@@ -1,0 +1,114 @@
+body {
+    font-size: 0.8rem;
+}
+.form-group label span.error {
+	color: #F00;
+	font-size: 11px;
+	font-style: italic;
+}
+/* Datatables pagination */
+.page-item {
+    display: inline;
+    float: left;
+}
+.page-item.disabled > a {
+    color: #636c72;
+    pointer-events: none;
+    cursor: not-allowed;
+    background-color: #fff;
+    border-color: #ddd;
+}
+.page-item.active > a {
+    z-index: 2;
+    color: #fff;
+    background-color: #0275d8;
+    border-color: #0275d8;
+}
+
+.page-item:first-child > a {
+    margin-left: 0;
+    border-bottom-left-radius: .25rem;
+    border-top-left-radius: .25rem;
+}
+.page-item > a {
+    position: relative;
+    display: block;
+    padding: .5rem .75rem;
+    margin-left: -1px;
+    line-height: 1.25;
+    color: #0275d8;
+    background-color: #fff;
+    border: 1px solid #ddd;
+        border-top-color: rgb(221, 221, 221);
+        border-right-color: rgb(221, 221, 221);
+        border-bottom-color: rgb(221, 221, 221);
+        border-left-color: rgb(221, 221, 221);
+}
+
+/* Datatables pagination */
+
+/* Datatables Table responsive */
+.form-control {
+    font-size: 0.85rem !important;
+}
+.table-responsive {
+	padding: 0 1.5rem;
+}
+/* Datatables Table responsive */
+
+.form-control-position {
+    /*top: 0.8rem;*/
+}
+
+.card-body .card-block {
+
+}
+
+.card-body .card-block .card-title {
+    margin-bottom: 0;
+}
+
+.media-list .medialist {
+    margin-bottom: 30px;
+}
+
+.medialist h5.text-bold-200 {
+    margin: 0;
+    line-height: 1rem;
+}
+
+.medialist .media-body > p {
+    margin-top: 8px;
+    line-height: 1.1rem;
+}
+
+.medialist .medialist-container {
+    border: 1px solid #DDD;
+    padding: 15px 15px 0px 15px;
+    cursor: pointer;
+    position: relative;
+}
+.medialist .medialist-container:hover {
+    background-color: #F0F0F0;
+}
+
+.medialist .medialist-container a.media-left {
+    padding-bottom: 15px;
+}
+
+.medialist .medialist-container .operations {
+    position: absolute;
+    float: right;
+    top: 10px;
+    right: 10px;
+    display: none;
+}
+.medialist .medialist-container:hover .operations {
+    display: block;
+}
+
+/* Button controls */
+.card .btnControls {
+    padding: 20px;
+}
+/* Button controls */

@@ -1,0 +1,513 @@
+:root {
+  --display-display-1-font-family: "Inter", Helvetica;
+  --display-display-1-font-weight: 500;
+  --display-display-1-font-size: 84px;
+  --display-display-1-letter-spacing: 0px;
+  --display-display-1-line-height: 100%;
+  --display-display-1-font-style: normal;
+  --heading-desktop-h1-font-family: "Inter", Helvetica;
+  --heading-desktop-h1-font-weight: 500;
+  --heading-desktop-h1-font-size: 64px;
+  --heading-desktop-h1-letter-spacing: 0px;
+  --heading-desktop-h1-line-height: 120.00000476837158%;
+  --heading-desktop-h1-font-style: normal;
+  --heading-desktop-h2-font-family: "Inter", Helvetica;
+  --heading-desktop-h2-font-weight: 500;
+  --heading-desktop-h2-font-size: 48px;
+  --heading-desktop-h2-letter-spacing: 0px;
+  --heading-desktop-h2-line-height: 120.00000476837158%;
+  --heading-desktop-h2-font-style: normal;
+  --heading-desktop-h3-font-family: "Inter", Helvetica;
+  --heading-desktop-h3-font-weight: 500;
+  --heading-desktop-h3-font-size: 32px;
+  --heading-desktop-h3-letter-spacing: 0px;
+  --heading-desktop-h3-line-height: 120.00000476837158%;
+  --heading-desktop-h3-font-style: normal;
+  --heading-desktop-h4-font-family: "Inter", Helvetica;
+  --heading-desktop-h4-font-weight: 500;
+  --heading-desktop-h4-font-size: 28px;
+  --heading-desktop-h4-letter-spacing: 0px;
+  --heading-desktop-h4-line-height: 120.00000476837158%;
+  --heading-desktop-h4-font-style: normal;
+  --heading-desktop-h5-font-family: "Inter", Helvetica;
+  --heading-desktop-h5-font-weight: 500;
+  --heading-desktop-h5-font-size: 24px;
+  --heading-desktop-h5-letter-spacing: 0px;
+  --heading-desktop-h5-line-height: 120.00000476837158%;
+  --heading-desktop-h5-font-style: normal;
+  --heading-desktop-h6-font-family: "Inter", Helvetica;
+  --heading-desktop-h6-font-weight: 500;
+  --heading-desktop-h6-font-size: 20px;
+  --heading-desktop-h6-letter-spacing: 0px;
+  --heading-desktop-h6-line-height: 120.00000476837158%;
+  --heading-desktop-h6-font-style: normal;
+  --body-extra-large-semibold-font-family: "Inter", Helvetica;
+  --body-extra-large-semibold-font-weight: 600;
+  --body-extra-large-semibold-font-size: 18px;
+  --body-extra-large-semibold-letter-spacing: 0px;
+  --body-extra-large-semibold-line-height: 150%;
+  --body-extra-large-semibold-font-style: normal;
+  --body-extra-large-medium-font-family: "Inter", Helvetica;
+  --body-extra-large-medium-font-weight: 500;
+  --body-extra-large-medium-font-size: 18px;
+  --body-extra-large-medium-letter-spacing: 0px;
+  --body-extra-large-medium-line-height: 150%;
+  --body-extra-large-medium-font-style: normal;
+  --body-extra-large-regular-font-family: "Inter", Helvetica;
+  --body-extra-large-regular-font-weight: 400;
+  --body-extra-large-regular-font-size: 18px;
+  --body-extra-large-regular-letter-spacing: 0px;
+  --body-extra-large-regular-line-height: 150%;
+  --body-extra-large-regular-font-style: normal;
+  --body-extra-large-underlined-font-family: "Inter", Helvetica;
+  --body-extra-large-underlined-font-weight: 500;
+  --body-extra-large-underlined-font-size: 18px;
+  --body-extra-large-underlined-letter-spacing: 0px;
+  --body-extra-large-underlined-line-height: 150%;
+  --body-extra-large-underlined-font-style: normal;
+  --body-large-semibold-font-family: "Inter", Helvetica;
+  --body-large-semibold-font-weight: 600;
+  --body-large-semibold-font-size: 16px;
+  --body-large-semibold-letter-spacing: 0px;
+  --body-large-semibold-line-height: 150%;
+  --body-large-semibold-font-style: normal;
+  --body-large-medium-font-family: "Inter", Helvetica;
+  --body-large-medium-font-weight: 500;
+  --body-large-medium-font-size: 16px;
+  --body-large-medium-letter-spacing: 0px;
+  --body-large-medium-line-height: 150%;
+  --body-large-medium-font-style: normal;
+  --body-large-regular-font-family: "Inter", Helvetica;
+  --body-large-regular-font-weight: 400;
+  --body-large-regular-font-size: 16px;
+  --body-large-regular-letter-spacing: 0px;
+  --body-large-regular-line-height: 150%;
+  --body-large-regular-font-style: normal;
+  --body-large-underlined-font-family: "Inter", Helvetica;
+  --body-large-underlined-font-weight: 500;
+  --body-large-underlined-font-size: 16px;
+  --body-large-underlined-letter-spacing: 0px;
+  --body-large-underlined-line-height: 150%;
+  --body-large-underlined-font-style: normal;
+  --body-base-semibold-font-family: "Inter", Helvetica;
+  --body-base-semibold-font-weight: 600;
+  --body-base-semibold-font-size: 14px;
+  --body-base-semibold-letter-spacing: 0px;
+  --body-base-semibold-line-height: 150%;
+  --body-base-semibold-font-style: normal;
+  --body-base-medium-font-family: "Inter", Helvetica;
+  --body-base-medium-font-weight: 500;
+  --body-base-medium-font-size: 14px;
+  --body-base-medium-letter-spacing: 0px;
+  --body-base-medium-line-height: 150%;
+  --body-base-medium-font-style: normal;
+  --body-base-regular-font-family: "Inter", Helvetica;
+  --body-base-regular-font-weight: 400;
+  --body-base-regular-font-size: 14px;
+  --body-base-regular-letter-spacing: 0px;
+  --body-base-regular-line-height: 150%;
+  --body-base-regular-font-style: normal;
+  --body-base-underlined-font-family: "Inter", Helvetica;
+  --body-base-underlined-font-weight: 500;
+  --body-base-underlined-font-size: 14px;
+  --body-base-underlined-letter-spacing: 0px;
+  --body-base-underlined-line-height: 150%;
+  --body-base-underlined-font-style: normal;
+  --body-small-semibold-font-family: "Inter", Helvetica;
+  --body-small-semibold-font-weight: 600;
+  --body-small-semibold-font-size: 12px;
+  --body-small-semibold-letter-spacing: 0px;
+  --body-small-semibold-line-height: 139.9999976158142%;
+  --body-small-semibold-font-style: normal;
+  --body-small-medium-font-family: "Inter", Helvetica;
+  --body-small-medium-font-weight: 500;
+  --body-small-medium-font-size: 12px;
+  --body-small-medium-letter-spacing: 0px;
+  --body-small-medium-line-height: 139.9999976158142%;
+  --body-small-medium-font-style: normal;
+  --body-small-regular-font-family: "Inter", Helvetica;
+  --body-small-regular-font-weight: 400;
+  --body-small-regular-font-size: 12px;
+  --body-small-regular-letter-spacing: 0px;
+  --body-small-regular-line-height: 139.9999976158142%;
+  --body-small-regular-font-style: normal;
+  --body-small-underlined-font-family: "Inter", Helvetica;
+  --body-small-underlined-font-weight: 500;
+  --body-small-underlined-font-size: 12px;
+  --body-small-underlined-letter-spacing: 0px;
+  --body-small-underlined-line-height: 139.9999976158142%;
+  --body-small-underlined-font-style: normal;
+  --global-colors-globalcolors-neutral-100: rgba(0, 0, 0, 1);
+  --global-colors-globalcolors-neutral-90: rgba(75, 75, 75, 1);
+  --global-colors-globalcolors-neutral-80: rgba(114, 114, 114, 1);
+  --global-colors-globalcolors-neutral-70: rgba(175, 175, 175, 1);
+  --global-colors-globalcolors-neutral-60: rgba(216, 216, 216, 1);
+  --global-colors-globalcolors-neutral-50: rgba(228, 228, 228, 1);
+  --global-colors-globalcolors-neutral-40: rgba(232, 232, 232, 1);
+  --global-colors-globalcolors-neutral-30: rgba(242, 242, 242, 1);
+  --global-colors-globalcolors-neutral-20: rgba(249, 249, 249, 1);
+  --global-colors-globalcolors-neutral-10: rgba(253, 253, 253, 1);
+  --global-colors-globalcolors-neutral-0: rgba(255, 255, 255, 1);
+  --global-colors-globalcolors-blue-10: rgba(237, 242, 254, 1);
+  --global-colors-globalcolors-blue-20: rgba(219, 228, 253, 1);
+  --global-colors-globalcolors-blue-30: rgba(182, 200, 251, 1);
+  --global-colors-globalcolors-blue-40: rgba(146, 173, 248, 1);
+  --global-colors-globalcolors-blue-50: rgba(109, 145, 246, 1);
+  --global-colors-globalcolors-blue-60: rgba(73, 118, 244, 1);
+  --global-colors-globalcolors-blue-70: rgba(55, 89, 183, 1);
+  --global-colors-globalcolors-blue-80: rgba(37, 59, 122, 1);
+  --global-colors-globalcolors-blue-90: rgba(18, 30, 61, 1);
+  --global-colors-globalcolors-blue-100: rgba(7, 12, 24, 1);
+  --global-colors-globalcolors-red-10: rgba(247, 237, 237, 1);
+  --global-colors-globalcolors-red-20: rgba(239, 219, 219, 1);
+  --global-colors-globalcolors-red-30: rgba(223, 183, 183, 1);
+  --global-colors-globalcolors-red-40: rgba(207, 147, 147, 1);
+  --global-colors-globalcolors-red-50: rgba(191, 111, 111, 1);
+  --global-colors-globalcolors-red-60: rgba(175, 75, 75, 1);
+  --global-colors-globalcolors-red-70: rgba(140, 60, 60, 1);
+  --global-colors-globalcolors-red-80: rgba(105, 45, 45, 1);
+  --global-colors-globalcolors-red-90: rgba(70, 30, 30, 1);
+  --global-colors-globalcolors-red-100: rgba(35, 15, 15, 1);
+  --global-colors-globalcolors-orange-10: rgba(251, 244, 236, 1);
+  --global-colors-globalcolors-orange-20: rgba(246, 232, 216, 1);
+  --global-colors-globalcolors-orange-30: rgba(237, 210, 177, 1);
+  --global-colors-globalcolors-orange-40: rgba(228, 187, 139, 1);
+  --global-colors-globalcolors-orange-50: rgba(219, 165, 100, 1);
+  --global-colors-globalcolors-orange-60: rgba(210, 142, 61, 1);
+  --global-colors-globalcolors-orange-70: rgba(168, 114, 49, 1);
+  --global-colors-globalcolors-orange-80: rgba(126, 85, 37, 1);
+  --global-colors-globalcolors-orange-90: rgba(84, 57, 24, 1);
+  --global-colors-globalcolors-orange-100: rgba(42, 28, 12, 1);
+  --global-colors-globalcolors-limeyellow-10: rgba(247, 247, 232, 1);
+  --global-colors-globalcolors-limeyellow-20: rgba(239, 238, 210, 1);
+  --global-colors-globalcolors-limeyellow-30: rgba(224, 221, 165, 1);
+  --global-colors-globalcolors-limeyellow-40: rgba(208, 205, 119, 1);
+  --global-colors-globalcolors-limeyellow-50: rgba(193, 188, 74, 1);
+  --global-colors-globalcolors-limeyellow-60: rgba(177, 171, 29, 1);
+  --global-colors-globalcolors-limeyellow-70: rgba(142, 137, 23, 1);
+  --global-colors-globalcolors-limeyellow-80: rgba(106, 103, 17, 1);
+  --global-colors-globalcolors-limeyellow-90: rgba(71, 68, 12, 1);
+  --global-colors-globalcolors-limeyellow-100: rgba(35, 34, 6, 1);
+  --global-colors-globalcolors-purple-10: rgba(244, 237, 247, 1);
+  --global-colors-globalcolors-purple-20: rgba(234, 219, 239, 1);
+  --global-colors-globalcolors-purple-30: rgba(213, 183, 223, 1);
+  --global-colors-globalcolors-purple-40: rgba(191, 147, 207, 1);
+  --global-colors-globalcolors-purple-50: rgba(170, 111, 191, 1);
+  --global-colors-globalcolors-purple-60: rgba(149, 75, 175, 1);
+  --global-colors-globalcolors-purple-70: rgba(119, 60, 140, 1);
+  --global-colors-globalcolors-purple-80: rgba(89, 45, 105, 1);
+  --global-colors-globalcolors-purple-90: rgba(60, 30, 70, 1);
+  --global-colors-globalcolors-purple-100: rgba(30, 15, 35, 1);
+  --global-colors-globalcolors-green-10: rgba(238, 245, 240, 1);
+  --global-colors-globalcolors-green-20: rgba(222, 236, 225, 1);
+  --global-colors-globalcolors-green-30: rgba(188, 216, 194, 1);
+  --global-colors-globalcolors-green-40: rgba(155, 197, 164, 1);
+  --global-colors-globalcolors-green-50: rgba(121, 177, 133, 1);
+  --global-colors-globalcolors-green-60: rgba(88, 158, 103, 1);
+  --global-colors-globalcolors-green-70: rgba(70, 126, 82, 1);
+  --global-colors-globalcolors-green-80: rgba(53, 95, 62, 1);
+  --global-colors-globalcolors-green-90: rgba(35, 63, 41, 1);
+  --global-colors-globalcolors-green-100: rgba(18, 32, 21, 1);
+  --global-colors-globalcolors-irish-10: rgba(238, 239, 245, 1);
+  --global-colors-globalcolors-irish-20: rgba(222, 223, 236, 1);
+  --global-colors-globalcolors-irish-30: rgba(188, 191, 216, 1);
+  --global-colors-globalcolors-irish-40: rgba(155, 159, 197, 1);
+  --global-colors-globalcolors-irish-50: rgba(121, 127, 177, 1);
+  --global-colors-globalcolors-irish-60: rgba(88, 95, 158, 1);
+  --global-colors-globalcolors-irish-70: rgba(70, 76, 126, 1);
+  --global-colors-globalcolors-irish-80: rgba(53, 57, 95, 1);
+  --global-colors-globalcolors-irish-90: rgba(35, 38, 63, 1);
+  --global-colors-globalcolors-irish-100: rgba(18, 19, 32, 1);
+  --color-tokens-color-tokens-content-dark-primary: var(
+    --global-colors-globalcolors-neutral-100
+  );
+  --color-tokens-color-tokens-content-dark-secondary: var(
+    --global-colors-globalcolors-neutral-80
+  );
+  --color-tokens-color-tokens-content-dark-tertiary: var(
+    --global-colors-globalcolors-neutral-70
+  );
+  --color-tokens-color-tokens-content-dark-disable: var(
+    --global-colors-globalcolors-neutral-60
+  );
+  --color-tokens-color-tokens-content-dark-informative: var(
+    --global-colors-globalcolors-blue-60
+  );
+  --color-tokens-color-tokens-content-dark-positive: var(
+    --global-colors-globalcolors-green-60
+  );
+  --color-tokens-color-tokens-content-dark-error: var(
+    --global-colors-globalcolors-red-60
+  );
+  --color-tokens-color-tokens-border-primary: var(
+    --global-colors-globalcolors-neutral-50
+  );
+  --color-tokens-color-tokens-border-secondary: var(
+    --global-colors-globalcolors-neutral-70
+  );
+  --color-tokens-color-tokens-border-tertiary: var(
+    --global-colors-globalcolors-neutral-100
+  );
+  --color-tokens-color-tokens-border-informative: var(
+    --global-colors-globalcolors-blue-30
+  );
+  --color-tokens-color-tokens-border-positive: var(
+    --global-colors-globalcolors-green-30
+  );
+  --color-tokens-color-tokens-border-error: var(
+    --global-colors-globalcolors-red-30
+  );
+  --color-tokens-color-tokens-border-warning: var(
+    --global-colors-globalcolors-orange-30
+  );
+  --color-tokens-color-tokens-background-primary: var(
+    --global-colors-globalcolors-neutral-0
+  );
+  --color-tokens-color-tokens-background-secondary: var(
+    --global-colors-globalcolors-neutral-20
+  );
+  --color-tokens-color-tokens-background-tertiary: var(
+    --global-colors-globalcolors-neutral-30
+  );
+  --color-tokens-color-tokens-background-blue: var(
+    --global-colors-globalcolors-blue-10
+  );
+  --color-tokens-color-tokens-background-green: var(
+    --global-colors-globalcolors-green-10
+  );
+  --color-tokens-color-tokens-background-red: var(
+    --global-colors-globalcolors-red-10
+  );
+  --color-tokens-color-tokens-background-orange: var(
+    --global-colors-globalcolors-orange-10
+  );
+  --color-tokens-color-tokens-background-purple: var(
+    --global-colors-globalcolors-purple-10
+  );
+  --color-tokens-color-tokens-background-yellow: var(
+    --global-colors-globalcolors-limeyellow-10
+  );
+  --color-tokens-color-tokens-action-primary-base: var(
+    --global-colors-globalcolors-neutral-100
+  );
+  --color-tokens-color-tokens-action-primary-hover: var(
+    --global-colors-globalcolors-neutral-80
+  );
+  --color-tokens-color-tokens-action-primary-active: var(
+    --global-colors-globalcolors-neutral-90
+  );
+  --color-tokens-color-tokens-action-primary-selected: var(
+    --global-colors-globalcolors-neutral-90
+  );
+  --color-tokens-color-tokens-action-primary-disbaled: var(
+    --global-colors-globalcolors-neutral-20
+  );
+  --color-tokens-color-tokens-action-secondary-base: var(
+    --global-colors-globalcolors-neutral-0
+  );
+  --color-tokens-color-tokens-action-secondary-base-2: var(
+    --global-colors-globalcolors-neutral-30
+  );
+  --color-tokens-color-tokens-action-secondary-hover: var(
+    --global-colors-globalcolors-neutral-40
+  );
+  --color-tokens-color-tokens-action-secondary-active: var(
+    --global-colors-globalcolors-neutral-50
+  );
+  --color-tokens-color-tokens-action-secondary-selected: var(
+    --global-colors-globalcolors-neutral-30
+  );
+  --color-tokens-color-tokens-action-secondary-disbaled: var(
+    --global-colors-globalcolors-neutral-20
+  );
+  --color-tokens-color-tokens-action-outline-base: var(
+    --global-colors-globalcolors-neutral-100
+  );
+  --color-tokens-color-tokens-action-outline-hover: var(
+    --global-colors-globalcolors-neutral-100
+  );
+  --color-tokens-color-tokens-action-outline-active: var(
+    --global-colors-globalcolors-neutral-80
+  );
+  --color-tokens-color-tokens-action-outline-selected: var(
+    --global-colors-globalcolors-neutral-70
+  );
+  --color-tokens-color-tokens-action-outline-disbaled: var(
+    --global-colors-globalcolors-neutral-30
+  );
+  --color-tokens-color-tokens-action-destructive-base: var(
+    --global-colors-globalcolors-red-50
+  );
+  --color-tokens-color-tokens-action-destructive-hover: var(
+    --global-colors-globalcolors-red-60
+  );
+  --color-tokens-color-tokens-action-destructive-active: var(
+    --global-colors-globalcolors-red-70
+  );
+  --color-tokens-color-tokens-action-destructive-selected: var(
+    --global-colors-globalcolors-red-60
+  );
+  --color-tokens-color-tokens-action-destructive-disbaled: var(
+    --global-colors-globalcolors-red-20
+  );
+  --color-tokens-color-tokens-interaction-primary-base: var(
+    --global-colors-globalcolors-neutral-100
+  );
+  --color-tokens-color-tokens-interaction-primary-hover: var(
+    --global-colors-globalcolors-neutral-80
+  );
+  --color-tokens-color-tokens-interaction-primary-active: var(
+    --global-colors-globalcolors-neutral-90
+  );
+  --color-tokens-color-tokens-interaction-primary-selected: var(
+    --global-colors-globalcolors-neutral-90
+  );
+  --color-tokens-color-tokens-interaction-primary-disbaled: var(
+    --global-colors-globalcolors-neutral-20
+  );
+  --color-tokens-color-tokens-interaction-secondary-base: var(
+    --global-colors-globalcolors-neutral-0
+  );
+  --color-tokens-color-tokens-interaction-secondary-hover: var(
+    --global-colors-globalcolors-neutral-30
+  );
+  --color-tokens-color-tokens-interaction-secondary-active: var(
+    --global-colors-globalcolors-neutral-50
+  );
+  --color-tokens-color-tokens-interaction-secondary-selected: var(
+    --global-colors-globalcolors-neutral-30
+  );
+  --color-tokens-color-tokens-interaction-secondary-disbaled: var(
+    --global-colors-globalcolors-neutral-20
+  );
+  --color-tokens-color-tokens-interaction-outline-base: var(
+    --global-colors-globalcolors-neutral-70
+  );
+  --color-tokens-color-tokens-interaction-outline-hover: var(
+    --global-colors-globalcolors-neutral-80
+  );
+  --color-tokens-color-tokens-interaction-outline-active: var(
+    --global-colors-globalcolors-neutral-100
+  );
+  --color-tokens-color-tokens-interaction-outline-selected: var(
+    --global-colors-globalcolors-neutral-60
+  );
+  --color-tokens-color-tokens-interaction-outline-disbaled: var(
+    --global-colors-globalcolors-neutral-40
+  );
+  --color-tokens-color-tokens-interaction-red-base: var(
+    --global-colors-globalcolors-red-60
+  );
+  --color-tokens-color-tokens-interaction-red-hover: var(
+    --global-colors-globalcolors-red-70
+  );
+  --color-tokens-color-tokens-interaction-red-active: var(
+    --global-colors-globalcolors-red-80
+  );
+  --color-tokens-color-tokens-interaction-red-selected: var(
+    --global-colors-globalcolors-red-70
+  );
+  --color-tokens-color-tokens-interaction-red-disbaled: var(
+    --global-colors-globalcolors-red-20
+  );
+  --color-tokens-color-tokens-content-light-primary: var(
+    --global-colors-globalcolors-neutral-0
+  );
+  --color-tokens-color-tokens-content-light-secondary: var(
+    --global-colors-globalcolors-neutral-20
+  );
+  --color-tokens-color-tokens-content-light-tertiary: var(
+    --global-colors-globalcolors-neutral-30
+  );
+  --color-tokens-color-tokens-content-light-disable: var(
+    --global-colors-globalcolors-neutral-60
+  );
+  --color-tokens-color-tokens-content-light-informative: var(
+    --global-colors-globalcolors-blue-60
+  );
+  --color-tokens-color-tokens-content-light-positive: var(
+    --global-colors-globalcolors-green-60
+  );
+  --color-tokens-color-tokens-content-light-error: var(
+    --global-colors-globalcolors-red-60
+  );
+  --color-tokens-color-tokens-interaction-green-base: var(
+    --global-colors-globalcolors-green-60
+  );
+  --color-tokens-color-tokens-interaction-green-hover: var(
+    --global-colors-globalcolors-green-70
+  );
+  --color-tokens-color-tokens-interaction-green-active: var(
+    --global-colors-globalcolors-green-80
+  );
+  --color-tokens-color-tokens-interaction-green-selected: var(
+    --global-colors-globalcolors-green-70
+  );
+  --color-tokens-color-tokens-interaction-green-disbaled: var(
+    --global-colors-globalcolors-green-20
+  );
+  --color-tokens-border-radius-2-px: 2px;
+  --color-tokens-border-radius-4-px: 4px;
+  --color-tokens-border-radius-8-px: 8px;
+  --color-tokens-border-radius-100-px: 100px;
+  --color-tokens-color-tokens-interaction-blue-base: var(
+    --global-colors-globalcolors-blue-60
+  );
+  --color-tokens-color-tokens-interaction-blue-hover: var(
+    --global-colors-globalcolors-blue-70
+  );
+  --color-tokens-color-tokens-interaction-blue-active: var(
+    --global-colors-globalcolors-blue-80
+  );
+  --color-tokens-color-tokens-interaction-blue-selected: var(
+    --global-colors-globalcolors-blue-70
+  );
+  --color-tokens-color-tokens-interaction-blue-disbaled: var(
+    --global-colors-globalcolors-blue-20
+  );
+  --color-tokens-color-tokens-interaction-yellow-base: var(
+    --global-colors-globalcolors-limeyellow-60
+  );
+  --color-tokens-color-tokens-interaction-yellow-hover: var(
+    --global-colors-globalcolors-limeyellow-70
+  );
+  --color-tokens-color-tokens-interaction-yellow-active: var(
+    --global-colors-globalcolors-limeyellow-80
+  );
+  --color-tokens-color-tokens-interaction-yellow-selected: var(
+    --global-colors-globalcolors-limeyellow-70
+  );
+  --color-tokens-color-tokens-interaction-yellow-disbaled: var(
+    --global-colors-globalcolors-limeyellow-20
+  );
+  --color-tokens-color-tokens-interaction-purple-base: var(
+    --global-colors-globalcolors-purple-60
+  );
+  --color-tokens-color-tokens-interaction-purple-hover: var(
+    --global-colors-globalcolors-purple-70
+  );
+  --color-tokens-color-tokens-interaction-purple-active: var(
+    --global-colors-globalcolors-purple-80
+  );
+  --color-tokens-color-tokens-interaction-purple-selected: var(
+    --global-colors-globalcolors-purple-70
+  );
+  --color-tokens-color-tokens-interaction-purple-disbaled: var(
+    --global-colors-globalcolors-purple-20
+  );
+  --color-tokens-color-tokens-interaction-orange-base: var(
+    --global-colors-globalcolors-orange-60
+  );
+  --color-tokens-color-tokens-interaction-orange-hover: var(
+    --global-colors-globalcolors-orange-70
+  );
+  --color-tokens-color-tokens-interaction-orange-active: var(
+    --global-colors-globalcolors-orange-80
+  );
+  --color-tokens-color-tokens-interaction-orange-selected: var(
+    --global-colors-globalcolors-orange-70
+  );
+  --color-tokens-color-tokens-interaction-orange-disbaled: var(
+    --global-colors-globalcolors-orange-20
+  );
+}
