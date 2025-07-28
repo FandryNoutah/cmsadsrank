@@ -1,0 +1,33 @@
+.d1{
+	width: 756px;
+	height: 432px;
+	margin: 50px auto;
+	box-shadow: 0px 15px 10px -5px #777;
+	background-color: #EDEDED;
+	background-size: contain;
+	animation: fondu 15s ease-in-out infinite both;
+}
+.d2{
+	width: 500px;
+	height: 0px;
+	margin-top: 75%;
+	margin: 50px auto;
+	box-shadow: 0px 0px 10px -5px #777;
+	background-color: #EDEDED;
+	background-size: contain;
+	animation: fondu 15s ease-in-out infinite both;
+}
+.conteneur{
+	max-width: 576px;
+	margin: 50px auto;
+}
+.d1:hover, .d2:hover{
+	animation-play-state: paused;
+}
+@keyframes fondu{
+	0%{background-image:url("img/c2.png");}
+	33,33%{background-image:url("img/c2.png");}
+	66,67%{background-image:url("img/c2.png");}
+	100%{background-image:url("img/c2.png");}
+	
+}
