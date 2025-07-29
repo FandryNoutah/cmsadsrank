@@ -51,7 +51,6 @@ class Client extends MY_Controller
 		// $this->data['am'] = $this->Donne_modele->get_all_am();
 		// $this->data['initiative'] = $this->Donne_modele->get_all_initiative();
 
-		$this->content = "layouts/client/detail.php";
-		$this->layout();
+		$this->load->view('layouts/client/detail/index');
 	}
 }
