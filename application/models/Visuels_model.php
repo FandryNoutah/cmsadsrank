@@ -351,13 +351,23 @@ class Visuels_model extends CI_Model {
 		return $retour;    
 	}
 	
-	public function getDonneeById($id) {
-		$sql = "select * from donnee where idclients = '". $id ."'";
-		$result = $this->db->query($sql);
-		$retour = $result->result_array();
-		$this->db->close();
-		return $retour;	
+		public function getDonneeById($id) {
+	    $this->db->select('donnee.*, clients.*, produit.*, 
+	                       am_user.photo_users AS am_photo_user, 
+	                       tech_user.photo_users AS tech_photo_user');
+	    
+	    $this->db->from('donnee');
+	    $this->db->join('clients', 'donnee.idclients = clients.idclients');
+	    $this->db->join('produit', 'donnee.idproduit = produit.idproduit');
+	    $this->db->join('users AS am_user', 'donnee.account_manager = am_user.id', 'left');
+	    $this->db->join('users AS tech_user', 'donnee.initiative = tech_user.id', 'left');
+	    
+	    $this->db->where('donnee.idclients', $id);
+	    
+	    $result = $this->db->get();
+	    return $result->result_array(); // pas besoin de close()
 	}
+
 	public function prendidgroupeannoncebyclientspmax($idclients) {
 		$sql = "select idgroupe_annonce from groupe_annonce where idclients = '". $idclients ."' AND type_campagnes = 3 ";
 		$result = $this->db->query($sql);
@@ -886,8 +896,8 @@ public function updatesgroupe($nom_groupe, $mot_cle, $idgroupe_annonce) {
         return $retour;
 		
 	}
-	public function insertclient($client, $site_client, $email_client, $numero_client) {
-        $query = "INSERT INTO clients (nom_client, email_client, numero_client, site_client) VALUES ('$client', '$email_client', '$numero_client', '$site_client')";
+	public function insertclient($client, $site_client, $email_client, $numero_client,$favicon,$cms,$cms_logo){
+        $query = "INSERT INTO clients (nom_client, email_client, numero_client, site_client,favicon,cms,cms_logo) VALUES ('$client', '$email_client', '$numero_client', '$site_client', '$favicon', '$cms', '$cms_logo')";
         $this->db->query($query);
         $idclient = $this->db->insert_id();
         
@@ -938,8 +948,8 @@ public function updatesgroupe($nom_groupe, $mot_cle, $idgroupe_annonce) {
 		return $affectedRows; // Retourne le nombre de lignes affectées
 	}
 	
-    public function insertfiche($idclient,$budget,$secteur_activite,$product_choice,$initiative,$am,$date_mis_en_place,$date_brief,$date_annonce,$dejaclient) {
-        $query = "INSERT INTO donnee (idclients,idproduit,budget,secteur_activite,initiative,account_manager,mis_en_place_paiement,Brief,annonce,modifier_par,dejaclient) VALUES ('$idclient','$product_choice','$budget','$secteur_activite','$initiative','$am','$date_mis_en_place','$date_brief','$date_annonce','$am','$dejaclient')";
+    public function insertfiche($idclient,$budget,$secteur_activite,$product_choice,$initiative,$am,$date_mis_en_place,$date_brief,$date_annonce,$dejaclient,$gtm_code) {
+        $query = "INSERT INTO donnee (idclients,idproduit,budget,secteur_activite,initiative,account_manager,mis_en_place_paiement,Brief,annonce,modifier_par,dejaclient,tracking_gtm) VALUES ('$idclient','$product_choice','$budget','$secteur_activite','$initiative','$am','$date_mis_en_place','$date_brief','$date_annonce','$am','$dejaclient','$gtm_code')";
         $this->db->query($query);
     }
 
