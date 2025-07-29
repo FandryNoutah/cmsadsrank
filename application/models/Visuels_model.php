@@ -886,8 +886,8 @@ public function updatesgroupe($nom_groupe, $mot_cle, $idgroupe_annonce) {
         return $retour;
 		
 	}
-	public function insertclient($client, $site_client, $email_client, $numero_client) {
-        $query = "INSERT INTO clients (nom_client, email_client, numero_client, site_client) VALUES ('$client', '$email_client', '$numero_client', '$site_client')";
+	public function insertclient($client, $site_client, $email_client, $numero_client,$favicon,$cms,$cms_logo){
+        $query = "INSERT INTO clients (nom_client, email_client, numero_client, site_client,favicon,cms,cms_logo) VALUES ('$client', '$email_client', '$numero_client', '$site_client', '$favicon', '$cms', '$cms_logo')";
         $this->db->query($query);
         $idclient = $this->db->insert_id();
         
@@ -938,8 +938,8 @@ public function updatesgroupe($nom_groupe, $mot_cle, $idgroupe_annonce) {
 		return $affectedRows; // Retourne le nombre de lignes affectées
 	}
 	
-    public function insertfiche($idclient,$budget,$secteur_activite,$product_choice,$initiative,$am,$date_mis_en_place,$date_brief,$date_annonce,$dejaclient) {
-        $query = "INSERT INTO donnee (idclients,idproduit,budget,secteur_activite,initiative,account_manager,mis_en_place_paiement,Brief,annonce,modifier_par,dejaclient) VALUES ('$idclient','$product_choice','$budget','$secteur_activite','$initiative','$am','$date_mis_en_place','$date_brief','$date_annonce','$am','$dejaclient')";
+    public function insertfiche($idclient,$budget,$secteur_activite,$product_choice,$initiative,$am,$date_mis_en_place,$date_brief,$date_annonce,$dejaclient,$gtm_code) {
+        $query = "INSERT INTO donnee (idclients,idproduit,budget,secteur_activite,initiative,account_manager,mis_en_place_paiement,Brief,annonce,modifier_par,dejaclient,tracking_gtm) VALUES ('$idclient','$product_choice','$budget','$secteur_activite','$initiative','$am','$date_mis_en_place','$date_brief','$date_annonce','$am','$dejaclient','$gtm_code')";
         $this->db->query($query);
     }
 
