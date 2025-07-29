@@ -13,6 +13,7 @@
 	<div class="container-fluid p-0 h-100">
 		<div class="row no-gutters h-100">
 
+			<!-- CUSTOM SIDEBAR FOR CLIENT DETAIL -->
 			<?php $this->load->view('layouts/client/detail/sidebar') ?>
 
 			<div class="col w-100">
@@ -45,7 +46,7 @@
 						Bleu
 					</span>
 
-					<div class="card position-absolute" style="width: 360px; top: 100px; right: 80px;">
+					<div class="card position-absolute" style="width: 360px; top: 50px; right: 80px;">
 						<div class="card-body">
 							<div class="d-flex justify-content-between align-items-center">
 								<button class="btn btn-dark py-3 px-5">
@@ -85,6 +86,107 @@
 							<button class="btn btn-outline-dark btn-block">Onboarding</button>
 						</div>
 					</div>
+
+					<br><br><br>
+					<ul class="nav nav-tabs mb-2 border-bottom">
+						<li class="nav-item">
+							<a class="nav-link py-3 active" type="button">
+								Société
+							</a>
+						</li>
+					</ul>
+
+					<div class="card mb-5">
+						<div class="card-body">
+							<div class="d-flex align-items-center mb-4">
+								<img src="<?= base_url('assets/images/figma/fb_debarras_logo.png') ?>" width="114">
+								<h6 class="ml-3">Ouest lyonnais climatisation plomberie SARL</h6>
+								<a href="#" class="text-decoration-none ml-auto mx-3">Categories</a>
+								<a href="#" class="text-decoration-none mx-3">Marketing</a>
+							</div>
+							<h6 class="text-muted font-weight-normal">
+								Meta Platforms, Inc., doing business as Meta and formerly named Facebook, Inc., and TheFacebook, Inc., is an American multinational technology conglomerate based in Menlo Park, California.
+								<br>
+								<br>
+								The company owns Facebook, Instagram, and WhatsApp, among other products and services. The company owns Facebook, Instagram, and WhatsApp, among other products and services.The company owns Facebook, Instagram, and WhatsApp, among other products and
+							</h6>
+						</div>
+					</div>
+
+					<div class="row row-cols-4 mb-5">
+						<div class="col">
+							<div class="card">
+								<div class="card-body">
+									<div class="d-flex align-items-center mb-2">
+										<img src="<?= base_url('assets/images/figma/discu_queue.png') ?>" width="43">
+										<a href="#" class="text-decoration-none text-muted ml-3 stretched-link">File de discussion</a>
+										<i class="fa fa-chevron-right ml-auto" style="font-size: 12px;"></i>
+									</div>
+									<h3 class="m-0">51 Discussions</h3>
+								</div>
+							</div>
+						</div>
+						<div class="col">
+							<div class="card">
+								<div class="card-body">
+									<div class="d-flex align-items-center mb-2">
+										<img src="<?= base_url('assets/images/figma/google_meet.png') ?>" width="43">
+										<a href="#" class="text-decoration-none text-muted ml-3 stretched-link">Google Meet</a>
+										<i class="fa fa-chevron-right ml-auto" style="font-size: 12px;"></i>
+									</div>
+									<h3 class="m-0">Le 10/07/2025</h3>
+								</div>
+							</div>
+						</div>
+						<div class="col">
+							<div class="card">
+								<div class="card-body">
+									<div class="d-flex align-items-center mb-2">
+										<img src="<?= base_url('assets/images/figma/air_call.png') ?>" width="43">
+										<a href="#" class="text-decoration-none text-muted ml-3 stretched-link">AirCall</a>
+										<i class="fa fa-chevron-right ml-auto" style="font-size: 12px;"></i>
+									</div>
+									<h3 class="m-0">162 Appels</h3>
+								</div>
+							</div>
+						</div>
+						<div class="col">
+							<div class="card">
+								<div class="card-body">
+									<div class="d-flex align-items-center mb-2">
+										<img src="<?= base_url('assets/images/figma/teams_tasks.png') ?>" width="43">
+										<a href="#" class="text-decoration-none text-muted ml-3 stretched-link">Teams Tasks</a>
+										<i class="fa fa-chevron-right ml-auto" style="font-size: 12px;"></i>
+									</div>
+									<h3 class="m-0">5 Task</h3>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<br><br>
+
+					<ul class="nav nav-tabs mr-auto border-bottom mb-5" role="tablist">
+						<li class="nav-item">
+							<a class="nav-link py-3 active" type="button" id="budget_tab" data-toggle="tab" data-target="#budget" type="button" role="tab" aria-controls="budget" aria-selected="true">
+								<img src="<?= base_url('assets/images/icons/figma/icon-budget.svg') ?>" alt="">
+								Budget Annuel
+							</a>
+						</li>
+						<li class="nav-item">
+							<a class="nav-link py-3" type="button" id="kanban_tab" data-toggle="tab" data-target="#kanban" type="button" role="tab" aria-controls="kanban" aria-selected="false">
+								<img src="<?= base_url('assets/images/icons/figma/icon-kanban.svg') ?>" alt="">
+								Variations
+							</a>
+						</li>
+					</ul>
+					<div class="tab-content" id="taskTabContent">
+
+						<div class="tab-pane fade mb-5" id="budget" role="tabpanel" aria-labelledby="budget_tab">
+
+						</div>
+					</div>
+
 				</div>
 			</div>
 		</div>
