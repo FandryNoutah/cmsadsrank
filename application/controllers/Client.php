@@ -44,13 +44,8 @@ class Client extends MY_Controller
 
 	public function detail_client($idclients)
 	{
-
-		// $this->data['donnee'] = $this->visuels_model->getClientDataByDonnee();
-		// $this->data['users'] = $this->Task_model->get_all_users();
-		// $this->data['produit'] = $this->Donne_modele->get_all_produit();
-		// $this->data['am'] = $this->Donne_modele->get_all_am();
-		// $this->data['initiative'] = $this->Donne_modele->get_all_initiative();
-
+		$id = $idclients;
+		$clients = $this->data["donnees"] = $this->visuels_model->getDonneeById($id);
 		$this->content = "layouts/client/detail.php";
 		$this->layout();
 	}
