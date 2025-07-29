@@ -53,4 +53,106 @@ class Client extends MY_Controller
 
 		$this->load->view('layouts/client/detail/index');
 	}
+	
+	public function insert_client()
+	{
+		$client = $this->input->post('client');
+		$email_client = $this->input->post('email_client');
+		$numero_client = $this->input->post('numero_client');
+		$dejaclient = $this->input->post('dejaclient');
+		$budget = $this->input->post('budget');
+		$secteur_activite = $this->input->post('secteur_activite');
+		$product_choice = $this->input->post('product_choice');
+		$initiative = $this->input->post('initiative');
+		$am = $this->input->post('am');
+		$date_mis_en_place = $this->input->post('date_mis_en_place');
+		$date_brief = $this->input->post('date_brief');
+		$date_annonce = $this->input->post('date_annonce');
+		$logo = $this->file_upload_field = 'logo';
+		$this->form_validation->set_rules('site_client', 'URL', 'required|trim');
+
+		if ($this->form_validation->run() == FALSE) {
+			die('Validation échouée : champ site_client requis');
+		}
+
+		$site_client = trim($this->input->post('site_client'));
+		if (!preg_match('#^https?://#i', $site_client)) {
+			$site_client = 'https://' . $site_client;
+		}
+		$html = file_get_contents($site_client);
+
+		if ($html === FALSE) {
+			die("Erreur : impossible d'accéder à l'URL $site_client");
+		}
+		preg_match('/GTM-[A-Z0-9]+/', $html, $matches);
+		$gtm_code = !empty($matches) ? $matches[0] : null;
+		$cms = $this->detect_cms($html, $site_client);
+		$cms_logo = $this->get_cms_logo($cms);
+		$favicon = $this->get_favicon($html, $site_client);
+		$idclient = $this->visuels_model->insertclient($client, $site_client, $email_client, $numero_client, $favicon, $cms, $cms_logo);
+		$this->visuels_model->insertfiche($idclient, $budget, $secteur_activite, $product_choice, $initiative, $am, $date_mis_en_place, $date_brief, $date_annonce, $dejaclient, $gtm_code);
+		redirect('Client');
+	}
+
+
+	private function detect_cms($html, $url)
+	{
+		if (preg_match('/<meta name=["\']generator["\'] content=["\']([^"\']+)["\']/', $html, $match)) {
+			return $match[1];
+		}
+		if (strpos($html, '/wp-content/') !== false || strpos($html, 'wp-') !== false) {
+			return 'WordPress';
+		} elseif (strpos($html, 'Joomla') !== false || strpos($html, '/administrator/') !== false) {
+			return 'Joomla';
+		} elseif (strpos($html, '/sites/default/') !== false) {
+			return 'Drupal';
+		} elseif (strpos($html, 'Shopify') !== false || strpos($html, 'cdn.shopify.com') !== false) {
+			return 'Shopify';
+		} elseif (strpos($html, 'Magento') !== false || strpos($html, 'mage/') !== false) {
+			return 'Magento';
+		}
+		$headers = @get_headers($url, 1);
+		if ($headers && isset($headers['X-Powered-By'])) {
+			return $headers['X-Powered-By'];
+		}
+
+		return 'Inconnu ou non détectable automatiquement';
+	}
+	private function get_cms_logo($cms_name)
+	{
+		$cms_logos = [
+			'WordPress' => 'wordpress.png',
+			'Joomla' => 'joomla.png',
+			'Drupal' => 'drupal.png',
+			'Shopify' => 'shopify.png',
+			'Magento' => 'magento.png'
+		];
+
+		foreach ($cms_logos as $key => $file) {
+			if (stripos($cms_name, $key) !== false) {
+				return base_url('assets/images/cms/' . $file);
+			}
+		}
+
+		return base_url('assets/images/cms/unknown.png');
+	}
+	private function get_favicon($html, $url)
+	{
+		if (preg_match('/<link[^>]+rel=["\'](?:shortcut icon|icon)["\'][^>]+href=["\']([^"\']+)["\']/i', $html, $matches)) {
+			$favicon = $matches[1];
+			if (parse_url($favicon, PHP_URL_SCHEME) === null) {
+				$parsed_url = parse_url($url);
+				$scheme = isset($parsed_url['scheme']) ? $parsed_url['scheme'] : 'https';
+				$host = isset($parsed_url['host']) ? $parsed_url['host'] : '';
+				$base = "$scheme://$host";
+				$favicon = (substr($favicon, 0, 1) === '/') ? $base . $favicon : $base . '/' . $favicon;
+			}
+
+			return $favicon;
+		}
+		$parsed_url = parse_url($url);
+		$scheme = isset($parsed_url['scheme']) ? $parsed_url['scheme'] : 'https';
+		$host = isset($parsed_url['host']) ? $parsed_url['host'] : '';
+		return "$scheme://$host/favicon.ico";
+	}
 }
