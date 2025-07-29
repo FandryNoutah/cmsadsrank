@@ -351,30 +351,22 @@ class Visuels_model extends CI_Model {
 		return $retour;    
 	}
 	
-	public function getDonneeById($id) {
-    // Sélectionner toutes les colonnes nécessaires, y compris les photos des utilisateurs
-    $this->db->select('donnee.*, clients.*, produit.*, 
-                       am_user.photo_users AS am_photo_user, 
-                       tech_user.photo_users AS tech_photo_user');
-    
-    // Table principale
-    $this->db->from('donnee');
-
-    // Jointures
-    $this->db->join('clients', 'donnee.idclients = clients.idclients');
-    $this->db->join('produit', 'donnee.idproduit = produit.idproduit');
-    $this->db->join('users AS am_user', 'donnee.account_manager = am_user.id', 'left');
-    $this->db->join('users AS tech_user', 'donnee.initiative = tech_user.id', 'left');
-    
-    // Filtrer par idclients
-    $this->db->where('donnee.idclients', $id);
-    
-    // Récupérer les résultats
-    $result = $this->db->get();
-    $retour = $result->result_array();
-    $this->db->close();
-    return $retour;
-}
+		public function getDonneeById($id) {
+	    $this->db->select('donnee.*, clients.*, produit.*, 
+	                       am_user.photo_users AS am_photo_user, 
+	                       tech_user.photo_users AS tech_photo_user');
+	    
+	    $this->db->from('donnee');
+	    $this->db->join('clients', 'donnee.idclients = clients.idclients');
+	    $this->db->join('produit', 'donnee.idproduit = produit.idproduit');
+	    $this->db->join('users AS am_user', 'donnee.account_manager = am_user.id', 'left');
+	    $this->db->join('users AS tech_user', 'donnee.initiative = tech_user.id', 'left');
+	    
+	    $this->db->where('donnee.idclients', $id);
+	    
+	    $result = $this->db->get();
+	    return $result->result_array(); // pas besoin de close()
+	}
 
 	public function prendidgroupeannoncebyclientspmax($idclients) {
 		$sql = "select idgroupe_annonce from groupe_annonce where idclients = '". $idclients ."' AND type_campagnes = 3 ";
