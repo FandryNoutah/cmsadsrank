@@ -1,3 +1,4 @@
+
 <div class="modal fade" id="clientModal" tabindex="-1" aria-labelledby="clientModalLabel" aria-hidden="true">
 	<div class="modal-dialog modal-dialog-scrollable" style="max-width: 600px;">
 		<div class="modal-content p-3">
@@ -8,18 +9,23 @@
 						<span aria-hidden="true">&times;</span>
 					</button>
 				</div>
+				<form action="<?php echo base_url("Client/insert_client") ?>" enctype="multipart/form-data" method="post" enctype="multipart/form-data">
 				<div class="modal-body">
 					<div class="form-group">
 						<label for="name">Nom client</label>
-						<input type="text" class="form-control h-auto py-3" placeholder="Entrer nom client" id="name" name="name">
+						<input type="text" class="form-control h-auto py-3" placeholder="Entrer nom client" id="name" name="client">
 					</div>
 					<div class="form-group">
 						<label for="website">Site internet</label>
-						<input type="text" class="form-control h-auto py-3" placeholder="Entrer l'url du client" id="website" name="website">
+						<input type="text" class="form-control h-auto py-3" placeholder="Entrer l'url du client" id="website" name="site_client">
 					</div>
 					<div class="form-group">
 						<label for="email">Email client</label>
-						<input type="email" class="form-control h-auto py-3" placeholder="Entrer l'adresse email du client" id="email" name="email">
+						<input type="email" class="form-control h-auto py-3" placeholder="Entrer l'adresse email du client" id="email" name="email_client">
+					</div>
+					<div class="form-group">
+						<label for="email">Numéro du client</label>
+						<input type="numero_client" class="form-control h-auto py-3" placeholder="Entrer le numéro du client" id="numero_client" name="numero_client">
 					</div>
 					<div class="form-group">
 						<label for="budget">Budget</label>
@@ -27,42 +33,41 @@
 					</div>
 					<div class="form-group">
 						<label for="product">Produit</label>
-						<select class="form-control h-auto py-3" name="product" id="product">
-							<option>Google Ads</option>
-							<option>GTM</option>
-							<option>Microsoft Ads</option>
-							<option>Social Media</option>
+						<select class="form-control h-auto py-3" name="product_choice" id="product">
+							<?php foreach($produit as $d): ?>
+							<option value="<?php echo $d->idproduit ?>"><?php echo $d->label_produit ?></option>
+							<?php endforeach; ?>
 						</select>
 					</div>
 					<div class="form-group">
 						<label for="initiative">Initiative</label>
 						<select class="form-control h-auto py-3" name="initiative" id="initiative">
 							<option selected disabled>Sélectionner Initiative</option>
-							<option>Admin</option>
-							<option>Michael</option>
-							<option>Mavreen</option>
+							<?php foreach($users as $u): ?>
+							<option value="<?php echo $u->id ?>"><?php echo $u->first_name ?></option>
+							<?php endforeach; ?>
 						</select>
 					</div>
 					<div class="form-group">
 						<label for="initiative">Account manager</label>
-						<select class="form-control h-auto py-3" name="initiative" id="initiative">
+						<select class="form-control h-auto py-3" name="am" id="initiative">
 							<option selected disabled>Sélectionner AM</option>
-							<option>Admin</option>
-							<option>Michael</option>
-							<option>Mavreen</option>
+							<?php foreach($users as $u): ?>
+							<option value="<?php echo $u->id ?>"><?php echo $u->first_name ?></option>
+							<?php endforeach; ?>
 						</select>
 					</div>
 					<div class="form-group">
 						<label for="payment_date">Date de mise en place du paiement</label>
-						<input type="date" class="form-control h-auto py-3" name="payment_date" id="payment_date">
+						<input type="date" class="form-control h-auto py-3" name="date_mis_en_place" id="payment_date">
 					</div>
 					<div class="form-group">
 						<label for="brief_date">Date Brief</label>
-						<input type="date" class="form-control h-auto py-3" name="brief_date" id="brief_date">
+						<input type="date" class="form-control h-auto py-3" name="date_brief" id="brief_date">
 					</div>
 					<div class="form-group">
 						<label for="announce_date">Date annonce en ligne</label>
-						<input type="date" class="form-control h-auto py-3" name="announce_date" id="announce_date">
+						<input type="date" class="form-control h-auto py-3" name="date_annonce" id="announce_date">
 					</div>
 
 					<div class="row">
@@ -74,6 +79,7 @@
 						</div>
 					</div>
 				</div>
+				</form>
 			</div>
 		</div>
 	</div>
