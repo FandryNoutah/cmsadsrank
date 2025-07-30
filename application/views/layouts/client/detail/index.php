@@ -17,7 +17,7 @@
 			<?php $this->load->view('layouts/client/detail/sidebar') ?>
 
 			<div class="col w-100">
-				<div class="container-fluid position-relative">
+				<div class="container-fluid position-relative pb-5 mb-5">
 
 					<br><br>
 					<span class="badge alert-success rounded-pill px-4 py-3" style="font-size: 12px; font-weight: 500;">
@@ -115,7 +115,7 @@
 
 					<div class="row row-cols-4 mb-5">
 						<div class="col">
-							<div class="card">
+							<div class="card h-100">
 								<div class="card-body">
 									<div class="d-flex align-items-center mb-2">
 										<img src="<?= base_url('assets/images/figma/discu_queue.png') ?>" width="43">
@@ -127,7 +127,7 @@
 							</div>
 						</div>
 						<div class="col">
-							<div class="card">
+							<div class="card h-100">
 								<div class="card-body">
 									<div class="d-flex align-items-center mb-2">
 										<img src="<?= base_url('assets/images/figma/google_meet.png') ?>" width="43">
@@ -139,7 +139,7 @@
 							</div>
 						</div>
 						<div class="col">
-							<div class="card">
+							<div class="card h-100">
 								<div class="card-body">
 									<div class="d-flex align-items-center mb-2">
 										<img src="<?= base_url('assets/images/figma/air_call.png') ?>" width="43">
@@ -151,7 +151,7 @@
 							</div>
 						</div>
 						<div class="col">
-							<div class="card">
+							<div class="card h-100">
 								<div class="card-body">
 									<div class="d-flex align-items-center mb-2">
 										<img src="<?= base_url('assets/images/figma/teams_tasks.png') ?>" width="43">
@@ -166,7 +166,7 @@
 
 					<br><br>
 
-					<ul class="nav nav-tabs mr-auto border-bottom mb-5" role="tablist">
+					<ul class="nav nav-tabs mr-auto border-bottom mb-3" role="tablist">
 						<li class="nav-item">
 							<a class="nav-link py-3 active" type="button" id="budget_tab" data-toggle="tab" data-target="#budget" type="button" role="tab" aria-controls="budget" aria-selected="true">
 								<img src="<?= base_url('assets/images/icons/figma/icon-budget.svg') ?>" alt="">
@@ -174,19 +174,100 @@
 							</a>
 						</li>
 						<li class="nav-item">
-							<a class="nav-link py-3" type="button" id="kanban_tab" data-toggle="tab" data-target="#kanban" type="button" role="tab" aria-controls="kanban" aria-selected="false">
+							<a class="nav-link py-3" type="button" id="variation_tab" data-toggle="tab" data-target="#variation" type="button" role="tab" aria-controls="variation" aria-selected="false">
 								<img src="<?= base_url('assets/images/icons/figma/icon-kanban.svg') ?>" alt="">
 								Variations
 							</a>
 						</li>
 					</ul>
 					<div class="tab-content" id="taskTabContent">
-
-						<div class="tab-pane fade mb-5" id="budget" role="tabpanel" aria-labelledby="budget_tab">
-
+						<div class="tab-pane fade mb-5 show active" id="budget" role="tabpanel" aria-labelledby="budget_tab">
+							<div class="card">
+								<div class="card-body">
+									<h1>Graph here</h1>
+								</div>
+							</div>
+						</div>
+						<div class="tab-pane fade mb-5" id="variation" role="tabpanel" aria-labelledby="variation_tab">
+							<div class="card">
+								<div class="card-body">
+									<h1>List here</h1>
+								</div>
+							</div>
 						</div>
 					</div>
 
+					<br><br>
+
+					<h1 style="font-size: 48px;">Loocker Studio</h1>
+					<div class="row row-cols-3">
+						<div class="col">
+							<div class="card h-100">
+								<div class="card-body text-center">
+									<h5>Rapport Basic</h5>
+									<span class="text-muted">
+										<i class="fa fa-circle mr-2" style="color: #589e67;"></i>
+										Active
+									</span>
+									<button class="btn btn-soutline-dark btn-block">Loocker Studio</button>
+								</div>
+							</div>
+						</div>
+						<div class="col">
+							<div class="card h-100">
+								<div class="card-body text-center">
+									<h5>Rapport de conversion</h5>
+									<span class="text-muted">
+										<i class="fa fa-circle mr-2" style="color: #589e67;"></i>
+										Active
+									</span>
+									<button class="btn btn-soutline-dark btn-block">Loocker Studio</button>
+								</div>
+							</div>
+						</div>
+						<div class="col">
+							<div class="card h-100">
+								<div class="card-body text-center">
+									<h5>Rapport Bilan Annuel</h5>
+									<br>
+									<button class="btn btn-light btn-block">
+										<i class="fa fa-plus"></i>
+										Create Task
+									</button>
+								</div>
+							</div>
+						</div>
+					</div>
+					
+					<br><br>
+
+					<div class="d-flex justify-content-between">
+						<h1 style="font-size: 48px;">Détection Modules</h1>
+						<button class="btn btn-outline-dark btn-lg">Voir tout</button>
+					</div>
+					<br><br>
+					<div class="row row-cols-2">
+						<div class="col">
+							<div class="card">
+								<div class="card-body text-center">
+									<h3 class="mb-3">6+ Apps connectés</h3>
+									<p class="text-muted mx-5" style="font-size: 18px;">
+										Embark on a transformative journey with our venture. Over 60 powerful tools to make your work more efficient and effective.
+									</p>
+								</div>
+							</div>
+						</div>
+						<div class="col">
+							<div class="card">
+								<div class="card-body text-center">
+									<h3 class="mb-3">Google Tag Manager</h3>
+									<p class="text-muted mx-5" style="font-size: 18px;">
+										Venture is audited and certified by few industry that have been leading in Security Third Party standards.
+									</p>
+								</div>
+							</div>
+						</div>
+					</div>
 				</div>
 			</div>
 		</div>
