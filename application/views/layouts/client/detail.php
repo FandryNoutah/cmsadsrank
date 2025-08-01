@@ -1,3 +1,4 @@
+<?php var_dump($donnees); ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
