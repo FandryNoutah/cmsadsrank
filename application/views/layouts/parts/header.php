@@ -12,7 +12,7 @@
 		<li class="nav-item">
 			<a class="nav-link" href="#">
 				<img src="<?= base_url('assets/images/icons/figma/icon-question.svg') ?>" alt="">
-				Help Center
+				Ticket
 			</a>
 		</li>
 		<li class="nav-item dropdown no-arrow">

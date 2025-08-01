@@ -13,14 +13,8 @@
 			</li>
 			<li class="nav-item rounded">
 				<a class="nav-link text-secondary" href="#">
-					<img class="mr-2" src="<?= base_url('assets/images/icons/figma/icon-bell.svg') ?>" />
-					<span class="nav-label">Notifications</span>
-				</a>
-			</li>
-			<li class="nav-item rounded">
-				<a class="nav-link text-secondary" href="#">
-					<img class="mr-2" src="<?= base_url('assets/images/icons/figma/icon-noteblank.svg') ?>" />
-					<span class="nav-label">Notes</span>
+					<img class="mr-2" src="<?= base_url('assets/images/icons/figma/icon-calendar.svg') ?>" />
+					<span class="nav-label">Onboarding</span>
 				</a>
 			</li>
 			<li class="nav-item rounded <?= ($this->uri->segment(1) == "Client") ? 'bg-white' : ''; ?>">
@@ -32,21 +26,22 @@
 			<li class="nav-item rounded <?= ($this->uri->segment(1) == "Task") ? 'bg-white' : ''; ?>">
 				<a class="nav-link text-secondary" href="<?= base_url('Task') ?>">
 					<img class="mr-2" src="<?= base_url('assets/images/icons/figma/icon-clipboardtext.svg') ?>" />
-					<span class="nav-label">Tasks</span>
+					<span class="nav-label">Tâches</span>
+				</a>
+			</li>
+			<li class="nav-item rounded">
+				<a class="nav-link text-secondary" href="#">
+					<img class="mr-2" src="<?= base_url('assets/images/icons/figma/icon-noteblank.svg') ?>" />
+					<span class="nav-label">Notes</span>
 				</a>
 			</li>
 			<li class="nav-item rounded">
 				<a class="nav-link text-secondary" href="#">
 					<img class="mr-2" src="<?= base_url('assets/images/icons/figma/icon-envelope.svg') ?>" />
-					<span class="nav-label">Emails</span>
+					<span class="nav-label">Discussions</span>
 				</a>
 			</li>
-			<li class="nav-item rounded">
-				<a class="nav-link text-secondary" href="#">
-					<img class="mr-2" src="<?= base_url('assets/images/icons/figma/icon-calendar.svg') ?>" />
-					<span class="nav-label">Calendars</span>
-				</a>
-			</li>
+			
 		</ul>
 
 		<ul class="nav flex-column pt-4 pb-3 px-2 border-bottom">
@@ -56,19 +51,14 @@
 			<li class="nav-item rounded">
 				<a class="nav-link text-secondary" href="#">
 					<img class="mr-2" src="<?= base_url('assets/images/icons/figma/chartlineup.svg') ?>" />
-					<span class="nav-label">Analytics</span>
+					<span class="nav-label">Loocker Studio</span>
 				</a>
 			</li>
-			<li class="nav-item rounded">
-				<a class="nav-link text-secondary" href="#">
-					<img class="mr-2" src="<?= base_url('assets/images/icons/figma/addressbook.svg') ?>" />
-					<span class="nav-label">Contacts</span>
-				</a>
-			</li>
+			
 			<li class="nav-item rounded">
 				<a class="nav-link text-secondary" href="#">
 					<img class="mr-2" src="<?= base_url('assets/images/icons/figma/icon-briefcase.svg') ?>" />
-					<span class="nav-label">Companies</span>
+					<span class="nav-label">Plan de taggage</span>
 				</a>
 			</li>
 		</ul>
@@ -76,14 +66,8 @@
 		<ul class="nav flex-column pt-4 pb-3 px-2">
 			<li class="nav-item rounded">
 				<a class="nav-link text-secondary" href="#">
-					<img class="mr-2" src="<?= base_url('assets/images/icons/figma/icon-squaresfour.svg') ?>" />
-					<span class="nav-label">Interactions</span>
-				</a>
-			</li>
-			<li class="nav-item rounded">
-				<a class="nav-link text-secondary" href="#">
 					<img class="mr-2" src="<?= base_url('assets/images/icons/figma/icon-gear.svg') ?>" />
-					<span class="nav-label">Settings</span>
+					<span class="nav-label">Utilisateur</span>
 				</a>
 			</li>
 		</ul>

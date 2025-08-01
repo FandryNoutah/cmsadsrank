@@ -5928,10 +5928,16 @@ a.badge-dark.focus {
 }
 
 .alert-primary {
+	color: #4976f4;
+	background-color: #edf2fe;
+	border-color: #4976f4;
+}
+
+/* .alert-primary {
 	color: #004085;
 	background-color: #cce5ff;
 	border-color: #b8daff;
-}
+} */
 
 .alert-primary hr {
 	border-top-color: #9fcdff;

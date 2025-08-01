@@ -137,8 +137,8 @@ Client
 					<tr>
 						<td>
 							<a href="<?= base_url('Client/detail_client/' . $d->idclients) ?>" style="display: flex; align-items: center; text-decoration: none; color: inherit;">
-								<img src="<?= base_url('assets/images/figma/user_frame.png') ?>" class="img-thumbnail" width="28" height="28" alt="Client Image" style="margin-right: 8px;">
-								<?= htmlspecialchars($d->nom_client) ?>
+							<img src="<?= $d->favicon ?>" class="img-thumbnail" width="28" height="28" alt="Client Image" style="margin-right: 8px;">
+							<?= htmlspecialchars($d->nom_client) ?>
 							</a>
 						</td>
 
