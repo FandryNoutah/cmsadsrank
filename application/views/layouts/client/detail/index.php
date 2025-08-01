@@ -223,7 +223,6 @@
 							</a>
 						</li>
 					</ul>
-
 					<div class="tab-content" id="taskTabContent">
 						<div class="tab-pane fade mb-5 show active" id="budget" role="tabpanel" aria-labelledby="budget_tab">
 							<div class="card">
