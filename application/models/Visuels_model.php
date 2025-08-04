@@ -353,8 +353,10 @@ class Visuels_model extends CI_Model {
 	
 	public function getDonneeById($id) {
     $this->db->select('donnee.*, clients.*, produit.*, 
-                       am_user.photo_users AS am_photo_user, 
-                       tech_user.photo_users AS tech_photo_user');
+                       am_user.photo_users AS am_photo_user,
+                       am_user.phone AS am_phone,
+                       tech_user.photo_users AS tech_photo_user,
+                       tech_user.phone AS tech_phone');
     
     $this->db->from('donnee');
     $this->db->join('clients', 'donnee.idclients = clients.idclients');
@@ -365,8 +367,9 @@ class Visuels_model extends CI_Model {
     $this->db->where('donnee.idclients', $id);
     
     $result = $this->db->get();
-    return $result->result_array(); // pas besoin de close()
+    return $result->result_array();
 }
+
 
 
 	public function prendidgroupeannoncebyclientspmax($idclients) {
@@ -897,7 +900,7 @@ public function updatesgroupe($nom_groupe, $mot_cle, $idgroupe_annonce) {
         return $retour;
 		
 	}
-public function insertclient($client, $site_client, $email_client, $numero_client, $favicon, $cms, $cms_logo, $longest_paragraph) {
+public function insertclient($client, $site_client, $email_client, $numero_client, $favicon, $cms, $cms_logo, $summary) {
     $client = $this->db->escape($client);
     $email_client = $this->db->escape($email_client);
     $numero_client = $this->db->escape($numero_client);
@@ -905,10 +908,10 @@ public function insertclient($client, $site_client, $email_client, $numero_clien
     $favicon = $this->db->escape($favicon);
     $cms = $this->db->escape($cms);
     $cms_logo = $this->db->escape($cms_logo);
-    $longest_paragraph = $this->db->escape($longest_paragraph);
+    $summary = $this->db->escape($summary);
 
     $query = "INSERT INTO clients (nom_client, email_client, numero_client, site_client, favicon, cms, cms_logo, info_base_client) 
-              VALUES ($client, $email_client, $numero_client, $site_client, $favicon, $cms, $cms_logo, $longest_paragraph)";
+              VALUES ($client, $email_client, $numero_client, $site_client, $favicon, $cms, $cms_logo, $summary)";
     
     $this->db->query($query);
 

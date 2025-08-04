@@ -3,7 +3,8 @@ defined('BASEPATH') or exit('No direct script access allowed');
 
 class Client extends MY_Controller
 {
-
+	private $api_url = 'https://api.aircall.io/v1/calls';
+    private $api_auth = 'e69c2f6c77144ad053a54bf77088aa09:6ab56a32536bc017ed6b2adb619338e0';
 	protected $file_upload_field;
 
 	public function __construct()
@@ -46,77 +47,204 @@ class Client extends MY_Controller
 	{
 		$id = $idclients;
 		$clients = $this->data["donnees"] = $this->visuels_model->getDonneeById($id);
+		$numero_client = $clients[0]['numero_client'];
+		$numero_am = $clients[0]['am_phone'];
+		$calls = $this->get_all_calls();
+
+        // Numéros à comparer (normalisés)
+        $my_number = $numero_am;        
+        $client_number = $numero_client;    
+
+        $count = 0;
+       	$matched_calls = [];
+
+        // Parcours des appels
+       foreach ($calls as $call) {
+            $aircall_number = isset($call->number->digits) ? preg_replace('/\D/', '', $call->number->digits) : '';
+           $external_number = isset($call->raw_digits) ? preg_replace('/\D/', '', $call->raw_digits) : '';
+
+           if (
+                ($aircall_number === $my_number && $external_number === $client_number) ||
+               ($aircall_number === $client_number && $external_number === $my_number)
+            ) {
+                $count++;
+                $matched_calls[] = $call;
+            }
+        }
+        $this->data["call_count"] = $count;
+        $data['matched_calls'] = $matched_calls;
 		$this->content = "layouts/client/detail/index.php";
 		$this->layout();
 	}
+	private function get_all_calls()
+    {
+        $all_calls = [];
+        $page = 1;
+
+        do {
+            $url = $this->api_url . '?page=' . $page;
+
+            $ch = curl_init();
+            curl_setopt($ch, CURLOPT_URL, $url);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch, CURLOPT_USERPWD, $this->api_auth);
+            curl_setopt($ch, CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
+            $response = curl_exec($ch);
+            curl_close($ch);
+
+            $data = json_decode($response);
+            if (isset($data->calls)) {
+                $all_calls = array_merge($all_calls, $data->calls);
+            }
+
+            $has_more = isset($data->meta->next_page_link);
+            $page++;
+
+        } while ($has_more);
+
+        return $all_calls;
+    }
+
+    public function test_api_connection()
+{
+    $url = $this->api_url . '?per_page=1'; // On limite à 1 appel pour le test
+
+    $ch = curl_init();
+    curl_setopt($ch, CURLOPT_URL, $url);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_USERPWD, $this->api_auth);
+    curl_setopt($ch, CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
+    $response = curl_exec($ch);
+    $httpcode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+    curl_close($ch);
+
+    if ($httpcode === 200) {
+        echo "✅ Connexion API réussie !<br>";
+        echo "<pre>" . print_r(json_decode($response), true) . "</pre>";
+    } else {
+        echo "❌ Échec de la connexion à l'API. Code HTTP : $httpcode<br>";
+        echo "Réponse brute :<br><pre>$response</pre>";
+    }
+}
+	
 	public function insert_client()
 {
-    $client = $this->input->post('client');
-    $email_client = $this->input->post('email_client');
-    $numero_client = $this->input->post('numero_client');
-    $dejaclient = $this->input->post('dejaclient');
-    $budget = $this->input->post('budget');
-    $secteur_activite = $this->input->post('secteur_activite');
-    $product_choice = $this->input->post('product_choice');
-    $initiative = $this->input->post('initiative');
-    $am = $this->input->post('am');
-    $date_mis_en_place = $this->input->post('date_mis_en_place');
-    $date_brief = $this->input->post('date_brief');
-    $date_annonce = $this->input->post('date_annonce');
-    $logo = $this->file_upload_field = 'logo';
+	$client = $this->input->post('client');
+	$email_client = $this->input->post('email_client');
+	$numero_client = $this->input->post('numero_client');
+	$dejaclient = $this->input->post('dejaclient');
+	$budget = $this->input->post('budget');
+	$secteur_activite = $this->input->post('secteur_activite');
+	$product_choice = $this->input->post('product_choice');
+	$initiative = $this->input->post('initiative');
+	$am = $this->input->post('am');
+	$date_mis_en_place = $this->input->post('date_mis_en_place');
+	$date_brief = $this->input->post('date_brief');
+	$date_annonce = $this->input->post('date_annonce');
+	$logo = $this->file_upload_field = 'logo';
 
-    $this->form_validation->set_rules('site_client', 'URL', 'required|trim');
+	$this->form_validation->set_rules('site_client', 'URL', 'required|trim');
 
-    if ($this->form_validation->run() == FALSE) {
-        die('Validation échouée : champ site_client requis');
-    }
+	if ($this->form_validation->run() == FALSE) {
+		die('Validation échouée : champ site_client requis');
+	}
 
-    $site_client = trim($this->input->post('site_client'));
-    if (!preg_match('#^https?://#i', $site_client)) {
-        $site_client = 'https://' . $site_client;
-    }
+	$site_client = trim($this->input->post('site_client'));
+	if (!preg_match('#^https?://#i', $site_client)) {
+		$site_client = 'https://' . $site_client;
+	}
 
-    // Utilisation de cURL pour récupérer le contenu
-    $html = $this->fetch_url($site_client);
+	$html = $this->fetch_url($site_client);
+	if ($html === false) {
+		die("Erreur : impossible d'accéder à l'URL $site_client");
+	}
 
-    if ($html === false) {
-        die("Erreur : impossible d'accéder à l'URL $site_client");
-    }
+	libxml_use_internal_errors(true);
+	$dom = new DOMDocument();
+	$dom->loadHTML($html);
+	libxml_clear_errors();
 
-    libxml_use_internal_errors(true);
-    $dom = new DOMDocument();
-    $dom->loadHTML($html);
-    libxml_clear_errors();
+	$xpath = new DOMXPath($dom);
 
-    $xpath = new DOMXPath($dom);
+	// ✅ Extraire les titres et paragraphes
+	$paragraphs = [];
+	$p_nodes = $xpath->query("//p");
+	foreach ($p_nodes as $p) {
+		$text = trim($p->textContent);
+		if (!empty($text)) {
+			$paragraphs[] = $text;
+		}
+	}
 
-    $longest_paragraph = '';
-    $max_length = 0;
+	$headings = [];
+	for ($i = 1; $i <= 6; $i++) {
+		$h_nodes = $xpath->query("//h$i");
+		foreach ($h_nodes as $h) {
+			$text = trim($h->textContent);
+			if (!empty($text)) {
+				$headings[] = [
+					'tag' => "h$i",
+					'text' => $text
+				];
+			}
+		}
+	}
 
-    $p_nodes = $xpath->query("//p");
+	// ✅ Générer le résumé avec ChatGPT
+	$summary = $this->get_summary_from_chatgpt($headings, $paragraphs);
 
-    foreach ($p_nodes as $p) {
-        $text = trim($p->textContent);
-        if (!empty($text)) {
-            $length = str_word_count($text); // Nombre de mots
-            if ($length > $max_length) {
-                $max_length = $length;
-                $longest_paragraph = $text;
-            }
-        }
-    }
+	preg_match('/GTM-[A-Z0-9]+/', $html, $matches);
+	$gtm_code = !empty($matches) ? $matches[0] : null;
+	$cms = $this->detect_cms($html, $site_client);
+	$cms_logo = $this->get_cms_logo($cms);
+	$favicon = $this->get_favicon($html, $site_client);
 
-    preg_match('/GTM-[A-Z0-9]+/', $html, $matches);
-    $gtm_code = !empty($matches) ? $matches[0] : null;
-    $cms = $this->detect_cms($html, $site_client);
-    $cms_logo = $this->get_cms_logo($cms);
-    $favicon = $this->get_favicon($html, $site_client);
+	// ✅ Insérer le résumé à la place du paragraphe le plus long
+	$idclient = $this->visuels_model->insertclient($client, $site_client, $email_client, $numero_client, $favicon, $cms, $cms_logo, $summary);
+	$this->visuels_model->insertfiche($idclient, $budget, $secteur_activite, $product_choice, $initiative, $am, $date_mis_en_place, $date_brief, $date_annonce, $dejaclient, $gtm_code);
 
-    $idclient = $this->visuels_model->insertclient($client, $site_client, $email_client, $numero_client, $favicon, $cms, $cms_logo, $longest_paragraph);
-    $this->visuels_model->insertfiche($idclient, $budget, $secteur_activite, $product_choice, $initiative, $am, $date_mis_en_place, $date_brief, $date_annonce, $dejaclient, $gtm_code);
-
-    redirect('Client');
+	redirect('Client');
 }
+private function get_summary_from_chatgpt($headings, $paragraphs) {
+	$api_key = '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'; // 🔐 Remplace avec ta clé
+	$model = 'gpt-4'; // ou 'gpt-3.5-turbo'
+
+	$input_text = "Voici les titres et paragraphes d’un site web. Résume ce que fait ce site, son activité, son objectif ou secteur, en quelques lignes.\n\n";
+	$input_text .= "Titres :\n";
+	foreach ($headings as $h) {
+		$input_text .= "- ({$h['tag']}) {$h['text']}\n";
+	}
+	$input_text .= "\nParagraphes :\n";
+	foreach (array_slice($paragraphs, 0, 10) as $p) {
+		$input_text .= "- $p\n";
+	}
+
+	$data = [
+		"model" => $model,
+		"messages" => [
+			["role" => "user", "content" => $input_text]
+		],
+		"temperature" => 0.7
+	];
+
+	$ch = curl_init('https://api.openai.com/v1/chat/completions');
+	curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+	curl_setopt($ch, CURLOPT_HTTPHEADER, [
+		'Content-Type: application/json',
+		'Authorization: Bearer ' . $api_key
+	]);
+	curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
+
+	$response = curl_exec($ch);
+	if (curl_errno($ch)) {
+		return 'Erreur OpenAI : ' . curl_error($ch);
+	}
+
+	curl_close($ch);
+	$result = json_decode($response, true);
+	return $result['choices'][0]['message']['content'] ?? 'Résumé non disponible.';
+}
+
 
 // Fonction cURL pour récupérer le contenu HTML
 private function fetch_url($url) {

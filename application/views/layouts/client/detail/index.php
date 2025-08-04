@@ -1,4 +1,3 @@
-
 <?php start_section('stylesheet'); ?>
 <style>
 	/* .table-wrapper {
@@ -46,26 +45,15 @@
 </style>
 <?php end_section(); ?>
 <?php start_section('content'); ?>
-<!DOCTYPE html>
-<html lang="en">
 
-<head>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1" />
-	<link rel="stylesheet" href="<?= base_url('assets/vendors/bootstrap/css/bootstrap.css') ?>" />
-	<link rel="stylesheet" href="<?= base_url('assets/vendors/fontawesome/css/all.min.css') ?>" />
-
-</head>
-
-<body>
-	<?php foreach($donnees as $d): ?>
+<?php foreach ($donnees as $d): ?>
 	<div class="container-fluid p-0 h-100">
 		<div class="row no-gutters h-100">
 
 			<?php $this->load->view('layouts/client/detail/sidebar') ?>
 
 			<div class="col w-100">
-				<div class="container-fluid position-relative">
+				<div class="container-fluid">
 
 					<br><br>
 					<span class="badge alert-success rounded-pill px-4 py-3" style="font-size: 12px; font-weight: 500;">
@@ -74,13 +62,15 @@
 					</span>
 					<br><br><br>
 
-					<div class="d-flex justify-content-start" style="font-size: 20px;">
-						<i class="fa fa-star mr-1"></i>
-						<i class="fa fa-star mr-1"></i>
-						<i class="fa fa-star mr-1"></i>
-						<i class="fa fa-star mr-1"></i>
-						<i class="fa fa-star-half mr-1"></i>
+					<div class="d-flex justify-content-start align-items-center">
+						<img src="<?= base_url('assets/images/icons/figma/star_full.svg') ?>" alt="star_full" width="20" class="mr-1">
+						<img src="<?= base_url('assets/images/icons/figma/star_full.svg') ?>" alt="star_full" width="20" class="mr-1">
+						<img src="<?= base_url('assets/images/icons/figma/star_full.svg') ?>" alt="star_full" width="20" class="mr-1">
+						<img src="<?= base_url('assets/images/icons/figma/star_full.svg') ?>" alt="star_full" width="20" class="mr-1">
+						<img src="<?= base_url('assets/images/icons/figma/star_half.svg') ?>" alt="star_half" width="20" class="mr-1">
+						<span class="ml-3 py-1 px-3 badge" style="background-color: #edf2fe; color: #4976f4; font-size: 12px; font-weight: 500;">Bleu</span>
 					</div>
+					
 					<br>
 
 					<h1 class="font-weight-bold" style="font-size: 48px;">
@@ -89,71 +79,70 @@
 					</h1>
 					<h5><?php echo $d['site_client'] ?></h5>
 
-					<span class="col-auto mx-1 p-2 badge" style="background-color: #edf2fe; color: #4976f4; font-size: 12px; font-weight: 500;">Bleu</span>
+					<div class="row no-gutters mb-3">
+						<div class="col pr-2">
+							<div class="card h-100 mb-5">
+								<div class="card-body">
+									<ul class="nav nav-tabs mb-2">
+										<li class="nav-item">
+											<a class="nav-link py-3 active" type="button">
+												Société
+											</a>
+										</li>
+									</ul>
 
-					<div class="card position-absolute" style="width: 360px; top: 100px; right: 80px;">
-						<div class="card-body">
-							<div class="d-flex justify-content-between align-items-center">
-								<button class="btn btn-dark py-3 px-5">
-									<?php echo $d['budget'] ?> €
-								</button>
-								<button type="button" class="btn btn-light rounded-pill px-3">
-									<i class="fa fa-ellipsis-v" style="font-size: 16px;"></i>
-								</button>
+									<div class="d-flex align-items-center mb-4">
+										<img src="<?= base_url('assets/images/figma/fb_debarras_logo.png') ?>" width="114">
+										<h6 class="ml-3">Ouest lyonnais climatisation plomberie SARL</h6>
+										<a href="#" class="text-decoration-none ml-auto mx-3">Categories</a>
+										<a href="#" class="text-decoration-none mx-3">Marketing</a>
+									</div>
+									<h6 class="text-muted font-weight-normal">
+										<?php echo $d['info_base_client'] ?></h6>
+								</div>
 							</div>
-							<br><br>
-							<div class="d-flex justify-content-start mb-3">
-								<span class="badge badge-light mr-3" style="width: 20px; height: 20px; background-color: #f2f2f2;">&nbsp;</span>
-								<span class="mr-2">Date d'anniversaire</span>
-								<span class="mr-2">|</span>
-								<span class="mr-2"><?php echo $d['mis_en_place_paiement'] ?></span>
-							</div>
-							<div class="d-flex justify-content-start mb-3">
-								<span class="badge badge-light mr-3" style="width: 20px; height: 20px; background-color: #f2f2f2;">&nbsp;</span>
-								<span class="mr-2">Date de Mise en ligne</span>
-								<span class="mr-2">|</span>
-								<span class="mr-2"><?php echo $d['annonce'] ?></span>
-							</div>
-							<div class="d-flex justify-content-start mb-3">
-								<span class="badge badge-light mr-3" style="width: 20px; height: 20px; background-color: #f2f2f2;">&nbsp;</span>
-								<span class="mr-2">Commerciale</span>
-								<span class="mr-2">
-									<img src="<?= base_url('assets/images/' . $d['am_photo_user']) ?>" width="24" height="24">
-								</span>
-							</div>
-							<div class="d-flex justify-content-start mb-4">
-								<span class="badge badge-light mr-3" style="width: 20px; height: 20px; background-color: #f2f2f2;">&nbsp;</span>
-								<span class="mr-2">Account Manager</span>
-								<span class="mr-2">
-									<img src="<?= base_url('assets/images/' . $d['tech_photo_user']) ?>" width="24" height="24">
-								</span>
-							</div>
-							<button class="btn btn-outline-dark btn-block">Onboarding</button>
 						</div>
-					</div>
-				<br><br><br><br><br><br><br><br><br>
-					<ul class="nav nav-tabs mb-2 border-bottom">
-						<li class="nav-item">
-							<a class="nav-link py-3 active" type="button">
-								Société
-							</a>
-						</li>
-					</ul>
-
-					<div class="card mb-5">
-						<div class="card-body">
-							<div class="d-flex align-items-center mb-4">
-								<img src="<?= base_url('assets/images/figma/fb_debarras_logo.png') ?>" width="114">
-								<h6 class="ml-3">Ouest lyonnais climatisation plomberie SARL</h6>
-								<a href="#" class="text-decoration-none ml-auto mx-3">Categories</a>
-								<a href="#" class="text-decoration-none mx-3">Marketing</a>
+						<div class="col-auto">
+							<div class="card h-100" style="width: 360px;">
+								<div class="card-body">
+									<div class="d-flex justify-content-between align-items-center">
+										<button class="btn btn-dark py-3 px-5">
+											<?php echo $d['budget'] ?> €
+										</button>
+										<button type="button" class="btn btn-light rounded-pill px-3">
+											<i class="fa fa-ellipsis-v" style="font-size: 16px;"></i>
+										</button>
+									</div>
+									<br><br>
+									<div class="d-flex justify-content-start mb-3">
+										<span class="badge badge-light mr-3" style="width: 20px; height: 20px; background-color: #f2f2f2;">&nbsp;</span>
+										<span class="mr-2">Date d'anniversaire</span>
+										<span class="mr-2">|</span>
+										<span class="mr-2"><?php echo $d['mis_en_place_paiement'] ?></span>
+									</div>
+									<div class="d-flex justify-content-start mb-3">
+										<span class="badge badge-light mr-3" style="width: 20px; height: 20px; background-color: #f2f2f2;">&nbsp;</span>
+										<span class="mr-2">Date de Mise en ligne</span>
+										<span class="mr-2">|</span>
+										<span class="mr-2"><?php echo $d['annonce'] ?></span>
+									</div>
+									<div class="d-flex justify-content-start mb-3">
+										<span class="badge badge-light mr-3" style="width: 20px; height: 20px; background-color: #f2f2f2;">&nbsp;</span>
+										<span class="mr-2">Commerciale</span>
+										<span class="mr-2">
+											<img src="<?= base_url('assets/images/' . $d['am_photo_user']) ?>" width="24" height="24">
+										</span>
+									</div>
+									<div class="d-flex justify-content-start mb-4">
+										<span class="badge badge-light mr-3" style="width: 20px; height: 20px; background-color: #f2f2f2;">&nbsp;</span>
+										<span class="mr-2">Account Manager</span>
+										<span class="mr-2">
+											<img src="<?= base_url('assets/images/' . $d['tech_photo_user']) ?>" width="24" height="24">
+										</span>
+									</div>
+									<button class="btn btn-outline-dark btn-block">Onboarding</button>
+								</div>
 							</div>
-							<h6 class="text-muted font-weight-normal">
-								Meta Platforms, Inc., doing business as Meta and formerly named Facebook, Inc., and TheFacebook, Inc., is an American multinational technology conglomerate based in Menlo Park, California.
-								<br>
-								<br>
-								The company owns Facebook, Instagram, and WhatsApp, among other products and services. The company owns Facebook, Instagram, and WhatsApp, among other products and services.The company owns Facebook, Instagram, and WhatsApp, among other products and
-							</h6>
 						</div>
 					</div>
 
@@ -190,7 +179,7 @@
 										<a href="#" class="text-decoration-none text-muted ml-3 stretched-link">AirCall</a>
 										<i class="fa fa-chevron-right ml-auto" style="font-size: 12px;"></i>
 									</div>
-									<h3 class="m-0">162 Appels</h3>
+									<h3 class="m-0"><?php echo $call_count ?> Appels</h3>
 								</div>
 							</div>
 						</div>
@@ -209,7 +198,7 @@
 					</div>
 
 					<br><br>
-						<ul class="nav nav-tabs mr-auto border-bottom mb-3" role="tablist">
+					<ul class="nav nav-tabs mr-auto border-bottom mb-3" role="tablist">
 						<li class="nav-item">
 							<a class="nav-link py-3 active" type="button" id="budget_tab" data-toggle="tab" data-target="#budget" type="button" role="tab" aria-controls="budget" aria-selected="true">
 								<img src="<?= base_url('assets/images/icons/figma/icon-budget.svg') ?>" alt="">
@@ -644,9 +633,6 @@
 			});
 		});
 	</script>
-	
-	<?php endforeach; ?>
-	<?php end_section(); ?>
-</body>
 
-</html>
+<?php endforeach; ?>
+<?php end_section(); ?>
