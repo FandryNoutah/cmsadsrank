@@ -1,4 +1,4 @@
-<nav id="sidebarMenu" class="col-auto p-0 d-md-block bg-light sidebar collapse border-right" style="width: 250px;">
+<nav id="sidebarMenu" class="col-auto p-0 d-md-block sidebar collapse border-right" style="width: 250px;">
 	<div class="sidebar-sticky">
 		<ul class="nav flex-column pt-4 pb-3 px-2 border-bottom">
 			<h6 class="sidebar-heading nav-label text-muted font-weight-light ml-3" style="font-size: 12px;">
