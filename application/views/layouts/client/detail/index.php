@@ -50,7 +50,7 @@
 	<div class="container-fluid p-0 h-100">
 		<div class="row no-gutters h-100">
 
-			<?php $this->load->view('layouts/client/detail/sidebar') ?>
+			<?php $this->load->view('layouts/client/detail/sidebar'); ?>
 
 			<div class="col w-100">
 				<div class="container-fluid">
@@ -70,7 +70,7 @@
 						<img src="<?= base_url('assets/images/icons/figma/star_half.svg') ?>" alt="star_half" width="20" class="mr-1">
 						<span class="ml-3 py-1 px-3 badge" style="background-color: #edf2fe; color: #4976f4; font-size: 12px; font-weight: 500;">Bleu</span>
 					</div>
-					
+
 					<br>
 
 					<h1 class="font-weight-bold" style="font-size: 48px;">
@@ -106,12 +106,18 @@
 							<div class="card h-100" style="width: 360px;">
 								<div class="card-body">
 									<div class="d-flex justify-content-between align-items-center">
-										<button class="btn btn-dark py-3 px-5">
+										<button class="btn btn-dark py-3 px-5" data-toggle="modal" data-target="#budgetModal">
 											<?php echo $d['budget'] ?> €
 										</button>
-										<button type="button" class="btn btn-light rounded-pill px-3">
-											<i class="fa fa-ellipsis-v" style="font-size: 16px;"></i>
-										</button>
+										<div class="dropdown no-arrow">
+											<a href="javascript:void(0);" class="btn btn-light rounded-pill px-3 nav-link dropdown-toggle" id="clientDetailDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+												<i class="fa fa-ellipsis-v" style="font-size: 16px;"></i>
+											</a>
+											<div class="dropdown-menu dropdown-menu-right animated--grow-in" aria-labelledby="clientDetailDropdown">
+												<a class="dropdown-item" href="javscript:void(0);" data-toggle="modal" data-target="#editModal">Modifier</a>
+												<a class="dropdown-item" href="javscript:void(0);" data-toggle="modal" data-target="#statusModal">Statut Client</a>
+											</div>
+										</div>
 									</div>
 									<br><br>
 									<div class="d-flex justify-content-start mb-3">
@@ -509,78 +515,85 @@
 		</div>
 	</div>
 
-	<script src="<?= base_url('assets/vendors/jquery/jquery.min.js') ?>"></script>
-	<script src="<?= base_url('assets/vendors/bootstrap/js/bootstrap.min.js') ?>"></script>
-	<script src="<?= base_url('assets/vendors/fontawesome/js/all.min.js') ?>"></script>
-	<script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+	<?php endforeach; ?>
+	
+	<?php $this->load->view('layouts/client/detail/modal/budget'); ?>
+	<?php $this->load->view('layouts/client/detail/modal/edit'); ?>
+	<?php $this->load->view('layouts/client/detail/modal/status'); ?>
 
-	<script>
-		$(function() {
+<?php end_section(); ?>
 
-			const chartData = [5200, 2800, 6100, 4200, 5100, 6500, 4300, 3100, 4900, 3400, 5500, 4300];
+<?php start_section('script'); ?>
 
-			const options = {
-				chart: {
-					type: 'bar',
-					height: 400,
-					toolbar: {
-						show: false
-					},
-					events: {
-						dataPointSelection: function(event, chartContext, config) {
-							// Optional: handle click
-						}
+<script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+
+<script>
+	$(function() {
+
+		const chartData = [5200, 2800, 6100, 4200, 5100, 6500, 4300, 3100, 4900, 3400, 5500, 4300];
+
+		const options = {
+			chart: {
+				type: 'bar',
+				height: 400,
+				toolbar: {
+					show: false
+				},
+				events: {
+					dataPointSelection: function(event, chartContext, config) {
+						// Optional: handle click
+					}
+				}
+			},
+			series: [{
+				name: 'Budget',
+				data: chartData
+			}],
+			xaxis: {
+				categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+				labels: {
+					style: {
+						fontSize: '16px'
+					}
+				}
+			},
+			yaxis: {
+				max: 6500,
+				min: 0,
+				tickAmount: 5,
+				labels: {
+					style: {
+						fontSize: '16px'
+					}
+				}
+			},
+			plotOptions: {
+				bar: {
+					distributed: true,
+					borderRadius: 5,
+					columnWidth: '32px',
+					endingShape: 'flat'
+				}
+			},
+			colors: new Array(chartData.length).fill('#D8D8D8'),
+			states: {
+				hover: {
+					filter: {
+						type: 'none'
 					}
 				},
-				series: [{
-					name: 'Budget',
-					data: chartData
-				}],
-				xaxis: {
-					categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
-					labels: {
-						style: {
-							fontSize: '16px'
-						}
+				active: {
+					allowMultipleDataPointsSelection: true,
+					filter: {
+						type: 'none'
 					}
-				},
-				yaxis: {
-					max: 6500,
-					min: 0,
-					tickAmount: 5,
-					labels: {
-						style: {
-							fontSize: '16px'
-						}
-					}
-				},
-				plotOptions: {
-					bar: {
-						distributed: true,
-						borderRadius: 5,
-						columnWidth: '32px',
-						endingShape: 'flat'
-					}
-				},
-				colors: new Array(chartData.length).fill('#D8D8D8'),
-				states: {
-					hover: {
-						filter: {
-							type: 'none'
-						}
-					},
-					active: {
-						allowMultipleDataPointsSelection: true,
-						filter: {
-							type: 'none'
-						}
-					}
-				},
-				tooltip: {
-					custom: function({
-						dataPointIndex
-					}) {
-						return `
+				}
+			},
+			tooltip: {
+				custom: function({
+					dataPointIndex
+				}) {
+					return `
 						<div class="card shadow-0 border-0">
 							<div class="card-body p-3">
 								<span class="badge badge-dark p-2 rounded-pill mr-2">
@@ -595,44 +608,43 @@
 								</div>
 							</div>
 						</div>`;
+				}
+			},
+			fill: {
+				colors: chartData.map((_, i) => '#D8D8D8')
+			},
+			stroke: {
+				width: 0
+			},
+			grid: {
+				borderColor: '#ccc',
+				yaxis: {
+					lines: {
+						show: true
 					}
 				},
-				fill: {
-					colors: chartData.map((_, i) => '#D8D8D8')
-				},
-				stroke: {
-					width: 0
-				},
-				grid: {
-					borderColor: '#ccc',
-					yaxis: {
-						lines: {
-							show: true
-						}
-					},
-					strokeDashArray: 4,
-				},
-				dataLabels: {
-					enabled: false
-				},
-				legend: {
-					show: false
-				}
-			};
+				strokeDashArray: 4,
+			},
+			dataLabels: {
+				enabled: false
+			},
+			legend: {
+				show: false
+			}
+		};
 
-			const chart = new ApexCharts(document.querySelector("#budgetChart"), options);
+		const chart = new ApexCharts(document.querySelector("#budgetChart"), options);
 
-			chart.render();
+		chart.render();
 
-			// Change color on hover and click
-			$(document).on('mouseover', '.apexcharts-bar-area', function() {
-				$(this).find('path').attr('fill', '#000');
-			});
-			$(document).on('mouseout', '.apexcharts-bar-area', function() {
-				$(this).find('path').attr('fill', '#D8D8D8');
-			});
+		// Change color on hover and click
+		$(document).on('mouseover', '.apexcharts-bar-area', function() {
+			$(this).find('path').attr('fill', '#000');
 		});
-	</script>
+		$(document).on('mouseout', '.apexcharts-bar-area', function() {
+			$(this).find('path').attr('fill', '#D8D8D8');
+		});
+	});
+</script>
 
-<?php endforeach; ?>
 <?php end_section(); ?>

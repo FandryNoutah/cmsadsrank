@@ -16,7 +16,7 @@
 			</a>
 		</li>
 		<li class="nav-item dropdown no-arrow">
-			<a class="nav-link dropdown-toggle d-flex align-items-center" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+			<a class="nav-link dropdown-toggle d-flex align-items-center" href="javascript:void(0);" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 				<?php $current_user = $this->ion_auth->user()->row(); ?>
 				<img src="<?= base_url('assets/images/' . $current_user->photo_users) ?>" class="rounded-circle mr-2" width="32" height="32" alt="User Image">
 				<span class="d-none d-md-inline mr-2"><?php echo $current_user->first_name ?> <?php echo $current_user->last_name ?></span>
