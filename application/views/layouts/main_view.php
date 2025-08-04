@@ -64,6 +64,7 @@
 	</div>
 
 	<script src="<?= base_url('assets/vendors/jquery/jquery.min.js') ?>"></script>
+	<script src="<?= base_url('assets/vendors/bootstrap/js/popper.min.js') ?>"></script>
 	<script src="<?= base_url('assets/vendors/bootstrap/js/bootstrap.min.js') ?>"></script>
 	<script src="<?= base_url('assets/vendors/fontawesome/js/all.min.js') ?>"></script>
 
