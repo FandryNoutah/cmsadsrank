@@ -47,4 +47,4 @@ application/logs/*
 !application/logs/.htaccess
 /vendor/
 
-system/sessions/*
+/system/sessions/*
