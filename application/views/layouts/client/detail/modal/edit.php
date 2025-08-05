@@ -126,7 +126,7 @@
 				</div>
 			</div>
 			<div class="modal-footer">
-				<button type="button" class="btn btn-success rounded-pill px-3">Enregistrer</button>
+				<button type="button" class="btn btn-dark px-3">Enregistrer</button>
 			</div>
 		</div>
 	</div>
