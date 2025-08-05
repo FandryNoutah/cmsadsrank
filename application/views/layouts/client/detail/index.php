@@ -91,13 +91,9 @@
 										</li>
 									</ul>
 
-									<div class="d-flex align-items-center mb-4">
-										<img src="<?= base_url('assets/images/figma/fb_debarras_logo.png') ?>" width="114">
-										<h6 class="ml-3">Ouest lyonnais climatisation plomberie SARL</h6>
-										<a href="#" class="text-decoration-none ml-auto mx-3">Categories</a>
-										<a href="#" class="text-decoration-none mx-3">Marketing</a>
-									</div>
+									
 									<h6 class="text-muted font-weight-normal">
+									</br>
 										<?php echo $d['info_base_client'] ?></h6>
 								</div>
 							</div>
