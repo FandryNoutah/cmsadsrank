@@ -209,7 +209,7 @@ private function get_summary_from_chatgpt($headings, $paragraphs) {
 	$api_key = '***REMOVED***-Il3DFS-ATHmSKydbqWGNqIZtuCsC2bD67DR5YhlXtsMAoe_tdMtjg_glXcnIhSb_qPVFz-z7y2T3BlbkFJUvVzia2NBnS5TagyZylJRG36YatVpkw27ZfVfhPB06yEiBeYLQDDfIFv3_oG2LClCuw8eNtTEA'; // 🔐 Remplace avec ta clé
 	$model = 'gpt-4'; // ou 'gpt-3.5-turbo'
 
-	$input_text = "Voici les titres et paragraphes d’un site web. Résume ce que fait ce site, son activité, son objectif ou secteur, en quelques lignes.\n\n";
+	$input_text = "Voici les titres et paragraphes d’un site web. Résume ce que fait ce site, son activité, son objectif ou secteur, en quelques deux paragraphe.\n\n";
 	$input_text .= "Titres :\n";
 	foreach ($headings as $h) {
 		$input_text .= "- ({$h['tag']}) {$h['text']}\n";
