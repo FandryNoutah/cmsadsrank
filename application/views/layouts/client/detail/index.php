@@ -1,3 +1,4 @@
+
 <?php start_section('stylesheet'); ?>
 <style>
 	/* .table-wrapper {
@@ -78,7 +79,7 @@
 						<br>
 					</h1>
 					<h5><?php echo $d['site_client'] ?></h5>
-
+					<img src="<?php echo $d['favicon']; ?>" width="43">
 					<div class="row no-gutters mb-3">
 						<div class="col pr-2">
 							<div class="card h-100 mb-5">
@@ -305,10 +306,7 @@
 									</p>
 									<div class="row justify-content-center">
 										<div class="col-auto">
-											<img src="<?= base_url('assets/images/cms/wordpress.png') ?>" width="43">
-										</div>
-										<div class="col-auto">
-											<img src="<?= base_url('assets/images/cms/shopify.png') ?>" width="43">
+											<img src="<?php echo $d['cms_logo']; ?>" width="43">
 										</div>
 									</div>
 								</div>
@@ -323,7 +321,7 @@
 									</p>
 									<span class="badge alert-success rounded-pill px-4 py-3" style="font-size: 14px; font-weight: 500;">
 										<i class="fa fa-circle mr-1" style="font-size: 10px;"></i>
-										GTM 30000HGY
+										<?php echo $d['tracking_gtm'] ?>
 									</span>
 								</div>
 							</div>
