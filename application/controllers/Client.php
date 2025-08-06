@@ -43,6 +43,7 @@ class Client extends MY_Controller
 		$this->layout();
 	}
 
+
 	public function detail_client($idclients)
 	{
 		$id = $idclients;
@@ -75,6 +76,54 @@ class Client extends MY_Controller
         $data['matched_calls'] = $matched_calls;
 		$this->content = "layouts/client/detail/index.php";
 		$this->layout();
+	}
+	public function creer_upsell()
+	{
+		$type_upsell = $this->input->post('type_upsell');
+		$demmande_upsell = $this->input->post('demmande_upsell');
+		$budget_upsell = $this->input->post('budget_upsell');
+		$idclients = $this->input->post('client');
+		$tm = $this->input->post('tm');
+		$date_upsell = $this->input->post('date_upsell');
+		$date_demande_upsell = $this->input->post('date_demande_upsell');
+		$inforamtion_upsell = $this->input->post('information_upsell');
+		$statut_upsell = $this->input->post('statut_upsell');
+		$id = $idclients;
+		$donnee = $this->data["clients"] = $this->visuels_model->getDonneeById($id);
+		$idonnee = $donnee[0]['idonnee'];
+		$buget_initiale = $donnee[0]['budget'];
+		if($type_upsell == 2):
+			$am = $this->input->post('am');
+			$budget_initiale = $this->input->post('budget_initiale');  
+			$idclient = $this->visuels_model->create_upsell($type_upsell,$budget_upsell,$budget_initiale,$demmande_upsell,$am, $tm, $date_upsell, $date_demande_upsell, $inforamtion_upsell, $statut_upsell,$idclients);
+			$budget_finale = $budget_upsell + $budget_initiale;
+			$this->visuels_model->update_budget($budget_finale,$idclients);
+			$date_brief = 0000-00-00;
+			$campagne_actif = 0;
+			$lien_datastudio = 0;
+			$validation_technique = 0000-00-00;
+			$date_validation_structure = 0000-00-00;
+			$this->visuels_model->update_brief($date_brief,$campagne_actif,$validation_technique,$date_validation_structure,$lien_datastudio,$idclients);
+			
+		endif;
+		if($type_upsell == 1):
+			$am = $this->input->post('am');
+			$budget_initiale = $this->input->post('budget_initiale');  
+			$idclient = $this->visuels_model->create_upsell($type_upsell,$budget_upsell,$budget_initiale,$demmande_upsell,$am, $tm, $date_upsell, $date_demande_upsell, $inforamtion_upsell, $statut_upsell,$idclients);
+			$budget_finale = $budget_initiale - $budget_upsell;
+			$this->visuels_model->update_budget($budget_finale,$idclients);
+			
+		endif;
+		if($type_upsell == 3):
+			$am = $this->input->post('am');
+			$am = $demmande_upsell;
+			$budget_initiale = $this->input->post('budget_initiale');  
+			$idclient = $this->visuels_model->create_upsell($type_upsell,$budget_upsell,$budget_initiale,$demmande_upsell,$am, $tm, $date_upsell, $date_demande_upsell, $inforamtion_upsell, $statut_upsell,$idclients);
+			
+		endif;
+		$this->session->set_flashdata('message-succes', "Donnée ajouté avec succès");
+			redirect('Client', 'refresh');
+			$this->layout();
 	}
 	private function get_all_calls()
     {
