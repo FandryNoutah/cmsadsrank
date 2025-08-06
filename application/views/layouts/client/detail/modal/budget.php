@@ -55,7 +55,7 @@
 				</div>
 			</div>
 			<div class="modal-footer">
-				<button type="button" class="btn btn-primary btn-block">Sauvegarder</button>
+				<button type="button" class="btn btn-dark btn-block">Sauvegarder</button>
 			</div>
 		</div>
 	</div>
