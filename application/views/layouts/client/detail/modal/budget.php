@@ -12,8 +12,10 @@
 				<div class="form-group">
 					<label for="budget_type">Type</label>
 					<select name="budget_type" id="budget_type" class="form-control">
-						<option value="">Type 1</option>
-						<option value="">Type 2</option>
+						<option value="">Séléctionner type</option>
+						<option value="1">Baisse de budget</option>
+						<option value="2">Upsell - création de nouvelle campagne</option>
+						<option value="3">Baisse de budget</option>
 					</select>
 				</div>
 
@@ -30,6 +32,16 @@
 				<div class="form-group">
 					<label for="budget">Budget</label>
 					<input type="number" name="budget" id="budget" class="form-control">
+				</div>
+				<div class="form-group">
+					<label for="am_select">AM</label>
+					<select name="am_select" id="budget_type" class="form-control">
+						<?php foreach($users as $u): ?>
+                                    <option value="<?php echo $u['id']; ?>">
+                                        <?php echo $u['last_name']; ?> <?php echo $u['first_name']; ?>
+                                    </option>
+                        <?php endforeach; ?>
+					</select>
 				</div>
 
 				<div class="form-group">
