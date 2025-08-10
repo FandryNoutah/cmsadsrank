@@ -74,7 +74,36 @@ class Client extends MY_Controller
 		$this->data["call_count"] = $count;
 		$this->data['matched_calls'] = $matched_calls;
 
-		$clientUpsells = $this->visuels_model->getupsellbyid($idclients);
+		$latestByMonth = [];
+
+		$clientUpsells = $this->visuels_model->getupsell();
+		foreach ($clientUpsells as $upsell) {
+
+			$monthIndex = (int)date('n', strtotime($upsell->date_upsell)) - 1; // 0-based index
+			$dateTimestamp = strtotime($upsell->date_upsell);
+
+			// Keep only latest date per month
+			if (!isset($latestByMonth[$monthIndex]) || $dateTimestamp > strtotime($latestByMonth[$monthIndex]['date'])) {
+				$latestByMonth[$monthIndex] = [
+					'date' => $upsell->date_upsell,
+					'budget' => $upsell->budgets
+				];
+			}
+		}
+
+		$chartData = array_fill(0, 12, 0);
+		$tooltipData = array_fill(0, 12, []);
+		
+		foreach ($latestByMonth as $monthIndex => $data) {
+			$chartData[$monthIndex] = $data['budget'];
+			$tooltipData[$monthIndex][] = [
+				'date' => date('d M Y', strtotime($data['date'])),
+				'budget' => $data['budget']
+			];
+		}
+		
+		$this->data['chartData'] = json_encode($chartData);
+		$this->data['tooltipData'] = json_encode($tooltipData);
 
 		$this->content = "layouts/client/detail/index.php";
 		$this->layout();
