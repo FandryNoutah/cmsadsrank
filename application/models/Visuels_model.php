@@ -161,6 +161,7 @@ class Visuels_model extends CI_Model {
 		// Exécution de la requête
 		return $this->db->get()->result();
 	}
+	
 	public function getupsellbyid($id) {
 		$this->load->database();
 		$this->db->select('
