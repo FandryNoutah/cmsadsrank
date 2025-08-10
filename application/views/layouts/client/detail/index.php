@@ -1,4 +1,3 @@
-
 <?php start_section('stylesheet'); ?>
 <style>
 	/* .table-wrapper {
@@ -76,10 +75,11 @@
 
 					<h1 class="font-weight-bold" style="font-size: 48px;">
 						<?php echo $d['nom_client'] ?>
-						<br>
+						<img src="<?php echo $d['favicon']; ?>" width="43" class="float-right">
 					</h1>
+					<br>
+
 					<h5><?php echo $d['site_client'] ?></h5>
-					<img src="<?php echo $d['favicon']; ?>" width="43">
 					<div class="row no-gutters mb-3">
 						<div class="col pr-2">
 							<div class="card h-100 mb-5">
@@ -92,9 +92,9 @@
 										</li>
 									</ul>
 
-									
+
 									<h6 class="text-muted font-weight-normal">
-									</br>
+										</br>
 										<?php echo $d['info_base_client'] ?></h6>
 								</div>
 							</div>
@@ -509,11 +509,11 @@
 		</div>
 	</div>
 
-	<?php endforeach; ?>
-	
-	<?php $this->load->view('layouts/client/detail/modal/budget'); ?>
-	<?php $this->load->view('layouts/client/detail/modal/edit'); ?>
-	<?php $this->load->view('layouts/client/detail/modal/status'); ?>
+<?php endforeach; ?>
+
+<?php $this->load->view('layouts/client/detail/modal/budget'); ?>
+<?php $this->load->view('layouts/client/detail/modal/edit'); ?>
+<?php $this->load->view('layouts/client/detail/modal/status'); ?>
 
 <?php end_section(); ?>
 
@@ -524,7 +524,13 @@
 <script>
 	$(function() {
 
-		const chartData = [5200, 2800, 6100, 4200, 5100, 6500, 4300, 3100, 4900, 3400, 5500, 4300];
+		const chartData = <?= $chartData ?>;
+		const tooltipData = <?= $tooltipData ?>;
+
+		const currentMonthIndex = new Date().getMonth();
+
+		// Generate colors
+		const colors = chartData.map((_, i) => i === currentMonthIndex ? '#000000' : '#D8D8D8');
 
 		const options = {
 			chart: {
@@ -569,7 +575,7 @@
 					endingShape: 'flat'
 				}
 			},
-			colors: new Array(chartData.length).fill('#D8D8D8'),
+			colors: colors,
 			states: {
 				hover: {
 					filter: {
@@ -587,25 +593,28 @@
 				custom: function({
 					dataPointIndex
 				}) {
+					if (!tooltipData[dataPointIndex].length) return '';
+					const item = tooltipData[dataPointIndex][0];
 					return `
 						<div class="card shadow-0 border-0">
 							<div class="card-body p-3">
 								<span class="badge badge-dark p-2 rounded-pill mr-2">
 									<i class="fa fa-envelope-open"></i>
 								</span>
-								<span class="text-muted alignt-middle" style="font-weight: 500;">30 July 2023</span>
+								<span class="text-muted" style="font-weight: 500;">${item.date}</span>
 								<div class="card mt-2">
 									<div class="card-body p-2 bg-light" style="font-weight: 500;">
-										<span class="text-muted">Baisse budget</span>
-										<span class="text-dark font-weight-bold" style="font-size: 16px;">- 2000</span>
+										<span class="text-muted">Budget</span>
+										<span class="text-dark font-weight-bold" style="font-size: 16px;">${item.budget}</span>
 									</div>
 								</div>
 							</div>
-						</div>`;
+						</div>
+					`;
 				}
 			},
 			fill: {
-				colors: chartData.map((_, i) => '#D8D8D8')
+				colors: colors
 			},
 			stroke: {
 				width: 0
@@ -632,12 +641,12 @@
 		chart.render();
 
 		// Change color on hover and click
-		$(document).on('mouseover', '.apexcharts-bar-area', function() {
+		/* $(document).on('mouseover', '.apexcharts-bar-area', function() {
 			$(this).find('path').attr('fill', '#000');
 		});
 		$(document).on('mouseout', '.apexcharts-bar-area', function() {
 			$(this).find('path').attr('fill', '#D8D8D8');
-		});
+		}); */
 	});
 </script>
 
