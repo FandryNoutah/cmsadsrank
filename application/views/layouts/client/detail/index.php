@@ -221,7 +221,7 @@
 								<div class="card-body">
 									<h5>Budget</h5>
 									<div class="d-flex align-items-center">
-										<h2 class="mr-2">3000Є</h2>
+										<h2 class="mr-2"><?= $d['budget'] ?> Є</h2>
 										<div class="mr-auto">
 											<span class="badge alert-success rounded-pill py-2 px-3 font-weight-normal" style="font-size: 14px;">
 												<i class="fa fa-chart-line mr-1"></i>
