@@ -161,6 +161,7 @@ class Visuels_model extends CI_Model {
 		// Exécution de la requête
 		return $this->db->get()->result();
 	}
+	
 	public function getupsellbyid($id) {
 		$this->load->database();
 		$this->db->select('
@@ -186,17 +187,10 @@ class Visuels_model extends CI_Model {
 		// Utilise le bon nom de colonne ici
 		$this->db->order_by('upsell.idupsell', 'DESC');
 	
-		$this->db->limit(1);
+		// $this->db->limit(1);
 	
-		return $this->db->get()->row(); 
+		return $this->db->get()->result(); 
 	}
-	
-	
-	
-	
-	
-	
-
 
 	public function getusersall() {
 		$sql = "select * from users";
