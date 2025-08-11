@@ -900,6 +900,11 @@ public function updatesgroupe($nom_groupe, $mot_cle, $idgroupe_annonce) {
         return $retour;
 		
 	}
+	public function search_clients($term) {
+    $this->db->like('nom_client', $term);
+    return $this->db->get('clients')->result(); // adapte "clients" si ton nom de table est différent
+}
+
 public function insertclient($client, $site_client, $email_client, $numero_client, $favicon, $cms, $cms_logo, $summary) {
     $client = $this->db->escape($client);
     $email_client = $this->db->escape($email_client);

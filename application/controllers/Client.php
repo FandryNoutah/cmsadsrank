@@ -42,6 +42,22 @@ class Client extends MY_Controller
 		$this->content = "layouts/client/index.php";
 		$this->layout();
 	}
+	public function search() {
+    $term = "Jean"; // remplace par un nom réel présent dans la base
+    $clients = $this->visuels_model->search_clients($term);
+
+    $result = [];
+    foreach ($clients as $client) {
+        $result[] = [
+            'idclients' => $client->idclients,
+            'nom_client' => $client->nom_client
+        ];
+    }
+
+    echo json_encode($result);
+}
+
+
 
 
 	public function detail_client($idclients)
