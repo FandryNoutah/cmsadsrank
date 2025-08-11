@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1:3306
--- Généré le : lun. 04 août 2025 à 17:46
+-- Généré le : lun. 11 août 2025 à 17:42
 -- Version du serveur : 5.7.44
 -- Version de PHP : 7.2.34
 
@@ -410,7 +410,7 @@ CREATE TABLE IF NOT EXISTS `clients` (
   `cms_logo` varchar(200) NOT NULL,
   `info_base_client` varchar(2500) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL,
   PRIMARY KEY (`idclients`)
-) ENGINE=InnoDB AUTO_INCREMENT=360 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=367 DEFAULT CHARSET=latin1;
 
 --
 -- Déchargement des données de la table `clients`
@@ -742,7 +742,8 @@ INSERT INTO `clients` (`idclients`, `nom_client`, `nom`, `prenom`, `email_client
 (355, 'Baje', '', '', 'dev@adsrank.fr', '33617135196', 'https://baje.fr', '', 'https://baje.fr/wp-content/uploads/2024/03/cropped-favicon-Baje-2.png', 'WordPress 6.8.2', 'http://localhost/cmsadsrank/assets/images/cms/wordpress.png', ''),
 (356, 'Qaulitycall', '', '', 'dev@adsrank.fr', '034 54 038 98', 'https://qualitycall.fr', '', 'https://qualitycall.fr/wp-content/uploads/2023/11/cropped-logo-v5-quality-call_mini.png', 'WordPress 6.8.2', 'http://localhost/cmsadsrank/assets/images/cms/wordpress.png', ''),
 (357, 'Loveless', '', '', 'dev@adsrank.fr', '034 54 038 98', 'https://lovelesspiercing.com/', '', 'https://lovelesspiercing.com/wp-content/uploads/2025/06/FAV_1.png', 'WordPress 6.7.2', 'http://localhost/cmsadsrank/assets/images/cms/wordpress.png', ''),
-(359, 'Casa Vecchia Corsa', '', '', 'dev@adsrank.fr', '33617135196', 'https://www.casavecchiacorsa.fr/', '', 'https://www.casavecchiacorsa.fr/cdn/shop/files/papillon_32x32.png?v=1613713309', 'Shopify', 'http://localhost/cmsadsrank/assets/images/cms/shopify.png', 'Le site \"Immortelle Corse\" se spécialise dans la vente de produits de beauté et de soins naturels fabriqués en Corse. Il propose une gamme de produits anti-âge et anti-rides, de soins capillaires et de coffrets cadeaux. Les produits sont issus de l\'agriculture biologique et contiennent principalement de l\'immortelle Corse, une plante connue pour ses propriétés bénéfiques pour la peau. Le site offre également des conseils et des informations sur les problèmes de peau, le choix d\'un sérum pour le visage et la réalisation d\'un baume capillaire à l\'argan et aux agrumes.');
+(359, 'Casa Vecchia Corsa', '', '', 'dev@adsrank.fr', '33617135196', 'https://www.casavecchiacorsa.fr/', '', 'https://www.casavecchiacorsa.fr/cdn/shop/files/papillon_32x32.png?v=1613713309', 'Shopify', 'http://localhost/cmsadsrank/assets/images/cms/shopify.png', 'Le site \"Immortelle Corse\" se spécialise dans la vente de produits de beauté et de soins naturels fabriqués en Corse. Il propose une gamme de produits anti-âge et anti-rides, de soins capillaires et de coffrets cadeaux. Les produits sont issus de l\'agriculture biologique et contiennent principalement de l\'immortelle Corse, une plante connue pour ses propriétés bénéfiques pour la peau. Le site offre également des conseils et des informations sur les problèmes de peau, le choix d\'un sérum pour le visage et la réalisation d\'un baume capillaire à l\'argan et aux agrumes.'),
+(366, 'Client 1', '', '', 'dev@adsrank.fr', '33617135196', 'https://baje.fr', '', 'https://baje.fr/wp-content/uploads/2024/03/cropped-favicon-Baje-2.png', 'WordPress 6.8.2', 'http://localhost/cmsadsrank/assets/images/cms/wordpress.png', 'Ce site web est une plateforme dédiée à l\'aménagement et la rénovation de locaux professionnels, notamment des bureaux, des hôtels et des commerces, principalement situés à Paris et en Île-de-France. Il propose une multitude de services allant de la conception 2D/3D à l\'installation de mobilier professionnel, en passant par la réalisation des travaux de rénovation. Le site s\'engage à respecter les délais et les budgets, en offrant une assurance décennale globale constructeur. Il se positionne comme un interlocuteur unique pour tous les besoins en matière d\'aménagement et de rénovation de locaux professionnels.\n\nEn plus de ces services, le site web met un accent particulier sur l\'empreinte environnementale. Il propose des solutions d\'aménagement qui tiennent compte de l\'environnement, notamment à travers l\'utilisation de l\'énergie renouvelable. Le site web dispose également d\'un blog où les utilisateurs peuvent trouver des articles sur l\'architecture tertiaire, les meilleurs revêtements pour locaux professionnels ou encore les avantages des cloisons amovibles en milieu tertiaire. Enfin, le site présente un portfolio de ses réalisations passées, témoignant de ses dix ans d\'expertise dans le domaine.');
 
 -- --------------------------------------------------------
 
@@ -893,7 +894,7 @@ CREATE TABLE IF NOT EXISTS `donnee` (
   `remarque_campagne` varchar(2500) NOT NULL,
   `fichier_nom` varchar(2500) NOT NULL,
   PRIMARY KEY (`idonnee`)
-) ENGINE=InnoDB AUTO_INCREMENT=360 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=367 DEFAULT CHARSET=latin1;
 
 --
 -- Déchargement des données de la table `donnee`
@@ -1228,7 +1229,8 @@ INSERT INTO `donnee` (`idonnee`, `idclients`, `dejaclient`, `idproduit`, `pource
 (355, 355, 0, 1, NULL, '1200', '19', '18', '2025-07-23', '2025-07-20', NULL, NULL, '0', NULL, '2025-08-10', 18, 0, '', '', '', 'GTM-KPRDGV6Q', '', '', '0000-00-00', '', '0000-00-00', '', 0, 0, 0, 0, '', '', '', '', '', '', 0, 0, '0000-00-00', '0000-00-00', 0, 0, '', 0, 1, '0000-00-00', '0000-00-00', 0, 0, 0, '', 0, '', ''),
 (356, 356, 0, 1, NULL, '1500', '20', '17', '2025-07-10', '2025-07-20', NULL, NULL, '0', NULL, '2025-08-09', 17, 0, '', '', '', 'GTM-MRX5CWXD', '', '', '0000-00-00', '', '0000-00-00', '', 0, 0, 0, 0, '', '', '', '', '', '', 0, 0, '0000-00-00', '0000-00-00', 0, 0, '', 0, 1, '0000-00-00', '0000-00-00', 0, 0, 0, '', 0, '', ''),
 (357, 357, 0, 1, NULL, '2600', '21', '22', '2025-08-08', '2025-08-01', NULL, NULL, '0', NULL, '2025-08-10', 22, 0, '', '', '', 'GTM-KH9XWT2Q', '', '', '0000-00-00', '', '0000-00-00', '', 0, 0, 0, 0, '', '', '', '', '', '', 0, 0, '0000-00-00', '0000-00-00', 0, 0, '', 0, 1, '0000-00-00', '0000-00-00', 0, 0, 0, '', 0, '', ''),
-(359, 359, 0, 1, NULL, '2600', '19', '18', '2025-08-14', '2025-08-28', NULL, NULL, '0', NULL, '2025-09-05', 18, 0, '', '', '', 'GTM-NWNMKTJT', '', '', '0000-00-00', '', '0000-00-00', '', 0, 0, 0, 0, '', '', '', '', '', '', 0, 0, '0000-00-00', '0000-00-00', 0, 0, '', 0, 1, '0000-00-00', '0000-00-00', 0, 0, 0, '', 0, '', '');
+(359, 359, 0, 1, NULL, '2600', '19', '18', '2025-08-14', '2025-08-28', NULL, NULL, '0', NULL, '2025-09-05', 18, 0, '', '', '', 'GTM-NWNMKTJT', '', '', '0000-00-00', '', '0000-00-00', '', 0, 0, 0, 0, '', '', '', '', '', '', 0, 0, '0000-00-00', '0000-00-00', 0, 0, '', 0, 1, '0000-00-00', '0000-00-00', 0, 0, 0, '', 0, '', ''),
+(366, 366, 0, 1, NULL, '1000', '20', '18', '2025-08-01', '2025-08-07', NULL, NULL, '0', NULL, '2025-08-14', 18, 0, '', '', '', 'GTM-KPRDGV6Q', '', '', '0000-00-00', '', '0000-00-00', '', 0, 0, 0, 0, '', '', '', '', '', '', 0, 0, '0000-00-00', '0000-00-00', 0, 0, '', 0, 1, '0000-00-00', '0000-00-00', 0, 0, 0, '', 0, '', '');
 
 -- --------------------------------------------------------
 
@@ -18844,17 +18846,22 @@ CREATE TABLE IF NOT EXISTS `tasks` (
   `Statuts_technique` varchar(200) NOT NULL,
   `note_technique` varchar(500) NOT NULL,
   `priorite` int(11) NOT NULL DEFAULT '0',
+  `actif` int(11) NOT NULL DEFAULT '0',
+  `statut_actif` int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (`idtask`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=latin1;
 
 --
 -- Déchargement des données de la table `tasks`
 --
 
-INSERT INTO `tasks` (`idtask`, `reference`, `type_tache`, `idclients`, `title`, `description`, `assigned_to`, `status`, `created_at`, `updated_at`, `date_demande`, `date_due`, `AM`, `Statuts_technique`, `note_technique`, `priorite`) VALUES
-(1, 'ADS00001', 1, 151, 'Google Ads', 'Revoir les Zones', 18, 'en cours', '2025-04-27 20:05:06', '2025-05-06 08:28:58', '2025-04-30', '2025-04-29', 23, '0', 'Revoir les Zones Revoir les Zones', 0),
-(2, 'ADS00002', 1, 340, 'Google Ads', 'Tu as oublier de remplir le plan de taggage', 23, 'en cours', '2025-06-17 09:12:37', '2025-06-17 09:15:10', '2025-06-17', '2025-06-20', 18, '2', 'C\'est bon, j\'ai remplis', 0),
-(3, 'ADS00003', 1, 340, 'Google Ads', 'Il faut augmenter le budget du client de 1000', 23, 'en cours', '2025-06-17 09:25:22', '2025-06-17 09:25:59', '2025-06-18', '2025-06-28', 18, '2', 'q', 0);
+INSERT INTO `tasks` (`idtask`, `reference`, `type_tache`, `idclients`, `title`, `description`, `assigned_to`, `status`, `created_at`, `updated_at`, `date_demande`, `date_due`, `AM`, `Statuts_technique`, `note_technique`, `priorite`, `actif`, `statut_actif`) VALUES
+(1, 'ADS00001', 1, 364, 'Création de Brief', 'En attente de brief', 20, 'en cours', '2025-08-11 14:26:57', '2025-08-11 14:26:57', '2025-08-01', '2025-08-07', 18, '1', '', 0, 0, 0),
+(2, 'ADS00002', 1, 365, 'Création de Brief', 'En attente de brief', 20, 'en cours', '2025-08-11 14:29:28', '2025-08-11 14:29:28', '2025-08-01', '2025-08-07', 18, '1', '', 0, 0, 0),
+(3, 'ADS00003', 1, 366, 'Création de Brief', 'En attente de brief', 20, 'en cours', '2025-08-11 14:31:41', '2025-08-11 14:31:41', '2025-08-01', '2025-08-07', 18, '1', '', 0, 0, 0),
+(4, 'ADS00004', 1, 366, 'Upsell', 'Le client fait une upsell', 23, 'en cours', '2025-08-11 15:50:46', '2025-08-11 15:50:46', '2025-08-13', '2025-08-13', 18, '1', '', 0, 1, 0),
+(5, 'ADS00005', 1, 366, 'Baisse', 'Le client fait une baisse', 23, 'en cours', '2025-08-11 15:59:25', '2025-08-11 15:59:25', '2025-08-12', '2025-08-12', 18, '1', '', 0, 1, 0),
+(6, 'ADS00006', 1, 366, 'Upsell', 'Le client fait une upsell', 23, 'en cours', '2025-08-11 16:03:09', '2025-08-11 16:03:09', '2025-08-07', '2025-08-07', 18, '1', '', 0, 0, 0);
 
 -- --------------------------------------------------------
 
@@ -18900,21 +18907,20 @@ CREATE TABLE IF NOT EXISTS `upsell` (
   `information` varchar(200) DEFAULT NULL,
   `etat_am` int(11) NOT NULL,
   `etat` int(11) DEFAULT NULL,
+  `actif` int(11) NOT NULL DEFAULT '0',
+  `statut_actif` int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (`idupsell`)
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=latin1;
 
 --
 -- Déchargement des données de la table `upsell`
 --
 
-INSERT INTO `upsell` (`idupsell`, `idclients`, `type_upsell`, `date_demande`, `date_upsell`, `budget_initiale`, `budgets`, `compta`, `am`, `tm`, `information_am`, `information`, `etat_am`, `etat`) VALUES
-(1, 339, 2, '2025-05-22', '2025-05-06', 4000, 500, 18, 18, 22, 'attention augmenter la PMAX DE 500', 'voit avec Mavreen', 0, 0),
-(2, 0, 3, '2025-06-01', '2025-05-29', 4000, 6000, 18, 18, 22, '', '.KK', 0, 0),
-(3, 339, 1, '2025-05-22', '2025-05-06', 4500, 1000, 23, 1, 22, '', '', 0, 0),
-(4, 340, 3, '2025-06-18', '2025-06-12', 400, 500, 18, 18, 22, '', 'dqsdqsdqs', 0, 0),
-(5, 340, 2, '2025-06-26', '2025-06-13', 400, 1000, 18, 1, 22, '', 'qsdqsdqsd', 0, 0),
-(6, 340, 1, '2025-07-04', '2025-06-12', 1400, 500, 18, 18, 22, '', 'Baisse', 0, 0),
-(7, 340, 2, '2025-07-17', '2025-07-17', 900, 500, 1, 1, 22, '', 'QSqs', 0, 0);
+INSERT INTO `upsell` (`idupsell`, `idclients`, `type_upsell`, `date_demande`, `date_upsell`, `budget_initiale`, `budgets`, `compta`, `am`, `tm`, `information_am`, `information`, `etat_am`, `etat`, `actif`, `statut_actif`) VALUES
+(3, 366, 0, '2025-08-01', '2025-08-01', 0, 1000, 18, 18, 18, '', 'Budget initial', 0, 1, 0, 0),
+(4, 366, 2, '2025-08-13', '2025-08-16', 1000, 1500, 0, 18, 23, '', 'test', 0, 0, 1, 0),
+(5, 366, 1, '2025-08-12', '2025-08-27', 1500, 500, 0, 18, 23, '', 'Baisse', 0, 0, 1, 0),
+(6, 366, 2, '2025-08-07', '2025-08-28', 500, 2500, 0, 18, 23, '', 'upsell', 0, 0, 1, 0);
 
 -- --------------------------------------------------------
 

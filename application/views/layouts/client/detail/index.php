@@ -1,35 +1,19 @@
 <?php start_section('stylesheet');  ?>
 <style>
-	/* .table-wrapper {
-		border-collapse: separate !important;
-		border-spacing: 0 10px;
-	}
-
-	.table-wrapper tr {
-		background: #fff;
-		box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
-		border-radius: 8px;
-	}
-
-	.table-wrapper td,
-	.table-wrapper th {
-		vertical-align: middle;
-		padding: 1rem;
-	} */
-
 	.table-wrapper {
-		border-spacing: 0 15px !important;
+		border-spacing: 15px 0 !important;
 		border-collapse: separate !important;
 	}
 
 	.table-wrapper td,
 	.table-wrapper th {
 		vertical-align: middle;
-		border: border;
-		border-bottom: 1px solid #dee2e6 !important;
+		/* border: border; */
+		border-bottom: 2px solid #dee2e6 !important;
+		border-top: 0px !important;
 	}
 
-	.table-wrapper tbody tr td:first-child,
+	/* .table-wrapper tbody tr td:first-child,
 	.table-wrapper thead tr th:first-child {
 		border-left: 1px solid #dee2e6;
 		border-top-left-radius: 4px;
@@ -41,7 +25,7 @@
 		border-right: 1px solid #dee2e6;
 		border-top-right-radius: 4px;
 		border-bottom-right-radius: 4px;
-	}
+	} */
 </style>
 <?php end_section(); ?>
 <?php start_section('content'); ?>
@@ -55,14 +39,11 @@
 			<div class="col w-100">
 				<div class="container-fluid">
 
-					<br><br>
-					<span class="badge alert-success rounded-pill px-4 py-3" style="font-size: 12px; font-weight: 500;">
+					<span class="badge alert-success rounded-pill px-4 py-3 mb-3" style="font-size: 12px; font-weight: 500;">
 						<i class="fa fa-circle mr-1" style="font-size: 10px;"></i>
 						Active
 					</span>
-					<br><br><br>
-
-					<div class="d-flex justify-content-start align-items-center">
+					<div class="d-flex justify-content-start align-items-center mb-3">
 						<img src="<?= base_url('assets/images/icons/figma/star_full.svg') ?>" alt="star_full" width="20" class="mr-1">
 						<img src="<?= base_url('assets/images/icons/figma/star_full.svg') ?>" alt="star_full" width="20" class="mr-1">
 						<img src="<?= base_url('assets/images/icons/figma/star_full.svg') ?>" alt="star_full" width="20" class="mr-1">
@@ -70,16 +51,11 @@
 						<img src="<?= base_url('assets/images/icons/figma/star_half.svg') ?>" alt="star_half" width="20" class="mr-1">
 						<span class="ml-3 py-1 px-3 badge" style="background-color: #edf2fe; color: #4976f4; font-size: 12px; font-weight: 500;">Bleu</span>
 					</div>
-
-					<br>
-
-					<h1 class="font-weight-bold" style="font-size: 48px;">
+					<h1 class="font-weight-bold mb-3" style="font-size: 48px;">
 						<?php echo $d['nom_client'] ?>
 						<img src="<?php echo $d['favicon']; ?>" width="43" class="float-right">
 					</h1>
-					<br>
-
-					<h5><?php echo $d['site_client'] ?></h5>
+					<h5 class="mb-3"><?php echo $d['site_client'] ?></h5>
 					<div class="row no-gutters mb-3">
 						<div class="col pr-2">
 							<div class="card h-100 mb-5">
@@ -92,10 +68,9 @@
 										</li>
 									</ul>
 
-
 									<h6 class="text-muted font-weight-normal">
-										</br>
-										<?php echo $d['info_base_client'] ?></h6>
+										<?php echo $d['info_base_client'] ?>
+									</h6>
 								</div>
 							</div>
 						</div>
@@ -117,26 +92,26 @@
 										</div>
 									</div>
 									<br><br>
-									<div class="d-flex justify-content-start mb-3">
+									<div class="d-flex justify-content-start mb-3" style="font-size: 16px;">
 										<span class="badge badge-light mr-3" style="width: 20px; height: 20px; background-color: #f2f2f2;">&nbsp;</span>
 										<span class="mr-2">Date d'anniversaire</span>
 										<span class="mr-2">|</span>
 										<span class="mr-2"><?php echo $d['mis_en_place_paiement'] ?></span>
 									</div>
-									<div class="d-flex justify-content-start mb-3">
+									<div class="d-flex justify-content-start mb-3" style="font-size: 16px;">
 										<span class="badge badge-light mr-3" style="width: 20px; height: 20px; background-color: #f2f2f2;">&nbsp;</span>
 										<span class="mr-2">Date de Mise en ligne</span>
 										<span class="mr-2">|</span>
 										<span class="mr-2"><?php echo $d['annonce'] ?></span>
 									</div>
-									<div class="d-flex justify-content-start mb-3">
+									<div class="d-flex justify-content-start mb-3" style="font-size: 16px;">
 										<span class="badge badge-light mr-3" style="width: 20px; height: 20px; background-color: #f2f2f2;">&nbsp;</span>
 										<span class="mr-2">Commerciale</span>
 										<span class="mr-2">
 											<img src="<?= base_url('assets/images/' . $d['am_photo_user']) ?>" width="24" height="24">
 										</span>
 									</div>
-									<div class="d-flex justify-content-start mb-4">
+									<div class="d-flex justify-content-start mb-4" style="font-size: 16px;">
 										<span class="badge badge-light mr-3" style="width: 20px; height: 20px; background-color: #f2f2f2;">&nbsp;</span>
 										<span class="mr-2">Account Manager</span>
 										<span class="mr-2">
@@ -229,17 +204,17 @@
 											</span>
 										</div>
 										<select class="form-control w-auto mr-5 border-dark text-dark" style="font-size: 14px; font-weight: 500;">
-											<option selected>January, 2023 - December, 2023</option>
-											<option value="1">January, 2024 - December, 2024</option>
-											<option value="2">January, 2025 - December, 2025</option>
+											<option selected>2023</option>
+											<option value="1">2024</option>
+											<option value="2">2025</option>
 										</select>
 									</div>
 									<span class="text-muted" style="font-size: 14px;">Average Open Rate</span>
 									<table class="table table-wrapper">
-										<thead class="bg-light text-muted">
+										<thead>
 											<tr>
 												<th>
-													Gastion de budget
+													Gestion de budget
 												</th>
 												<th>
 													Date de la demande
@@ -257,26 +232,26 @@
 										</thead>
 										<tbody>
 											<?php foreach ($upsell as $u): ?>
-													<tr>
-														<td>
-															<?php if($u->type_upsell == 2): ?>
+												<tr>
+													<td>
+														<?php if ($u->type_upsell == 2): ?>
 															<span class="badge alert-success rounded-pill px-4 py-3" style="font-size: 14px; font-weight: 500;">
 																<i class="fa fa-circle mr-1" style="font-size: 10px;"></i>
 																Hausse de budget
 															</span>
-															<?php endif; ?>	
-															<?php if($u->type_upsell == 1): ?>
+														<?php endif; ?>
+														<?php if ($u->type_upsell == 1): ?>
 															<span class="badge alert-danger rounded-pill px-4 py-3" style="font-size: 14px; font-weight: 500;">
 																<i class="fa fa-circle mr-1" style="font-size: 10px;"></i>
 																Baisse de budget
 															</span>
-															<?php endif; ?>	
-														</td>
-														<td><?php echo $u->date_demande ?></td>
-														<td><?php echo $u->date_upsell ?></td>
-														<td><?php echo $u->budget_initiale ?> €</td>	
-														<td><?php echo $u->budgets ?> €</td>
-													</tr>
+														<?php endif; ?>
+													</td>
+													<td><?php echo $u->date_demande ?></td>
+													<td><?php echo $u->date_upsell ?></td>
+													<td><?php echo $u->budget_initiale ?> €</td>
+													<td><?php echo $u->budgets ?> €</td>
+												</tr>
 											<?php endforeach; ?>
 										</tbody>
 									</table>
@@ -386,7 +361,7 @@
 									<th>Description</th>
 									<th>Member</th>
 									<th>Status</th>
-									
+
 								</tr>
 							</thead>
 							<tbody>
@@ -398,40 +373,40 @@
 										</a>
 									</td>
 								</tr>
-								<?php if($task != NULL): ?>
-								<?php foreach($task as $t): ?>
-								<tr>
-									<td class="align-middle" style="font-weight: 500;"><?php echo $t->title; ?></td>
-									<td class="align-middle text-muted">
-										<img src="<?= base_url('assets/images/icons/figma/calendar.svg') ?>" alt="">
-										<?php echo $t->date_demande; ?>
-									</td>
-									<td class="align-middle text-muted">
-										<img src="<?= base_url('assets/images/icons/figma/calendar.svg') ?>" alt="">
-										<?php echo $t->date_due; ?>
-									</td>
-									<td class="align-middle text-muted">
-										<?php echo $t->description; ?>
-									</td>
-									<td class="align-middle">
-										<div class="d-flex align-items-center avatar-group">
-											<img src="<?= base_url('assets/images/' . $d['tech_photo_user']) ?>" width="28" class="rounded-circle avatar" alt="Avatar 1">
-											<img src="<?= base_url('assets/images/' . $d['am_photo_user']) ?>" width="28" class="rounded-circle avatar" alt="Avatar 2">
-											
-										</div>
-									</td>
-									<td class="align-middle">
-										<span class="badge alert-warning rounded-pill px-3 py-2" style="font-size: 12px; font-weight: 500;">
-											<i class="fa fa-circle mr-1" style="font-size: 10px;"></i>
-											Planned
-										</span>
-										<a href="javascript:void(0);" class="ml-auto">
-												<i class="fa fa-ellipsis-v"></i>
-										</a>
-									</td>
-								</tr>
-								<?php endforeach; ?>
-							<?php endif; ?>
+								<?php if ($task != NULL): ?>
+									<?php foreach ($task as $t): ?>
+										<tr>
+											<td class="align-middle" style="font-weight: 500;"><?php echo $t->title; ?></td>
+											<td class="align-middle text-muted">
+												<img src="<?= base_url('assets/images/icons/figma/calendar.svg') ?>" alt="">
+												<?php echo $t->date_demande; ?>
+											</td>
+											<td class="align-middle text-muted">
+												<img src="<?= base_url('assets/images/icons/figma/calendar.svg') ?>" alt="">
+												<?php echo $t->date_due; ?>
+											</td>
+											<td class="align-middle text-muted">
+												<?php echo $t->description; ?>
+											</td>
+											<td class="align-middle">
+												<div class="d-flex align-items-center avatar-group">
+													<img src="<?= base_url('assets/images/' . $d['tech_photo_user']) ?>" width="28" class="rounded-circle avatar" alt="Avatar 1">
+													<img src="<?= base_url('assets/images/' . $d['am_photo_user']) ?>" width="28" class="rounded-circle avatar" alt="Avatar 2">
+
+												</div>
+											</td>
+											<td class="align-middle">
+												<span class="badge alert-warning rounded-pill px-3 py-2" style="font-size: 12px; font-weight: 500;">
+													<i class="fa fa-circle mr-1" style="font-size: 10px;"></i>
+													Planned
+												</span>
+												<a href="javascript:void(0);" class="ml-auto">
+													<i class="fa fa-ellipsis-v"></i>
+												</a>
+											</td>
+										</tr>
+									<?php endforeach; ?>
+								<?php endif; ?>
 
 							</tbody>
 						</table>
