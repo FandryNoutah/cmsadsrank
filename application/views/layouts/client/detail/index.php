@@ -1,4 +1,4 @@
-<?php start_section('stylesheet'); ?>
+<?php start_section('stylesheet');  ?>
 <style>
 	/* .table-wrapper {
 		border-collapse: separate !important;
@@ -182,7 +182,7 @@
 										<a href="#" class="text-decoration-none text-muted ml-3 stretched-link">AirCall</a>
 										<i class="fa fa-chevron-right ml-auto" style="font-size: 12px;"></i>
 									</div>
-									<h3 class="m-0"><?php echo $call_count ?> Appels</h3>
+									<h3 class="m-0"><?= date('Y-m-d', $matched_calls[0]->started_at) ?></h3>
 								</div>
 							</div>
 						</div>
@@ -235,7 +235,51 @@
 										</select>
 									</div>
 									<span class="text-muted" style="font-size: 14px;">Average Open Rate</span>
-									<div id="budgetChart"></div>
+									<table class="table table-wrapper">
+										<thead class="bg-light text-muted">
+											<tr>
+												<th>
+													Gastion de budget
+												</th>
+												<th>
+													Date de la demande
+												</th>
+												<th>
+													Date Effective
+												</th>
+												<th>
+													Montant
+												</th>
+												<th>
+													Nouveau montant
+												</th>
+											</tr>
+										</thead>
+										<tbody>
+											<?php foreach ($upsell as $u): ?>
+													<tr>
+														<td>
+															<?php if($u->type_upsell == 2): ?>
+															<span class="badge alert-success rounded-pill px-4 py-3" style="font-size: 14px; font-weight: 500;">
+																<i class="fa fa-circle mr-1" style="font-size: 10px;"></i>
+																Hausse de budget
+															</span>
+															<?php endif; ?>	
+															<?php if($u->type_upsell == 1): ?>
+															<span class="badge alert-danger rounded-pill px-4 py-3" style="font-size: 14px; font-weight: 500;">
+																<i class="fa fa-circle mr-1" style="font-size: 10px;"></i>
+																Baisse de budget
+															</span>
+															<?php endif; ?>	
+														</td>
+														<td><?php echo $u->date_demande ?></td>
+														<td><?php echo $u->date_upsell ?></td>
+														<td><?php echo $u->budget_initiale ?> €</td>	
+														<td><?php echo $u->budgets ?> €</td>
+													</tr>
+											<?php endforeach; ?>
+										</tbody>
+									</table>
 								</div>
 							</div>
 						</div>
@@ -336,11 +380,13 @@
 						<table class="table">
 							<thead>
 								<tr class="text-muted">
-									<th>Task Name</th>
-									<th>Due Date</th>
 									<th>Label</th>
-									<th>Status</th>
+									<th>Date de la demande</th>
+									<th>Date due</th>
+									<th>Description</th>
 									<th>Member</th>
+									<th>Status</th>
+									
 								</tr>
 							</thead>
 							<tbody>
@@ -352,18 +398,26 @@
 										</a>
 									</td>
 								</tr>
-								<!-- FOREACH HERE -->
+								<?php if($task != NULL): ?>
+								<?php foreach($task as $t): ?>
 								<tr>
-									<td class="align-middle" style="font-weight: 500;">Monthly Product Discussion</td>
+									<td class="align-middle" style="font-weight: 500;"><?php echo $t->title; ?></td>
 									<td class="align-middle text-muted">
 										<img src="<?= base_url('assets/images/icons/figma/calendar.svg') ?>" alt="">
-										24 Jan 2023
+										<?php echo $t->date_demande; ?>
+									</td>
+									<td class="align-middle text-muted">
+										<img src="<?= base_url('assets/images/icons/figma/calendar.svg') ?>" alt="">
+										<?php echo $t->date_due; ?>
+									</td>
+									<td class="align-middle text-muted">
+										<?php echo $t->description; ?>
 									</td>
 									<td class="align-middle">
-										<div class="row justify-content-start">
-											<span class="col-auto mx-1 p-2 badge" style="background-color: #fbf4ec; color: #d28e3d; font-size: 12px; font-weight: 500;">Internal</span>
-											<span class="col-auto mx-1 p-2 badge" style="background-color: #f7f7e8; color: #b1ab1d; font-size: 12px; font-weight: 500;">Marketing</span>
-											<span class="col-auto mx-1 p-2 badge" style="background-color: #f7eded; color: #af4b4b; font-size: 12px; font-weight: 500;">Urgent</span>
+										<div class="d-flex align-items-center avatar-group">
+											<img src="<?= base_url('assets/images/' . $d['tech_photo_user']) ?>" width="28" class="rounded-circle avatar" alt="Avatar 1">
+											<img src="<?= base_url('assets/images/' . $d['am_photo_user']) ?>" width="28" class="rounded-circle avatar" alt="Avatar 2">
+											
 										</div>
 									</td>
 									<td class="align-middle">
@@ -371,75 +425,14 @@
 											<i class="fa fa-circle mr-1" style="font-size: 10px;"></i>
 											Planned
 										</span>
-									</td>
-									<td class="align-middle">
-										<div class="d-flex align-items-center avatar-group">
-											<img src="<?= base_url('assets/images/figma/user_frame.png') ?>" width="28" class="rounded-circle avatar" alt="Avatar 1">
-											<img src="<?= base_url('assets/images/figma/user_frame.png') ?>" width="28" class="rounded-circle avatar" alt="Avatar 2">
-											<a href="javascript:void(0);" class="ml-auto">
+										<a href="javascript:void(0);" class="ml-auto">
 												<i class="fa fa-ellipsis-v"></i>
-											</a>
-										</div>
+										</a>
 									</td>
 								</tr>
-								<tr>
-									<td class="align-middle" style="font-weight: 500;">Monthly Product Discussion</td>
-									<td class="align-middle text-muted">
-										<img src="<?= base_url('assets/images/icons/figma/calendar.svg') ?>" alt="">
-										24 Jan 2023
-									</td>
-									<td class="align-middle">
-										<div class="row justify-content-start">
-											<span class="col-auto mx-1 p-2 badge" style="background-color: #fbf4ec; color: #d28e3d; font-size: 12px; font-weight: 500;">Internal</span>
-											<span class="col-auto mx-1 p-2 badge" style="background-color: #f4edf7; color: #954baf; font-size: 12px; font-weight: 500;">Marketing</span>
-											<span class="col-auto mx-1 p-2 badge" style="background-color: #f7eded; color: #af4b4b; font-size: 12px; font-weight: 500;">Urgent</span>
-										</div>
-									</td>
-									<td class="align-middle">
-										<span class="badge alert-primary rounded-pill px-3 py-2" style="font-size: 12px; font-weight: 500;">
-											<i class="fa fa-circle mr-1" style="font-size: 10px;"></i>
-											Upcoming
-										</span>
-									</td>
-									<td class="align-middle">
-										<div class="d-flex align-items-center avatar-group">
-											<img src="<?= base_url('assets/images/figma/user_frame.png') ?>" width="28" class="rounded-circle avatar" alt="Avatar 1">
-											<img src="<?= base_url('assets/images/figma/user_frame.png') ?>" width="28" class="rounded-circle avatar" alt="Avatar 2">
-											<a href="javascript:void(0);" class="ml-auto">
-												<i class="fa fa-ellipsis-v"></i>
-											</a>
-										</div>
-									</td>
-								</tr>
-								<tr>
-									<td class="align-middle" style="font-weight: 500;">Monthly Product Discussion</td>
-									<td class="align-middle text-muted">
-										<img src="<?= base_url('assets/images/icons/figma/calendar.svg') ?>" alt="">
-										24 Jan 2023
-									</td>
-									<td class="align-middle">
-										<div class="row justify-content-start">
-											<span class="col-auto mx-1 p-2 badge" style="background-color: #fbf4ec; color: #d28e3d; font-size: 12px; font-weight: 500;">Internal</span>
-											<span class="col-auto mx-1 p-2 badge" style="background-color: #edf2fe; color: #4976f4; font-size: 12px; font-weight: 500;">Marketing</span>
-											<span class="col-auto mx-1 p-2 badge" style="background-color: #f7eded; color: #af4b4b; font-size: 12px; font-weight: 500;">Urgent</span>
-										</div>
-									</td>
-									<td class="align-middle">
-										<span class="badge alert-success rounded-pill px-3 py-2" style="font-size: 12px; font-weight: 500;">
-											<i class="fa fa-circle mr-1" style="font-size: 10px;"></i>
-											Upcoming
-										</span>
-									</td>
-									<td class="align-middle">
-										<div class="d-flex align-items-center avatar-group">
-											<img src="<?= base_url('assets/images/figma/user_frame.png') ?>" width="28" class="rounded-circle avatar" alt="Avatar 1">
-											<img src="<?= base_url('assets/images/figma/user_frame.png') ?>" width="28" class="rounded-circle avatar" alt="Avatar 2">
-											<a href="javascript:void(0);" class="ml-auto">
-												<i class="fa fa-ellipsis-v"></i>
-											</a>
-										</div>
-									</td>
-								</tr>
+								<?php endforeach; ?>
+							<?php endif; ?>
+
 							</tbody>
 						</table>
 					</div><br><br>
