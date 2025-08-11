@@ -51,9 +51,9 @@ class Visuels_model extends CI_Model {
 		$this->db->query($sql);
 		$this->db->close();
 	}
-	public function create_upsell($type_upsell,$budget_upsell,$budget_initiale,$demmande_upsell,$am, $tm, $date_upsell, $date_demande_upsell, $inforamtion_upsell, $statut_upsell,$idclients){
-		$sql = "INSERT INTO upsell (type_upsell,budget_initiale, budgets,compta, am, tm, date_upsell, date_demande, information, etat, idclients) 
-				VALUES ('$type_upsell', '$budget_initiale', '$budget_upsell','$demmande_upsell', '$am', '$tm', '$date_upsell', '$date_demande_upsell', '$inforamtion_upsell', '$statut_upsell', '$idclients')";
+	public function create_upsell($type_upsell,$budget_finale,$budget_initiale,$demmande_upsell,$am, $tm, $date_upsell, $date_demande_upsell, $inforamtion_upsell, $statut_upsell,$idclients,$actif){
+		$sql = "INSERT INTO upsell (type_upsell,budget_initiale, budgets,compta, am, tm, date_upsell, date_demande, information, etat, idclients,actif) 
+				VALUES ('$type_upsell', '$budget_initiale', '$budget_finale','$demmande_upsell', '$am', '$tm', '$date_upsell', '$date_demande_upsell', '$inforamtion_upsell', '$statut_upsell', '$idclients', '$actif')";
 		$this->db->query($sql);
 		$this->db->close();
 	}
@@ -158,6 +158,78 @@ class Visuels_model extends CI_Model {
 		// Ne garder que les enregistrements ayant un type upsell défini
 		$this->db->where_in('upsell.type_upsell', [1, 2,3]);
 	
+		// Exécution de la requête
+		return $this->db->get()->result();
+	}
+	public function getupsellbyidclient($idclients) {
+		// Sélectionner les colonnes de la table upsell, nom_client, photos AM et TM, et budget depuis donnee
+		$this->db->select('
+			upsell.*, 
+			clients.nom_client, 
+			am_user.photo_users AS am_photo, 
+			tech_user.photo_users AS tm_photo,
+			compta_user.photo_users AS compta_photo, 
+			donnee.budget
+		');
+		
+		// Table principale
+		$this->db->from('upsell');
+	
+		// Jointure avec la table clients
+		$this->db->join('clients', 'upsell.idclients = clients.idclients', 'left');
+	
+		// Jointure avec la table donnee
+		$this->db->join('donnee', 'donnee.idclients = upsell.idclients', 'left');
+		
+		// Jointure avec la table users pour AM (Account Manager)
+		$this->db->join('users AS am_user', 'upsell.am = am_user.id', 'left');
+	
+		// Jointure avec la table users pour TM (Technicien)
+		$this->db->join('users AS tech_user', 'upsell.tm = tech_user.id', 'left');
+		$this->db->join('users AS compta_user', 'upsell.compta = compta_user.id', 'left');
+	
+		// Ne garder que les enregistrements ayant un type upsell défini
+		$this->db->where_in('upsell.type_upsell', [1, 2,3]);
+		$this->db->where('upsell.actif !=', 0);
+		$this->db->where_in('upsell.idclients', $idclients);
+		$this->db->order_by('upsell.idupsell', 'DESC');
+
+		// Exécution de la requête
+		return $this->db->get()->result();
+	}
+
+	public function getdernierbyidclient($idclients) {
+		// Sélectionner les colonnes de la table upsell, nom_client, photos AM et TM, et budget depuis donnee
+		$this->db->select('
+			upsell.*, 
+			clients.nom_client, 
+			am_user.photo_users AS am_photo, 
+			tech_user.photo_users AS tm_photo,
+			compta_user.photo_users AS compta_photo, 
+			donnee.budget
+		');
+		
+		// Table principale
+		$this->db->from('upsell');
+	
+		// Jointure avec la table clients
+		$this->db->join('clients', 'upsell.idclients = clients.idclients', 'left');
+	
+		// Jointure avec la table donnee
+		$this->db->join('donnee', 'donnee.idclients = upsell.idclients', 'left');
+		
+		// Jointure avec la table users pour AM (Account Manager)
+		$this->db->join('users AS am_user', 'upsell.am = am_user.id', 'left');
+	
+		// Jointure avec la table users pour TM (Technicien)
+		$this->db->join('users AS tech_user', 'upsell.tm = tech_user.id', 'left');
+		$this->db->join('users AS compta_user', 'upsell.compta = compta_user.id', 'left');
+	
+		// Ne garder que les enregistrements ayant un type upsell défini
+		$this->db->where_in('upsell.type_upsell', [0,1, 2,3]);
+		$this->db->where_in('upsell.idclients', $idclients);
+		$this->db->order_by('upsell.idupsell', 'DESC');
+
 		// Exécution de la requête
 		return $this->db->get()->result();
 	}

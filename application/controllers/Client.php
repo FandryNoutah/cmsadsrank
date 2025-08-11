@@ -59,11 +59,32 @@ class Client extends MY_Controller
 
 
 
+public function application($idclients)
+	{
+		$this->data['upsell'] = $this->visuels_model->getupsellbyidclient($idclients);
+		$t = $this->data['budget_initial'] = $this->visuels_model->getdernierbyidclient($idclients);
+		$this->data['task'] = $this->Task_model->get_task_by_id_client($idclients);
+		$this->data["users"] = $this->Task_model->get_all_users();
+		$clients = $this->data["donnees"] = $this->visuels_model->getDonneeById($idclients);
+		$this->content = "layouts/client/detail/application/index.php";
+		$this->layout();
+	}
+	public function activer_processus_tache()
+	{
+		var_dump("tache");
+		die();
+	}
+
 	public function detail_client($idclients)
 	{
+		$this->data['upsell'] = $this->visuels_model->getupsellbyidclient($idclients);
+		$t = $this->data['budget_initial'] = $this->visuels_model->getdernierbyidclient($idclients);
+		$this->data['task'] = $this->Task_model->get_task_by_id_client($idclients);
+		$this->data["users"] = $this->Task_model->get_all_users();
 		$clients = $this->data["donnees"] = $this->visuels_model->getDonneeById($idclients);
 		$numero_client = $clients[0]['numero_client'];
 		$numero_am = $clients[0]['am_phone'];
+		
 		$calls = $this->get_all_calls();
 
 		// Numéros à comparer (normalisés)
@@ -143,34 +164,88 @@ class Client extends MY_Controller
 		if ($type_upsell == 2):
 			$am = $this->input->post('am');
 			$budget_initiale = $this->input->post('budget_initiale');
-			$idclient = $this->visuels_model->create_upsell($type_upsell, $budget_upsell, $budget_initiale, $demmande_upsell, $am, $tm, $date_upsell, $date_demande_upsell, $inforamtion_upsell, $statut_upsell, $idclients);
+			//$idclient = $this->visuels_model->create_upsell($type_upsell, $budget_upsell, $budget_initiale, $demmande_upsell, $am, $tm, $date_upsell, $date_demande_upsell, $inforamtion_upsell, $statut_upsell, $idclients);
+			$budget_initiale = intval($budget_initiale);
+			$budget_upsell = intval($budget_upsell);
 			$budget_finale = $budget_upsell + $budget_initiale;
-			$this->visuels_model->update_budget($budget_finale, $idclients);
-			$date_brief = 0000 - 00 - 00;
-			$campagne_actif = 0;
-			$lien_datastudio = 0;
-			$validation_technique = 0000 - 00 - 00;
-			$date_validation_structure = 0000 - 00 - 00;
-			$this->visuels_model->update_brief($date_brief, $campagne_actif, $validation_technique, $date_validation_structure, $lien_datastudio, $idclients);
+			//var_dump($budget_finale );die();
+			//$this->visuels_model->update_budget($budget_finale, $idclients);
+			//$date_brief = 0000 - 00 - 00;
+			//$campagne_actif = 0;
+			//$lien_datastudio = 0;
+			//$validation_technique = 0000 - 00 - 00;
+			//$date_validation_structure = 0000 - 00 - 00;
+			//$this->visuels_model->update_brief($date_brief, $campagne_actif, $validation_technique, $date_validation_structure, $lien_datastudio, $idclients);
+			$actif = 1;
+			$idclient = $this->visuels_model->create_upsell($type_upsell, $budget_finale, $budget_initiale, $demmande_upsell, $am, $tm, $date_upsell, $date_demande_upsell, $inforamtion_upsell, $statut_upsell, $idclients,$actif);
+			$type_tache = 1; 
+			$title = "Upsell";
+			$tache = "Le client fait une upsell";
+			$Statuts_technique = 1;
+			
+			$data = array(
+				'type_tache' => $type_tache,
+				'date_demande' => $date_demande_upsell,
+				'date_due' => $date_demande_upsell,
+				'idclients' => $idclients,
+				'AM' => $am,
+				'assigned_to' => $tm,
+				'title' => $title,
+				'Statuts_technique' => $Statuts_technique,
+				'description' => $tache
 
+			);
+
+		$this->Task_model->add_task($data);
 		endif;
 		if ($type_upsell == 1):
 			$am = $this->input->post('am');
 			$budget_initiale = $this->input->post('budget_initiale');
-			$idclient = $this->visuels_model->create_upsell($type_upsell, $budget_upsell, $budget_initiale, $demmande_upsell, $am, $tm, $date_upsell, $date_demande_upsell, $inforamtion_upsell, $statut_upsell, $idclients);
+			//$idclient = $this->visuels_model->create_upsell($type_upsell, $budget_upsell, $budget_initiale, $demmande_upsell, $am, $tm, $date_upsell, $date_demande_upsell, $inforamtion_upsell, $statut_upsell, $idclients);
+			$budget_initiale = intval($budget_initiale);
+			$budget_upsell = intval($budget_upsell);
 			$budget_finale = $budget_initiale - $budget_upsell;
-			$this->visuels_model->update_budget($budget_finale, $idclients);
+			//var_dump($budget_finale );die();
+			//$this->visuels_model->update_budget($budget_finale, $idclients);
+			//$date_brief = 0000 - 00 - 00;
+			//$campagne_actif = 0;
+			//$lien_datastudio = 0;
+			//$validation_technique = 0000 - 00 - 00;
+			//$date_validation_structure = 0000 - 00 - 00;
+			//$this->visuels_model->update_brief($date_brief, $campagne_actif, $validation_technique, $date_validation_structure, $lien_datastudio, $idclients);
+			$type_tache = 1; 
+			$title = "Baisse";
+			$tache = "Le client fait une baisse";
+			$Statuts_technique = 1;
+			$actif = 1;
+			$data = array(
+				'type_tache' => $type_tache,
+				'date_demande' => $date_demande_upsell,
+				'date_due' => $date_demande_upsell,
+				'idclients' => $idclients,
+				'AM' => $am,
+				'assigned_to' => $tm,
+				'title' => $title,
+				'Statuts_technique' => $Statuts_technique,
+				'description' => $tache
+			);
+
+			$this->Task_model->add_task($data);
+			$idclient = $this->visuels_model->create_upsell($type_upsell, $budget_finale, $budget_initiale, $demmande_upsell, $am, $tm, $date_upsell, $date_demande_upsell, $inforamtion_upsell, $statut_upsell, $idclients,$actif);
+
 
 		endif;
-		if ($type_upsell == 3):
-			$am = $this->input->post('am');
-			$am = $demmande_upsell;
-			$budget_initiale = $this->input->post('budget_initiale');
-			$idclient = $this->visuels_model->create_upsell($type_upsell, $budget_upsell, $budget_initiale, $demmande_upsell, $am, $tm, $date_upsell, $date_demande_upsell, $inforamtion_upsell, $statut_upsell, $idclients);
+		//if ($type_upsell == 3):
+			//$am = $this->input->post('am');
+			//$am = $demmande_upsell;
+			//$budget_initiale = $this->input->post('budget_initiale');
+			//$idclient = $this->visuels_model->create_upsell($type_upsell, $budget_upsell, $budget_initiale, $demmande_upsell, $am, $tm, $date_upsell, $date_demande_upsell, $inforamtion_upsell, $statut_upsell, $idclients);
 
-		endif;
+		//endif;
 		$this->session->set_flashdata('message-succes', "Donnée ajouté avec succès");
-		redirect('Client', 'refresh');
+		redirect('Client/detail_client/' . $idclients, 'refresh');
+
+
 		$this->layout();
 	}
 	private function get_all_calls()
@@ -238,6 +313,7 @@ class Client extends MY_Controller
 		$date_brief = $this->input->post('date_brief');
 		$date_annonce = $this->input->post('date_annonce');
 		$logo = $this->file_upload_field = 'logo';
+		
 
 		$this->form_validation->set_rules('site_client', 'URL', 'required|trim');
 
@@ -298,6 +374,35 @@ class Client extends MY_Controller
 		// ✅ Insérer le résumé à la place du paragraphe le plus long
 		$idclient = $this->visuels_model->insertclient($client, $site_client, $email_client, $numero_client, $favicon, $cms, $cms_logo, $summary);
 		$this->visuels_model->insertfiche($idclient, $budget, $secteur_activite, $product_choice, $initiative, $am, $date_mis_en_place, $date_brief, $date_annonce, $dejaclient, $gtm_code);
+		$title = "Création de Brief";
+			$tache = "En attente de brief";
+			$Statuts_technique = 1;
+			$type_tache = 1;
+			$data = array(
+				'type_tache' => $type_tache,
+				'date_demande' => $date_mis_en_place,
+				'date_due' => $date_brief,
+				'idclients' => $idclient,
+				'AM' => $am,
+				'assigned_to' => $initiative,
+				'title' => $title,
+				'Statuts_technique' => $Statuts_technique,
+				'description' => $tache
+			);
+
+		$this->Task_model->add_task($data);
+		$type = 1;
+		$budget_finale = $budget;
+		$budget_finale = $budget;
+		$statut_upsell = 1;
+		$idclients = $idclient;
+		$demmande_upsell = $am;
+		$am = $am;
+		$tm = $am;
+		$date_upsell = $date_mis_en_place;
+		$date_demande_upsell = $date_mis_en_place;
+		$inforamtion_upsell = "Budget initial";
+		$idclient = $this->visuels_model->create_upsell($type_upsell, $budget_finale, $budget_initiale, $demmande_upsell, $am, $tm, $date_upsell, $date_demande_upsell, $inforamtion_upsell, $statut_upsell, $idclients);
 
 		redirect('Client');
 	}
@@ -306,7 +411,7 @@ class Client extends MY_Controller
 		$api_key = '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'; // 🔐 Remplace avec ta clé
 		$model = 'gpt-4'; // ou 'gpt-3.5-turbo'
 
-		$input_text = "Voici les titres et paragraphes d’un site web. Résume ce que fait ce site, son activité, son objectif ou secteur, en quelques deux paragraphe.\n\n";
+		$input_text = "Voici les titres et paragraphes d’un site web. Résume ce que fait ce site, son activité, son objectif ou secteur, en **deux paragraphes distincts, séparés par une ligne vide**.\n\n";
 		$input_text .= "Titres :\n";
 		foreach ($headings as $h) {
 			$input_text .= "- ({$h['tag']}) {$h['text']}\n";

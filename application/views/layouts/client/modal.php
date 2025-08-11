@@ -1,3 +1,4 @@
+
 <div class="modal fade" id="clientModal" tabindex="-1" aria-labelledby="clientModalLabel" aria-hidden="true">
 	<div class="modal-dialog modal-dialog-scrollable" style="max-width: 600px;">
 		<div class="modal-content p-3">
