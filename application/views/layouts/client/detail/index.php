@@ -92,26 +92,26 @@
 										</div>
 									</div>
 									<br><br>
-									<div class="d-flex justify-content-start mb-3" style="font-size: 16px;">
+									<div class="d-flex justify-content-start mb-3" style="font-size: 15px;">
 										<span class="badge badge-light mr-3" style="width: 20px; height: 20px; background-color: #f2f2f2;">&nbsp;</span>
 										<span class="mr-2">Date d'anniversaire</span>
 										<span class="mr-2">|</span>
 										<span class="mr-2"><?php echo $d['mis_en_place_paiement'] ?></span>
 									</div>
-									<div class="d-flex justify-content-start mb-3" style="font-size: 16px;">
+									<div class="d-flex justify-content-start mb-3" style="font-size: 15px;">
 										<span class="badge badge-light mr-3" style="width: 20px; height: 20px; background-color: #f2f2f2;">&nbsp;</span>
 										<span class="mr-2">Date de Mise en ligne</span>
 										<span class="mr-2">|</span>
 										<span class="mr-2"><?php echo $d['annonce'] ?></span>
 									</div>
-									<div class="d-flex justify-content-start mb-3" style="font-size: 16px;">
+									<div class="d-flex justify-content-start mb-3" style="font-size: 15px;">
 										<span class="badge badge-light mr-3" style="width: 20px; height: 20px; background-color: #f2f2f2;">&nbsp;</span>
 										<span class="mr-2">Commerciale</span>
 										<span class="mr-2">
 											<img src="<?= base_url('assets/images/' . $d['am_photo_user']) ?>" width="24" height="24">
 										</span>
 									</div>
-									<div class="d-flex justify-content-start mb-4" style="font-size: 16px;">
+									<div class="d-flex justify-content-start mb-4" style="font-size: 15px;">
 										<span class="badge badge-light mr-3" style="width: 20px; height: 20px; background-color: #f2f2f2;">&nbsp;</span>
 										<span class="mr-2">Account Manager</span>
 										<span class="mr-2">
