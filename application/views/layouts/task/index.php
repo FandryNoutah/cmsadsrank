@@ -1,3 +1,34 @@
+<?php start_section('stylesheet'); ?>
+<style>
+	.table-wrapper {
+		border-spacing: 0 15px !important;
+		border-collapse: separate !important;
+	}
+
+	.table-wrapper td,
+	.table-wrapper th {
+		vertical-align: middle;
+		border: border;
+		border-bottom: 1px solid #dee2e6 !important;
+		padding: 14px !important;
+	}
+
+	.table-wrapper tbody tr td:first-child,
+	.table-wrapper thead tr th:first-child {
+		border-left: 1px solid #dee2e6;
+		border-top-left-radius: 4px;
+		border-bottom-left-radius: 4px;
+	}
+
+	.table-wrapper tbody tr td:last-child,
+	.table-wrapper thead tr th:last-child {
+		border-right: 1px solid #dee2e6;
+		border-top-right-radius: 4px;
+		border-bottom-right-radius: 4px;
+	}
+</style>
+<?php end_section(); ?>
+
 <?php start_section('page_title'); ?>
 Task
 <?php end_section(); ?>
@@ -87,68 +118,87 @@ Task
 					Create Task
 				</button>
 
-				<div class="card card-hover mb-3">
-					<div class="card-body" style="padding-top: 14px; padding-bottom: 14px;">
-						<div class="d-flex justify-content-between align-items-center">
-							<h6 class="mb-0 ml-3">
-								Monthly product Descussion
-							</h6>
-							<span class="text-muted">
-								Envoi Procédure + Invitation GTM
-							</span>
-							<span class="text-muted">
-								<img src="<?= base_url('assets/images/icons/figma/calendar.svg') ?>" alt="">
-								Due Date 24 Jan 2023
-							</span>
-							<div class="row">
-								<span class="col-auto mx-1 badge alert-success">Internal</span>
-								<span class="col-auto mx-1 badge alert-warning">Marketing</span>
-								<span class="col-auto mx-1 badge alert-danger">Urgent</span>
-							</div>
-							<div class="d-flex align-items-center avatar-group">
-								<img src="<?= base_url('assets/images/figma/user_frame.png') ?>" width="28" class="rounded-circle avatar" alt="Avatar 1">
-								<img src="<?= base_url('assets/images/figma/user_frame.png') ?>" width="28" class="rounded-circle avatar" alt="Avatar 2">
-								<img src="<?= base_url('assets/images/figma/user_frame.png') ?>" width="28" class="rounded-circle avatar" alt="Avatar 3">
-								<img src="<?= base_url('assets/images/figma/user_frame.png') ?>" width="28" class="rounded-circle avatar" alt="Avatar 4">
-							</div>
-							<a href="#" class="text-decoration-none text-muted">
-								<i class="fa fa-ellipsis-h"></i>
-							</a>
-						</div>
-					</div>
-				</div>
-
-				<div class="card card-hover mb-3">
-					<div class="card-body" style="padding-top: 14px; padding-bottom: 14px;">
-						<div class="d-flex justify-content-between align-items-center">
-							<h6 class="mb-0 ml-3">
-								Monthly product Descussion
-							</h6>
-							<span class="text-muted">
-								Envoi Procédure + Invitation GTM
-							</span>
-							<span class="text-muted">
-								<img src="<?= base_url('assets/images/icons/figma/calendar.svg') ?>" alt="">
-								Due Date 24 Jan 2023
-							</span>
-							<div class="row">
-								<span class="col-auto mx-1 badge alert-success">Internal</span>
-								<span class="col-auto mx-1 badge alert-warning">Marketing</span>
-								<span class="col-auto mx-1 badge alert-danger">Urgent</span>
-							</div>
-							<div class="d-flex align-items-center avatar-group">
-								<img src="<?= base_url('assets/images/figma/user_frame.png') ?>" width="28" class="rounded-circle avatar" alt="Avatar 1">
-								<img src="<?= base_url('assets/images/figma/user_frame.png') ?>" width="28" class="rounded-circle avatar" alt="Avatar 2">
-								<img src="<?= base_url('assets/images/figma/user_frame.png') ?>" width="28" class="rounded-circle avatar" alt="Avatar 3">
-								<img src="<?= base_url('assets/images/figma/user_frame.png') ?>" width="28" class="rounded-circle avatar" alt="Avatar 4">
-							</div>
-							<a href="#" class="text-decoration-none text-muted">
-								<i class="fa fa-ellipsis-h"></i>
-							</a>
-						</div>
-					</div>
-				</div>
-
+				<table class="table table-wrapper w-100">
+					<tbody>
+						<!-- foreach here -->
+						<tr>
+							<td>
+								<h6 class="mb-0 ml-3">
+									Monthly product Descussion
+								</h6>
+							</td>
+							<td>
+								<span class="text-muted">
+									Envoi Procédure + Invitation GTM
+								</span>
+							</td>
+							<td>
+								<span class="text-muted">
+									<img src="<?= base_url('assets/images/icons/figma/calendar.svg') ?>" alt="">
+									Due Date 24 Jan 2023
+								</span>
+							</td>
+							<td>
+								<div class="row">
+									<span class="col-auto mx-1 badge alert-success">Internal</span>
+									<span class="col-auto mx-1 badge alert-warning">Marketing</span>
+									<span class="col-auto mx-1 badge alert-danger">Urgent</span>
+								</div>
+							</td>
+							<td>
+								<div class="d-flex align-items-center avatar-group">
+									<img src="<?= base_url('assets/images/figma/user_frame.png') ?>" width="28" class="rounded-circle avatar" alt="Avatar 1">
+									<img src="<?= base_url('assets/images/figma/user_frame.png') ?>" width="28" class="rounded-circle avatar" alt="Avatar 2">
+									<img src="<?= base_url('assets/images/figma/user_frame.png') ?>" width="28" class="rounded-circle avatar" alt="Avatar 3">
+									<img src="<?= base_url('assets/images/figma/user_frame.png') ?>" width="28" class="rounded-circle avatar" alt="Avatar 4">
+								</div>
+							</td>
+							<td>
+								<a href="#" class="text-decoration-none text-muted">
+									<i class="fa fa-ellipsis-h"></i>
+								</a>
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<h6 class="mb-0 ml-3">
+									Monthly product Descussion
+								</h6>
+							</td>
+							<td>
+								<span class="text-muted">
+									Envoi Procédure + Invitation GTM
+								</span>
+							</td>
+							<td>
+								<span class="text-muted">
+									<img src="<?= base_url('assets/images/icons/figma/calendar.svg') ?>" alt="">
+									Due Date 24 Jan 2023
+								</span>
+							</td>
+							<td>
+								<div class="row">
+									<span class="col-auto mx-1 badge alert-success">Internal</span>
+									<span class="col-auto mx-1 badge alert-warning">Marketing</span>
+									<span class="col-auto mx-1 badge alert-danger">Urgent</span>
+								</div>
+							</td>
+							<td>
+								<div class="d-flex align-items-center avatar-group">
+									<img src="<?= base_url('assets/images/figma/user_frame.png') ?>" width="28" class="rounded-circle avatar" alt="Avatar 1">
+									<img src="<?= base_url('assets/images/figma/user_frame.png') ?>" width="28" class="rounded-circle avatar" alt="Avatar 2">
+									<img src="<?= base_url('assets/images/figma/user_frame.png') ?>" width="28" class="rounded-circle avatar" alt="Avatar 3">
+									<img src="<?= base_url('assets/images/figma/user_frame.png') ?>" width="28" class="rounded-circle avatar" alt="Avatar 4">
+								</div>
+							</td>
+							<td>
+								<a href="#" class="text-decoration-none text-muted">
+									<i class="fa fa-ellipsis-h"></i>
+								</a>
+							</td>
+						</tr>
+					</tbody>
+				</table>
 			</div>
 
 			<hr>
@@ -168,68 +218,87 @@ Task
 					Create Task
 				</button>
 
-				<div class="card card-hover mb-3">
-					<div class="card-body" style="padding-top: 14px; padding-bottom: 14px;">
-						<div class="d-flex justify-content-between align-items-center">
-							<h6 class="mb-0 ml-3">
-								Monthly product Descussion
-							</h6>
-							<span class="text-muted">
-								Envoi Procédure + Invitation GTM
-							</span>
-							<span class="text-muted">
-								<img src="<?= base_url('assets/images/icons/figma/calendar.svg') ?>" alt="">
-								Due Date 24 Jan 2023
-							</span>
-							<div class="row">
-								<span class="col-auto mx-1 badge alert-success">Internal</span>
-								<span class="col-auto mx-1 badge alert-warning">Marketing</span>
-								<span class="col-auto mx-1 badge alert-danger">Urgent</span>
-							</div>
-							<div class="d-flex align-items-center avatar-group">
-								<img src="<?= base_url('assets/images/figma/user_frame.png') ?>" width="28" class="rounded-circle avatar" alt="Avatar 1">
-								<img src="<?= base_url('assets/images/figma/user_frame.png') ?>" width="28" class="rounded-circle avatar" alt="Avatar 2">
-								<img src="<?= base_url('assets/images/figma/user_frame.png') ?>" width="28" class="rounded-circle avatar" alt="Avatar 3">
-								<img src="<?= base_url('assets/images/figma/user_frame.png') ?>" width="28" class="rounded-circle avatar" alt="Avatar 4">
-							</div>
-							<a href="#" class="text-decoration-none text-muted">
-								<i class="fa fa-ellipsis-h"></i>
-							</a>
-						</div>
-					</div>
-				</div>
-
-				<div class="card card-hover mb-3">
-					<div class="card-body" style="padding-top: 14px; padding-bottom: 14px;">
-						<div class="d-flex justify-content-between align-items-center">
-							<h6 class="mb-0 ml-3">
-								Monthly product Descussion
-							</h6>
-							<span class="text-muted">
-								Envoi Procédure + Invitation GTM
-							</span>
-							<span class="text-muted">
-								<img src="<?= base_url('assets/images/icons/figma/calendar.svg') ?>" alt="">
-								Due Date 24 Jan 2023
-							</span>
-							<div class="row">
-								<span class="col-auto mx-1 badge alert-success">Internal</span>
-								<span class="col-auto mx-1 badge alert-warning">Marketing</span>
-								<span class="col-auto mx-1 badge alert-danger">Urgent</span>
-							</div>
-							<div class="d-flex align-items-center avatar-group">
-								<img src="<?= base_url('assets/images/figma/user_frame.png') ?>" width="28" class="rounded-circle avatar" alt="Avatar 1">
-								<img src="<?= base_url('assets/images/figma/user_frame.png') ?>" width="28" class="rounded-circle avatar" alt="Avatar 2">
-								<img src="<?= base_url('assets/images/figma/user_frame.png') ?>" width="28" class="rounded-circle avatar" alt="Avatar 3">
-								<img src="<?= base_url('assets/images/figma/user_frame.png') ?>" width="28" class="rounded-circle avatar" alt="Avatar 4">
-							</div>
-							<a href="#" class="text-decoration-none text-muted">
-								<i class="fa fa-ellipsis-h"></i>
-							</a>
-						</div>
-					</div>
-				</div>
-
+				<table class="table table-wrapper w-100">
+					<tbody>
+						<!-- foreach here -->
+						<tr>
+							<td>
+								<h6 class="mb-0 ml-3">
+									Monthly product Descussion
+								</h6>
+							</td>
+							<td>
+								<span class="text-muted">
+									Envoi Procédure + Invitation GTM
+								</span>
+							</td>
+							<td>
+								<span class="text-muted">
+									<img src="<?= base_url('assets/images/icons/figma/calendar.svg') ?>" alt="">
+									Due Date 24 Jan 2023
+								</span>
+							</td>
+							<td>
+								<div class="row">
+									<span class="col-auto mx-1 badge alert-success">Internal</span>
+									<span class="col-auto mx-1 badge alert-warning">Marketing</span>
+									<span class="col-auto mx-1 badge alert-danger">Urgent</span>
+								</div>
+							</td>
+							<td>
+								<div class="d-flex align-items-center avatar-group">
+									<img src="<?= base_url('assets/images/figma/user_frame.png') ?>" width="28" class="rounded-circle avatar" alt="Avatar 1">
+									<img src="<?= base_url('assets/images/figma/user_frame.png') ?>" width="28" class="rounded-circle avatar" alt="Avatar 2">
+									<img src="<?= base_url('assets/images/figma/user_frame.png') ?>" width="28" class="rounded-circle avatar" alt="Avatar 3">
+									<img src="<?= base_url('assets/images/figma/user_frame.png') ?>" width="28" class="rounded-circle avatar" alt="Avatar 4">
+								</div>
+							</td>
+							<td>
+								<a href="#" class="text-decoration-none text-muted">
+									<i class="fa fa-ellipsis-h"></i>
+								</a>
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<h6 class="mb-0 ml-3">
+									Monthly product Descussion
+								</h6>
+							</td>
+							<td>
+								<span class="text-muted">
+									Envoi Procédure + Invitation GTM
+								</span>
+							</td>
+							<td>
+								<span class="text-muted">
+									<img src="<?= base_url('assets/images/icons/figma/calendar.svg') ?>" alt="">
+									Due Date 24 Jan 2023
+								</span>
+							</td>
+							<td>
+								<div class="row">
+									<span class="col-auto mx-1 badge alert-success">Internal</span>
+									<span class="col-auto mx-1 badge alert-warning">Marketing</span>
+									<span class="col-auto mx-1 badge alert-danger">Urgent</span>
+								</div>
+							</td>
+							<td>
+								<div class="d-flex align-items-center avatar-group">
+									<img src="<?= base_url('assets/images/figma/user_frame.png') ?>" width="28" class="rounded-circle avatar" alt="Avatar 1">
+									<img src="<?= base_url('assets/images/figma/user_frame.png') ?>" width="28" class="rounded-circle avatar" alt="Avatar 2">
+									<img src="<?= base_url('assets/images/figma/user_frame.png') ?>" width="28" class="rounded-circle avatar" alt="Avatar 3">
+									<img src="<?= base_url('assets/images/figma/user_frame.png') ?>" width="28" class="rounded-circle avatar" alt="Avatar 4">
+								</div>
+							</td>
+							<td>
+								<a href="#" class="text-decoration-none text-muted">
+									<i class="fa fa-ellipsis-h"></i>
+								</a>
+							</td>
+						</tr>
+					</tbody>
+				</table>
 			</div>
 
 			<hr>
@@ -249,67 +318,87 @@ Task
 					Create Task
 				</button>
 
-				<div class="card card-hover mb-3">
-					<div class="card-body" style="padding-top: 14px; padding-bottom: 14px;">
-						<div class="d-flex justify-content-between align-items-center">
-							<h6 class="mb-0 ml-3">
-								Monthly product Descussion
-							</h6>
-							<span class="text-muted">
-								Envoi Procédure + Invitation GTM
-							</span>
-							<span class="text-muted">
-								<img src="<?= base_url('assets/images/icons/figma/calendar.svg') ?>" alt="">
-								Due Date 24 Jan 2023
-							</span>
-							<div class="row">
-								<span class="col-auto mx-1 badge alert-success">Internal</span>
-								<span class="col-auto mx-1 badge alert-warning">Marketing</span>
-								<span class="col-auto mx-1 badge alert-danger">Urgent</span>
-							</div>
-							<div class="d-flex align-items-center avatar-group">
-								<img src="<?= base_url('assets/images/figma/user_frame.png') ?>" width="28" class="rounded-circle avatar" alt="Avatar 1">
-								<img src="<?= base_url('assets/images/figma/user_frame.png') ?>" width="28" class="rounded-circle avatar" alt="Avatar 2">
-								<img src="<?= base_url('assets/images/figma/user_frame.png') ?>" width="28" class="rounded-circle avatar" alt="Avatar 3">
-								<img src="<?= base_url('assets/images/figma/user_frame.png') ?>" width="28" class="rounded-circle avatar" alt="Avatar 4">
-							</div>
-							<a href="#" class="text-decoration-none text-muted">
-								<i class="fa fa-ellipsis-h"></i>
-							</a>
-						</div>
-					</div>
-				</div>
-
-				<div class="card card-hover mb-3">
-					<div class="card-body" style="padding-top: 14px; padding-bottom: 14px;">
-						<div class="d-flex justify-content-between align-items-center">
-							<h6 class="mb-0 ml-3">
-								Monthly product Descussion
-							</h6>
-							<span class="text-muted">
-								Envoi Procédure + Invitation GTM
-							</span>
-							<span class="text-muted">
-								<img src="<?= base_url('assets/images/icons/figma/calendar.svg') ?>" alt="">
-								Due Date 24 Jan 2023
-							</span>
-							<div class="row">
-								<span class="col-auto mx-1 badge alert-success">Internal</span>
-								<span class="col-auto mx-1 badge alert-warning">Marketing</span>
-								<span class="col-auto mx-1 badge alert-danger">Urgent</span>
-							</div>
-							<div class="d-flex align-items-center avatar-group">
-								<img src="<?= base_url('assets/images/figma/user_frame.png') ?>" width="28" class="rounded-circle avatar" alt="Avatar 1">
-								<img src="<?= base_url('assets/images/figma/user_frame.png') ?>" width="28" class="rounded-circle avatar" alt="Avatar 2">
-								<img src="<?= base_url('assets/images/figma/user_frame.png') ?>" width="28" class="rounded-circle avatar" alt="Avatar 3">
-								<img src="<?= base_url('assets/images/figma/user_frame.png') ?>" width="28" class="rounded-circle avatar" alt="Avatar 4">
-							</div>
-							<a href="#" class="text-decoration-none text-muted">
-								<i class="fa fa-ellipsis-h"></i>
-							</a>
-						</div>
-					</div>
-				</div>
+				<table class="table table-wrapper w-100">
+					<tbody>
+						<!-- foreach here -->
+						<tr>
+							<td>
+								<h6 class="mb-0 ml-3">
+									Monthly product Descussion
+								</h6>
+							</td>
+							<td>
+								<span class="text-muted">
+									Envoi Procédure + Invitation GTM
+								</span>
+							</td>
+							<td>
+								<span class="text-muted">
+									<img src="<?= base_url('assets/images/icons/figma/calendar.svg') ?>" alt="">
+									Due Date 24 Jan 2023
+								</span>
+							</td>
+							<td>
+								<div class="row">
+									<span class="col-auto mx-1 badge alert-success">Internal</span>
+									<span class="col-auto mx-1 badge alert-warning">Marketing</span>
+									<span class="col-auto mx-1 badge alert-danger">Urgent</span>
+								</div>
+							</td>
+							<td>
+								<div class="d-flex align-items-center avatar-group">
+									<img src="<?= base_url('assets/images/figma/user_frame.png') ?>" width="28" class="rounded-circle avatar" alt="Avatar 1">
+									<img src="<?= base_url('assets/images/figma/user_frame.png') ?>" width="28" class="rounded-circle avatar" alt="Avatar 2">
+									<img src="<?= base_url('assets/images/figma/user_frame.png') ?>" width="28" class="rounded-circle avatar" alt="Avatar 3">
+									<img src="<?= base_url('assets/images/figma/user_frame.png') ?>" width="28" class="rounded-circle avatar" alt="Avatar 4">
+								</div>
+							</td>
+							<td>
+								<a href="#" class="text-decoration-none text-muted">
+									<i class="fa fa-ellipsis-h"></i>
+								</a>
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<h6 class="mb-0 ml-3">
+									Monthly product Descussion
+								</h6>
+							</td>
+							<td>
+								<span class="text-muted">
+									Envoi Procédure + Invitation GTM
+								</span>
+							</td>
+							<td>
+								<span class="text-muted">
+									<img src="<?= base_url('assets/images/icons/figma/calendar.svg') ?>" alt="">
+									Due Date 24 Jan 2023
+								</span>
+							</td>
+							<td>
+								<div class="row">
+									<span class="col-auto mx-1 badge alert-success">Internal</span>
+									<span class="col-auto mx-1 badge alert-warning">Marketing</span>
+									<span class="col-auto mx-1 badge alert-danger">Urgent</span>
+								</div>
+							</td>
+							<td>
+								<div class="d-flex align-items-center avatar-group">
+									<img src="<?= base_url('assets/images/figma/user_frame.png') ?>" width="28" class="rounded-circle avatar" alt="Avatar 1">
+									<img src="<?= base_url('assets/images/figma/user_frame.png') ?>" width="28" class="rounded-circle avatar" alt="Avatar 2">
+									<img src="<?= base_url('assets/images/figma/user_frame.png') ?>" width="28" class="rounded-circle avatar" alt="Avatar 3">
+									<img src="<?= base_url('assets/images/figma/user_frame.png') ?>" width="28" class="rounded-circle avatar" alt="Avatar 4">
+								</div>
+							</td>
+							<td>
+								<a href="#" class="text-decoration-none text-muted">
+									<i class="fa fa-ellipsis-h"></i>
+								</a>
+							</td>
+						</tr>
+					</tbody>
+				</table>
 
 			</div>
 
