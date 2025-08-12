@@ -120,83 +120,47 @@ Task
 
 				<table class="table table-wrapper w-100">
 					<tbody>
-						<!-- foreach here -->
-						<tr>
-							<td>
-								<h6 class="mb-0 ml-3">
-									Monthly product Descussion
-								</h6>
-							</td>
-							<td>
-								<span class="text-muted">
-									Envoi Procédure + Invitation GTM
-								</span>
-							</td>
-							<td>
-								<span class="text-muted">
-									<img src="<?= base_url('assets/images/icons/figma/calendar.svg') ?>" alt="">
-									Due Date 24 Jan 2023
-								</span>
-							</td>
-							<td>
-								<div class="row">
-									<span class="col-auto mx-1 badge alert-success">Internal</span>
-									<span class="col-auto mx-1 badge alert-warning">Marketing</span>
-									<span class="col-auto mx-1 badge alert-danger">Urgent</span>
-								</div>
-							</td>
-							<td>
-								<div class="d-flex align-items-center avatar-group">
-									<img src="<?= base_url('assets/images/figma/user_frame.png') ?>" width="28" class="rounded-circle avatar" alt="Avatar 1">
-									<img src="<?= base_url('assets/images/figma/user_frame.png') ?>" width="28" class="rounded-circle avatar" alt="Avatar 2">
-									<img src="<?= base_url('assets/images/figma/user_frame.png') ?>" width="28" class="rounded-circle avatar" alt="Avatar 3">
-									<img src="<?= base_url('assets/images/figma/user_frame.png') ?>" width="28" class="rounded-circle avatar" alt="Avatar 4">
-								</div>
-							</td>
-							<td>
-								<a href="#" class="text-decoration-none text-muted">
-									<i class="fa fa-ellipsis-h"></i>
-								</a>
-							</td>
-						</tr>
-						<tr>
-							<td>
-								<h6 class="mb-0 ml-3">
-									Monthly product Descussion
-								</h6>
-							</td>
-							<td>
-								<span class="text-muted">
-									Envoi Procédure + Invitation GTM
-								</span>
-							</td>
-							<td>
-								<span class="text-muted">
-									<img src="<?= base_url('assets/images/icons/figma/calendar.svg') ?>" alt="">
-									Due Date 24 Jan 2023
-								</span>
-							</td>
-							<td>
-								<div class="row">
-									<span class="col-auto mx-1 badge alert-success">Internal</span>
-									<span class="col-auto mx-1 badge alert-warning">Marketing</span>
-									<span class="col-auto mx-1 badge alert-danger">Urgent</span>
-								</div>
-							</td>
-							<td>
-								<div class="d-flex align-items-center avatar-group">
-									<img src="<?= base_url('assets/images/figma/user_frame.png') ?>" width="28" class="rounded-circle avatar" alt="Avatar 1">
-									<img src="<?= base_url('assets/images/figma/user_frame.png') ?>" width="28" class="rounded-circle avatar" alt="Avatar 2">
-									<img src="<?= base_url('assets/images/figma/user_frame.png') ?>" width="28" class="rounded-circle avatar" alt="Avatar 3">
-									<img src="<?= base_url('assets/images/figma/user_frame.png') ?>" width="28" class="rounded-circle avatar" alt="Avatar 4">
-								</div>
-							</td>
-							<td>
-								<a href="#" class="text-decoration-none text-muted">
-									<i class="fa fa-ellipsis-h"></i>
-								</a>
-							</td>
-						</tr>
+						<?php foreach ($tache_team as $t):  ?>
+							<tr>
+								<td>
+									<h6 class="mb-0 ml-3">
+										<?php echo $t->nom_client; ?>
+									</h6>
+								</td>
+								<td>
+									<span class="text-muted">
+										<?php echo $t->title; ?>
+									</span>
+								</td>
+								<td>
+									<span class="text-muted">
+										<img src="<?= base_url('assets/images/icons/figma/calendar.svg') ?>" alt="">
+										<?php echo $t->date_due; ?>
+									</span>
+								</td>
+								<td>
+									<div class="row">
+										<span class="col-auto mx-1 badge alert-success">Internal</span>
+										<span class="col-auto mx-1 badge alert-warning">Marketing</span>
+										<span class="col-auto mx-1 badge alert-danger">Urgent</span>
+									</div>
+								</td>
+								<td>
+									<div class="d-flex align-items-center avatar-group">
+										<img src="<?= base_url('assets/images/figma/user_frame.png') ?>" width="28" class="rounded-circle avatar" alt="Avatar 1">
+										<img src="<?= base_url('assets/images/figma/user_frame.png') ?>" width="28" class="rounded-circle avatar" alt="Avatar 2">
+										<img src="<?= base_url('assets/images/figma/user_frame.png') ?>" width="28" class="rounded-circle avatar" alt="Avatar 3">
+										<img src="<?= base_url('assets/images/figma/user_frame.png') ?>" width="28" class="rounded-circle avatar" alt="Avatar 4">
+									</div>
+								</td>
+								<td>
+									<a href="#" class="text-decoration-none text-muted">
+										<i class="fa fa-ellipsis-h"></i>
+									</a>
+								</td>
+							</tr>
+						<?php endforeach; ?>
+
 					</tbody>
 				</table>
 			</div>
@@ -419,147 +383,55 @@ Task
 								Create Task
 							</button>
 
-							<!-- Eto no manao foreach -->
-							<div class="card mt-3">
-								<div class="card-body">
-									<div class="d-flex">
-										<div class="mr-2">
-											<span class="badge alert-success">Internal</span>
-										</div>
-										<div class="mr-2">
-											<span class="badge alert-warning">Marketing</span>
-										</div>
-										<div class="mr-2">
-											<span class="badge alert-danger">Urgent</span>
-										</div>
-										<a href="#" class="col-auto ml-auto text-decoration-none text-muted">
-											<i class="fa fa-ellipsis-h"></i>
-										</a>
-									</div>
-									<h6 class="my-3" style="font-size: 14px;">Andréa et Stephano le compte pour moi Assor Doukhan (assordoukhanavocats.fr)</h6>
-									<span class="text-muted d-block mb-3">Envoi Procédure + Invitation GTM</span>
-									<span class="text-muted d-block mb-3">
-										<img src="<?= base_url('assets/images/icons/figma/calendar.svg') ?>" alt="">
-										Due Date 24 Jan 2023
-									</span>
-									<div class="row no-gutters" style="font-size: 14px;">
-										<div class="col-auto mr-auto">
-											<div class="d-flex align-items-center avatar-group">
-												<img src="<?= base_url('assets/images/figma/user_frame.png') ?>" width="24" class="rounded-circle avatar" alt="Avatar 1">
-												<img src="<?= base_url('assets/images/figma/user_frame.png') ?>" width="24" class="rounded-circle avatar" alt="Avatar 2">
-												<img src="<?= base_url('assets/images/figma/user_frame.png') ?>" width="24" class="rounded-circle avatar" alt="Avatar 3">
-												<img src="<?= base_url('assets/images/figma/user_frame.png') ?>" width="24" class="rounded-circle avatar" alt="Avatar 4">
+							<?php foreach ($tache_team as $t): ?>
+								<div class="card mt-3">
+									<div class="card-body">
+										<div class="d-flex">
+											<div class="mr-2">
+												<span class="badge alert-success">Internal</span>
 											</div>
-										</div>
-										<span class="col-auto mr-3">
-											<a href="#" class="text-muted">
-												<img src="<?= base_url('assets/images/icons/figma/attachment-8.svg') ?>" alt="">
-												5
+											<div class="mr-2">
+												<span class="badge alert-warning">Marketing</span>
+											</div>
+											<div class="mr-2">
+												<span class="badge alert-danger">Urgent</span>
+											</div>
+											<a href="#" class="col-auto ml-auto text-decoration-none text-muted">
+												<i class="fa fa-ellipsis-h"></i>
 											</a>
-										</span>
-										<span class="col-auto">
-											<a href="#" class="text-muted">
-												<img src="<?= base_url('assets/images/icons/figma/chat-9.svg') ?>" alt="">
-												19
-											</a>
-										</span>
-									</div>
-								</div>
-							</div>
-							<div class="card mt-3">
-								<div class="card-body">
-									<div class="d-flex">
-										<div class="mr-2">
-											<span class="badge alert-success">Internal</span>
 										</div>
-										<div class="mr-2">
-											<span class="badge alert-warning">Marketing</span>
-										</div>
-										<div class="mr-2">
-											<span class="badge alert-danger">Urgent</span>
-										</div>
-										<a href="#" class="col-auto ml-auto text-decoration-none text-muted">
-											<i class="fa fa-ellipsis-h"></i>
-										</a>
-									</div>
-									<h6 class="my-3" style="font-size: 14px;">Monthly product Descussion</h6>
-									<div class="row mb-3" style="font-size: 14px;">
-										<span class="col-auto mr-auto text-muted">
+										<h6 class="my-3" style="font-size: 14px;"><?php echo $t->nom_client; ?></h6>
+										<span class="text-muted d-block mb-3"><?php echo $t->title; ?></span>
+										<span class="text-muted d-block mb-3">
 											<img src="<?= base_url('assets/images/icons/figma/calendar.svg') ?>" alt="">
-											Due Date 24 Jan 2023
+											Due Date <?php echo $t->date_due; ?>
 										</span>
-										<span class="col-auto text-muted">
-											<img src="<?= base_url('assets/images/icons/figma/checklist.svg') ?>" alt="">
-											10/124
-										</span>
-									</div>
-									<div class="row no-gutters" style="font-size: 14px;">
-										<div class="col-auto mr-auto">
-											<div class="d-flex align-items-center avatar-group">
-												<img src="<?= base_url('assets/images/figma/user_frame.png') ?>" width="24" class="rounded-circle avatar" alt="Avatar 1">
-												<img src="<?= base_url('assets/images/figma/user_frame.png') ?>" width="24" class="rounded-circle avatar" alt="Avatar 2">
-												<img src="<?= base_url('assets/images/figma/user_frame.png') ?>" width="24" class="rounded-circle avatar" alt="Avatar 3">
-												<img src="<?= base_url('assets/images/figma/user_frame.png') ?>" width="24" class="rounded-circle avatar" alt="Avatar 4">
+										<div class="row no-gutters" style="font-size: 14px;">
+											<div class="col-auto mr-auto">
+												<div class="d-flex align-items-center avatar-group">
+													<img src="<?= base_url('assets/images/figma/user_frame.png') ?>" width="24" class="rounded-circle avatar" alt="Avatar 1">
+													<img src="<?= base_url('assets/images/figma/user_frame.png') ?>" width="24" class="rounded-circle avatar" alt="Avatar 2">
+													<img src="<?= base_url('assets/images/figma/user_frame.png') ?>" width="24" class="rounded-circle avatar" alt="Avatar 3">
+													<img src="<?= base_url('assets/images/figma/user_frame.png') ?>" width="24" class="rounded-circle avatar" alt="Avatar 4">
+												</div>
 											</div>
+											<span class="col-auto mr-3">
+												<a href="#" class="text-muted">
+													<img src="<?= base_url('assets/images/icons/figma/attachment-8.svg') ?>" alt="">
+													5
+												</a>
+											</span>
+											<span class="col-auto">
+												<a href="#" class="text-muted">
+													<img src="<?= base_url('assets/images/icons/figma/chat-9.svg') ?>" alt="">
+													19
+												</a>
+											</span>
 										</div>
-										<span class="col-auto mr-3 text-muted">
-											<img src="<?= base_url('assets/images/icons/figma/attachment-8.svg') ?>" alt="">
-											5
-										</span>
-										<span class="col-auto text-muted">
-											<img src="<?= base_url('assets/images/icons/figma/chat-9.svg') ?>" alt="">
-											19
-										</span>
 									</div>
 								</div>
-							</div>
-							<div class="card mt-3">
-								<div class="card-body">
-									<div class="d-flex">
-										<div class="mr-2">
-											<span class="badge alert-success">Internal</span>
-										</div>
-										<div class="mr-2">
-											<span class="badge alert-warning">Marketing</span>
-										</div>
-										<div class="mr-2">
-											<span class="badge alert-danger">Urgent</span>
-										</div>
-										<a href="#" class="col-auto ml-auto text-decoration-none text-muted">
-											<i class="fa fa-ellipsis-h"></i>
-										</a>
-									</div>
-									<h6 class="my-3" style="font-size: 14px;">Monthly product Descussion</h6>
-									<div class="row mb-3" style="font-size: 14px;">
-										<span class="col-auto mr-auto text-muted">
-											<img src="<?= base_url('assets/images/icons/figma/calendar.svg') ?>" alt="">
-											Due Date 24 Jan 2023
-										</span>
-										<span class="col-auto text-muted">
-											<img src="<?= base_url('assets/images/icons/figma/checklist.svg') ?>" alt="">
-											10/124
-										</span>
-									</div>
-									<div class="row no-gutters" style="font-size: 14px;">
-										<div class="col-auto mr-auto">
-											<div class="d-flex align-items-center avatar-group">
-												<img src="<?= base_url('assets/images/figma/user_frame.png') ?>" width="24" class="rounded-circle avatar" alt="Avatar 1">
-												<img src="<?= base_url('assets/images/figma/user_frame.png') ?>" width="24" class="rounded-circle avatar" alt="Avatar 2">
-												<img src="<?= base_url('assets/images/figma/user_frame.png') ?>" width="24" class="rounded-circle avatar" alt="Avatar 3">
-												<img src="<?= base_url('assets/images/figma/user_frame.png') ?>" width="24" class="rounded-circle avatar" alt="Avatar 4">
-											</div>
-										</div>
-										<span class="col-auto mr-3 text-muted">
-											<img src="<?= base_url('assets/images/icons/figma/attachment-8.svg') ?>" alt="">
-											5
-										</span>
-										<span class="col-auto text-muted">
-											<img src="<?= base_url('assets/images/icons/figma/chat-9.svg') ?>" alt="">
-											19
-										</span>
-									</div>
-								</div>
-							</div>
+							<?php endforeach; ?>
+
 						</div>
 					</div>
 				</div>
