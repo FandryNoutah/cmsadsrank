@@ -422,7 +422,7 @@ Task
 												</a>
 											</span>
 											<span class="col-auto">
-												<a href="#" class="text-muted">
+												<a href="javascript:void(0);" class="text-muted" data-toggle="modal" data-target="#discussionModal" data-id="id_task">
 													<img src="<?= base_url('assets/images/icons/figma/chat-9.svg') ?>" alt="">
 													19
 												</a>
@@ -488,7 +488,7 @@ Task
 											<img src="<?= base_url('assets/images/icons/figma/attachment-8.svg') ?>" alt="">
 											5
 										</span>
-										<span class="col-auto text-muted">
+										<span class="javascript:void(0);ol-auto text-muted" data-toggle="modal" data-target="#discussionModal" data-id="id_task">
 											<img src="<?= base_url('assets/images/icons/figma/chat-9.svg') ?>" alt="">
 											19
 										</span>
@@ -535,7 +535,7 @@ Task
 											<img src="<?= base_url('assets/images/icons/figma/attachment-8.svg') ?>" alt="">
 											5
 										</span>
-										<span class="col-auto text-muted">
+										<span class="javascript:void(0);ol-auto text-muted" data-toggle="modal" data-target="#discussionModal" data-id="id_task">
 											<img src="<?= base_url('assets/images/icons/figma/chat-9.svg') ?>" alt="">
 											19
 										</span>
@@ -582,7 +582,7 @@ Task
 											<img src="<?= base_url('assets/images/icons/figma/attachment-8.svg') ?>" alt="">
 											5
 										</span>
-										<span class="col-auto text-muted">
+										<span class="javascript:void(0);ol-auto text-muted" data-toggle="modal" data-target="#discussionModal" data-id="id_task">
 											<img src="<?= base_url('assets/images/icons/figma/chat-9.svg') ?>" alt="">
 											19
 										</span>
@@ -643,7 +643,7 @@ Task
 											</a>
 										</span>
 										<span class="col-auto">
-											<a href="#" class="text-muted">
+											<a href="javascript:void(0);" class="text-muted" data-toggle="modal" data-target="#discussionModal" data-id="id_task">
 												<img src="<?= base_url('assets/images/icons/figma/chat-9.svg') ?>" alt="">
 												19
 											</a>
@@ -691,7 +691,7 @@ Task
 											<img src="<?= base_url('assets/images/icons/figma/attachment-8.svg') ?>" alt="">
 											5
 										</span>
-										<span class="col-auto text-muted">
+										<span class="javascript:void(0);ol-auto text-muted" data-toggle="modal" data-target="#discussionModal" data-id="id_task">
 											<img src="<?= base_url('assets/images/icons/figma/chat-9.svg') ?>" alt="">
 											19
 										</span>
@@ -738,7 +738,7 @@ Task
 											<img src="<?= base_url('assets/images/icons/figma/attachment-8.svg') ?>" alt="">
 											5
 										</span>
-										<span class="col-auto text-muted">
+										<span class="javascript:void(0);ol-auto text-muted" data-toggle="modal" data-target="#discussionModal" data-id="id_task">
 											<img src="<?= base_url('assets/images/icons/figma/chat-9.svg') ?>" alt="">
 											19
 										</span>
@@ -754,6 +754,7 @@ Task
 </div>
 
 <?php $this->load->view('layouts/task/modal/form'); ?>
+<?php $this->load->view('layouts/task/modal/discussion'); ?>
 
 <?php end_section(); ?>
 
@@ -777,6 +778,46 @@ Task
 				.addClass('fa-chevron-down');
 		});
 
+		$('#discussionModal').on('show.bs.modal', function(event) {
+
+			let button = $(event.relatedTarget);
+			let id_task = $(button).attr('data-id');
+
+			$.ajax({
+				type: "POST",
+				url: "Task/fetch_discussion/" + id_task,
+				dataType: "json",
+				beforeSend: function() {
+					$('#task_discussion').html('<span class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>');
+				},
+				success: function(response) {
+
+					$('#task_discussion').html('');
+					$.each(response, function(index, data) {
+
+						let owner = data.owner;
+
+						let alignment = owner ? "justify-content-end" : "justify-content-start";
+						let color = owner ? "bg-primary text-white" : "bg-light";
+						let sender = owner ? "You" : data.sender;
+
+						let html = `
+							<div class="d-flex ${alignment}">
+								<div class="message_container mt-3">
+									<span class="small text-muted">${sender} ${data.date}</span>
+									<div class="p-2 ${color} rounded" style="width: fit-content;">
+										${data.message}
+									</div>
+								</div>
+							</div>
+						`;
+
+						$('#task_discussion').append(html); // append if ascendant ; prepend if descendant
+					});
+				}
+			});
+
+		});
 	});
 </script>
 <?php end_section(); ?>
