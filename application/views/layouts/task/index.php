@@ -111,6 +111,9 @@ Task
 								<img src="<?= base_url('assets/images/figma/user_frame.png') ?>" width="28" class="rounded-circle avatar" alt="Avatar 3">
 								<img src="<?= base_url('assets/images/figma/user_frame.png') ?>" width="28" class="rounded-circle avatar" alt="Avatar 4">
 							</div>
+							<a href="#" class="text-decoration-none text-muted">
+								<i class="fa fa-ellipsis-h"></i>
+							</a>
 						</div>
 					</div>
 				</div>
@@ -139,6 +142,9 @@ Task
 								<img src="<?= base_url('assets/images/figma/user_frame.png') ?>" width="28" class="rounded-circle avatar" alt="Avatar 3">
 								<img src="<?= base_url('assets/images/figma/user_frame.png') ?>" width="28" class="rounded-circle avatar" alt="Avatar 4">
 							</div>
+							<a href="#" class="text-decoration-none text-muted">
+								<i class="fa fa-ellipsis-h"></i>
+							</a>
 						</div>
 					</div>
 				</div>
@@ -186,6 +192,9 @@ Task
 								<img src="<?= base_url('assets/images/figma/user_frame.png') ?>" width="28" class="rounded-circle avatar" alt="Avatar 3">
 								<img src="<?= base_url('assets/images/figma/user_frame.png') ?>" width="28" class="rounded-circle avatar" alt="Avatar 4">
 							</div>
+							<a href="#" class="text-decoration-none text-muted">
+								<i class="fa fa-ellipsis-h"></i>
+							</a>
 						</div>
 					</div>
 				</div>
@@ -214,6 +223,9 @@ Task
 								<img src="<?= base_url('assets/images/figma/user_frame.png') ?>" width="28" class="rounded-circle avatar" alt="Avatar 3">
 								<img src="<?= base_url('assets/images/figma/user_frame.png') ?>" width="28" class="rounded-circle avatar" alt="Avatar 4">
 							</div>
+							<a href="#" class="text-decoration-none text-muted">
+								<i class="fa fa-ellipsis-h"></i>
+							</a>
 						</div>
 					</div>
 				</div>
@@ -261,6 +273,9 @@ Task
 								<img src="<?= base_url('assets/images/figma/user_frame.png') ?>" width="28" class="rounded-circle avatar" alt="Avatar 3">
 								<img src="<?= base_url('assets/images/figma/user_frame.png') ?>" width="28" class="rounded-circle avatar" alt="Avatar 4">
 							</div>
+							<a href="#" class="text-decoration-none text-muted">
+								<i class="fa fa-ellipsis-h"></i>
+							</a>
 						</div>
 					</div>
 				</div>
@@ -289,6 +304,9 @@ Task
 								<img src="<?= base_url('assets/images/figma/user_frame.png') ?>" width="28" class="rounded-circle avatar" alt="Avatar 3">
 								<img src="<?= base_url('assets/images/figma/user_frame.png') ?>" width="28" class="rounded-circle avatar" alt="Avatar 4">
 							</div>
+							<a href="#" class="text-decoration-none text-muted">
+								<i class="fa fa-ellipsis-h"></i>
+							</a>
 						</div>
 					</div>
 				</div>
