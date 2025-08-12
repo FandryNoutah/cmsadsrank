@@ -46,6 +46,28 @@ class Task extends MY_Controller
 		$this->layout();
 	}
 
+	public function fetch_discussion($id_task) {
+
+		// Check for order (ascendant || descendant)
+		
+		$discussions = [
+			[
+				"date"		=>	"8 Mar, 10:12",
+				"sender"	=>	"John",
+				"message"	=>	"Hello, how are you?",
+				"owner"		=>	false
+			],
+			[
+				"date"		=>	"8 Mar, 11:58",
+				"message"	=>	"I'm good, thanks!",
+				"owner"		=>	true
+			]
+		];
+
+		echo json_encode($discussions);
+
+	}
+
 	public function detail_client($idclients)
 	{
 
@@ -80,6 +102,7 @@ class Task extends MY_Controller
 			echo json_encode(array('status' => 'error', 'message' => 'Erreur lors de la mise à jour'));
 		}
 	}
+
 	public function creer_upsell()
 	{
 		$type_upsell = $this->input->post('type_upsell');
@@ -128,6 +151,7 @@ class Task extends MY_Controller
 		redirect('Upsell', 'refresh');
 		$this->layout();
 	}
+
 	public function uptates_information_rapport()
 	{
 		// Récupérer les données envoyées par AJAX
@@ -157,6 +181,7 @@ class Task extends MY_Controller
 			echo json_encode(array('status' => 'error', 'message' => 'Erreur lors de la mise à jour'));
 		}
 	}
+
 	public function info_am()
 	{
 		// Vérifier si les données sont présentes et valides
@@ -250,6 +275,7 @@ class Task extends MY_Controller
 			'message' => $success ? 'État mis à jour' : 'Erreur lors de la mise à jour'
 		]);
 	}
+
 	public function update_etat_am()
 	{
 		$this->load->library('form_validation');
@@ -283,13 +309,6 @@ class Task extends MY_Controller
 			'message' => $success ? 'État AM mis à jour' : 'Erreur lors de la mise à jour'
 		]);
 	}
-
-
-
-
-
-
-
 
 	public function Contexte($id)
 	{
