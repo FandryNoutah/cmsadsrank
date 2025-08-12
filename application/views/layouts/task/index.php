@@ -33,7 +33,7 @@ Task
 		</button>
 	</div>
 	<div class="col-auto px-1">
-		<button class="btn btn-dark">
+		<button class="btn btn-dark" data-toggle="modal" data-target="#taskModal">
 			<img src="<?= base_url('assets/images/icons/figma/icon-plus.svg') ?>" alt="">
 			Add Task
 		</button>
@@ -773,6 +773,9 @@ Task
 		</div>
 	</div>
 </div>
+
+<?php $this->load->view('layouts/task/modal/form'); ?>
+
 <?php end_section(); ?>
 
 <?php start_section('script'); ?>
