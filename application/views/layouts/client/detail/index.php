@@ -166,10 +166,10 @@
 								<div class="card-body">
 									<div class="d-flex align-items-center mb-2">
 										<img src="<?= base_url('assets/images/figma/teams_tasks.png') ?>" width="43">
-										<a href="#" class="text-decoration-none text-muted ml-3 stretched-link">Teams Tasks</a>
+										<a href="<?= base_url('Client/tache_client/' . $donnees[0]['idclients']) ?>" class="text-decoration-none text-muted ml-3 stretched-link">Teams Tasks</a>
 										<i class="fa fa-chevron-right ml-auto" style="font-size: 12px;"></i>
 									</div>
-									<h3 class="m-0">5 Task</h3>
+									<h3 class="m-0"><?php echo $nbr_task ?> Tâches en cours</h3>
 								</div>
 							</div>
 						</div>
@@ -313,7 +313,11 @@
 
 					<div class="d-flex justify-content-between">
 						<h1 style="font-size: 48px;">Détection Modules</h1>
-						<button class="btn btn-outline-dark btn-lg">Voir tout</button>
+						<form action="<?= base_url('Client/application/' . $donnees[0]['idclients']) ?>" method="get">
+							<button class="btn btn-outline-dark btn-lg" type="submit">Voir tout</button>
+						</form>
+
+
 					</div><br>
 					<div class="row row-cols-2">
 						<div class="col">

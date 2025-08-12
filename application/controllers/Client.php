@@ -56,7 +56,16 @@ class Client extends MY_Controller
 
     echo json_encode($result);
 }
-
+public function tache_client($idclients)
+	{
+		$this->data['upsell'] = $this->visuels_model->getupsellbyidclient($idclients);
+		$t = $this->data['budget_initial'] = $this->visuels_model->getdernierbyidclient($idclients);
+		$this->data['task'] = $this->Task_model->get_task_by_id_client($idclients);
+		$this->data["users"] = $this->Task_model->get_all_users();
+		$clients = $this->data["donnees"] = $this->visuels_model->getDonneeById($idclients);
+		$this->content = "layouts/client/detail/tache/index.php";
+		$this->layout();
+	}
 
 
 public function application($idclients)
@@ -78,8 +87,10 @@ public function application($idclients)
 	public function detail_client($idclients)
 	{
 		$this->data['upsell'] = $this->visuels_model->getupsellbyidclient($idclients);
-		$t = $this->data['budget_initial'] = $this->visuels_model->getdernierbyidclient($idclients);
-		$this->data['task'] = $this->Task_model->get_task_by_id_client($idclients);
+		$this->data['budget_initial'] = $this->visuels_model->getdernierbyidclient($idclients);
+		$t = $this->data['task'] = $this->Task_model->get_task_by_id_client($idclients);
+		$t = count($t);
+		$this->data['nbr_task'] = $t;
 		$this->data["users"] = $this->Task_model->get_all_users();
 		$clients = $this->data["donnees"] = $this->visuels_model->getDonneeById($idclients);
 		$numero_client = $clients[0]['numero_client'];
@@ -90,7 +101,6 @@ public function application($idclients)
 		// Numéros à comparer (normalisés)
 		$my_number = $numero_am;
 		$client_number = $numero_client;
-
 		$count = 0;
 		$matched_calls = [];
 
@@ -391,18 +401,19 @@ public function application($idclients)
 			);
 
 		$this->Task_model->add_task($data);
-		$type = 1;
+		$type_upsell = 1;
 		$budget_finale = $budget;
-		$budget_finale = $budget;
+		$budget_initiale = $budget;
 		$statut_upsell = 1;
 		$idclients = $idclient;
 		$demmande_upsell = $am;
 		$am = $am;
 		$tm = $am;
+		$actif = 0;
 		$date_upsell = $date_mis_en_place;
 		$date_demande_upsell = $date_mis_en_place;
 		$inforamtion_upsell = "Budget initial";
-		$idclient = $this->visuels_model->create_upsell($type_upsell, $budget_finale, $budget_initiale, $demmande_upsell, $am, $tm, $date_upsell, $date_demande_upsell, $inforamtion_upsell, $statut_upsell, $idclients);
+		$idclient = $this->visuels_model->create_upsell($type_upsell, $budget_finale, $budget_initiale, $demmande_upsell, $am, $tm, $date_upsell, $date_demande_upsell, $inforamtion_upsell, $statut_upsell, $idclients,$actif);
 
 		redirect('Client');
 	}
