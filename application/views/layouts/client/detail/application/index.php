@@ -64,13 +64,28 @@
 <?php end_section(); ?>
 
 <?php start_section('content'); ?>
+<?php foreach ($donnees as $d): ?>
+<?php
+$cms_full = $d['cms'];
+
+if (stripos($cms_full, 'Inconnu') !== false || stripos($cms_full, 'non détectable automatiquement') !== false) {
+    $cms_name = "Non détectable";
+} else {
+    $cms_name = explode(' ', $cms_full)[0];
+}
+
+echo $cms_name;
+?>
+
+
+
 <div class="container-fluid p-0 h-100">
   <div class="row no-gutters h-100">
     <?php $this->load->view('layouts/client/detail/sidebar'); ?>
     <div class="col w-100">
       <div class="container-fluid">
         <br>
-		<?php foreach ($donnees as $d): ?>
+		
 					<div class="row row-cols-2">
 						<div class="col">
 							<div class="card h-100">
@@ -95,9 +110,9 @@
 								installed
 								</div>
 								<div class="card-body text-center">
-									<h3 class="mb-4">Wordpress</h3>
+									<h3 class="mb-4"><?php echo $cms_name; ?></h3>
 									<p class="text-muted mx-5 mb-5" style="font-size: 18px;">
-										WordPress est installé avec cette URL.
+										<?php echo $cms_name; ?> est installé avec cette URL.
 										Action : Vérifier la présence de GTM puis suivre la procédure correspondante.
 									</p>
 									<div class="row justify-content-center">
