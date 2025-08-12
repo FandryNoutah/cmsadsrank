@@ -41,7 +41,7 @@ class Task extends MY_Controller
 		$this->data['initiative'] = $this->Donne_modele->get_all_initiative(); */
 
 		// $this->page = "templates/v3/Task.php";
-		
+		$this->data['tache_team'] = $this->Task_model->get_task_team();
 		$this->content = "layouts/task/index.php";
 		$this->layout();
 	}
