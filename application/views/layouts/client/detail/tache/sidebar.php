@@ -6,7 +6,7 @@
 				GENERAL SETTINGS
 			</h6>
 			<li class="nav-item rounded">
-				<a class="nav-link text-secondary" href="<?= base_url('Client/detail_client/' . $donnees[0]['idclients']) ?>">
+				<a class="nav-link text-secondary" href="<?= base_url(); ?>">
 					<img class="mr-2" src="<?= base_url('assets/images/icons/figma/icon-chartpie.svg') ?>" />
 					<span>Client</span>
 				</a>
@@ -18,7 +18,7 @@
 				</a>
 			</li>
 			<li class="nav-item rounded">
-				<a class="nav-link text-secondary" href="<?= base_url('Client/tache_client/' . $donnees[0]['idclients']) ?>">
+				<a class="nav-link text-secondary" href="#">
 					<img class="mr-2" src="<?= base_url('assets/images/icons/figma/icon-noteblank.svg') ?>" />
 					<span>Tâches</span>
 				</a>
