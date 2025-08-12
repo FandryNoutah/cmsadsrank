@@ -166,6 +166,6 @@ Client
 	</table>
 </div>
 
-<?php $this->load->view('layouts/client/modal.php') ?>
+<?php $this->load->view('layouts/client/modal.php'); ?>
 
 <?php end_section(); ?>
