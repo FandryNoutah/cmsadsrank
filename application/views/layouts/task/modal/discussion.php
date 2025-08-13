@@ -10,14 +10,21 @@
 
 			<div class="modal-body" id="task_discussion"></div>
 
-			<div class="modal-footer">
-				<div class="input-group">
-					<textarea name="message" id="message" class="form-control" style="resize: none;" placeholder="Type a message ..."></textarea>
-					<div class="input-group-append">
-						<button class="btn btn-dark" type="button">Envoyer</button>
+			<form action="<?= site_url('Task/send_message') ?>" method="POST" id="message_form">
+				<div class="modal-footer">
+					<div class="d-flex w-100">
+						<div class="flex-grow-1 px-1">
+							<input name="message" id="message" class="form-control" style="resize: none;" placeholder="Type a message ...">
+						</div>
+						<div class="px-1">
+							<button class="btn btn-dark" type="submit">
+								Envoyer
+								<i class="fa fa-paper-plane"></i>
+							</button>
+						</div>
 					</div>
 				</div>
-			</div>
+			</form>
 		</div>
 	</div>
 </div>
