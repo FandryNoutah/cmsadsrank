@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1:3306
--- Généré le : lun. 11 août 2025 à 17:42
+-- Généré le : mer. 13 août 2025 à 08:22
 -- Version du serveur : 5.7.44
 -- Version de PHP : 7.2.34
 
@@ -410,7 +410,7 @@ CREATE TABLE IF NOT EXISTS `clients` (
   `cms_logo` varchar(200) NOT NULL,
   `info_base_client` varchar(2500) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL,
   PRIMARY KEY (`idclients`)
-) ENGINE=InnoDB AUTO_INCREMENT=367 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=371 DEFAULT CHARSET=latin1;
 
 --
 -- Déchargement des données de la table `clients`
@@ -743,7 +743,8 @@ INSERT INTO `clients` (`idclients`, `nom_client`, `nom`, `prenom`, `email_client
 (356, 'Qaulitycall', '', '', 'dev@adsrank.fr', '034 54 038 98', 'https://qualitycall.fr', '', 'https://qualitycall.fr/wp-content/uploads/2023/11/cropped-logo-v5-quality-call_mini.png', 'WordPress 6.8.2', 'http://localhost/cmsadsrank/assets/images/cms/wordpress.png', ''),
 (357, 'Loveless', '', '', 'dev@adsrank.fr', '034 54 038 98', 'https://lovelesspiercing.com/', '', 'https://lovelesspiercing.com/wp-content/uploads/2025/06/FAV_1.png', 'WordPress 6.7.2', 'http://localhost/cmsadsrank/assets/images/cms/wordpress.png', ''),
 (359, 'Casa Vecchia Corsa', '', '', 'dev@adsrank.fr', '33617135196', 'https://www.casavecchiacorsa.fr/', '', 'https://www.casavecchiacorsa.fr/cdn/shop/files/papillon_32x32.png?v=1613713309', 'Shopify', 'http://localhost/cmsadsrank/assets/images/cms/shopify.png', 'Le site \"Immortelle Corse\" se spécialise dans la vente de produits de beauté et de soins naturels fabriqués en Corse. Il propose une gamme de produits anti-âge et anti-rides, de soins capillaires et de coffrets cadeaux. Les produits sont issus de l\'agriculture biologique et contiennent principalement de l\'immortelle Corse, une plante connue pour ses propriétés bénéfiques pour la peau. Le site offre également des conseils et des informations sur les problèmes de peau, le choix d\'un sérum pour le visage et la réalisation d\'un baume capillaire à l\'argan et aux agrumes.'),
-(366, 'Client 1', '', '', 'dev@adsrank.fr', '33617135196', 'https://baje.fr', '', 'https://baje.fr/wp-content/uploads/2024/03/cropped-favicon-Baje-2.png', 'WordPress 6.8.2', 'http://localhost/cmsadsrank/assets/images/cms/wordpress.png', 'Ce site web est une plateforme dédiée à l\'aménagement et la rénovation de locaux professionnels, notamment des bureaux, des hôtels et des commerces, principalement situés à Paris et en Île-de-France. Il propose une multitude de services allant de la conception 2D/3D à l\'installation de mobilier professionnel, en passant par la réalisation des travaux de rénovation. Le site s\'engage à respecter les délais et les budgets, en offrant une assurance décennale globale constructeur. Il se positionne comme un interlocuteur unique pour tous les besoins en matière d\'aménagement et de rénovation de locaux professionnels.\n\nEn plus de ces services, le site web met un accent particulier sur l\'empreinte environnementale. Il propose des solutions d\'aménagement qui tiennent compte de l\'environnement, notamment à travers l\'utilisation de l\'énergie renouvelable. Le site web dispose également d\'un blog où les utilisateurs peuvent trouver des articles sur l\'architecture tertiaire, les meilleurs revêtements pour locaux professionnels ou encore les avantages des cloisons amovibles en milieu tertiaire. Enfin, le site présente un portfolio de ses réalisations passées, témoignant de ses dix ans d\'expertise dans le domaine.');
+(366, 'Andréa Assor Doukhan (assordoukhanavocats.fr)', '', '', 'dev@adsrank.fr', '33617135196', 'https://baje.fr', '', 'https://baje.fr/wp-content/uploads/2024/03/cropped-favicon-Baje-2.png', 'WordPress 6.8.2', 'http://localhost/cmsadsrank/assets/images/cms/wordpress.png', 'Ce site web est une plateforme dédiée à l\'aménagement et la rénovation de locaux professionnels, notamment des bureaux, des hôtels et des commerces, principalement situés à Paris et en Île-de-France. Il propose une multitude de services allant de la conception 2D/3D à l\'installation de mobilier professionnel, en passant par la réalisation des travaux de rénovation. Le site s\'engage à respecter les délais et les budgets, en offrant une assurance décennale globale constructeur. Il se positionne comme un interlocuteur unique pour tous les besoins en matière d\'aménagement et de rénovation de locaux professionnels.\n\nEn plus de ces services, le site web met un accent particulier sur l\'empreinte environnementale. Il propose des solutions d\'aménagement qui tiennent compte de l\'environnement, notamment à travers l\'utilisation de l\'énergie renouvelable. Le site web dispose également d\'un blog où les utilisateurs peuvent trouver des articles sur l\'architecture tertiaire, les meilleurs revêtements pour locaux professionnels ou encore les avantages des cloisons amovibles en milieu tertiaire. Enfin, le site présente un portfolio de ses réalisations passées, témoignant de ses dix ans d\'expertise dans le domaine.'),
+(370, 'Google', '', '', 'dev@adsrank.fr', '33617135196', 'https://www.google.com/', '', 'https://www.google.com/favicon.ico', 'Inconnu ou non détectable automatiquement', 'http://localhost/cmsadsrank/assets/images/cms/unknown.png', 'Il est impossible de déterminer précisément l\'activité, l\'objectif ou le secteur du site en question à partir des informations fournies. Le titre \"Account Options\" suggère que le site pourrait offrir des options de comptes d\'utilisateur, peut-être dans le cadre d\'un service en ligne ou d\'une plateforme, mais cela reste spéculatif sans informations supplémentaires.\n\nLe copyright de 2025 indique que le site a été créé ou mis à jour cette année, mais cela ne donne pas plus d\'indications sur le type de service ou de contenu qu\'il propose. Nous avons besoin de plus d\'informations pour fournir un résumé précis de ce que fait ce site.');
 
 -- --------------------------------------------------------
 
@@ -894,7 +895,7 @@ CREATE TABLE IF NOT EXISTS `donnee` (
   `remarque_campagne` varchar(2500) NOT NULL,
   `fichier_nom` varchar(2500) NOT NULL,
   PRIMARY KEY (`idonnee`)
-) ENGINE=InnoDB AUTO_INCREMENT=367 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=371 DEFAULT CHARSET=latin1;
 
 --
 -- Déchargement des données de la table `donnee`
@@ -1230,7 +1231,8 @@ INSERT INTO `donnee` (`idonnee`, `idclients`, `dejaclient`, `idproduit`, `pource
 (356, 356, 0, 1, NULL, '1500', '20', '17', '2025-07-10', '2025-07-20', NULL, NULL, '0', NULL, '2025-08-09', 17, 0, '', '', '', 'GTM-MRX5CWXD', '', '', '0000-00-00', '', '0000-00-00', '', 0, 0, 0, 0, '', '', '', '', '', '', 0, 0, '0000-00-00', '0000-00-00', 0, 0, '', 0, 1, '0000-00-00', '0000-00-00', 0, 0, 0, '', 0, '', ''),
 (357, 357, 0, 1, NULL, '2600', '21', '22', '2025-08-08', '2025-08-01', NULL, NULL, '0', NULL, '2025-08-10', 22, 0, '', '', '', 'GTM-KH9XWT2Q', '', '', '0000-00-00', '', '0000-00-00', '', 0, 0, 0, 0, '', '', '', '', '', '', 0, 0, '0000-00-00', '0000-00-00', 0, 0, '', 0, 1, '0000-00-00', '0000-00-00', 0, 0, 0, '', 0, '', ''),
 (359, 359, 0, 1, NULL, '2600', '19', '18', '2025-08-14', '2025-08-28', NULL, NULL, '0', NULL, '2025-09-05', 18, 0, '', '', '', 'GTM-NWNMKTJT', '', '', '0000-00-00', '', '0000-00-00', '', 0, 0, 0, 0, '', '', '', '', '', '', 0, 0, '0000-00-00', '0000-00-00', 0, 0, '', 0, 1, '0000-00-00', '0000-00-00', 0, 0, 0, '', 0, '', ''),
-(366, 366, 0, 1, NULL, '1000', '20', '18', '2025-08-01', '2025-08-07', NULL, NULL, '0', NULL, '2025-08-14', 18, 0, '', '', '', 'GTM-KPRDGV6Q', '', '', '0000-00-00', '', '0000-00-00', '', 0, 0, 0, 0, '', '', '', '', '', '', 0, 0, '0000-00-00', '0000-00-00', 0, 0, '', 0, 1, '0000-00-00', '0000-00-00', 0, 0, 0, '', 0, '', '');
+(366, 366, 0, 1, NULL, '1000', '20', '18', '2025-08-01', '2025-08-07', NULL, NULL, '0', NULL, '2025-08-14', 18, 0, '', '', '', 'GTM-KPRDGV6Q', '', '', '0000-00-00', '', '0000-00-00', '', 0, 0, 0, 0, '', '', '', '', '', '', 0, 0, '0000-00-00', '0000-00-00', 0, 0, '', 0, 1, '0000-00-00', '0000-00-00', 0, 0, 0, '', 0, '', ''),
+(370, 370, 0, 1, NULL, '2499', '19', '17', '2025-08-14', '2025-08-21', NULL, NULL, '0', NULL, '2025-08-22', 17, 0, '', '', '', '', '', '', '0000-00-00', '', '0000-00-00', '', 0, 0, 0, 0, '', '', '', '', '', '', 0, 0, '0000-00-00', '0000-00-00', 0, 0, '', 0, 1, '0000-00-00', '0000-00-00', 0, 0, 0, '', 0, '', '');
 
 -- --------------------------------------------------------
 
@@ -1383,6 +1385,33 @@ CREATE TABLE IF NOT EXISTS `groups` (
 INSERT INTO `groups` (`id`, `name`, `description`) VALUES
 (1, 'admin', 'Administrator'),
 (2, 'members', 'General User');
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `group_messages`
+--
+
+DROP TABLE IF EXISTS `group_messages`;
+CREATE TABLE IF NOT EXISTS `group_messages` (
+  `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `user_id` int(11) UNSIGNED NOT NULL,
+  `task_id` int(11) DEFAULT NULL,
+  `message` text NOT NULL,
+  `created_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  KEY `user_id` (`user_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
+
+--
+-- Déchargement des données de la table `group_messages`
+--
+
+INSERT INTO `group_messages` (`id`, `user_id`, `task_id`, `message`, `created_at`) VALUES
+(1, 18, NULL, 'Bonjour', '2025-08-13 09:32:14'),
+(2, 23, NULL, 'Bonjour, c\'est laurent', '2025-08-13 09:32:49'),
+(3, 1, NULL, 'Je suis l\'admin', '2025-08-13 09:33:29'),
+(4, 23, 6, 'Bonjour, upsell le moi d\'Aôut', '2025-08-13 09:57:47');
 
 -- --------------------------------------------------------
 
@@ -18849,19 +18878,18 @@ CREATE TABLE IF NOT EXISTS `tasks` (
   `actif` int(11) NOT NULL DEFAULT '0',
   `statut_actif` int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (`idtask`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=latin1;
 
 --
 -- Déchargement des données de la table `tasks`
 --
 
 INSERT INTO `tasks` (`idtask`, `reference`, `type_tache`, `idclients`, `title`, `description`, `assigned_to`, `status`, `created_at`, `updated_at`, `date_demande`, `date_due`, `AM`, `Statuts_technique`, `note_technique`, `priorite`, `actif`, `statut_actif`) VALUES
-(1, 'ADS00001', 1, 364, 'Création de Brief', 'En attente de brief', 20, 'en cours', '2025-08-11 14:26:57', '2025-08-11 14:26:57', '2025-08-01', '2025-08-07', 18, '1', '', 0, 0, 0),
-(2, 'ADS00002', 1, 365, 'Création de Brief', 'En attente de brief', 20, 'en cours', '2025-08-11 14:29:28', '2025-08-11 14:29:28', '2025-08-01', '2025-08-07', 18, '1', '', 0, 0, 0),
 (3, 'ADS00003', 1, 366, 'Création de Brief', 'En attente de brief', 20, 'en cours', '2025-08-11 14:31:41', '2025-08-11 14:31:41', '2025-08-01', '2025-08-07', 18, '1', '', 0, 0, 0),
 (4, 'ADS00004', 1, 366, 'Upsell', 'Le client fait une upsell', 23, 'en cours', '2025-08-11 15:50:46', '2025-08-11 15:50:46', '2025-08-13', '2025-08-13', 18, '1', '', 0, 1, 0),
 (5, 'ADS00005', 1, 366, 'Baisse', 'Le client fait une baisse', 23, 'en cours', '2025-08-11 15:59:25', '2025-08-11 15:59:25', '2025-08-12', '2025-08-12', 18, '1', '', 0, 1, 0),
-(6, 'ADS00006', 1, 366, 'Upsell', 'Le client fait une upsell', 23, 'en cours', '2025-08-11 16:03:09', '2025-08-11 16:03:09', '2025-08-07', '2025-08-07', 18, '1', '', 0, 0, 0);
+(6, 'ADS00006', 1, 366, 'Upsell', 'Le client fait une upsell', 23, 'en cours', '2025-08-11 16:03:09', '2025-08-11 16:03:09', '2025-08-07', '2025-08-07', 18, '1', '', 0, 0, 0),
+(10, 'ADS00010', 1, 370, 'Création de Brief', 'En attente de brief', 19, 'en cours', '2025-08-12 07:13:27', '2025-08-12 07:13:27', '2025-08-14', '2025-08-21', 17, '1', '', 0, 0, 0);
 
 -- --------------------------------------------------------
 
@@ -18910,7 +18938,7 @@ CREATE TABLE IF NOT EXISTS `upsell` (
   `actif` int(11) NOT NULL DEFAULT '0',
   `statut_actif` int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (`idupsell`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=latin1;
 
 --
 -- Déchargement des données de la table `upsell`
@@ -18920,7 +18948,9 @@ INSERT INTO `upsell` (`idupsell`, `idclients`, `type_upsell`, `date_demande`, `d
 (3, 366, 0, '2025-08-01', '2025-08-01', 0, 1000, 18, 18, 18, '', 'Budget initial', 0, 1, 0, 0),
 (4, 366, 2, '2025-08-13', '2025-08-16', 1000, 1500, 0, 18, 23, '', 'test', 0, 0, 1, 0),
 (5, 366, 1, '2025-08-12', '2025-08-27', 1500, 500, 0, 18, 23, '', 'Baisse', 0, 0, 1, 0),
-(6, 366, 2, '2025-08-07', '2025-08-28', 500, 2500, 0, 18, 23, '', 'upsell', 0, 0, 1, 0);
+(6, 366, 2, '2025-08-07', '2025-08-28', 500, 2500, 0, 18, 23, '', 'upsell', 0, 0, 1, 0),
+(7, 369, 1, '2025-08-15', '2025-08-15', 5000, 5000, 17, 17, 17, '', 'Budget initial', 0, 1, 0, 0),
+(8, 370, 1, '2025-08-14', '2025-08-14', 2499, 2499, 17, 17, 17, '', 'Budget initial', 0, 1, 0, 0);
 
 -- --------------------------------------------------------
 
@@ -18958,15 +18988,15 @@ CREATE TABLE IF NOT EXISTS `users` (
 --
 
 INSERT INTO `users` (`id`, `ip_address`, `username`, `password`, `salt`, `email`, `activation_code`, `forgotten_password_code`, `forgotten_password_time`, `remember_code`, `created_on`, `last_login`, `active`, `first_name`, `last_name`, `company`, `phone`, `sam_id`, `photo_users`, `tech`) VALUES
-(1, '127.0.0.1', 'administrator', '$2y$08$RBtf1uosPF8RFU3GkQUG..0UrraKdSwhwxBU2Jv9Niw33S0kVzofG', '', 'admin@admin.com', '', NULL, NULL, 'd0vCQehtKT.pdfnT3Vkn2O', 1268889823, 1754298567, 1, 'Admin', 'Adsrank', 'ADMIN', '33766076170', NULL, '', 0),
+(1, '127.0.0.1', 'administrator', '$2y$08$RBtf1uosPF8RFU3GkQUG..0UrraKdSwhwxBU2Jv9Niw33S0kVzofG', '', 'admin@admin.com', '', NULL, NULL, 'd0vCQehtKT.pdfnT3Vkn2O', 1268889823, 1755070398, 1, 'Admin', 'Adsrank', 'ADMIN', '33766076170', NULL, '/equipe/admin.png', 0),
 (15, '127.0.0.1', 'Miora', '$2y$08$k.u5F9ym.7/q.dRleHm4OOvgp9n1SgWd6N98BgFSuWCSiU41J/tLa', NULL, 'razakatiana.antenaina@yahoo.com', NULL, NULL, NULL, NULL, 1736261668, 1736261676, 1, 'Dev', 'Miora', 'Adsrank', '0345403898', 0, '', 0),
 (17, '127.0.0.1', 'Michael', '$2y$08$RBtf1uosPF8RFU3GkQUG..0UrraKdSwhwxBU2Jv9Niw33S0kVzofG', '', 'admin@admin.com', '', NULL, NULL, 'd0vCQehtKT.pdfnT3Vkn2O', 1268889823, 1741943903, 1, 'Michael', 'Adsrank', 'ADMIN', '0345403898', NULL, '/equipe/Michael.png', 0),
-(18, '127.0.0.1', 'Mavreen', '$2y$08$J8Qy4wBG8487ktv5vVLGT.tZ.JFDz1HjprjgIKCCgC1txaa0d224W', '', 'mavreen.bassin@adsrank.fr', '', NULL, NULL, 'd0vCQehtKT.pdfnT3Vkn2O', 1268889823, 1754313456, 1, 'Mavreen', 'Bassin', 'Adsrank', '33756282710', NULL, '/equipe/Mavreen.png', 3),
+(18, '127.0.0.1', 'Mavreen', '$2y$08$J8Qy4wBG8487ktv5vVLGT.tZ.JFDz1HjprjgIKCCgC1txaa0d224W', '', 'mavreen.bassin@adsrank.fr', '', NULL, NULL, 'd0vCQehtKT.pdfnT3Vkn2O', 1268889823, 1755068799, 1, 'Mavreen', 'Bassin', 'Adsrank', '33756282710', NULL, '/equipe/Mavreen.png', 3),
 (19, '127.0.0.1', 'Salome', '$2y$08$RBtf1uosPF8RFU3GkQUG..0UrraKdSwhwxBU2Jv9Niw33S0kVzofG', '', 'admin@admin.com', '', NULL, NULL, 'd0vCQehtKT.pdfnT3Vkn2O', 1268889823, 1745583867, 1, 'Salome', 'Adsrank', 'ADMIN', '0345403898', NULL, '/equipe/Salome.png', 0),
 (20, '127.0.0.1', 'Audrey', '$2y$08$RBtf1uosPF8RFU3GkQUG..0UrraKdSwhwxBU2Jv9Niw33S0kVzofG', '', 'admin@admin.com', '', NULL, NULL, 'd0vCQehtKT.pdfnT3Vkn2O', 1268889823, 1741943128, 1, 'Audrey', 'Adsrank', 'ADMIN', '0345403898', NULL, '/equipe/audrey.png', 0),
 (21, '127.0.0.1', 'Teddy', '$2y$08$RBtf1uosPF8RFU3GkQUG..0UrraKdSwhwxBU2Jv9Niw33S0kVzofG', '', 'admin@admin.com', '', NULL, NULL, 'd0vCQehtKT.pdfnT3Vkn2O', 1268889823, 1739954850, 1, 'Teddy', 'Adsrank', 'ADMIN', '0345403898', NULL, '/equipe/Teddy.png', 0),
 (22, '127.0.0.1', 'Ilane', '$2y$08$dWfnU6JVzzzGvyVMLw4rlePFRCQrDtyBNEMfwQQLuB50b/Y5V328y', '', 'admin@admin.com', '', NULL, NULL, 'd0vCQehtKT.pdfnT3Vkn2O', 1268889823, 1740040898, 1, 'Ilane', 'Adsrank', 'Adsrank', '0345403898', NULL, '/equipe/Ilane.png', 0),
-(23, '127.0.0.1', 'Laurent', '$2y$08$OkhBrdwGioVvp3/RZ/LVYOsO6X9qHrDd4zd9Huolass9qR2lDcEGa', '', 'admin@admin.com', '', NULL, NULL, 'd0vCQehtKT.pdfnT3Vkn2O', 1268889823, 1753768386, 1, 'Laurent', 'Adsrank', 'Adsrank', '0345403898', NULL, '/equipe/Laurent.png', 1);
+(23, '127.0.0.1', 'Laurent', '$2y$08$OkhBrdwGioVvp3/RZ/LVYOsO6X9qHrDd4zd9Huolass9qR2lDcEGa', '', 'admin@admin.com', '', NULL, NULL, 'd0vCQehtKT.pdfnT3Vkn2O', 1268889823, 1755070350, 1, 'Laurent', 'Adsrank', 'Adsrank', '0345403898', NULL, '/equipe/Laurent.png', 1);
 
 -- --------------------------------------------------------
 
@@ -18993,6 +19023,16 @@ INSERT INTO `users_groups` (`id`, `user_id`, `group_id`) VALUES
 (24, 1, 1),
 (25, 1, 2),
 (26, 15, 2);
+
+--
+-- Contraintes pour les tables déchargées
+--
+
+--
+-- Contraintes pour la table `group_messages`
+--
+ALTER TABLE `group_messages`
+  ADD CONSTRAINT `group_messages_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
