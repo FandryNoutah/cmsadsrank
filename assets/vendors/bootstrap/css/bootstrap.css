@@ -6034,7 +6034,7 @@ a.badge-dark.focus {
 
 .alert-light {
 	color: #818182;
-	background-color: #fefefe;
+	background-color: #f9f9f9;
 	border-color: #fdfdfe;
 }
 
@@ -7524,7 +7524,7 @@ button.bg-danger:focus {
 }
 
 .bg-light {
-	background-color: #f8f9fa !important;
+	background-color: #f9f9f9 !important;
 }
 
 a.bg-light:hover,
