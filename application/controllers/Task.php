@@ -11,6 +11,10 @@ class Task extends MY_Controller
 	{
 		parent::__construct();
 
+		$this->load->model('Tasks_model');
+        $this->load->model('Task_message_model');
+        $this->current_user = $this->ion_auth->user()->row();
+
 		/* $this->load->model("visuels_model");
 		$this->load->model("concurrent");
 		$this->load->model("Donne_modele");
@@ -49,23 +53,37 @@ class Task extends MY_Controller
 	public function fetch_discussion($id_task) {
 
 		// Check for order (ascendant || descendant)
+
+		$messages = $this->Task_message_model->get_messages_by_task($id_task);
+		$currentUser = $this->current_user;
 		
-		$discussions = [
-			[
-				"date"		=>	"8 Mar, 10:12",
-				"sender"	=>	"John",
-				"message"	=>	"Hello, how are you?",
-				"owner"		=>	false
-			],
-			[
-				"date"		=>	"8 Mar, 11:58",
-				"message"	=>	"I'm good, thanks!",
-				"owner"		=>	true
-			]
-		];
+		foreach ($messages as $message) {
 
-		echo json_encode($discussions);
+			$created_at = $message->created_at;
+			$message->created_at = (new DateTime($created_at))->format('j M, H:i');
 
+			$message->owner = $message->user_id == $currentUser->id;
+		}
+
+		echo json_encode($messages);
+	}
+
+	public function send_message() {
+
+		$id_task = $this->input->post('id_task', TRUE);
+		$message = $this->input->post('message', TRUE);
+
+		if (!empty($message) && $this->current_user) {
+            $this->Task_message_model->insert_message([
+                'user_id' => $this->current_user->id,
+                'task_id' => $id_task,
+                'message' => $message
+            ]);
+        }
+
+		echo json_encode([
+			"done"	=>	true
+		]);
 	}
 
 	public function detail_client($idclients)
