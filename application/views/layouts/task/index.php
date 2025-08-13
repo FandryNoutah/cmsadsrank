@@ -124,18 +124,18 @@ Task
 							<tr>
 								<td>
 									<h6 class="mb-0 ml-3">
-										<?php echo $t->nom_client; ?>
+										<?= $t->nom_client; ?>
 									</h6>
 								</td>
 								<td>
 									<span class="text-muted">
-										<?php echo $t->title; ?>
+										<?= $t->title; ?>
 									</span>
 								</td>
 								<td>
 									<span class="text-muted">
 										<img src="<?= base_url('assets/images/icons/figma/calendar.svg') ?>" alt="">
-										<?php echo $t->date_due; ?>
+										<?= $t->date_due; ?>
 									</span>
 								</td>
 								<td>
@@ -400,11 +400,11 @@ Task
 												<i class="fa fa-ellipsis-h"></i>
 											</a>
 										</div>
-										<h6 class="my-3" style="font-size: 14px;"><?php echo $t->nom_client; ?></h6>
-										<span class="text-muted d-block mb-3"><?php echo $t->title; ?></span>
+										<h6 class="my-3" style="font-size: 14px;"><?= $t->nom_client; ?></h6>
+										<span class="text-muted d-block mb-3"><?= $t->title; ?></span>
 										<span class="text-muted d-block mb-3">
 											<img src="<?= base_url('assets/images/icons/figma/calendar.svg') ?>" alt="">
-											Due Date <?php echo $t->date_due; ?>
+											Due Date <?= $t->date_due; ?>
 										</span>
 										<div class="row no-gutters" style="font-size: 14px;">
 											<div class="col-auto mr-auto">
@@ -422,7 +422,7 @@ Task
 												</a>
 											</span>
 											<span class="col-auto">
-												<a href="javascript:void(0);" class="text-muted" data-toggle="modal" data-target="#discussionModal" data-id="id_task">
+												<a href="javascript:void(0);" class="text-muted" data-toggle="modal" data-target="#discussionModal" data-id="<?= $t->idtask ?>" data-title="<?= $t->title; ?>">
 													<img src="<?= base_url('assets/images/icons/figma/chat-9.svg') ?>" alt="">
 													19
 												</a>
@@ -488,7 +488,7 @@ Task
 											<img src="<?= base_url('assets/images/icons/figma/attachment-8.svg') ?>" alt="">
 											5
 										</span>
-										<span class="javascript:void(0);ol-auto text-muted" data-toggle="modal" data-target="#discussionModal" data-id="id_task">
+										<span class="javascript:void(0);ol-auto text-muted" data-toggle="modal" data-target="#discussionModal" data-id="<?= $t->idtask ?>">
 											<img src="<?= base_url('assets/images/icons/figma/chat-9.svg') ?>" alt="">
 											19
 										</span>
@@ -535,7 +535,7 @@ Task
 											<img src="<?= base_url('assets/images/icons/figma/attachment-8.svg') ?>" alt="">
 											5
 										</span>
-										<span class="javascript:void(0);ol-auto text-muted" data-toggle="modal" data-target="#discussionModal" data-id="id_task">
+										<span class="javascript:void(0);ol-auto text-muted" data-toggle="modal" data-target="#discussionModal" data-id="<?= $t->idtask ?>">
 											<img src="<?= base_url('assets/images/icons/figma/chat-9.svg') ?>" alt="">
 											19
 										</span>
@@ -582,7 +582,7 @@ Task
 											<img src="<?= base_url('assets/images/icons/figma/attachment-8.svg') ?>" alt="">
 											5
 										</span>
-										<span class="javascript:void(0);ol-auto text-muted" data-toggle="modal" data-target="#discussionModal" data-id="id_task">
+										<span class="javascript:void(0);ol-auto text-muted" data-toggle="modal" data-target="#discussionModal" data-id="<?= $t->idtask ?>">
 											<img src="<?= base_url('assets/images/icons/figma/chat-9.svg') ?>" alt="">
 											19
 										</span>
@@ -643,7 +643,7 @@ Task
 											</a>
 										</span>
 										<span class="col-auto">
-											<a href="javascript:void(0);" class="text-muted" data-toggle="modal" data-target="#discussionModal" data-id="id_task">
+											<a href="javascript:void(0);" class="text-muted" data-toggle="modal" data-target="#discussionModal" data-id="<?= $t->idtask ?>">
 												<img src="<?= base_url('assets/images/icons/figma/chat-9.svg') ?>" alt="">
 												19
 											</a>
@@ -691,7 +691,7 @@ Task
 											<img src="<?= base_url('assets/images/icons/figma/attachment-8.svg') ?>" alt="">
 											5
 										</span>
-										<span class="javascript:void(0);ol-auto text-muted" data-toggle="modal" data-target="#discussionModal" data-id="id_task">
+										<span class="javascript:void(0);ol-auto text-muted" data-toggle="modal" data-target="#discussionModal" data-id="<?= $t->idtask ?>">
 											<img src="<?= base_url('assets/images/icons/figma/chat-9.svg') ?>" alt="">
 											19
 										</span>
@@ -738,7 +738,7 @@ Task
 											<img src="<?= base_url('assets/images/icons/figma/attachment-8.svg') ?>" alt="">
 											5
 										</span>
-										<span class="javascript:void(0);ol-auto text-muted" data-toggle="modal" data-target="#discussionModal" data-id="id_task">
+										<span class="javascript:void(0);ol-auto text-muted" data-toggle="modal" data-target="#discussionModal" data-id="<?= $t->idtask ?>">
 											<img src="<?= base_url('assets/images/icons/figma/chat-9.svg') ?>" alt="">
 											19
 										</span>
@@ -762,6 +762,60 @@ Task
 <script>
 	$(function() {
 
+		var id_task = null;
+
+		function fetch_discussion() {
+
+			if (id_task != null) {
+
+				$.ajax({
+					type: "POST",
+					url: "Task/fetch_discussion/" + id_task,
+					dataType: "json",
+					beforeSend: function() {
+						$('#task_discussion').html('<span class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>');
+					},
+					success: function(response) {
+
+						$('#task_discussion').html('');
+						if (response.length > 0) {
+							$.each(response, function(index, data) {
+
+								let owner = data.owner;
+
+								let alignment = owner ? "justify-content-end" : "justify-content-start";
+								let color = owner ? "bg-dark text-white" : "bg-light border";
+								let sender = owner ? "You" : data.username;
+								let float = owner ? "float-right" : "float-left";
+
+								let html = `
+								<div class="d-flex ${alignment}">
+									<div class="message_container mt-3" style="max-width: 75%;">
+										<span class="small text-muted d-block">${sender} ${data.created_at}</span>
+										<div class="p-2 ${color} rounded ${float}" style="width: fit-content;">
+											${data.message}
+										</div>
+									</div>
+								</div>
+							`;
+
+								$('#task_discussion').append(html); // append if ascendant ; prepend if descendant
+							});
+						} else {
+							$('#task_discussion').html(`
+								<div class="alert alert-light" role="alert">
+									Aucune discussion pour le moment!
+								</div>
+							`);
+						}
+
+						let modalBody = $('#discussionModal .modal-body'); // current open modal body
+						modalBody.scrollTop(modalBody[0].scrollHeight);
+					}
+				});
+			}
+		}
+
 		$('.collapse').on('show.bs.collapse', function() {
 
 			let aria_labelled = $(this).attr('aria-labelledby');
@@ -781,43 +835,49 @@ Task
 		$('#discussionModal').on('show.bs.modal', function(event) {
 
 			let button = $(event.relatedTarget);
-			let id_task = $(button).attr('data-id');
+			let title = $(button).attr('data-title');
+			id_task = $(button).attr('data-id');
+
+			$('#discussionModalLabel').html('Discussion sur: ' + title ?? "Unknown");
+
+			fetch_discussion();
+		});
+
+		$('#discussionModal').on('hide.bs.modal', function(event) {
+			id_task = null;
+			$('#message').val("");
+		});
+
+		$('#message_form').submit(function(event) {
+
+			event.preventDefault();
+
+			let submitter = event.originalEvent.submitter;
+			let buttonChild = $(submitter).html();
 
 			$.ajax({
-				type: "POST",
-				url: "Task/fetch_discussion/" + id_task,
+				type: $(this).attr('method'),
+				url: $(this).attr('action'),
+				data: {
+					"id_task": id_task,
+					"message": $('#message').val()
+				},
 				dataType: "json",
 				beforeSend: function() {
-					$('#task_discussion').html('<span class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>');
+					$(submitter).attr('disabled', "disabled");
+					$(submitter).html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>');
 				},
 				success: function(response) {
+					
+					$(submitter).removeAttr("disabled");
+					$(submitter).html(buttonChild);
 
-					$('#task_discussion').html('');
-					$.each(response, function(index, data) {
-
-						let owner = data.owner;
-
-						let alignment = owner ? "justify-content-end" : "justify-content-start";
-						let color = owner ? "bg-primary text-white" : "bg-light";
-						let sender = owner ? "You" : data.sender;
-
-						let html = `
-							<div class="d-flex ${alignment}">
-								<div class="message_container mt-3">
-									<span class="small text-muted">${sender} ${data.date}</span>
-									<div class="p-2 ${color} rounded" style="width: fit-content;">
-										${data.message}
-									</div>
-								</div>
-							</div>
-						`;
-
-						$('#task_discussion').append(html); // append if ascendant ; prepend if descendant
-					});
+					$('#message').val("");
+					fetch_discussion();
 				}
 			});
-
 		});
+
 	});
 </script>
 <?php end_section(); ?>
