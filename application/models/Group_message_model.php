@@ -1,0 +1,24 @@
+<?php
+defined('BASEPATH') OR exit('No direct script access allowed');
+
+class Group_message_model extends CI_Model {
+
+    public function __construct()
+    {
+        parent::__construct();
+        $this->load->database(); // <--- important
+    }
+
+    public function get_all_messages() {
+        $this->db->select('group_messages.*, users.username, users.photo_users');
+        $this->db->from('group_messages');
+        $this->db->join('users', 'users.id = group_messages.user_id');
+        $this->db->order_by('group_messages.created_at', 'ASC');
+        return $this->db->get()->result();
+    }
+
+    public function insert_message($data) {
+        return $this->db->insert('group_messages', $data);
+    }
+}
+
