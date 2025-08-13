@@ -12,9 +12,9 @@
 
 			<div class="modal-footer">
 				<div class="input-group">
-					<textarea name="message" id="message" class="form-control p-2" style="resize: none;" placeholder="Type a message ..."></textarea>
+					<textarea name="message" id="message" class="form-control" style="resize: none;" placeholder="Type a message ..."></textarea>
 					<div class="input-group-append">
-						<button class="btn btn-primary" type="button">Envoyer</button>
+						<button class="btn btn-dark" type="button">Envoyer</button>
 					</div>
 				</div>
 			</div>
