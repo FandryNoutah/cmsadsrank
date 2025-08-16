@@ -16,7 +16,7 @@
 						<div class="flex-grow-1 px-1">
 							<input name="message" id="message" class="form-control" style="resize: none;" placeholder="Type a message ...">
 						</div>
-						<div class="px-1">
+						<div class="d-flex px-1">
 							<button class="btn btn-dark" type="submit">
 								Envoyer
 								<i class="fa fa-paper-plane"></i>
