@@ -92,6 +92,7 @@ Task
 		</button>
 	</div>
 </div>
+
 <?php end_section(); ?>
 
 <?php start_section('content'); ?>
@@ -176,9 +177,14 @@ Task
 									</div>
 								</td>
 								<td>
-									<a href="#" class="text-decoration-none text-muted">
-										<i class="fa fa-ellipsis-h"></i>
-									</a>
+									<div class="dropdown no-arrow">
+										<a href="javascript:void(0);" class="text-decoration-none text-muted task-menu dropdown-toggle" role="button" data-toggle="dropdown" aria-expanded="false">
+											<i class="fa fa-ellipsis-h"></i>
+										</a>
+										<div class="dropdown-menu dropdown-menu-right">
+											<a href="#" class="dropdown-item">Détails</a>
+										</div>
+									</div>
 								</td>
 							</tr>
 						<?php endforeach; ?>
@@ -240,9 +246,14 @@ Task
 								</div>
 							</td>
 							<td>
-								<a href="#" class="text-decoration-none text-muted">
-									<i class="fa fa-ellipsis-h"></i>
-								</a>
+								<div class="dropdown no-arrow">
+									<a href="javascript:void(0);" class="text-decoration-none text-muted task-menu dropdown-toggle" role="button" data-toggle="dropdown" aria-expanded="false">
+										<i class="fa fa-ellipsis-h"></i>
+									</a>
+									<div class="dropdown-menu dropdown-menu-right">
+										<a href="#" class="dropdown-item">Détails</a>
+									</div>
+								</div>
 							</td>
 						</tr>
 						<tr>
@@ -278,9 +289,14 @@ Task
 								</div>
 							</td>
 							<td>
-								<a href="#" class="text-decoration-none text-muted">
-									<i class="fa fa-ellipsis-h"></i>
-								</a>
+								<div class="dropdown no-arrow">
+									<a href="javascript:void(0);" class="text-decoration-none text-muted task-menu dropdown-toggle" role="button" data-toggle="dropdown" aria-expanded="false">
+										<i class="fa fa-ellipsis-h"></i>
+									</a>
+									<div class="dropdown-menu dropdown-menu-right">
+										<a href="#" class="dropdown-item">Détails</a>
+									</div>
+								</div>
 							</td>
 						</tr>
 					</tbody>
@@ -340,9 +356,14 @@ Task
 								</div>
 							</td>
 							<td>
-								<a href="#" class="text-decoration-none text-muted">
-									<i class="fa fa-ellipsis-h"></i>
-								</a>
+								<div class="dropdown no-arrow">
+									<a href="javascript:void(0);" class="text-decoration-none text-muted task-menu dropdown-toggle" role="button" data-toggle="dropdown" aria-expanded="false">
+										<i class="fa fa-ellipsis-h"></i>
+									</a>
+									<div class="dropdown-menu dropdown-menu-right">
+										<a href="#" class="dropdown-item">Détails</a>
+									</div>
+								</div>
 							</td>
 						</tr>
 						<tr>
@@ -378,9 +399,14 @@ Task
 								</div>
 							</td>
 							<td>
-								<a href="#" class="text-decoration-none text-muted">
-									<i class="fa fa-ellipsis-h"></i>
-								</a>
+								<div class="dropdown no-arrow">
+									<a href="javascript:void(0);" class="text-decoration-none text-muted task-menu dropdown-toggle" role="button" data-toggle="dropdown" aria-expanded="false">
+										<i class="fa fa-ellipsis-h"></i>
+									</a>
+									<div class="dropdown-menu dropdown-menu-right">
+										<a href="#" class="dropdown-item">Détails</a>
+									</div>
+								</div>
 							</td>
 						</tr>
 					</tbody>
@@ -418,9 +444,14 @@ Task
 											<div class="mr-2">
 												<span class="badge alert-danger">Urgent</span>
 											</div>
-											<a href="#" class="col-auto ml-auto text-decoration-none text-muted">
-												<i class="fa fa-ellipsis-h"></i>
-											</a>
+											<div class="dropdown no-arrow ml-auto">
+												<a href="javascript:void(0);" class="text-decoration-none text-muted task-menu dropdown-toggle" role="button" data-toggle="dropdown" aria-expanded="false">
+													<i class="fa fa-ellipsis-h"></i>
+												</a>
+												<div class="dropdown-menu dropdown-menu-right">
+													<button type="button" class="dropdown-item" data-toggle="modal" data-target="#detailModal" data-id="<?= $t->idtask; ?>">Détails</button>
+												</div>
+											</div>
 										</div>
 										<h6 class="my-3" style="font-size: 14px;"><?= $t->nom_client; ?></h6>
 										<span class="text-muted d-block mb-3"><?= $t->title; ?></span>
@@ -444,7 +475,7 @@ Task
 												</a>
 											</span>
 											<span class="col-auto">
-												<a href="javascript:void(0);" class="text-muted" data-toggle="modal" data-target="#discussionModal" data-id="<?= $t->idtask ?>" data-title="<?= $t->title; ?>">
+												<a href="javascript:void(0);" class="text-muted" data-toggle="modal" data-target="#discussionModal" data-id="<?= $t->idtask; ?>" data-title="<?= $t->title; ?>">
 													<img src="<?= base_url('assets/images/icons/figma/chat-9.svg') ?>" alt="">
 													19
 												</a>
@@ -482,9 +513,14 @@ Task
 										<div class="mr-2">
 											<span class="badge alert-danger">Urgent</span>
 										</div>
-										<a href="#" class="col-auto ml-auto text-decoration-none text-muted">
-											<i class="fa fa-ellipsis-h"></i>
-										</a>
+										<div class="dropdown no-arrow">
+											<a href="javascript:void(0);" class="col-auto ml-auto text-decoration-none text-muted task-menu dropdown-toggle" role="button" data-toggle="dropdown" aria-expanded="false">
+												<i class="fa fa-ellipsis-h"></i>
+											</a>
+											<div class="dropdown-menu dropdown-menu-right">
+												<a href="#" class="dropdown-item">Détails</a>
+											</div>
+										</div>
 									</div>
 									<h6 class="my-3" style="font-size: 14px;">Monthly product Descussion</h6>
 									<div class="row mb-3" style="font-size: 14px;">
@@ -529,9 +565,14 @@ Task
 										<div class="mr-2">
 											<span class="badge alert-danger">Urgent</span>
 										</div>
-										<a href="#" class="col-auto ml-auto text-decoration-none text-muted">
-											<i class="fa fa-ellipsis-h"></i>
-										</a>
+										<div class="dropdown no-arrow">
+											<a href="javascript:void(0);" class="col-auto ml-auto text-decoration-none text-muted task-menu dropdown-toggle" role="button" data-toggle="dropdown" aria-expanded="false">
+												<i class="fa fa-ellipsis-h"></i>
+											</a>
+											<div class="dropdown-menu dropdown-menu-right">
+												<a href="#" class="dropdown-item">Détails</a>
+											</div>
+										</div>
 									</div>
 									<h6 class="my-3" style="font-size: 14px;">Monthly product Descussion</h6>
 									<div class="row mb-3" style="font-size: 14px;">
@@ -576,9 +617,14 @@ Task
 										<div class="mr-2">
 											<span class="badge alert-danger">Urgent</span>
 										</div>
-										<a href="#" class="col-auto ml-auto text-decoration-none text-muted">
-											<i class="fa fa-ellipsis-h"></i>
-										</a>
+										<div class="dropdown no-arrow">
+											<a href="javascript:void(0);" class="col-auto ml-auto text-decoration-none text-muted task-menu dropdown-toggle" role="button" data-toggle="dropdown" aria-expanded="false">
+												<i class="fa fa-ellipsis-h"></i>
+											</a>
+											<div class="dropdown-menu dropdown-menu-right">
+												<a href="#" class="dropdown-item">Détails</a>
+											</div>
+										</div>
 									</div>
 									<h6 class="my-3" style="font-size: 14px;">Monthly product Descussion</h6>
 									<div class="row mb-3" style="font-size: 14px;">
@@ -639,9 +685,14 @@ Task
 										<div class="mr-2">
 											<span class="badge alert-danger">Urgent</span>
 										</div>
-										<a href="#" class="col-auto ml-auto text-decoration-none text-muted">
-											<i class="fa fa-ellipsis-h"></i>
-										</a>
+										<div class="dropdown no-arrow">
+											<a href="javascript:void(0);" class="col-auto ml-auto text-decoration-none text-muted task-menu dropdown-toggle" role="button" data-toggle="dropdown" aria-expanded="false">
+												<i class="fa fa-ellipsis-h"></i>
+											</a>
+											<div class="dropdown-menu dropdown-menu-right">
+												<a href="#" class="dropdown-item">Détails</a>
+											</div>
+										</div>
 									</div>
 									<h6 class="my-3" style="font-size: 14px;">Andréa et Stephano le compte pour moi Assor Doukhan (assordoukhanavocats.fr)</h6>
 									<span class="text-muted d-block mb-3">Envoi Procédure + Invitation GTM</span>
@@ -685,9 +736,14 @@ Task
 										<div class="mr-2">
 											<span class="badge alert-danger">Urgent</span>
 										</div>
-										<a href="#" class="col-auto ml-auto text-decoration-none text-muted">
-											<i class="fa fa-ellipsis-h"></i>
-										</a>
+										<div class="dropdown no-arrow">
+											<a href="javascript:void(0);" class="col-auto ml-auto text-decoration-none text-muted task-menu dropdown-toggle" role="button" data-toggle="dropdown" aria-expanded="false">
+												<i class="fa fa-ellipsis-h"></i>
+											</a>
+											<div class="dropdown-menu dropdown-menu-right">
+												<a href="#" class="dropdown-item">Détails</a>
+											</div>
+										</div>
 									</div>
 									<h6 class="my-3" style="font-size: 14px;">Monthly product Descussion</h6>
 									<div class="row mb-3" style="font-size: 14px;">
@@ -732,9 +788,14 @@ Task
 										<div class="mr-2">
 											<span class="badge alert-danger">Urgent</span>
 										</div>
-										<a href="#" class="col-auto ml-auto text-decoration-none text-muted">
-											<i class="fa fa-ellipsis-h"></i>
-										</a>
+										<div class="dropdown no-arrow">
+											<a href="javascript:void(0);" class="col-auto ml-auto text-decoration-none text-muted task-menu dropdown-toggle" role="button" data-toggle="dropdown" aria-expanded="false">
+												<i class="fa fa-ellipsis-h"></i>
+											</a>
+											<div class="dropdown-menu dropdown-menu-right">
+												<a href="#" class="dropdown-item">Détails</a>
+											</div>
+										</div>
 									</div>
 									<h6 class="my-3" style="font-size: 14px;">Monthly product Descussion</h6>
 									<div class="row mb-3" style="font-size: 14px;">
@@ -776,6 +837,7 @@ Task
 </div>
 
 <?php $this->load->view('layouts/task/modal/form'); ?>
+<?php $this->load->view('layouts/task/modal/detail'); ?>
 <?php $this->load->view('layouts/task/modal/discussion'); ?>
 
 <?php end_section(); ?>
