@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Notes extends CI_Controller {
+class Notes extends MY_Controller {
 
     private $current_user;
 
@@ -19,8 +19,14 @@ class Notes extends CI_Controller {
     }
 
     public function index() {
-        $data['notes'] = $this->Note_model->get_for_user($this->current_user->id);
-        $this->load->view('layouts/note/list', $data);
+
+        $this->data['notes'] = $this->Note_model->get_for_user($this->current_user->id);
+    	$this->data['users'] = $this->Note_model->get_all_users();
+
+		$this->content = "layouts/note/index.php";
+		$this->layout();
+
+        // $this->load->view('layouts/note/list', $data);
     }
 
     public function create() {

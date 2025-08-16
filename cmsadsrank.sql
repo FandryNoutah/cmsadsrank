@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1:3306
--- Généré le : mer. 13 août 2025 à 08:22
+-- Généré le : mer. 13 août 2025 à 16:31
 -- Version du serveur : 5.7.44
 -- Version de PHP : 7.2.34
 
@@ -1401,7 +1401,7 @@ CREATE TABLE IF NOT EXISTS `group_messages` (
   `created_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   KEY `user_id` (`user_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `group_messages`
@@ -1411,7 +1411,9 @@ INSERT INTO `group_messages` (`id`, `user_id`, `task_id`, `message`, `created_at
 (1, 18, NULL, 'Bonjour', '2025-08-13 09:32:14'),
 (2, 23, NULL, 'Bonjour, c\'est laurent', '2025-08-13 09:32:49'),
 (3, 1, NULL, 'Je suis l\'admin', '2025-08-13 09:33:29'),
-(4, 23, 6, 'Bonjour, upsell le moi d\'Aôut', '2025-08-13 09:57:47');
+(4, 23, 6, 'Bonjour, upsell le moi d\'Aôut', '2025-08-13 09:57:47'),
+(5, 18, 4, 'Bonjour, c\'est Mavreen', '2025-08-13 18:29:42'),
+(6, 23, 4, 'Bonjour, c\'est laurent', '2025-08-13 18:30:13');
 
 -- --------------------------------------------------------
 
@@ -18747,6 +18749,65 @@ CREATE TABLE IF NOT EXISTS `messages` (
 -- --------------------------------------------------------
 
 --
+-- Structure de la table `notes`
+--
+
+DROP TABLE IF EXISTS `notes`;
+CREATE TABLE IF NOT EXISTS `notes` (
+  `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `title` varchar(255) NOT NULL,
+  `content` text NOT NULL,
+  `type` varchar(50) NOT NULL DEFAULT 'information',
+  `status` enum('Normal','Priorité','Urgent') NOT NULL DEFAULT 'Normal',
+  `created_by` int(11) UNSIGNED NOT NULL,
+  `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  KEY `created_by` (`created_by`)
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
+
+--
+-- Déchargement des données de la table `notes`
+--
+
+INSERT INTO `notes` (`id`, `title`, `content`, `type`, `status`, `created_by`, `created_at`) VALUES
+(1, 'Note 1 test', 'Contenu note 1', 'information', 'Normal', 18, '2025-08-13 13:19:32'),
+(2, 'Note test 2', 'contenu 2025', 'rappel', 'Urgent', 18, '2025-08-13 13:21:04'),
+(3, 'Note 2', '2052', 'information', 'Normal', 18, '2025-08-13 13:21:34'),
+(4, 'note 2', 'contenu', 'information', 'Normal', 18, '2025-08-13 13:22:37');
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `note_users`
+--
+
+DROP TABLE IF EXISTS `note_users`;
+CREATE TABLE IF NOT EXISTS `note_users` (
+  `note_id` int(11) UNSIGNED NOT NULL,
+  `user_id` int(11) UNSIGNED NOT NULL,
+  PRIMARY KEY (`note_id`,`user_id`),
+  KEY `user_id` (`user_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Déchargement des données de la table `note_users`
+--
+
+INSERT INTO `note_users` (`note_id`, `user_id`) VALUES
+(2, 17),
+(3, 17),
+(1, 18),
+(4, 18),
+(3, 19),
+(2, 20),
+(4, 22),
+(2, 23),
+(3, 23),
+(4, 23);
+
+-- --------------------------------------------------------
+
+--
 -- Structure de la table `plan_de_taggage`
 --
 
@@ -18991,12 +19052,12 @@ INSERT INTO `users` (`id`, `ip_address`, `username`, `password`, `salt`, `email`
 (1, '127.0.0.1', 'administrator', '$2y$08$RBtf1uosPF8RFU3GkQUG..0UrraKdSwhwxBU2Jv9Niw33S0kVzofG', '', 'admin@admin.com', '', NULL, NULL, 'd0vCQehtKT.pdfnT3Vkn2O', 1268889823, 1755070398, 1, 'Admin', 'Adsrank', 'ADMIN', '33766076170', NULL, '/equipe/admin.png', 0),
 (15, '127.0.0.1', 'Miora', '$2y$08$k.u5F9ym.7/q.dRleHm4OOvgp9n1SgWd6N98BgFSuWCSiU41J/tLa', NULL, 'razakatiana.antenaina@yahoo.com', NULL, NULL, NULL, NULL, 1736261668, 1736261676, 1, 'Dev', 'Miora', 'Adsrank', '0345403898', 0, '', 0),
 (17, '127.0.0.1', 'Michael', '$2y$08$RBtf1uosPF8RFU3GkQUG..0UrraKdSwhwxBU2Jv9Niw33S0kVzofG', '', 'admin@admin.com', '', NULL, NULL, 'd0vCQehtKT.pdfnT3Vkn2O', 1268889823, 1741943903, 1, 'Michael', 'Adsrank', 'ADMIN', '0345403898', NULL, '/equipe/Michael.png', 0),
-(18, '127.0.0.1', 'Mavreen', '$2y$08$J8Qy4wBG8487ktv5vVLGT.tZ.JFDz1HjprjgIKCCgC1txaa0d224W', '', 'mavreen.bassin@adsrank.fr', '', NULL, NULL, 'd0vCQehtKT.pdfnT3Vkn2O', 1268889823, 1755068799, 1, 'Mavreen', 'Bassin', 'Adsrank', '33756282710', NULL, '/equipe/Mavreen.png', 3),
+(18, '127.0.0.1', 'Mavreen', '$2y$08$J8Qy4wBG8487ktv5vVLGT.tZ.JFDz1HjprjgIKCCgC1txaa0d224W', '', 'mavreen.bassin@adsrank.fr', '', NULL, NULL, 'd0vCQehtKT.pdfnT3Vkn2O', 1268889823, 1755102627, 1, 'Mavreen', 'Bassin', 'Adsrank', '33756282710', NULL, '/equipe/Mavreen.png', 3),
 (19, '127.0.0.1', 'Salome', '$2y$08$RBtf1uosPF8RFU3GkQUG..0UrraKdSwhwxBU2Jv9Niw33S0kVzofG', '', 'admin@admin.com', '', NULL, NULL, 'd0vCQehtKT.pdfnT3Vkn2O', 1268889823, 1745583867, 1, 'Salome', 'Adsrank', 'ADMIN', '0345403898', NULL, '/equipe/Salome.png', 0),
 (20, '127.0.0.1', 'Audrey', '$2y$08$RBtf1uosPF8RFU3GkQUG..0UrraKdSwhwxBU2Jv9Niw33S0kVzofG', '', 'admin@admin.com', '', NULL, NULL, 'd0vCQehtKT.pdfnT3Vkn2O', 1268889823, 1741943128, 1, 'Audrey', 'Adsrank', 'ADMIN', '0345403898', NULL, '/equipe/audrey.png', 0),
 (21, '127.0.0.1', 'Teddy', '$2y$08$RBtf1uosPF8RFU3GkQUG..0UrraKdSwhwxBU2Jv9Niw33S0kVzofG', '', 'admin@admin.com', '', NULL, NULL, 'd0vCQehtKT.pdfnT3Vkn2O', 1268889823, 1739954850, 1, 'Teddy', 'Adsrank', 'ADMIN', '0345403898', NULL, '/equipe/Teddy.png', 0),
 (22, '127.0.0.1', 'Ilane', '$2y$08$dWfnU6JVzzzGvyVMLw4rlePFRCQrDtyBNEMfwQQLuB50b/Y5V328y', '', 'admin@admin.com', '', NULL, NULL, 'd0vCQehtKT.pdfnT3Vkn2O', 1268889823, 1740040898, 1, 'Ilane', 'Adsrank', 'Adsrank', '0345403898', NULL, '/equipe/Ilane.png', 0),
-(23, '127.0.0.1', 'Laurent', '$2y$08$OkhBrdwGioVvp3/RZ/LVYOsO6X9qHrDd4zd9Huolass9qR2lDcEGa', '', 'admin@admin.com', '', NULL, NULL, 'd0vCQehtKT.pdfnT3Vkn2O', 1268889823, 1755070350, 1, 'Laurent', 'Adsrank', 'Adsrank', '0345403898', NULL, '/equipe/Laurent.png', 1);
+(23, '127.0.0.1', 'Laurent', '$2y$08$OkhBrdwGioVvp3/RZ/LVYOsO6X9qHrDd4zd9Huolass9qR2lDcEGa', '', 'admin@admin.com', '', NULL, NULL, 'd0vCQehtKT.pdfnT3Vkn2O', 1268889823, 1755102596, 1, 'Laurent', 'Adsrank', 'Adsrank', '0345403898', NULL, '/equipe/Laurent.png', 1);
 
 -- --------------------------------------------------------
 
@@ -19033,6 +19094,19 @@ INSERT INTO `users_groups` (`id`, `user_id`, `group_id`) VALUES
 --
 ALTER TABLE `group_messages`
   ADD CONSTRAINT `group_messages_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE;
+
+--
+-- Contraintes pour la table `notes`
+--
+ALTER TABLE `notes`
+  ADD CONSTRAINT `notes_ibfk_1` FOREIGN KEY (`created_by`) REFERENCES `users` (`id`) ON DELETE CASCADE;
+
+--
+-- Contraintes pour la table `note_users`
+--
+ALTER TABLE `note_users`
+  ADD CONSTRAINT `note_users_ibfk_1` FOREIGN KEY (`note_id`) REFERENCES `notes` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `note_users_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

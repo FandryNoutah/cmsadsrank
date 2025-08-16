@@ -26,6 +26,28 @@
 		border-top-right-radius: 4px;
 		border-bottom-right-radius: 4px;
 	}
+
+	/* For modal attachment design */
+	.file-drop-area {
+		border: 2px dashed #ccc;
+		border-radius: 8px;
+		padding: 30px;
+		text-align: center;
+		cursor: pointer;
+		transition: border-color 0.3s;
+	}
+
+	.file-drop-area.dragover {
+		border-color: #0d6efd;
+		/* bootstrap primary */
+		background: #f8f9fa;
+	}
+
+	.file-drop-icon {
+		font-size: 40px;
+		color: #6c757d;
+		margin-bottom: 10px;
+	}
 </style>
 <?php end_section(); ?>
 
@@ -759,6 +781,8 @@ Task
 <?php end_section(); ?>
 
 <?php start_section('script'); ?>
+
+<!-- Index page script -->
 <script>
 	$(function() {
 
@@ -868,7 +892,7 @@ Task
 					$(submitter).html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>');
 				},
 				success: function(response) {
-					
+
 					$(submitter).removeAttr("disabled");
 					$(submitter).html(buttonChild);
 
@@ -877,7 +901,51 @@ Task
 				}
 			});
 		});
+	});
+</script>
 
+<!-- Task modal create -->
+<script>
+	$(function() {
+		const dropArea = $("#fileDrop");
+		const input = $("#fileInput");
+		const fileName = $("#fileName");
+
+		// Click to trigger input
+		dropArea.click(function() {
+			console.log("here");
+
+			input.click();
+		});
+
+		// Drag & drop events
+		dropArea.on("dragover", function(e) {
+			e.preventDefault();
+			e.stopPropagation();
+			dropArea.addClass("dragover");
+		});
+
+		dropArea.on("dragleave drop", function(e) {
+			e.preventDefault();
+			e.stopPropagation();
+			dropArea.removeClass("dragover");
+		});
+
+		dropArea.on("drop", function(e) {
+			let file = e.originalEvent.dataTransfer.files[0]; // just one file
+			input[0].files = e.originalEvent.dataTransfer.files;
+			showFile(file);
+		});
+
+		input.on("change", function() {
+			if (this.files[0]) {
+				showFile(this.files[0]);
+			}
+		});
+
+		function showFile(file) {
+			fileName.text(file.name);
+		}
 	});
 </script>
 <?php end_section(); ?>
