@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1:3306
--- Généré le : mer. 13 août 2025 à 16:31
+-- Généré le : dim. 17 août 2025 à 17:25
 -- Version du serveur : 5.7.44
 -- Version de PHP : 7.2.34
 
@@ -1401,7 +1401,7 @@ CREATE TABLE IF NOT EXISTS `group_messages` (
   `created_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   KEY `user_id` (`user_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `group_messages`
@@ -1413,7 +1413,9 @@ INSERT INTO `group_messages` (`id`, `user_id`, `task_id`, `message`, `created_at
 (3, 1, NULL, 'Je suis l\'admin', '2025-08-13 09:33:29'),
 (4, 23, 6, 'Bonjour, upsell le moi d\'Aôut', '2025-08-13 09:57:47'),
 (5, 18, 4, 'Bonjour, c\'est Mavreen', '2025-08-13 18:29:42'),
-(6, 23, 4, 'Bonjour, c\'est laurent', '2025-08-13 18:30:13');
+(6, 23, 4, 'Bonjour, c\'est laurent', '2025-08-13 18:30:13'),
+(7, 18, 3, 'Bonjour, tu peux vérifier stp, lerci', '2025-08-14 09:53:22'),
+(8, 23, 3, 'Bonjour, ok', '2025-08-14 09:53:52');
 
 -- --------------------------------------------------------
 
@@ -18761,6 +18763,7 @@ CREATE TABLE IF NOT EXISTS `notes` (
   `status` enum('Normal','Priorité','Urgent') NOT NULL DEFAULT 'Normal',
   `created_by` int(11) UNSIGNED NOT NULL,
   `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  `date_due` date DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `created_by` (`created_by`)
 ) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
@@ -18769,11 +18772,11 @@ CREATE TABLE IF NOT EXISTS `notes` (
 -- Déchargement des données de la table `notes`
 --
 
-INSERT INTO `notes` (`id`, `title`, `content`, `type`, `status`, `created_by`, `created_at`) VALUES
-(1, 'Note 1 test', 'Contenu note 1', 'information', 'Normal', 18, '2025-08-13 13:19:32'),
-(2, 'Note test 2', 'contenu 2025', 'rappel', 'Urgent', 18, '2025-08-13 13:21:04'),
-(3, 'Note 2', '2052', 'information', 'Normal', 18, '2025-08-13 13:21:34'),
-(4, 'note 2', 'contenu', 'information', 'Normal', 18, '2025-08-13 13:22:37');
+INSERT INTO `notes` (`id`, `title`, `content`, `type`, `status`, `created_by`, `created_at`, `date_due`) VALUES
+(1, 'Note 1 test', 'Contenu note 1', 'information', 'Normal', 18, '2025-08-13 13:19:32', NULL),
+(2, 'Note test 2', 'contenu 2025', 'rappel', 'Urgent', 18, '2025-08-13 13:21:04', NULL),
+(3, 'Note 2', '2052', 'information', 'Normal', 18, '2025-08-13 13:21:34', NULL),
+(4, 'note 2', 'contenu', 'information', 'Normal', 18, '2025-08-13 13:22:37', NULL);
 
 -- --------------------------------------------------------
 
@@ -18927,7 +18930,7 @@ CREATE TABLE IF NOT EXISTS `tasks` (
   `title` varchar(255) NOT NULL,
   `description` text NOT NULL,
   `assigned_to` int(11) DEFAULT NULL,
-  `status` enum('en cours','effectuée','annulée') DEFAULT 'en cours',
+  `status` enum('planifié','en cours','effectuée','annulée') DEFAULT 'planifié',
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `date_demande` date NOT NULL,
@@ -18946,8 +18949,8 @@ CREATE TABLE IF NOT EXISTS `tasks` (
 --
 
 INSERT INTO `tasks` (`idtask`, `reference`, `type_tache`, `idclients`, `title`, `description`, `assigned_to`, `status`, `created_at`, `updated_at`, `date_demande`, `date_due`, `AM`, `Statuts_technique`, `note_technique`, `priorite`, `actif`, `statut_actif`) VALUES
-(3, 'ADS00003', 1, 366, 'Création de Brief', 'En attente de brief', 20, 'en cours', '2025-08-11 14:31:41', '2025-08-11 14:31:41', '2025-08-01', '2025-08-07', 18, '1', '', 0, 0, 0),
-(4, 'ADS00004', 1, 366, 'Upsell', 'Le client fait une upsell', 23, 'en cours', '2025-08-11 15:50:46', '2025-08-11 15:50:46', '2025-08-13', '2025-08-13', 18, '1', '', 0, 1, 0),
+(3, 'ADS00003', 1, 366, 'Création de Brief', 'En attente de brief', 20, 'planifié', '2025-08-11 14:31:41', '2025-08-17 06:50:26', '2025-08-01', '2025-08-07', 18, '1', '', 0, 0, 0),
+(4, 'ADS00004', 1, 366, 'Upsell', 'Le client fait une upsell', 23, 'effectuée', '2025-08-11 15:50:46', '2025-08-17 06:52:25', '2025-08-13', '2025-08-13', 18, '1', '', 0, 1, 0),
 (5, 'ADS00005', 1, 366, 'Baisse', 'Le client fait une baisse', 23, 'en cours', '2025-08-11 15:59:25', '2025-08-11 15:59:25', '2025-08-12', '2025-08-12', 18, '1', '', 0, 1, 0),
 (6, 'ADS00006', 1, 366, 'Upsell', 'Le client fait une upsell', 23, 'en cours', '2025-08-11 16:03:09', '2025-08-11 16:03:09', '2025-08-07', '2025-08-07', 18, '1', '', 0, 0, 0),
 (10, 'ADS00010', 1, 370, 'Création de Brief', 'En attente de brief', 19, 'en cours', '2025-08-12 07:13:27', '2025-08-12 07:13:27', '2025-08-14', '2025-08-21', 17, '1', '', 0, 0, 0);
@@ -19052,12 +19055,12 @@ INSERT INTO `users` (`id`, `ip_address`, `username`, `password`, `salt`, `email`
 (1, '127.0.0.1', 'administrator', '$2y$08$RBtf1uosPF8RFU3GkQUG..0UrraKdSwhwxBU2Jv9Niw33S0kVzofG', '', 'admin@admin.com', '', NULL, NULL, 'd0vCQehtKT.pdfnT3Vkn2O', 1268889823, 1755070398, 1, 'Admin', 'Adsrank', 'ADMIN', '33766076170', NULL, '/equipe/admin.png', 0),
 (15, '127.0.0.1', 'Miora', '$2y$08$k.u5F9ym.7/q.dRleHm4OOvgp9n1SgWd6N98BgFSuWCSiU41J/tLa', NULL, 'razakatiana.antenaina@yahoo.com', NULL, NULL, NULL, NULL, 1736261668, 1736261676, 1, 'Dev', 'Miora', 'Adsrank', '0345403898', 0, '', 0),
 (17, '127.0.0.1', 'Michael', '$2y$08$RBtf1uosPF8RFU3GkQUG..0UrraKdSwhwxBU2Jv9Niw33S0kVzofG', '', 'admin@admin.com', '', NULL, NULL, 'd0vCQehtKT.pdfnT3Vkn2O', 1268889823, 1741943903, 1, 'Michael', 'Adsrank', 'ADMIN', '0345403898', NULL, '/equipe/Michael.png', 0),
-(18, '127.0.0.1', 'Mavreen', '$2y$08$J8Qy4wBG8487ktv5vVLGT.tZ.JFDz1HjprjgIKCCgC1txaa0d224W', '', 'mavreen.bassin@adsrank.fr', '', NULL, NULL, 'd0vCQehtKT.pdfnT3Vkn2O', 1268889823, 1755102627, 1, 'Mavreen', 'Bassin', 'Adsrank', '33756282710', NULL, '/equipe/Mavreen.png', 3),
+(18, '127.0.0.1', 'Mavreen', '$2y$08$J8Qy4wBG8487ktv5vVLGT.tZ.JFDz1HjprjgIKCCgC1txaa0d224W', '', 'mavreen.bassin@adsrank.fr', '', NULL, NULL, 'd0vCQehtKT.pdfnT3Vkn2O', 1268889823, 1755449911, 1, 'Mavreen', 'Bassin', 'Adsrank', '33756282710', NULL, '/equipe/Mavreen.png', 3),
 (19, '127.0.0.1', 'Salome', '$2y$08$RBtf1uosPF8RFU3GkQUG..0UrraKdSwhwxBU2Jv9Niw33S0kVzofG', '', 'admin@admin.com', '', NULL, NULL, 'd0vCQehtKT.pdfnT3Vkn2O', 1268889823, 1745583867, 1, 'Salome', 'Adsrank', 'ADMIN', '0345403898', NULL, '/equipe/Salome.png', 0),
 (20, '127.0.0.1', 'Audrey', '$2y$08$RBtf1uosPF8RFU3GkQUG..0UrraKdSwhwxBU2Jv9Niw33S0kVzofG', '', 'admin@admin.com', '', NULL, NULL, 'd0vCQehtKT.pdfnT3Vkn2O', 1268889823, 1741943128, 1, 'Audrey', 'Adsrank', 'ADMIN', '0345403898', NULL, '/equipe/audrey.png', 0),
 (21, '127.0.0.1', 'Teddy', '$2y$08$RBtf1uosPF8RFU3GkQUG..0UrraKdSwhwxBU2Jv9Niw33S0kVzofG', '', 'admin@admin.com', '', NULL, NULL, 'd0vCQehtKT.pdfnT3Vkn2O', 1268889823, 1739954850, 1, 'Teddy', 'Adsrank', 'ADMIN', '0345403898', NULL, '/equipe/Teddy.png', 0),
 (22, '127.0.0.1', 'Ilane', '$2y$08$dWfnU6JVzzzGvyVMLw4rlePFRCQrDtyBNEMfwQQLuB50b/Y5V328y', '', 'admin@admin.com', '', NULL, NULL, 'd0vCQehtKT.pdfnT3Vkn2O', 1268889823, 1740040898, 1, 'Ilane', 'Adsrank', 'Adsrank', '0345403898', NULL, '/equipe/Ilane.png', 0),
-(23, '127.0.0.1', 'Laurent', '$2y$08$OkhBrdwGioVvp3/RZ/LVYOsO6X9qHrDd4zd9Huolass9qR2lDcEGa', '', 'admin@admin.com', '', NULL, NULL, 'd0vCQehtKT.pdfnT3Vkn2O', 1268889823, 1755102596, 1, 'Laurent', 'Adsrank', 'Adsrank', '0345403898', NULL, '/equipe/Laurent.png', 1);
+(23, '127.0.0.1', 'Laurent', '$2y$08$OkhBrdwGioVvp3/RZ/LVYOsO6X9qHrDd4zd9Huolass9qR2lDcEGa', '', 'admin@admin.com', '', NULL, NULL, 'd0vCQehtKT.pdfnT3Vkn2O', 1268889823, 1755157942, 1, 'Laurent', 'Adsrank', 'Adsrank', '0345403898', NULL, '/equipe/Laurent.png', 1);
 
 -- --------------------------------------------------------
 

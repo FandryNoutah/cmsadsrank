@@ -25,7 +25,7 @@
 <?php end_section(); ?>
 
 <?php start_section('page_title'); ?>
-Task
+Notes
 <?php end_section(); ?>
 
 <?php start_section('page_heading'); ?>
@@ -52,6 +52,54 @@ Task
 <?php end_section(); ?>
 
 <?php start_section('content'); ?>
+
+<div class="container-fluid">
+	<div class="row row-cols-3">
+		<?php foreach ($notes as $note): ?>
+
+			<div class="col">
+				<div class="card h-100">
+					<div class="card-body">
+						<div class="row">
+							<span class="col-auto mx-1 badge alert-warning">
+								<?= htmlspecialchars($note->type); ?>
+							</span>
+							<span class="col-auto mx-1 badge alert-primary">
+								<?= htmlspecialchars($note->status); ?>
+							</span>
+						</div>
+						<h6 class="my-3" style="font-size: 16px; font-weight: 500;">
+							<?= htmlspecialchars($note->title); ?>
+						</h6>
+						<p class="text-muted">
+							<?= nl2br(htmlspecialchars($note->content)); ?>
+						</p>
+					</div>
+					<div class="card-footer d-flex justify-content-between bg-transparent">
+						<?php
+							echo "De: " . htmlspecialchars($note->author) . " | Pour: ";
+
+							$recipients = $this->Note_model->get_note_recipients($note->id);
+							echo implode(', ', array_map(function ($r) {
+								return htmlspecialchars($r->username);
+							}, $recipients));
+						?>
+
+						<!-- A UTILISER SI BESOIN D'IMAGE -->
+
+						<!-- <div class="d-flex align-items-center avatar-group">
+							<img src="" class="avatar rounded-circle" width="28" height="28" alt="Client Image">
+							<img src="" class="avatar rounded-circle" width="28" height="28" alt="Client Image">
+						</div> -->
+
+						<span class="text-muted text-right text-nowrap">Mar 5, 04:25</span>
+					</div>
+				</div>
+			</div>
+		<?php endforeach; ?>
+
+	</div>
+</div>
 
 <?php $this->load->view('layouts/note/modal/form'); ?>
 

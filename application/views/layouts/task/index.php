@@ -183,7 +183,7 @@ Task
 								</td>
 								<td>
 									<div class="d-flex align-items-center avatar-group">
-										<img src="<?php echo base_url(IMAGES_PATH . htmlspecialchars($t->AM_photo)); ?>" width="28" height="28" alt="Client Image"><img src="<?php echo base_url(IMAGES_PATH . htmlspecialchars($t->assigned_to_photo)); ?>" width="28" height="28" alt="Client Image">
+										<img src="<?= base_url(IMAGES_PATH . htmlspecialchars($t->AM_photo)); ?>" class="avatar rounded-circle" width="28" height="28" alt="Client Image"><img src="<?= base_url(IMAGES_PATH . htmlspecialchars($t->assigned_to_photo)); ?>" class="avatar rounded-circle" width="28" height="28" alt="Client Image">
 												</div>
 								</td>
 								<td>
@@ -263,7 +263,7 @@ Task
 								</td>
 								<td>
 									<div class="d-flex align-items-center avatar-group">
-										<img src="<?php echo base_url(IMAGES_PATH . htmlspecialchars($t->AM_photo)); ?>" width="28" height="28" alt="Client Image"><img src="<?php echo base_url(IMAGES_PATH . htmlspecialchars($t->assigned_to_photo)); ?>" width="28" height="28" alt="Client Image">
+										<img src="<?= base_url(IMAGES_PATH . htmlspecialchars($t->AM_photo)); ?>" class="avatar rounded-circle" width="28" height="28" alt="Client Image"><img src="<?= base_url(IMAGES_PATH . htmlspecialchars($t->assigned_to_photo)); ?>" class="avatar rounded-circle" width="28" height="28" alt="Client Image">
 												</div>
 								</td>
 								<td>
@@ -342,7 +342,7 @@ Task
 								</td>
 								<td>
 									<div class="d-flex align-items-center avatar-group">
-										<img src="<?php echo base_url(IMAGES_PATH . htmlspecialchars($t->AM_photo)); ?>" width="28" height="28" alt="Client Image"><img src="<?php echo base_url(IMAGES_PATH . htmlspecialchars($t->assigned_to_photo)); ?>" width="28" height="28" alt="Client Image">
+										<img src="<?= base_url(IMAGES_PATH . htmlspecialchars($t->AM_photo)); ?>" class="avatar rounded-circle" width="28" height="28" alt="Client Image"><img src="<?= base_url(IMAGES_PATH . htmlspecialchars($t->assigned_to_photo)); ?>" class="avatar rounded-circle" width="28" height="28" alt="Client Image">
 												</div>
 								</td>
 								<td>
@@ -427,7 +427,7 @@ Task
 										<div class="row no-gutters" style="font-size: 14px;">
 											<div class="col-auto mr-auto">
 												<div class="d-flex align-items-center avatar-group">
-													<img src="<?php echo base_url(IMAGES_PATH . htmlspecialchars($t->AM_photo)); ?>" width="28" height="28" alt="Client Image"><img src="<?php echo base_url(IMAGES_PATH . htmlspecialchars($t->assigned_to_photo)); ?>" width="28" height="28" alt="Client Image">
+													<img src="<?= base_url(IMAGES_PATH . htmlspecialchars($t->AM_photo)); ?>" class="avatar rounded-circle" width="28" height="28" alt="Client Image"><img src="<?= base_url(IMAGES_PATH . htmlspecialchars($t->assigned_to_photo)); ?>" class="avatar rounded-circle" width="28" height="28" alt="Client Image">
 												</div>
 											</div>
 											<span class="col-auto mr-3">
@@ -512,7 +512,7 @@ Task
 										<div class="row no-gutters" style="font-size: 14px;">
 											<div class="col-auto mr-auto">
 												<div class="d-flex align-items-center avatar-group">
-													<img src="<?php echo base_url(IMAGES_PATH . htmlspecialchars($t->AM_photo)); ?>" width="28" height="28" alt="Client Image"><img src="<?php echo base_url(IMAGES_PATH . htmlspecialchars($t->assigned_to_photo)); ?>" width="28" height="28" alt="Client Image">
+													<img src="<?= base_url(IMAGES_PATH . htmlspecialchars($t->AM_photo)); ?>" class="avatar rounded-circle" width="28" height="28" alt="Client Image"><img src="<?= base_url(IMAGES_PATH . htmlspecialchars($t->assigned_to_photo)); ?>" class="avatar rounded-circle" width="28" height="28" alt="Client Image">
 												</div>
 											</div>
 											<span class="col-auto mr-3">
@@ -595,7 +595,7 @@ Task
 										<div class="row no-gutters" style="font-size: 14px;">
 											<div class="col-auto mr-auto">
 												<div class="d-flex align-items-center avatar-group">
-													<img src="<?php echo base_url(IMAGES_PATH . htmlspecialchars($t->AM_photo)); ?>" width="28" height="28" alt="Client Image"><img src="<?php echo base_url(IMAGES_PATH . htmlspecialchars($t->assigned_to_photo)); ?>" width="28" height="28" alt="Client Image">
+													<img src="<?= base_url(IMAGES_PATH . htmlspecialchars($t->AM_photo)); ?>" class="avatar rounded-circle" width="28" height="28" alt="Client Image"><img src="<?= base_url(IMAGES_PATH . htmlspecialchars($t->assigned_to_photo)); ?>" class="avatar rounded-circle" width="28" height="28" alt="Client Image">
 												</div>
 											</div>
 											<span class="col-auto mr-3">
