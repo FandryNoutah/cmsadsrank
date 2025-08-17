@@ -45,7 +45,7 @@ class Task extends MY_Controller
 		$this->data['initiative'] = $this->Donne_modele->get_all_initiative(); */
 
 		// $this->page = "templates/v3/Task.php";
-		$this->data['tache_team'] = $this->Task_model->get_task_team();
+		$this->data['tache'] = $this->Task_model->get_all_tâche();
 		$this->content = "layouts/task/index.php";
 		$this->layout();
 	}
@@ -93,6 +93,35 @@ class Task extends MY_Controller
 
 		$this->page = "templates/v3/Task.php";
 		$this->layout();
+	}
+	 public function insert_tache() {
+		// Récupérer les données envoyées par le formulaire
+		$type_tache = $this->input->post('type_tache');
+		$date_demande = $this->input->post('date_demande');
+		
+		$date_due = $this->input->post('date_due');
+		$idclients = $this->input->post('idclients');
+		$AM = $this->input->post('AM');
+		$assigned_to = $this->input->post('assigned_to');
+		$title = $this->input->post('title');
+		$Statuts_technique = $this->input->post('Statuts_technique');
+		$tache = $this->input->post('tache');
+		$reference =
+			$data = array(
+				'type_tache' => $type_tache,
+				'date_demande' => $date_demande,
+				'date_due' => $date_due,
+				'idclients' => $idclients,
+				'AM' => $AM,
+				'assigned_to' => $assigned_to,
+				'title' => $title,
+				'Statuts_technique' => $Statuts_technique,
+				'description' => $tache
+			);
+
+		$this->Task_model->add_task($data);
+		$this->session->set_flashdata('message-succes', "Tâche ajoutée avec succès");
+		redirect('Task', 'refresh');
 	}
 
 	public function uptates_information()
