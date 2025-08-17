@@ -134,7 +134,7 @@ class Task_model extends CI_Model
 		// Retourner les résultats
 		return $query->result();
 	}
-	public function get_task_team($status = null)
+	public function get_all_tâche($status = null)
 	{
 		$this->db->select('tasks.*, u1.first_name as assigned_to_name, u1.photo_users as assigned_to_photo, u2.first_name as AM_name, u2.photo_users as AM_photo, clients.*');
 		$this->db->from('tasks');
@@ -147,7 +147,6 @@ class Task_model extends CI_Model
 
 		// Jointure avec la table users pour "AM" (utilisateur AM)
 		$this->db->join('users u2', 'u2.id = tasks.AM', 'left');
-		$this->db->where('type_tache', 1);
 
 		if ($status !== null) {
 			$this->db->where('Statuts_technique', $status); // Exact match
