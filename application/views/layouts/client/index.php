@@ -51,7 +51,22 @@ Client
 
 <?php start_section('page_heading'); ?>
 
-<div class="row mx-lg-2 ml-auto my-3">
+<ul class="nav nav-tabs mr-auto ml-5" role="tablist">
+	<li class="nav-item">
+		<a class="nav-link py-3 active" type="button" id="list_tab" data-toggle="tab" data-target="#list" type="button" role="tab" aria-controls="list" aria-selected="true">
+			<img src="<?= base_url('assets/images/icons/figma/icon-list.svg') ?>" alt="">
+			List
+		</a>
+	</li>
+	<li class="nav-item">
+		<a class="nav-link py-3" type="button" id="kanban_tab" data-toggle="tab" data-target="#kanban" type="button" role="tab" aria-controls="kanban" aria-selected="false">
+			<img src="<?= base_url('assets/images/icons/figma/icon-kanban.svg') ?>" alt="">
+			Kanban
+		</a>
+	</li>
+</ul>
+
+<div class="row mx-lg-2 ml-auto">
 	<div class="col-auto px-1">
 		<button class="btn btn-outline-dark">
 			<img src="<?= base_url('assets/images/icons/figma/icon-funnelsimple.svg') ?>" alt="">
@@ -100,70 +115,220 @@ Client
 	</div>
 </div>
 
-<div class="table-responsive">
+<div class="tab-content" id="clientTabContent">
 
-	<table class="table table-wrapper">
-		<thead class="bg-light text-muted">
-			<tr>
-				<th>
-					Client
-					<img src="<?= base_url('assets/images/icons/figma/icon-caretdoublevertical-5.svg') ?>" class="ml-2">
-				</th>
-				<th>
-					Produit
-					<img src="<?= base_url('assets/images/icons/figma/icon-caretdoublevertical-5.svg') ?>" class="ml-2">
-				</th>
-				<th>
-					AM
-					<img src="<?= base_url('assets/images/icons/figma/icon-caretdoublevertical-5.svg') ?>" class="ml-2">
-				</th>
-				<th>
-					Client depuis le
-					<img src="<?= base_url('assets/images/icons/figma/icon-caretdoublevertical-5.svg') ?>" class="ml-2">
-				</th>
-				<th>
-					Budget
-					<img src="<?= base_url('assets/images/icons/figma/icon-caretdoublevertical-5.svg') ?>" class="ml-2">
-				</th>
-				<th>
-					Statut
-					<img src="<?= base_url('assets/images/icons/figma/icon-caretdoublevertical-5.svg') ?>" class="ml-2">
-				</th>
-			</tr>
-		</thead>
-		<tbody>
-			<?php foreach ($donnee as $d): ?>
-				<?php if ($d->budget != 0) : ?>
+	<div class="tab-pane fade show active mb-5" id="list" role="tabpanel" aria-labelledby="list_tab">
+		<div class="table-responsive">
+
+			<table class="table table-wrapper">
+				<thead class="bg-light text-muted">
 					<tr>
-						<td>
-							<a href="<?= base_url('Client/detail_client/' . $d->idclients) ?>" style="display: flex; align-items: center; text-decoration: none; color: inherit;">
-							<img src="<?= $d->favicon ?>" class="img-thumbnail" width="28" height="28" alt="Client Image" style="margin-right: 8px;">
-							<?= htmlspecialchars($d->nom_client) ?>
-							</a>
-						</td>
+						<th>
+							Client
+							<img src="<?= base_url('assets/images/icons/figma/icon-caretdoublevertical-5.svg') ?>" class="ml-2">
+						</th>
+						<th>
+							Produit
+							<img src="<?= base_url('assets/images/icons/figma/icon-caretdoublevertical-5.svg') ?>" class="ml-2">
+						</th>
+						<th>
+							AM
+							<img src="<?= base_url('assets/images/icons/figma/icon-caretdoublevertical-5.svg') ?>" class="ml-2">
+						</th>
+						<th>
+							Client depuis le
+							<img src="<?= base_url('assets/images/icons/figma/icon-caretdoublevertical-5.svg') ?>" class="ml-2">
+						</th>
+						<th>
+							Budget
+							<img src="<?= base_url('assets/images/icons/figma/icon-caretdoublevertical-5.svg') ?>" class="ml-2">
+						</th>
+						<th>
+							Statut
+							<img src="<?= base_url('assets/images/icons/figma/icon-caretdoublevertical-5.svg') ?>" class="ml-2">
+						</th>
+					</tr>
+				</thead>
+				<tbody>
+					<?php foreach ($donnee as $d): ?>
+						<?php if ($d->budget != 0) : ?>
+							<tr>
+								<td>
+									<a href="<?= base_url('Client/detail_client/' . $d->idclients) ?>" style="display: flex; align-items: center; text-decoration: none; color: inherit;">
+										<img src="<?= $d->favicon ?>" class="img-thumbnail" width="28" height="28" alt="Client Image" style="margin-right: 8px;">
+										<?= htmlspecialchars($d->nom_client) ?>
+									</a>
+								</td>
 
-						<td class="text-muted"><?php echo $d->label_produit ?></td>
-						<td>
-							<img src="<?php echo base_url(IMAGES_PATH . htmlspecialchars($d->tech_photo_user)); ?>" width="28" height="28" alt="Client Image"><img src="<?php echo base_url(IMAGES_PATH . htmlspecialchars($d->am_photo_user)); ?>" width="28" height="28" alt="Client Image">
-						</td>
-						<td><?php echo $d->mis_en_place_paiement ?></td>
-						<td><?php
-							$budget = $d->budget;
-							$budget = ($budget / 2) / 30.6;
-							$budget = round($budget, 2);
-							?>
-							<?php echo $budget; ?> €</td>
-						<td>
-							<span class="badge alert-success rounded-pill px-2 py-1" style="font-size: 12px; font-weight: 500;">
+								<td class="text-muted"><?= $d->label_produit ?></td>
+								<td>
+									<img src="<?= base_url(IMAGES_PATH . htmlspecialchars($d->tech_photo_user)); ?>" width="28" height="28" alt="Client Image"><img src="<?= base_url(IMAGES_PATH . htmlspecialchars($d->am_photo_user)); ?>" width="28" height="28" alt="Client Image">
+								</td>
+								<td><?= $d->mis_en_place_paiement ?></td>
+								<td><?php
+									$budget = $d->budget;
+									$budget = ($budget / 2) / 30.6;
+									$budget = round($budget, 2);
+									?>
+									<?= $budget; ?> €</td>
+								<td>
+									<span class="badge alert-success rounded-pill px-2 py-1" style="font-size: 12px; font-weight: 500;">
+										<i class="fa fa-circle mr-1" style="font-size: 10px;"></i>
+										Active
+									</span>
+								</td>
+							</tr>
+						<?php endif; ?>
+					<?php endforeach; ?>
+				</tbody>
+			</table>
+		</div>
+	</div>
+
+	<div class="tab-pane fade" id="kanban" role="tabpanel" aria-labelledby="kanban_tab">
+		<div class="row row-cols-3">
+
+			<!-- ACTIVE COLUMN -->
+			<div class="col mb-3">
+				<div class="card h-100" style="border-radius: 8px;">
+					<div class="card-body">
+						<div class="d-flex align-items-center">
+							<span class="mx-1 badge alert-success rounded-pill p-2" style="font-size: 14px; font-weight: 500;">
 								<i class="fa fa-circle mr-1" style="font-size: 10px;"></i>
 								Active
 							</span>
-						</td>
-					</tr>
-				<?php endif; ?>
-			<?php endforeach; ?>
-		</tbody>
-	</table>
+							<span class="badge alert-light mx-1 text-dark" style="font-size: 14px;">4</span>
+							<a href="#" class="text-dark text-decoration-none ml-auto" style="font-size: 28px;">+</a>
+						</div>
+
+						<?php foreach ($donnee as $d): ?>
+							<?php if ($d->budget != 0) : ?>
+								<div class="card mt-3">
+									<div class="card-body">
+										<a href="<?= base_url('Client/detail_client/' . $d->idclients) ?>" class="stretched-link"></a>
+										<div class="d-block mb-3">
+											<img src="<?= $d->favicon ?>" alt="" width="48">
+										</div>
+										<p style="font-size: 18px; font-weight: 400;" class="mb-3">
+											<?= htmlspecialchars($d->nom_client) ?>
+										</p>
+										<div class="d-flex justify-content-between">
+											<span class="text-muted">
+												<img src="<?= base_url('assets/images/icons/figma/calendar.svg') ?>" alt="">
+												<?= $d->mis_en_place_paiement ?>
+											</span>
+											<?php
+											$budget = $d->budget;
+											$budget = ($budget / 2) / 30.6;
+											$budget = round($budget, 2);
+											?>
+											<span>
+												<?= $budget; ?> €</td>
+											</span>
+										</div>
+									</div>
+								</div>
+							<?php endif; ?>
+						<?php endforeach; ?>
+					</div>
+				</div>
+			</div>
+
+			<!-- PAUSE COLUMN -->
+			<div class="col mb-3">
+				<div class="card h-100" style="border-radius: 8px;">
+					<div class="card-body">
+						<div class="d-flex align-items-center">
+							<span class="mx-1 badge alert-warning rounded-pill p-2" style="font-size: 14px; font-weight: 500;">
+								<i class="fa fa-circle mr-1" style="font-size: 10px;"></i>
+								Pause
+							</span>
+							<span class="badge alert-light mx-1 text-dark" style="font-size: 14px;">4</span>
+							<a href="#" class="text-dark text-decoration-none ml-auto" style="font-size: 28px;">+</a>
+						</div>
+
+						<div class="card mt-3">
+							<div class="card-body">
+								<div class="d-block mb-3">
+									<img src="<?= base_url('assets/images/icons/figma/brand-logos-10.svg') ?>" alt="" width="48">
+								</div>
+								<p style="font-size: 18px; font-weight: 400;" class="mb-3">Ouest lyonnais climatisation plomberie SARL</p>
+								<div class="d-flex justify-content-between">
+									<span class="text-muted">
+										<img src="<?= base_url('assets/images/icons/figma/calendar.svg') ?>" alt="">
+										16/08/2013
+									</span>
+									<span>$2.120</span>
+								</div>
+							</div>
+						</div>
+						<div class="card mt-3">
+							<div class="card-body">
+								<div class="d-block mb-3">
+									<img src="<?= base_url('assets/images/icons/figma/brand-logos-10.svg') ?>" alt="" width="48">
+								</div>
+								<p style="font-size: 18px; font-weight: 400;" class="mb-3">Ouest lyonnais climatisation plomberie SARL</p>
+								<div class="d-flex justify-content-between">
+									<span class="text-muted">
+										<img src="<?= base_url('assets/images/icons/figma/calendar.svg') ?>" alt="">
+										16/08/2013
+									</span>
+									<span>$2.120</span>
+								</div>
+							</div>
+						</div>
+						<div class="card mt-3">
+							<div class="card-body">
+								<div class="d-block mb-3">
+									<img src="<?= base_url('assets/images/icons/figma/brand-logos-10.svg') ?>" alt="" width="48">
+								</div>
+								<p style="font-size: 18px; font-weight: 400;" class="mb-3">Ouest lyonnais climatisation plomberie SARL</p>
+								<div class="d-flex justify-content-between">
+									<span class="text-muted">
+										<img src="<?= base_url('assets/images/icons/figma/calendar.svg') ?>" alt="">
+										16/08/2013
+									</span>
+									<span>$2.120</span>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<!-- RESILIER COLUMN -->
+			<div class="col mb-3">
+				<div class="card h-100" style="border-radius: 8px;">
+					<div class="card-body">
+						<div class="d-flex align-items-center">
+							<span class="mx-1 badge alert-danger rounded-pill p-2" style="font-size: 14px; font-weight: 500;">
+								<i class="fa fa-circle mr-1" style="font-size: 10px;"></i>
+								Résilier
+							</span>
+							<span class="badge alert-light mx-1 text-dark" style="font-size: 14px;">4</span>
+							<a href="#" class="text-dark text-decoration-none ml-auto" style="font-size: 28px;">+</a>
+						</div>
+
+						<div class="card mt-3">
+							<div class="card-body">
+								<div class="d-block mb-3">
+									<img src="<?= base_url('assets/images/icons/figma/brand-logos-10.svg') ?>" alt="" width="48">
+								</div>
+								<p style="font-size: 18px; font-weight: 400;" class="mb-3">Ouest lyonnais climatisation plomberie SARL</p>
+								<div class="d-flex justify-content-between">
+									<span class="text-muted">
+										<img src="<?= base_url('assets/images/icons/figma/calendar.svg') ?>" alt="">
+										16/08/2013
+									</span>
+									<span>$2.120</span>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
 </div>
 
 <?php $this->load->view('layouts/client/modal.php'); ?>

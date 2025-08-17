@@ -182,7 +182,7 @@ Task
 											<i class="fa fa-ellipsis-h"></i>
 										</a>
 										<div class="dropdown-menu dropdown-menu-right">
-											<a href="#" class="dropdown-item">Détails</a>
+											<button type="button" class="dropdown-item" data-toggle="modal" data-target="#detailModal" data-id="<?= $t->idtask; ?>">Détails</button>
 										</div>
 									</div>
 								</td>
