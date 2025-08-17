@@ -60,7 +60,7 @@
 						<div class="col pr-2" style="margin-right: 30px;">
 							<div class="card h-100 mb-5" style="margin-bottom: 0rem !important;">
 								<div class="card-body">
-									<ul class="nav nav-tabs mb-2" style="margin-top: -15px;">
+									<ul class="nav nav-tabs mb-3" style="margin-top: -15px;">
 										<li class="nav-item">
 											<a class="nav-link py-3 active" type="button">
 												Société
@@ -69,11 +69,16 @@
 									</ul>
 
 									<h6 class="text-muted font-weight-normal" style="font-size: 15.5px;">
-										
 										<?php echo $d['info_base_client'] ?></br>
-												Favicon <img src="<?php echo $d['favicon']; ?>" width="43"></br>
-											
 									</h6>
+									<ul class="nav nav-tabs">
+										<li class="nav-item">
+											<a class="nav-link py-3 active" type="button">
+												Favicon
+												<img src="<?php echo $d['favicon']; ?>" width="43"></br>
+											</a>
+										</li>
+									</ul>
 								</div>
 							</div>
 						</div>
@@ -97,12 +102,12 @@
 									<br><br>
 									<div class="d-flex justify-content-start mb-3" style="font-size: 18px;">
 										<span class="badge badge-light mr-3" style="width: 20px; height: 20px; background-color: #f2f2f2;">&nbsp;</span>
-										<span class="mr-2">Date d'anniversaire : <?php echo $d['mis_en_place_paiement'] ?></span> 
+										<span class="mr-2">Date d'anniversaire : <?php echo $d['mis_en_place_paiement'] ?></span>
 									</div>
 									<div class="d-flex justify-content-start mb-3" style="font-size: 18px;">
 										<span class="badge badge-light mr-3" style="width: 20px; height: 20px; background-color: #f2f2f2;">&nbsp;</span>
 										<span class="mr-2">Date de mise en ligne : <?php echo $d['annonce'] ?></span>
-										
+
 									</div>
 									<div class="d-flex justify-content-start mb-3" style="font-size: 18px;">
 										<span class="badge badge-light mr-3" style="width: 20px; height: 20px; background-color: #f2f2f2;">&nbsp;</span>
@@ -118,14 +123,14 @@
 											<img src="<?= base_url('assets/images/' . $d['tech_photo_user']) ?>" width="24" height="24">
 										</span>
 									</div>
-									<button class="btn btn-outline-dark btn-block">Onboarding</button>
+									<a href="<?= base_url('Client/onboarding/' . $d['idclients']) ?>" class="btn btn-outline-dark btn-block">Onboarding</a>
 								</div>
 							</div>
 						</div>
 					</div>
 
 					<div class="row row-cols-4 mb-5" style="margin-top: 30px;">
-						<div class="col" >
+						<div class="col">
 							<div class="card h-100">
 								<div class="card-body">
 									<div class="d-flex align-items-center mb-2">
@@ -137,7 +142,7 @@
 								</div>
 							</div>
 						</div>
-						<div class="col" >
+						<div class="col">
 							<div class="card h-100">
 								<div class="card-body">
 									<div class="d-flex align-items-center mb-2">
@@ -149,7 +154,7 @@
 								</div>
 							</div>
 						</div>
-						<div class="col" >
+						<div class="col">
 							<div class="card h-100">
 								<div class="card-body">
 									<div class="d-flex align-items-center mb-2">
@@ -161,7 +166,7 @@
 								</div>
 							</div>
 						</div>
-						<div class="col" >
+						<div class="col">
 							<div class="card h-100">
 								<div class="card-body">
 									<div class="d-flex align-items-center mb-2">
@@ -256,8 +261,8 @@
 					</div>
 
 					<br><br>
-					<div class="d-flex justify-content-between">										
-					<h1 style="font-size: 48px;">Loocker Studio</h1>
+					<div class="d-flex justify-content-between">
+						<h1 style="font-size: 48px;">Loocker Studio</h1>
 					</div><br>
 					<div class="row row-cols-3">
 						<div class="col">
