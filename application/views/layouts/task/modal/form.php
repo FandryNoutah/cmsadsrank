@@ -1,8 +1,8 @@
 <div class="modal fade" id="taskModal" tabindex="-1" aria-labelledby="taskModalLabel" aria-hidden="true">
-	<form action="#">
+	<form action="<?php echo base_url("Task/insert_tache") ?>" enctype="multipart/form-data" method="post" >
 		<div class="modal-dialog modal-dialog-scrollable">
 			<div class="modal-content">
-
+				<input type="hidden" name="AM" value="<?php $current_user->id ?>" >
 				<div class="modal-header">
 					<h5 class="modal-title" id="taskModalLabel">Nouveau tâche</h5>
 					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -15,44 +15,59 @@
 						<div class="col form-group">
 							<label for="task_type">Type</label>
 							<select name="task_type" id="task_type" class="form-control">
-								<option value="information">Information</option>
-								<option value="tache">Tâche</option>
-								<option value="rappel">Rappel</option>
+								<option value="1">Team task</option>
+								<option value="2">Temporaire</option>
+								<option value="3">GTM</option>
 							</select>
 						</div>
 						<div class="col form-group">
 							<label for="task_status">Statut</label>
-							<select name="task_status" id="task_status" class="form-control">
-								<option value="Normal">Normal</option>
-								<option value="Priorité">Priorité</option>
-								<option value="Urgent">Urgent</option>
+							<select name="Statuts_technique" id="task_status" class="form-control">
+								<option value="1">Normal</option>
+								<option value="2">Priorité</option>
+								<option value="3">Urgent</option>
 							</select>
 						</div>
 					</div>
 
 					<div class="form-group">
 						<label for="task_title">Titre du tâche</label>
-						<input type="text" name="task_title" id="task_title" class="form-control" placeholder="Entrer le titre du tâche">
+						<input type="text" name="title" id="task_title" class="form-control" placeholder="Entrer le titre du tâche">
+					</div>
+					<div class="form-group">
+						<label for="task_title">Client</label>
+						<select name="client" id="client_select" class="form-control" style="width: 100%;">
+							<option ></option>
+                                <?php foreach ($donnee as $d): ?>
+                                    <option value="<?php echo $d->idclients; ?>" data-budget="<?php echo $d->budget; ?>">
+                                        <?php echo htmlspecialchars($d->nom_client); ?>
+                                    </option>
+                                <?php endforeach; ?>
+                            </select>
 					</div>
 
 					<div class="form-row">
 						<div class="col form-group">
-							<label for="add_member">Add Members</label>
-							<button type="button" class="btn btn-outline-dark rounded-circle d-block">
-								<i class="fa fa-user-plus"></i>
-							</button>
+							<label for="task_status">To</label>
+							<select name="assigned_to" id="task_status" class="form-control">
+								<?php foreach($users as $u): ?>
+								<option value="<?php echo $u->id ?>"><?php echo $u->first_name ?></option>
+								<?php endforeach; ?>
+							</select>
 						</div>
 						<div class="col form-group">
-							<label for="add_member">Add Labels</label>
-							<button type="button" class="btn btn-outline-dark rounded-circle d-block">
-								<i class="fa fa-tag"></i>
-							</button>
+							<label for="exampleInputEmail1">Date de la demande</label>
+							<input type="date" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" name="date_demande">
 						</div>
+
+							
+
 						<div class="col form-group">
 							<label for="due_date">Date due</label>
-							<input type="date" name="due_date" id="due_date" class="form-control">
+							<input type="date" name="date_due" id="due_date" class="form-control">
 						</div>
 					</div>
+					
 
 					<div class="form-group">
 						<label for="tache">Tâches</label>
@@ -85,4 +100,18 @@
 			</div>
 		</div>
 	</form>
+	<script>
+  function setDefaultDate() {
+    const today = new Date();
+    const yyyy = today.getFullYear();
+    let mm = today.getMonth() + 1;
+    let dd = today.getDate();
+    if (mm < 10) mm = '0' + mm;
+    if (dd < 10) dd = '0' + dd;
+
+    const formattedDate = yyyy + '-' + mm + '-' + dd;
+    document.getElementById('exampleInputEmail1').value = formattedDate;
+  }
+  window.onload = setDefaultDate;
+</script>
 </div>
