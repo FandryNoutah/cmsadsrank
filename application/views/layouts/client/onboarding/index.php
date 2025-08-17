@@ -13,7 +13,7 @@
 		height: 34px;
 		border-radius: 50%;
 		top: 7px;
-		left: -33px;
+		left: -32.7px;
 		transition: transform 0.25s ease-in-out;
 	}
 
@@ -281,7 +281,7 @@
 					<h1 class="display-1 text-center my-5" style="font-size: 42px;">
 						Mise en place Google Tag manager
 					</h1>
-					<div class="card">
+					<div class="card mb-3">
 						<div class="card-body py-5 px-4">
 							<div class="row align-items-center">
 								<div class="col-6 text-center">
@@ -302,6 +302,9 @@
 								</div>
 							</div>
 						</div>
+					</div>
+					<div class="d-flex justify-content-end align-items-center">
+						<button class="btn btn-dark px-4 float-right">Suivant</button>
 					</div>
 				</div>
 			</div>
