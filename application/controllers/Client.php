@@ -73,16 +73,44 @@ public function application($idclients)
 		$this->data['upsell'] = $this->visuels_model->getupsellbyidclient($idclients);
 		$t = $this->data['budget_initial'] = $this->visuels_model->getdernierbyidclient($idclients);
 		$this->data['task'] = $this->Task_model->get_task_by_id_client($idclients);
+		$this->data['procedure_gtm'] = $this->Task_model->get_procedure_gtm($idclients);
 		$this->data["users"] = $this->Task_model->get_all_users();
 		$clients = $this->data["donnees"] = $this->visuels_model->getDonneeById($idclients);
 		$this->content = "layouts/client/detail/application/index.php";
 		$this->layout();
 	}
-	public function activer_processus_tache()
-	{
-		var_dump("tache");
-		die();
-	}
+public function activer_processus_tache()
+{
+    $type_tache = 3;
+    $title = "Demande de procédure GTM";
+    $description = "Activer le procédure GTM";
+    $Statuts_technique = 1;
+    $procedure_gtm = 1;
+
+    $idclients = $this->input->post('idclients');
+    $am = $this->input->post('am');
+    $tm = $this->input->post('assigned_to');
+    $date = $this->input->post('date');
+
+    $data = array(
+        'type_tache' => $type_tache,
+        'date_demande' => $date,
+        'date_due' => $date,
+        'idclients' => $idclients,
+        'AM' => $am,
+        'assigned_to' => $tm,
+        'title' => $title,
+        'Statuts_technique' => $Statuts_technique,
+        'procedure_gtm' => $procedure_gtm,
+        'description' => $description
+    );
+
+    $this->Task_model->add_task($data);
+
+    // Retourner une réponse JSON avec l’URL de redirection
+    echo json_encode(['redirect_url' => base_url('Client/application/' . $idclients)]);
+}
+
 
 	public function detail_client($idclients)
 	{
