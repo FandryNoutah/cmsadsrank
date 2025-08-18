@@ -52,7 +52,8 @@
 						<span class="ml-3 py-1 px-3 badge" style="background-color: #edf2fe; color: #4976f4; font-size: 12px; font-weight: 500;">Bleu</span>
 					</div>
 					<h1 class="font-weight-bold mb-3" style="font-size: 48px;">
-						<?php echo $d['nom_client'] ?>
+						<?php echo $d['nom_client'] ?></br>
+						Assor (assordoukhanavocats.fr)
 
 					</h1>
 					<h5 class="mb-3" style=""><?php echo $d['site_client'] ?></br></br></h5>
@@ -74,8 +75,7 @@
 									<ul class="nav nav-tabs">
 										<li class="nav-item">
 											<a class="nav-link py-3 active" type="button">
-												Favicon
-												<img src="<?php echo $d['favicon']; ?>" width="43"></br>
+												<img src="<?php echo $d['favicon']; ?>" width="34" height="34" alt="Client Image" class="rounded-circle mr-2"></br>
 											</a>
 										</li>
 									</ul>
