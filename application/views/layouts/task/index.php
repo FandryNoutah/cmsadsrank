@@ -140,63 +140,62 @@ Task
 				<table class="table table-wrapper w-100">
 					<tbody>
 						<?php foreach ($tache as $t):  ?>
-							<?php if($t->status == "planifié"): ?>
-							<tr>
-								<td>
-									<h6 class="mb-0 ml-3">
-										<?= $t->nom_client; ?>
-									</h6>
-								</td>
-								<td>
-									<span class="text-muted">
-										<?= $t->title; ?>
-									</span>
-								</td>
-								<td>
-									<span class="text-muted">
-										<img src="<?= base_url('assets/images/icons/figma/calendar.svg') ?>" alt="">
-										<?= $t->date_due; ?>
-									</span>
-								</td>
-								<td>
-									<div class="row">
-										<?php if($t->type_tache == 1): ?>
+							<?php if ($t->status == "planifié"): ?>
+								<tr>
+									<td>
+										<h6 class="mb-0 ml-3">
+											<?= $t->nom_client; ?>
+										</h6>
+									</td>
+									<td>
+										<span class="text-muted">
+											<?= $t->title; ?>
+										</span>
+									</td>
+									<td>
+										<span class="text-muted">
+											<img src="<?= base_url('assets/images/icons/figma/calendar.svg') ?>" alt="">
+											<?= $t->date_due; ?>
+										</span>
+									</td>
+									<td>
+										<div class="row">
+											<?php if ($t->type_tache == 1): ?>
 												<span class="col-auto mx-1 badge alert-success">Team task</span>
 											<?php endif; ?>
-											<?php if($t->type_tache == 2): ?>
+											<?php if ($t->type_tache == 2): ?>
 												<span class="col-auto mx-1 badge alert-success">Temporaire</span>
 											<?php endif; ?>
-											<?php if($t->type_tache == 3): ?>
+											<?php if ($t->type_tache == 3): ?>
 												<span class="col-auto mx-1 badge alert-success">GTM</span>
 											<?php endif; ?>
-											<?php if($t->Statuts_technique == 1): ?>
+											<?php if ($t->Statuts_technique == 1): ?>
 												<span class="col-auto mx-1 badge alert-success">Normal</span>
-											</div>
 											<?php endif; ?>
-											<?php if($t->Statuts_technique == 2): ?>
+											<?php if ($t->Statuts_technique == 2): ?>
 												<span class="col-auto mx-1 badge alert-warning">Priorité</span>
 											<?php endif; ?>
-											<?php if($t->Statuts_technique == 3): ?>
+											<?php if ($t->Statuts_technique == 3): ?>
 												<span class="col-auto mx-1 badge alert-danger">Urgent</span>
 											<?php endif; ?>
-									</div>
-								</td>
-								<td>
-									<div class="d-flex align-items-center avatar-group">
-										<img src="<?= base_url(IMAGES_PATH . htmlspecialchars($t->AM_photo)); ?>" class="avatar rounded-circle" width="28" height="28" alt="Client Image"><img src="<?= base_url(IMAGES_PATH . htmlspecialchars($t->assigned_to_photo)); ?>" class="avatar rounded-circle" width="28" height="28" alt="Client Image">
-												</div>
-								</td>
-								<td>
-									<div class="dropdown no-arrow">
-										<a href="javascript:void(0);" class="text-decoration-none text-muted task-menu dropdown-toggle" role="button" data-toggle="dropdown" aria-expanded="false">
-											<i class="fa fa-ellipsis-h"></i>
-										</a>
-										<div class="dropdown-menu dropdown-menu-right">
-											<button type="button" class="dropdown-item" data-toggle="modal" data-target="#detailModal" data-id="<?= $t->idtask; ?>">Détails</button>
 										</div>
-									</div>
-								</td>
-							</tr>
+									</td>
+									<td>
+										<div class="d-flex align-items-center avatar-group">
+											<img src="<?= base_url(IMAGES_PATH . htmlspecialchars($t->AM_photo)); ?>" class="avatar rounded-circle" width="28" height="28" alt="Client Image"><img src="<?= base_url(IMAGES_PATH . htmlspecialchars($t->assigned_to_photo)); ?>" class="avatar rounded-circle" width="28" height="28" alt="Client Image">
+										</div>
+									</td>
+									<td>
+										<div class="dropdown no-arrow">
+											<a href="javascript:void(0);" class="text-decoration-none text-muted task-menu dropdown-toggle" role="button" data-toggle="dropdown" aria-expanded="false">
+												<i class="fa fa-ellipsis-h"></i>
+											</a>
+											<div class="dropdown-menu dropdown-menu-right">
+												<button type="button" class="dropdown-item" data-toggle="modal" data-target="#detailModal" data-id="<?= $t->idtask; ?>">Détails</button>
+											</div>
+										</div>
+									</td>
+								</tr>
 							<?php endif; ?>
 						<?php endforeach; ?>
 
@@ -220,63 +219,62 @@ Task
 				<table class="table table-wrapper w-100">
 					<tbody>
 						<?php foreach ($tache as $t): ?>
-								<?php if($t->status == "en cours"): ?>
-						<tr>
-								<td>
-									<h6 class="mb-0 ml-3">
-										<?= $t->nom_client; ?>
-									</h6>
-								</td>
-								<td>
-									<span class="text-muted">
-										<?= $t->title; ?>
-									</span>
-								</td>
-								<td>
-									<span class="text-muted">
-										<img src="<?= base_url('assets/images/icons/figma/calendar.svg') ?>" alt="">
-										<?= $t->date_due; ?>
-									</span>
-								</td>
-								<td>
-									<div class="row">
-											<?php if($t->type_tache == 1): ?>
+							<?php if ($t->status == "en cours"): ?>
+								<tr>
+									<td>
+										<h6 class="mb-0 ml-3">
+											<?= $t->nom_client; ?>
+										</h6>
+									</td>
+									<td>
+										<span class="text-muted">
+											<?= $t->title; ?>
+										</span>
+									</td>
+									<td>
+										<span class="text-muted">
+											<img src="<?= base_url('assets/images/icons/figma/calendar.svg') ?>" alt="">
+											<?= $t->date_due; ?>
+										</span>
+									</td>
+									<td>
+										<div class="row">
+											<?php if ($t->type_tache == 1): ?>
 												<span class="col-auto mx-1 badge alert-success">Team task</span>
 											<?php endif; ?>
-											<?php if($t->type_tache == 2): ?>
+											<?php if ($t->type_tache == 2): ?>
 												<span class="col-auto mx-1 badge alert-success">Temporaire</span>
 											<?php endif; ?>
-											<?php if($t->type_tache == 3): ?>
+											<?php if ($t->type_tache == 3): ?>
 												<span class="col-auto mx-1 badge alert-success">GTM</span>
 											<?php endif; ?>
-											<?php if($t->Statuts_technique == 1): ?>
+											<?php if ($t->Statuts_technique == 1): ?>
 												<span class="col-auto mx-1 badge alert-success">Normal</span>
-											</div>
 											<?php endif; ?>
-											<?php if($t->Statuts_technique == 2): ?>
+											<?php if ($t->Statuts_technique == 2): ?>
 												<span class="col-auto mx-1 badge alert-warning">Priorité</span>
 											<?php endif; ?>
-											<?php if($t->Statuts_technique == 3): ?>
+											<?php if ($t->Statuts_technique == 3): ?>
 												<span class="col-auto mx-1 badge alert-danger">Urgent</span>
 											<?php endif; ?>
-									</div>
-								</td>
-								<td>
-									<div class="d-flex align-items-center avatar-group">
-										<img src="<?= base_url(IMAGES_PATH . htmlspecialchars($t->AM_photo)); ?>" class="avatar rounded-circle" width="28" height="28" alt="Client Image"><img src="<?= base_url(IMAGES_PATH . htmlspecialchars($t->assigned_to_photo)); ?>" class="avatar rounded-circle" width="28" height="28" alt="Client Image">
-												</div>
-								</td>
-								<td>
-									<div class="dropdown no-arrow">
-										<a href="javascript:void(0);" class="text-decoration-none text-muted task-menu dropdown-toggle" role="button" data-toggle="dropdown" aria-expanded="false">
-											<i class="fa fa-ellipsis-h"></i>
-										</a>
-										<div class="dropdown-menu dropdown-menu-right">
-											<a href="#" class="dropdown-item">Détails</a>
 										</div>
-									</div>
-								</td>
-							</tr>
+									</td>
+									<td>
+										<div class="d-flex align-items-center avatar-group">
+											<img src="<?= base_url(IMAGES_PATH . htmlspecialchars($t->AM_photo)); ?>" class="avatar rounded-circle" width="28" height="28" alt="Client Image"><img src="<?= base_url(IMAGES_PATH . htmlspecialchars($t->assigned_to_photo)); ?>" class="avatar rounded-circle" width="28" height="28" alt="Client Image">
+										</div>
+									</td>
+									<td>
+										<div class="dropdown no-arrow">
+											<a href="javascript:void(0);" class="text-decoration-none text-muted task-menu dropdown-toggle" role="button" data-toggle="dropdown" aria-expanded="false">
+												<i class="fa fa-ellipsis-h"></i>
+											</a>
+											<div class="dropdown-menu dropdown-menu-right">
+												<button type="button" class="dropdown-item" data-toggle="modal" data-target="#detailModal" data-id="<?= $t->idtask; ?>">Détails</button>
+											</div>
+										</div>
+									</td>
+								</tr>
 							<?php endif; ?>
 						<?php endforeach; ?>
 					</tbody>
@@ -299,63 +297,62 @@ Task
 				<table class="table table-wrapper w-100">
 					<tbody>
 						<?php foreach ($tache as $t): ?>
-								<?php if($t->status == "effectuée"): ?>
-						<tr>
-								<td>
-									<h6 class="mb-0 ml-3">
-										<?= $t->nom_client; ?>
-									</h6>
-								</td>
-								<td>
-									<span class="text-muted">
-										<?= $t->title; ?>
-									</span>
-								</td>
-								<td>
-									<span class="text-muted">
-										<img src="<?= base_url('assets/images/icons/figma/calendar.svg') ?>" alt="">
-										<?= $t->date_due; ?>
-									</span>
-								</td>
-								<td>
-									<div class="row">
-										<?php if($t->type_tache == 1): ?>
+							<?php if ($t->status == "effectuée"): ?>
+								<tr>
+									<td>
+										<h6 class="mb-0 ml-3">
+											<?= $t->nom_client; ?>
+										</h6>
+									</td>
+									<td>
+										<span class="text-muted">
+											<?= $t->title; ?>
+										</span>
+									</td>
+									<td>
+										<span class="text-muted">
+											<img src="<?= base_url('assets/images/icons/figma/calendar.svg') ?>" alt="">
+											<?= $t->date_due; ?>
+										</span>
+									</td>
+									<td>
+										<div class="row">
+											<?php if ($t->type_tache == 1): ?>
 												<span class="col-auto mx-1 badge alert-success">Team task</span>
 											<?php endif; ?>
-											<?php if($t->type_tache == 2): ?>
+											<?php if ($t->type_tache == 2): ?>
 												<span class="col-auto mx-1 badge alert-success">Temporaire</span>
 											<?php endif; ?>
-											<?php if($t->type_tache == 3): ?>
+											<?php if ($t->type_tache == 3): ?>
 												<span class="col-auto mx-1 badge alert-success">GTM</span>
 											<?php endif; ?>
-											<?php if($t->Statuts_technique == 1): ?>
+											<?php if ($t->Statuts_technique == 1): ?>
 												<span class="col-auto mx-1 badge alert-success">Normal</span>
-											</div>
 											<?php endif; ?>
-											<?php if($t->Statuts_technique == 2): ?>
+											<?php if ($t->Statuts_technique == 2): ?>
 												<span class="col-auto mx-1 badge alert-warning">Priorité</span>
 											<?php endif; ?>
-											<?php if($t->Statuts_technique == 3): ?>
+											<?php if ($t->Statuts_technique == 3): ?>
 												<span class="col-auto mx-1 badge alert-danger">Urgent</span>
 											<?php endif; ?>
-									</div>
-								</td>
-								<td>
-									<div class="d-flex align-items-center avatar-group">
-										<img src="<?= base_url(IMAGES_PATH . htmlspecialchars($t->AM_photo)); ?>" class="avatar rounded-circle" width="28" height="28" alt="Client Image"><img src="<?= base_url(IMAGES_PATH . htmlspecialchars($t->assigned_to_photo)); ?>" class="avatar rounded-circle" width="28" height="28" alt="Client Image">
-												</div>
-								</td>
-								<td>
-									<div class="dropdown no-arrow">
-										<a href="javascript:void(0);" class="text-decoration-none text-muted task-menu dropdown-toggle" role="button" data-toggle="dropdown" aria-expanded="false">
-											<i class="fa fa-ellipsis-h"></i>
-										</a>
-										<div class="dropdown-menu dropdown-menu-right">
-											<a href="#" class="dropdown-item">Détails</a>
 										</div>
-									</div>
-								</td>
-							</tr>
+									</td>
+									<td>
+										<div class="d-flex align-items-center avatar-group">
+											<img src="<?= base_url(IMAGES_PATH . htmlspecialchars($t->AM_photo)); ?>" class="avatar rounded-circle" width="28" height="28" alt="Client Image"><img src="<?= base_url(IMAGES_PATH . htmlspecialchars($t->assigned_to_photo)); ?>" class="avatar rounded-circle" width="28" height="28" alt="Client Image">
+										</div>
+									</td>
+									<td>
+										<div class="dropdown no-arrow">
+											<a href="javascript:void(0);" class="text-decoration-none text-muted task-menu dropdown-toggle" role="button" data-toggle="dropdown" aria-expanded="false">
+												<i class="fa fa-ellipsis-h"></i>
+											</a>
+											<div class="dropdown-menu dropdown-menu-right">
+												<button type="button" class="dropdown-item" data-toggle="modal" data-target="#detailModal" data-id="<?= $t->idtask; ?>">Détails</button>
+											</div>
+										</div>
+									</td>
+								</tr>
 							<?php endif; ?>
 						<?php endforeach; ?>
 					</tbody>
@@ -375,76 +372,76 @@ Task
 							<span class="h4 mx-2 w-auto">Planifié</span>
 							<span class="text-muted">3 open tasks</span>
 							<?php foreach ($tache as $t): ?>
-								<?php if($t->status == "planifié"): ?>
-								<div class="card mt-3">
-									<div class="card-body">
-										<div class="d-flex">
-											<?php if($t->type_tache == 1): ?>
-											<div class="mr-2">
-												<span class="badge alert-success">Team task</span>
-											</div>
-											<?php endif; ?>
-											<?php if($t->type_tache == 2): ?>
-											<div class="mr-2">
-												<span class="badge alert-success">Temporaire</span>
-											</div>
-											<?php endif; ?>
-											<?php if($t->type_tache == 3): ?>
-											<div class="mr-2">
-												<span class="badge alert-success">GTM</span>
-											</div>
-											<?php endif; ?>
-											<?php if($t->Statuts_technique == 1): ?>
-											<div class="mr-2">
-												<span class="badge alert-success">Normal</span>
-											</div>
-											<?php endif; ?>
-											<?php if($t->Statuts_technique == 2): ?>
-											<div class="mr-2">
-												<span class="badge alert-warning">Priorité</span>
-											</div>
-											<?php endif; ?>
-											<?php if($t->Statuts_technique == 3): ?>
-											<div class="mr-2">
-												<span class="badge alert-danger">Urgent</span>
-											</div>
-											<?php endif; ?>
-											<div class="dropdown no-arrow ml-auto">
-												<a href="javascript:void(0);" class="text-decoration-none text-muted task-menu dropdown-toggle" role="button" data-toggle="dropdown" aria-expanded="false">
-													<i class="fa fa-ellipsis-h"></i>
-												</a>
-												<div class="dropdown-menu dropdown-menu-right">
-													<button type="button" class="dropdown-item" data-toggle="modal" data-target="#detailModal" data-id="<?= $t->idtask; ?>">Détails</button>
+								<?php if ($t->status == "planifié"): ?>
+									<div class="card mt-3">
+										<div class="card-body">
+											<div class="d-flex">
+												<?php if ($t->type_tache == 1): ?>
+													<div class="mr-2">
+														<span class="badge alert-success">Team task</span>
+													</div>
+												<?php endif; ?>
+												<?php if ($t->type_tache == 2): ?>
+													<div class="mr-2">
+														<span class="badge alert-success">Temporaire</span>
+													</div>
+												<?php endif; ?>
+												<?php if ($t->type_tache == 3): ?>
+													<div class="mr-2">
+														<span class="badge alert-success">GTM</span>
+													</div>
+												<?php endif; ?>
+												<?php if ($t->Statuts_technique == 1): ?>
+													<div class="mr-2">
+														<span class="badge alert-success">Normal</span>
+													</div>
+												<?php endif; ?>
+												<?php if ($t->Statuts_technique == 2): ?>
+													<div class="mr-2">
+														<span class="badge alert-warning">Priorité</span>
+													</div>
+												<?php endif; ?>
+												<?php if ($t->Statuts_technique == 3): ?>
+													<div class="mr-2">
+														<span class="badge alert-danger">Urgent</span>
+													</div>
+												<?php endif; ?>
+												<div class="dropdown no-arrow ml-auto">
+													<a href="javascript:void(0);" class="text-decoration-none text-muted task-menu dropdown-toggle" role="button" data-toggle="dropdown" aria-expanded="false">
+														<i class="fa fa-ellipsis-h"></i>
+													</a>
+													<div class="dropdown-menu dropdown-menu-right">
+														<button type="button" class="dropdown-item" data-toggle="modal" data-target="#detailModal" data-id="<?= $t->idtask; ?>">Détails</button>
+													</div>
 												</div>
 											</div>
-										</div>
-										<h6 class="my-3" style="font-size: 14px;"><?= $t->nom_client; ?></h6>
-										<span class="text-muted d-block mb-3"><?= $t->title; ?></span>
-										<span class="text-muted d-block mb-3">
-											<img src="<?= base_url('assets/images/icons/figma/calendar.svg') ?>" alt="">
-											Date Due <?= $t->date_due; ?>
-										</span>
-										<div class="row no-gutters" style="font-size: 14px;">
-											<div class="col-auto mr-auto">
-												<div class="d-flex align-items-center avatar-group">
-													<img src="<?= base_url(IMAGES_PATH . htmlspecialchars($t->AM_photo)); ?>" class="avatar rounded-circle" width="28" height="28" alt="Client Image"><img src="<?= base_url(IMAGES_PATH . htmlspecialchars($t->assigned_to_photo)); ?>" class="avatar rounded-circle" width="28" height="28" alt="Client Image">
+											<h6 class="my-3" style="font-size: 14px;"><?= $t->nom_client; ?></h6>
+											<span class="text-muted d-block mb-3"><?= $t->title; ?></span>
+											<span class="text-muted d-block mb-3">
+												<img src="<?= base_url('assets/images/icons/figma/calendar.svg') ?>" alt="">
+												Date Due <?= $t->date_due; ?>
+											</span>
+											<div class="row no-gutters" style="font-size: 14px;">
+												<div class="col-auto mr-auto">
+													<div class="d-flex align-items-center avatar-group">
+														<img src="<?= base_url(IMAGES_PATH . htmlspecialchars($t->AM_photo)); ?>" class="avatar rounded-circle" width="28" height="28" alt="Client Image"><img src="<?= base_url(IMAGES_PATH . htmlspecialchars($t->assigned_to_photo)); ?>" class="avatar rounded-circle" width="28" height="28" alt="Client Image">
+													</div>
 												</div>
+												<span class="col-auto mr-3">
+													<a href="#" class="text-muted">
+														<img src="<?= base_url('assets/images/icons/figma/attachment-8.svg') ?>" alt="">
+														5
+													</a>
+												</span>
+												<span class="col-auto">
+													<a href="javascript:void(0);" class="text-muted" data-toggle="modal" data-target="#discussionModal" data-id="<?= $t->idtask; ?>" data-title="<?= $t->title; ?>">
+														<img src="<?= base_url('assets/images/icons/figma/chat-9.svg') ?>" alt="">
+														19
+													</a>
+												</span>
 											</div>
-											<span class="col-auto mr-3">
-												<a href="#" class="text-muted">
-													<img src="<?= base_url('assets/images/icons/figma/attachment-8.svg') ?>" alt="">
-													5
-												</a>
-											</span>
-											<span class="col-auto">
-												<a href="javascript:void(0);" class="text-muted" data-toggle="modal" data-target="#discussionModal" data-id="<?= $t->idtask; ?>" data-title="<?= $t->title; ?>">
-													<img src="<?= base_url('assets/images/icons/figma/chat-9.svg') ?>" alt="">
-													19
-												</a>
-											</span>
 										</div>
 									</div>
-								</div>
 								<?php endif; ?>
 							<?php endforeach; ?>
 
@@ -460,76 +457,76 @@ Task
 
 							<!-- Eto no manao foreach -->
 							<?php foreach ($tache as $t): ?>
-								<?php if($t->status == "en cours"): ?>
-								<div class="card mt-3">
-									<div class="card-body">
-										<div class="d-flex">
-											<?php if($t->type_tache == 1): ?>
-											<div class="mr-2">
-												<span class="badge alert-success">Team task</span>
-											</div>
-											<?php endif; ?>
-											<?php if($t->type_tache == 2): ?>
-											<div class="mr-2">
-												<span class="badge alert-success">Temporaire</span>
-											</div>
-											<?php endif; ?>
-											<?php if($t->type_tache == 3): ?>
-											<div class="mr-2">
-												<span class="badge alert-success">GTM</span>
-											</div>
-											<?php endif; ?>
-											<?php if($t->Statuts_technique == 1): ?>
-											<div class="mr-2">
-												<span class="badge alert-success">Normal</span>
-											</div>
-											<?php endif; ?>
-											<?php if($t->Statuts_technique == 2): ?>
-											<div class="mr-2">
-												<span class="badge alert-warning">Priorité</span>
-											</div>
-											<?php endif; ?>
-											<?php if($t->Statuts_technique == 3): ?>
-											<div class="mr-2">
-												<span class="badge alert-danger">Urgent</span>
-											</div>
-											<?php endif; ?>
-											<div class="dropdown no-arrow ml-auto">
-												<a href="javascript:void(0);" class="text-decoration-none text-muted task-menu dropdown-toggle" role="button" data-toggle="dropdown" aria-expanded="false">
-													<i class="fa fa-ellipsis-h"></i>
-												</a>
-												<div class="dropdown-menu dropdown-menu-right">
-													<button type="button" class="dropdown-item" data-toggle="modal" data-target="#detailModal" data-id="<?= $t->idtask; ?>">Détails</button>
+								<?php if ($t->status == "en cours"): ?>
+									<div class="card mt-3">
+										<div class="card-body">
+											<div class="d-flex">
+												<?php if ($t->type_tache == 1): ?>
+													<div class="mr-2">
+														<span class="badge alert-success">Team task</span>
+													</div>
+												<?php endif; ?>
+												<?php if ($t->type_tache == 2): ?>
+													<div class="mr-2">
+														<span class="badge alert-success">Temporaire</span>
+													</div>
+												<?php endif; ?>
+												<?php if ($t->type_tache == 3): ?>
+													<div class="mr-2">
+														<span class="badge alert-success">GTM</span>
+													</div>
+												<?php endif; ?>
+												<?php if ($t->Statuts_technique == 1): ?>
+													<div class="mr-2">
+														<span class="badge alert-success">Normal</span>
+													</div>
+												<?php endif; ?>
+												<?php if ($t->Statuts_technique == 2): ?>
+													<div class="mr-2">
+														<span class="badge alert-warning">Priorité</span>
+													</div>
+												<?php endif; ?>
+												<?php if ($t->Statuts_technique == 3): ?>
+													<div class="mr-2">
+														<span class="badge alert-danger">Urgent</span>
+													</div>
+												<?php endif; ?>
+												<div class="dropdown no-arrow ml-auto">
+													<a href="javascript:void(0);" class="text-decoration-none text-muted task-menu dropdown-toggle" role="button" data-toggle="dropdown" aria-expanded="false">
+														<i class="fa fa-ellipsis-h"></i>
+													</a>
+													<div class="dropdown-menu dropdown-menu-right">
+														<button type="button" class="dropdown-item" data-toggle="modal" data-target="#detailModal" data-id="<?= $t->idtask; ?>">Détails</button>
+													</div>
 												</div>
 											</div>
-										</div>
-										<h6 class="my-3" style="font-size: 14px;"><?= $t->nom_client; ?></h6>
-										<span class="text-muted d-block mb-3"><?= $t->title; ?></span>
-										<span class="text-muted d-block mb-3">
-											<img src="<?= base_url('assets/images/icons/figma/calendar.svg') ?>" alt="">
-											Date Due <?= $t->date_due; ?>
-										</span>
-										<div class="row no-gutters" style="font-size: 14px;">
-											<div class="col-auto mr-auto">
-												<div class="d-flex align-items-center avatar-group">
-													<img src="<?= base_url(IMAGES_PATH . htmlspecialchars($t->AM_photo)); ?>" class="avatar rounded-circle" width="28" height="28" alt="Client Image"><img src="<?= base_url(IMAGES_PATH . htmlspecialchars($t->assigned_to_photo)); ?>" class="avatar rounded-circle" width="28" height="28" alt="Client Image">
+											<h6 class="my-3" style="font-size: 14px;"><?= $t->nom_client; ?></h6>
+											<span class="text-muted d-block mb-3"><?= $t->title; ?></span>
+											<span class="text-muted d-block mb-3">
+												<img src="<?= base_url('assets/images/icons/figma/calendar.svg') ?>" alt="">
+												Date Due <?= $t->date_due; ?>
+											</span>
+											<div class="row no-gutters" style="font-size: 14px;">
+												<div class="col-auto mr-auto">
+													<div class="d-flex align-items-center avatar-group">
+														<img src="<?= base_url(IMAGES_PATH . htmlspecialchars($t->AM_photo)); ?>" class="avatar rounded-circle" width="28" height="28" alt="Client Image"><img src="<?= base_url(IMAGES_PATH . htmlspecialchars($t->assigned_to_photo)); ?>" class="avatar rounded-circle" width="28" height="28" alt="Client Image">
+													</div>
 												</div>
+												<span class="col-auto mr-3">
+													<a href="#" class="text-muted">
+														<img src="<?= base_url('assets/images/icons/figma/attachment-8.svg') ?>" alt="">
+														5
+													</a>
+												</span>
+												<span class="col-auto">
+													<a href="javascript:void(0);" class="text-muted" data-toggle="modal" data-target="#discussionModal" data-id="<?= $t->idtask; ?>" data-title="<?= $t->title; ?>">
+														<img src="<?= base_url('assets/images/icons/figma/chat-9.svg') ?>" alt="">
+														19
+													</a>
+												</span>
 											</div>
-											<span class="col-auto mr-3">
-												<a href="#" class="text-muted">
-													<img src="<?= base_url('assets/images/icons/figma/attachment-8.svg') ?>" alt="">
-													5
-												</a>
-											</span>
-											<span class="col-auto">
-												<a href="javascript:void(0);" class="text-muted" data-toggle="modal" data-target="#discussionModal" data-id="<?= $t->idtask; ?>" data-title="<?= $t->title; ?>">
-													<img src="<?= base_url('assets/images/icons/figma/chat-9.svg') ?>" alt="">
-													19
-												</a>
-											</span>
 										</div>
 									</div>
-								</div>
 								<?php endif; ?>
 							<?php endforeach; ?>
 						</div>
@@ -543,76 +540,76 @@ Task
 							<span class="text-muted">3 open tasks</span>
 							<!-- Eto no manao foreach -->
 							<?php foreach ($tache as $t): ?>
-								<?php if($t->status == "effectuée"): ?>
-								<div class="card mt-3">
-									<div class="card-body">
-										<div class="d-flex">
-											<?php if($t->type_tache == 1): ?>
-											<div class="mr-2">
-												<span class="badge alert-success">Team task</span>
-											</div>
-											<?php endif; ?>
-											<?php if($t->type_tache == 2): ?>
-											<div class="mr-2">
-												<span class="badge alert-success">Temporaire</span>
-											</div>
-											<?php endif; ?>
-											<?php if($t->type_tache == 3): ?>
-											<div class="mr-2">
-												<span class="badge alert-success">GTM</span>
-											</div>
-											<?php endif; ?>
-											<?php if($t->Statuts_technique == 1): ?>
-											<div class="mr-2">
-												<span class="badge alert-success">Normal</span>
-											</div>
-											<?php endif; ?>
-											<?php if($t->Statuts_technique == 2): ?>
-											<div class="mr-2">
-												<span class="badge alert-warning">Priorité</span>
-											</div>
-											<?php endif; ?>
-											<?php if($t->Statuts_technique == 3): ?>
-											<div class="mr-2">
-												<span class="badge alert-danger">Urgent</span>
-											</div>
-											<?php endif; ?>
-											<div class="dropdown no-arrow ml-auto">
-												<a href="javascript:void(0);" class="text-decoration-none text-muted task-menu dropdown-toggle" role="button" data-toggle="dropdown" aria-expanded="false">
-													<i class="fa fa-ellipsis-h"></i>
-												</a>
-												<div class="dropdown-menu dropdown-menu-right">
-													<button type="button" class="dropdown-item" data-toggle="modal" data-target="#detailModal" data-id="<?= $t->idtask; ?>">Détails</button>
+								<?php if ($t->status == "effectuée"): ?>
+									<div class="card mt-3">
+										<div class="card-body">
+											<div class="d-flex">
+												<?php if ($t->type_tache == 1): ?>
+													<div class="mr-2">
+														<span class="badge alert-success">Team task</span>
+													</div>
+												<?php endif; ?>
+												<?php if ($t->type_tache == 2): ?>
+													<div class="mr-2">
+														<span class="badge alert-success">Temporaire</span>
+													</div>
+												<?php endif; ?>
+												<?php if ($t->type_tache == 3): ?>
+													<div class="mr-2">
+														<span class="badge alert-success">GTM</span>
+													</div>
+												<?php endif; ?>
+												<?php if ($t->Statuts_technique == 1): ?>
+													<div class="mr-2">
+														<span class="badge alert-success">Normal</span>
+													</div>
+												<?php endif; ?>
+												<?php if ($t->Statuts_technique == 2): ?>
+													<div class="mr-2">
+														<span class="badge alert-warning">Priorité</span>
+													</div>
+												<?php endif; ?>
+												<?php if ($t->Statuts_technique == 3): ?>
+													<div class="mr-2">
+														<span class="badge alert-danger">Urgent</span>
+													</div>
+												<?php endif; ?>
+												<div class="dropdown no-arrow ml-auto">
+													<a href="javascript:void(0);" class="text-decoration-none text-muted task-menu dropdown-toggle" role="button" data-toggle="dropdown" aria-expanded="false">
+														<i class="fa fa-ellipsis-h"></i>
+													</a>
+													<div class="dropdown-menu dropdown-menu-right">
+														<button type="button" class="dropdown-item" data-toggle="modal" data-target="#detailModal" data-id="<?= $t->idtask; ?>">Détails</button>
+													</div>
 												</div>
 											</div>
-										</div>
-										<h6 class="my-3" style="font-size: 14px;"><?= $t->nom_client; ?></h6>
-										<span class="text-muted d-block mb-3"><?= $t->title; ?></span>
-										<span class="text-muted d-block mb-3">
-											<img src="<?= base_url('assets/images/icons/figma/calendar.svg') ?>" alt="">
-											Date Due <?= $t->date_due; ?>
-										</span>
-										<div class="row no-gutters" style="font-size: 14px;">
-											<div class="col-auto mr-auto">
-												<div class="d-flex align-items-center avatar-group">
-													<img src="<?= base_url(IMAGES_PATH . htmlspecialchars($t->AM_photo)); ?>" class="avatar rounded-circle" width="28" height="28" alt="Client Image"><img src="<?= base_url(IMAGES_PATH . htmlspecialchars($t->assigned_to_photo)); ?>" class="avatar rounded-circle" width="28" height="28" alt="Client Image">
+											<h6 class="my-3" style="font-size: 14px;"><?= $t->nom_client; ?></h6>
+											<span class="text-muted d-block mb-3"><?= $t->title; ?></span>
+											<span class="text-muted d-block mb-3">
+												<img src="<?= base_url('assets/images/icons/figma/calendar.svg') ?>" alt="">
+												Date Due <?= $t->date_due; ?>
+											</span>
+											<div class="row no-gutters" style="font-size: 14px;">
+												<div class="col-auto mr-auto">
+													<div class="d-flex align-items-center avatar-group">
+														<img src="<?= base_url(IMAGES_PATH . htmlspecialchars($t->AM_photo)); ?>" class="avatar rounded-circle" width="28" height="28" alt="Client Image"><img src="<?= base_url(IMAGES_PATH . htmlspecialchars($t->assigned_to_photo)); ?>" class="avatar rounded-circle" width="28" height="28" alt="Client Image">
+													</div>
 												</div>
+												<span class="col-auto mr-3">
+													<a href="#" class="text-muted">
+														<img src="<?= base_url('assets/images/icons/figma/attachment-8.svg') ?>" alt="">
+														5
+													</a>
+												</span>
+												<span class="col-auto">
+													<a href="javascript:void(0);" class="text-muted" data-toggle="modal" data-target="#discussionModal" data-id="<?= $t->idtask; ?>" data-title="<?= $t->title; ?>">
+														<img src="<?= base_url('assets/images/icons/figma/chat-9.svg') ?>" alt="">
+														19
+													</a>
+												</span>
 											</div>
-											<span class="col-auto mr-3">
-												<a href="#" class="text-muted">
-													<img src="<?= base_url('assets/images/icons/figma/attachment-8.svg') ?>" alt="">
-													5
-												</a>
-											</span>
-											<span class="col-auto">
-												<a href="javascript:void(0);" class="text-muted" data-toggle="modal" data-target="#discussionModal" data-id="<?= $t->idtask; ?>" data-title="<?= $t->title; ?>">
-													<img src="<?= base_url('assets/images/icons/figma/chat-9.svg') ?>" alt="">
-													19
-												</a>
-											</span>
 										</div>
 									</div>
-								</div>
 								<?php endif; ?>
 							<?php endforeach; ?>
 						</div>
@@ -636,6 +633,14 @@ Task
 	$(function() {
 
 		var id_task = null;
+
+		function resetDetail() {
+			$('#detail_discussion').html("");
+			$('#detailModalLabel').text("");
+			$('#detail_due_date').removeAttr('value');
+			$('#detail_description').text("");
+			$('#detail_discussion_form').removeAttr('id');
+		}
 
 		function fetch_discussion() {
 
@@ -662,15 +667,15 @@ Task
 								let float = owner ? "float-right" : "float-left";
 
 								let html = `
-								<div class="d-flex ${alignment}">
-									<div class="message_container mt-3" style="max-width: 75%;">
-										<span class="small text-muted d-block">${sender} ${data.created_at}</span>
-										<div class="p-2 ${color} rounded ${float}" style="width: fit-content;">
-											${data.message}
+									<div class="d-flex ${alignment}">
+										<div class="message_container mt-3" style="max-width: 75%;">
+											<span class="small text-muted d-block">${sender} ${data.created_at}</span>
+											<div class="p-2 ${color} rounded ${float}" style="width: fit-content;">
+												${data.message}
+											</div>
 										</div>
 									</div>
-								</div>
-							`;
+								`;
 
 								$('#task_discussion').append(html); // append if ascendant ; prepend if descendant
 							});
@@ -687,6 +692,56 @@ Task
 					}
 				});
 			}
+		}
+
+		function fetch_detail(task_id) {
+
+			$.ajax({
+				type: "GET",
+				url: "Task/detail_task/" + task_id,
+				dataType: "json",
+				beforeSend: function() {
+					resetDetail();
+				},
+				success: function(response) {
+
+					let task = response.task;
+					let messages = response.messages;
+
+					$('#detailModalLabel').text("Tâche: " + task.title);
+					$('#detail_due_date').val(task.date_due);
+					$('#detail_description').text(task.description);
+
+					$.each(messages, function(index, data) {
+
+						let html = `
+							<div class="d-block activity-container mt-3">
+								<div class="d-flex">
+									<div class="mx-1">
+										<img src="${data.photo_users}" alt="" width="32">
+									</div>
+									<div class="flex-fill mx-1">
+										<div class="d-block mb-2">
+											<span class="font-weight-bold">${data.username}</span>
+											${data.message}
+										</div>
+										<div class="d-block mb-2">
+											<span class="text-muted small">${data.created_at}</span>
+										</div>
+									</div>
+									<div class="mx-1">
+										<a href="javascript:void(0);" class="text-decoration-none text-muted">
+											<i class="fa fa-ellipsis-h"></i>
+										</a>
+									</div>
+								</div>
+							</div>
+						`;
+
+						$('#detail_discussion').prepend(html);
+					});
+				}
+			});
 		}
 
 		$('.collapse').on('show.bs.collapse', function() {
@@ -747,6 +802,50 @@ Task
 
 					$('#message').val("");
 					fetch_discussion();
+				}
+			});
+		});
+
+		$('#detailModal').on('show.bs.modal', function(event) {
+
+			let button = $(event.relatedTarget);
+			let task_id = $(button).attr('data-id');
+			$('#detail_discussion_form').data('id', task_id);
+
+			fetch_detail(task_id);
+		});
+
+		$('#detailModal').on('hide.bs.modal', function(event) {
+			resetDetail();
+		});
+
+		$('#detail_discussion_form').submit(function(event) {
+
+			event.preventDefault();
+
+			let submitter = event.originalEvent.submitter;
+			let buttonChild = $(submitter).html();
+			let task_id = $(this).data('id');
+
+			$.ajax({
+				type: $(this).attr('method'),
+				url: $(this).attr('action'),
+				data: {
+					"id_task": task_id,
+					"message": $('#detail_message').val()
+				},
+				dataType: "json",
+				beforeSend: function() {
+					$(submitter).attr('disabled', "disabled");
+					$(submitter).html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>');
+				},
+				success: function(response) {
+
+					$(submitter).removeAttr("disabled");
+					$(submitter).html(buttonChild);
+
+					$('#detail_message').val("");
+					fetch_detail(task_id);
 				}
 			});
 		});
