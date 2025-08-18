@@ -33,6 +33,15 @@
 		transform: scale(1.5);
 		margin-right: 10px;
 	} */
+
+	.step {
+		display: none;
+	}
+
+	.step.active {
+		display: block;
+	}
+
 </style>
 <?php end_section() ?>
 
@@ -163,15 +172,15 @@
 					</div>
 				</div>
 
-				<button class="btn btn-dark mt-5">
+				<button class="btn btn-dark mt-5" id="create_camp_button">
 					<img src="<?= base_url('assets/images/icons/figma/icon-plus.svg') ?>" alt="">
 					Création Nouvelle Campagne
 				</button>
 
-				<div id="camp_creation_step">
+				<div id="camp_creation_step" class="d-none">
 
 					<!-- CAMPAGNE -->
-					<div id="campagne_step" class="mb-4">
+					<div id="campagne_step" class="step active mb-4">
 						<h1 class="display-1 text-center mt-5" style="font-size: 42px;">
 							Paramètres de la campagne
 						</h1>
@@ -224,18 +233,18 @@
 											<i class="fa fa-arrow-right"></i>
 										</a>
 										<input type="radio" name="camp_param" id="camp_resa" value="resa" class="d-none">
-	
+
 									</div>
 								</div>
 							</div>
 						</div>
 						<div class="d-flex justify-content-end align-items-center">
-							<button class="btn btn-dark px-4 float-right">Suivant</button>
+							<button class="btn btn-dark px-4 float-right next-button" data-input="camp_param">Suivant</button>
 						</div>
 					</div>
-	
+
 					<!-- OBJECTIF -->
-					<div id="objectif_step" class="mb-4">
+					<div id="objectif_step" class="step mb-4">
 						<h1 class="display-1 text-center mt-5" style="font-size: 42px;">
 							Choisissez votre objectif
 						</h1>
@@ -287,12 +296,12 @@
 							</div>
 						</div>
 						<div class="d-flex justify-content-end align-items-center">
-							<button class="btn btn-dark px-4 float-right">Suivant</button>
+							<button class="btn btn-dark px-4 float-right next-button" data-input="obj">Suivant</button>
 						</div>
 					</div>
-	
+
 					<!-- GOOGLE TAG -->
-					<div id="gtm_step" class="mb-4">
+					<div id="gtm_step" class="step mb-4">
 						<h1 class="display-1 text-center my-5" style="font-size: 42px;">
 							Mise en place Google Tag manager
 						</h1>
@@ -332,36 +341,54 @@
 <?php end_section(); ?>
 
 <?php start_section('script') ?>
-	<script>
-		$(function() {
+<script>
+	$(function() {
 
-			$('.select-camp').click(function() {
+		$('#create_camp_button').click(function() {
 
-				let target = $(this).data('target');
+			$('#camp_creation_step').removeClass('d-none');
 
-				$(target).prop('checked', true);
-				$('.camp-container').removeClass('border-dark shadow');
-				$(this).parents('.camp-container').addClass('border-dark shadow');
-			});
+			$('html, body').animate({
+				scrollTop: $("#create_camp_button").offset().top
+			}, 500);
 
-			$('.select-obj').click(function() {
-
-				let target = $(this).data('target');
-
-				$(target).prop('checked', true);
-				$('.obj-container').removeClass('border-dark shadow');
-				$(this).parents('.obj-container').addClass('border-dark shadow');
-			});
-
-			$('#final_button').click(function() {
-
-				let camp_param = $('input[name="camp_param"]:checked').val();
-				let obj = $('input[name="obj"]:checked').val();
-				let gtm = $('input[name="gtm"]').is(':checked');
-
-				console.log(camp_param, obj, gtm);
-				
-			});
 		});
-	</script>
+
+		$('.select-camp').click(function() {
+
+			let target = $(this).data('target');
+
+			$(target).prop('checked', true);
+			$('.camp-container').removeClass('border-dark shadow');
+			$(this).parents('.camp-container').addClass('border-dark shadow');
+		});
+
+		$('.select-obj').click(function() {
+
+			let target = $(this).data('target');
+
+			$(target).prop('checked', true);
+			$('.obj-container').removeClass('border-dark shadow');
+			$(this).parents('.obj-container').addClass('border-dark shadow');
+		});
+
+		// STEP CODE
+		$('.next-button').click(function() {
+
+			let input = $(this).data('input');
+			console.log(input);
+
+		});
+		
+		$('#final_button').click(function() {
+
+			let camp_param = $('input[name="camp_param"]:checked').val();
+			let obj = $('input[name="obj"]:checked').val();
+			let gtm = $('input[name="gtm"]').is(':checked');
+
+			console.log(camp_param, obj, gtm);
+
+		});
+	});
+</script>
 <?php end_section() ?>

@@ -35,17 +35,21 @@ class Task extends MY_Controller
 	public function index()
 	{
 
-		/* $ko = $this->data['donnee'] = $this->visuels_model->getClientDataByDonnee();	
+		/* 
 		 $this->data['Campgagne_non_actif'] = $this->visuels_model->getDonneeByCampagneNonActif();
 		  $this->data['Campgagne_en_attente_envoye'] = $this->visuels_model->getDonneeByenattentedeenvoyestructure();
 		$ko = $this->data['upsell'] = $this->visuels_model->getupsell();
-		$t = $this->data['users'] = $this->visuels_model->getusersall();
 		$this->data['produit'] = $this->Donne_modele->get_all_produit();
 		$this->data['am'] = $this->Donne_modele->get_all_am();
 		$this->data['initiative'] = $this->Donne_modele->get_all_initiative(); */
 
 		// $this->page = "templates/v3/Task.php";
+
+		$this->data['donnee'] = $this->visuels_model->getClientDataByDonnee();	
+		$this->data['users'] = $this->visuels_model->getusersall();
 		$this->data['tache'] = $this->Task_model->get_all_tâche();
+
+		// dd($this->data['donnee']);
 		$this->content = "layouts/task/index.php";
 		$this->layout();
 	}
@@ -101,7 +105,7 @@ class Task extends MY_Controller
 		
 		$date_due = $this->input->post('date_due');
 		$idclients = $this->input->post('idclients');
-		$AM = $this->input->post('AM');
+		$AM = $this->input->post('am');
 		$assigned_to = $this->input->post('assigned_to');
 		$title = $this->input->post('title');
 		$Statuts_technique = $this->input->post('Statuts_technique');
