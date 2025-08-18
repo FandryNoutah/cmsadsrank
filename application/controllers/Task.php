@@ -12,8 +12,8 @@ class Task extends MY_Controller
 		parent::__construct();
 
 		$this->load->model('Tasks_model');
-        $this->load->model('Task_message_model');
-        $this->current_user = $this->ion_auth->user()->row();
+		$this->load->model('Task_message_model');
+		$this->current_user = $this->ion_auth->user()->row();
 
 		/* $this->load->model("visuels_model");
 		$this->load->model("concurrent");
@@ -45,22 +45,23 @@ class Task extends MY_Controller
 
 		// $this->page = "templates/v3/Task.php";
 
-		$this->data['donnee'] = $this->visuels_model->getClientDataByDonnee();	
+		$this->data['donnee'] = $this->visuels_model->getClientDataByDonnee();
 		$this->data['users'] = $this->visuels_model->getusersall();
 		$this->data['tache'] = $this->Task_model->get_all_tâche();
 
-		// dd($this->data['donnee']);
+		// dd($this->data['tache']);
 		$this->content = "layouts/task/index.php";
 		$this->layout();
 	}
 
-	public function fetch_discussion($id_task) {
+	public function fetch_discussion($id_task)
+	{
 
 		// Check for order (ascendant || descendant)
 
 		$messages = $this->Task_message_model->get_messages_by_task($id_task);
 		$currentUser = $this->current_user;
-		
+
 		foreach ($messages as $message) {
 
 			$created_at = $message->created_at;
@@ -72,37 +73,59 @@ class Task extends MY_Controller
 		echo json_encode($messages);
 	}
 
-	public function send_message() {
+	public function send_message()
+	{
 
 		$id_task = $this->input->post('id_task', TRUE);
 		$message = $this->input->post('message', TRUE);
 
 		if (!empty($message) && $this->current_user) {
-            $this->Task_message_model->insert_message([
-                'user_id' => $this->current_user->id,
-                'task_id' => $id_task,
-                'message' => $message
-            ]);
-        }
+			$this->Task_message_model->insert_message([
+				'user_id' => $this->current_user->id,
+				'task_id' => $id_task,
+				'message' => $message
+			]);
+		}
 
 		echo json_encode([
 			"done"	=>	true
 		]);
 	}
 
+	public function detail_task($id_task) {
+
+		$task = $this->Task_model->get_task_by_id($id_task);
+		$messages = $this->Task_message_model->get_messages_by_task($id_task);
+
+		foreach ($messages as $message) {
+			
+			$created_at = $message->created_at;
+			$message->created_at = (new DateTime($created_at))->format('j M, H:i');
+
+			$photo_users = base_url(IMAGES_PATH . $message->photo_users);
+			$message->photo_users = $photo_users;
+		}
+		
+		echo json_encode([
+			'task'		=>	$task,
+			'messages'	=>	$messages
+		]);
+	}
+
 	public function detail_client($idclients)
 	{
-
 		$this->data['donne_detail_client'] = $this->visuels_model->getdonneclientbyidclients($idclients);
 
 		$this->page = "templates/v3/Task.php";
 		$this->layout();
 	}
-	 public function insert_tache() {
+
+	public function insert_tache()
+	{
 		// Récupérer les données envoyées par le formulaire
 		$type_tache = $this->input->post('type_tache');
 		$date_demande = $this->input->post('date_demande');
-		
+
 		$date_due = $this->input->post('date_due');
 		$idclients = $this->input->post('idclients');
 		$AM = $this->input->post('am');
