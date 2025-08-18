@@ -137,12 +137,31 @@ echo $cms_name;
               <div >Procédure d'installation et Invitation</div>
               <div style="color:#8b8b8b;font-size:13px;">En sélectionnant cette option, la tâche correspondante sera automatiquement ajoutée à votre Team Task</div>
             </div>
+            <?php if (empty($procedure_gtm)): ?>
             <label class="toggle" aria-label="Activer procédure">
-              <input type="checkbox" />
-              <span class="switch">
-                <span class="knob"></span>
-              </span>
-            </label>
+            <input type="checkbox" class="activer-procedure"
+                  data-idclient="<?php echo $d['idclients']; ?>"
+                  data-am="<?php echo $d['initiative']; ?>"
+                  data-assigned="<?php echo $d['account_manager']; ?>" />
+            <span class="switch">
+              <span class="knob"></span>
+            </span>
+          </label>
+             <?php endif; ?>
+            <?php if (!empty($procedure_gtm)): ?>
+  <label class="toggle" aria-label="Activer procédure">
+    <input type="checkbox" class="activer-procedure"
+           data-idclient="<?php echo $d['idclients']; ?>"
+           data-am="<?php echo $d['initiative']; ?>"
+           data-assigned="<?php echo $d['account_manager']; ?>"
+           checked disabled />
+    <span class="switch">
+      <span class="knob"></span>
+    </span>
+  </label>
+<?php endif; ?>
+
+
           </div>
         </div>
 
@@ -156,12 +175,23 @@ echo $cms_name;
               Invitation reçu du client
               <div style="color:#8b8b8b;font-size:13px;">Receive push notifications on mentions and comments via your mobile app</div>
             </div>
+            <?php if (empty($procedure_gtm)): ?>
             <label class="toggle">
               <input type="checkbox" />
               <span class="switch">
                 <span class="knob"></span>
               </span>
             </label>
+            <?php endif; ?>
+            <?php if (!empty($procedure_gtm)): ?>
+            <label class="toggle">
+              <input type="checkbox" checked enable />
+              <span class="switch">
+                <span class="knob"></span>
+              </span>
+            </label>
+
+            <?php endif; ?>
           </div>
           <div class="d-flex justify-content-between align-items-center border-bottom py-2">
             <div>
@@ -186,20 +216,32 @@ echo $cms_name;
       console.log('Toggle changed:', e.target.checked);
     });
   });
-  document.getElementById('toggle_procedure').addEventListener('change', function(e) {
-    var checked = e.target.checked;
-    fetch('<?php echo site_url('Client/activer_processus_tache'); ?>', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-      body: 'etat=' + (checked ? 1 : 0)
-    })
-    .then(response => response.text())
-    .then(data => {
-      console.log('Réponse serveur:', data);
-    })
-    .catch(err => {
-      console.error('Erreur:', err);
+  $(document).ready(function () {
+    $('.activer-procedure').change(function () {
+        if (this.checked) {
+            let idclients = $(this).data('idclient');
+            let am = $(this).data('am');
+            let assigned_to = $(this).data('assigned');
+            let date_today = new Date().toISOString().split('T')[0]; // YYYY-MM-DD
+
+            $.ajax({
+                url: "<?php echo base_url('Client/activer_processus_tache'); ?>",
+                method: "POST",
+                data: {
+                    idclients: idclients,
+                    am: am,
+                    assigned_to: assigned_to,
+                    date: date_today
+                },
+                success: function (response) {
+                    alert("Processus activé avec succès !");
+                },
+                error: function () {
+                    alert("Erreur lors de l'activation du processus.");
+                }
+            });
+        }
     });
-  });
+});
 </script>
 <?php end_section(); ?>
