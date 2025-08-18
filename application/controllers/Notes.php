@@ -21,7 +21,9 @@ class Notes extends MY_Controller {
     public function index() {
 
         $this->data['notes'] = $this->Note_model->get_for_user($this->current_user->id);
-    	$this->data['users'] = $this->Note_model->get_all_users();
+		
+    	$this->data['donnee'] = $this->visuels_model->getClientDataByDonnee();	
+		$this->data['users'] = $this->visuels_model->getusersall();
 		// dd($this->data['notes']);
 		$this->content = "layouts/note/index.php";
 		$this->layout();
