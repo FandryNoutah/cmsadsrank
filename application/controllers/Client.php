@@ -42,21 +42,24 @@ class Client extends MY_Controller
 		$this->content = "layouts/client/index.php";
 		$this->layout();
 	}
-	public function search() {
-    $term = "Jean"; // remplace par un nom réel présent dans la base
-    $clients = $this->visuels_model->search_clients($term);
 
-    $result = [];
-    foreach ($clients as $client) {
-        $result[] = [
-            'idclients' => $client->idclients,
-            'nom_client' => $client->nom_client
-        ];
-    }
+	public function search()
+	{
+		$term = "Jean"; // remplace par un nom réel présent dans la base
+		$clients = $this->visuels_model->search_clients($term);
 
-    echo json_encode($result);
-}
-public function tache_client($idclients)
+		$result = [];
+		foreach ($clients as $client) {
+			$result[] = [
+				'idclients' => $client->idclients,
+				'nom_client' => $client->nom_client
+			];
+		}
+
+		echo json_encode($result);
+	}
+
+	public function tache_client($idclients)
 	{
 		$this->data['upsell'] = $this->visuels_model->getupsellbyidclient($idclients);
 		$t = $this->data['budget_initial'] = $this->visuels_model->getdernierbyidclient($idclients);
@@ -68,7 +71,7 @@ public function tache_client($idclients)
 	}
 
 
-public function application($idclients)
+	public function application($idclients)
 	{
 		$this->data['upsell'] = $this->visuels_model->getupsellbyidclient($idclients);
 		$t = $this->data['budget_initial'] = $this->visuels_model->getdernierbyidclient($idclients);
@@ -121,9 +124,10 @@ public function activer_processus_tache()
 		$this->data['nbr_task'] = $t;
 		$this->data["users"] = $this->Task_model->get_all_users();
 		$clients = $this->data["donnees"] = $this->visuels_model->getDonneeById($idclients);
+		// dd($clients);
 		$numero_client = $clients[0]['numero_client'];
 		$numero_am = $clients[0]['am_phone'];
-		
+
 		$calls = $this->get_all_calls();
 
 		// Numéros à comparer (normalisés)
@@ -168,7 +172,7 @@ public function activer_processus_tache()
 
 		$chartData = array_fill(0, 12, 0);
 		$tooltipData = array_fill(0, 12, []);
-		
+
 		foreach ($latestByMonth as $monthIndex => $data) {
 			$chartData[$monthIndex] = $data['budget'];
 			$tooltipData[$monthIndex][] = [
@@ -176,11 +180,17 @@ public function activer_processus_tache()
 				'budget' => $data['budget']
 			];
 		}
-		
+
 		$this->data['chartData'] = json_encode($chartData);
 		$this->data['tooltipData'] = json_encode($tooltipData);
 
 		$this->content = "layouts/client/detail/index.php";
+		$this->layout();
+	}
+
+	public function onboarding($idclients) {
+		
+		$this->content = "layouts/client/onboarding/index.php";
 		$this->layout();
 	}
 
@@ -215,12 +225,12 @@ public function activer_processus_tache()
 			//$date_validation_structure = 0000 - 00 - 00;
 			//$this->visuels_model->update_brief($date_brief, $campagne_actif, $validation_technique, $date_validation_structure, $lien_datastudio, $idclients);
 			$actif = 1;
-			$idclient = $this->visuels_model->create_upsell($type_upsell, $budget_finale, $budget_initiale, $demmande_upsell, $am, $tm, $date_upsell, $date_demande_upsell, $inforamtion_upsell, $statut_upsell, $idclients,$actif);
-			$type_tache = 1; 
+			$idclient = $this->visuels_model->create_upsell($type_upsell, $budget_finale, $budget_initiale, $demmande_upsell, $am, $tm, $date_upsell, $date_demande_upsell, $inforamtion_upsell, $statut_upsell, $idclients, $actif);
+			$type_tache = 1;
 			$title = "Upsell";
 			$tache = "Le client fait une upsell";
 			$Statuts_technique = 1;
-			
+
 			$data = array(
 				'type_tache' => $type_tache,
 				'date_demande' => $date_demande_upsell,
@@ -234,7 +244,7 @@ public function activer_processus_tache()
 
 			);
 
-		$this->Task_model->add_task($data);
+			$this->Task_model->add_task($data);
 		endif;
 		if ($type_upsell == 1):
 			$am = $this->input->post('am');
@@ -251,7 +261,7 @@ public function activer_processus_tache()
 			//$validation_technique = 0000 - 00 - 00;
 			//$date_validation_structure = 0000 - 00 - 00;
 			//$this->visuels_model->update_brief($date_brief, $campagne_actif, $validation_technique, $date_validation_structure, $lien_datastudio, $idclients);
-			$type_tache = 1; 
+			$type_tache = 1;
 			$title = "Baisse";
 			$tache = "Le client fait une baisse";
 			$Statuts_technique = 1;
@@ -269,15 +279,15 @@ public function activer_processus_tache()
 			);
 
 			$this->Task_model->add_task($data);
-			$idclient = $this->visuels_model->create_upsell($type_upsell, $budget_finale, $budget_initiale, $demmande_upsell, $am, $tm, $date_upsell, $date_demande_upsell, $inforamtion_upsell, $statut_upsell, $idclients,$actif);
+			$idclient = $this->visuels_model->create_upsell($type_upsell, $budget_finale, $budget_initiale, $demmande_upsell, $am, $tm, $date_upsell, $date_demande_upsell, $inforamtion_upsell, $statut_upsell, $idclients, $actif);
 
 
 		endif;
 		//if ($type_upsell == 3):
-			//$am = $this->input->post('am');
-			//$am = $demmande_upsell;
-			//$budget_initiale = $this->input->post('budget_initiale');
-			//$idclient = $this->visuels_model->create_upsell($type_upsell, $budget_upsell, $budget_initiale, $demmande_upsell, $am, $tm, $date_upsell, $date_demande_upsell, $inforamtion_upsell, $statut_upsell, $idclients);
+		//$am = $this->input->post('am');
+		//$am = $demmande_upsell;
+		//$budget_initiale = $this->input->post('budget_initiale');
+		//$idclient = $this->visuels_model->create_upsell($type_upsell, $budget_upsell, $budget_initiale, $demmande_upsell, $am, $tm, $date_upsell, $date_demande_upsell, $inforamtion_upsell, $statut_upsell, $idclients);
 
 		//endif;
 		$this->session->set_flashdata('message-succes', "Donnée ajouté avec succès");
@@ -286,6 +296,7 @@ public function activer_processus_tache()
 
 		$this->layout();
 	}
+
 	private function get_all_calls()
 	{
 		$all_calls = [];
@@ -351,7 +362,7 @@ public function activer_processus_tache()
 		$date_brief = $this->input->post('date_brief');
 		$date_annonce = $this->input->post('date_annonce');
 		$logo = $this->file_upload_field = 'logo';
-		
+
 
 		$this->form_validation->set_rules('site_client', 'URL', 'required|trim');
 
@@ -413,20 +424,20 @@ public function activer_processus_tache()
 		$idclient = $this->visuels_model->insertclient($client, $site_client, $email_client, $numero_client, $favicon, $cms, $cms_logo, $summary);
 		$this->visuels_model->insertfiche($idclient, $budget, $secteur_activite, $product_choice, $initiative, $am, $date_mis_en_place, $date_brief, $date_annonce, $dejaclient, $gtm_code);
 		$title = "Création de Brief";
-			$tache = "En attente de brief";
-			$Statuts_technique = 1;
-			$type_tache = 1;
-			$data = array(
-				'type_tache' => $type_tache,
-				'date_demande' => $date_mis_en_place,
-				'date_due' => $date_brief,
-				'idclients' => $idclient,
-				'AM' => $am,
-				'assigned_to' => $initiative,
-				'title' => $title,
-				'Statuts_technique' => $Statuts_technique,
-				'description' => $tache
-			);
+		$tache = "En attente de brief";
+		$Statuts_technique = 1;
+		$type_tache = 1;
+		$data = array(
+			'type_tache' => $type_tache,
+			'date_demande' => $date_mis_en_place,
+			'date_due' => $date_brief,
+			'idclients' => $idclient,
+			'AM' => $am,
+			'assigned_to' => $initiative,
+			'title' => $title,
+			'Statuts_technique' => $Statuts_technique,
+			'description' => $tache
+		);
 
 		$this->Task_model->add_task($data);
 		$type_upsell = 1;
@@ -441,10 +452,11 @@ public function activer_processus_tache()
 		$date_upsell = $date_mis_en_place;
 		$date_demande_upsell = $date_mis_en_place;
 		$inforamtion_upsell = "Budget initial";
-		$idclient = $this->visuels_model->create_upsell($type_upsell, $budget_finale, $budget_initiale, $demmande_upsell, $am, $tm, $date_upsell, $date_demande_upsell, $inforamtion_upsell, $statut_upsell, $idclients,$actif);
+		$idclient = $this->visuels_model->create_upsell($type_upsell, $budget_finale, $budget_initiale, $demmande_upsell, $am, $tm, $date_upsell, $date_demande_upsell, $inforamtion_upsell, $statut_upsell, $idclients, $actif);
 
 		redirect('Client');
 	}
+
 	private function get_summary_from_chatgpt($headings, $paragraphs)
 	{
 		$api_key = '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'; // 🔐 Remplace avec ta clé
@@ -486,7 +498,6 @@ public function activer_processus_tache()
 		return $result['choices'][0]['message']['content'] ?? 'Résumé non disponible.';
 	}
 
-
 	// Fonction cURL pour récupérer le contenu HTML
 	private function fetch_url($url)
 	{
@@ -511,9 +522,6 @@ public function activer_processus_tache()
 	}
 
 	// Reste de tes méthodes detect_cms(), get_cms_logo(), get_favicon() inchangées
-
-
-
 	private function detect_cms($html, $url)
 	{
 		if (preg_match('/<meta name=["\']generator["\'] content=["\']([^"\']+)["\']/', $html, $match)) {
@@ -537,6 +545,7 @@ public function activer_processus_tache()
 
 		return 'Inconnu ou non détectable automatiquement';
 	}
+
 	private function get_cms_logo($cms_name)
 	{
 		$cms_logos = [
@@ -555,6 +564,7 @@ public function activer_processus_tache()
 
 		return base_url('assets/images/cms/unknown.png');
 	}
+
 	private function get_favicon($html, $url)
 	{
 		if (preg_match('/<link[^>]+rel=["\'](?:shortcut icon|icon)["\'][^>]+href=["\']([^"\']+)["\']/i', $html, $matches)) {

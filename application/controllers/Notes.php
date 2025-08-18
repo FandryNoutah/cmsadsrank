@@ -20,14 +20,13 @@ class Notes extends MY_Controller {
 
     public function index() {
 
-        $data['notes'] = $this->Note_model->get_for_user($this->current_user->id);
-    	$data['users'] = $this->Note_model->get_all_users();
-        var_dump( $data['notes']);
-        die();
-		//$this->content = "layouts/note/index.php";
-		//$this->layout();
+        $this->data['notes'] = $this->Note_model->get_for_user($this->current_user->id);
+    	$this->data['users'] = $this->Note_model->get_all_users();
+		// dd($this->data['notes']);
+		$this->content = "layouts/note/index.php";
+		$this->layout();
 
-        $this->load->view('layouts/note/list', $data);
+        // $this->load->view('layouts/note/list', $data);
     }
 
     public function create() {
