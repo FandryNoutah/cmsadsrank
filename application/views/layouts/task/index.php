@@ -27,6 +27,31 @@
 		border-bottom-right-radius: 4px;
 	}
 
+	.table-synced th:nth-child(2),
+	.table-synced td:nth-child(2) {
+		width: 15%;
+	}
+
+	.table-synced th:nth-child(3),
+	.table-synced td:nth-child(3) {
+		width: 15%;
+	}
+
+	.table-synced th:nth-child(4),
+	.table-synced td:nth-child(4) {
+		width: 15%;
+	}
+
+	.table-synced th:nth-child(5),
+	.table-synced td:nth-child(5) {
+		width: 10%;
+	}
+
+	.table-synced th:nth-child(6),
+	.table-synced td:nth-child(6) {
+		width: 5%;
+	}
+
 	/* For modal attachment design */
 	.file-drop-area {
 		border: 2px dashed #ccc;
@@ -99,7 +124,16 @@ Task
 
 <div class="container-fluid">
 
-	<ul class="nav nav-tabs mb-3" role="tablist">
+	<div class="form-group">
+		<label for="task_filter">Type de tâche:</label>
+		<select name="task_filter" id="task_filter" class="custom-select w-auto">
+			<option value="0">All Task</option>
+			<option value="1">Team task</option>
+			<option value="2">Temporaire</option>
+			<option value="3">GTM</option>
+		</select>
+	</div>
+	<!-- <ul class="nav nav-tabs mb-3" role="tablist">
 		<li class="nav-item">
 			<a class="nav-link py-3 active" type="button">
 				All Task
@@ -120,7 +154,7 @@ Task
 				GTM
 			</a>
 		</li>
-	</ul>
+	</ul> -->
 
 	<div class="tab-content" id="taskTabContent">
 
@@ -137,11 +171,11 @@ Task
 
 			<div id="collapsePlanned" class="collapse show" aria-labelledby="headingOne">
 
-				<table class="table table-wrapper w-100">
+				<table class="table table-wrapper table-synced w-100" id="planned_table">
 					<tbody>
 						<?php foreach ($tache as $t):  ?>
 							<?php if ($t->status == "planifié"): ?>
-								<tr>
+								<tr class="task-filter" data-type="<?= $t->type_tache ?>">
 									<td>
 										<h6 class="mb-0 ml-3">
 											<?= $t->nom_client; ?>
@@ -216,11 +250,11 @@ Task
 
 			<div id="collapseUpcoming" class="collapse show" aria-labelledby="headingTwo">
 
-				<table class="table table-wrapper w-100">
+				<table class="table table-wrapper table-synced w-100" id="upcoming_table">
 					<tbody>
 						<?php foreach ($tache as $t): ?>
 							<?php if ($t->status == "en cours"): ?>
-								<tr>
+								<tr class="task-filter" data-type="<?= $t->type_tache ?>">
 									<td>
 										<h6 class="mb-0 ml-3">
 											<?= $t->nom_client; ?>
@@ -294,11 +328,11 @@ Task
 
 			<div id="collapseCompleted" class="collapse show" aria-labelledby="headingThree">
 
-				<table class="table table-wrapper w-100">
+				<table class="table table-wrapper table-synced w-100" id="completed_table">
 					<tbody>
 						<?php foreach ($tache as $t): ?>
 							<?php if ($t->status == "effectuée"): ?>
-								<tr>
+								<tr class="task-filter" data-type="<?= $t->type_tache ?>">
 									<td>
 										<h6 class="mb-0 ml-3">
 											<?= $t->nom_client; ?>
@@ -373,7 +407,7 @@ Task
 							<span class="text-muted">3 open tasks</span>
 							<?php foreach ($tache as $t): ?>
 								<?php if ($t->status == "planifié"): ?>
-									<div class="card mt-3">
+									<div class="card mt-3 task-filter" data-type="<?= $t->type_tache ?>">
 										<div class="card-body">
 											<div class="d-flex">
 												<?php if ($t->type_tache == 1): ?>
@@ -458,7 +492,7 @@ Task
 							<!-- Eto no manao foreach -->
 							<?php foreach ($tache as $t): ?>
 								<?php if ($t->status == "en cours"): ?>
-									<div class="card mt-3">
+									<div class="card mt-3 task-filter" data-type="<?= $t->type_tache ?>">
 										<div class="card-body">
 											<div class="d-flex">
 												<?php if ($t->type_tache == 1): ?>
@@ -541,7 +575,7 @@ Task
 							<!-- Eto no manao foreach -->
 							<?php foreach ($tache as $t): ?>
 								<?php if ($t->status == "effectuée"): ?>
-									<div class="card mt-3">
+									<div class="card mt-3 task-filter" data-type="<?= $t->type_tache ?>">
 										<div class="card-body">
 											<div class="d-flex">
 												<?php if ($t->type_tache == 1): ?>
@@ -627,6 +661,29 @@ Task
 <?php end_section(); ?>
 
 <?php start_section('script'); ?>
+
+<!-- Task filter script -->
+<script>
+	$(function() {
+
+		function filter_task(type) {
+
+			if (type == 0) {
+				$('.task-filter').removeClass('d-none');
+			} else {
+				$('.task-filter').addClass('d-none');
+				$('.task-filter[data-type="'+ type +'"]').removeClass('d-none');
+			}
+		}
+
+		$('#task_filter').change(function() {
+
+			let type = $(this).val();
+			filter_task(type);
+			
+		});
+	});
+</script>
 
 <!-- Index page script -->
 <script>
