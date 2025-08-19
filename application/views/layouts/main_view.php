@@ -54,9 +54,7 @@
 							<?= $page_heading ?>
 						</div>
 
-						<div class="container-fluid">
-							<?= $content ?>
-						</div>
+						<?= $content ?>
 					<?php endif; ?>
 				</div>
 			</div>
