@@ -3,6 +3,12 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Note_model extends CI_Model {
 
+	public function __construct()
+    {
+        parent::__construct();
+        $this->load->database();
+    }
+	
     public function create($noteData, $assignedUsers) {
         $this->db->insert('notes', $noteData);
         $note_id = $this->db->insert_id();
@@ -42,7 +48,7 @@ class Note_model extends CI_Model {
         $this->db->select('u.username');
         $this->db->from('note_users nu');
         $this->db->join('users u', 'u.id = nu.user_id');
-        $this->db->where('nu.note_id', $note_id);
+        $this->db->where('nu.note_id', $note_id); // line 45
         return $this->db->get()->result();
     }
 }
