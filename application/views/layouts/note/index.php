@@ -60,6 +60,7 @@ Notes
 			<div class="col">
 				<div class="card h-100">
 					<div class="card-body">
+						<a href="javascript:void(0);" class="stretched-link" data-toggle="modal" data-target="#detailModal"></a>
 						<div class="row">
 							<span class="col-auto mx-1 badge alert-warning">
 								<?= htmlspecialchars($note->type); ?>
@@ -102,6 +103,7 @@ Notes
 </div>
 
 <?php $this->load->view('layouts/note/modal/form'); ?>
+<?php $this->load->view('layouts/note/modal/detail'); ?>
 
 <?php end_section(); ?>
 

@@ -12,7 +12,7 @@
 				</a>
 			</li>
 			<li class="nav-item rounded">
-				<a class="nav-link text-secondary" href="#">
+				<a class="nav-link text-secondary" href="<?= base_url('Onboarding') ?>">
 					<img class="mr-2" src="<?= base_url('assets/images/icons/figma/icon-calendar.svg') ?>" />
 					<span class="nav-label">Onboarding</span>
 				</a>
@@ -68,6 +68,12 @@
 				<a class="nav-link text-secondary" href="#">
 					<img class="mr-2" src="<?= base_url('assets/images/icons/figma/icon-gear.svg') ?>" />
 					<span class="nav-label">Utilisateur</span>
+				</a>
+			</li>
+			<li class="nav-item rounded">
+				<a class="nav-link text-secondary" href="<?= base_url('Gtm') ?>">
+					<img class="mr-2" src="<?= base_url('assets/images/icons/figma/icon-gear.svg') ?>" />
+					<span class="nav-label">GTM</span>
 				</a>
 			</li>
 		</ul>
