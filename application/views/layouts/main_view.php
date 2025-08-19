@@ -43,7 +43,7 @@
 
 			<?= $sidebar ?>
 
-			<div class="col w-100">
+			<div class="col w-100 h-100 overflow-auto">
 				<?= $header ?>
 
 				<div class="wrapper">
