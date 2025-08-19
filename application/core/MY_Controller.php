@@ -78,19 +78,20 @@ class MY_Controller extends CI_Controller
 
 		// 1. Build all sections (from view)
 		$this->load->view($this->content, $this->data);
-
+		
 		// 2. Gather sections
 		$this->template["stylesheet"] = section('stylesheet');
 		$this->template["page_title"] = section('page_title');
 		$this->template["page_heading"] = section('page_heading');
 		$this->template["content"] = section('content');
 		$this->template["script"] = section('script');
-
+		
+		// dd("here"); 
 		// 3. Inject parts
 		$this->template["header"] = $this->load->view("layouts/parts/header", $this->data, true);
 		$this->template["footer"] = $this->load->view("layouts/parts/footer", $this->data, true);
 		$this->template["sidebar"] = $this->load->view("layouts/parts/sidebar", $this->data, true);
-
+		
 		// 4. Final layout
 		$this->load->view("layouts/main_view", $this->template); 
 	}
