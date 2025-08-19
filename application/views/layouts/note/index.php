@@ -79,10 +79,10 @@ Notes
 						<?php
 							echo "De: " . htmlspecialchars($note->author) . " | Pour: ";
 
-							$recipients = $this->Note_model->get_note_recipients($note->id);
-							echo implode(', ', array_map(function ($r) {
-								return htmlspecialchars($r->username);
-							}, $recipients));
+							// $recipients = $this->Note_model->get_note_recipients($note->id);
+							// echo implode(', ', array_map(function ($r) {
+							// 	return htmlspecialchars($r->username);
+							// }, $recipients));
 						?>
 
 						<!-- A UTILISER SI BESOIN D'IMAGE -->

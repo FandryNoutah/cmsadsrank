@@ -39,27 +39,76 @@
 			<div class="col w-100">
 				<div class="container-fluid">
 
-					<span class="badge alert-success rounded-pill px-4 py-3 mb-3" style="font-size: 12px; font-weight: 500; margin-left: 93%">
+					<span class="badge alert-success rounded-pill px-4 py-3 mb-3" style="font-size: 12px; font-weight: 500;">
 						<i class="fa fa-circle mr-1" style="font-size: 10px;"></i>
 						Active
 					</span>
-					<div class="d-flex justify-content-start align-items-center mb-3">
-						<img src="<?= base_url('assets/images/icons/figma/star_full.svg') ?>" alt="star_full" width="20" class="mr-1">
-						<img src="<?= base_url('assets/images/icons/figma/star_full.svg') ?>" alt="star_full" width="20" class="mr-1">
-						<img src="<?= base_url('assets/images/icons/figma/star_full.svg') ?>" alt="star_full" width="20" class="mr-1">
-						<img src="<?= base_url('assets/images/icons/figma/star_full.svg') ?>" alt="star_full" width="20" class="mr-1">
-						<img src="<?= base_url('assets/images/icons/figma/star_half.svg') ?>" alt="star_half" width="20" class="mr-1">
-						<span class="ml-3 py-1 px-3 badge" style="background-color: #edf2fe; color: #4976f4; font-size: 12px; font-weight: 500;">Bleu</span>
-					</div>
-					<h1 class="font-weight-bold mb-3" style="font-size: 48px;">
-						<?php echo $d['nom_client'] ?></br>
-						Assor (assordoukhanavocats.fr)
 
-					</h1>
-					<h5 class="mb-3" style=""><?php echo $d['site_client'] ?></br></br></h5>
+					<div class="row mb-4">
+						<div class="col overflow-hidden">
+							<div class="d-flex justify-content-start align-items-center mb-3">
+								<img src="<?= base_url('assets/images/icons/figma/star_full.svg') ?>" alt="star_full" width="20" class="mr-1">
+								<img src="<?= base_url('assets/images/icons/figma/star_full.svg') ?>" alt="star_full" width="20" class="mr-1">
+								<img src="<?= base_url('assets/images/icons/figma/star_full.svg') ?>" alt="star_full" width="20" class="mr-1">
+								<img src="<?= base_url('assets/images/icons/figma/star_full.svg') ?>" alt="star_full" width="20" class="mr-1">
+								<img src="<?= base_url('assets/images/icons/figma/star_half.svg') ?>" alt="star_half" width="20" class="mr-1">
+								<span class="ml-3 py-1 px-3 badge" style="background-color: #edf2fe; color: #4976f4; font-size: 12px; font-weight: 500;">Bleu</span>
+							</div>
+							<h1 class="mb-3" style="font-size: 48px; font-weight: 500;">
+								<?php echo $d['nom_client'] ?>
+							</h1>
+							<h5 class="mb-3" style=""><?php echo $d['site_client'] ?></h5>
+						</div>
+						<div class="col-auto">
+							<div class="card h-100" style="width: 23rem;">
+								<div class="card-body">
+									<div class="d-flex justify-content-between align-items-center">
+										<button class="btn btn-dark py-3 px-5" data-toggle="modal" data-target="#budgetModal">
+											<?php echo $d['budget'] ?> €
+										</button>
+										<div class="dropdown no-arrow">
+											<a href="javascript:void(0);" class="btn btn-light rounded-pill px-3 nav-link dropdown-toggle" id="clientDetailDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+												<i class="fa fa-ellipsis-v" style="font-size: 16px;"></i>
+											</a>
+											<div class="dropdown-menu dropdown-menu-right animated--grow-in" aria-labelledby="clientDetailDropdown">
+												<a class="dropdown-item" href="javscript:void(0);" data-toggle="modal" data-target="#editModal">Modifier</a>
+												<a class="dropdown-item" href="javscript:void(0);" data-toggle="modal" data-target="#statusModal">Statut Client</a>
+											</div>
+										</div>
+									</div>
+									<br><br>
+									<div class="d-flex justify-content-start mb-3" style="font-size: 16px;">
+										<span class="badge badge-light mr-3" style="width: 20px; height: 20px; background-color: #f2f2f2;">&nbsp;</span>
+										<span class="mr-2">Date d'anniversaire : <?php echo $d['mis_en_place_paiement'] ?></span>
+									</div>
+									<div class="d-flex justify-content-start mb-3" style="font-size: 16px;">
+										<span class="badge badge-light mr-3" style="width: 20px; height: 20px; background-color: #f2f2f2;">&nbsp;</span>
+										<span class="mr-2">Date de mise en ligne : <?php echo $d['annonce'] ?></span>
+
+									</div>
+									<div class="d-flex justify-content-start mb-3" style="font-size: 16px;">
+										<span class="badge badge-light mr-3" style="width: 20px; height: 20px; background-color: #f2f2f2;">&nbsp;</span>
+										<span class="mr-2">Commerciale</span>
+										<span class="mr-2">
+											<img src="<?= base_url('assets/images/' . $d['am_photo_user']) ?>" width="24" height="24">
+										</span>
+									</div>
+									<div class="d-flex justify-content-start mb-4" style="font-size: 16px;">
+										<span class="badge badge-light mr-3" style="width: 20px; height: 20px; background-color: #f2f2f2;">&nbsp;</span>
+										<span class="mr-2">Account Manager</span>
+										<span class="mr-2">
+											<img src="<?= base_url('assets/images/' . $d['tech_photo_user']) ?>" width="24" height="24">
+										</span>
+									</div>
+									<a href="<?= base_url('Client/onboarding/' . $d['idclients']) ?>" class="btn btn-outline-dark btn-block">Onboarding</a>
+								</div>
+							</div>
+						</div>
+					</div>
+
 					<div class="row no-gutters mb-3">
-						<div class="col pr-2" style="margin-right: 30px;">
-							<div class="card h-100 mb-5" style="margin-bottom: 0rem !important;">
+						<div class="col pr-2" style="margin-right: 15px;">
+							<div class="card h-100 mb-5">
 								<div class="card-body">
 									<ul class="nav nav-tabs mb-3" style="margin-top: -15px;">
 										<li class="nav-item">
@@ -83,106 +132,49 @@
 							</div>
 						</div>
 						<div class="col-auto">
-							<div class="card h-100" style="width: 420px;">
+							<div class="card" style="width: 23rem;">
 								<div class="card-body">
-									<div class="d-flex justify-content-between align-items-center">
-										<button class="btn btn-dark py-3 px-5" data-toggle="modal" data-target="#budgetModal">
-											<?php echo $d['budget'] ?> €
-										</button>
-										<div class="dropdown no-arrow">
-											<a href="javascript:void(0);" class="btn btn-light rounded-pill px-3 nav-link dropdown-toggle" id="clientDetailDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-												<i class="fa fa-ellipsis-v" style="font-size: 16px;"></i>
-											</a>
-											<div class="dropdown-menu dropdown-menu-right animated--grow-in" aria-labelledby="clientDetailDropdown">
-												<a class="dropdown-item" href="javscript:void(0);" data-toggle="modal" data-target="#editModal">Modifier</a>
-												<a class="dropdown-item" href="javscript:void(0);" data-toggle="modal" data-target="#statusModal">Statut Client</a>
-											</div>
-										</div>
-									</div>
-									<br><br>
-									<div class="d-flex justify-content-start mb-3" style="font-size: 18px;">
-										<span class="badge badge-light mr-3" style="width: 20px; height: 20px; background-color: #f2f2f2;">&nbsp;</span>
-										<span class="mr-2">Date d'anniversaire : <?php echo $d['mis_en_place_paiement'] ?></span>
-									</div>
-									<div class="d-flex justify-content-start mb-3" style="font-size: 18px;">
-										<span class="badge badge-light mr-3" style="width: 20px; height: 20px; background-color: #f2f2f2;">&nbsp;</span>
-										<span class="mr-2">Date de mise en ligne : <?php echo $d['annonce'] ?></span>
-
-									</div>
-									<div class="d-flex justify-content-start mb-3" style="font-size: 18px;">
-										<span class="badge badge-light mr-3" style="width: 20px; height: 20px; background-color: #f2f2f2;">&nbsp;</span>
-										<span class="mr-2">Commerciale</span>
-										<span class="mr-2">
-											<img src="<?= base_url('assets/images/' . $d['am_photo_user']) ?>" width="24" height="24">
-										</span>
-									</div>
-									<div class="d-flex justify-content-start mb-4" style="font-size: 18px;">
-										<span class="badge badge-light mr-3" style="width: 20px; height: 20px; background-color: #f2f2f2;">&nbsp;</span>
-										<span class="mr-2">Account Manager</span>
-										<span class="mr-2">
-											<img src="<?= base_url('assets/images/' . $d['tech_photo_user']) ?>" width="24" height="24">
-										</span>
-									</div>
-									<a href="<?= base_url('Client/onboarding/' . $d['idclients']) ?>" class="btn btn-outline-dark btn-block">Onboarding</a>
-								</div>
-							</div>
-						</div>
-					</div>
-
-					<div class="row row-cols-4 mb-5" style="margin-top: 30px;">
-						<div class="col">
-							<div class="card h-100">
-								<div class="card-body">
-									<div class="d-flex align-items-center mb-2">
-										<img src="<?= base_url('assets/images/figma/discu_queue.png') ?>" width="43">
-										<a href="#" class="text-decoration-none text-muted ml-3 stretched-link">File de discussion</a>
-										<i class="fa fa-chevron-right ml-auto" style="font-size: 12px;"></i>
-									</div>
-									<h3 class="m-0">51 Discussions</h3>
-								</div>
-							</div>
-						</div>
-						<div class="col">
-							<div class="card h-100">
-								<div class="card-body">
-									<div class="d-flex align-items-center mb-2">
-										<img src="<?= base_url('assets/images/figma/google_meet.png') ?>" width="43">
-										<a href="#" class="text-decoration-none text-muted ml-3 stretched-link">Google Meet</a>
-										<i class="fa fa-chevron-right ml-auto" style="font-size: 12px;"></i>
-									</div>
-									<h3 class="m-0">2025-07-12</h3>
-								</div>
-							</div>
-						</div>
-						<div class="col">
-							<div class="card h-100">
-								<div class="card-body">
-									<div class="d-flex align-items-center mb-2">
-										<img src="<?= base_url('assets/images/figma/air_call.png') ?>" width="43">
-										<a href="#" class="text-decoration-none text-muted ml-3 stretched-link">AirCall</a>
-										<i class="fa fa-chevron-right ml-auto" style="font-size: 12px;"></i>
-									</div>
-									<h3 class="m-0"><?= date('Y-m-d', $matched_calls[0]->started_at) ?></h3>
-								</div>
-							</div>
-						</div>
-						<div class="col">
-							<div class="card h-100">
-								<div class="card-body">
-									<div class="d-flex align-items-center mb-2">
-										<img src="<?= base_url('assets/images/figma/teams_tasks.png') ?>" width="43">
-										<a href="<?= base_url('Client/tache_client/' . $donnees[0]['idclients']) ?>" class="text-decoration-none text-muted ml-3 stretched-link">Teams Tasks</a>
-										<i class="fa fa-chevron-right ml-auto" style="font-size: 12px;"></i>
-									</div>
-									<h3 class="m-0"><?php echo $nbr_task ?> Tâches en cours</h3>
+									<table class="table table-borderless">
+										<tr>
+											<td class="align-bottom text-center" style="border-bottom: 2px solid black; font-weight: 500;">
+												Secteur Activité
+											</td>
+											<td class="text-center">
+												<span class="badge alert-dark">Artisan Plombier</span>
+											</td>
+										</tr>
+										<tr>
+											<td class="align-bottom text-center" style="border-bottom: 2px solid black; font-weight: 500;">
+												Logo
+											</td>
+											<td class="text-center">
+												<button class="btn btn-light btn-sm">
+													<i class="fa fa-plus"></i>
+													Ajouter Logo
+												</button>
+												<!-- <span class="badge alert-dark">Artisan Plombier</span> -->
+											</td>
+										</tr>
+										<tr>
+											<td class="align-bottom text-center" style="border-bottom: 2px solid black; font-weight: 500;">
+												Favicon
+											</td>
+											<td class="text-center">
+												<img src="<?php echo $d['favicon']; ?>" width="28" class="mr-2">
+												Venture
+											</td>
+										</tr>
+									</table>
 								</div>
 							</div>
 						</div>
 					</div>
 
 					<br>
+
 					<h1 style="font-size: 48px;">Budget annuel</h1>
 					</br>
+
 					<div class="tab-content" id="taskTabContent">
 						<div class="tab-pane fade mb-5 show active" id="budget" role="tabpanel" aria-labelledby="budget_tab">
 							<div class="card">
@@ -259,8 +251,60 @@
 							</div>
 						</div>
 					</div>
+					<br>
 
-					<br><br>
+					<div class="row row-cols-4 mb-5" style="margin-top: 30px;">
+						<div class="col">
+							<div class="card h-100">
+								<div class="card-body">
+									<div class="d-flex align-items-center mb-2">
+										<img src="<?= base_url('assets/images/figma/discu_queue.png') ?>" width="43">
+										<a href="#" class="text-decoration-none text-muted ml-3 stretched-link">File de discussion</a>
+										<i class="fa fa-chevron-right ml-auto" style="font-size: 12px;"></i>
+									</div>
+									<h3 class="m-0">51 Discussions</h3>
+								</div>
+							</div>
+						</div>
+						<div class="col">
+							<div class="card h-100">
+								<div class="card-body">
+									<div class="d-flex align-items-center mb-2">
+										<img src="<?= base_url('assets/images/figma/google_meet.png') ?>" width="43">
+										<a href="#" class="text-decoration-none text-muted ml-3 stretched-link">Google Meet</a>
+										<i class="fa fa-chevron-right ml-auto" style="font-size: 12px;"></i>
+									</div>
+									<h3 class="m-0">2025-07-12</h3>
+								</div>
+							</div>
+						</div>
+						<div class="col">
+							<div class="card h-100">
+								<div class="card-body">
+									<div class="d-flex align-items-center mb-2">
+										<img src="<?= base_url('assets/images/figma/air_call.png') ?>" width="43">
+										<a href="#" class="text-decoration-none text-muted ml-3 stretched-link">AirCall</a>
+										<i class="fa fa-chevron-right ml-auto" style="font-size: 12px;"></i>
+									</div>
+									<h3 class="m-0"><?= date('Y-m-d', $matched_calls[0]->started_at) ?></h3>
+								</div>
+							</div>
+						</div>
+						<div class="col">
+							<div class="card h-100">
+								<div class="card-body">
+									<div class="d-flex align-items-center mb-2">
+										<img src="<?= base_url('assets/images/figma/teams_tasks.png') ?>" width="43">
+										<a href="<?= base_url('Client/tache_client/' . $donnees[0]['idclients']) ?>" class="text-decoration-none text-muted ml-3 stretched-link">Teams Tasks</a>
+										<i class="fa fa-chevron-right ml-auto" style="font-size: 12px;"></i>
+									</div>
+									<h3 class="m-0"><?php echo $nbr_task ?> Tâches en cours</h3>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<br>
 					<div class="d-flex justify-content-between">
 						<h1 style="font-size: 48px;">Loocker Studio</h1>
 					</div><br>
