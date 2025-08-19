@@ -1,4 +1,4 @@
-<nav id="sidebarMenu" class="col-auto p-0 d-md-block bg-light sidebar collapse border-right" style="width: 250px;">
+<nav id="sidebarMenu" class="col-auto p-0 d-md-block bg-light sidebar collapse border-right h-100" style="width: 250px;">
 	<a class="navbar-brand d-flex align-items-center justify-content-center p-0 m-0 border-bottom" href="#" style="height: 72px;">
 		<img class="logo-full" src="<?= base_url('assets/images/figma/logo_adsrank.png') ?>" alt="" height="30">
 		<img class="logo-split d-none" src="<?= base_url('assets/images/figma/logo_split.png') ?>" alt="" style="width: 30px;">
