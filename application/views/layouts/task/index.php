@@ -123,38 +123,28 @@ Task
 <?php start_section('content'); ?>
 
 <div class="container-fluid">
-
-	<div class="form-group">
-		<label for="task_filter">Type de tâche:</label>
-		<select name="task_filter" id="task_filter" class="custom-select w-auto">
-			<option value="0">All Task</option>
-			<option value="1">Team task</option>
-			<option value="2">Temporaire</option>
-			<option value="3">GTM</option>
-		</select>
-	</div>
-	<!-- <ul class="nav nav-tabs mb-3" role="tablist">
+	<ul class="nav nav-tabs mb-3" role="tablist">
 		<li class="nav-item">
-			<a class="nav-link py-3 active" type="button">
+			<a class="nav-link py-3 active task-filter-button" data-type="0" type="button">
 				All Task
 			</a>
 		</li>
 		<li class="nav-item">
-			<a class="nav-link py-3" type="button">
+			<a class="nav-link py-3 task-filter-button" data-type="1" type="button">
 				Team Task
 			</a>
 		</li>
 		<li class="nav-item">
-			<a class="nav-link py-3" type="button">
+			<a class="nav-link py-3 task-filter-button" data-type="2" type="button">
 				Temporaire
 			</a>
 		</li>
 		<li class="nav-item">
-			<a class="nav-link py-3" type="button">
+			<a class="nav-link py-3 task-filter-button" data-type="3" type="button">
 				GTM
 			</a>
 		</li>
-	</ul> -->
+	</ul>
 
 	<div class="tab-content" id="taskTabContent">
 
@@ -676,11 +666,13 @@ Task
 			}
 		}
 
-		$('#task_filter').change(function() {
+		$('.task-filter-button').click(function() {
 
-			let type = $(this).val();
+			let type = $(this).data('type');
+			$('.task-filter-button').removeClass('active');
+			$(this).addClass('active');
+
 			filter_task(type);
-			
 		});
 	});
 </script>
