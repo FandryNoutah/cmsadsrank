@@ -60,7 +60,7 @@ Notes
 			<div class="col">
 				<div class="card h-100">
 					<div class="card-body">
-						<a href="javascript:void(0);" class="stretched-link" data-toggle="modal" data-target="#detailModal"></a>
+						<a href="javascript:void(0);" class="stretched-link" data-id="<?= $note->id; ?>" data-toggle="modal" data-target="#detailModal"></a>
 						<div class="row">
 							<span class="col-auto mx-1 badge alert-warning">
 								<?= htmlspecialchars($note->type); ?>
@@ -110,6 +110,68 @@ Notes
 <?php start_section('script'); ?>
 
 <script>
+	$(function() {
+
+		function fetchDetail(task_id) {
+			$.ajax({
+				type: "GET",
+				url: "Notes/detail_note/" + task_id,
+				dataType: "json",
+				success: function (response) {
+					
+					let note = response.note;
+					let messages = response.messages;
+
+					$('#detailModalLabel').text("Tâche: " + note.title);
+					$('#detail_due_date').val(note.date_due);
+					$('#detail_description').text(note.description);
+
+					$.each(messages, function(index, data) {
+
+						let html = `
+							<div class="d-block activity-container mt-3">
+								<div class="d-flex">
+									<div class="mx-1">
+										<img src="${data.photo_users}" alt="" width="32">
+									</div>
+									<div class="flex-fill mx-1">
+										<div class="d-block mb-2">
+											<span class="font-weight-bold">${data.username}</span>
+											${data.message}
+										</div>
+										<div class="d-block mb-2">
+											<span class="text-muted small">${data.created_at}</span>
+										</div>
+									</div>
+									<div class="mx-1">
+										<a href="javascript:void(0);" class="text-decoration-none text-muted">
+											<i class="fa fa-ellipsis-h"></i>
+										</a>
+									</div>
+								</div>
+							</div>
+						`;
+
+						$('#detail_discussion').prepend(html);
+					});
+				}
+			});
+		}
+
+		$('#detailModal').on('show.bs.modal', function(event) {
+
+			let button = $(event.relatedTarget);
+			let task_id = $(button).attr('data-id');
+			$('#detail_discussion_form').data('id', task_id);
+
+			fetchDetail(task_id);
+		});
+	});
+</script>
+
+<!-- Attachment script -->
+<script>
+
 	$(function() {
 		const dropArea = $("#fileDrop");
 		const input = $("#fileInput");
