@@ -38,7 +38,8 @@ class Notes extends MY_Controller
 				'content'     => $this->input->post('content', TRUE),
 				'type'        => $this->input->post('type', TRUE),
 				'status'      => $this->input->post('status', TRUE),
-				'created_by'  => $this->current_user->id
+				'created_by'  => $this->current_user->id,
+				'date_due'    => $this->input->post('date_due', TRUE),
 			];
 
 			$assignedUsers = [];

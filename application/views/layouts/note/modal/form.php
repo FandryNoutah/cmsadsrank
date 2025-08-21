@@ -1,5 +1,6 @@
 <div class="modal fade" id="noteModal" tabindex="-1" aria-labelledby="noteModalLabel" aria-hidden="true">
-	<form action="#">
+	<form action="<?= site_url('notes/create') ?>" method="POST">
+		
 		<div class="modal-dialog modal-dialog-scrollable">
 			<div class="modal-content">
 
@@ -14,7 +15,7 @@
 					<div class="form-row">
 						<div class="col form-group">
 							<label for="note_type">Type</label>
-							<select name="note_type" id="note_type" class="form-control">
+							<select name="type" id="note_type" class="form-control">
 								<option value="information">Information</option>
 								<option value="tache">Tâche</option>
 								<option value="rappel">Rappel</option>
@@ -22,7 +23,7 @@
 						</div>
 						<div class="col form-group">
 							<label for="note_status">Statut</label>
-							<select name="note_status" id="note_status" class="form-control">
+							<select name="status" id="note_status" class="form-control">
 								<option value="Normal">Normal</option>
 								<option value="Priorité">Priorité</option>
 								<option value="Urgent">Urgent</option>
@@ -32,7 +33,7 @@
 					
 					<div class="form-group">
 						<label for="note_title">Titre du note</label>
-						<input type="text" name="note_title" id="note_title" class="form-control" placeholder="Entrer le titre du note">
+						<input type="text" name="title" id="note_title" class="form-control" placeholder="Entrer le titre du note">
 					</div>
 
 					<div class="form-row">
@@ -50,13 +51,13 @@
 						</div>
 						<div class="col form-group">
 							<label for="due_date">Date due</label>
-							<input type="date" name="due_date" id="due_date" class="form-control">
+							<input type="date" name="date_due" id="due_date" class="form-control">
 						</div>
 					</div>
 
 					<div class="form-group">
 						<label for="note">Notes</label>
-						<textarea name="note" id="note" rows="2" class="form-control"></textarea>
+						<textarea name="content" id="note" rows="2" class="form-control"></textarea>
 					</div>
 
 					<div class="form-group">
