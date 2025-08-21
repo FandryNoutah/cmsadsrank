@@ -1,11 +1,11 @@
-<div class="modal fade" id="noteModal" tabindex="-1" aria-labelledby="noteModalLabel" aria-hidden="true">
-	<form action="<?= site_url('notes/create') ?>" method="POST">
+<div class="modal fade" id="formModal" tabindex="-1" aria-labelledby="formModalLabel" aria-hidden="true">
+	<form action="<?= site_url('notes/create') ?>" method="POST" id="note_form">
 		
 		<div class="modal-dialog modal-dialog-scrollable">
 			<div class="modal-content">
 
 				<div class="modal-header">
-					<h5 class="modal-title" id="noteModalLabel">Nouveau note</h5>
+					<h5 class="modal-title" id="formModalLabel">Nouveau note</h5>
 					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 						<span aria-hidden="true">&times;</span>
 					</button>
@@ -77,7 +77,7 @@
 					</div> -->
 				</div>
 				<div class="modal-footer">
-					<button type="submit" class="btn btn-dark px-3">Ajouter</button>
+					<button type="submit" class="btn btn-dark px-3"></button>
 				</div>
 			</div>
 		</div>
