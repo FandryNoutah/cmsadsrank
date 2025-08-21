@@ -75,8 +75,8 @@
 				</form>
 
 				<div class="d-flex justify-content-between">
-					<label for="">Activity</label>
-					<button class="btn btn-outline-dark">Hide Activity Details</button>
+					<label for="">Discussions</label>
+					<!-- <button class="btn btn-outline-dark">Hide Activity Details</button> -->
 				</div>
 
 				<div id="detail_discussion"></div>
