@@ -3,7 +3,7 @@
 		<div class="modal-content">
 
 			<div class="modal-header">
-				<h5 class="modal-title" id="detailModalLabel">Détails tâche</h5>
+				<h5 class="modal-title" id="detailModalLabel"></h5>
 				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 					<span aria-hidden="true">&times;</span>
 				</button>
@@ -27,10 +27,10 @@
 						<label for="add_member">Add Labels</label>
 						<div class="d-flex align-items-center">
 							<div class="mr-2">
-								<span class="badge alert-success p-2" style="font-size: 14px;">Internal</span>
+								<span class="badge alert-success p-2" style="font-size: 14px;" id="detail_type"></span>
 							</div>
 							<div class="mr-2">
-								<span class="badge alert-warning p-2" style="font-size: 14px;">Marketing</span>
+								<span class="badge alert-warning p-2" style="font-size: 14px;" id="detail_status"></span>
 							</div>
 							<button type="button" class="btn btn-outline-dark rounded-circle d-block">
 								<i class="fa fa-tag"></i>
@@ -38,13 +38,13 @@
 						</div>
 					</div>
 					<div class="col form-group">
-						<label for="due_date">Date due</label>
-						<input type="date" name="due_date" id="due_date" class="form-control">
+						<label for="detail_due_date">Date due</label>
+						<input type="date" name="due_date" id="detail_due_date" class="form-control">
 					</div>
 				</div>
 
 				<label>Description</label>
-				<p class="text-muted">Monthly Product Discussion by Design and Marketing Teams with CEO to Plan our future products sales and reports</p>
+				<p class="text-muted" id="detail_description">Monthly Product Discussion by Design and Marketing Teams with CEO to Plan our future products sales and reports</p>
 
 				<div class="form-group">
 					<label for="attachment">Attachment</label>
@@ -58,6 +58,8 @@
 					<div id="fileName" class="mt-3 text-muted"></div>
 				</div>
 
+				<hr>
+				
 				<div class="form-group input-group">
 					<input type="text" class="form-control border-right-0" placeholder="Add Your Comment">
 					<div class="input-group-append">
@@ -71,12 +73,12 @@
 						</a>
 					</div>
 				</div>
-
+				
 				<div class="d-flex justify-content-between">
-					<label for="">Activity</label>
-					<button class="btn btn-outline-dark">Hide Activity Details</button>
+					<span>Discussions</span>
+					<!-- <button class="btn btn-outline-dark">Hide Activity Details</button> -->
 				</div>
-
+				
 				<!-- foreach -->
 				<div class="d-block activity-container mt-3">
 					<div class="d-flex">
