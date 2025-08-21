@@ -29,6 +29,18 @@ class Notes extends MY_Controller
 
 		// $this->load->view('layouts/note/list', $data);
 	}
+
+
+	public function detail_note($id_note) {
+
+		$note = $this->Note_model->get_by_id($id_note);
+
+		echo json_encode([
+			'note'		=>	$note,
+			'messages'	=>	[]
+		]);
+	}
+
 	public function create()
 	{
 		if ($this->input->method() === 'post') {
