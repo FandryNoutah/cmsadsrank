@@ -128,7 +128,7 @@ class Task extends MY_Controller
 
 		$date_due = $this->input->post('date_due');
 		$idclients = $this->input->post('idclients');
-		$AM = $this->input->post('AM');
+		$AM = $this->input->post('am');
 		$assigned_to = $this->input->post('assigned_to');
 		$title = $this->input->post('title');
 		$Statuts_technique = $this->input->post('Statuts_technique');
