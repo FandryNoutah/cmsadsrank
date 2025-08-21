@@ -249,6 +249,22 @@ class Task_model extends CI_Model
 
     // Retourner le résultat sous forme de tableau d'objets
     return $query->result(); 
+}public function get_procedure_gtm($idclients)
+{
+    // Construire la requête SQL
+    $sql = "SELECT tasks.*, users.*, clients.*, am_clients.*, assigned_clients.* 
+            FROM tasks 
+            LEFT JOIN users ON users.id = tasks.assigned_to 
+            LEFT JOIN clients ON clients.idclients = tasks.idclients 
+            LEFT JOIN clients AS am_clients ON am_clients.idclients = tasks.AM 
+            LEFT JOIN clients AS assigned_clients ON assigned_clients.idclients = tasks.assigned_to 
+            WHERE tasks.idclients = ? AND tasks.procedure_gtm = 1";
+
+    // Exécuter la requête avec le paramètre $idclients
+    $query = $this->db->query($sql, array($idclients));
+
+    // Retourner le résultat sous forme de tableau d'objets
+    return $query->result(); 
 }
 
 	// public function get_task_by_id($idtask) {
