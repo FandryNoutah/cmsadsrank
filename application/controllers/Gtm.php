@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
 
-class Client extends MY_Controller
+class Gtm extends MY_Controller
 {
 	private $api_url = 'https://api.aircall.io/v1/calls';
 	private $api_auth = 'e69c2f6c77144ad053a54bf77088aa09:6ab56a32536bc017ed6b2adb619338e0';
@@ -39,7 +39,7 @@ class Client extends MY_Controller
 		$this->data['am'] = $this->Donne_modele->get_all_am();
 		$this->data['initiative'] = $this->Donne_modele->get_all_initiative();
 
-		$this->content = "layouts/client/index.php";
+		$this->content = "layouts/gtm/index.php";
 		$this->layout();
 	}
 
