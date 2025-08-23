@@ -44,14 +44,14 @@
 	}
 </style>
 <?php end_section(); ?>
-
 <?php start_section('page_title'); ?>
 GTM
 <?php end_section(); ?>
 
 <?php start_section('page_heading'); ?>
 
-<div class="row mx-lg-2 ml-auto">
+
+<div class="row mx-lg-2">
 	<div class="col-auto px-1">
 		<button class="btn btn-outline-dark">
 			<img src="<?= base_url('assets/images/icons/figma/icon-funnelsimple.svg') ?>" alt="">
@@ -70,8 +70,20 @@ GTM
 
 <?php start_section('content'); ?>
 <div class="tab-content" id="clientTabContent">
-
-	<div class="tab-pane fade show active mb-5" id="list" role="tabpanel" aria-labelledby="list_tab">
+<ul class="nav nav-tabs mb-3" role="tablist">
+		<li class="nav-item">
+			<a class="nav-link py-3 active task-filter-button" data-type="0" type="button">
+				GTM
+			</a>
+		</li>
+		<li class="nav-item">
+			<a class="nav-link py-3 task-filter-button" data-type="1" type="button">
+				Optimisation
+			</a>
+		</li>
+	</ul>
+	<div class="container-fluid">
+		<div class="tab-pane fade show active mb-5" id="list" role="tabpanel" aria-labelledby="list_tab">
 		<div class="table-responsive">
 
 			<table class="table table-wrapper">
@@ -122,6 +134,7 @@ GTM
 								<td>
 									<img src="<?= base_url(IMAGES_PATH . htmlspecialchars($d->am_photo_user)); ?>" width="28" height="28" alt="Client Image">
 								</td>
+								<td>2025-07-06</td>
 								<td>
 									<span class="badge alert-success rounded-pill px-2 py-1" style="font-size: 12px; font-weight: 500;">
 										<i class="fa fa-circle mr-1" style="font-size: 10px;"></i>
@@ -146,6 +159,8 @@ GTM
 				</tbody>
 			</table>
 		</div>
+	</div>
+	</div>
 	</div>
 
 	<div class="tab-pane fade" id="kanban" role="tabpanel" aria-labelledby="kanban_tab">
