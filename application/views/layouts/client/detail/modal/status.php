@@ -15,16 +15,18 @@
 						<option value="">Arrêt campagne / résiliation client</option>
 					</select>
 				</div>
-				
+
 				<div class="form-group">
 					<label for="status_client">Client</label>
-					<input type="text" readonly value="Client name" class="form-control">
+					<input type="text" readonly value="<?= $d['nom_client']; ?>" class="form-control">
 				</div>
-				
+
 				<div class="form-group">
 					<label for="status_tm">TM</label>
 					<select name="status_tm" id="status_tm" class="form-control">
-						<option value="">Ilane</option>
+						<?php foreach ($users as $u): ?>
+							<option value="<?= $u->id ?>"><?= $u->first_name ?></option>
+						<?php endforeach; ?>
 					</select>
 				</div>
 
