@@ -1,4 +1,5 @@
 <?php start_section('stylesheet'); ?>
+<link href="<?= base_url('assets/vendors/select2/css/select2.min.css'); ?>" rel="stylesheet" />
 <style>
 	.table-wrapper {
 		border-spacing: 0 15px !important;
@@ -144,6 +145,11 @@ Task
 				GTM
 			</a>
 		</li>
+		<li class="nav-item">
+			<a class="nav-link py-3 task-filter-button" data-type="4" type="button">
+				Plan de taggage
+			</a>
+		</li>
 	</ul>
 
 	<div class="tab-content" id="taskTabContent">
@@ -192,6 +198,9 @@ Task
 											<?php endif; ?>
 											<?php if ($t->type_tache == 3): ?>
 												<span class="col-auto mx-1 badge alert-success">GTM</span>
+											<?php endif; ?>
+											<?php if ($t->type_tache == 4): ?>
+												<span class="col-auto mx-1 badge alert-success">Plan de taggage</span>
 											<?php endif; ?>
 											<?php if ($t->Statuts_technique == 1): ?>
 												<span class="col-auto mx-1 badge alert-success">Normal</span>
@@ -272,6 +281,9 @@ Task
 											<?php if ($t->type_tache == 3): ?>
 												<span class="col-auto mx-1 badge alert-success">GTM</span>
 											<?php endif; ?>
+											<?php if ($t->type_tache == 4): ?>
+												<span class="col-auto mx-1 badge alert-success">Plan de taggage</span>
+											<?php endif; ?>
 											<?php if ($t->Statuts_technique == 1): ?>
 												<span class="col-auto mx-1 badge alert-success">Normal</span>
 											<?php endif; ?>
@@ -350,6 +362,9 @@ Task
 											<?php if ($t->type_tache == 3): ?>
 												<span class="col-auto mx-1 badge alert-success">GTM</span>
 											<?php endif; ?>
+											<?php if ($t->type_tache == 4): ?>
+												<span class="col-auto mx-1 badge alert-success">Plan de taggage</span>
+											<?php endif; ?>
 											<?php if ($t->Statuts_technique == 1): ?>
 												<span class="col-auto mx-1 badge alert-success">Normal</span>
 											<?php endif; ?>
@@ -415,6 +430,11 @@ Task
 														<span class="badge alert-success">GTM</span>
 													</div>
 												<?php endif; ?>
+												<?php if ($t->type_tache == 4): ?>
+													<div class="mr-2">
+														<span class="badge alert-success">Plan de taggage</span>
+													</div>
+												<?php endif; ?>
 												<?php if ($t->Statuts_technique == 1): ?>
 													<div class="mr-2">
 														<span class="badge alert-success">Normal</span>
@@ -460,7 +480,7 @@ Task
 												<span class="col-auto">
 													<a href="javascript:void(0);" class="text-muted" data-toggle="modal" data-target="#discussionModal" data-id="<?= $t->idtask; ?>" data-title="<?= $t->title; ?>">
 														<img src="<?= base_url('assets/images/icons/figma/chat-9.svg') ?>" alt="">
-														19
+														<?= $t->count_messages; ?>
 													</a>
 												</span>
 											</div>
@@ -500,6 +520,11 @@ Task
 														<span class="badge alert-success">GTM</span>
 													</div>
 												<?php endif; ?>
+												<?php if ($t->type_tache == 4): ?>
+													<div class="mr-2">
+														<span class="badge alert-success">Plan de taggage</span>
+													</div>
+												<?php endif; ?>
 												<?php if ($t->Statuts_technique == 1): ?>
 													<div class="mr-2">
 														<span class="badge alert-success">Normal</span>
@@ -545,7 +570,7 @@ Task
 												<span class="col-auto">
 													<a href="javascript:void(0);" class="text-muted" data-toggle="modal" data-target="#discussionModal" data-id="<?= $t->idtask; ?>" data-title="<?= $t->title; ?>">
 														<img src="<?= base_url('assets/images/icons/figma/chat-9.svg') ?>" alt="">
-														19
+														<?= $t->count_messages; ?>
 													</a>
 												</span>
 											</div>
@@ -583,6 +608,11 @@ Task
 														<span class="badge alert-success">GTM</span>
 													</div>
 												<?php endif; ?>
+												<?php if ($t->type_tache == 4): ?>
+													<div class="mr-2">
+														<span class="badge alert-success">Plan de taggage</span>
+													</div>
+												<?php endif; ?>
 												<?php if ($t->Statuts_technique == 1): ?>
 													<div class="mr-2">
 														<span class="badge alert-success">Normal</span>
@@ -628,7 +658,7 @@ Task
 												<span class="col-auto">
 													<a href="javascript:void(0);" class="text-muted" data-toggle="modal" data-target="#discussionModal" data-id="<?= $t->idtask; ?>" data-title="<?= $t->title; ?>">
 														<img src="<?= base_url('assets/images/icons/figma/chat-9.svg') ?>" alt="">
-														19
+														<?= $t->count_messages; ?>
 													</a>
 												</span>
 											</div>
@@ -652,6 +682,8 @@ Task
 
 <?php start_section('script'); ?>
 
+<script src="<?= base_url('assets/vendors/select2/js/select2.min.js'); ?>"></script>
+
 <!-- Task filter script -->
 <script>
 	$(function() {
@@ -662,7 +694,7 @@ Task
 				$('.task-filter').removeClass('d-none');
 			} else {
 				$('.task-filter').addClass('d-none');
-				$('.task-filter[data-type="'+ type +'"]').removeClass('d-none');
+				$('.task-filter[data-type="' + type + '"]').removeClass('d-none');
 			}
 		}
 
@@ -680,6 +712,8 @@ Task
 <!-- Index page script -->
 <script>
 	$(function() {
+
+		$('#client_select').select2();
 
 		var id_task = null;
 

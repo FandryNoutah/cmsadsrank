@@ -13,20 +13,27 @@
 				<div class="modal-body">
 
 					<div class="form-group">
-						<label for="company">Société</label>
-						<input type="text" name="company" id="company" class="form-control">
+						<label for="donnee">Société</label>
+						<select name="donnee" id="donnee" class="form-control">
+							<?php foreach ($donnee as $d): ?>
+								<?php if ($d->budget != 0) : ?>
+
+									<option value="<?= $d->idclients; ?>"><?= $d->nom_client; ?></option>
+								<?php endif; ?>
+							<?php endforeach; ?>
+						</select>
 					</div>
-					
+
 					<div class="form-group">
 						<label for="date_demande">Date de la demande</label>
 						<input type="date" name="date_demande" id="date_demande" class="form-control">
 					</div>
-					
+
 					<div class="form-group">
 						<label for="invite_receipt">Invitation reçu</label>
 						<input type="date" name="invite_receipt" id="invite_receipt" class="form-control">
 					</div>
-					
+
 					<div class="form-group">
 						<label for="mep_gtm">Mise en place GTM</label>
 						<input type="text" name="mep_gtm" id="mep_gtm" class="form-control">

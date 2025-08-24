@@ -82,37 +82,38 @@ class Client extends MY_Controller
 		$this->content = "layouts/client/detail/application/index.php";
 		$this->layout();
 	}
-public function activer_processus_tache()
-{
-    $type_tache = 3;
-    $title = "Demande de procédure GTM";
-    $description = "Activer le procédure GTM";
-    $Statuts_technique = 1;
-    $procedure_gtm = 1;
+	
+	public function activer_processus_tache()
+	{
+		$type_tache = 3;
+		$title = "Demande de procédure GTM";
+		$description = "Activer le procédure GTM";
+		$Statuts_technique = 1;
+		$procedure_gtm = 1;
 
-    $idclients = $this->input->post('idclients');
-    $am = $this->input->post('am');
-    $tm = $this->input->post('assigned_to');
-    $date = $this->input->post('date');
+		$idclients = $this->input->post('idclients');
+		$am = $this->input->post('am');
+		$tm = $this->input->post('assigned_to');
+		$date = $this->input->post('date');
 
-    $data = array(
-        'type_tache' => $type_tache,
-        'date_demande' => $date,
-        'date_due' => $date,
-        'idclients' => $idclients,
-        'AM' => $am,
-        'assigned_to' => $tm,
-        'title' => $title,
-        'Statuts_technique' => $Statuts_technique,
-        'procedure_gtm' => $procedure_gtm,
-        'description' => $description
-    );
+		$data = array(
+			'type_tache' => $type_tache,
+			'date_demande' => $date,
+			'date_due' => $date,
+			'idclients' => $idclients,
+			'AM' => $am,
+			'assigned_to' => $tm,
+			'title' => $title,
+			'Statuts_technique' => $Statuts_technique,
+			'procedure_gtm' => $procedure_gtm,
+			'description' => $description
+		);
 
-    $this->Task_model->add_task($data);
+		$this->Task_model->add_task($data);
 
-    // Retourner une réponse JSON avec l’URL de redirection
-    echo json_encode(['redirect_url' => base_url('Client/application/' . $idclients)]);
-}
+		// Retourner une réponse JSON avec l’URL de redirection
+		echo json_encode(['redirect_url' => base_url('Client/application/' . $idclients)]);
+	}
 
 
 	public function detail_client($idclients)
@@ -188,8 +189,9 @@ public function activer_processus_tache()
 		$this->layout();
 	}
 
-	public function onboarding($idclients) {
-		
+	public function onboarding($idclients)
+	{
+
 		$this->content = "layouts/client/onboarding/index.php";
 		$this->layout();
 	}

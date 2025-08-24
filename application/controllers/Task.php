@@ -47,7 +47,11 @@ class Task extends MY_Controller
 
 		$this->data['donnee'] = $this->visuels_model->getClientDataByDonnee();
 		$this->data['users'] = $this->visuels_model->getusersall();
-		$this->data['tache'] = $this->Task_model->get_all_tâche();
+		$tasks = $this->data['tache'] = $this->Task_model->get_all_tâche();
+
+		foreach ($tasks as $task) {
+			$task->count_messages = $this->Task_message_model->count_messages_by_task($task->idtask);
+		}
 
 		// dd($this->data['tache']);
 		$this->content = "layouts/task/index.php";

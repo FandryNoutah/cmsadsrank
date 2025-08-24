@@ -1,6 +1,6 @@
 <div class="modal fade" id="formModal" tabindex="-1" aria-labelledby="formModalLabel" aria-hidden="true">
 	<form action="<?= site_url('notes/create') ?>" method="POST" id="note_form">
-		
+
 		<div class="modal-dialog modal-dialog-scrollable">
 			<div class="modal-content">
 
@@ -30,7 +30,7 @@
 							</select>
 						</div>
 					</div>
-					
+
 					<div class="form-group">
 						<label for="note_title">Titre du note</label>
 						<input type="text" name="title" id="note_title" class="form-control" placeholder="Entrer le titre du note">
@@ -39,9 +39,21 @@
 					<div class="form-row">
 						<div class="col form-group">
 							<label for="add_member">Add Members</label>
-							<button type="button" class="btn btn-outline-dark rounded-circle d-block">
-								<i class="fa fa-user-plus"></i>
-							</button>
+							<div class="dropdown no-arrow" id="users_dropdown">
+								<button type="button" class="btn btn-outline-dark rounded-circle d-block dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+									<i class="fa fa-user-plus"></i>
+								</button>
+								<div class="dropdown-menu" id="users_dd_menu">
+									<?php foreach ($users as $user): ?>
+										<li class="dropdown-item">
+											<div class="custom-control custom-checkbox">
+												<input type="checkbox" class="custom-control-input assigned-select" name="assigned_to[]" value="<?= $user->id; ?>" id="assigned_to_<?= $user->id; ?>">
+												<label class="custom-control-label" for="assigned_to_<?= $user->id; ?>"><?= $user->username; ?></label>
+											</div>
+										</li>
+									<?php endforeach; ?>
+								</div>
+							</div>
 						</div>
 						<div class="col form-group">
 							<label for="add_member">Add Labels</label>
