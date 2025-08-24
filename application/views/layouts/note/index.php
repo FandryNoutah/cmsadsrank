@@ -148,6 +148,7 @@ Notes
 			$('#note').val("");
 			$('#due_date').val("");
 			$('#note_submit').html("Ajouter");
+			$('.assigned-select').prop('checked', false);
 		}
 
 		function fetchDetail(id_note) {
@@ -240,6 +241,15 @@ Notes
 						$('#note_title').val(note.title);
 						$('#note').val(note.content);
 						$('#due_date').val(note.date_due);
+
+						let assigned_users = response.assigned_users;
+						$.each(assigned_users, function(index, value) {
+							
+							let user_id = value.user_id;
+							$('#assigned_to_'+ user_id).prop('checked', true);
+
+						});
+
 					}
 				});
 			} else {
@@ -252,6 +262,10 @@ Notes
 
 		$('#formModal').on('hide.bs.modal', function(event) {
 			resetForm();
+		});
+
+		$('#users_dd_menu').on('click', function(event) {
+			event.stopPropagation();
 		});
 	});
 </script>
