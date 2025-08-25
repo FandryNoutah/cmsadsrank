@@ -713,9 +713,7 @@ Task
 <script>
 	$(function() {
 
-		$('.select2').select2({
-			
-		});
+		$('.select2').select2();
 
 		var id_task = null;
 
