@@ -18,10 +18,10 @@
 						<option value="3">Baisse de budget</option>
 					</select>
 				</div>
-				<input type="hidden" value="<?php echo $donnees[0]['idclients']; ?>" name="client">
+				<input type="hidden" value="<?php echo $donnees['idclients']; ?>" name="client">
 				<div class="form-group">
 					<label for="budget_client">Client</label>
-					<input type="text" readonly value="<?php echo $donnees[0]['nom_client']; ?>" class="form-control">
+					<input type="text" readonly value="<?php echo $donnees['nom_client']; ?>" class="form-control">
 				</div>
 
 				<div class="form-group">
