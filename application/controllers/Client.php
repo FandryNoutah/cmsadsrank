@@ -42,7 +42,24 @@ class Client extends MY_Controller
 		$this->content = "layouts/client/index.php";
 		$this->layout();
 	}
-
+	public function resiliation()
+	{
+		$resiliation = $this->input->post('resiliation');
+		$idclients = $this->input->post('client');
+		$tm_resiliation = $this->input->post('tm');
+		$date_resiliation = $this->input->post('date_resiliation');
+		$demande_resiliation = $this->input->post('demande_resiliation');
+		$fin_campagne = $this->input->post('fin_campagne');
+		
+		$am_resiliation = $this->input->post('am_resiliation');
+		$information_resiliation = $this->input->post('information_resiliation');
+		$statut_resiliation = $this->input->post('statut_resiliation');
+	
+        $idclient = $this->visuels_model->create_resiliation($resiliation,$date_resiliation,$fin_campagne, $am_resiliation, $tm_resiliation, $demande_resiliation, $information_resiliation, $statut_resiliation,$idclients);
+		$this->session->set_flashdata('message-succes', "Client résilier avec succès");
+			redirect('Client/detail_client/' . $idclients, 'refresh');
+			$this->layout();
+	}
 	public function search()
 	{
 		$term = "Jean"; // remplace par un nom réel présent dans la base
@@ -82,37 +99,38 @@ class Client extends MY_Controller
 		$this->content = "layouts/client/detail/application/index.php";
 		$this->layout();
 	}
-public function activer_processus_tache()
-{
-    $type_tache = 3;
-    $title = "Demande de procédure GTM";
-    $description = "Activer le procédure GTM";
-    $Statuts_technique = 1;
-    $procedure_gtm = 1;
+	
+	public function activer_processus_tache()
+	{
+		$type_tache = 3;
+		$title = "Demande de procédure GTM";
+		$description = "Activer le procédure GTM";
+		$Statuts_technique = 1;
+		$procedure_gtm = 1;
 
-    $idclients = $this->input->post('idclients');
-    $am = $this->input->post('am');
-    $tm = $this->input->post('assigned_to');
-    $date = $this->input->post('date');
+		$idclients = $this->input->post('idclients');
+		$am = $this->input->post('am');
+		$tm = $this->input->post('assigned_to');
+		$date = $this->input->post('date');
 
-    $data = array(
-        'type_tache' => $type_tache,
-        'date_demande' => $date,
-        'date_due' => $date,
-        'idclients' => $idclients,
-        'AM' => $am,
-        'assigned_to' => $tm,
-        'title' => $title,
-        'Statuts_technique' => $Statuts_technique,
-        'procedure_gtm' => $procedure_gtm,
-        'description' => $description
-    );
+		$data = array(
+			'type_tache' => $type_tache,
+			'date_demande' => $date,
+			'date_due' => $date,
+			'idclients' => $idclients,
+			'AM' => $am,
+			'assigned_to' => $tm,
+			'title' => $title,
+			'Statuts_technique' => $Statuts_technique,
+			'procedure_gtm' => $procedure_gtm,
+			'description' => $description
+		);
 
-    $this->Task_model->add_task($data);
+		$this->Task_model->add_task($data);
 
-    // Retourner une réponse JSON avec l’URL de redirection
-    echo json_encode(['redirect_url' => base_url('Client/application/' . $idclients)]);
-}
+		// Retourner une réponse JSON avec l’URL de redirection
+		echo json_encode(['redirect_url' => base_url('Client/application/' . $idclients)]);
+	}
 
 
 	public function detail_client($idclients)
@@ -188,8 +206,9 @@ public function activer_processus_tache()
 		$this->layout();
 	}
 
-	public function onboarding($idclients) {
-		
+	public function onboarding($idclients)
+	{
+
 		$this->content = "layouts/client/onboarding/index.php";
 		$this->layout();
 	}

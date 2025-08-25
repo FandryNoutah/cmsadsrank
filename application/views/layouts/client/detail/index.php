@@ -38,12 +38,25 @@
 		<div class="col" style="height: calc(100vh - 101px); overflow-y:auto;">
 			<div class="container-fluid pb-5">
 
-				<div class="dropdown ">
-
+				<div class="dropdown">
+					<?php if($d['resiliation'] == 1):  ?>
 					<a type="button" class="badge alert-success rounded-pill px-4 py-3 mb-3 dropdown-toggle" style="font-size: 12px; font-weight: 500;" id="clientStatusDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 						<i class="fa fa-circle mr-1" style="font-size: 10px;"></i>
 						Active
 					</a>
+					<?php endif; ?>
+					<?php if($d['resiliation'] == 2):  ?>
+					<a type="button" class="badge alert-warning rounded-pill px-4 py-3 mb-3 dropdown-toggle" style="font-size: 12px; font-weight: 500;" id="clientStatusDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+						<i class="fa fa-circle mr-1" style="font-size: 10px;"></i>
+						Mis en pause
+					</a>
+					<?php endif; ?>
+					<?php if($d['resiliation'] == 3):  ?>
+					<a type="button" class="badge alert-danger rounded-pill px-4 py-3 mb-3 dropdown-toggle" style="font-size: 12px; font-weight: 500;" id="clientStatusDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+						<i class="fa fa-circle mr-1" style="font-size: 10px;"></i>
+						Résilié
+					</a>
+					<?php endif; ?>
 					<div class="dropdown-menu dropdown-menu-right animated--grow-in" aria-labelledby="clientStatusDropdown">
 						<a class="dropdown-item" href="javscript:void(0);" data-toggle="modal" data-target="#statusModal">Statut Client</a>
 					</div>
@@ -60,16 +73,16 @@
 							<span class="ml-3 py-1 px-3 badge" style="background-color: #edf2fe; color: #4976f4; font-size: 12px; font-weight: 500;">Bleu</span>
 						</div>
 						<h1 class="mb-3" style="font-size: 48px; font-weight: 500;">
-							<?php echo $d['nom_client'] ?>
+							<?= $d['nom_client'] ?>
 						</h1>
-						<h5 class="mb-3" style=""><?php echo $d['site_client'] ?></h5>
+						<h5 class="mb-3" style=""><a href="<?= $d['site_client'] ?>" target="_blank" style="color: black"><?= $d['site_client'] ?></a></h5>
 					</div>
 					<div class="col-auto">
 						<div class="card h-100" style="width: 23rem;">
 							<div class="card-body">
 								<div class="d-flex justify-content-between align-items-center">
 									<button class="btn btn-dark py-3 px-5" data-toggle="modal" data-target="#budgetModal">
-										<?php echo $d['budget'] ?> €
+										<?= $d['budget'] ?> €
 									</button>
 									<div class="dropdown no-arrow">
 										<a href="javascript:void(0);" class="btn btn-light rounded-pill px-3 nav-link dropdown-toggle" id="clientDetailDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -81,24 +94,24 @@
 									</div>
 								</div>
 								<br><br>
-								<div class="d-flex justify-content-start mb-3" style="font-size: 16px;">
-									<span class="badge badge-light mr-3" style="width: 20px; height: 20px; background-color: #f2f2f2;">&nbsp;</span>
-									<span class="mr-2">Date d'anniversaire : <?php echo $d['mis_en_place_paiement'] ?></span>
+								<div class="d-flex justify-content-start mb-3" style="font-size: 15px;">
+									 <i class="fa fa-check-square mr-2" style="color: #f0f0f0ff; font-size: 18px;"></i>
+									<span class="mr-2">Date d'anniversaire : <?= $d['mis_en_place_paiement'] ?></span>
 								</div>
-								<div class="d-flex justify-content-start mb-3" style="font-size: 16px;">
-									<span class="badge badge-light mr-3" style="width: 20px; height: 20px; background-color: #f2f2f2;">&nbsp;</span>
-									<span class="mr-2">Date de mise en ligne : <?php echo $d['annonce'] ?></span>
+								<div class="d-flex justify-content-start mb-3" style="font-size: 15px;">
+									 <i class="fa fa-check-square mr-2" style="color: #f0f0f0ff; font-size: 18px;"></i>
+									<span class="mr-2">Date de mise en ligne : <?= $d['annonce'] ?></span>
 
 								</div>
-								<div class="d-flex justify-content-start mb-3" style="font-size: 16px;">
-									<span class="badge badge-light mr-3" style="width: 20px; height: 20px; background-color: #f2f2f2;">&nbsp;</span>
+								<div class="d-flex justify-content-start mb-3" style="font-size: 15px;">
+									 <i class="fa fa-check-square mr-2" style="color: #f0f0f0ff; font-size: 18px;"></i>
 									<span class="mr-2">Commerciale</span>
 									<span class="mr-2">
 										<img src="<?= base_url('assets/images/' . $d['am_photo_user']) ?>" width="24" height="24">
 									</span>
 								</div>
-								<div class="d-flex justify-content-start mb-4" style="font-size: 16px;">
-									<span class="badge badge-light mr-3" style="width: 20px; height: 20px; background-color: #f2f2f2;">&nbsp;</span>
+								<div class="d-flex justify-content-start mb-4" style="font-size: 15px;">
+									 <i class="fa fa-check-square mr-2" style="color: #f0f0f0ff; font-size: 18px;"></i>
 									<span class="mr-2">Account Manager</span>
 									<span class="mr-2">
 										<img src="<?= base_url('assets/images/' . $d['tech_photo_user']) ?>" width="24" height="24">
@@ -123,8 +136,16 @@
 								</ul>
 
 								<h6 class="text-muted font-weight-normal" style="font-size: 15.5px;">
-									<?php echo $d['info_base_client'] ?></br>
+									<?= $d['info_base_client'] ?></br>
 								</h6>
+								<!-- <ul class="nav nav-tabs">
+									<li class="nav-item">
+										<a class="nav-link py-3 active" type="button">
+											Favicon
+											<img src="<?= $d['favicon']; ?>" width="43"></br>
+										</a>
+									</li>
+								</ul> -->
 							</div>
 						</div>
 					</div>
@@ -157,7 +178,7 @@
 											Favicon
 										</td>
 										<td class="text-center">
-											<img src="<?php echo $d['favicon']; ?>" width="28" class="mr-2">
+											<img src="<?= $d['favicon']; ?>" width="28" class="mr-2">
 											Venture
 										</td>
 									</tr>
@@ -185,10 +206,10 @@
 											12%
 										</span>
 									</div>
-									<select class="form-control w-auto mr-5 border-dark text-dark" style="font-size: 14px; font-weight: 500;">
-										<option selected>2023</option>
-										<option value="1">2024</option>
-										<option value="2">2025</option>
+									<select class="form-control w-auto mr-5 border-dark text-dark" id="filter_budget_year" style="font-size: 14px; font-weight: 500;">
+										<option value="2023">2023</option>
+										<option value="2024">2024</option>
+										<option value="2025">2025</option>
 									</select>
 								</div>
 								<span class="text-muted" style="font-size: 14px;">Budget actuellement en cours</span>
@@ -214,7 +235,7 @@
 									</thead>
 									<tbody>
 										<?php foreach ($upsell as $u): ?>
-											<tr>
+											<tr class="budget-year-row" data-year="<?= explode('-', $u->date_demande)[0]; ?>">
 												<td>
 													<?php if ($u->type_upsell == 2): ?>
 														<span class="badge alert-success rounded-pill px-4 py-3" style="font-size: 14px; font-weight: 500;">
@@ -229,10 +250,10 @@
 														</span>
 													<?php endif; ?>
 												</td>
-												<td><?php echo $u->date_demande ?></td>
-												<td><?php echo $u->date_upsell ?></td>
-												<td><?php echo $u->budget_initiale ?> €</td>
-												<td><?php echo $u->budgets ?> €</td>
+												<td><?= $u->date_demande ?></td>
+												<td><?= $u->date_upsell ?></td>
+												<td><?= $u->budget_initiale ?> €</td>
+												<td><?= $u->budgets ?> €</td>
 											</tr>
 										<?php endforeach; ?>
 									</tbody>
@@ -295,7 +316,7 @@
 									<a href="<?= base_url('Client/tache_client/' . $donnees[0]['idclients']) ?>" class="text-decoration-none text-muted ml-3 stretched-link">Teams Tasks</a>
 									<i class="fa fa-chevron-right ml-auto" style="font-size: 12px;"></i>
 								</div>
-								<h3 class="m-0"><?php echo $nbr_task ?> Tâches en cours</h3>
+								<h3 class="m-0"><?= $nbr_task ?> Tâches en cours</h3>
 							</div>
 						</div>
 					</div>
@@ -364,7 +385,7 @@
 								</p>
 								<div class="row justify-content-center">
 									<div class="col-auto">
-										<img src="<?php echo $d['cms_logo']; ?>" width="43">
+										<img src="<?= $d['cms_logo']; ?>" width="43">
 									</div>
 								</div>
 							</div>
@@ -379,7 +400,7 @@
 								</p>
 								<span class="badge alert-success rounded-pill px-4 py-3" style="font-size: 14px; font-weight: 500;">
 									<i class="fa fa-circle mr-1" style="font-size: 10px;"></i>
-									<?php echo $d['tracking_gtm'] ?>
+									<?= $d['tracking_gtm'] ?>
 								</span>
 							</div>
 						</div>
@@ -401,7 +422,7 @@
 								<th>Description</th>
 								<th>Member</th>
 								<th>Status</th>
-
+								<th></th>
 							</tr>
 						</thead>
 						<tbody>
@@ -416,17 +437,17 @@
 							<?php if ($task != NULL): ?>
 								<?php foreach ($task as $t): ?>
 									<tr>
-										<td class="align-middle" style="font-weight: 500;"><?php echo $t->title; ?></td>
+										<td class="align-middle" style="font-weight: 500;"><?= $t->title; ?></td>
 										<td class="align-middle text-muted">
 											<img src="<?= base_url('assets/images/icons/figma/calendar.svg') ?>" alt="">
-											<?php echo $t->date_demande; ?>
+											<?= $t->date_demande; ?>
 										</td>
 										<td class="align-middle text-muted">
 											<img src="<?= base_url('assets/images/icons/figma/calendar.svg') ?>" alt="">
-											<?php echo $t->date_due; ?>
+											<?= $t->date_due; ?>
 										</td>
 										<td class="align-middle text-muted">
-											<?php echo $t->description; ?>
+											<?= $t->description; ?>
 										</td>
 										<td class="align-middle">
 											<div class="d-flex align-items-center avatar-group">
@@ -440,6 +461,8 @@
 												<i class="fa fa-circle mr-1" style="font-size: 10px;"></i>
 												Planned
 											</span>
+										</td>
+										<td>
 											<a href="javascript:void(0);" class="ml-auto">
 												<i class="fa fa-ellipsis-v"></i>
 											</a>
@@ -654,6 +677,12 @@
 		$(document).on('mouseout', '.apexcharts-bar-area', function() {
 			$(this).find('path').attr('fill', '#D8D8D8');
 		}); */
+
+		$('#filter_budget_year').change(function() {
+			let year = $(this).data('year');
+			$('.budget-year-row').addClass('d-none');
+			$('.budget-year-row[data-year="'+ year +'"]').removeClass('d-none');
+		});
 	});
 </script>
 
