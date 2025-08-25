@@ -172,10 +172,24 @@ Client
 										?>
 										<?= $budget; ?> €</td>
 									<td>
+										<?php if($d->resiliation == 1):  ?>
 										<span class="badge alert-success rounded-pill px-2 py-1" style="font-size: 12px; font-weight: 500;">
 											<i class="fa fa-circle mr-1" style="font-size: 10px;"></i>
 											Active
 										</span>
+										<?php endif; ?>
+										<?php if($d->resiliation == 2):  ?>
+										<span class="badge alert-warning rounded-pill px-2 py-1" style="font-size: 12px; font-weight: 500;">
+											<i class="fa fa-circle mr-1" style="font-size: 10px;"></i>
+											Mis en pause
+										</span>
+										<?php endif; ?>
+										<?php if($d->resiliation == 3):  ?>
+										<span class="badge alert-danger rounded-pill px-2 py-1" style="font-size: 12px; font-weight: 500;">
+											<i class="fa fa-circle mr-1" style="font-size: 10px;"></i>
+											Résilié
+										</span>
+										<?php endif; ?>
 									</td>
 								</tr>
 							<?php endif; ?>
