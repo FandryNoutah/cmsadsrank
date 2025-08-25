@@ -1,9 +1,9 @@
-<div class="modal fade" id="detailModal" tabindex="-1" aria-labelledby="detailModalLabel" aria-hidden="true">
+<div class="modal fade" id="taskModal" tabindex="-1" aria-labelledby="taskModalLabel" aria-hidden="true">
 	<div class="modal-dialog modal-lg modal-dialog-scrollable" style="width: 640px;">
 		<div class="modal-content">
 
 			<div class="modal-header">
-				<h5 class="modal-title" id="detailModalLabel"></h5>
+				<h5 class="modal-title" id="taskModalLabel"></h5>
 				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 					<span aria-hidden="true">&times;</span>
 				</button>
@@ -27,10 +27,10 @@
 						<label for="add_member">Add Labels</label>
 						<div class="d-flex align-items-center">
 							<div class="mr-2">
-								<span class="badge alert-success p-2" style="font-size: 14px;" id="detail_type"></span>
+								<span class="badge alert-success p-2" style="font-size: 14px;">Internal</span>
 							</div>
 							<div class="mr-2">
-								<span class="badge alert-warning p-2" style="font-size: 14px;" id="detail_status"></span>
+								<span class="badge alert-warning p-2" style="font-size: 14px;">Marketing</span>
 							</div>
 							<button type="button" class="btn btn-outline-dark rounded-circle d-block">
 								<i class="fa fa-tag"></i>
@@ -38,13 +38,13 @@
 						</div>
 					</div>
 					<div class="col form-group">
-						<label for="detail_due_date">Date due</label>
-						<input type="date" name="due_date" id="detail_due_date" class="form-control">
+						<label for="task_due_date">Date due</label>
+						<input type="date" name="due_date" id="task_due_date" class="form-control">
 					</div>
 				</div>
 
 				<label>Description</label>
-				<p class="text-muted" id="detail_description">Monthly Product Discussion by Design and Marketing Teams with CEO to Plan our future products sales and reports</p>
+				<p class="text-muted" id="task_description">Monthly Product Discussion by Design and Marketing Teams with CEO to Plan our future products sales and reports</p>
 
 				<div class="form-group">
 					<label for="attachment">Attachment</label>
@@ -57,10 +57,10 @@
 					<input type="file" id="fileInput" class="d-none">
 					<div id="fileName" class="mt-3 text-muted"></div>
 				</div>
-				
-				<form action="<?= site_url('Notes/send_message') ?>" method="POST" id="detail_discussion_form">
+
+				<form action="<?= site_url('Task/send_message') ?>" method="POST" id="task_discussion_form">
 					<div class="form-group input-group">
-						<input type="text" class="form-control border-right-0" placeholder="Add Your Message" id="detail_message">
+						<input type="text" class="form-control border-right-0" placeholder="Add Your Message" id="task_message">
 						<div class="input-group-append">
 							<a href="#" class="btn btn-outline-secondary border-left-0 border-right-0 d-flex align-items-center">
 								<i class="fa fa-paperclip"></i>
@@ -76,13 +76,13 @@
 
 				<div class="d-flex justify-content-between">
 					<label for="">Discussions</label>
-					<!-- <button class="btn btn-outline-dark">Hide Activity Details</button> -->
+					<!-- <button class="btn btn-outline-dark">Hide Activity tasks</button> -->
 				</div>
 
-				<div id="detail_discussion"></div>
+				<div id="task_discussion"></div>
 			</div>
 			<div class="modal-footer">
-				<button type="submit" class="btn btn-dark px-3">Ajouter</button>
+				<button type="submit" class="btn btn-light px-3">Fermer</button>
 			</div>
 		</div>
 	</div>
