@@ -19,9 +19,8 @@ class Notes extends MY_Controller
 	public function index()
 	{
 
-		$notes = $this->data['notes'] = $this->Note_model->get_for_user($this->current_user->id);
-		$this->data['donnee'] = $this->visuels_model->getClientDataByDonnee();
-		$this->data['users'] = $this->visuels_model->getusersall();
+		$this->data['notes'] = $this->Note_model->get_for_user($this->current_user->id);
+		$this->data['users'] = $this->Note_model->get_all_users();
 
 		// dd($this->data['notes']);
 		$this->content = "layouts/note/index.php";
@@ -67,14 +66,15 @@ class Notes extends MY_Controller
 		]);
 	}
 
-
 	public function detail_note($id_note) {
 
 		$note = $this->Note_model->get_by_id($id_note);
+		$assigned_users = $this->Note_model->get_assigned_users($id_note);
 
 		echo json_encode([
 			'note'		=>	$note,
-			'messages'	=>	[]
+			'messages'	=>	[],
+			'assigned_users'	=>	$assigned_users
 		]);
 	}
 
@@ -90,9 +90,9 @@ class Notes extends MY_Controller
 				'date_due'    => $this->input->post('date_due', TRUE),
 			];
 
-			$assignedUsers = [];
+			$assignedUsers = $this->input->post('assigned_to') ?? [$this->current_user->id];
 
-			if ($this->input->post('assign_mode') === 'self') {
+			/* if ($this->input->post('assign_mode') === 'self') {
 				$assignedUsers[] = $this->current_user->id;
 			} else {
 				$assignedUsers = $this->input->post('assigned_to') ?? [];
@@ -100,7 +100,7 @@ class Notes extends MY_Controller
 
 			if (empty($assignedUsers)) {
 				$assignedUsers[] = $this->current_user->id;
-			}
+			} */
 
 			$this->Note_model->create($noteData, $assignedUsers);
 			redirect('notes');
@@ -163,5 +163,5 @@ class Notes extends MY_Controller
 		redirect('notes');
 	}
 
-
+	
 }
