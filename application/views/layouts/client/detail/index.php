@@ -450,9 +450,14 @@
 											</span>
 										</td>
 										<td>
-											<a href="javascript:void(0);" class="ml-auto">
+											<div class="dropdown no-arrow">
+											<a href="javascript:void(0);" class="text-decoration-none text-muted task-menu dropdown-toggle" role="button" data-toggle="dropdown" aria-expanded="false">
 												<i class="fa fa-ellipsis-v"></i>
 											</a>
+											<div class="dropdown-menu dropdown-menu-right">
+												<button type="button" class="dropdown-item" data-toggle="modal" data-target="#taskModal" data-id="<?= $t->idtask; ?>">Détails</button>
+											</div>
+										</div>
 										</td>
 									</tr>
 								<?php endforeach; ?>
@@ -531,6 +536,7 @@
 <?php $this->load->view('layouts/client/detail/modal/budget'); ?>
 <?php $this->load->view('layouts/client/detail/modal/edit'); ?>
 <?php $this->load->view('layouts/client/detail/modal/status'); ?>
+<?php $this->load->view('layouts/client/detail/modal/task'); ?>
 
 <?php end_section(); ?>
 
@@ -541,134 +547,83 @@
 <script>
 	$(function() {
 
-		const chartData = <?= $chartData ?>;
-		const tooltipData = <?= $tooltipData ?>;
-
 		const currentMonthIndex = new Date().getMonth();
 
-		// Generate colors
-		const colors = chartData.map((_, i) => i === currentMonthIndex ? '#000000' : '#D8D8D8');
+		function resetTask() {
+			$('#task_discussion').html("");
+			$('#taskModalLabel').text("");
+			$('#task_due_date').removeAttr('value');
+			$('#task_description').text("");
+			$('#task_discussion_form').removeAttr('id');
+		}
 
-		const options = {
-			chart: {
-				type: 'bar',
-				height: 400,
-				toolbar: {
-					show: false
+		function fetch_task(task_id) {
+
+			$.ajax({
+				type: "GET",
+				url: "Task/detail_task/" + task_id,
+				dataType: "json",
+				beforeSend: function() {
+					resetTask();
 				},
-				events: {
-					dataPointSelection: function(event, chartContext, config) {
-						// Optional: handle click
-					}
-				}
-			},
-			series: [{
-				name: 'Budget',
-				data: chartData
-			}],
-			xaxis: {
-				categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
-				labels: {
-					style: {
-						fontSize: '16px'
-					}
-				}
-			},
-			yaxis: {
-				max: 6500,
-				min: 0,
-				tickAmount: 5,
-				labels: {
-					style: {
-						fontSize: '16px'
-					}
-				}
-			},
-			plotOptions: {
-				bar: {
-					distributed: true,
-					borderRadius: 5,
-					columnWidth: '32px',
-					endingShape: 'flat'
-				}
-			},
-			colors: colors,
-			states: {
-				hover: {
-					filter: {
-						type: 'none'
-					}
-				},
-				active: {
-					allowMultipleDataPointsSelection: true,
-					filter: {
-						type: 'none'
-					}
-				}
-			},
-			tooltip: {
-				custom: function({
-					dataPointIndex
-				}) {
-					if (!tooltipData[dataPointIndex].length) return '';
-					const item = tooltipData[dataPointIndex][0];
-					return `
-						<div class="card shadow-0 border-0">
-							<div class="card-body p-3">
-								<span class="badge badge-dark p-2 rounded-pill mr-2">
-									<i class="fa fa-envelope-open"></i>
-								</span>
-								<span class="text-muted" style="font-weight: 500;">${item.date}</span>
-								<div class="card mt-2">
-									<div class="card-body p-2 bg-light" style="font-weight: 500;">
-										<span class="text-muted">Budget</span>
-										<span class="text-dark font-weight-bold" style="font-size: 16px;">${item.budget}</span>
+				success: function(response) {
+
+					let task = response.task;
+					let messages = response.messages;
+
+					$('#taskModalLabel').text("Tâche: " + task.title);
+					$('#task_due_date').val(task.date_due);
+					$('#task_description').text(task.description);
+
+					$.each(messages, function(index, data) {
+
+						let html = `
+							<div class="d-block activity-container mt-3">
+								<div class="d-flex">
+									<div class="mx-1">
+										<img src="${data.photo_users}" alt="" width="32">
+									</div>
+									<div class="flex-fill mx-1">
+										<div class="d-block mb-2">
+											<span class="font-weight-bold">${data.username}</span>
+											${data.message}
+										</div>
+										<div class="d-block mb-2">
+											<span class="text-muted small">${data.created_at}</span>
+										</div>
+									</div>
+									<div class="mx-1">
+										<a href="javascript:void(0);" class="text-decoration-none text-muted">
+											<i class="fa fa-ellipsis-h"></i>
+										</a>
 									</div>
 								</div>
 							</div>
-						</div>
-					`;
+						`;
+
+						$('#task_discussion').prepend(html);
+					});
 				}
-			},
-			fill: {
-				colors: colors
-			},
-			stroke: {
-				width: 0
-			},
-			grid: {
-				borderColor: '#ccc',
-				yaxis: {
-					lines: {
-						show: true
-					}
-				},
-				strokeDashArray: 4,
-			},
-			dataLabels: {
-				enabled: false
-			},
-			legend: {
-				show: false
-			}
-		};
-
-		const chart = new ApexCharts(document.querySelector("#budgetChart"), options);
-
-		chart.render();
-
-		// Change color on hover and click
-		/* $(document).on('mouseover', '.apexcharts-bar-area', function() {
-			$(this).find('path').attr('fill', '#000');
-		});
-		$(document).on('mouseout', '.apexcharts-bar-area', function() {
-			$(this).find('path').attr('fill', '#D8D8D8');
-		}); */
+			});
+		}
 
 		$('#filter_budget_year').change(function() {
 			let year = $(this).data('year');
 			$('.budget-year-row').addClass('d-none');
 			$('.budget-year-row[data-year="'+ year +'"]').removeClass('d-none');
+		});
+
+		$('#taskModal').on('show.bs.modal', function(event) {
+
+			let button = $(event.relatedTarget);
+			let task_id = $(button).attr('data-id');
+			$('#detail_discussion_form').data('id', task_id);
+
+			fetch_task(task_id);
+		});
+
+		$('#taskModal').on('hide.bs.modal', function(event) {
+			resetTask();
 		});
 	});
 </script>
