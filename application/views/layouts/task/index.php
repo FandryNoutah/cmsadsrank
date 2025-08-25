@@ -713,7 +713,9 @@ Task
 <script>
 	$(function() {
 
-		$('#client_select').select2();
+		$('.select2').select2({
+			
+		});
 
 		var id_task = null;
 
@@ -978,5 +980,20 @@ Task
 			fileName.text(file.name);
 		}
 	});
+</script>
+
+<script>
+	function setDefaultDate() {
+		const today = new Date();
+		const yyyy = today.getFullYear();
+		let mm = today.getMonth() + 1;
+		let dd = today.getDate();
+		if (mm < 10) mm = '0' + mm;
+		if (dd < 10) dd = '0' + dd;
+
+		const formattedDate = yyyy + '-' + mm + '-' + dd;
+		document.getElementById('exampleInputEmail1').value = formattedDate;
+	}
+	window.onload = setDefaultDate;
 </script>
 <?php end_section(); ?>
