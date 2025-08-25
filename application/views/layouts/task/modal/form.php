@@ -1,6 +1,6 @@
 <div class="modal fade" id="taskModal" tabindex="-1" aria-labelledby="taskModalLabel" aria-hidden="true">
 	<form action="<?php echo base_url("Task/insert_tache") ?>" enctype="multipart/form-data" method="post">
-		<div class="modal-dialog modal-dialog-scrollable">
+		<div class="modal-dialog modal-lg modal-dialog-scrollable">
 			<div class="modal-content">
 				<?php $current_user = $this->ion_auth->user()->row(); ?>
 				<input type="hidden" name="am" value="<?php echo $current_user->id ?>">

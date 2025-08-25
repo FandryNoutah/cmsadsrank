@@ -38,10 +38,16 @@
 		<div class="col" style="height: calc(100vh - 101px); overflow-y:auto;">
 			<div class="container-fluid pb-5">
 
-				<span class="badge alert-success rounded-pill px-4 py-3 mb-3" style="font-size: 12px; font-weight: 500;">
-					<i class="fa fa-circle mr-1" style="font-size: 10px;"></i>
-					Active
-				</span>
+				<div class="dropdown ">
+
+					<a type="button" class="badge alert-success rounded-pill px-4 py-3 mb-3 dropdown-toggle" style="font-size: 12px; font-weight: 500;" id="clientStatusDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+						<i class="fa fa-circle mr-1" style="font-size: 10px;"></i>
+						Active
+					</a>
+					<div class="dropdown-menu dropdown-menu-right animated--grow-in" aria-labelledby="clientStatusDropdown">
+						<a class="dropdown-item" href="javscript:void(0);" data-toggle="modal" data-target="#statusModal">Statut Client</a>
+					</div>
+				</div>
 
 				<div class="row mb-4">
 					<div class="col overflow-hidden">
@@ -71,7 +77,6 @@
 										</a>
 										<div class="dropdown-menu dropdown-menu-right animated--grow-in" aria-labelledby="clientDetailDropdown">
 											<a class="dropdown-item" href="javscript:void(0);" data-toggle="modal" data-target="#editModal">Modifier</a>
-											<a class="dropdown-item" href="javscript:void(0);" data-toggle="modal" data-target="#statusModal">Statut Client</a>
 										</div>
 									</div>
 								</div>
@@ -120,14 +125,6 @@
 								<h6 class="text-muted font-weight-normal" style="font-size: 15.5px;">
 									<?php echo $d['info_base_client'] ?></br>
 								</h6>
-								<ul class="nav nav-tabs">
-									<li class="nav-item">
-										<a class="nav-link py-3 active" type="button">
-											Favicon
-											<img src="<?php echo $d['favicon']; ?>" width="43"></br>
-										</a>
-									</li>
-								</ul>
 							</div>
 						</div>
 					</div>
