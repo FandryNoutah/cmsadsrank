@@ -171,20 +171,6 @@ class Client extends MY_Controller
 			}
 		}
 
-		$chartData = array_fill(0, 12, 0);
-		$tooltipData = array_fill(0, 12, []);
-
-		foreach ($latestByMonth as $monthIndex => $data) {
-			$chartData[$monthIndex] = $data['budget'];
-			$tooltipData[$monthIndex][] = [
-				'date' => date('d M Y', strtotime($data['date'])),
-				'budget' => $data['budget']
-			];
-		}
-
-		$this->data['chartData'] = json_encode($chartData);
-		$this->data['tooltipData'] = json_encode($tooltipData);
-
 		$this->content = "layouts/client/detail/index.php";
 		$this->layout();
 	}
