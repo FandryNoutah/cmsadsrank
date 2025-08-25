@@ -33,6 +33,7 @@ class Gtm extends MY_Controller
 
 	public function index()
 	{
+		
 		$this->data['donnee'] = $this->visuels_model->getClientDataByDonnee();
 		$this->data['users'] = $this->Task_model->get_all_users();
 		$this->data['produit'] = $this->Donne_modele->get_all_produit();
