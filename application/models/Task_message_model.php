@@ -18,6 +18,13 @@ class Task_message_model extends CI_Model {
         return $this->db->get()->result();
     }
 
+    public function count_messages_by_task($task_id) {
+        $this->db->select('group_messages.*');
+        $this->db->from('group_messages');
+        $this->db->where('group_messages.task_id', $task_id);
+        return $this->db->count_all_results();
+    }
+
     public function insert_message($data) {
         return $this->db->insert('group_messages', $data);
     }
