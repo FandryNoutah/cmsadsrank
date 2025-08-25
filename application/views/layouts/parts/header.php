@@ -1,11 +1,8 @@
 <nav class="navbar navbar-expand sticky-top navbar-light bg-white border-bottom pl-4" style="height: 72px;">
-
-	<button class="btn btn-light py-0 px-1 position-absolute" id="toggleSidebar" style="left: -16px;">
-		<img class="img" src="<?= base_url('assets/images/icons/figma/Menu/CaretDoubleHorizontal.png') ?>">
-	</button>
-
-	<form action="" class="form-inline mr-auto">
-		<input class="form-control" type="text" id="search_client" placeholder="Search" aria-label="Search">
+	
+	<form action="" class="form-inline mr-auto dropdown">
+		<input class="form-control" data-toggle="dropdown" type="text" id="search_client" placeholder="Search" aria-label="Search">
+		<div class="dropdown-menu" id="clients_dropdown"></div>
 	</form>
 
 
