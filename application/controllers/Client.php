@@ -45,8 +45,9 @@ class Client extends MY_Controller
 
 	public function search()
 	{
-		$term = "Jean"; // remplace par un nom réel présent dans la base
-		$clients = $this->visuels_model->search_clients($term);
+
+		$keyword = $this->input->post('keyword');
+		$clients = $this->visuels_model->search_clients($keyword);
 
 		$result = [];
 		foreach ($clients as $client) {
@@ -82,7 +83,20 @@ class Client extends MY_Controller
 		$this->content = "layouts/client/detail/application/index.php";
 		$this->layout();
 	}
-	
+
+	public function gtm($idclients)
+	{
+
+		$this->data["donnees"] = $this->visuels_model->getDonneeById($idclients);
+		$this->data['donnee'] = $this->visuels_model->getClientDataByDonnee();
+		$this->data['users'] = $this->Task_model->get_all_users();
+		$this->data['produit'] = $this->Donne_modele->get_all_produit();
+		$this->data['am'] = $this->Donne_modele->get_all_am();
+		$this->data['initiative'] = $this->Donne_modele->get_all_initiative();
+		$this->content = "layouts/client/detail/gtm/index.php";
+		$this->layout();
+	}
+
 	public function activer_processus_tache()
 	{
 		$type_tache = 3;
