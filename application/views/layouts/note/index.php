@@ -68,7 +68,7 @@ Notes
 								<?= htmlspecialchars($note->status); ?>
 							</span>
 							<div class="col-auto dropdown no-arrow ml-auto">
-								<a href="javascript:void(0);" class="text-decoration-none text-muted task-menu dropdown-toggle" role="button" data-toggle="dropdown" aria-expanded="false">
+								<a href="javascript:void(0);" class="text-decoration-none text-muted note-menu dropdown-toggle" role="button" data-toggle="dropdown" aria-expanded="false">
 									<i class="fa fa-ellipsis-h"></i>
 								</a>
 								<div class="dropdown-menu">
@@ -151,7 +151,7 @@ Notes
 			$('.assigned-select').prop('checked', false);
 		}
 
-		function fetchDetail(id_note) {
+		function fetch_detail(id_note) {
 			$.ajax({
 				type: "GET",
 				url: "Notes/detail_note/" + id_note,
@@ -208,7 +208,7 @@ Notes
 			let id_note = $(button).attr('data-id');
 			$('#detail_discussion_form').data('id', id_note);
 
-			fetchDetail(id_note);
+			fetch_detail(id_note);
 		});
 
 		$('#detailModal').on('hide.bs.modal', function(event) {
@@ -266,6 +266,37 @@ Notes
 
 		$('#users_dd_menu').on('click', function(event) {
 			event.stopPropagation();
+		});
+
+		$('#detail_discussion_form').submit(function(event) {
+
+			event.preventDefault();
+
+			let submitter = event.originalEvent.submitter;
+			let buttonChild = $(submitter).html();
+			let id_note = $(this).data('id');
+
+			$.ajax({
+				type: $(this).attr('method'),
+				url: $(this).attr('action'),
+				data: {
+					"id_note": id_note,
+					"message": $('#detail_message').val()
+				},
+				dataType: "json",
+				beforeSend: function() {
+					$(submitter).attr('disabled', "disabled");
+					$(submitter).html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>');
+				},
+				success: function(response) {
+
+					$(submitter).removeAttr("disabled");
+					$(submitter).html(buttonChild);
+
+					$('#detail_message').val("");
+					fetch_detail(id_note);
+				}
+			});
 		});
 	});
 </script>
