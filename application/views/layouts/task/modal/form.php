@@ -1,6 +1,6 @@
-<div class="modal fade" id="taskModal" tabindex="-1" aria-labelledby="taskModalLabel" aria-hidden="true">
-	<form action="<?php echo base_url("Task/insert_tache") ?>" enctype="multipart/form-data" method="post">
-		<div class="modal-dialog modal-lg modal-dialog-scrollable">
+<form action="<?php echo base_url("Task/insert_tache") ?>" enctype="multipart/form-data" method="post">
+	<div class="modal fade" id="taskModal" aria-labelledby="taskModalLabel" aria-hidden="true">
+		<div class="modal-dialog modal-lg modal-dialog-scrollable" id="taskModalDialog">
 			<div class="modal-content">
 				<?php $current_user = $this->ion_auth->user()->row(); ?>
 				<input type="hidden" name="am" value="<?php echo $current_user->id ?>">
@@ -36,7 +36,7 @@
 					</div>
 					<div class="form-group">
 						<label for="task_title">Client</label>
-						<select name="idclients" id="client_select" class="form-control" style="width: 100%;">
+						<select name="idclients" id="idclients" class="select2" style="width: 100%; padding: 12px 16px;">
 							<?php foreach ($donnee as $d): ?>
 								<option value="<?php echo $d->idclients; ?>" data-budget="<?php echo $d->budget; ?>">
 									<?php echo htmlspecialchars($d->nom_client); ?>
@@ -58,8 +58,6 @@
 							<label for="exampleInputEmail1">Date de la demande</label>
 							<input type="date" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" name="date_demande">
 						</div>
-
-
 
 						<div class="col form-group">
 							<label for="due_date">Date due</label>
@@ -98,19 +96,5 @@
 				</div>
 			</div>
 		</div>
-	</form>
-	<script>
-		function setDefaultDate() {
-			const today = new Date();
-			const yyyy = today.getFullYear();
-			let mm = today.getMonth() + 1;
-			let dd = today.getDate();
-			if (mm < 10) mm = '0' + mm;
-			if (dd < 10) dd = '0' + dd;
-
-			const formattedDate = yyyy + '-' + mm + '-' + dd;
-			document.getElementById('exampleInputEmail1').value = formattedDate;
-		}
-		window.onload = setDefaultDate;
-	</script>
-</div>
+	</div>
+</form>

@@ -561,7 +561,7 @@
 
 			$.ajax({
 				type: "GET",
-				url: "Task/detail_task/" + task_id,
+				url: "<?= site_url('Task/detail_task/'); ?>" + task_id,
 				dataType: "json",
 				beforeSend: function() {
 					resetTask();
@@ -617,13 +617,45 @@
 
 			let button = $(event.relatedTarget);
 			let task_id = $(button).attr('data-id');
-			$('#detail_discussion_form').data('id', task_id);
+			
+			$('#task_discussion_form').data('id', task_id);
 
 			fetch_task(task_id);
 		});
 
 		$('#taskModal').on('hide.bs.modal', function(event) {
 			resetTask();
+		});
+
+		$('#task_discussion_form').submit(function(event) {
+
+			event.preventDefault();
+
+			let submitter = event.originalEvent.submitter;
+			let buttonChild = $(submitter).html();
+			let task_id = $(this).data('id');
+
+			$.ajax({
+				type: $(this).attr('method'),
+				url: $(this).attr('action'),
+				data: {
+					"id_task": task_id,
+					"message": $('#task_message').val()
+				},
+				dataType: "json",
+				beforeSend: function() {
+					$(submitter).attr('disabled', "disabled");
+					$(submitter).html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>');
+				},
+				success: function(response) {
+
+					$(submitter).removeAttr("disabled");
+					$(submitter).html(buttonChild);
+
+					$('#task_message').val("");
+					fetch_task(task_id);
+				}
+			});
 		});
 	});
 </script>
