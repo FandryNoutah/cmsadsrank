@@ -29,43 +29,6 @@ class Notes extends MY_Controller
 
 		// $this->load->view('layouts/note/list', $data);
 	}
-	public function fetch_discussion($id_notes)
-	{
-
-		// Check for order (ascendant || descendant)
-
-		$messages = $this->Task_message_model->get_messages_by_note($id_notes);
-		$currentUser = $this->current_user;
-
-		foreach ($messages as $message) {
-
-			$created_at = $message->created_at;
-			$message->created_at = (new DateTime($created_at))->format('j M, H:i');
-
-			$message->owner = $message->user_id == $currentUser->id;
-		}
-
-		echo json_encode($messages);
-	}
-
-	public function send_message()
-	{
-
-		$id_notes = $this->input->post('id_notes', TRUE);
-		$message = $this->input->post('message', TRUE);
-
-		if (!empty($message) && $this->current_user) {
-			$this->Task_message_model->insert_message_note([
-				'user_id' => $this->current_user->id,
-				'id_notes' => $id_notes,
-				'message' => $message
-			]);
-		}
-
-		echo json_encode([
-			"done"	=>	true
-		]);
-	}
 
 	public function detail_note($id_note)
 	{
