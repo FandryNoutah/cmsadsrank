@@ -57,7 +57,7 @@
 
 			<?= $sidebar ?>
 
-			<div class="col w-100 h-100 overflow-auto">
+			<div class="col w-100 h-100 overflow-auto scroll-container">
 				<?= $header ?>
 
 				<div class="wrapper">
