@@ -399,8 +399,11 @@
 			let obj = $('input[name="obj"]:checked').val();
 			let gtm = $('input[name="gtm"]').is(':checked');
 
-			console.log(camp_param, obj, gtm);
-
+			if (!camp_param || !obj) {
+				alert("Veuillez d'abord choisir les options précédentes!");
+			} else {
+				alert("redirecting soon!")
+			}
 		});
 	});
 </script>
