@@ -137,7 +137,35 @@ class Task extends MY_Controller
 		$title = $this->input->post('title');
 		$Statuts_technique = $this->input->post('Statuts_technique');
 		$tache = $this->input->post('tache');
-		$reference =
+		$fichier_nom = null;
+
+		// Chargement de la bibliothèque d'upload
+		$this->load->library('upload');
+
+		// Vérification du fichier
+		if (isset($_FILES['fichier']) && $_FILES['fichier']['name'] != '') {
+
+			// Configuration de l'upload
+			$config['upload_path']   = './uploads/';
+			$config['allowed_types'] = 'jpg|png|gif|pdf|doc|docx|xls|xlsx|csv';
+
+			$config['max_size']      = 2048; // Taille max en Ko (2 Mo)
+			$config['encrypt_name']  = FALSE; // Renomme le fichier
+
+			// Initialisation de l'upload
+			$this->upload->initialize($config);
+
+			// Tentative d'upload
+			if ($this->upload->do_upload('fichier')) {
+				$uploadData = $this->upload->data();
+				$fichier_nom = 'uploads/' . $uploadData['file_name'];
+			} else {
+				$error = $this->upload->display_errors();
+				log_message('error', 'Échec de l\'upload: ' . $error);
+				echo 'Erreur lors de l\'upload : ' . $error;
+				return;
+			}
+		}
 			$data = array(
 				'type_tache' => $type_tache,
 				'date_demande' => $date_demande,
@@ -147,6 +175,7 @@ class Task extends MY_Controller
 				'assigned_to' => $assigned_to,
 				'title' => $title,
 				'Statuts_technique' => $Statuts_technique,
+				'fichier_nom' => $fichier_nom,
 				'description' => $tache
 			);
 

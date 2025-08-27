@@ -42,7 +42,24 @@ class Client extends MY_Controller
 		$this->content = "layouts/client/index.php";
 		$this->layout();
 	}
-
+	public function resiliation()
+	{
+		$resiliation = $this->input->post('resiliation');
+		$idclients = $this->input->post('client');
+		$tm_resiliation = $this->input->post('tm');
+		$date_resiliation = $this->input->post('date_resiliation');
+		$demande_resiliation = $this->input->post('demande_resiliation');
+		$fin_campagne = $this->input->post('fin_campagne');
+		
+		$am_resiliation = $this->input->post('am_resiliation');
+		$information_resiliation = $this->input->post('information_resiliation');
+		$statut_resiliation = $this->input->post('statut_resiliation');
+	
+        $idclient = $this->visuels_model->create_resiliation($resiliation,$date_resiliation,$fin_campagne, $am_resiliation, $tm_resiliation, $demande_resiliation, $information_resiliation, $statut_resiliation,$idclients);
+		$this->session->set_flashdata('message-succes', "Client résilier avec succès");
+			redirect('Client/detail_client/' . $idclients, 'refresh');
+			$this->layout();
+	}
 	public function search()
 	{
 

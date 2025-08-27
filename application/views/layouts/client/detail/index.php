@@ -40,11 +40,24 @@
 			<div class="container-fluid pb-5">
 
 				<div class="dropdown">
-
+					<?php if($d['resiliation'] == 1):  ?>
 					<a type="button" class="badge alert-success rounded-pill px-4 py-3 mb-3 dropdown-toggle" style="font-size: 12px; font-weight: 500;" id="clientStatusDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 						<i class="fa fa-circle mr-1" style="font-size: 10px;"></i>
 						Active
 					</a>
+					<?php endif; ?>
+					<?php if($d['resiliation'] == 2):  ?>
+					<a type="button" class="badge alert-warning rounded-pill px-4 py-3 mb-3 dropdown-toggle" style="font-size: 12px; font-weight: 500;" id="clientStatusDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+						<i class="fa fa-circle mr-1" style="font-size: 10px;"></i>
+						Mis en pause
+					</a>
+					<?php endif; ?>
+					<?php if($d['resiliation'] == 3):  ?>
+					<a type="button" class="badge alert-danger rounded-pill px-4 py-3 mb-3 dropdown-toggle" style="font-size: 12px; font-weight: 500;" id="clientStatusDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+						<i class="fa fa-circle mr-1" style="font-size: 10px;"></i>
+						Résilié
+					</a>
+					<?php endif; ?>
 					<div class="dropdown-menu dropdown-menu-right animated--grow-in" aria-labelledby="clientStatusDropdown">
 						<a class="dropdown-item" href="javscript:void(0);" data-toggle="modal" data-target="#statusModal">Statut Client</a>
 					</div>
@@ -63,7 +76,7 @@
 						<h1 class="mb-3" style="font-size: 48px; font-weight: 500;">
 							<?= $d['nom_client'] ?>
 						</h1>
-						<h5 class="mb-3" style=""><?= $d['site_client'] ?></h5>
+						<h5 class="mb-3" style=""><a href="<?= $d['site_client'] ?>" target="_blank" style="color: black"><?= $d['site_client'] ?></a></h5>
 					</div>
 					<div class="col-auto">
 						<div class="card h-100" style="width: 23rem;">

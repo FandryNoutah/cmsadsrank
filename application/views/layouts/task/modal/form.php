@@ -79,7 +79,7 @@
 							</div>
 							<span>Drag files here or <span class="text-primary">Browse</span></span>
 						</div>
-						<input type="file" id="fileInput" class="d-none">
+						<input type="file" id="fileInput" class="d-none" name="fichier">
 						<div id="fileName" class="mt-3 text-muted"></div>
 					</div>
 

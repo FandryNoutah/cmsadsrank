@@ -57,7 +57,7 @@
 			</li>
 			
 			<li class="nav-item rounded">
-				<a class="nav-link text-secondary" href="#">
+				<a class="nav-link text-secondary" href="<?= base_url('Plan_de_taggage') ?>">
 					<img class="mr-2" src="<?= base_url('assets/images/icons/figma/icon-briefcase.svg') ?>" />
 					<span class="nav-label">Plan de taggage</span>
 				</a>

@@ -14,17 +14,11 @@
 					<div class="col form-group">
 						<label for="add_member">Members</label>
 						<div class="d-flex align-items-center avatar-group">
-							<img src="<?= base_url('assets/images/figma/user_frame.png') ?>" width="36" class="rounded-circle avatar" alt="Avatar 1">
-							<img src="<?= base_url('assets/images/figma/user_frame.png') ?>" width="36" class="rounded-circle avatar" alt="Avatar 2">
-							<img src="<?= base_url('assets/images/figma/user_frame.png') ?>" width="36" class="rounded-circle avatar" alt="Avatar 3">
-							<img src="<?= base_url('assets/images/figma/user_frame.png') ?>" width="36" class="rounded-circle avatar" alt="Avatar 4">
-							<button type="button" class="btn btn-outline-dark rounded-circle d-block ml-2 py-2">
-								<i class="fa fa-user-plus"></i>
-							</button>
+							
 						</div>
 					</div>
 					<div class="col form-group">
-						<label for="add_member">Add Labels</label>
+						<label for="add_member">Label</label>
 						<div class="d-flex align-items-center">
 							<div class="mr-2">
 								<span class="badge alert-success p-2" style="font-size: 14px;">Internal</span>
@@ -32,9 +26,6 @@
 							<div class="mr-2">
 								<span class="badge alert-warning p-2" style="font-size: 14px;">Marketing</span>
 							</div>
-							<button type="button" class="btn btn-outline-dark rounded-circle d-block">
-								<i class="fa fa-tag"></i>
-							</button>
 						</div>
 					</div>
 					<div class="col form-group">
@@ -82,7 +73,10 @@
 				<div id="detail_discussion"></div>
 			</div>
 			<div class="modal-footer">
-				<button type="submit" class="btn btn-light px-3">Fermer</button>
+				<button type="submit" class="btn btn-light px-3">Modifier</button>
+			</div>
+			<div class="modal-footer">
+				<button type="submit" class="btn btn-light px-3">Terminer</button>
 			</div>
 		</div>
 	</div>
