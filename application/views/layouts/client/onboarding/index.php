@@ -233,11 +233,11 @@
 											<i class="fa fa-arrow-right"></i>
 										</a>
 										<input type="radio" name="camp_param" id="camp_resa" value="resa" class="d-none">
-
 									</div>
 								</div>
 							</div>
 						</div>
+
 						<div class="d-flex justify-content-end align-items-center">
 							<button class="btn btn-dark px-4 float-right next-button" data-input="camp_param">Suivant</button>
 						</div>
@@ -348,9 +348,9 @@
 
 			$('#camp_creation_step').removeClass('d-none');
 
-			$('html, body').animate({
-				scrollTop: $("#create_camp_button").offset().top
-			}, 500);
+			$('.scroll-container').animate({
+				scrollTop: $('.scroll-container')[0].scrollHeight
+			}, 1000);
 
 		});
 
@@ -359,7 +359,7 @@
 			let target = $(this).data('target');
 
 			$(target).prop('checked', true);
-			$('.camp-container').removeClass('border-dark shadow');
+			$('.camp-container').removeClass('border-dark border-danger shadow');
 			$(this).parents('.camp-container').addClass('border-dark shadow');
 		});
 
@@ -368,7 +368,7 @@
 			let target = $(this).data('target');
 
 			$(target).prop('checked', true);
-			$('.obj-container').removeClass('border-dark shadow');
+			$('.obj-container').removeClass('border-dark border-danger shadow');
 			$(this).parents('.obj-container').addClass('border-dark shadow');
 		});
 
@@ -376,8 +376,21 @@
 		$('.next-button').click(function() {
 
 			let input = $(this).data('input');
-			console.log(input);
+			let value = $('input[name="'+ input +'"]:checked').val();
 
+			if (!value) {
+				$('input[name="'+ input +'"]').parents('.card').removeClass('border-dark');
+				$('input[name="'+ input +'"]').parents('.card').addClass('border-danger shadow');
+			} else {
+				$('input[name="'+ input +'"]').parents('.card').removeClass('border-danger');
+				// $(this).parents('.step').removeClass('active');
+				$(this).parents('.step').next('.step').addClass('active');
+
+				$('.scroll-container').animate({
+					scrollTop: $('.scroll-container')[0].scrollHeight
+				}, 1000);
+			}
+			
 		});
 		
 		$('#final_button').click(function() {
