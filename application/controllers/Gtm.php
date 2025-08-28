@@ -16,7 +16,7 @@ class Gtm extends MY_Controller
 		$this->load->model("Donne_modele");
 		$this->load->model("Data_modele");
 		$this->load->model("Image_model");
-		$this->load->model("Message_model");
+		$this->load->model("Task_message_model");
 		$this->load->model("Task_model");
 		$this->data['visuels'] = $this->visuels_model->get_all();
 		// $this->load->library('PHPExcel');
@@ -29,6 +29,8 @@ class Gtm extends MY_Controller
 		$this->load->library('upload');
 		$this->load->library('form_validation');
 		$this->form_validation->set_error_delimiters('<span class="error">', '</span>');
+		$this->current_user = $this->ion_auth->user()->row();
+
 	}
 
 	public function index()
@@ -43,7 +45,7 @@ class Gtm extends MY_Controller
 
 		// Check for order (ascendant || descendant)
 
-		$messages = $this->Gtm_message_model->get_messages_by_gtm($id_task);
+		$messages = $this->Task_message_model->get_messages_by_task($id_task);
 		$currentUser = $this->current_user;
 
 		foreach ($messages as $message) {
@@ -64,15 +66,35 @@ class Gtm extends MY_Controller
 		$message = $this->input->post('message', TRUE);
 
 		if (!empty($message) && $this->current_user) {
-			$this->Gtm_message_model->insert_message_gtm([
+			$this->Task_message_model->insert_message([
 				'user_id' => $this->current_user->id,
-				'id_task' => $id_task,
+				'task_id' => $id_task,
 				'message' => $message
 			]);
 		}
 
 		echo json_encode([
 			"done"	=>	true
+		]);
+	}
+
+	public function detail_task($id_task) {
+
+		$task = $this->Task_model->get_task_by_id($id_task);
+		$messages = $this->Task_message_model->get_messages_by_task($id_task);
+
+		foreach ($messages as $message) {
+			
+			$created_at = $message->created_at;
+			$message->created_at = (new DateTime($created_at))->format('j M, H:i');
+
+			$photo_users = base_url(IMAGES_PATH . $message->photo_users);
+			$message->photo_users = $photo_users;
+		}
+		
+		echo json_encode([
+			'task'		=>	$task,
+			'messages'	=>	$messages
 		]);
 	}
 }
