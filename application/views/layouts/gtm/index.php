@@ -97,8 +97,7 @@
 						</tr>
 					</thead>
 					<tbody>
-						<?php foreach ($donnee as $d): ?>
-							<?php if ($d->budget != 0) : ?>
+						<?php foreach ($gtm_task as $d): ?>
 								<tr>
 									<td>
 										<a href="<?= base_url('Client/detail_client/' . $d->idclients) ?>" style="display: flex; align-items: center; text-decoration: none; color: inherit;">
@@ -109,28 +108,28 @@
 
 									<td class="text-muted"><?= $d->site_client ?></td>
 									<td>
-										<img src="<?= base_url(IMAGES_PATH . htmlspecialchars($d->am_photo_user)); ?>" width="28" height="28" alt="Client Image">
+										<img src="<?= base_url(IMAGES_PATH . htmlspecialchars($d->AM)); ?>" width="28" height="28" alt="Client Image">
 									</td>
 									<td class="text-muted">
 										<i class="fa fa-calendar"></i>
-										16/08/2013
+										<?= htmlspecialchars($d->created_at) ?>
 									</td>
 									<td>
 										<span class="badge alert-success rounded-pill px-2 py-1" style="font-size: 12px; font-weight: 500;">
 											<i class="fa fa-circle mr-1" style="font-size: 10px;"></i>
-											2025-08-17
+											<?= htmlspecialchars($d->invitation_reçu) ?>
 										</span>
 									</td>
 									<td>
 										<span class="badge alert-success rounded-pill px-2 py-1" style="font-size: 12px; font-weight: 500;">
 											<i class="fa fa-circle mr-1" style="font-size: 10px;"></i>
-											Installé
+											<?= htmlspecialchars($d->status) ?>
 										</span>
 									</td>
 									<td>
 										<span class="badge alert-success rounded-pill px-2 py-1" style="font-size: 12px; font-weight: 500;">
 											<i class="fa fa-circle mr-1" style="font-size: 10px;"></i>
-											Implémenté
+											<?= htmlspecialchars($d->Statuts_technique) ?>
 										</span>
 									</td>
 									<td>
@@ -139,16 +138,16 @@
 												<i class="fa fa-ellipsis-v"></i>
 											</a>
 											<div class="dropdown-menu">
-												<button type="button" class="dropdown-item" data-toggle="modal" data-target="#detailModal" data-id="<?= $d->idonnee; ?>">
+												<button type="button" class="dropdown-item" data-toggle="modal" data-target="#detailModal" data-id="<?= $d->idtask; ?>">
 													<i class="fa fa-eye mr-2"></i>
 													Détails
 												</button>
-												<button type="button" class="dropdown-item" data-toggle="modal" data-target="#formModal" data-id="<?= $d->idonnee; ?>">
+												<button type="button" class="dropdown-item" data-toggle="modal" data-target="#formModal" data-id="<?= $d->idtask; ?>">
 													<i class="fa fa-edit mr-2"></i>
 													Modifier
 												</button>
 												<div class="dropdown-divider"></div>
-												<a href="<?= base_url('Gtm/delete/' . $d->idonnee); ?>" class="dropdown-item text-danger" data-id="<?= $d->idonnee; ?>">
+												<a href="<?= base_url('Gtm/delete/' . $d->idtask); ?>" class="dropdown-item text-danger" data-id="<?= $d->idtask; ?>">
 													<i class="fa fa-trash mr-2"></i>
 													Supprimer
 												</a>
@@ -156,7 +155,6 @@
 										</div>
 									</td>
 								</tr>
-							<?php endif; ?>
 						<?php endforeach; ?>
 					</tbody>
 				</table>
