@@ -209,7 +209,27 @@ class Client extends MY_Controller
 	public function onboarding($idclients)
 	{
 
+		$this->data['idclients'] = $idclients;
 		$this->content = "layouts/client/onboarding/index.php";
+		$this->layout();
+	}
+
+	public function campagne($idclients) {
+
+		$camp_param = $this->input->get('camp_param');
+		$obj = $this->input->get('obj');
+		$gtm = $this->input->get('gtm');
+		
+		switch ($obj) {
+			case "search":
+				$this->content = "layouts/client/onboarding/search.php";
+				break;
+				
+			case "pmax":
+				$this->content = "layouts/client/onboarding/pmax.php";
+				break;
+		}
+
 		$this->layout();
 	}
 
