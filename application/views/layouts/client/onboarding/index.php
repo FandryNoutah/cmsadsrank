@@ -402,7 +402,9 @@
 			if (!camp_param || !obj) {
 				alert("Veuillez d'abord choisir les options précédentes!");
 			} else {
-				alert("redirecting soon!")
+				
+				let url = "<?= site_url('Client/campagne/'. $idclients); ?>?camp_param="+ camp_param +"&obj="+ obj +"&gtm="+ gtm;
+				window.location.href = url;
 			}
 		});
 	});

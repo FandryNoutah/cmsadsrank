@@ -106,10 +106,13 @@ Task
 		</button>
 	</div>
 	<div class="col-auto px-1">
-		<button class="btn btn-outline-dark">
-			<img src="<?= base_url('assets/images/icons/figma/icon-funnel.svg') ?>" alt="">
-			Filter
-		</button>
+		<select id="am_filter" class="custom-select border-dark">
+			<option disabled selected>Filter</option>
+			<option value="0">Tous</option>
+			<?php foreach ($users as $u): ?>
+				<option value="<?= $u['id']; ?>"><?= $u['first_name'] ." ". $u['last_name']; ?></option>
+			<?php endforeach; ?>
+		</select>
 	</div>
 	<div class="col-auto px-1">
 		<button class="btn btn-dark" data-toggle="modal" data-target="#taskModal">
@@ -171,7 +174,7 @@ Task
 					<tbody>
 						<?php foreach ($tache as $t):  ?>
 							<?php if ($t->status == "planifié"): ?>
-								<tr class="task-filter" data-type="<?= $t->type_tache ?>">
+								<tr class="task-filter" data-type="<?= $t->type_tache ?>" data-am="<?= $t->AM; ?>">
 									<td>
 										<h6 class="mb-0 ml-3">
 											<?= $t->nom_client; ?>
@@ -215,7 +218,8 @@ Task
 									</td>
 									<td>
 										<div class="d-flex align-items-center avatar-group">
-											<img src="<?= base_url(IMAGES_PATH . htmlspecialchars($t->AM_photo)); ?>" class="avatar rounded-circle" width="28" height="28" alt="Client Image"><img src="<?= base_url(IMAGES_PATH . htmlspecialchars($t->assigned_to_photo)); ?>" class="avatar rounded-circle" width="28" height="28" alt="Client Image">
+											<img src="<?= base_url(IMAGES_PATH . htmlspecialchars($t->AM_photo)); ?>" class="avatar rounded-circle" width="28" height="28" alt="Client Image">
+											<img src="<?= base_url(IMAGES_PATH . htmlspecialchars($t->assigned_to_photo)); ?>" class="avatar rounded-circle" width="28" height="28" alt="Client Image">
 										</div>
 									</td>
 									<td>
@@ -253,7 +257,7 @@ Task
 					<tbody>
 						<?php foreach ($tache as $t): ?>
 							<?php if ($t->status == "en cours"): ?>
-								<tr class="task-filter" data-type="<?= $t->type_tache ?>">
+								<tr class="task-filter" data-type="<?= $t->type_tache ?>" data-am="<?= $t->AM; ?>">
 									<td>
 										<h6 class="mb-0 ml-3">
 											<?= $t->nom_client; ?>
@@ -334,7 +338,7 @@ Task
 					<tbody>
 						<?php foreach ($tache as $t): ?>
 							<?php if ($t->status == "effectuée"): ?>
-								<tr class="task-filter" data-type="<?= $t->type_tache ?>">
+								<tr class="task-filter" data-type="<?= $t->type_tache ?>" data-am="<?= $t->AM; ?>">
 									<td>
 										<h6 class="mb-0 ml-3">
 											<?= $t->nom_client; ?>
@@ -412,7 +416,7 @@ Task
 							<span class="text-muted">3 open tasks</span>
 							<?php foreach ($tache as $t): ?>
 								<?php if ($t->status == "planifié"): ?>
-									<div class="card mt-3 task-filter" data-type="<?= $t->type_tache ?>">
+									<div class="card mt-3 task-filter" data-type="<?= $t->type_tache ?>" data-am="<?= $t->AM; ?>">
 										<div class="card-body">
 											<div class="d-flex">
 												<?php if ($t->type_tache == 1): ?>
@@ -502,7 +506,7 @@ Task
 							<!-- Eto no manao foreach -->
 							<?php foreach ($tache as $t): ?>
 								<?php if ($t->status == "en cours"): ?>
-									<div class="card mt-3 task-filter" data-type="<?= $t->type_tache ?>">
+									<div class="card mt-3 task-filter" data-type="<?= $t->type_tache ?>" data-am="<?= $t->AM; ?>">
 										<div class="card-body">
 											<div class="d-flex">
 												<?php if ($t->type_tache == 1): ?>
@@ -590,7 +594,7 @@ Task
 							<!-- Eto no manao foreach -->
 							<?php foreach ($tache as $t): ?>
 								<?php if ($t->status == "effectuée"): ?>
-									<div class="card mt-3 task-filter" data-type="<?= $t->type_tache ?>">
+									<div class="card mt-3 task-filter" data-type="<?= $t->type_tache ?>" data-am="<?= $t->AM; ?>">
 										<div class="card-body">
 											<div class="d-flex">
 												<?php if ($t->type_tache == 1): ?>
@@ -705,6 +709,18 @@ Task
 			$(this).addClass('active');
 
 			filter_task(type);
+		});
+
+		$('#am_filter').change(function() {
+			let id = $(this).val();
+			
+			if (id == 0) {
+				$('.task-filter').removeClass('d-none');
+			} else {
+				$('.task-filter').addClass('d-none');
+				$('.task-filter[data-am="' + id + '"]').removeClass('d-none');
+			}
+			
 		});
 	});
 </script>
