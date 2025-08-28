@@ -134,6 +134,7 @@ class Task_model extends CI_Model
 		// Retourner les résultats
 		return $query->result();
 	}
+	
 	public function get_all_tâche($status = null)
 	{
 		$this->db->select('tasks.*, u1.first_name as assigned_to_name, u1.photo_users as assigned_to_photo, u2.first_name as AM_name, u2.photo_users as AM_photo, clients.*');
