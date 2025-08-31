@@ -106,11 +106,11 @@ Task
 		</button>
 	</div>
 	<div class="col-auto px-1">
-		<select id="am_filter" class="custom-select border-dark">
+		<select id="task_user_filter" class="custom-select border-dark">
 			<option disabled selected>Filter</option>
 			<option value="0">Tous</option>
 			<?php foreach ($users as $u): ?>
-				<option value="<?= $u['id']; ?>"><?= $u['first_name'] ." ". $u['last_name']; ?></option>
+				<option value="<?= $u['id']; ?>"><?= $u['first_name'] . " " . $u['last_name']; ?></option>
 			<?php endforeach; ?>
 		</select>
 	</div>
@@ -174,7 +174,7 @@ Task
 					<tbody>
 						<?php foreach ($tache as $t):  ?>
 							<?php if ($t->status == "planifié"): ?>
-								<tr class="task-filter" data-type="<?= $t->type_tache ?>" data-am="<?= $t->AM; ?>">
+								<tr class="task-filter" data-type="<?= $t->type_tache ?>" data-am="<?= $t->AM; ?>" data-assigned="<?= $t->assigned_to ?>">
 									<td>
 										<h6 class="mb-0 ml-3">
 											<?= $t->nom_client; ?>
@@ -257,7 +257,7 @@ Task
 					<tbody>
 						<?php foreach ($tache as $t): ?>
 							<?php if ($t->status == "en cours"): ?>
-								<tr class="task-filter" data-type="<?= $t->type_tache ?>" data-am="<?= $t->AM; ?>">
+								<tr class="task-filter" data-type="<?= $t->type_tache ?>" data-am="<?= $t->AM; ?>" data-assigned="<?= $t->assigned_to ?>">
 									<td>
 										<h6 class="mb-0 ml-3">
 											<?= $t->nom_client; ?>
@@ -338,7 +338,7 @@ Task
 					<tbody>
 						<?php foreach ($tache as $t): ?>
 							<?php if ($t->status == "effectuée"): ?>
-								<tr class="task-filter" data-type="<?= $t->type_tache ?>" data-am="<?= $t->AM; ?>">
+								<tr class="task-filter" data-type="<?= $t->type_tache ?>" data-am="<?= $t->AM; ?>" data-assigned="<?= $t->assigned_to ?>">
 									<td>
 										<h6 class="mb-0 ml-3">
 											<?= $t->nom_client; ?>
@@ -416,7 +416,7 @@ Task
 							<span class="text-muted">3 open tasks</span>
 							<?php foreach ($tache as $t): ?>
 								<?php if ($t->status == "planifié"): ?>
-									<div class="card mt-3 task-filter" data-type="<?= $t->type_tache ?>" data-am="<?= $t->AM; ?>">
+									<div class="card mt-3 task-filter" data-type="<?= $t->type_tache ?>" data-am="<?= $t->AM; ?>" data-assigned="<?= $t->assigned_to ?>">
 										<div class="card-body">
 											<div class="d-flex">
 												<?php if ($t->type_tache == 1): ?>
@@ -506,7 +506,7 @@ Task
 							<!-- Eto no manao foreach -->
 							<?php foreach ($tache as $t): ?>
 								<?php if ($t->status == "en cours"): ?>
-									<div class="card mt-3 task-filter" data-type="<?= $t->type_tache ?>" data-am="<?= $t->AM; ?>">
+									<div class="card mt-3 task-filter" data-type="<?= $t->type_tache ?>" data-am="<?= $t->AM; ?>" data-assigned="<?= $t->assigned_to ?>">
 										<div class="card-body">
 											<div class="d-flex">
 												<?php if ($t->type_tache == 1): ?>
@@ -594,7 +594,7 @@ Task
 							<!-- Eto no manao foreach -->
 							<?php foreach ($tache as $t): ?>
 								<?php if ($t->status == "effectuée"): ?>
-									<div class="card mt-3 task-filter" data-type="<?= $t->type_tache ?>" data-am="<?= $t->AM; ?>">
+									<div class="card mt-3 task-filter" data-type="<?= $t->type_tache ?>" data-am="<?= $t->AM; ?>" data-assigned="<?= $t->assigned_to ?>">
 										<div class="card-body">
 											<div class="d-flex">
 												<?php if ($t->type_tache == 1): ?>
@@ -650,7 +650,8 @@ Task
 											<div class="row no-gutters" style="font-size: 14px;">
 												<div class="col-auto mr-auto">
 													<div class="d-flex align-items-center avatar-group">
-														<img src="<?= base_url(IMAGES_PATH . htmlspecialchars($t->AM_photo)); ?>" class="avatar rounded-circle" width="28" height="28" alt="Client Image"><img src="<?= base_url(IMAGES_PATH . htmlspecialchars($t->assigned_to_photo)); ?>" class="avatar rounded-circle" width="28" height="28" alt="Client Image">
+														<img src="<?= base_url(IMAGES_PATH . htmlspecialchars($t->AM_photo)); ?>" class="avatar rounded-circle" width="28" height="28" alt="Client Image">
+														<img src="<?= base_url(IMAGES_PATH . htmlspecialchars($t->assigned_to_photo)); ?>" class="avatar rounded-circle" width="28" height="28" alt="Client Image">
 													</div>
 												</div>
 												<span class="col-auto mr-3">
@@ -711,16 +712,17 @@ Task
 			filter_task(type);
 		});
 
-		$('#am_filter').change(function() {
+		$('#task_user_filter').change(function() {
 			let id = $(this).val();
-			
+
 			if (id == 0) {
 				$('.task-filter').removeClass('d-none');
 			} else {
 				$('.task-filter').addClass('d-none');
 				$('.task-filter[data-am="' + id + '"]').removeClass('d-none');
+				$('.task-filter[data-assigned="' + id + '"]').removeClass('d-none');
 			}
-			
+
 		});
 	});
 </script>
@@ -739,6 +741,9 @@ Task
 			$('#detail_due_date').removeAttr('value');
 			$('#detail_description').text("");
 			$('#detail_discussion_form').removeAttr('id');
+			$('#detail_type').html("");
+			$('#detail_status').html("");
+			$('#detail_avatar').html("");
 		}
 
 		function fetch_discussion() {
@@ -810,6 +815,48 @@ Task
 					$('#detailModalLabel').text("Tâche: " + task.title);
 					$('#detail_due_date').val(task.date_due);
 					$('#detail_description').text(task.description);
+
+					let photo_users = `<img src="<?= base_url(IMAGES_PATH); ?>/${task.photo_users}" class="avatar rounded-circle" width="36" height="36" alt="Client Image">`;
+					// let assigned_photo = `<img src="<?= base_url(IMAGES_PATH); ?>/${task.assigned_to_photo}" class="avatar rounded-circle" width="28" height="28" alt="Client Image">`;
+
+					$('#detail_avatar').append(photo_users);
+
+					var type = "";
+					switch (task.type_tache) {
+						case "1":
+							type = "Team Task";
+							break;
+						case "2":
+							type = "Temporaire";
+							break;
+						case "3":
+							type = "GTM";
+							break;
+						case "4":
+							type = "Plan de taggage";
+							break;
+					}
+
+					$('#detail_type').html(`<span class="badge alert-success p-2" style="font-size: 14px;">${type}</span>`);
+
+					var status = "";
+					var status_color = "";
+					switch (task.Statuts_technique) {
+						case "1":
+							status = "Normal";
+							status_color = "success";
+							break;
+						case "2":
+							status = "Priorité";
+							status_color = "warning";
+							break;
+						case "3":
+							status = "Urgent";
+							status_color = "danger";
+							break;
+					}
+
+					$('#detail_status').html(`<span class="badge alert-${status_color} p-2" style="font-size: 14px;">${status}</span>`);
 
 					$.each(messages, function(index, data) {
 
