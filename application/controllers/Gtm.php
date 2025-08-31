@@ -36,6 +36,7 @@ class Gtm extends MY_Controller
 	public function index()
 	{
 		$this->data['gtm_task'] = $this->Task_model->get_all_procedure_gtm();
+		// dd($this->data['gtm_task']);
 		$this->content = "layouts/gtm/index.php";
 		$this->layout();
 	}
