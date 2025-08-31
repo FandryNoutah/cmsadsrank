@@ -101,14 +101,19 @@
 							<tr>
 								<td>
 									<a href="<?= base_url('Client/detail_client/' . $d->idclients) ?>" style="display: flex; align-items: center; text-decoration: none; color: inherit;">
-										<img src="<?= $d->favicon ?>" class="img-thumbnail" width="28" height="28" alt="Client Image" style="margin-right: 8px;">
+										<?php if ($d->favicon): ?>
+											<img src="<?= $d->favicon; ?>" class="img-thumbnail" width="28" height="28" alt="Client Image" style="margin-right: 8px;">
+										<?php endif; ?>
+
 										<?= htmlspecialchars($d->nom_client) ?>
 									</a>
 								</td>
 
 								<td class="text-muted"><?= $d->site_client ?></td>
 								<td>
-									<img src="<?= base_url(IMAGES_PATH . htmlspecialchars($d->AM)); ?>" width="28" height="28" alt="Client Image">
+									<?php if ($d->photo_users): ?>
+										<img src="<?= base_url(IMAGES_PATH . htmlspecialchars($d->photo_users)); ?>" width="28" height="28" alt="Client Image">
+									<?php endif; ?>
 								</td>
 								<td class="text-muted">
 									<i class="fa fa-calendar"></i>
