@@ -18,9 +18,6 @@
 							<img src="<?= base_url('assets/images/figma/user_frame.png') ?>" width="36" class="rounded-circle avatar" alt="Avatar 2">
 							<img src="<?= base_url('assets/images/figma/user_frame.png') ?>" width="36" class="rounded-circle avatar" alt="Avatar 3">
 							<img src="<?= base_url('assets/images/figma/user_frame.png') ?>" width="36" class="rounded-circle avatar" alt="Avatar 4">
-							<button type="button" class="btn btn-outline-dark rounded-circle d-block ml-2 py-2">
-								<i class="fa fa-user-plus"></i>
-							</button>
 						</div>
 					</div>
 					<div class="col form-group">
@@ -32,9 +29,6 @@
 							<div class="mr-2">
 								<span class="badge alert-warning p-2" style="font-size: 14px;" id="detail_status"></span>
 							</div>
-							<button type="button" class="btn btn-outline-dark rounded-circle d-block">
-								<i class="fa fa-tag"></i>
-							</button>
 						</div>
 					</div>
 					<div class="col form-group">
@@ -47,17 +41,18 @@
 				<p class="text-muted" id="detail_description">Monthly Product Discussion by Design and Marketing Teams with CEO to Plan our future products sales and reports</p>
 
 				<div class="form-group">
-					<label for="attachment">Attachment</label>
-					<div class="file-drop-area" id="fileDrop">
-						<div class="file-drop-icon">
-							<i class="fas fa-image"></i>
-						</div>
-						<span>Drag files here or <span class="text-primary">Browse</span></span>
+					<p>Attachment</p>
+					<div class="btn-group" role="group">
+						<button class="btn btn-outline-dark btn-sm" type="button">
+							<i class="fa fa-image"></i>
+						</button>
+						<button class="btn btn-outline-primary btn-sm">
+							<i class="fa fa-download"></i>
+							Télécharger le fichier
+						</button>
 					</div>
-					<input type="file" id="fileInput" class="d-none">
-					<div id="fileName" class="mt-3 text-muted"></div>
 				</div>
-				
+
 				<form action="<?= site_url('Notes/send_message') ?>" method="POST" id="detail_discussion_form">
 					<div class="form-group input-group">
 						<input type="text" class="form-control border-right-0" placeholder="Add Your Message" id="detail_message">
