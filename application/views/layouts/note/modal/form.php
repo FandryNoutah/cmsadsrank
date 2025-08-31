@@ -56,12 +56,6 @@
 							</div>
 						</div>
 						<div class="col form-group">
-							<label for="add_member">Add Labels</label>
-							<button type="button" class="btn btn-outline-dark rounded-circle d-block">
-								<i class="fa fa-tag"></i>
-							</button>
-						</div>
-						<div class="col form-group">
 							<label for="due_date">Date due</label>
 							<input type="date" name="date_due" id="due_date" class="form-control">
 						</div>
