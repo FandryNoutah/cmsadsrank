@@ -50,15 +50,15 @@ class Client extends MY_Controller
 		$date_resiliation = $this->input->post('date_resiliation');
 		$demande_resiliation = $this->input->post('demande_resiliation');
 		$fin_campagne = $this->input->post('fin_campagne');
-		
+
 		$am_resiliation = $this->input->post('am_resiliation');
 		$information_resiliation = $this->input->post('information_resiliation');
 		$statut_resiliation = $this->input->post('statut_resiliation');
-	
-        $idclient = $this->visuels_model->create_resiliation($resiliation,$date_resiliation,$fin_campagne, $am_resiliation, $tm_resiliation, $demande_resiliation, $information_resiliation, $statut_resiliation,$idclients);
+
+		$idclient = $this->visuels_model->create_resiliation($resiliation, $date_resiliation, $fin_campagne, $am_resiliation, $tm_resiliation, $demande_resiliation, $information_resiliation, $statut_resiliation, $idclients);
 		$this->session->set_flashdata('message-succes', "Client résilier avec succès");
-			redirect('Client/detail_client/' . $idclients, 'refresh');
-			$this->layout();
+		redirect('Client/detail_client/' . $idclients, 'refresh');
+		$this->layout();
 	}
 	public function search()
 	{
@@ -214,22 +214,25 @@ class Client extends MY_Controller
 		$this->layout();
 	}
 
-	public function campagne($idclients) {
+	public function campagne($idclients)
+	{
 
 		$camp_param = $this->input->get('camp_param');
 		$obj = $this->input->get('obj');
 		$gtm = $this->input->get('gtm');
-		
-		switch ($obj) {
+		$this->data["donnees"] = $this->visuels_model->getDonneeById($idclients);
+
+		/* switch ($obj) {
 			case "search":
 				$this->content = "layouts/client/onboarding/search.php";
 				break;
-				
+
 			case "pmax":
 				$this->content = "layouts/client/onboarding/pmax.php";
 				break;
-		}
+		} */
 
+		$this->content = "layouts/client/onboarding/$obj.php";
 		$this->layout();
 	}
 
