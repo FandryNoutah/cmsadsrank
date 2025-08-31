@@ -33,7 +33,7 @@
 		#toggleSidebar {
 			left: 235px;
 			top: 21px;
-			z-index: 99999;
+			z-index: 1021;
 			transition: left 0.3s ease;
 		}
 
