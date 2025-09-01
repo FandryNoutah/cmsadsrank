@@ -99,10 +99,10 @@ Notes
 						<?php
 						echo "De: " . htmlspecialchars($note->author) . " | Pour: ";
 
-						// $recipients = $this->Note_model->get_note_recipients($note->id);
-						// echo implode(', ', array_map(function ($r) {
-						// 	return htmlspecialchars($r->username);
-						// }, $recipients));
+						$recipients = $this->Note_model->get_note_recipients($note->id);
+						echo implode(', ', array_map(function ($r) {
+							return htmlspecialchars($r->username);
+						}, $recipients));
 						?>
 
 						<!-- A UTILISER SI BESOIN D'IMAGE -->
@@ -137,6 +137,7 @@ Notes
 			$('#detail_due_date').removeAttr('value');
 			$('#detail_description').text("");
 			$('#detail_discussion_form').removeAttr('id');
+			$('#detail_avatar').html("");
 		}
 
 		function resetForm() {
@@ -169,6 +170,12 @@ Notes
 					$('#detail_description').text(note.content);
 					$('#detail_type').text(note.type);
 					$('#detail_status').text(note.status);
+
+					let assigned_users = response.assigned_users;
+					$.each(assigned_users, function(index, value) {
+						let avatar = `<img src = "<?= base_url(IMAGES_PATH) ?>${value.photo_users}"width = "36"class = "rounded-circle avatar" >`;
+						$('#detail_avatar').append(avatar);
+					});
 
 					$.each(messages, function(index, data) {
 
@@ -244,10 +251,9 @@ Notes
 
 						let assigned_users = response.assigned_users;
 						$.each(assigned_users, function(index, value) {
-							
-							let user_id = value.user_id;
-							$('#assigned_to_'+ user_id).prop('checked', true);
 
+							let user_id = value.id;
+							$('#assigned_to_' + user_id).prop('checked', true);
 						});
 
 					}
