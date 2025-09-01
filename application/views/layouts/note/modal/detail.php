@@ -13,12 +13,7 @@
 				<div class="row">
 					<div class="col form-group">
 						<label for="add_member">Members</label>
-						<div class="d-flex align-items-center avatar-group">
-							<img src="<?= base_url('assets/images/figma/user_frame.png') ?>" width="36" class="rounded-circle avatar" alt="Avatar 1">
-							<img src="<?= base_url('assets/images/figma/user_frame.png') ?>" width="36" class="rounded-circle avatar" alt="Avatar 2">
-							<img src="<?= base_url('assets/images/figma/user_frame.png') ?>" width="36" class="rounded-circle avatar" alt="Avatar 3">
-							<img src="<?= base_url('assets/images/figma/user_frame.png') ?>" width="36" class="rounded-circle avatar" alt="Avatar 4">
-						</div>
+						<div class="d-flex align-items-center avatar-group" id="detail_avatar"></div>
 					</div>
 					<div class="col form-group">
 						<label for="add_member">Add Labels</label>
