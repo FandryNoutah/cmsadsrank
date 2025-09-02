@@ -149,17 +149,17 @@ echo $cms_name;
           </label>
              <?php endif; ?>
             <?php if (!empty($procedure_gtm)): ?>
-  <label class="toggle" aria-label="Activer procédure">
-    <input type="checkbox" class="activer-procedure"
-           data-idclient="<?php echo $d['idclients']; ?>"
-           data-am="<?php echo $d['initiative']; ?>"
-           data-assigned="<?php echo $d['account_manager']; ?>"
-           checked disabled />
-    <span class="switch">
-      <span class="knob"></span>
-    </span>
-  </label>
-<?php endif; ?>
+      <label class="toggle" aria-label="Activer procédure">
+        <input type="checkbox" class="activer-procedure"
+              data-idclient="<?php echo $d['idclients']; ?>"
+              data-am="<?php echo $d['initiative']; ?>"
+              data-assigned="<?php echo $d['account_manager']; ?>"
+              checked disabled />
+        <span class="switch">
+          <span class="knob"></span>
+        </span>
+      </label>
+    <?php endif; ?>
 
 
           </div>
