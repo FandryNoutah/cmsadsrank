@@ -42,6 +42,22 @@ class Client extends MY_Controller
 		$this->content = "layouts/client/index.php";
 		$this->layout();
 	}
+
+	
+
+	public function enregistrer() {
+		$data = json_decode(file_get_contents("php://input"), true);
+
+		$idclients = $data['idclients'] ?? null;
+		$rating = $data['rating'] ?? null;
+
+		if ($idclients && $rating) {
+			$this->visuels_model->enregistrer_note($idclients, $rating);
+			echo json_encode(['success' => true]);
+		} else {
+			echo json_encode(['success' => false, 'message' => 'Données invalides']);
+		}
+	}
 	public function resiliation()
 	{
 		$resiliation = $this->input->post('resiliation');
@@ -205,6 +221,8 @@ class Client extends MY_Controller
 
 	public function detail_client($idclients)
 	{
+
+		$this->data['note'] = $this->visuels_model->get_note_par_client($idclients);
 		$this->data['upsell'] = $this->visuels_model->getupsellbyidclient($idclients);
 		$this->data['budget_initial'] = $this->visuels_model->getdernierbyidclient($idclients);
 		$t = $this->data['task'] = $this->Task_model->get_task_by_id_client($idclients);

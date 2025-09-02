@@ -38,8 +38,9 @@
 							<i class="fa fa-image"></i>
 						</button>
 						<button class="btn btn-outline-primary btn-sm">
-							<i class="fa fa-download"></i>
-							Télécharger le fichier
+							<a href="<?php //echo base_url($donne_detail_client[0]['fichier_nom']); ?>" target="_blank" download>
+                                            Télécharger la pièce joint
+                            </a>
 						</button>
 					</div>
 				</div>
