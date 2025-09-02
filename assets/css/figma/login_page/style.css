@@ -1,0 +1,2933 @@
+.sign-in-page {
+  display: flex;
+  min-height: 100vh;
+  align-items: flex-start;
+  position: relative;
+  background-color: var(--color-tokens-color-tokens-background-secondary);
+}
+
+.sign-in-page .illustrational-image {
+  position: relative;
+  flex: 1;
+  align-self: stretch;
+  flex-grow: 1;
+  background-color: var(--color-tokens-color-tokens-content-dark-primary);
+}
+
+.sign-in-page .overlap {
+  position: relative;
+  width: 720px;
+  height: 820px;
+}
+
+.sign-in-page .pattern {
+  position: absolute;
+  width: 720px;
+  height: 820px;
+  top: 0;
+  left: 0;
+}
+
+.sign-in-page .overlap-group {
+  position: relative;
+  height: 820px;
+}
+
+.sign-in-page .polygon {
+  position: absolute;
+  width: 257px;
+  height: 359px;
+  top: 278px;
+  left: 463px;
+}
+
+.sign-in-page .img {
+  position: absolute;
+  width: 414px;
+  height: 228px;
+  top: 0;
+  left: 227px;
+}
+
+.sign-in-page .polygon-2 {
+  position: absolute;
+  width: 520px;
+  height: 724px;
+  top: 96px;
+  left: 0;
+}
+
+.sign-in-page .text-wrapper {
+  position: absolute;
+  width: 413px;
+  top: 75px;
+  left: 154px;
+  font-family: var(--heading-desktop-h3-font-family);
+  font-weight: var(--heading-desktop-h3-font-weight);
+  color: var(--color-tokens-color-tokens-content-light-primary);
+  font-size: var(--heading-desktop-h3-font-size);
+  text-align: center;
+  letter-spacing: var(--heading-desktop-h3-letter-spacing);
+  line-height: var(--heading-desktop-h3-line-height);
+  font-style: var(--heading-desktop-h3-font-style);
+}
+
+.sign-in-page .companies {
+  display: flex;
+  width: 720px;
+  height: 44px;
+  align-items: flex-start;
+  gap: 64px;
+  position: absolute;
+  top: 700px;
+  left: 0;
+}
+
+.sign-in-page .company-logo {
+  position: relative;
+  width: 122.62px;
+  height: 43.6px;
+}
+
+.sign-in-page .vector {
+  position: absolute;
+  width: 122px;
+  height: 22px;
+  top: 9px;
+  left: 0;
+}
+
+.sign-in-page .div {
+  width: 148.06px;
+  position: relative;
+  height: 43.6px;
+}
+
+.sign-in-page .vector-2 {
+  position: absolute;
+  width: 107px;
+  height: 25px;
+  top: 11px;
+  left: 41px;
+}
+
+.sign-in-page .vector-3 {
+  position: absolute;
+  width: 34px;
+  height: 29px;
+  top: 7px;
+  left: 0;
+}
+
+.sign-in-page .company-logo-2 {
+  width: 102.64px;
+  position: relative;
+  height: 43.6px;
+}
+
+.sign-in-page .vector-4 {
+  position: absolute;
+  width: 17px;
+  height: 17px;
+  top: 15px;
+  left: 27px;
+}
+
+.sign-in-page .vector-5 {
+  position: absolute;
+  width: 17px;
+  height: 17px;
+  top: 15px;
+  left: 45px;
+}
+
+.sign-in-page .vector-6 {
+  position: absolute;
+  width: 16px;
+  height: 24px;
+  top: 15px;
+  left: 63px;
+}
+
+.sign-in-page .vector-7 {
+  position: absolute;
+  width: 4px;
+  height: 25px;
+  top: 7px;
+  left: 82px;
+}
+
+.sign-in-page .vector-8 {
+  position: absolute;
+  width: 15px;
+  height: 17px;
+  top: 15px;
+  left: 87px;
+}
+
+.sign-in-page .vector-9 {
+  position: absolute;
+  width: 25px;
+  height: 26px;
+  top: 6px;
+  left: 0;
+}
+
+.sign-in-page .company-logo-3 {
+  width: 109.91px;
+  position: relative;
+  height: 43.6px;
+}
+
+.sign-in-page .vector-10 {
+  position: absolute;
+  width: 75px;
+  height: 23px;
+  top: 8px;
+  left: 34px;
+}
+
+.sign-in-page .vector-11 {
+  position: absolute;
+  width: 13px;
+  height: 13px;
+  top: 8px;
+  left: 0;
+}
+
+.sign-in-page .vector-12 {
+  position: absolute;
+  width: 13px;
+  height: 13px;
+  top: 8px;
+  left: 15px;
+}
+
+.sign-in-page .vector-13 {
+  position: absolute;
+  width: 13px;
+  height: 13px;
+  top: 22px;
+  left: 15px;
+}
+
+.sign-in-page .vector-14 {
+  position: absolute;
+  width: 13px;
+  height: 13px;
+  top: 22px;
+  left: 0;
+}
+
+.sign-in-page .vector-wrapper {
+  width: 119.9px;
+  margin-right: -139.13px;
+  overflow: hidden;
+  position: relative;
+  height: 43.6px;
+}
+
+.sign-in-page .vector-15 {
+  position: absolute;
+  width: 119px;
+  height: 30px;
+  top: -36757px;
+  left: -15777px;
+}
+
+.sign-in-page .img-wrapper {
+  width: 89.02px;
+  margin-right: -292.15px;
+  overflow: hidden;
+  position: relative;
+  height: 43.6px;
+}
+
+.sign-in-page .vector-16 {
+  position: absolute;
+  width: 89px;
+  height: 20px;
+  top: -36750px;
+  left: -15961px;
+}
+
+.sign-in-page .rectangle {
+  top: 0;
+  left: 596px;
+  position: absolute;
+  width: 124px;
+  height: 92px;
+  background: linear-gradient(270deg, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 0) 100%);
+}
+
+.sign-in-page .rectangle-2 {
+  top: -24px;
+  left: 0;
+  transform: rotate(180deg);
+  position: absolute;
+  width: 124px;
+  height: 92px;
+  background: linear-gradient(270deg, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 0) 100%);
+}
+
+.sign-in-page .p {
+  position: absolute;
+  width: 720px;
+  top: 163px;
+  left: 0;
+  font-family: var(--body-base-regular-font-family);
+  font-weight: var(--body-base-regular-font-weight);
+  color: var(--color-tokens-color-tokens-content-light-tertiary);
+  font-size: var(--body-base-regular-font-size);
+  text-align: center;
+  letter-spacing: var(--body-base-regular-letter-spacing);
+  line-height: var(--body-base-regular-line-height);
+  font-style: var(--body-base-regular-font-style);
+}
+
+.sign-in-page .illustration {
+  position: absolute;
+  width: 441px;
+  height: 360px;
+  top: 252px;
+  left: 139px;
+}
+
+.sign-in-page .overlap-2 {
+  position: absolute;
+  width: 449px;
+  height: 394px;
+  top: -4px;
+  left: -4px;
+}
+
+.sign-in-page .tasks-kanban {
+  position: absolute;
+  width: 449px;
+  height: 347px;
+  top: 0;
+  left: 0;
+  background-color: var(--color-tokens-color-tokens-background-primary);
+  border-radius: 8.49px;
+  overflow: hidden;
+  border: none;
+}
+
+.sign-in-page .tasks-kanban::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  padding: 4.24px;
+  border-radius: 8.49px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.2) 0%, rgba(255, 255, 255, 0.07) 100%);
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-maREMOVEDcomposite: xor;
+  maREMOVEDcomposite: exclude;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.sign-in-page .overlap-3 {
+  position: relative;
+  width: 449px;
+  height: 461px;
+  top: -1px;
+  left: -1px;
+}
+
+.sign-in-page .content {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: flex-start;
+  position: absolute;
+  top: 1px;
+  left: 77px;
+}
+
+.sign-in-page .header-top-header {
+  display: flex;
+  width: 365.52px;
+  height: 22.08px;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0px 9.81px;
+  position: relative;
+  background-color: var(--color-tokens-color-tokens-background-primary);
+  border-bottom-width: 0.31px;
+  border-bottom-style: solid;
+  border-color: var(--color-tokens-color-tokens-border-primary);
+}
+
+.sign-in-page .search-bar {
+  display: flex;
+  width: 110.39px;
+  align-items: center;
+  justify-content: space-between;
+  padding: 3.07px 3.68px;
+  position: relative;
+  border-radius: 1.23px;
+  border: 0.31px solid;
+  border-color: var(--color-tokens-color-tokens-interaction-outline-base);
+}
+
+.sign-in-page .div-2 {
+  display: inline-flex;
+  align-items: center;
+  gap: 3.68px;
+  position: relative;
+  flex: 0 0 auto;
+}
+
+.sign-in-page .img-2 {
+  position: relative;
+  width: 6.13px;
+  height: 6.13px;
+}
+
+.sign-in-page .text-wrapper-2 {
+  position: relative;
+  width: fit-content;
+  margin-top: -0.24px;
+  font-family: "Inter", Helvetica;
+  font-weight: 400;
+  color: var(--color-tokens-color-tokens-content-dark-tertiary);
+  font-size: 4.3px;
+  letter-spacing: 0;
+  line-height: 6.4px;
+  white-space: nowrap;
+}
+
+.sign-in-page .div-3 {
+  display: inline-flex;
+  align-items: center;
+  gap: 2.45px;
+  position: relative;
+  flex: 0 0 auto;
+}
+
+.sign-in-page .frame {
+  display: flex;
+  width: 6.13px;
+  height: 6.13px;
+  align-items: center;
+  justify-content: center;
+  gap: 3.07px;
+  position: relative;
+  background-color: var(--color-tokens-color-tokens-background-tertiary);
+  border-radius: 0.61px;
+}
+
+.sign-in-page .img-3 {
+  position: relative;
+  width: 4.91px;
+  height: 4.91px;
+}
+
+.sign-in-page .text-wrapper-3 {
+  position: relative;
+  width: fit-content;
+  margin-top: -0.74px;
+  margin-bottom: -0.13px;
+  font-family: "Inter", Helvetica;
+  font-weight: 500;
+  color: var(--color-tokens-color-tokens-content-dark-secondary);
+  font-size: 4.9px;
+  letter-spacing: 0;
+  line-height: 7.4px;
+  white-space: nowrap;
+}
+
+.sign-in-page .frame-2 {
+  display: inline-flex;
+  align-items: center;
+  gap: 9.81px;
+  position: relative;
+  flex: 0 0 auto;
+}
+
+.sign-in-page .navigation-sidebar {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: space-between;
+  padding: 2.45px;
+  position: relative;
+  align-self: stretch;
+  border-radius: 1.23px;
+}
+
+.sign-in-page .content-2 {
+  display: flex;
+  align-items: center;
+  gap: 3.68px;
+  position: relative;
+  flex: 1;
+  flex-grow: 1;
+}
+
+.sign-in-page .title {
+  position: relative;
+  width: fit-content;
+  margin-top: -0.24px;
+  margin-right: -0.16px;
+  font-family: "Inter", Helvetica;
+  font-weight: 500;
+  color: var(--color-tokens-color-tokens-content-dark-secondary);
+  font-size: 4.3px;
+  letter-spacing: 0;
+  line-height: 6.4px;
+  white-space: nowrap;
+}
+
+.sign-in-page .frame-3 {
+  position: relative;
+  width: 9.81px;
+  height: 9.81px;
+  border-radius: 7.36px;
+  background-image: url(./img/frame-5518.png);
+  background-size: cover;
+  background-position: 50% 50%;
+}
+
+.sign-in-page .text-wrapper-4 {
+  position: relative;
+  width: fit-content;
+  font-family: "Inter", Helvetica;
+  font-weight: 500;
+  color: var(--color-tokens-color-tokens-content-dark-primary);
+  font-size: 4.3px;
+  text-align: center;
+  letter-spacing: 0;
+  line-height: 6.4px;
+  white-space: nowrap;
+}
+
+.sign-in-page .header-section {
+  display: flex;
+  width: 367.52px;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0px 9.81px;
+  position: relative;
+  flex: 0 0 auto;
+  margin-left: -1px;
+  background-color: var(--color-tokens-color-tokens-background-primary);
+  border-bottom-width: 0.31px;
+  border-bottom-style: solid;
+  border-color: var(--color-tokens-color-tokens-border-primary);
+}
+
+.sign-in-page .content-3 {
+  display: inline-flex;
+  height: 21.16px;
+  align-items: center;
+  gap: 11.04px;
+  position: relative;
+  flex: 0 0 auto;
+}
+
+.sign-in-page .div-4 {
+  display: inline-flex;
+  align-items: center;
+  gap: 4.91px;
+  position: relative;
+  flex: 0 0 auto;
+}
+
+.sign-in-page .title-2 {
+  position: relative;
+  width: fit-content;
+  margin-top: -0.31px;
+  font-family: "Inter", Helvetica;
+  font-weight: 500;
+  color: var(--color-tokens-color-tokens-content-dark-primary);
+  font-size: 7.4px;
+  letter-spacing: 0;
+  line-height: 8.8px;
+  white-space: nowrap;
+}
+
+.sign-in-page .tab-outline-tabs {
+  display: inline-flex;
+  align-items: center;
+  position: relative;
+  align-self: stretch;
+  flex: 0 0 auto;
+}
+
+.sign-in-page .tab-outline-menu {
+  justify-content: center;
+  gap: 2.45px;
+  padding: 4.91px;
+  display: inline-flex;
+  align-items: center;
+  position: relative;
+  align-self: stretch;
+  flex: 0 0 auto;
+}
+
+.sign-in-page .title-3 {
+  position: relative;
+  width: fit-content;
+  font-family: "Inter", Helvetica;
+  font-weight: 500;
+  color: var(--color-tokens-color-tokens-content-dark-secondary);
+  font-size: 4.3px;
+  letter-spacing: 0;
+  line-height: 6.4px;
+  white-space: nowrap;
+}
+
+.sign-in-page .tab-outline-menu-2 {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 2.45px;
+  padding: 4.91px;
+  position: relative;
+  align-self: stretch;
+  flex: 0 0 auto;
+  border-bottom-width: 0.61px;
+  border-bottom-style: solid;
+  border-color: var(--color-tokens-color-tokens-content-dark-primary);
+}
+
+.sign-in-page .title-4 {
+  position: relative;
+  width: fit-content;
+  font-family: "Inter", Helvetica;
+  font-weight: 500;
+  color: var(--color-tokens-color-tokens-content-dark-primary);
+  font-size: 4.3px;
+  letter-spacing: 0;
+  line-height: 6.4px;
+  white-space: nowrap;
+}
+
+.sign-in-page .buttons {
+  display: inline-flex;
+  gap: 2.45px;
+  padding: 2.45px 3.68px;
+  flex: 0 0 auto;
+  margin-top: -1px;
+  margin-bottom: -1px;
+  margin-left: -1px;
+  background-color: var(--color-tokens-color-tokens-action-secondary-base);
+  border-radius: var(--color-tokens-border-radius-4-px);
+  border: 0.31px solid;
+  border-color: var(--color-tokens-color-tokens-action-outline-base);
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.sign-in-page .placeholder {
+  position: relative;
+  width: fit-content;
+  margin-top: -0.15px;
+  font-family: "Inter", Helvetica;
+  font-weight: 500;
+  color: var(--color-tokens-color-tokens-content-dark-primary);
+  font-size: 4.3px;
+  letter-spacing: 0;
+  line-height: 6.4px;
+  white-space: nowrap;
+}
+
+.sign-in-page .button {
+  all: unset;
+  box-sizing: border-box;
+  display: inline-flex;
+  gap: 2.45px;
+  padding: 2.45px 3.68px;
+  flex: 0 0 auto;
+  margin-top: -1px;
+  margin-bottom: -1px;
+  background-color: var(--color-tokens-color-tokens-action-secondary-base);
+  border-radius: var(--color-tokens-border-radius-4-px);
+  border: 0.31px solid;
+  border-color: var(--color-tokens-color-tokens-action-outline-base);
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.sign-in-page .separator {
+  width: 1px;
+  background-color: var(--color-tokens-color-tokens-border-primary);
+  position: relative;
+  align-self: stretch;
+}
+
+.sign-in-page .buttons-2 {
+  display: inline-flex;
+  gap: 2.45px;
+  padding: 2.45px 3.68px;
+  flex: 0 0 auto;
+  background-color: var(--color-tokens-color-tokens-action-primary-base);
+  border-radius: var(--color-tokens-border-radius-4-px);
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.sign-in-page .placeholder-2 {
+  margin-top: -0.15px;
+  color: var(--color-tokens-color-tokens-content-light-primary);
+  font-size: 4.3px;
+  line-height: 6.4px;
+  position: relative;
+  width: fit-content;
+  font-family: "Inter", Helvetica;
+  font-weight: 500;
+  letter-spacing: 0;
+  white-space: nowrap;
+}
+
+.sign-in-page .content-4 {
+  display: inline-flex;
+  align-items: flex-start;
+  gap: 10.8px;
+  padding: 9.81px;
+  position: relative;
+  flex: 0 0 auto;
+}
+
+.sign-in-page .div-5 {
+  display: flex;
+  flex-direction: column;
+  width: 110.39px;
+  align-items: flex-start;
+  gap: 6.13px;
+  padding: 6.13px;
+  position: relative;
+  background-color: var(--color-tokens-color-tokens-background-primary);
+  border-radius: 2.45px;
+  border: 0.31px solid;
+  border-color: var(--color-tokens-color-tokens-border-primary);
+}
+
+.sign-in-page .content-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 3.68px;
+  position: relative;
+  align-self: stretch;
+  width: 100%;
+  flex: 0 0 auto;
+}
+
+.sign-in-page .ellipse {
+  background-color: var(--global-colors-globalcolors-limeyellow-60);
+  position: relative;
+  width: 2.45px;
+  height: 2.45px;
+  border-radius: 1.23px;
+}
+
+.sign-in-page .content-5 {
+  display: inline-flex;
+  align-items: flex-end;
+  gap: 2.45px;
+  position: relative;
+  flex: 0 0 auto;
+}
+
+.sign-in-page .text-wrapper-5 {
+  position: relative;
+  width: fit-content;
+  margin-top: -0.31px;
+  font-family: "Inter", Helvetica;
+  font-weight: 500;
+  color: var(--color-tokens-color-tokens-content-dark-primary);
+  font-size: 6.1px;
+  letter-spacing: 0;
+  line-height: normal;
+  white-space: nowrap;
+}
+
+.sign-in-page .text-wrapper-6 {
+  position: relative;
+  width: fit-content;
+  font-family: "Inter", Helvetica;
+  font-weight: 400;
+  color: var(--color-tokens-color-tokens-content-dark-secondary);
+  font-size: 4.3px;
+  letter-spacing: 0;
+  line-height: 6.2px;
+  white-space: nowrap;
+}
+
+.sign-in-page .content-6 {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4.91px;
+  position: relative;
+  align-self: stretch;
+  width: 100%;
+  flex: 0 0 auto;
+}
+
+.sign-in-page .buttons-3 {
+  display: flex;
+  width: 98.13px;
+  align-items: center;
+  justify-content: center;
+  gap: 2.45px;
+  padding: 2.45px 5.52px;
+  position: relative;
+  flex: 0 0 auto;
+  background-color: var(--color-tokens-color-tokens-action-secondary-base-2);
+  border-radius: var(--color-tokens-border-radius-4-px);
+}
+
+.sign-in-page .text-wrapper-7 {
+  color: var(--color-tokens-color-tokens-content-dark-primary);
+  font-size: 4.9px;
+  line-height: 7.4px;
+  position: relative;
+  width: fit-content;
+  font-family: "Inter", Helvetica;
+  font-weight: 500;
+  letter-spacing: 0;
+  white-space: nowrap;
+}
+
+.sign-in-page .cards-taREMOVEDcard {
+  display: flex;
+  flex-direction: column;
+  width: 98.74px;
+  align-items: flex-start;
+  gap: 4.91px;
+  padding: 5.52px;
+  position: relative;
+  flex: 0 0 auto;
+  margin-left: -0.31px;
+  margin-right: -0.31px;
+  background-color: var(--color-tokens-color-tokens-background-primary);
+  border-radius: var(--color-tokens-border-radius-4-px);
+  border: 0.31px solid;
+  border-color: var(--color-tokens-color-tokens-border-primary);
+}
+
+.sign-in-page .div-6 {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: relative;
+  align-self: stretch;
+  width: 100%;
+  flex: 0 0 auto;
+}
+
+.sign-in-page .badge {
+  display: inline-flex;
+  align-items: flex-start;
+  gap: 2.76px;
+  position: relative;
+  flex: 0 0 auto;
+}
+
+.sign-in-page .badge-2 {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 2.45px;
+  padding: 1.23px 1.84px;
+  position: relative;
+  flex: 0 0 auto;
+  background-color: var(--color-tokens-color-tokens-background-orange);
+  border-radius: 1.23px;
+}
+
+.sign-in-page .badge-3 {
+  position: relative;
+  width: fit-content;
+  margin-top: -0.31px;
+  font-family: "Inter", Helvetica;
+  font-weight: 500;
+  color: var(--color-tokens-color-tokens-interaction-orange-base);
+  font-size: 3.7px;
+  letter-spacing: 0;
+  line-height: 5.2px;
+  white-space: nowrap;
+}
+
+.sign-in-page .badge-4 {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 2.45px;
+  padding: 1.23px 1.84px;
+  position: relative;
+  flex: 0 0 auto;
+  background-color: var(--color-tokens-color-tokens-background-yellow);
+  border-radius: 1.23px;
+}
+
+.sign-in-page .badge-5 {
+  position: relative;
+  width: fit-content;
+  margin-top: -0.31px;
+  font-family: "Inter", Helvetica;
+  font-weight: 500;
+  color: var(--color-tokens-color-tokens-interaction-yellow-base);
+  font-size: 3.7px;
+  letter-spacing: 0;
+  line-height: 5.2px;
+  white-space: nowrap;
+}
+
+.sign-in-page .badge-6 {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 2.45px;
+  padding: 1.23px 1.84px;
+  position: relative;
+  flex: 0 0 auto;
+  background-color: var(--color-tokens-color-tokens-background-red);
+  border-radius: 1.23px;
+}
+
+.sign-in-page .badge-7 {
+  position: relative;
+  width: fit-content;
+  margin-top: -0.31px;
+  font-family: "Inter", Helvetica;
+  font-weight: 500;
+  color: var(--color-tokens-color-tokens-interaction-red-base);
+  font-size: 3.7px;
+  letter-spacing: 0;
+  line-height: 5.2px;
+  white-space: nowrap;
+}
+
+.sign-in-page .more {
+  position: relative;
+  width: 7.36px;
+  height: 7.36px;
+}
+
+.sign-in-page .content-7 {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 4.91px;
+  position: relative;
+  align-self: stretch;
+  width: 100%;
+  flex: 0 0 auto;
+}
+
+.sign-in-page .text-wrapper-8 {
+  position: relative;
+  align-self: stretch;
+  margin-top: -0.31px;
+  font-family: "Inter", Helvetica;
+  font-weight: 500;
+  color: var(--color-tokens-color-tokens-content-dark-primary);
+  font-size: 4.3px;
+  letter-spacing: 0;
+  line-height: 6.4px;
+}
+
+.sign-in-page .div-7 {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  position: relative;
+  align-self: stretch;
+  width: 100%;
+  flex: 0 0 auto;
+}
+
+.sign-in-page .text-wrapper-9 {
+  position: relative;
+  width: fit-content;
+  margin-top: -0.31px;
+  font-family: "Inter", Helvetica;
+  font-weight: 400;
+  color: var(--color-tokens-color-tokens-content-dark-secondary);
+  font-size: 4.3px;
+  letter-spacing: 0;
+  line-height: 6.4px;
+  white-space: nowrap;
+}
+
+.sign-in-page .div-8 {
+  display: inline-flex;
+  align-items: center;
+  gap: 1.23px;
+  position: relative;
+  flex: 0 0 auto;
+}
+
+.sign-in-page .member {
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-end;
+  position: relative;
+  flex: 0 0 auto;
+}
+
+.sign-in-page .member-2 {
+  background-image: url(./img/member-01.png);
+  position: relative;
+  width: 7.36px;
+  height: 7.36px;
+  border-radius: 7.36px;
+  border: 0.61px solid;
+  border-color: var(--color-tokens-color-tokens-background-primary);
+  background-size: cover;
+  background-position: 50% 50%;
+}
+
+.sign-in-page .member-3 {
+  margin-left: -3.68px;
+  background-image: url(./img/member-02.png);
+  position: relative;
+  width: 7.36px;
+  height: 7.36px;
+  border-radius: 7.36px;
+  border: 0.61px solid;
+  border-color: var(--color-tokens-color-tokens-background-primary);
+  background-size: cover;
+  background-position: 50% 50%;
+}
+
+.sign-in-page .member-4 {
+  margin-left: -3.68px;
+  background-image: url(./img/member-03.png);
+  position: relative;
+  width: 7.36px;
+  height: 7.36px;
+  border-radius: 7.36px;
+  border: 0.61px solid;
+  border-color: var(--color-tokens-color-tokens-background-primary);
+  background-size: cover;
+  background-position: 50% 50%;
+}
+
+.sign-in-page .member-5 {
+  margin-left: -3.68px;
+  background-image: url(./img/member-04.png);
+  position: relative;
+  width: 7.36px;
+  height: 7.36px;
+  border-radius: 7.36px;
+  border: 0.61px solid;
+  border-color: var(--color-tokens-color-tokens-background-primary);
+  background-size: cover;
+  background-position: 50% 50%;
+}
+
+.sign-in-page .badge-8 {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 2.45px;
+  padding: 1.23px 1.84px;
+  position: relative;
+  flex: 0 0 auto;
+  background-color: var(--color-tokens-color-tokens-background-purple);
+  border-radius: 1.23px;
+}
+
+.sign-in-page .badge-9 {
+  position: relative;
+  width: fit-content;
+  margin-top: -0.31px;
+  font-family: "Inter", Helvetica;
+  font-weight: 500;
+  color: var(--color-tokens-color-tokens-interaction-purple-base);
+  font-size: 3.7px;
+  letter-spacing: 0;
+  line-height: 5.2px;
+  white-space: nowrap;
+}
+
+.sign-in-page .member-6 {
+  background-image: url(./img/member-01-1.png);
+  position: relative;
+  width: 7.36px;
+  height: 7.36px;
+  border-radius: 7.36px;
+  border: 0.61px solid;
+  border-color: var(--color-tokens-color-tokens-background-primary);
+  background-size: cover;
+  background-position: 50% 50%;
+}
+
+.sign-in-page .member-7 {
+  background-image: url(./img/member-02-1.png);
+  position: relative;
+  width: 7.36px;
+  height: 7.36px;
+  margin-left: -3.68px;
+  border-radius: 7.36px;
+  border: 0.61px solid;
+  border-color: var(--color-tokens-color-tokens-background-primary);
+  background-size: cover;
+  background-position: 50% 50%;
+}
+
+.sign-in-page .member-8 {
+  background-image: url(./img/member-03-1.png);
+  position: relative;
+  width: 7.36px;
+  height: 7.36px;
+  margin-left: -3.68px;
+  border-radius: 7.36px;
+  border: 0.61px solid;
+  border-color: var(--color-tokens-color-tokens-background-primary);
+  background-size: cover;
+  background-position: 50% 50%;
+}
+
+.sign-in-page .cards-taREMOVEDcard-2 {
+  width: 98.74px;
+  margin-bottom: -0.31px;
+  margin-right: -0.31px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4.91px;
+  padding: 5.52px;
+  position: relative;
+  flex: 0 0 auto;
+  margin-left: -0.31px;
+  background-color: var(--color-tokens-color-tokens-background-primary);
+  border-radius: var(--color-tokens-border-radius-4-px);
+  border: 0.31px solid;
+  border-color: var(--color-tokens-color-tokens-border-primary);
+}
+
+.sign-in-page .badge-10 {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 2.45px;
+  padding: 1.23px 1.84px;
+  position: relative;
+  flex: 0 0 auto;
+  background-color: var(--color-tokens-color-tokens-background-blue);
+  border-radius: 1.23px;
+}
+
+.sign-in-page .badge-11 {
+  position: relative;
+  width: fit-content;
+  margin-top: -0.31px;
+  font-family: "Inter", Helvetica;
+  font-weight: 500;
+  color: var(--color-tokens-color-tokens-interaction-blue-base);
+  font-size: 3.7px;
+  letter-spacing: 0;
+  line-height: 5.2px;
+  white-space: nowrap;
+}
+
+.sign-in-page .member-9 {
+  background-image: url(./img/member-01-2.png);
+  position: relative;
+  width: 7.36px;
+  height: 7.36px;
+  border-radius: 7.36px;
+  border: 0.61px solid;
+  border-color: var(--color-tokens-color-tokens-background-primary);
+  background-size: cover;
+  background-position: 50% 50%;
+}
+
+.sign-in-page .member-10 {
+  background-image: url(./img/member-02-2.png);
+  position: relative;
+  width: 7.36px;
+  height: 7.36px;
+  margin-left: -3.68px;
+  border-radius: 7.36px;
+  border: 0.61px solid;
+  border-color: var(--color-tokens-color-tokens-background-primary);
+  background-size: cover;
+  background-position: 50% 50%;
+}
+
+.sign-in-page .title-5 {
+  display: flex;
+  align-items: center;
+  gap: 2.45px;
+  position: relative;
+  align-self: stretch;
+  width: 100%;
+  flex: 0 0 auto;
+}
+
+.sign-in-page .ellipse-2 {
+  background-color: var(--elements-blue);
+  position: relative;
+  width: 2.45px;
+  height: 2.45px;
+  border-radius: 1.23px;
+}
+
+.sign-in-page .badge-12 {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 2.45px;
+  padding: 1.23px 1.84px;
+  position: relative;
+  flex: 0 0 auto;
+  background-color: var(--color-tokens-color-tokens-background-green);
+  border-radius: 1.23px;
+}
+
+.sign-in-page .badge-13 {
+  position: relative;
+  width: fit-content;
+  margin-top: -0.31px;
+  font-family: "Inter", Helvetica;
+  font-weight: 500;
+  color: var(--color-tokens-color-tokens-interaction-green-base);
+  font-size: 3.7px;
+  letter-spacing: 0;
+  line-height: 5.2px;
+  white-space: nowrap;
+}
+
+.sign-in-page .member-11 {
+  background-image: url(./img/member-01-3.png);
+  position: relative;
+  width: 7.36px;
+  height: 7.36px;
+  border-radius: 7.36px;
+  border: 0.61px solid;
+  border-color: var(--color-tokens-color-tokens-content-light-primary);
+  background-size: cover;
+  background-position: 50% 50%;
+}
+
+.sign-in-page .member-12 {
+  background-image: url(./img/member-02-3.png);
+  position: relative;
+  width: 7.36px;
+  height: 7.36px;
+  margin-left: -3.68px;
+  border-radius: 7.36px;
+  border: 0.61px solid;
+  border-color: var(--color-tokens-color-tokens-content-light-primary);
+  background-size: cover;
+  background-position: 50% 50%;
+}
+
+.sign-in-page .member-13 {
+  background-image: url(./img/member-01-4.png);
+  position: relative;
+  width: 7.36px;
+  height: 7.36px;
+  border-radius: 7.36px;
+  border: 0.61px solid;
+  border-color: var(--color-tokens-color-tokens-background-primary);
+  background-size: cover;
+  background-position: 50% 50%;
+}
+
+.sign-in-page .member-14 {
+  background-image: url(./img/member-02-4.png);
+  position: relative;
+  width: 7.36px;
+  height: 7.36px;
+  margin-left: -3.68px;
+  border-radius: 7.36px;
+  border: 0.61px solid;
+  border-color: var(--color-tokens-color-tokens-background-primary);
+  background-size: cover;
+  background-position: 50% 50%;
+}
+
+.sign-in-page .member-15 {
+  background-image: url(./img/member-03-2.png);
+  position: relative;
+  width: 7.36px;
+  height: 7.36px;
+  margin-left: -3.68px;
+  border-radius: 7.36px;
+  border: 0.61px solid;
+  border-color: var(--color-tokens-color-tokens-background-primary);
+  background-size: cover;
+  background-position: 50% 50%;
+}
+
+.sign-in-page .cards-taREMOVEDcard-3 {
+  width: 30.7px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4.91px;
+  padding: 5.52px;
+  position: relative;
+  flex: 0 0 auto;
+  margin-left: -0.31px;
+  background-color: var(--color-tokens-color-tokens-background-primary);
+  border-radius: var(--color-tokens-border-radius-4-px);
+  border: 0.31px solid;
+  border-color: var(--color-tokens-color-tokens-border-primary);
+}
+
+.sign-in-page .badge-14 {
+  display: inline-flex;
+  align-items: flex-start;
+  gap: 2.76px;
+  position: relative;
+  flex: 0 0 auto;
+  margin-right: -42.51px;
+}
+
+.sign-in-page .more-2 {
+  margin-right: -49.87px;
+  margin-left: 0px;
+  position: relative;
+  width: 7.36px;
+  height: 7.36px;
+}
+
+.sign-in-page .date {
+  display: inline-flex;
+  align-items: center;
+  gap: 2.45px;
+  position: relative;
+  flex: 0 0 auto;
+  margin-right: -33.31px;
+}
+
+.sign-in-page .checklist {
+  display: inline-flex;
+  align-items: center;
+  gap: 1.23px;
+  position: relative;
+  flex: 0 0 auto;
+  margin-right: -47.44px;
+}
+
+.sign-in-page .member-16 {
+  background-image: url(./img/member-01-5.png);
+  position: relative;
+  width: 7.36px;
+  height: 7.36px;
+  border-radius: 7.36px;
+  border: 0.61px solid;
+  border-color: var(--color-tokens-color-tokens-background-primary);
+  background-size: cover;
+  background-position: 50% 50%;
+}
+
+.sign-in-page .member-17 {
+  background-image: url(./img/member-02-5.png);
+  position: relative;
+  width: 7.36px;
+  height: 7.36px;
+  margin-left: -3.68px;
+  border-radius: 7.36px;
+  border: 0.61px solid;
+  border-color: var(--color-tokens-color-tokens-background-primary);
+  background-size: cover;
+  background-position: 50% 50%;
+}
+
+.sign-in-page .member-18 {
+  background-image: url(./img/member-03-3.png);
+  position: relative;
+  width: 7.36px;
+  height: 7.36px;
+  margin-left: -3.68px;
+  border-radius: 7.36px;
+  border: 0.61px solid;
+  border-color: var(--color-tokens-color-tokens-background-primary);
+  background-size: cover;
+  background-position: 50% 50%;
+}
+
+.sign-in-page .member-19 {
+  background-image: url(./img/member-04-1.png);
+  position: relative;
+  width: 7.36px;
+  height: 7.36px;
+  margin-left: -3.68px;
+  border-radius: 7.36px;
+  border: 0.61px solid;
+  border-color: var(--color-tokens-color-tokens-background-primary);
+  background-size: cover;
+  background-position: 50% 50%;
+}
+
+.sign-in-page .content-8 {
+  display: inline-flex;
+  align-items: center;
+  gap: 3.68px;
+  position: relative;
+  flex: 0 0 auto;
+  margin-right: -23.29px;
+  margin-left: -1.91e-6px;
+}
+
+.sign-in-page .badge-15 {
+  display: inline-flex;
+  align-items: flex-start;
+  gap: 2.76px;
+  position: relative;
+  flex: 0 0 auto;
+  margin-right: -38.51px;
+}
+
+.sign-in-page .more-3 {
+  margin-right: -45.87px;
+  margin-left: 0px;
+  position: relative;
+  width: 7.36px;
+  height: 7.36px;
+}
+
+.sign-in-page .date-2 {
+  position: relative;
+  width: 4.91px;
+  height: 4.91px;
+  margin-top: -36652.8px;
+  margin-left: -15396.19px;
+}
+
+.sign-in-page .checklist-2 {
+  display: inline-flex;
+  align-items: center;
+  gap: 1.23px;
+  position: relative;
+  flex: 0 0 auto;
+  margin-right: -48.44px;
+}
+
+.sign-in-page .checklist-3 {
+  position: relative;
+  width: 4.91px;
+  height: 4.91px;
+  margin-top: -36652.8px;
+  margin-left: -15448.55px;
+}
+
+.sign-in-page .member-20 {
+  background-image: url(./img/member-04-3.png);
+  position: relative;
+  width: 7.36px;
+  height: 7.36px;
+  border-radius: 7.36px;
+  border: 0.61px solid;
+  border-color: var(--color-tokens-color-tokens-background-primary);
+  background-size: cover;
+  background-position: 50% 50%;
+}
+
+.sign-in-page .member-21 {
+  background-image: url(./img/member-04-3.png);
+  position: relative;
+  width: 7.36px;
+  height: 7.36px;
+  margin-left: -3.68px;
+  border-radius: 7.36px;
+  border: 0.61px solid;
+  border-color: var(--color-tokens-color-tokens-background-primary);
+  background-size: cover;
+  background-position: 50% 50%;
+}
+
+.sign-in-page .content-9 {
+  display: inline-flex;
+  align-items: center;
+  gap: 3.68px;
+  position: relative;
+  flex: 0 0 auto;
+  margin-right: -21.29px;
+  margin-left: -1.91e-6px;
+}
+
+.sign-in-page .attachment {
+  position: relative;
+  width: 4.91px;
+  height: 4.91px;
+  margin-top: -36664.38px;
+  margin-left: -15414.59px;
+}
+
+.sign-in-page .chat {
+  margin-top: -36664.38px;
+  margin-left: -15427.4px;
+  position: relative;
+  width: 4.91px;
+  height: 4.91px;
+}
+
+.sign-in-page .cards-taREMOVEDcard-4 {
+  width: 30.7px;
+  margin-bottom: -0.31px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4.91px;
+  padding: 5.52px;
+  position: relative;
+  flex: 0 0 auto;
+  margin-left: -0.31px;
+  background-color: var(--color-tokens-color-tokens-background-primary);
+  border-radius: var(--color-tokens-border-radius-4-px);
+  border: 0.31px solid;
+  border-color: var(--color-tokens-color-tokens-border-primary);
+}
+
+.sign-in-page .more-4 {
+  margin-top: -36687.51px;
+  margin-left: -30734.19px;
+  position: relative;
+  width: 7.36px;
+  height: 7.36px;
+}
+
+.sign-in-page .date-3 {
+  position: relative;
+  width: 4.91px;
+  height: 4.91px;
+  margin-top: -36734.27px;
+  margin-left: -15396.19px;
+}
+
+.sign-in-page .checklist-4 {
+  position: relative;
+  width: 4.91px;
+  height: 4.91px;
+  margin-top: -36734.27px;
+  margin-left: -15448.55px;
+}
+
+.sign-in-page .content-10 {
+  display: inline-flex;
+  align-items: center;
+  gap: 3.68px;
+  position: relative;
+  flex: 0 0 auto;
+  margin-right: -22.29px;
+  margin-left: -1.91e-6px;
+}
+
+.sign-in-page .attachment-2 {
+  position: relative;
+  width: 4.91px;
+  height: 4.91px;
+  margin-top: -36745.86px;
+  margin-left: -15414.59px;
+}
+
+.sign-in-page .chat-2 {
+  margin-top: -36745.86px;
+  margin-left: -15426.4px;
+  position: relative;
+  width: 4.91px;
+  height: 4.91px;
+}
+
+.sign-in-page .ellipse-3 {
+  position: relative;
+  width: 2.45px;
+  height: 2.45px;
+  background-color: var(--elements-green);
+  border-radius: 1.23px;
+}
+
+.sign-in-page .member-22 {
+  background-image: url(./img/member-01-8.png);
+  position: relative;
+  width: 7.36px;
+  height: 7.36px;
+  border-radius: 7.36px;
+  border: 0.61px solid;
+  border-color: var(--color-tokens-color-tokens-content-light-primary);
+  background-size: cover;
+  background-position: 50% 50%;
+}
+
+.sign-in-page .member-23 {
+  background-image: url(./img/member-02-8.png);
+  position: relative;
+  width: 7.36px;
+  height: 7.36px;
+  margin-left: -3.68px;
+  border-radius: 7.36px;
+  border: 0.61px solid;
+  border-color: var(--color-tokens-color-tokens-content-light-primary);
+  background-size: cover;
+  background-position: 50% 50%;
+}
+
+.sign-in-page .member-24 {
+  background-image: url(./img/member-01-9.png);
+  position: relative;
+  width: 7.36px;
+  height: 7.36px;
+  border-radius: 7.36px;
+  border: 0.61px solid;
+  border-color: var(--color-tokens-color-tokens-content-light-primary);
+  background-size: cover;
+  background-position: 50% 50%;
+}
+
+.sign-in-page .member-25 {
+  background-image: url(./img/member-02-9.png);
+  position: relative;
+  width: 7.36px;
+  height: 7.36px;
+  margin-left: -3.68px;
+  border-radius: 7.36px;
+  border: 0.61px solid;
+  border-color: var(--color-tokens-color-tokens-content-light-primary);
+  background-size: cover;
+  background-position: 50% 50%;
+}
+
+.sign-in-page .navigation-sidebar-2 {
+  display: flex;
+  flex-direction: column;
+  width: 78px;
+  height: 341px;
+  align-items: flex-start;
+  justify-content: space-between;
+  position: absolute;
+  top: 0;
+  left: 0;
+  background-color: var(--color-tokens-color-tokens-background-secondary);
+  border-right-width: 0.31px;
+  border-right-style: solid;
+  border-color: var(--color-tokens-color-tokens-border-primary);
+}
+
+.sign-in-page .div-9 {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6.13px;
+  position: relative;
+  align-self: stretch;
+  width: 100%;
+  flex: 0 0 auto;
+}
+
+.sign-in-page .logo {
+  display: flex;
+  height: 22.08px;
+  align-items: center;
+  gap: 3.07px;
+  padding: 6.13px 8.59px;
+  position: relative;
+  align-self: stretch;
+  width: 100%;
+  border-bottom-width: 0.31px;
+  border-bottom-style: solid;
+  border-color: var(--color-tokens-color-tokens-border-primary);
+}
+
+.sign-in-page .logogram {
+  position: relative;
+  width: 8.59px;
+  height: 7.38px;
+}
+
+.sign-in-page .overlap-group-2 {
+  position: relative;
+  width: 9px;
+  height: 7px;
+}
+
+.sign-in-page .polygon-3 {
+  width: 4px;
+  height: 3px;
+  left: 5px;
+  position: absolute;
+  top: 0;
+}
+
+.sign-in-page .polygon-4 {
+  position: absolute;
+  width: 6px;
+  height: 7px;
+  top: 0;
+  left: 0;
+}
+
+.sign-in-page .text-wrapper-10 {
+  position: relative;
+  width: fit-content;
+  margin-top: -0.31px;
+  font-family: "Inter", Helvetica;
+  font-weight: 500;
+  color: var(--color-tokens-color-tokens-content-dark-primary);
+  font-size: 6.1px;
+  letter-spacing: 0;
+  line-height: 8.6px;
+  white-space: nowrap;
+}
+
+.sign-in-page .slider {
+  display: flex;
+  width: 9px;
+  height: 9px;
+  align-items: center;
+  justify-content: center;
+  gap: 3.07px;
+  position: absolute;
+  top: 7px;
+  left: 72px;
+  background-color: var(--color-tokens-color-tokens-background-tertiary);
+  border-radius: 0.61px;
+}
+
+.sign-in-page .menu {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1.23px;
+  padding: 0px 4.91px;
+  position: relative;
+  align-self: stretch;
+  width: 100%;
+  flex: 0 0 auto;
+}
+
+.sign-in-page .navigation-sidebar-3 {
+  display: flex;
+  height: 11.04px;
+  align-items: center;
+  justify-content: space-between;
+  padding: 2.45px;
+  position: relative;
+  align-self: stretch;
+  width: 100%;
+  border-radius: 1.23px;
+}
+
+.sign-in-page .title-6 {
+  position: relative;
+  width: fit-content;
+  margin-top: -0.24px;
+  font-family: "Inter", Helvetica;
+  font-weight: 500;
+  color: var(--color-tokens-color-tokens-content-dark-secondary);
+  font-size: 4.3px;
+  letter-spacing: 0;
+  line-height: 6.4px;
+  white-space: nowrap;
+}
+
+.sign-in-page .navigation-sidebar-4 {
+  display: flex;
+  height: 11.04px;
+  width: 100%;
+  background-color: var(--color-tokens-color-tokens-action-secondary-selected);
+  align-items: center;
+  justify-content: space-between;
+  padding: 2.45px;
+  position: relative;
+  align-self: stretch;
+  border-radius: 1.23px;
+}
+
+.sign-in-page .title-7 {
+  position: relative;
+  width: fit-content;
+  margin-top: -0.24px;
+  font-family: "Inter", Helvetica;
+  font-weight: 500;
+  color: var(--color-tokens-color-tokens-content-dark-primary);
+  font-size: 4.3px;
+  letter-spacing: 0;
+  line-height: 6.4px;
+  white-space: nowrap;
+}
+
+.sign-in-page .separator-2 {
+  position: relative;
+  align-self: stretch;
+  width: 100%;
+  height: 1px;
+}
+
+.sign-in-page .menu-2 {
+  gap: 1.53px;
+  padding: 0px 4.91px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  position: relative;
+  align-self: stretch;
+  width: 100%;
+  flex: 0 0 auto;
+}
+
+.sign-in-page .div-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 3.68px;
+  padding: 1.23px 2.45px;
+  position: relative;
+  align-self: stretch;
+  width: 100%;
+  flex: 0 0 auto;
+}
+
+.sign-in-page .text-wrapper-11 {
+  position: relative;
+  width: fit-content;
+  margin-top: -0.31px;
+  font-family: "Inter", Helvetica;
+  font-weight: 500;
+  color: var(--color-tokens-color-tokens-content-dark-secondary);
+  font-size: 3.7px;
+  letter-spacing: 0;
+  line-height: 5.2px;
+  white-space: nowrap;
+}
+
+.sign-in-page .frame-4 {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1.23px;
+  position: relative;
+  align-self: stretch;
+  width: 100%;
+  flex: 0 0 auto;
+}
+
+.sign-in-page .separator-3 {
+  width: 100%;
+  height: 1px;
+  margin-bottom: -0.69px;
+  position: relative;
+  align-self: stretch;
+}
+
+.sign-in-page .container {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 0px 4.91px;
+  position: relative;
+  align-self: stretch;
+  width: 100%;
+  flex: 0 0 auto;
+}
+
+.sign-in-page .menu-3 {
+  gap: 2.45px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  position: relative;
+  align-self: stretch;
+  width: 100%;
+  flex: 0 0 auto;
+}
+
+.sign-in-page .content-11 {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 6.13px 4.91px;
+  position: relative;
+  align-self: stretch;
+  width: 100%;
+  flex: 0 0 auto;
+  border-top-width: 0.31px;
+  border-top-style: solid;
+  border-color: var(--color-tokens-color-tokens-border-primary);
+}
+
+.sign-in-page .profile {
+  display: flex;
+  flex-direction: column;
+  width: 9.81px;
+  height: 9.81px;
+  align-items: center;
+  justify-content: center;
+  gap: 3.07px;
+  padding: 3.07px;
+  position: relative;
+  background-color: var(--color-tokens-color-tokens-background-tertiary);
+  border-radius: 1.23px;
+}
+
+.sign-in-page .text-wrapper-12 {
+  position: relative;
+  width: fit-content;
+  margin-top: -0.97px;
+  margin-bottom: -0.35px;
+  margin-left: -0.16px;
+  margin-right: -0.16px;
+  font-family: "Inter", Helvetica;
+  font-weight: 500;
+  color: var(--color-tokens-color-tokens-content-dark-primary);
+  font-size: 4.3px;
+  letter-spacing: 0;
+  line-height: normal;
+  white-space: nowrap;
+}
+
+.sign-in-page .shadow {
+  position: absolute;
+  width: 103px;
+  height: 306px;
+  top: 58px;
+  left: 211px;
+  background-color: #0000000f;
+  filter: blur(5.26px);
+}
+
+.sign-in-page .upcoming {
+  display: flex;
+  flex-direction: column;
+  width: 112px;
+  align-items: flex-start;
+  gap: 7.6px;
+  padding: 7.6px;
+  position: absolute;
+  top: 57px;
+  left: 211px;
+  background-color: var(--color-tokens-color-tokens-background-primary);
+  border-radius: 2.53px;
+  border: 0.32px solid;
+  border-color: var(--color-tokens-color-tokens-border-primary);
+}
+
+.sign-in-page .buttons-4 {
+  display: flex;
+  width: 98.13px;
+  gap: 2.45px;
+  padding: 2.45px 5.52px;
+  flex: 0 0 auto;
+  margin-right: -2.94px;
+  background-color: var(--color-tokens-color-tokens-action-secondary-base-2);
+  border-radius: var(--color-tokens-border-radius-4-px);
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.sign-in-page .cards-taREMOVEDcard-5 {
+  width: 98.74px;
+  margin-right: -3.25px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4.91px;
+  padding: 5.52px;
+  position: relative;
+  flex: 0 0 auto;
+  margin-left: -0.31px;
+  background-color: var(--color-tokens-color-tokens-background-primary);
+  border-radius: var(--color-tokens-border-radius-4-px);
+  border: 0.31px solid;
+  border-color: var(--color-tokens-color-tokens-border-primary);
+}
+
+.sign-in-page .member-26 {
+  background-image: url(./img/member-01-10.png);
+  position: relative;
+  width: 7.36px;
+  height: 7.36px;
+  border-radius: 7.36px;
+  border: 0.61px solid;
+  border-color: var(--color-tokens-color-tokens-content-light-primary);
+  background-size: cover;
+  background-position: 50% 50%;
+}
+
+.sign-in-page .member-27 {
+  background-image: url(./img/member-02-10.png);
+  position: relative;
+  width: 7.36px;
+  height: 7.36px;
+  margin-left: -3.68px;
+  border-radius: 7.36px;
+  border: 0.61px solid;
+  border-color: var(--color-tokens-color-tokens-content-light-primary);
+  background-size: cover;
+  background-position: 50% 50%;
+}
+
+.sign-in-page .member-28 {
+  background-image: url(./img/member-01-11.png);
+  position: relative;
+  width: 7.36px;
+  height: 7.36px;
+  border-radius: 7.36px;
+  border: 0.61px solid;
+  border-color: var(--color-tokens-color-tokens-background-primary);
+  background-size: cover;
+  background-position: 50% 50%;
+}
+
+.sign-in-page .member-29 {
+  background-image: url(./img/member-02-11.png);
+  position: relative;
+  width: 7.36px;
+  height: 7.36px;
+  margin-left: -3.68px;
+  border-radius: 7.36px;
+  border: 0.61px solid;
+  border-color: var(--color-tokens-color-tokens-background-primary);
+  background-size: cover;
+  background-position: 50% 50%;
+}
+
+.sign-in-page .member-30 {
+  background-image: url(./img/member-03-6.png);
+  position: relative;
+  width: 7.36px;
+  height: 7.36px;
+  margin-left: -3.68px;
+  border-radius: 7.36px;
+  border: 0.61px solid;
+  border-color: var(--color-tokens-color-tokens-background-primary);
+  background-size: cover;
+  background-position: 50% 50%;
+}
+
+.sign-in-page .member-31 {
+  background-image: url(./img/member-01-12.png);
+  position: relative;
+  width: 7.36px;
+  height: 7.36px;
+  border-radius: 7.36px;
+  border: 0.61px solid;
+  border-color: var(--color-tokens-color-tokens-background-primary);
+  background-size: cover;
+  background-position: 50% 50%;
+}
+
+.sign-in-page .member-32 {
+  background-image: url(./img/member-02-12.png);
+  position: relative;
+  width: 7.36px;
+  height: 7.36px;
+  margin-left: -3.68px;
+  border-radius: 7.36px;
+  border: 0.61px solid;
+  border-color: var(--color-tokens-color-tokens-background-primary);
+  background-size: cover;
+  background-position: 50% 50%;
+}
+
+.sign-in-page .member-33 {
+  background-image: url(./img/member-03-7.png);
+  position: relative;
+  width: 7.36px;
+  height: 7.36px;
+  margin-left: -3.68px;
+  border-radius: 7.36px;
+  border: 0.61px solid;
+  border-color: var(--color-tokens-color-tokens-background-primary);
+  background-size: cover;
+  background-position: 50% 50%;
+}
+
+.sign-in-page .member-34 {
+  background-image: url(./img/member-04-4.png);
+  position: relative;
+  width: 7.36px;
+  height: 7.36px;
+  margin-left: -3.68px;
+  border-radius: 7.36px;
+  border: 0.61px solid;
+  border-color: var(--color-tokens-color-tokens-background-primary);
+  background-size: cover;
+  background-position: 50% 50%;
+}
+
+.sign-in-page .member-35 {
+  background-image: url(./img/member-01-13.png);
+  position: relative;
+  width: 7.36px;
+  height: 7.36px;
+  border-radius: 7.36px;
+  border: 0.61px solid;
+  border-color: var(--color-tokens-color-tokens-background-primary);
+  background-size: cover;
+  background-position: 50% 50%;
+}
+
+.sign-in-page .member-36 {
+  background-image: url(./img/member-02-13.png);
+  position: relative;
+  width: 7.36px;
+  height: 7.36px;
+  margin-left: -3.68px;
+  border-radius: 7.36px;
+  border: 0.61px solid;
+  border-color: var(--color-tokens-color-tokens-background-primary);
+  background-size: cover;
+  background-position: 50% 50%;
+}
+
+.sign-in-page .member-37 {
+  background-image: url(./img/member-03-8.png);
+  position: relative;
+  width: 7.36px;
+  height: 7.36px;
+  margin-left: -3.68px;
+  border-radius: 7.36px;
+  border: 0.61px solid;
+  border-color: var(--color-tokens-color-tokens-background-primary);
+  background-size: cover;
+  background-position: 50% 50%;
+}
+
+.sign-in-page .member-38 {
+  background-image: url(./img/member-04-5.png);
+  position: relative;
+  width: 7.36px;
+  height: 7.36px;
+  margin-left: -3.68px;
+  border-radius: 7.36px;
+  border: 0.61px solid;
+  border-color: var(--color-tokens-color-tokens-background-primary);
+  background-size: cover;
+  background-position: 50% 50%;
+}
+
+.sign-in-page .cards-taREMOVEDcard-6 {
+  width: 98.74px;
+  margin-bottom: -0.31px;
+  margin-right: -3.25px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4.91px;
+  padding: 5.52px;
+  position: relative;
+  flex: 0 0 auto;
+  margin-left: -0.31px;
+  background-color: var(--color-tokens-color-tokens-background-primary);
+  border-radius: var(--color-tokens-border-radius-4-px);
+  border: 0.31px solid;
+  border-color: var(--color-tokens-color-tokens-border-primary);
+}
+
+.sign-in-page .member-39 {
+  background-image: url(./img/member-01-14.png);
+  position: relative;
+  width: 7.36px;
+  height: 7.36px;
+  border-radius: 7.36px;
+  border: 0.61px solid;
+  border-color: var(--color-tokens-color-tokens-background-primary);
+  background-size: cover;
+  background-position: 50% 50%;
+}
+
+.sign-in-page .member-40 {
+  background-image: url(./img/member-02-14.png);
+  position: relative;
+  width: 7.36px;
+  height: 7.36px;
+  margin-left: -3.68px;
+  border-radius: 7.36px;
+  border: 0.61px solid;
+  border-color: var(--color-tokens-color-tokens-background-primary);
+  background-size: cover;
+  background-position: 50% 50%;
+}
+
+.sign-in-page .member-41 {
+  background-image: url(./img/member-03-9.png);
+  position: relative;
+  width: 7.36px;
+  height: 7.36px;
+  margin-left: -3.68px;
+  border-radius: 7.36px;
+  border: 0.61px solid;
+  border-color: var(--color-tokens-color-tokens-background-primary);
+  background-size: cover;
+  background-position: 50% 50%;
+}
+
+.sign-in-page .member-42 {
+  background-image: url(./img/member-04-6.png);
+  position: relative;
+  width: 7.36px;
+  height: 7.36px;
+  margin-left: -3.68px;
+  border-radius: 7.36px;
+  border: 0.61px solid;
+  border-color: var(--color-tokens-color-tokens-background-primary);
+  background-size: cover;
+  background-position: 50% 50%;
+}
+
+.sign-in-page .shadow-2 {
+  position: absolute;
+  width: 119px;
+  height: 206px;
+  top: 59px;
+  left: 328px;
+  background-color: #0000000f;
+  filter: blur(5.26px);
+}
+
+.sign-in-page .taREMOVEDmodal {
+  display: flex;
+  flex-direction: column;
+  width: 16px;
+  align-items: flex-start;
+  gap: 7.28px;
+  padding: 7.28px;
+  position: absolute;
+  top: 52px;
+  left: 468px;
+  background-color: var(--color-tokens-color-tokens-background-primary);
+  border-radius: 2.43px;
+  border: 0.3px solid;
+  border-color: var(--color-tokens-color-tokens-border-primary);
+}
+
+.sign-in-page .text-wrapper-13 {
+  position: relative;
+  width: fit-content;
+  margin-top: -0.3px;
+  margin-right: -44px;
+  font-family: "Inter", Helvetica;
+  font-weight: 500;
+  color: var(--global-colors-globalcolors-neutral-100);
+  font-size: 5.5px;
+  letter-spacing: 0;
+  line-height: normal;
+}
+
+.sign-in-page .icon-x {
+  position: relative;
+  width: 6.07px;
+  height: 6.07px;
+  margin-left: -55.07px;
+}
+
+.sign-in-page .content-12 {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6.07px;
+  position: relative;
+  align-self: stretch;
+  width: 100%;
+  flex: 0 0 auto;
+}
+
+.sign-in-page .content-13 {
+  display: flex;
+  align-items: flex-start;
+  gap: 6.07px;
+  position: relative;
+  align-self: stretch;
+  width: 100%;
+  flex: 0 0 auto;
+}
+
+.sign-in-page .members {
+  display: flex;
+  flex-direction: column;
+  width: 35.18px;
+  align-items: flex-start;
+  gap: 2.43px;
+  position: relative;
+  align-self: stretch;
+  margin-right: -34.18px;
+}
+
+.sign-in-page .text-wrapper-14 {
+  position: relative;
+  width: fit-content;
+  margin-top: -0.3px;
+  font-family: "Inter", Helvetica;
+  font-weight: 400;
+  color: var(--global-colors-globalcolors-neutral-100);
+  font-size: 4.2px;
+  letter-spacing: 0;
+  line-height: 6.4px;
+  white-space: nowrap;
+}
+
+.sign-in-page .buttons-5 {
+  display: flex;
+  width: 12.13px;
+  height: 12.13px;
+  gap: 3.03px;
+  padding: 3.03px;
+  border-radius: var(--color-tokens-border-radius-100-px);
+  border: 0.3px solid;
+  border-color: var(--color-tokens-color-tokens-action-outline-base);
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.sign-in-page .icon-userplus {
+  position: relative;
+  width: 6.1px;
+  height: 6.07px;
+  margin-right: -0.04px;
+}
+
+.sign-in-page .labels {
+  display: flex;
+  flex-direction: column;
+  width: 35.18px;
+  align-items: flex-start;
+  gap: 2.43px;
+  position: relative;
+  align-self: stretch;
+  margin-right: -75.42px;
+}
+
+.sign-in-page .img-4 {
+  position: relative;
+  width: 6.07px;
+  height: 6.07px;
+}
+
+.sign-in-page .date-picker {
+  display: flex;
+  flex-direction: column;
+  height: 20.62px;
+  align-items: flex-start;
+  gap: 2.43px;
+  position: relative;
+  flex: 1;
+  flex-grow: 1;
+  margin-right: -82.49px;
+}
+
+.sign-in-page .label {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  position: relative;
+  align-self: stretch;
+  width: 100%;
+  flex: 0 0 auto;
+}
+
+.sign-in-page .input-label {
+  margin-right: -18px;
+  position: relative;
+  width: fit-content;
+  margin-top: -0.3px;
+  font-family: "Inter", Helvetica;
+  font-weight: 400;
+  color: var(--color-tokens-color-tokens-content-dark-primary);
+  font-size: 4.2px;
+  letter-spacing: 0;
+  line-height: 6.4px;
+  white-space: nowrap;
+}
+
+.sign-in-page .input-base {
+  align-items: center;
+  flex: 0 0 auto;
+  margin-bottom: -53.87px;
+  display: flex;
+  gap: 3.64px;
+  padding: 3.03px 3.64px;
+  position: relative;
+  align-self: stretch;
+  width: 100%;
+  background-color: var(--color-tokens-color-tokens-background-primary);
+  border-radius: 1.21px;
+  border: 0.3px solid;
+  border-color: var(--color-tokens-color-tokens-interaction-outline-base);
+}
+
+.sign-in-page .icon-calendar {
+  position: relative;
+  width: 6.07px;
+  height: 6.07px;
+  margin-right: -12.34px;
+}
+
+.sign-in-page .select-date-range {
+  position: relative;
+  flex: 1;
+  margin-top: -0.3px;
+  margin-right: -16.98px;
+  font-family: "Inter", Helvetica;
+  font-weight: 400;
+  color: var(--color-tokens-color-tokens-content-dark-tertiary);
+  font-size: 4.2px;
+  letter-spacing: 0;
+  line-height: 6.4px;
+}
+
+.sign-in-page .icon-arrow-down {
+  position: relative;
+  width: 4.02px;
+  height: 6.07px;
+  margin-right: -24.64px;
+}
+
+.sign-in-page .div-10 {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2.43px;
+  position: relative;
+  align-self: stretch;
+  width: 100%;
+  flex: 0 0 auto;
+}
+
+.sign-in-page .input-label-2 {
+  margin-right: -22px;
+  position: relative;
+  width: fit-content;
+  margin-top: -0.3px;
+  font-family: "Inter", Helvetica;
+  font-weight: 400;
+  color: var(--color-tokens-color-tokens-content-dark-primary);
+  font-size: 4.2px;
+  letter-spacing: 0;
+  line-height: 6.4px;
+  white-space: nowrap;
+}
+
+.sign-in-page .input-base-2 {
+  height: 37.61px;
+  align-items: flex-start;
+  display: flex;
+  gap: 3.64px;
+  padding: 3.03px 3.64px;
+  position: relative;
+  align-self: stretch;
+  width: 100%;
+  background-color: var(--color-tokens-color-tokens-interaction-secondary-base);
+  border-radius: var(--color-tokens-border-radius-4-px);
+  border: 0.3px solid;
+  border-color: var(--color-tokens-color-tokens-interaction-outline-base);
+}
+
+.sign-in-page .enter-your-title {
+  position: relative;
+  flex: 1;
+  margin-top: -0.3px;
+  margin-bottom: -112.16px;
+  margin-right: -7.28px;
+  font-family: "Inter", Helvetica;
+  font-weight: 400;
+  color: var(--color-tokens-color-tokens-content-dark-tertiary);
+  font-size: 4.2px;
+  letter-spacing: 0;
+  line-height: 6.4px;
+}
+
+.sign-in-page .text-wrapper-15 {
+  position: absolute;
+  width: 64px;
+  top: 30px;
+  left: -65px;
+  font-family: "Inter", Helvetica;
+  font-weight: 400;
+  color: var(--color-tokens-color-tokens-content-dark-tertiary);
+  font-size: 3.6px;
+  text-align: right;
+  letter-spacing: 0;
+  line-height: 5.1px;
+}
+
+.sign-in-page .checklist-5 {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2.43px;
+  position: relative;
+  flex: 0 0 auto;
+  margin-right: -29px;
+}
+
+.sign-in-page .text-field {
+  display: inline-flex;
+  flex-direction: column;
+  height: 6.07px;
+  align-items: flex-start;
+  gap: 2.43px;
+  position: relative;
+}
+
+.sign-in-page .input-label-3 {
+  position: relative;
+  width: fit-content;
+  margin-top: -0.3px;
+  font-family: "Inter", Helvetica;
+  font-weight: 400;
+  color: var(--color-tokens-color-tokens-content-dark-primary);
+  font-size: 4.2px;
+  letter-spacing: 0;
+  line-height: 6.4px;
+  white-space: nowrap;
+}
+
+.sign-in-page .text-wrapper-16 {
+  position: relative;
+  width: fit-content;
+  margin-top: -0.3px;
+  margin-right: -23px;
+  font-family: "Inter", Helvetica;
+  font-weight: 400;
+  color: var(--color-tokens-color-tokens-content-dark-primary);
+  font-size: 4.2px;
+  letter-spacing: 0;
+  line-height: 7.3px;
+  white-space: nowrap;
+}
+
+.sign-in-page .upload-files-modal {
+  display: flex;
+  flex-direction: column;
+  height: 32.15px;
+  align-items: center;
+  justify-content: center;
+  gap: 2.43px;
+  padding: 7.28px 9.7px;
+  position: relative;
+  align-self: stretch;
+  width: 100%;
+  border-radius: 1.21px;
+  border: 0.3px dashed;
+  border-color: var(--color-tokens-color-tokens-action-outline-base);
+}
+
+.sign-in-page .icon-image {
+  position: relative;
+  width: 9.7px;
+  height: 9.7px;
+  margin-top: -1.27px;
+  margin-left: -14.06px;
+  margin-right: -14.06px;
+}
+
+.sign-in-page .text-wrapper-17 {
+  position: relative;
+  width: fit-content;
+  margin-bottom: -0.97px;
+  margin-left: -34.7px;
+  margin-right: -34.7px;
+  font-family: "Inter", Helvetica;
+  font-weight: 400;
+  color: #a3a7b0;
+  font-size: 4.2px;
+  letter-spacing: 0;
+  line-height: 7.3px;
+  white-space: nowrap;
+}
+
+.sign-in-page .buttons-6 {
+  display: flex;
+  width: 140.41px;
+  gap: 2.43px;
+  padding: 2.43px 5.46px;
+  flex: 0 0 auto;
+  margin-right: -138.72px;
+  background-color: var(--color-tokens-color-tokens-action-primary-base);
+  border-radius: var(--color-tokens-border-radius-4-px);
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.sign-in-page .placeholder-3 {
+  margin-top: -0.15px;
+  color: var(--color-tokens-color-tokens-content-light-primary);
+  font-size: 4.9px;
+  line-height: 7.3px;
+  position: relative;
+  width: fit-content;
+  font-family: "Inter", Helvetica;
+  font-weight: 500;
+  letter-spacing: 0;
+  white-space: nowrap;
+}
+
+.sign-in-page .content-14 {
+  display: flex;
+  flex-direction: column;
+  width: 720px;
+  align-items: center;
+  gap: 140px;
+  padding: 64px 140px;
+  position: relative;
+  align-self: stretch;
+}
+
+.sign-in-page .content-15 {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 36px;
+  position: relative;
+  align-self: stretch;
+  width: 100%;
+  flex: 0 0 auto;
+}
+
+.sign-in-page .frame-5 {
+  display: inline-flex;
+  align-items: center;
+  gap: 17.14px;
+  position: relative;
+  flex: 0 0 auto;
+}
+
+.sign-in-page .overlap-group-wrapper {
+  position: relative;
+  width: 40px;
+  height: 34.39px;
+}
+
+.sign-in-page .overlap-group-3 {
+  position: relative;
+  height: 34px;
+}
+
+.sign-in-page .polygon-5 {
+  width: 18px;
+  height: 15px;
+  left: 22px;
+  position: absolute;
+  top: 0;
+}
+
+.sign-in-page .polygon-6 {
+  position: absolute;
+  width: 29px;
+  height: 34px;
+  top: 0;
+  left: 0;
+}
+
+.sign-in-page .text-wrapper-18 {
+  position: relative;
+  width: fit-content;
+  margin-top: -1.43px;
+  font-family: "Inter", Helvetica;
+  font-weight: 500;
+  color: var(--color-tokens-color-tokens-content-dark-primary);
+  font-size: 28.6px;
+  letter-spacing: 0;
+  line-height: 40px;
+  white-space: nowrap;
+}
+
+.sign-in-page .headline {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  position: relative;
+  align-self: stretch;
+  width: 100%;
+  flex: 0 0 auto;
+}
+
+.sign-in-page .text-wrapper-19 {
+  position: relative;
+  align-self: stretch;
+  margin-top: -1px;
+  font-family: var(--heading-desktop-h3-font-family);
+  font-weight: var(--heading-desktop-h3-font-weight);
+  color: var(--color-tokens-color-tokens-content-dark-primary);
+  font-size: var(--heading-desktop-h3-font-size);
+  text-align: center;
+  letter-spacing: var(--heading-desktop-h3-letter-spacing);
+  line-height: var(--heading-desktop-h3-line-height);
+  font-style: var(--heading-desktop-h3-font-style);
+}
+
+.sign-in-page .text-wrapper-20 {
+  position: relative;
+  align-self: stretch;
+  font-family: var(--body-large-regular-font-family);
+  font-weight: var(--body-large-regular-font-weight);
+  color: var(--color-tokens-color-tokens-content-dark-secondary);
+  font-size: var(--body-large-regular-font-size);
+  text-align: center;
+  letter-spacing: var(--body-large-regular-letter-spacing);
+  line-height: var(--body-large-regular-line-height);
+  font-style: var(--body-large-regular-font-style);
+}
+
+.sign-in-page .form {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 24px;
+  position: relative;
+  flex: 0 0 auto;
+}
+
+.sign-in-page .textfield {
+  display: flex;
+  flex-direction: column;
+  width: 440px;
+  align-items: flex-start;
+  gap: 16px;
+  position: relative;
+  flex: 0 0 auto;
+}
+
+.sign-in-page .text-field-2 {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+  position: relative;
+  align-self: stretch;
+  width: 100%;
+  flex: 0 0 auto;
+}
+
+.sign-in-page .input-label-4 {
+  position: relative;
+  width: fit-content;
+  margin-top: -1px;
+  font-family: var(--body-base-regular-font-family);
+  font-weight: var(--body-base-regular-font-weight);
+  color: var(--color-tokens-color-tokens-content-dark-primary);
+  font-size: var(--body-base-regular-font-size);
+  letter-spacing: var(--body-base-regular-letter-spacing);
+  line-height: var(--body-base-regular-line-height);
+  white-space: nowrap;
+  font-style: var(--body-base-regular-font-style);
+}
+
+.sign-in-page .input-base-3 {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px;
+  position: relative;
+  align-self: stretch;
+  width: 100%;
+  flex: 0 0 auto;
+  background-color: var(--color-tokens-color-tokens-interaction-secondary-base);
+  border-radius: var(--color-tokens-border-radius-4-px);
+  border: 1px solid;
+  border-color: var(--color-tokens-color-tokens-interaction-outline-base);
+}
+
+.sign-in-page .enter-your-title-2 {
+  position: relative;
+  flex: 1;
+  margin-top: -1px;
+  font-family: var(--body-base-regular-font-family);
+  font-weight: var(--body-base-regular-font-weight);
+  color: var(--color-tokens-color-tokens-content-dark-tertiary);
+  font-size: var(--body-base-regular-font-size);
+  letter-spacing: var(--body-base-regular-letter-spacing);
+  line-height: var(--body-base-regular-line-height);
+  font-style: var(--body-base-regular-font-style);
+}
+
+.sign-in-page .icon-eye {
+  position: relative;
+  width: 20px;
+  height: 20px;
+}
+
+.sign-in-page .frame-6 {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  position: relative;
+  flex: 0 0 auto;
+}
+
+.sign-in-page .checkbox {
+  position: relative;
+  width: 20px;
+  height: 20px;
+  border-radius: var(--color-tokens-border-radius-4-px);
+  overflow: hidden;
+}
+
+.sign-in-page .rounded-rectangle {
+  position: relative;
+  width: 18px;
+  height: 18px;
+  top: 1px;
+  left: 1px;
+  background-color: var(--color-tokens-color-tokens-interaction-secondary-base);
+  border-radius: 4px;
+  border: 1px solid;
+  border-color: var(--color-tokens-color-tokens-interaction-outline-base);
+}
+
+.sign-in-page .text-wrapper-21 {
+  position: relative;
+  width: fit-content;
+  margin-top: -1px;
+  font-family: var(--body-base-regular-font-family);
+  font-weight: var(--body-base-regular-font-weight);
+  color: var(--color-tokens-color-tokens-content-dark-tertiary);
+  font-size: var(--body-base-regular-font-size);
+  letter-spacing: var(--body-base-regular-letter-spacing);
+  line-height: var(--body-base-regular-line-height);
+  white-space: nowrap;
+  font-style: var(--body-base-regular-font-style);
+}
+
+.sign-in-page .text-wrapper-22 {
+  position: relative;
+  width: fit-content;
+  margin-top: -1px;
+  font-family: var(--body-base-semibold-font-family);
+  font-weight: var(--body-base-semibold-font-weight);
+  color: var(--color-tokens-color-tokens-content-dark-primary);
+  font-size: var(--body-base-semibold-font-size);
+  letter-spacing: var(--body-base-semibold-letter-spacing);
+  line-height: var(--body-base-semibold-line-height);
+  white-space: nowrap;
+  font-style: var(--body-base-semibold-font-style);
+}
+
+.sign-in-page .button-2 {
+  display: flex;
+  flex-direction: column;
+  width: 440px;
+  align-items: center;
+  gap: 16px;
+  position: relative;
+  flex: 0 0 auto;
+}
+
+.sign-in-page .buttons-7 {
+  display: flex;
+  gap: 8px;
+  padding: 9px 18px;
+  align-self: stretch;
+  width: 100%;
+  flex: 0 0 auto;
+  background-color: var(--global-colors-globalcolors-neutral-100);
+  border-radius: var(--color-tokens-border-radius-4-px);
+  overflow: hidden;
+  border: none;
+  box-shadow: 0px 0px 0px 4px #0000000a, 0px 0px 0px 1px #000000, inset 0px 10px 12px #ffffff42;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.sign-in-page .buttons-7::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  padding: 1px;
+  border-radius: 4px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.2) 0%, rgba(255, 255, 255, 0.07) 100%);
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-maREMOVEDcomposite: xor;
+  maREMOVEDcomposite: exclude;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.sign-in-page .placeholder-4 {
+  margin-top: -1px;
+  color: var(--color-tokens-color-tokens-content-light-primary);
+  font-size: var(--body-large-medium-font-size);
+  line-height: var(--body-large-medium-line-height);
+  position: relative;
+  width: fit-content;
+  font-family: var(--body-large-medium-font-family);
+  font-weight: var(--body-large-medium-font-weight);
+  letter-spacing: var(--body-large-medium-letter-spacing);
+  white-space: nowrap;
+  font-style: var(--body-large-medium-font-style);
+}
+
+.sign-in-page .buttons-8 {
+  display: flex;
+  gap: 8px;
+  padding: 8px 18px;
+  align-self: stretch;
+  width: 100%;
+  flex: 0 0 auto;
+  margin-left: -1px;
+  margin-right: -1px;
+  background-color: var(--color-tokens-color-tokens-action-secondary-base);
+  border-radius: var(--color-tokens-border-radius-4-px);
+  border: 1px solid;
+  border-color: var(--color-tokens-color-tokens-action-outline-base);
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.sign-in-page .brand-logos {
+  position: relative;
+  width: 16px;
+  height: 16px;
+}
+
+.sign-in-page .placeholder-5 {
+  margin-top: -0.5px;
+  color: var(--color-tokens-color-tokens-content-dark-primary);
+  font-size: var(--body-large-medium-font-size);
+  line-height: var(--body-large-medium-line-height);
+  position: relative;
+  width: fit-content;
+  font-family: var(--body-large-medium-font-family);
+  font-weight: var(--body-large-medium-font-weight);
+  letter-spacing: var(--body-large-medium-letter-spacing);
+  white-space: nowrap;
+  font-style: var(--body-large-medium-font-style);
+}
+
+.sign-in-page .frame-7 {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  position: relative;
+  flex: 0 0 auto;
+}
+
+.sign-in-page .text-wrapper-23 {
+  position: relative;
+  width: fit-content;
+  margin-top: -1px;
+  font-family: var(--body-base-regular-font-family);
+  font-weight: var(--body-base-regular-font-weight);
+  color: var(--color-tokens-color-tokens-content-dark-secondary);
+  font-size: var(--body-base-regular-font-size);
+  letter-spacing: var(--body-base-regular-letter-spacing);
+  line-height: var(--body-base-regular-line-height);
+  white-space: nowrap;
+  font-style: var(--body-base-regular-font-style);
+}
+
+.sign-in-page .text-wrapper-24 {
+  position: relative;
+  width: fit-content;
+  margin-bottom: -2px;
+  font-family: var(--body-base-regular-font-family);
+  font-weight: var(--body-base-regular-font-weight);
+  color: var(--color-tokens-color-tokens-content-dark-tertiary);
+  font-size: var(--body-base-regular-font-size);
+  letter-spacing: var(--body-base-regular-letter-spacing);
+  line-height: var(--body-base-regular-line-height);
+  white-space: nowrap;
+  font-style: var(--body-base-regular-font-style);
+}
