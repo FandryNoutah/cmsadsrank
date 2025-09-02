@@ -56,6 +56,62 @@ class Client extends MY_Controller
 		$statut_resiliation = $this->input->post('statut_resiliation');
 
 		$idclient = $this->visuels_model->create_resiliation($resiliation, $date_resiliation, $fin_campagne, $am_resiliation, $tm_resiliation, $demande_resiliation, $information_resiliation, $statut_resiliation, $idclients);
+		
+		if($resiliation == 1):
+			$type_upsell = 2;
+		endif;
+		if($resiliation == 2):
+			$type_upsell = 4;
+		endif;
+		if($resiliation == 3):
+			$type_upsell = 5;
+		endif;
+
+		$demmande_upsell = $date_resiliation;
+		$tm = $tm_resiliation;
+		$date_upsell = $fin_campagne;
+		$date_demande_upsell = $demmande_upsell;
+		$inforamtion_upsell = $information_resiliation;
+		$statut_upsell = $statut_resiliation;
+		$id = intval($idclients);
+		$donnee = $this->data["clients"] = $this->visuels_model->getDonneeById($id);
+		$idonnee = $donnee[0]['idonnee'];
+		$budget_initiale = $donnee[0]['budget'];
+			$am = $this->input->post('am');
+			$budget_initiale = intval($budget_initiale);
+			$budget_upsell = intval($budget_initiale);
+			$budget_finale = $budget_initiale;
+			$actif = 1;
+			$idclient = $this->visuels_model->create_upsell($type_upsell, $budget_finale, $budget_initiale, $demmande_upsell, $am, $tm, $date_upsell, $date_demande_upsell, $inforamtion_upsell, $statut_upsell, $idclients, $actif);
+			$type_tache = 1;
+			if($type_upsell == 2):
+			$title = "Relance client";
+			$tache = "Le client sera relancer, voir date due";
+			endif;
+			if($type_upsell == 4):
+			$title = "Mise en pause";
+			$tache = "Mettre le client en pause, voir date due";
+			endif;
+			if($type_upsell == 5):
+			$title = "Résiliation";
+			$tache = "Résiliation complète du client, voir date due";
+			endif;
+			$Statuts_technique = 1;
+
+			$data = array(
+				'type_tache' => $type_tache,
+				'date_demande' => $date_demande_upsell,
+				'date_due' => $fin_campagne,
+				'idclients' => $idclients,
+				'AM' => $am_resiliation,
+				'assigned_to' => $tm,
+				'title' => $title,
+				'Statuts_technique' => $Statuts_technique,
+				'description' => $tache
+
+			);
+
+		$this->Task_model->add_task($data);
 		$this->session->set_flashdata('message-succes', "Client résilier avec succès");
 		redirect('Client/detail_client/' . $idclients, 'refresh');
 		$this->layout();
