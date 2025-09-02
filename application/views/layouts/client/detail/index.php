@@ -172,7 +172,7 @@
 							<div class="card-body">
 								<table class="table table-borderless">
 									<tr>
-										<td class="align-bottom text-center" style="border-bottom: 2px solid black; font-weight: 500;">
+										<td class="align-bottom text-left" style=" font-weight: 500;">
 											Secteur Activité
 										</td>
 										<td class="text-center">
@@ -180,24 +180,42 @@
 										</td>
 									</tr>
 									<tr>
-										<td class="align-bottom text-center" style="border-bottom: 2px solid black; font-weight: 500;">
+										<td class="align-bottom text-left" style=" font-weight: 500;">
 											Logo
 										</td>
 										<td class="text-center">
-											<button class="btn btn-light btn-sm">
-												<i class="fa fa-plus"></i>
-												Ajouter Logo
-											</button>
-											<!-- <span class="badge alert-dark">Artisan Plombier</span> -->
+											<?php if($d['logo_client'] == NULL): ?>
+											<?php echo form_open_multipart('Client/upload_logo'); ?>
+
+												<div class="form-group">
+													<input type="file" name="logo" id="logo" style="display: none;" onchange="this.form.submit();">
+													<input type="hidden" name="idclients" value="<?= $d['idclients']; ?>">
+													<button type="button" class="btn btn-light btn-sm" onclick="document.getElementById('logo').click();">
+														<i class="fa fa-plus"></i> Ajouter Logo
+													</button>
+												</div>
+											<?php echo form_close(); ?>
+											<?php endif; ?>
+											<?php if($d['logo_client'] != NULL): ?>
+											<?php echo form_open_multipart('Client/upload_logo'); ?>
+
+												<div class="form-group">
+													<input type="file" name="logo" id="logo" style="display: none;" onchange="this.form.submit();">
+													<input type="hidden" name="idclients" value="<?= $d['idclients']; ?>">
+													<button type="button" class="btn btn-light btn-sm" onclick="document.getElementById('logo').click();">
+														<img src="<?php echo base_url($d['logo_client']); ?>" width="150"/>
+													</button>
+												</div>
+											<?php echo form_close(); ?>
+											<?php endif; ?>
 										</td>
 									</tr>
 									<tr>
-										<td class="align-bottom text-center" style="border-bottom: 2px solid black; font-weight: 500;">
+										<td class="align-bottom text-left" style=" font-weight: 500;">
 											Favicon
 										</td>
 										<td class="text-center">
 											<img src="<?= $d['favicon']; ?>" width="28" class="mr-2">
-											Venture
 										</td>
 									</tr>
 								</table>
@@ -353,7 +371,12 @@
 									<a href="#" class="text-decoration-none text-muted ml-3 stretched-link">AirCall</a>
 									<i class="fa fa-chevron-right ml-auto" style="font-size: 12px;"></i>
 								</div>
+								<?php if( empty($matched_calls[0]->started_at)):?>
+								<h3 class="m-0">Invalide</h3>
+								<?php endif; ?>
+								<?php if( !empty($matched_calls[0]->started_at)):?>
 								<h3 class="m-0"><?= date('Y-m-d', $matched_calls[0]->started_at) ?></h3>
+								<?php endif; ?>
 							</div>
 						</div>
 					</div>
@@ -720,50 +743,7 @@
 			});
 		});
 	});
-	document.addEventListener('DOMContentLoaded', function () {
-	const stars = document.querySelectorAll('#star-rating .star');
-	const ratingDisplay = document.getElementById('selected-rating');
-	const idClient = document.getElementById('idclients').value;
-
-	const fullStar = "<?= base_url('assets/images/icons/figma/star_full.svg') ?>";
-	const emptyStar = "<?= base_url('assets/images/icons/figma/Empty_Star.svg') ?>";
-
-	stars.forEach((star, index) => {
-		star.addEventListener('click', () => {
-			const rating = index + 1;
-
-			// MAJ visuelle des étoiles
-			stars.forEach((s, i) => {
-				s.src = i < rating ? fullStar : emptyStar;
-			});
-
-			// Afficher la note
-			ratingDisplay.textContent = `${rating}/5`;
-
-			// Envoi AJAX pour enregistrer la note
-			fetch("<?= base_url('Client/enregistrer') ?>", {
-				method: "POST",
-				headers: {
-					'Content-Type': 'application/json'
-				},
-				body: JSON.stringify({
-					rating: rating,
-					idclients: idClient
-				})
-			})
-			.then(response => response.json())
-			.then(data => {
-				if (data.success) {
-					console.log("Note enregistrée avec succès.");
-				} else {
-					console.error("Erreur lors de l’enregistrement :", data.message);
-				}
-			})
-			.catch(error => console.error("Erreur réseau :", error));
-		});
-	});
-});
-
+	
 	</script>
 <?php $noteClient = isset($note) ? $note : 0; ?>
 
