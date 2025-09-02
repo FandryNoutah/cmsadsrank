@@ -189,7 +189,7 @@ class Visuels_model extends CI_Model {
 		$this->db->join('users AS compta_user', 'upsell.compta = compta_user.id', 'left');
 	
 		// Ne garder que les enregistrements ayant un type upsell défini
-		$this->db->where_in('upsell.type_upsell', [1, 2,3]);
+		$this->db->where_in('upsell.type_upsell', [1, 2,3,4,5]);
 		$this->db->where('upsell.actif !=', 0);
 		$this->db->where_in('upsell.idclients', $idclients);
 		$this->db->order_by('upsell.idupsell', 'DESC');
