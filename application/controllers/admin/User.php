@@ -76,7 +76,7 @@ class User extends MY_Controller
 		}
 
 		$this->load->helper('form');
-		$this->page = "templates/admin_login_page";
+		$this->page = "layouts/login/index.php";
 		$this->layout_old();
 	}
 
