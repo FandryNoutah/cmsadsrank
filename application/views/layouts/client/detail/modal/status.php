@@ -14,6 +14,7 @@
 					<select name="resiliation" id="status_type" class="form-control">
 						<option value="3">Arrêt campagne / résiliation client</option>
 						<option value="2">Mise en pause</option>
+						<option value="1">Activé</option>
 					</select>
 				</div>
 				<input type="hidden" class="form-control" name="am_resiliation" value="<?php echo $current_user->id; ?>">
