@@ -42,9 +42,22 @@ class Client extends MY_Controller
 		$this->content = "layouts/client/index.php";
 		$this->layout();
 	}
+	public function upload_logo()
+	{
+		$idclients = $this->input->post('idclients');
 
-	
+		$logo = $this->file_upload_field = "logo";
+		$logo = "";
+		$this->upload->initialize($this->set_upload_options("", $_FILES["logo"]["name"]));
+		if ($this->upload->do_upload('logo') != null) {
 
+			$logo = $this->path . $this->upload->file_name;
+		}
+		$this->Donne_modele->updatelogo($idclients, $logo);
+
+		redirect('Client/detail_client/' . $idclients);
+		
+	}
 	public function enregistrer() {
 		$data = json_decode(file_get_contents("php://input"), true);
 
@@ -699,5 +712,17 @@ class Client extends MY_Controller
 		$scheme = isset($parsed_url['scheme']) ? $parsed_url['scheme'] : 'https';
 		$host = isset($parsed_url['host']) ? $parsed_url['host'] : '';
 		return "$scheme://$host/favicon.ico";
+	}
+	private function set_upload_options($prefix, $filename)
+	{
+		$file = pathinfo($filename);
+		$file = $file['filename'];
+		$config = array();
+		$config['upload_path']      = $this->path;
+		$config['allowed_types']    = 'jpg|jpeg|png|gif|webp';
+		$config['max_size']         = '0';
+		$config['file_name']        = url_title(iconv("UTF-8", "ASCII//TRANSLIT", $prefix . '_' . $file), '_', TRUE);
+		$config['overwrite']        = FALSE;
+		return $config;
 	}
 }
