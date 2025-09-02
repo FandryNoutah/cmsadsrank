@@ -42,6 +42,33 @@ class Visuels_model extends CI_Model {
 
 		return $this->db->get()->result();
 	}
+
+	public function enregistrer_note($idclients, $rating) {
+		$data = [
+			'idclients' => $idclients,
+			'note' => $rating,
+			'date_ajout' => date('Y-m-d H:i:s')
+		];
+
+		// Si un enregistrement existe déjà, on met à jour
+		$existe = $this->db->get_where('ratings', ['idclients' => $idclients])->row();
+		if ($existe) {
+			$this->db->where('idclients', $idclients);
+			$this->db->update('ratings', ['note' => $rating, 'date_ajout' => date('Y-m-d H:i:s')]);
+		} else {
+			$this->db->insert('ratings', $data);
+		}
+	}
+	public function get_note_par_client($idclients) {
+	$this->db->select('note');
+	$this->db->from('ratings');
+	$this->db->where('idclients', $idclients);
+	$query = $this->db->get();
+	$result = $query->row();
+
+	return $result ? (int) $result->note : 0; // Retourne 0 si pas de note
+}
+
 	public function get_all() {
         $this->db->where("status", 1);
 	    return $this->db->get($this->table)->result();
