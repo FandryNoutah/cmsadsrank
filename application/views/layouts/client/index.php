@@ -217,6 +217,7 @@ Client
 
 							<?php foreach ($donnee as $d): ?>
 								<?php if ($d->budget != 0) : ?>
+									<?php if ($d->resiliation == 1):  ?>
 									<div class="card mt-3">
 										<div class="card-body">
 											<a href="<?= base_url('Client/detail_client/' . $d->idclients) ?>" class="stretched-link"></a>
@@ -242,6 +243,7 @@ Client
 											</div>
 										</div>
 									</div>
+									<?php endif; ?>
 								<?php endif; ?>
 							<?php endforeach; ?>
 						</div>
@@ -261,51 +263,37 @@ Client
 								<a href="#" class="text-dark text-decoration-none ml-auto" style="font-size: 28px;">+</a>
 							</div>
 
-							<div class="card mt-3">
-								<div class="card-body">
-									<div class="d-block mb-3">
-										<img src="<?= base_url('assets/images/icons/figma/brand-logos-10.svg') ?>" alt="" width="48">
+							<?php foreach ($donnee as $d): ?>
+								<?php if ($d->budget != 0) : ?>
+									<?php if ($d->resiliation == 2):  ?>
+									<div class="card mt-3">
+										<div class="card-body">
+											<a href="<?= base_url('Client/detail_client/' . $d->idclients) ?>" class="stretched-link"></a>
+											<div class="d-block mb-3">
+												<img src="<?= $d->favicon ?>" alt="" width="48">
+											</div>
+											<p style="font-size: 18px; font-weight: 400;" class="mb-3">
+												<?= htmlspecialchars($d->nom_client) ?>
+											</p>
+											<div class="d-flex justify-content-between">
+												<span class="text-muted">
+													<img src="<?= base_url('assets/images/icons/figma/calendar.svg') ?>" alt="">
+													<?= $d->mis_en_place_paiement ?>
+												</span>
+												<?php
+												$budget = $d->budget;
+												$budget = ($budget / 2) / 30.6;
+												$budget = round($budget, 2);
+												?>
+												<span>
+													<?= $budget; ?> €</td>
+												</span>
+											</div>
+										</div>
 									</div>
-									<p style="font-size: 18px; font-weight: 400;" class="mb-3">Ouest lyonnais climatisation plomberie SARL</p>
-									<div class="d-flex justify-content-between">
-										<span class="text-muted">
-											<img src="<?= base_url('assets/images/icons/figma/calendar.svg') ?>" alt="">
-											16/08/2013
-										</span>
-										<span>$2.120</span>
-									</div>
-								</div>
-							</div>
-							<div class="card mt-3">
-								<div class="card-body">
-									<div class="d-block mb-3">
-										<img src="<?= base_url('assets/images/icons/figma/brand-logos-10.svg') ?>" alt="" width="48">
-									</div>
-									<p style="font-size: 18px; font-weight: 400;" class="mb-3">Ouest lyonnais climatisation plomberie SARL</p>
-									<div class="d-flex justify-content-between">
-										<span class="text-muted">
-											<img src="<?= base_url('assets/images/icons/figma/calendar.svg') ?>" alt="">
-											16/08/2013
-										</span>
-										<span>$2.120</span>
-									</div>
-								</div>
-							</div>
-							<div class="card mt-3">
-								<div class="card-body">
-									<div class="d-block mb-3">
-										<img src="<?= base_url('assets/images/icons/figma/brand-logos-10.svg') ?>" alt="" width="48">
-									</div>
-									<p style="font-size: 18px; font-weight: 400;" class="mb-3">Ouest lyonnais climatisation plomberie SARL</p>
-									<div class="d-flex justify-content-between">
-										<span class="text-muted">
-											<img src="<?= base_url('assets/images/icons/figma/calendar.svg') ?>" alt="">
-											16/08/2013
-										</span>
-										<span>$2.120</span>
-									</div>
-								</div>
-							</div>
+									<?php endif; ?>
+								<?php endif; ?>
+							<?php endforeach; ?>
 						</div>
 					</div>
 				</div>
@@ -323,21 +311,37 @@ Client
 								<a href="#" class="text-dark text-decoration-none ml-auto" style="font-size: 28px;">+</a>
 							</div>
 
-							<div class="card mt-3">
-								<div class="card-body">
-									<div class="d-block mb-3">
-										<img src="<?= base_url('assets/images/icons/figma/brand-logos-10.svg') ?>" alt="" width="48">
+							<?php foreach ($donnee as $d): ?>
+								<?php if ($d->budget != 0) : ?>
+									<?php if ($d->resiliation == 3):  ?>
+									<div class="card mt-3">
+										<div class="card-body">
+											<a href="<?= base_url('Client/detail_client/' . $d->idclients) ?>" class="stretched-link"></a>
+											<div class="d-block mb-3">
+												<img src="<?= $d->favicon ?>" alt="" width="48">
+											</div>
+											<p style="font-size: 18px; font-weight: 400;" class="mb-3">
+												<?= htmlspecialchars($d->nom_client) ?>
+											</p>
+											<div class="d-flex justify-content-between">
+												<span class="text-muted">
+													<img src="<?= base_url('assets/images/icons/figma/calendar.svg') ?>" alt="">
+													<?= $d->mis_en_place_paiement ?>
+												</span>
+												<?php
+												$budget = $d->budget;
+												$budget = ($budget / 2) / 30.6;
+												$budget = round($budget, 2);
+												?>
+												<span>
+													<?= $budget; ?> €</td>
+												</span>
+											</div>
+										</div>
 									</div>
-									<p style="font-size: 18px; font-weight: 400;" class="mb-3">Ouest lyonnais climatisation plomberie SARL</p>
-									<div class="d-flex justify-content-between">
-										<span class="text-muted">
-											<img src="<?= base_url('assets/images/icons/figma/calendar.svg') ?>" alt="">
-											16/08/2013
-										</span>
-										<span>$2.120</span>
-									</div>
-								</div>
-							</div>
+									<?php endif; ?>
+								<?php endif; ?>
+							<?php endforeach; ?>
 						</div>
 					</div>
 				</div>
