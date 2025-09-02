@@ -65,14 +65,21 @@
 
 				<div class="row mb-4">
 					<div class="col overflow-hidden">
-						<div class="d-flex justify-content-start align-items-center mb-3">
-							<img src="<?= base_url('assets/images/icons/figma/star_full.svg') ?>" alt="star_full" width="20" class="mr-1">
-							<img src="<?= base_url('assets/images/icons/figma/star_full.svg') ?>" alt="star_full" width="20" class="mr-1">
-							<img src="<?= base_url('assets/images/icons/figma/star_full.svg') ?>" alt="star_full" width="20" class="mr-1">
-							<img src="<?= base_url('assets/images/icons/figma/star_full.svg') ?>" alt="star_full" width="20" class="mr-1">
-							<img src="<?= base_url('assets/images/icons/figma/star_half.svg') ?>" alt="star_half" width="20" class="mr-1">
-							<span class="ml-3 py-1 px-3 badge" style="background-color: #edf2fe; color: #4976f4; font-size: 12px; font-weight: 500;">Bleu</span>
+						<div class="d-flex justify-content-start align-items-center mb-3" id="star-rating">
+						<img src="<?= base_url('assets/images/icons/figma/Empty_Star.svg') ?>" alt="star" width="20" class="mr-1 star" data-index="1">
+						<img src="<?= base_url('assets/images/icons/figma/Empty_Star.svg') ?>" alt="star" width="20" class="mr-1 star" data-index="2">
+						<img src="<?= base_url('assets/images/icons/figma/Empty_Star.svg') ?>" alt="star" width="20" class="mr-1 star" data-index="3">
+						<img src="<?= base_url('assets/images/icons/figma/Empty_Star.svg') ?>" alt="star" width="20" class="mr-1 star" data-index="4">
+						<img src="<?= base_url('assets/images/icons/figma/Empty_Star.svg') ?>" alt="star" width="20" class="mr-1 star" data-index="5">
+						<span class="ml-3 py-1 px-3 badge" style="background-color: #edf2fe; color: #4976f4; font-size: 12px; font-weight: 500;">
+							Bleu
+						</span>
 						</div>
+
+
+
+
+
 						<h1 class="mb-3" style="font-size: 48px; font-weight: 500;">
 							<?= $d['nom_client'] ?>
 						</h1>
@@ -214,7 +221,7 @@
 									</select>
 								</div>
 								<span class="text-muted" style="font-size: 14px;">Budget actuellement en cours</span>
-								<table class="table table-wrapper">
+								<table class="table table-wrapper" style="text-align: center;">
 									<thead>
 										<tr>
 											<th>
@@ -250,11 +257,42 @@
 															Baisse de budget
 														</span>
 													<?php endif; ?>
+													<?php if ($u->type_upsell == 5): ?>
+														<span class="badge alert-danger rounded-pill px-4 py-3" style="font-size: 14px; font-weight: 500;">
+															<i class="fa fa-circle mr-1" style="font-size: 10px;"></i>
+															Résiliation complète														</span>
+													<?php endif; ?>
+													<?php if ($u->type_upsell == 4): ?>
+														<span class="badge alert-warning rounded-pill px-4 py-3" style="font-size: 14px; font-weight: 500;">
+															<i class="fa fa-circle mr-1" style="font-size: 10px;"></i>
+															Mise en pause
+														</span>
+													<?php endif; ?>
 												</td>
 												<td><?= $u->date_demande ?></td>
 												<td><?= $u->date_upsell ?></td>
-												<td><?= $u->budget_initiale ?> €</td>
-												<td><?= $u->budgets ?> €</td>
+												<td>
+												<?php if ($u->type_upsell == 4): ?>
+														Pause
+												<?php endif; ?>
+												<?php if ($u->type_upsell == 5): ?>
+														Résilié
+												<?php endif; ?>	
+												<?php if ($u->type_upsell == 1 || $u->type_upsell == 2): ?>
+														<?= $u->budget_initiale ?> €
+												<?php endif; ?>		
+												</td>
+												<td >
+												<?php if ($u->type_upsell == 4): ?>
+														Pause
+												<?php endif; ?>
+												<?php if ($u->type_upsell == 5): ?>
+														Résilié
+												<?php endif; ?>	
+												<?php if ($u->type_upsell == 1 || $u->type_upsell == 2): ?>
+														<?= $u->budgets ?> €
+												<?php endif; ?>	
+												</td>
 											</tr>
 										<?php endforeach; ?>
 									</tbody>
@@ -672,6 +710,24 @@
 			});
 		});
 	});
+	document.addEventListener('DOMContentLoaded', function () {
+		const stars = document.querySelectorAll('#star-rating .star');
+		const ratingDisplay = document.getElementById('selected-rating');
+
+		const fullStar = "<?= base_url('assets/images/icons/figma/star_full.svg') ?>";
+		const halfStar = "<?= base_url('assets/images/icons/figma/Empty_Star.svg') ?>";
+
+		stars.forEach((star, index) => {
+		star.addEventListener('click', () => {
+			const rating = index + 1;
+			stars.forEach((s, i) => {
+			s.src = i < rating ? fullStar : halfStar;
+			});
+			ratingDisplay.textContent = rating;
+		});
+		});
+	});
+
 </script>
 
 <?php end_section(); ?>
