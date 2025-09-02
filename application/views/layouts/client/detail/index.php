@@ -66,14 +66,24 @@
 				<div class="row mb-4">
 					<div class="col overflow-hidden">
 						<div class="d-flex justify-content-start align-items-center mb-3" id="star-rating">
-						<img src="<?= base_url('assets/images/icons/figma/Empty_Star.svg') ?>" alt="star" width="20" class="mr-1 star" data-index="1">
-						<img src="<?= base_url('assets/images/icons/figma/Empty_Star.svg') ?>" alt="star" width="20" class="mr-1 star" data-index="2">
-						<img src="<?= base_url('assets/images/icons/figma/Empty_Star.svg') ?>" alt="star" width="20" class="mr-1 star" data-index="3">
-						<img src="<?= base_url('assets/images/icons/figma/Empty_Star.svg') ?>" alt="star" width="20" class="mr-1 star" data-index="4">
-						<img src="<?= base_url('assets/images/icons/figma/Empty_Star.svg') ?>" alt="star" width="20" class="mr-1 star" data-index="5">
-						<span class="ml-3 py-1 px-3 badge" style="background-color: #edf2fe; color: #4976f4; font-size: 12px; font-weight: 500;">
-							Bleu
-						</span>
+						<?php $noteClient = isset($note) ? $note : 0; ?>
+
+						<div class="d-flex justify-content-start align-items-center mb-3" id="star-rating">
+							<?php for ($i = 1; $i <= 5; $i++): ?>
+								<img
+									src="<?= base_url('assets/images/icons/figma/') . ($i <= $noteClient ? 'star_full.svg' : 'Empty_Star.svg') ?>"
+									alt="star"
+									width="20"
+									class="mr-1 star"
+									data-index="<?= $i ?>"
+								>
+							<?php endfor; ?>
+							<span class="ml-3 py-1 px-3 badge" style="background-color: #edf2fe; color: #4976f4; font-size: 12px; font-weight: 500;">
+								Bleu
+							</span>
+						</div>
+						<input type="hidden" id="idclients" value="<?= $donnees[0]['idclients'] ?>">
+
 						</div>
 
 
@@ -711,23 +721,120 @@
 		});
 	});
 	document.addEventListener('DOMContentLoaded', function () {
-		const stars = document.querySelectorAll('#star-rating .star');
-		const ratingDisplay = document.getElementById('selected-rating');
+	const stars = document.querySelectorAll('#star-rating .star');
+	const ratingDisplay = document.getElementById('selected-rating');
+	const idClient = document.getElementById('idclients').value;
 
-		const fullStar = "<?= base_url('assets/images/icons/figma/star_full.svg') ?>";
-		const halfStar = "<?= base_url('assets/images/icons/figma/Empty_Star.svg') ?>";
+	const fullStar = "<?= base_url('assets/images/icons/figma/star_full.svg') ?>";
+	const emptyStar = "<?= base_url('assets/images/icons/figma/Empty_Star.svg') ?>";
 
-		stars.forEach((star, index) => {
+	stars.forEach((star, index) => {
 		star.addEventListener('click', () => {
 			const rating = index + 1;
+
+			// MAJ visuelle des étoiles
 			stars.forEach((s, i) => {
-			s.src = i < rating ? fullStar : halfStar;
+				s.src = i < rating ? fullStar : emptyStar;
 			});
-			ratingDisplay.textContent = rating;
-		});
+
+			// Afficher la note
+			ratingDisplay.textContent = `${rating}/5`;
+
+			// Envoi AJAX pour enregistrer la note
+			fetch("<?= base_url('Client/enregistrer') ?>", {
+				method: "POST",
+				headers: {
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify({
+					rating: rating,
+					idclients: idClient
+				})
+			})
+			.then(response => response.json())
+			.then(data => {
+				if (data.success) {
+					console.log("Note enregistrée avec succès.");
+				} else {
+					console.error("Erreur lors de l’enregistrement :", data.message);
+				}
+			})
+			.catch(error => console.error("Erreur réseau :", error));
 		});
 	});
+});
 
+	</script>
+<?php $noteClient = isset($note) ? $note : 0; ?>
+
+<div class="d-flex justify-content-start align-items-center mb-3" id="star-rating">
+	<?php for ($i = 1; $i <= 5; $i++): ?>
+		<img
+			src="<?= base_url('assets/images/icons/figma/') . ($i <= $noteClient ? 'star_full.svg' : 'Empty_Star.svg') ?>"
+			alt="star"
+			width="20"
+			class="mr-1 star"
+			data-index="<?= $i ?>"
+		>
+	<?php endfor; ?>
+
+	<!-- Affichage de la couleur -->
+	<span class="ml-3 py-1 px-3 badge" style="background-color: #edf2fe; color: #4976f4; font-size: 12px; font-weight: 500;">
+		Bleu
+	</span>
+
+	<!-- Affichage du nombre d'étoiles sélectionnées -->
+	<span id="selected-rating" class="ml-2 font-weight-bold text-primary">
+		<?= $noteClient > 0 ? $noteClient . '/5' : '' ?>
+	</span>
+</div>
+
+<!-- ID du client -->
+<input type="hidden" id="idclients" value="<?= $donnees[0]['idclients'] ?>">
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+	const stars = document.querySelectorAll('#star-rating .star');
+	const ratingDisplay = document.getElementById('selected-rating');
+	const idClient = document.getElementById('idclients').value;
+
+	const fullStar = "<?= base_url('assets/images/icons/figma/star_full.svg') ?>";
+	const emptyStar = "<?= base_url('assets/images/icons/figma/Empty_Star.svg') ?>";
+
+	stars.forEach((star, index) => {
+		star.addEventListener('click', () => {
+			const rating = index + 1;
+
+			// MAJ visuelle des étoiles
+			stars.forEach((s, i) => {
+				s.src = i < rating ? fullStar : emptyStar;
+			});
+
+			// Afficher la note
+			ratingDisplay.textContent = `${rating}/5`;
+
+			// Envoi AJAX pour enregistrer la note
+			fetch("<?= base_url('Client/enregistrer') ?>", {
+				method: "POST",
+				headers: {
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify({
+					rating: rating,
+					idclients: idClient
+				})
+			})
+			.then(response => response.json())
+			.then(data => {
+				if (data.success) {
+					console.log("Note enregistrée avec succès.");
+				} else {
+					console.error("Erreur lors de l’enregistrement :", data.message);
+				}
+			})
+			.catch(error => console.error("Erreur réseau :", error));
+		});
+	});
+});
 </script>
 
 <?php end_section(); ?>
