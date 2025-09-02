@@ -77,11 +77,11 @@ class Note_model extends CI_Model {
     }
     public function get_assigned_users($noteId)
     {
-        return $this->db
-            ->select('user_id')
-            ->where('note_id', $noteId)
-            ->get('note_users')
-            ->result_array();
+        $this->db->select('u.*');
+        $this->db->from('note_users nu');
+        $this->db->join('users u', 'u.id = nu.user_id');
+        $this->db->where('nu.note_id', $noteId); // line 45
+        return $this->db->get()->result();
     }
 
 
