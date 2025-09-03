@@ -57,15 +57,17 @@ class Task extends MY_Controller
 		$this->content = "layouts/task/index.php";
 		$this->layout();
 	}
+
 	public function delete_task() {
 		$task_id = $this->input->get('id'); 
 		$idclients = $this->input->get('client_id');
 		$this->Task_model->delete_task($task_id);
 		redirect('Task');
 	}
+
 	public function edits_task() {
 		$idclients = $this->input->post('idclients');
-		$taskId = $this->input->post('idtask');
+		$taskId = $this->input->post('taskId');
 		$title = $this->input->post('title');
 		$description = $this->input->post('description');
 		$assignedTo = $this->input->post('user_id');
@@ -73,6 +75,7 @@ class Task extends MY_Controller
 		$this->Task_model->update_task($taskId, $title, $description, $assignedTo, $status);
 		redirect('Task');
 	}
+
 	public function fetch_discussion($id_task)
 	{
 
@@ -1601,8 +1604,6 @@ class Task extends MY_Controller
 
 		return implode(',', $file_names);  // Retourne les noms de fichiers séparés par une virgule
 	}
-
-
 
 	public function Admin_brief($id)
 	{
