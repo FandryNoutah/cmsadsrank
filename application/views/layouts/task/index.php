@@ -115,7 +115,7 @@ Task
 		</select>
 	</div>
 	<div class="col-auto px-1">
-		<button class="btn btn-dark" data-toggle="modal" data-target="#taskModal">
+		<button class="btn btn-dark" data-toggle="modal" data-target="#formModal">
 			<img src="<?= base_url('assets/images/icons/figma/icon-plus.svg') ?>" alt="">
 			Add Task
 		</button>
@@ -228,7 +228,14 @@ Task
 												<i class="fa fa-ellipsis-v"></i>
 											</a>
 											<div class="dropdown-menu dropdown-menu-right">
-												<button type="button" class="dropdown-item" data-toggle="modal" data-target="#detailModal" data-id="<?= $t->idtask; ?>">Détails</button>
+												<button type="button" class="dropdown-item" data-toggle="modal" data-target="#detailModal" data-id="<?= $t->idtask; ?>">
+													<i class="fa fa-eye mr-2"></i>
+													Détails
+												</button>
+												<button type="button" class="dropdown-item" data-toggle="modal" data-target="#formModal" data-id="<?= $t->idtask; ?>">
+													<i class="fa fa-edit mr-2"></i>
+													Modifier
+												</button>
 											</div>
 										</div>
 									</td>
@@ -310,7 +317,14 @@ Task
 												<i class="fa fa-ellipsis-v"></i>
 											</a>
 											<div class="dropdown-menu dropdown-menu-right">
-												<button type="button" class="dropdown-item" data-toggle="modal" data-target="#detailModal" data-id="<?= $t->idtask; ?>">Détails</button>
+												<button type="button" class="dropdown-item" data-toggle="modal" data-target="#detailModal" data-id="<?= $t->idtask; ?>">
+													<i class="fa fa-eye mr-2"></i>
+													Détails
+												</button>
+												<button type="button" class="dropdown-item" data-toggle="modal" data-target="#formModal" data-id="<?= $t->idtask; ?>">
+													<i class="fa fa-edit mr-2"></i>
+													Modifier
+												</button>
 											</div>
 										</div>
 									</td>
@@ -391,7 +405,14 @@ Task
 												<i class="fa fa-ellipsis-v"></i>
 											</a>
 											<div class="dropdown-menu dropdown-menu-right">
-												<button type="button" class="dropdown-item" data-toggle="modal" data-target="#detailModal" data-id="<?= $t->idtask; ?>">Détails</button>
+												<button type="button" class="dropdown-item" data-toggle="modal" data-target="#detailModal" data-id="<?= $t->idtask; ?>">
+													<i class="fa fa-eye mr-2"></i>
+													Détails
+												</button>
+												<button type="button" class="dropdown-item" data-toggle="modal" data-target="#formModal" data-id="<?= $t->idtask; ?>">
+													<i class="fa fa-edit mr-2"></i>
+													Modifier
+												</button>
 											</div>
 										</div>
 									</td>
@@ -459,7 +480,14 @@ Task
 														<i class="fa fa-ellipsis-h"></i>
 													</a>
 													<div class="dropdown-menu dropdown-menu-right">
-														<button type="button" class="dropdown-item" data-toggle="modal" data-target="#detailModal" data-id="<?= $t->idtask; ?>">Détails</button>
+														<button type="button" class="dropdown-item" data-toggle="modal" data-target="#detailModal" data-id="<?= $t->idtask; ?>">
+															<i class="fa fa-eye mr-2"></i>
+															Détails
+														</button>
+														<button type="button" class="dropdown-item" data-toggle="modal" data-target="#formModal" data-id="<?= $t->idtask; ?>">
+															<i class="fa fa-edit mr-2"></i>
+															Modifier
+														</button>
 													</div>
 												</div>
 											</div>
@@ -549,7 +577,14 @@ Task
 														<i class="fa fa-ellipsis-h"></i>
 													</a>
 													<div class="dropdown-menu dropdown-menu-right">
-														<button type="button" class="dropdown-item" data-toggle="modal" data-target="#detailModal" data-id="<?= $t->idtask; ?>">Détails</button>
+														<button type="button" class="dropdown-item" data-toggle="modal" data-target="#detailModal" data-id="<?= $t->idtask; ?>">
+															<i class="fa fa-eye mr-2"></i>
+															Détails
+														</button>
+														<button type="button" class="dropdown-item" data-toggle="modal" data-target="#formModal" data-id="<?= $t->idtask; ?>">
+															<i class="fa fa-edit mr-2"></i>
+															Modifier
+														</button>
 													</div>
 												</div>
 											</div>
@@ -637,7 +672,14 @@ Task
 														<i class="fa fa-ellipsis-h"></i>
 													</a>
 													<div class="dropdown-menu dropdown-menu-right">
-														<button type="button" class="dropdown-item" data-toggle="modal" data-target="#detailModal" data-id="<?= $t->idtask; ?>">Détails</button>
+														<button type="button" class="dropdown-item" data-toggle="modal" data-target="#detailModal" data-id="<?= $t->idtask; ?>">
+															<i class="fa fa-eye mr-2"></i>
+															Détails
+														</button>
+														<button type="button" class="dropdown-item" data-toggle="modal" data-target="#formModal" data-id="<?= $t->idtask; ?>">
+															<i class="fa fa-edit mr-2"></i>
+															Modifier
+														</button>
 													</div>
 												</div>
 											</div>
@@ -738,12 +780,27 @@ Task
 		function resetDetail() {
 			$('#detail_discussion').html("");
 			$('#detailModalLabel').text("");
-			$('#detail_due_date').removeAttr('value');
+			$('#detail_date_due').removeAttr('value');
 			$('#detail_description').text("");
 			$('#detail_discussion_form').removeAttr('id');
 			$('#detail_type').html("");
 			$('#detail_status').html("");
 			$('#detail_avatar').html("");
+		}
+
+		function resetForm() {
+			$('#taskId').removeAttr('value');
+			$('#formModalLabel').text("Nouveau Tache")
+			$('#task_form').attr('action', "<?= base_url('Task/insert_tache'); ?>");
+			$('#task_type').val("");
+			$('#task_status').val("");
+			$('#task_title').val("");
+			$('#idclients').val("");
+			$('#assigned_to').val("");
+			$('#date_demande').val("");
+			$('#date_due').val("");
+			$('#tache').val("");
+			$('#task_form button[type="submit"]').text("Ajouter");
 		}
 
 		function fetch_discussion() {
@@ -813,7 +870,7 @@ Task
 					let messages = response.messages;
 
 					$('#detailModalLabel').text("Tâche: " + task.title);
-					$('#detail_due_date').val(task.date_due);
+					$('#detail_date_due').val(task.date_due);
 					$('#detail_description').text(task.description);
 
 					let photo_users = `<img src="<?= base_url(IMAGES_PATH); ?>/${task.photo_users}" class="avatar rounded-circle" width="36" height="36" alt="Client Image">`;
@@ -995,6 +1052,47 @@ Task
 				}
 			});
 		});
+
+		$('#formModal').on('show.bs.modal', function(event) {
+			
+			let button = $(event.relatedTarget);
+			let id_task = $(button).attr('data-id');
+			
+			if (id_task) {
+
+				$.ajax({
+					type: "GET",
+					url: "Task/detail_task/" + id_task,
+					dataType: "json",
+					beforeSend: function() {
+						resetForm();
+					},
+					success: function(response) {
+
+						let task = response.task;
+
+						$('#formModalLabel').text("Modification note: " + task.title)
+						$('#task_form').attr('action', "<?= site_url('Task/edits_task'); ?>");
+						$('#task_type').val(task.type_tache);
+						$('#task_status').val(task.status);
+						$('#task_title').val(task.title);
+						$('#idclients').val(task.idclients);
+						$('#assigned_to').val(task.assigned_to);
+						$('#date_demande').val(task.date_demande);
+						$('#date_due').val(task.date_due);
+						$('#tache').val(task.tache);
+						$('#taskId').val(task.id);
+						$('#task_form button[type="submit"]').text("Modifier");
+
+					}
+				});
+
+			} else {
+				$('#task_form button[type="submit"]').text("Ajouter");
+				$('#formModalLabel').text("Nouveau Tache")
+				$('#task_form').attr('action', "<?= site_url('Task/insert_tache') ?>");
+			}
+		});
 	});
 </script>
 
@@ -1044,7 +1142,7 @@ Task
 </script>
 
 <script>
-	function setDefaultDate() {
+	/* function setDefaultDate() {
 		const today = new Date();
 		const yyyy = today.getFullYear();
 		let mm = today.getMonth() + 1;
@@ -1055,6 +1153,6 @@ Task
 		const formattedDate = yyyy + '-' + mm + '-' + dd;
 		document.getElementById('exampleInputEmail1').value = formattedDate;
 	}
-	window.onload = setDefaultDate;
+	window.onload = setDefaultDate; */
 </script>
 <?php end_section(); ?>
