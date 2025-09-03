@@ -1,11 +1,14 @@
-<form action="<?php echo base_url("Task/insert_tache") ?>" enctype="multipart/form-data" method="post">
-	<div class="modal fade" id="taskModal" aria-labelledby="taskModalLabel" aria-hidden="true">
-		<div class="modal-dialog modal-lg modal-dialog-scrollable" id="taskModalDialog">
+<div class="modal fade" id="formModal" aria-labelledby="formModalLabel" aria-hidden="true">
+	<form action="<?php echo base_url("Task/insert_tache") ?>" enctype="multipart/form-data" method="POST" id="task_form">
+		<div class="modal-dialog modal-lg modal-dialog-scrollable" id="formModalDialog">
 			<div class="modal-content">
 				<?php $current_user = $this->ion_auth->user()->row(); ?>
+
 				<input type="hidden" name="am" value="<?php echo $current_user->id ?>">
+				<input type="hidden" name="taskId" id="taskId">
+
 				<div class="modal-header">
-					<h5 class="modal-title" id="taskModalLabel">Nouveau tâche</h5>
+					<h5 class="modal-title" id="formModalLabel">Nouveau tâche</h5>
 					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 						<span aria-hidden="true">&times;</span>
 					</button>
@@ -47,21 +50,21 @@
 
 					<div class="form-row">
 						<div class="col form-group">
-							<label for="task_status">To</label>
-							<select name="assigned_to" id="task_status" class="form-control">
+							<label for="assigned_to">To</label>
+							<select name="assigned_to" id="assigned_to" class="form-control">
 								<?php foreach ($users as $u): ?>
 									<option value="<?php echo $u['id'] ?>"><?php echo $u['first_name'] ?></option>
 								<?php endforeach; ?>
 							</select>
 						</div>
 						<div class="col form-group">
-							<label for="exampleInputEmail1">Date de la demande</label>
-							<input type="date" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" name="date_demande">
+							<label for="date_demande">Date de la demande</label>
+							<input type="date" class="form-control" id="date_demande" aria-describedby="emailHelp" name="date_demande">
 						</div>
 
 						<div class="col form-group">
-							<label for="due_date">Date due</label>
-							<input type="date" name="date_due" id="due_date" class="form-control">
+							<label for="date_due">Date due</label>
+							<input type="date" name="date_due" id="date_due" class="form-control">
 						</div>
 					</div>
 
@@ -82,19 +85,11 @@
 						<input type="file" id="fileInput" class="d-none" name="fichier">
 						<div id="fileName" class="mt-3 text-muted"></div>
 					</div>
-
-					<!-- <div class="form-group">
-						<label for="task_status">Statut</label>
-						<select name="task_status" id="task_status" class="form-control">
-							<option value="">Plannifier</option>
-							<option value="">En Cours</option>
-						</select>
-					</div> -->
 				</div>
 				<div class="modal-footer">
 					<button type="submit" class="btn btn-dark px-3">Ajouter</button>
 				</div>
 			</div>
 		</div>
-	</div>
-</form>
+	</form>
+</div>
