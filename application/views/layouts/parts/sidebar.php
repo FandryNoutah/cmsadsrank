@@ -7,7 +7,7 @@
 	<div class="sidebar-sticky">
 		<ul class="nav flex-column pt-4 pb-3 px-2 border-bottom">
 			<li class="nav-item rounded">
-				<a class="nav-link text-secondary" href="<?= base_url(); ?>">
+				<a class="nav-link text-secondary" href="<?= base_url('Dashboard'); ?>">
 					<img class="mr-2" src="<?= base_url('assets/images/icons/figma/icon-chartpie.svg') ?>" />
 					<span class="nav-label">Dashboard</span>
 				</a>
