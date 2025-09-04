@@ -164,7 +164,7 @@ Task
 					<i class="fa fa-chevron-up toggle-icon mr-2"></i>
 					<i class="fa fa-circle text-warning" style="font-size: 10px;"></i>
 					<span class="h5 mx-2 w-auto">Planifié</span>
-					<span class="text-muted">3 open tasks</span>
+					<span class="text-muted"><?= $count_planned; ?> open tasks</span>
 				</p>
 			</a>
 
@@ -174,6 +174,7 @@ Task
 					<tbody>
 						<?php foreach ($tache as $t):  ?>
 							<?php if ($t->status == "planifié"): ?>
+
 								<tr class="task-filter" data-type="<?= $t->type_tache ?>" data-am="<?= $t->AM; ?>" data-assigned="<?= $t->assigned_to ?>">
 									<td>
 										<h6 class="mb-0 ml-3">
@@ -236,6 +237,10 @@ Task
 													<i class="fa fa-edit mr-2"></i>
 													Modifier
 												</button>
+												<a href="<?= base_url('Task/delete_task/' . $t->idtask); ?>" class="dropdown-item text-danger">
+													<i class="fa fa-trash mr-2"></i>
+													Supprimer
+												</a>
 											</div>
 										</div>
 									</td>
@@ -254,7 +259,7 @@ Task
 					<i class="fa fa-chevron-up toggle-icon mr-2"></i>
 					<i class="fa fa-circle text-primary" style="font-size: 10px;"></i>
 					<span class="h5 mx-2 w-auto">En Cours</span>
-					<span class="text-muted">3 open tasks</span>
+					<span class="text-muted"><?= $count_upcoming; ?> open tasks</span>
 				</p>
 			</a>
 
@@ -325,6 +330,10 @@ Task
 													<i class="fa fa-edit mr-2"></i>
 													Modifier
 												</button>
+												<a href="<?= base_url('Task/delete_task/' . $t->idtask); ?>" class="dropdown-item text-danger">
+													<i class="fa fa-trash mr-2"></i>
+													Supprimer
+												</a>
 											</div>
 										</div>
 									</td>
@@ -342,7 +351,7 @@ Task
 					<i class="fa fa-chevron-up toggle-icon mr-2"></i>
 					<i class="fa fa-circle text-success" style="font-size: 10px;"></i>
 					<span class="h5 mx-2 w-auto">Terminé</span>
-					<span class="text-muted">3 open tasks</span>
+					<span class="text-muted"><?= $count_completed; ?> open tasks</span>
 				</p>
 			</a>
 
@@ -413,6 +422,10 @@ Task
 													<i class="fa fa-edit mr-2"></i>
 													Modifier
 												</button>
+												<a href="<?= base_url('Task/delete_task/' . $t->idtask); ?>" class="dropdown-item text-danger">
+													<i class="fa fa-trash mr-2"></i>
+													Supprimer
+												</a>
 											</div>
 										</div>
 									</td>
@@ -434,7 +447,7 @@ Task
 						<div class="card-body">
 							<i class="fa fa-circle text-warning" style="font-size: 10px;"></i>
 							<span class="h4 mx-2 w-auto">Planifié</span>
-							<span class="text-muted">3 open tasks</span>
+							<span class="text-muted"><?= $count_planned; ?> open tasks</span>
 							<?php foreach ($tache as $t): ?>
 								<?php if ($t->status == "planifié"): ?>
 									<div class="card mt-3 task-filter" data-type="<?= $t->type_tache ?>" data-am="<?= $t->AM; ?>" data-assigned="<?= $t->assigned_to ?>">
@@ -488,6 +501,10 @@ Task
 															<i class="fa fa-edit mr-2"></i>
 															Modifier
 														</button>
+														<a href="<?= base_url('Task/delete_task/' . $t->idtask); ?>" class="dropdown-item text-danger">
+															<i class="fa fa-trash mr-2"></i>
+															Supprimer
+														</a>
 													</div>
 												</div>
 											</div>
@@ -503,12 +520,13 @@ Task
 														<img src="<?= base_url(IMAGES_PATH . htmlspecialchars($t->AM_photo)); ?>" class="avatar rounded-circle" width="28" height="28" alt="Client Image"><img src="<?= base_url(IMAGES_PATH . htmlspecialchars($t->assigned_to_photo)); ?>" class="avatar rounded-circle" width="28" height="28" alt="Client Image">
 													</div>
 												</div>
-												<span class="col-auto mr-3">
-													<a href="#" class="text-muted">
-														<img src="<?= base_url('assets/images/icons/figma/attachment-8.svg') ?>" alt="">
-														5
-													</a>
-												</span>
+												<?php if ($t->fichier_nom != null): ?>
+													<span class="col-auto mr-3">
+														<a href="#" class="text-muted">
+															<img src="<?= base_url('assets/images/icons/figma/attachment-8.svg') ?>" alt="">
+														</a>
+													</span>
+												<?php endif; ?>
 												<span class="col-auto">
 													<a href="javascript:void(0);" class="text-muted" data-toggle="modal" data-target="#discussionModal" data-id="<?= $t->idtask; ?>" data-title="<?= $t->title; ?>">
 														<img src="<?= base_url('assets/images/icons/figma/chat-9.svg') ?>" alt="">
@@ -529,7 +547,7 @@ Task
 						<div class="card-body">
 							<i class="fa fa-circle text-primary" style="font-size: 10px;"></i>
 							<span class="h4 mx-2 w-auto">En cours</span>
-							<span class="text-muted">3 open tasks</span>
+							<span class="text-muted"><?= $count_upcoming; ?> open tasks</span>
 
 							<!-- Eto no manao foreach -->
 							<?php foreach ($tache as $t): ?>
@@ -585,6 +603,10 @@ Task
 															<i class="fa fa-edit mr-2"></i>
 															Modifier
 														</button>
+														<a href="<?= base_url('Task/delete_task/' . $t->idtask); ?>" class="dropdown-item text-danger">
+															<i class="fa fa-trash mr-2"></i>
+															Supprimer
+														</a>
 													</div>
 												</div>
 											</div>
@@ -600,12 +622,13 @@ Task
 														<img src="<?= base_url(IMAGES_PATH . htmlspecialchars($t->AM_photo)); ?>" class="avatar rounded-circle" width="28" height="28" alt="Client Image"><img src="<?= base_url(IMAGES_PATH . htmlspecialchars($t->assigned_to_photo)); ?>" class="avatar rounded-circle" width="28" height="28" alt="Client Image">
 													</div>
 												</div>
-												<span class="col-auto mr-3">
-													<a href="#" class="text-muted">
-														<img src="<?= base_url('assets/images/icons/figma/attachment-8.svg') ?>" alt="">
-														5
-													</a>
-												</span>
+												<?php if ($t->fichier_nom != null): ?>
+													<span class="col-auto mr-3">
+														<a href="#" class="text-muted">
+															<img src="<?= base_url('assets/images/icons/figma/attachment-8.svg') ?>" alt="">
+														</a>
+													</span>
+												<?php endif; ?>
 												<span class="col-auto">
 													<a href="javascript:void(0);" class="text-muted" data-toggle="modal" data-target="#discussionModal" data-id="<?= $t->idtask; ?>" data-title="<?= $t->title; ?>">
 														<img src="<?= base_url('assets/images/icons/figma/chat-9.svg') ?>" alt="">
@@ -625,7 +648,7 @@ Task
 						<div class="card-body">
 							<i class="fa fa-circle text-success" style="font-size: 10px;"></i>
 							<span class="h4 mx-2 w-auto">Terminé</span>
-							<span class="text-muted">3 open tasks</span>
+							<span class="text-muted"><?= $count_completed; ?> open tasks</span>
 							<!-- Eto no manao foreach -->
 							<?php foreach ($tache as $t): ?>
 								<?php if ($t->status == "effectuée"): ?>
@@ -680,6 +703,10 @@ Task
 															<i class="fa fa-edit mr-2"></i>
 															Modifier
 														</button>
+														<a href="<?= base_url('Task/delete_task/' . $t->idtask); ?>" class="dropdown-item text-danger">
+															<i class="fa fa-trash mr-2"></i>
+															Supprimer
+														</a>
 													</div>
 												</div>
 											</div>
@@ -696,12 +723,13 @@ Task
 														<img src="<?= base_url(IMAGES_PATH . htmlspecialchars($t->assigned_to_photo)); ?>" class="avatar rounded-circle" width="28" height="28" alt="Client Image">
 													</div>
 												</div>
-												<span class="col-auto mr-3">
-													<a href="#" class="text-muted">
-														<img src="<?= base_url('assets/images/icons/figma/attachment-8.svg') ?>" alt="">
-														5
-													</a>
-												</span>
+												<?php if ($t->fichier_nom != null): ?>
+													<span class="col-auto mr-3">
+														<a href="#" class="text-muted">
+															<img src="<?= base_url('assets/images/icons/figma/attachment-8.svg') ?>" alt="">
+														</a>
+													</span>
+												<?php endif; ?>
 												<span class="col-auto">
 													<a href="javascript:void(0);" class="text-muted" data-toggle="modal" data-target="#discussionModal" data-id="<?= $t->idtask; ?>" data-title="<?= $t->title; ?>">
 														<img src="<?= base_url('assets/images/icons/figma/chat-9.svg') ?>" alt="">
@@ -764,7 +792,6 @@ Task
 				$('.task-filter[data-am="' + id + '"]').removeClass('d-none');
 				$('.task-filter[data-assigned="' + id + '"]').removeClass('d-none');
 			}
-
 		});
 	});
 </script>
@@ -786,6 +813,10 @@ Task
 			$('#detail_type').html("");
 			$('#detail_status').html("");
 			$('#detail_avatar').html("");
+			$('#attachment_download').removeAttr("href");
+			$('#attachment_container').addClass('d-none');
+			$('#change_status').removeAttr("value")
+			$('#status_form input[name="taskId"]').removeAttr("value");
 		}
 
 		function resetForm() {
@@ -873,10 +904,11 @@ Task
 					$('#detail_date_due').val(task.date_due);
 					$('#detail_description').text(task.description);
 
-					let photo_users = `<img src="<?= base_url(IMAGES_PATH); ?>/${task.photo_users}" class="avatar rounded-circle" width="36" height="36" alt="Client Image">`;
-					// let assigned_photo = `<img src="<?= base_url(IMAGES_PATH); ?>/${task.assigned_to_photo}" class="avatar rounded-circle" width="28" height="28" alt="Client Image">`;
+					// let photo_users = `<img src="<?= base_url(IMAGES_PATH); ?>/${task.photo_users}" class="avatar rounded-circle" width="36" height="36" alt="Client Image">`;
+					let am_photo = `<img src="<?= base_url(IMAGES_PATH); ?>/${task.AM_photo}" class="avatar rounded-circle" width="36" height="36" alt="Client Image">`;
+					let assigned_to_photo = `<img src="<?= base_url(IMAGES_PATH); ?>/${task.assigned_to_photo}" class="avatar rounded-circle" width="36" height="36" alt="Client Image">`;
 
-					$('#detail_avatar').append(photo_users);
+					$('#detail_avatar').append([am_photo, assigned_to_photo]);
 
 					var type = "";
 					switch (task.type_tache) {
@@ -943,6 +975,14 @@ Task
 
 						$('#detail_discussion').prepend(html);
 					});
+
+					if (task.fichier_nom) {
+						$('#attachment_download').attr('href', "<?= base_url(); ?>/" + task.fichier_nom);
+						$('#attachment_container').removeClass('d-none');
+					}
+
+					$('#change_status').val(task.status);
+					$('#status_form input[name="taskId"]').val(task.id);
 				}
 			});
 		}
@@ -1054,10 +1094,10 @@ Task
 		});
 
 		$('#formModal').on('show.bs.modal', function(event) {
-			
+
 			let button = $(event.relatedTarget);
 			let id_task = $(button).attr('data-id');
-			
+
 			if (id_task) {
 
 				$.ajax({
@@ -1074,7 +1114,7 @@ Task
 						$('#formModalLabel').text("Modification note: " + task.title)
 						$('#task_form').attr('action', "<?= site_url('Task/edits_task'); ?>");
 						$('#task_type').val(task.type_tache);
-						$('#task_status').val(task.status);
+						$('#task_status').val(task.Statuts_technique);
 						$('#task_title').val(task.title);
 						$('#idclients').val(task.idclients);
 						$('#assigned_to').val(task.assigned_to);
