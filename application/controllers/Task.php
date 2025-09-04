@@ -49,30 +49,59 @@ class Task extends MY_Controller
 		$this->data['users'] = $this->visuels_model->getusersall();
 		$tasks = $this->data['tache'] = $this->Task_model->get_all_tâche();
 
+		$this->data['count_planned'] = 0;
+		$this->data['count_upcoming'] = 0;
+		$this->data['count_completed'] = 0;
+
 		foreach ($tasks as $task) {
 			$taREMOVED>count_messages = $this->Task_message_model->count_messages_by_task($taREMOVED>idtask);
+			switch ($taREMOVED>status) {
+				case "planifié":
+					$this->data['count_planned']++;
+					break;
+				
+				case "en cours":
+					$this->data['count_upcoming']++;
+					break;
+
+				case "effectuée":
+					$this->data['count_completed']++;
+					break;
+			}
 		}
 
-		// dd($this->data['tache']);
 		$this->content = "layouts/task/index.php";
 		$this->layout();
 	}
 
-	public function delete_task() {
-		$task_id = $this->input->get('id'); 
-		$idclients = $this->input->get('client_id');
+	public function delete_task($task_id) {
 		$this->Task_model->delete_task($task_id);
 		redirect('Task');
 	}
 
 	public function edits_task() {
-		$idclients = $this->input->post('idclients');
+
 		$taskId = $this->input->post('taskId');
-		$title = $this->input->post('title');
-		$description = $this->input->post('description');
-		$assignedTo = $this->input->post('user_id');
-		$status = $this->input->post('status');
-		$this->Task_model->update_task($taskId, $title, $description, $assignedTo, $status);
+		$data = [
+			'type_tache'		=>	$this->input->post('type_tache'),
+			'Statuts_technique'	=>	$this->input->post('Statuts_technique'),
+			'title'				=>	$this->input->post('title'),
+			'idclients'			=>	$this->input->post('idclients'),
+			'assigned_to'		=>	$this->input->post('assigned_to'),
+			'date_demande'		=>	$this->input->post('date_demande'),
+			'date_due'			=>	$this->input->post('date_due'),
+			'description'		=>	$this->input->post('tache')
+		];
+		$this->Task_model->update_task($taskId, $data);
+		redirect('Task');
+	}
+
+	public function change_status() {
+		$taskId = $this->input->post('taskId');
+		$data = [
+			'status'	=>	$this->input->post('status'),
+		];
+		$this->Task_model->update_task($taskId, $data);
 		redirect('Task');
 	}
 
