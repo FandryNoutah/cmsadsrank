@@ -37,10 +37,13 @@ Notes
 		</button>
 	</div>
 	<div class="col-auto px-1">
-		<button class="btn btn-outline-dark">
-			<img src="<?= base_url('assets/images/icons/figma/icon-funnel.svg') ?>" alt="">
-			Filter
-		</button>
+		<select id="note_user_filter" class="custom-select border-dark">
+			<option disabled selected>Filter</option>
+			<option value="0">Tous</option>
+			<?php foreach ($users as $user): ?>
+				<option value="<?= $user->id; ?>"><?= $user->username; ?></option>
+			<?php endforeach; ?>
+		</select>
 	</div>
 	<div class="col-auto px-1">
 		<button class="btn btn-dark" data-toggle="modal" data-target="#formModal">
@@ -57,7 +60,7 @@ Notes
 	<div class="row row-cols-3">
 		<?php foreach ($notes as $note): ?>
 
-			<div class="col">
+			<div class="col mb-3 note-filter">
 				<div class="card h-100">
 					<div class="card-body">
 						<div class="row">
@@ -97,12 +100,12 @@ Notes
 					</div>
 					<div class="card-footer d-flex justify-content-between bg-transparent">
 						<?php
-						echo "De: " . htmlspecialchars($note->author) . " | Pour: ";
+							echo "De: " . htmlspecialchars($note->author) . " | Pour: ";
 
-						$recipients = $this->Note_model->get_note_recipients($note->id);
-						echo implode(', ', array_map(function ($r) {
-							return htmlspecialchars($r->username);
-						}, $recipients));
+							/* $recipients = $this->Note_model->get_note_recipients($note->id);
+							echo implode(', ', array_map(function ($r) {
+								return htmlspecialchars($r->username);
+							}, $recipients)); */
 						?>
 
 						<!-- A UTILISER SI BESOIN D'IMAGE -->
@@ -303,6 +306,18 @@ Notes
 					fetch_detail(id_note);
 				}
 			});
+		});
+
+		$('#note_user_filter').change(function() {
+			let id = $(this).val();
+
+			if (id == 0) {
+				$('.note-filter').removeClass('d-none');
+			} else {
+				$('.note-filter').addClass('d-none');
+				$('.note-filter[data-am="' + id + '"]').removeClass('d-none');
+				$('.note-filter[data-assigned="' + id + '"]').removeClass('d-none');
+			}
 		});
 	});
 </script>
