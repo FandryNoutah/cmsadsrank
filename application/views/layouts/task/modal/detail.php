@@ -31,17 +31,15 @@
 				<label>Description</label>
 				<p class="text-muted" id="detail_description"></p>
 
-				<div class="form-group">
+				<div class="form-group" id="attachment_container">
 					<p>Attachment</p>
 					<div class="btn-group" role="group">
 						<button class="btn btn-outline-dark btn-sm" type="button">
 							<i class="fa fa-image"></i>
 						</button>
-						<button class="btn btn-outline-primary btn-sm">
-							<a href="<?php //echo base_url($donne_detail_client[0]['fichier_nom']); ?>" target="_blank" download>
-                                            Télécharger la pièce joint
-                            </a>
-						</button>
+						<a class="btn btn-outline-primary btn-sm" target="_blank" download id="attachment_download">
+							Télécharger la pièce jointe
+						</a>
 					</div>
 				</div>
 
@@ -68,11 +66,22 @@
 
 				<div id="detail_discussion"></div>
 			</div>
+			<form action="<?= site_url('Task/change_status'); ?>" method="POST" id="status_form">
+
+				<input type="hidden" name="taskId">
+				<div class="modal-footer d-flex justify-content-between">
+					<select name="status" id="change_status" class="form-control w-50">
+						<option value="planifié">Planifié</option>
+						<option value="en cours">En cours</option>
+						<option value="effectuée">Terminé</option>
+						<option value="annulée">Annulé</option>
+					</select>
+					<button type="submit" class="btn btn-dark px-3">Modifier</button>
+				</div>
+
+			</form>
 			<div class="modal-footer">
-				<button type="submit" class="btn btn-light px-3">Modifier</button>
-			</div>
-			<div class="modal-footer">
-				<button type="submit" class="btn btn-light px-3">Terminer</button>
+				<button type="submit" class="btn btn-light px-3">Fermer</button>
 			</div>
 		</div>
 	</div>
