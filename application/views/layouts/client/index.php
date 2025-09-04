@@ -42,6 +42,31 @@
 		border-top-right-radius: 4px;
 		border-bottom-right-radius: 4px;
 	}
+
+	.table-wrapper th:nth-child(2),
+	.table-wrapper td:nth-child(2) {
+		width: 15%;
+	}
+
+	.table-wrapper th:nth-child(3),
+	.table-wrapper td:nth-child(3) {
+		width: 10%;
+	}
+
+	.table-wrapper th:nth-child(4),
+	.table-wrapper td:nth-child(4) {
+		width: 15%;
+	}
+
+	.table-wrapper th:nth-child(5),
+	.table-wrapper td:nth-child(5) {
+		width: 10%;
+	}
+
+	.table-wrapper th:nth-child(6),
+	.table-wrapper td:nth-child(6) {
+		width: 15%;
+	}
 </style>
 <?php end_section(); ?>
 
