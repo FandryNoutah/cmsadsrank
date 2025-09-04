@@ -6,31 +6,38 @@ class Dashboard extends MY_Controller
  
 	function __construct() {
 		parent::__construct();
-		$this->data['page_title'] = 'Hors Média';
-		
-		/*
-		$this->data['panneaux'] = $this->panneau_model->get_all();
-		$this->data['kiosques'] = $this->kiosque_model->get_all();
-		$this->data['flags'] = $this->flags_model->get_all();
-		$this->data['regisseurs'] = $this->regisseur_model->get_all();
-		$this->data['panneaux_coords'] = $this->panneau_model->get_all_panneau_coords();
-		$this->data['flag_coords'] = $this->flags_model->get_all_flag_coords();
-		$this->data['_visuels'] = $this->visuels_model->get_all();
-		
-		foreach ($this->panneau_model->get_provinces() as $key => $value) {
-			$provinces[$value->id] = $value->label;
-		}
-		foreach ($this->panneau_model->get_regisseurs() as $regisseurs) {
-			$regisseur[$regisseurs->id] = $regisseurs->label;
-		}
-		$this->data['provinces'] = $provinces;
-		$this->data['regisseurs'] = $regisseur;
-		*/
+		$this->load->model("Dashboard_model");
+	
 	}
 
 	public function index()
 	{
-		$this->content = "layouts/dashboard";
+		$current_user = $this->ion_auth->user()->row();
+		$idusers = intval($current_user->id);
+		$task = $this->Dashboard_model->get_task_by_id_users($idusers);
+		$nbr_task_planifier = 0;
+		foreach ($task as $t) {
+			if ($t->status == "planifié") {
+				$nbr_task_planifier++;
+			}
+		}
+		$nbr_task = count($task);
+		$this->data['task'] = $task;
+		$this->data['nbr_task'] = $nbr_task;
+		$this->data['nbr_task_planifier'] = $nbr_task_planifier;
+		$nbr_task_attribuer = $this->Dashboard_model->get_task_by_id_users_attribuer($idusers);
+		$nbr_task_attribuer_plannifier = 0;
+		foreach ($nbr_task_attribuer as $t) {
+			if ($t->status == "planifié") {
+				$nbr_task_attribuer++;
+			}
+		}
+		$nbr_task_attribuer = count($nbr_task_attribuer);
+		$this->data['nbr_task_attribuer'] = $nbr_task_attribuer;
+		$this->data['nbr_task_attribuer_plannifier'] = $nbr_task_attribuer_plannifier;
+
+		$this->content = "layouts/Dashboard/index.php";
 		$this->layout();
 	}
+
 }
