@@ -6,11 +6,11 @@ class Task_model extends CI_Model
 	{
 		parent::__construct();
 	}
-	
+
 	// Méthode pour récupérer une tâche par son ID
 	public function get_All_task_non_complete()
 	{
-		
+
 		$this->db->select('tasks.*, u1.first_name as assigned_to_name, u1.photo_users as assigned_to_photo, u2.first_name as AM_name, u2.photo_users as AM_photo, clients.*');
 		$this->db->from('tasks');
 
@@ -32,9 +32,10 @@ class Task_model extends CI_Model
 		// Retourner les résultats
 		return $query->result();
 	}
-	
-	public function count_All_task_non_complete($current_user = null) {
-		
+
+	public function count_All_task_non_complete($current_user = null)
+	{
+
 		$this->db->select('COUNT(*) as total');
 		$this->db->from('tasks');
 
@@ -61,7 +62,7 @@ class Task_model extends CI_Model
 		$result = $query->row();
 		return $result->total;
 	}
-	
+
 	public function get_team_task_non_complete()
 	{
 		$this->db->select('tasks.*, u1.first_name as assigned_to_name, u1.photo_users as assigned_to_photo, u2.first_name as AM_name, u2.photo_users as AM_photo, clients.*');
@@ -134,7 +135,7 @@ class Task_model extends CI_Model
 		// Retourner les résultats
 		return $query->result();
 	}
-	
+
 	public function get_all_tâche($status = null)
 	{
 		$this->db->select('tasks.*, u1.first_name as assigned_to_name, u1.photo_users as assigned_to_photo, u2.first_name as AM_name, u2.photo_users as AM_photo, clients.*');
@@ -219,6 +220,33 @@ class Task_model extends CI_Model
 
 	public function get_task_by_id($idtask)
 	{
+		$this->db->select('tasks.*, 
+        u1.first_name as assigned_to_name, 
+        u1.photo_users as assigned_to_photo, 
+        u2.first_name as AM_name, 
+        u2.photo_users as AM_photo, 
+        clients.*');
+		$this->db->from('tasks');
+
+		// Join with users for "assigned_to"
+		$this->db->join('users u1', 'u1.id = tasks.assigned_to', 'left');
+
+		// Join with clients
+		$this->db->join('clients', 'clients.idclients = tasks.idclients', 'left');
+
+		// Join with users for "AM"
+		$this->db->join('users u2', 'u2.id = tasks.AM', 'left');
+
+		// Condition: where task id = $idtask
+		$this->db->where('tasks.idtask', $idtask);
+
+		$query = $this->db->get();
+
+		return $query->row(); // single row instead of result()
+	}
+
+	/* public function get_task_by_id($idtask)
+	{
 		// Construire la requête SQL
 		$sql = "SELECT tasks.*, users.*, clients.*, am_clients.*, assigned_clients.* 
                 FROM tasks 
@@ -233,11 +261,11 @@ class Task_model extends CI_Model
 
 		// Retourner le résultat sous forme d'un seul objet
 		return $query->row(); // Utiliser row() pour récupérer une seule ligne
-	}
+	} */
 	public function get_task_by_id_client($idclients)
-{
-    // Construire la requête SQL
-    $sql = "SELECT tasks.*, users.*, clients.*, am_clients.*, assigned_clients.* 
+	{
+		// Construire la requête SQL
+		$sql = "SELECT tasks.*, users.*, clients.*, am_clients.*, assigned_clients.* 
             FROM tasks 
             LEFT JOIN users ON users.id = tasks.assigned_to 
             LEFT JOIN clients ON clients.idclients = tasks.idclients 
@@ -245,17 +273,16 @@ class Task_model extends CI_Model
             LEFT JOIN clients AS assigned_clients ON assigned_clients.idclients = tasks.assigned_to 
             WHERE tasks.idclients = ?";
 
-    // Exécuter la requête avec le paramètre $idclients
-    $query = $this->db->query($sql, array($idclients));
+		// Exécuter la requête avec le paramètre $idclients
+		$query = $this->db->query($sql, array($idclients));
 
-    // Retourner le résultat sous forme de tableau d'objets
-    return $query->result(); 
-
-}
-public function get_procedure_gtm($idclients)
-{
-    // Construire la requête SQL
-    $sql = "SELECT tasks.*, users.*, clients.*, am_clients.*, assigned_clients.* 
+		// Retourner le résultat sous forme de tableau d'objets
+		return $query->result();
+	}
+	public function get_procedure_gtm($idclients)
+	{
+		// Construire la requête SQL
+		$sql = "SELECT tasks.*, users.*, clients.*, am_clients.*, assigned_clients.* 
             FROM tasks 
             LEFT JOIN users ON users.id = tasks.assigned_to 
             LEFT JOIN clients ON clients.idclients = tasks.idclients 
@@ -263,16 +290,16 @@ public function get_procedure_gtm($idclients)
             LEFT JOIN clients AS assigned_clients ON assigned_clients.idclients = tasks.assigned_to 
             WHERE tasks.idclients = ? AND tasks.procedure_gtm = 1";
 
-    // Exécuter la requête avec le paramètre $idclients
-    $query = $this->db->query($sql, array($idclients));
+		// Exécuter la requête avec le paramètre $idclients
+		$query = $this->db->query($sql, array($idclients));
 
-    // Retourner le résultat sous forme de tableau d'objets
-    return $query->result(); 
-}
-public function get_all_procedure_gtm()
-{
-    // Construire la requête SQL
-    $sql = "SELECT tasks.*, users.*, clients.*, am_clients.*, assigned_clients.* 
+		// Retourner le résultat sous forme de tableau d'objets
+		return $query->result();
+	}
+	public function get_all_procedure_gtm()
+	{
+		// Construire la requête SQL
+		$sql = "SELECT tasks.*, users.*, clients.*, am_clients.*, assigned_clients.* 
             FROM tasks 
             LEFT JOIN users ON users.id = tasks.assigned_to 
             LEFT JOIN clients ON clients.idclients = tasks.idclients 
@@ -280,12 +307,12 @@ public function get_all_procedure_gtm()
             LEFT JOIN clients AS assigned_clients ON assigned_clients.idclients = tasks.assigned_to 
             WHERE tasks.procedure_gtm = 1";
 
-    // Exécuter la requête avec le paramètre $idclients
-    $query = $this->db->query($sql);
+		// Exécuter la requête avec le paramètre $idclients
+		$query = $this->db->query($sql);
 
-    // Retourner le résultat sous forme de tableau d'objets
-    return $query->result(); 
-}
+		// Retourner le résultat sous forme de tableau d'objets
+		return $query->result();
+	}
 
 	// public function get_task_by_id($idtask) {
 	//     // Sélectionner les colonnes de tasks, users et clients
@@ -317,19 +344,11 @@ public function get_all_procedure_gtm()
 	// }
 	public function update_task($taskId, $task_data)
 	{
-		/* $data = array(
-			'date_demande' => $date_demande,
-			'date_due' => $date_due,
-			'AM' => $am,
-			'assigned_to' => $assignedTo,
-			'description' => $description,
-			'Statuts_technique' => $status,
-			'title' => $title
-		); */
-
 		// Mettre à jour la tâche dans la base de données
 		$this->db->where('idtask', $taskId);
 		$this->db->update('tasks', $task_data);
+
+		return $this->db->affected_rows() > 0;
 	}
 
 	// Fonction pour récupérer toutes les tâches
