@@ -41,7 +41,7 @@ Notes
 			<option disabled selected>Filter</option>
 			<option value="0">Tous</option>
 			<?php foreach ($users as $user): ?>
-				<option value="<?= $user->id; ?>"><?= $user->username; ?></option>
+				<option value="<?= $user->username; ?>"><?= $user->username; ?></option>
 			<?php endforeach; ?>
 		</select>
 	</div>
@@ -60,7 +60,7 @@ Notes
 	<div class="row row-cols-3">
 		<?php foreach ($notes as $note): ?>
 
-			<div class="col mb-3 note-filter">
+			<div class="col mb-3 note-filter" data-author="<?= $note->author; ?>">
 				<div class="card h-100">
 					<div class="card-body">
 						<div class="row">
@@ -102,10 +102,10 @@ Notes
 						<?php
 							echo "De: " . htmlspecialchars($note->author) . " | Pour: ";
 
-							/* $recipients = $this->Note_model->get_note_recipients($note->id);
+							$recipients = $this->Note_model->get_note_recipients($note->id);
 							echo implode(', ', array_map(function ($r) {
 								return htmlspecialchars($r->username);
-							}, $recipients)); */
+							}, $recipients));
 						?>
 
 						<!-- A UTILISER SI BESOIN D'IMAGE -->
@@ -309,14 +309,13 @@ Notes
 		});
 
 		$('#note_user_filter').change(function() {
-			let id = $(this).val();
+			let author = $(this).val();
 
-			if (id == 0) {
+			if (author == 0) {
 				$('.note-filter').removeClass('d-none');
 			} else {
 				$('.note-filter').addClass('d-none');
-				$('.note-filter[data-am="' + id + '"]').removeClass('d-none');
-				$('.note-filter[data-assigned="' + id + '"]').removeClass('d-none');
+				$('.note-filter[data-author="' + author + '"]').removeClass('d-none');
 			}
 		});
 	});
