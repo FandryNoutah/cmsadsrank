@@ -6,31 +6,77 @@ class Dashboard extends MY_Controller
  
 	function __construct() {
 		parent::__construct();
-		$this->data['page_title'] = 'Hors Média';
-		
-		/*
-		$this->data['panneaux'] = $this->panneau_model->get_all();
-		$this->data['kiosques'] = $this->kiosque_model->get_all();
-		$this->data['flags'] = $this->flags_model->get_all();
-		$this->data['regisseurs'] = $this->regisseur_model->get_all();
-		$this->data['panneaux_coords'] = $this->panneau_model->get_all_panneau_coords();
-		$this->data['flag_coords'] = $this->flags_model->get_all_flag_coords();
-		$this->data['_visuels'] = $this->visuels_model->get_all();
-		
-		foreach ($this->panneau_model->get_provinces() as $key => $value) {
-			$provinces[$value->id] = $value->label;
-		}
-		foreach ($this->panneau_model->get_regisseurs() as $regisseurs) {
-			$regisseur[$regisseurs->id] = $regisseurs->label;
-		}
-		$this->data['provinces'] = $provinces;
-		$this->data['regisseurs'] = $regisseur;
-		*/
+		$this->load->model("Dashboard_model");
+		$this->load->model("Note_model");
+		$this->current_user = $this->ion_auth->user()->row();
 	}
 
 	public function index()
 	{
-		$this->content = "layouts/dashboard";
+		$current_user = $this->ion_auth->user()->row();
+		$idusers = intval($current_user->id);
+		$task = $this->Dashboard_model->get_task_by_id_users($idusers);
+		$nbr_task_planifier = 0;
+		foreach ($task as $t) {
+			if ($t->status == "planifié") {
+				$nbr_task_planifier++;
+			}
+		}
+		$nbr_task = count($task);
+		$this->data['task'] = $task;
+		$this->data['nbr_task'] = $nbr_task;
+		$this->data['nbr_task_planifier'] = $nbr_task_planifier;
+		$nbr_task_attribuer = $this->Dashboard_model->get_task_by_id_users_attribuer($idusers);
+		$nbr_task_attribuer_plannifier = 0;
+		foreach ($nbr_task_attribuer as $t) {
+			if ($t->status == "planifié") {
+				$nbr_task_attribuer++;
+			}
+		}
+		$nbr_task_attribuer = count($nbr_task_attribuer);
+		$this->data['nbr_task_attribuer'] = $nbr_task_attribuer;
+		$this->data['nbr_task_attribuer_plannifier'] = $nbr_task_attribuer_plannifier;
+		$donnee = $this->data['donnee'] = $this->visuels_model->getClientDataByDonnee();
+		$this->data['nbr_client'] = count($donnee);
+		$nbr_client_actif = 0;
+		$nbr_client_pause = 0;
+		$nbr_client_resilie = 0;
+		$total_budget_actif = 0;
+		$total_budget_en_pause = 0;
+		$total_budget_resilie = 0;
+		foreach ($donnee as $d) {
+			if ($d->resiliation == 1) {
+				$total_budget_actif += $d->budget;
+				$nbr_client_actif++;
+			}
+		}
+		foreach ($donnee as $d) {
+			if ($d->resiliation == 2) {
+				$total_budget_en_pause += $d->budget;
+				$nbr_client_pause++;
+			}
+		}
+		foreach ($donnee as $d) {
+			if ($d->resiliation == 3) {
+				$total_budget_resilie += $d->budget;
+				$nbr_client_resilie++;
+			}
+		}
+		$this->data['nbr_client_actif'] = $nbr_client_actif;
+		$this->data['nbr_client_pause'] = $nbr_client_pause;
+		$this->data['nbr_client_resilie'] = $nbr_client_resilie;
+		$this->data['total_budget_actif'] = $total_budget_actif;
+		$this->data['total_budget_en_pause'] = $total_budget_en_pause;
+		$this->data['total_budget_resilie'] = $total_budget_resilie;
+		$this->data['notes'] = $this->Note_model->get_for_user($this->current_user->id);
+		$discussion = $this->data['discussion'] = $this->Dashboard_model->get_discussion_task_by_id_users($idusers);
+		$this->data['nbr_discussion_task'] = $nbr_discussion_task = count($discussion);
+		$discussion = $this->data['discussion'] = $this->Dashboard_model->get_discussion_note_by_id_users($idusers);
+		$this->data['nbr_discussion_note'] = $nbr_discussion_note = count($discussion);
+		$discussion = $this->data['discussion'] = $this->Dashboard_model->get_discussion_gtm_by_id_users($idusers);
+		$this->data['nbr_discussion_gtm'] = $nbr_discussion_gtm = count($discussion);
+		$this->content = "layouts/Dashboard/index.php";
 		$this->layout();
 	}
+
 }
