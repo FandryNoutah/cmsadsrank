@@ -23,7 +23,7 @@ class Notes extends MY_Controller
 		$this->data['notes'] = $this->Note_model->get_for_user($this->current_user->id);
 		$this->data['users'] = $this->Note_model->get_all_users();
 
-		// dd($this->data['users']);
+		// dd($this->data['notes']);
 		$this->content = "layouts/note/index.php";
 		$this->layout();
 
@@ -65,8 +65,9 @@ class Notes extends MY_Controller
 				'date_due'    => $this->input->post('date_due', TRUE),
 			];
 
-			$assignedUsers = $this->input->post('assigned_to') ?? [$this->current_user->id];
-
+			$assignedUsers = $this->input->post('assigned_to') ?? [];
+			$assignedUsers[] = $this->current_user->id;
+			
 			/* if ($this->input->post('assign_mode') === 'self') {
 				$assignedUsers[] = $this->current_user->id;
 			} else {
