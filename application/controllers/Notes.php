@@ -20,7 +20,7 @@ class Notes extends MY_Controller
 	public function index()
 	{
 
-		$notes = $this->data['notes'] = $this->Note_model->get_for_user($this->current_user->id);
+		$notes = $this->Note_model->get_for_user($this->current_user->id);
 		$this->data['users'] = $this->Note_model->get_all_users();
 
 		foreach ($notes as $note) {
@@ -29,6 +29,8 @@ class Notes extends MY_Controller
 			$assigned_users = $this->Note_model->get_assigned_users($id_note);
 			$note->assigned_users = $assigned_users;
 		}
+
+		$this->data['notes'] = $notes;
 
 		$this->content = "layouts/note/index.php";
 		$this->layout();
