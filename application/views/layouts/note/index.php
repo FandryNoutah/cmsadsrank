@@ -98,17 +98,11 @@ Notes
 							<?= nl2br(htmlspecialchars($note->content)); ?>
 						</p>
 					</div>
-					<div class="card-footer d-flex justify-content-between bg-transparent">
-						<?php
-						/* echo "De: " . htmlspecialchars($note->author) . " | Pour: ";
+					<div class="card-footer d-flex bg-transparent">
 
-							$recipients = $this->Note_model->get_note_recipients($note->id);
-							echo implode(', ', array_map(function ($r) {
-								return htmlspecialchars($r->username);
-							}, $recipients)); */
-						?>
-
-						<!-- A UTILISER SI BESOIN D'IMAGE -->
+						<div class="d-flex align-items-center avatar-group">
+							<img src="<?= base_url(IMAGES_PATH . $this->ion_auth->user()->row()->photo_users); ?>" class="avatar rounded-circle" width="28" height="28" alt="Client Image">
+						</div>
 
 						<div class="d-flex align-items-center avatar-group">
 							<?php foreach ($note->assigned_users as $assigned_user): ?>
@@ -116,7 +110,7 @@ Notes
 							<?php endforeach; ?>
 						</div>
 
-						<span class="text-muted text-right text-nowrap"><?= $note->date_due; ?></span>
+						<span class="text-muted text-right text-nowrap ml-auto"><?= $note->date_due; ?></span>
 					</div>
 				</div>
 			</div>
