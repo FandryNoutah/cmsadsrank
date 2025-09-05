@@ -826,7 +826,7 @@ Task
 			$('#task_type').val("");
 			$('#task_status').val("");
 			$('#task_title').val("");
-			$('#idclients').val("");
+			$('#idclients').val(null).removeAttr('disabled').trigger('change');
 			$('#assigned_to').val("");
 			$('#date_demande').val("");
 			$('#date_due').val("");
@@ -982,7 +982,7 @@ Task
 					}
 
 					$('#change_status').val(task.status);
-					$('#status_form input[name="taskId"]').val(task.id);
+					$('#status_form input[name="taskId"]').val(task.idtask);
 				}
 			});
 		}
@@ -1116,12 +1116,12 @@ Task
 						$('#task_type').val(task.type_tache);
 						$('#task_status').val(task.Statuts_technique);
 						$('#task_title').val(task.title);
-						$('#idclients').val(task.idclients);
+						$('#idclients').val(task.idclients).attr('disabled', "disabled").trigger('change');
 						$('#assigned_to').val(task.assigned_to);
 						$('#date_demande').val(task.date_demande);
 						$('#date_due').val(task.date_due);
 						$('#tache').val(task.tache);
-						$('#taskId').val(task.id);
+						$('#taskId').val(task.idtask);
 						$('#task_form button[type="submit"]').text("Modifier");
 
 					}
@@ -1132,6 +1132,10 @@ Task
 				$('#formModalLabel').text("Nouveau Tache")
 				$('#task_form').attr('action', "<?= site_url('Task/insert_tache') ?>");
 			}
+		});
+
+		$('#formModal').on('hide.bs.modal', function(event) {
+			resetForm();
 		});
 	});
 </script>
