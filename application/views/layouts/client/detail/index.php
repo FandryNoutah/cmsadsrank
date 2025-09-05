@@ -39,64 +39,78 @@
 		<div class="col" style="height: calc(100vh - 101px); overflow-y:auto;">
 			<div class="container-fluid pb-5">
 
-				<div class="dropdown">
-					<?php if($d['resiliation'] == 1):  ?>
-					<a type="button" class="badge alert-success rounded-pill px-4 py-3 mb-3 dropdown-toggle" style="font-size: 12px; font-weight: 500;" id="clientStatusDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-						<i class="fa fa-circle mr-1" style="font-size: 10px;"></i>
-						Active
-					</a>
-					<?php endif; ?>
-					<?php if($d['resiliation'] == 2):  ?>
-					<a type="button" class="badge alert-warning rounded-pill px-4 py-3 mb-3 dropdown-toggle" style="font-size: 12px; font-weight: 500;" id="clientStatusDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-						<i class="fa fa-circle mr-1" style="font-size: 10px;"></i>
-						Mis en pause
-					</a>
-					<?php endif; ?>
-					<?php if($d['resiliation'] == 3):  ?>
-					<a type="button" class="badge alert-danger rounded-pill px-4 py-3 mb-3 dropdown-toggle" style="font-size: 12px; font-weight: 500;" id="clientStatusDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-						<i class="fa fa-circle mr-1" style="font-size: 10px;"></i>
-						Résilié
-					</a>
-					<?php endif; ?>
-					<div class="dropdown-menu dropdown-menu-right animated--grow-in" aria-labelledby="clientStatusDropdown">
-						<a class="dropdown-item" href="javscript:void(0);" data-toggle="modal" data-target="#statusModal">Statut Client</a>
-					</div>
-				</div>
-
 				<div class="row mb-4">
-					<div class="col overflow-hidden">
-						<div class="d-flex justify-content-start align-items-center mb-3" id="star-rating">
-						<?php $noteClient = isset($note) ? $note : 0; ?>
+					<div class="col">
+						<div class="card">
+							<div class="card-body">
 
-						<div class="d-flex justify-content-start align-items-center mb-3" id="star-rating">
-							<?php for ($i = 1; $i <= 5; $i++): ?>
-								<img
-									src="<?= base_url('assets/images/icons/figma/') . ($i <= $noteClient ? 'star_full.svg' : 'Empty_Star.svg') ?>"
-									alt="star"
-									width="20"
-									class="mr-1 star"
-									data-index="<?= $i ?>"
-								>
-							<?php endfor; ?>
-							<span class="ml-3 py-1 px-3 badge" style="background-color: #edf2fe; color: #4976f4; font-size: 12px; font-weight: 500;">
-								Bleu
-							</span>
+								<div class="dropdown">
+									<?php if ($d['resiliation'] == 1):  ?>
+										<a type="button" class="badge alert-success rounded-pill px-4 py-3 mb-3 dropdown-toggle" style="font-size: 12px; font-weight: 500;" id="clientStatusDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+											<i class="fa fa-circle mr-1" style="font-size: 10px;"></i>
+											Active
+										</a>
+									<?php endif; ?>
+									<?php if ($d['resiliation'] == 2):  ?>
+										<a type="button" class="badge alert-warning rounded-pill px-4 py-3 mb-3 dropdown-toggle" style="font-size: 12px; font-weight: 500;" id="clientStatusDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+											<i class="fa fa-circle mr-1" style="font-size: 10px;"></i>
+											Mis en pause
+										</a>
+									<?php endif; ?>
+									<?php if ($d['resiliation'] == 3):  ?>
+										<a type="button" class="badge alert-danger rounded-pill px-4 py-3 mb-3 dropdown-toggle" style="font-size: 12px; font-weight: 500;" id="clientStatusDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+											<i class="fa fa-circle mr-1" style="font-size: 10px;"></i>
+											Résilié
+										</a>
+									<?php endif; ?>
+									<div class="dropdown-menu dropdown-menu-right animated--grow-in" aria-labelledby="clientStatusDropdown">
+										<a class="dropdown-item" href="javscript:void(0);" data-toggle="modal" data-target="#statusModal">Statut Client</a>
+									</div>
+								</div>
+		
+								<div class="d-flex justify-content-start align-items-center mb-3" id="star-rating">
+									<?php $noteClient = isset($note) ? $note : 0; ?>
+		
+									<div class="d-flex justify-content-start align-items-center mb-3" id="star-rating">
+										<?php for ($i = 1; $i <= 5; $i++): ?>
+											<img
+												src="<?= base_url('assets/images/icons/figma/') . ($i <= $noteClient ? 'star_full.svg' : 'Empty_Star.svg') ?>"
+												alt="star"
+												width="20"
+												class="mr-1 star"
+												data-index="<?= $i ?>">
+										<?php endfor; ?>
+										<span class="ml-3 py-1 px-3 badge" style="background-color: #edf2fe; color: #4976f4; font-size: 12px; font-weight: 500;">
+											Bleu
+										</span>
+									</div>
+									<input type="hidden" id="idclients" value="<?= $donnees[0]['idclients'] ?>">
+								</div>
+		
+								<h1 class="mb-3" style="font-size: 48px; font-weight: 500;">
+									<?= $d['nom_client'] ?>
+								</h1>
+								<h5 class="mb-5" style=""><a href="<?= $d['site_client'] ?>" target="_blank" style="color: black"><?= $d['site_client'] ?></a></h5>
+		
+								<hr>
+
+								<ul class="nav nav-tabs mb-3" style="margin-top: -15px;">
+									<li class="nav-item">
+										<a class="nav-link py-3 active" type="button">
+											Société
+										</a>
+									</li>
+								</ul>
+		
+								<h6 class="text-muted font-weight-normal" style="font-size: 15.5px;">
+									<?= $d['info_base_client'] ?></br>
+								</h6>
+							</div>
 						</div>
-						<input type="hidden" id="idclients" value="<?= $donnees[0]['idclients'] ?>">
-
-						</div>
-
-
-
-
-
-						<h1 class="mb-3" style="font-size: 48px; font-weight: 500;">
-							<?= $d['nom_client'] ?>
-						</h1>
-						<h5 class="mb-3" style=""><a href="<?= $d['site_client'] ?>" target="_blank" style="color: black"><?= $d['site_client'] ?></a></h5>
 					</div>
+
 					<div class="col-auto">
-						<div class="card h-100" style="width: 23rem;">
+						<div class="card mb-4" style="width: 23rem;">
 							<div class="card-body">
 								<div class="d-flex justify-content-between align-items-center">
 									<button class="btn btn-dark py-3 px-5" data-toggle="modal" data-target="#budgetModal">
@@ -113,23 +127,23 @@
 								</div>
 								<br><br>
 								<div class="d-flex justify-content-start mb-3" style="font-size: 15px;">
-									 <i class="fa fa-check-square mr-2" style="color: #f0f0f0ff; font-size: 18px;"></i>
+									<i class="fa fa-check-square mr-2" style="color: #f0f0f0ff; font-size: 18px;"></i>
 									<span class="mr-2">Date d'anniversaire : <?= $d['mis_en_place_paiement'] ?></span>
 								</div>
 								<div class="d-flex justify-content-start mb-3" style="font-size: 15px;">
-									 <i class="fa fa-check-square mr-2" style="color: #f0f0f0ff; font-size: 18px;"></i>
+									<i class="fa fa-check-square mr-2" style="color: #f0f0f0ff; font-size: 18px;"></i>
 									<span class="mr-2">Date de mise en ligne : <?= $d['annonce'] ?></span>
 
 								</div>
 								<div class="d-flex justify-content-start mb-3" style="font-size: 15px;">
-									 <i class="fa fa-check-square mr-2" style="color: #f0f0f0ff; font-size: 18px;"></i>
+									<i class="fa fa-check-square mr-2" style="color: #f0f0f0ff; font-size: 18px;"></i>
 									<span class="mr-2">Commerciale</span>
 									<span class="mr-2">
 										<img src="<?= base_url('assets/images/' . $d['am_photo_user']) ?>" width="24" height="24">
 									</span>
 								</div>
 								<div class="d-flex justify-content-start mb-4" style="font-size: 15px;">
-									 <i class="fa fa-check-square mr-2" style="color: #f0f0f0ff; font-size: 18px;"></i>
+									<i class="fa fa-check-square mr-2" style="color: #f0f0f0ff; font-size: 18px;"></i>
 									<span class="mr-2">Account Manager</span>
 									<span class="mr-2">
 										<img src="<?= base_url('assets/images/' . $d['tech_photo_user']) ?>" width="24" height="24">
@@ -138,36 +152,7 @@
 								<a href="<?= base_url('Client/onboarding/' . $d['idclients']) ?>" class="btn btn-outline-dark btn-block">Onboarding</a>
 							</div>
 						</div>
-					</div>
-				</div>
 
-				<div class="row no-gutters mb-3">
-					<div class="col pr-2" style="margin-right: 15px;">
-						<div class="card h-100 mb-5">
-							<div class="card-body">
-								<ul class="nav nav-tabs mb-3" style="margin-top: -15px;">
-									<li class="nav-item">
-										<a class="nav-link py-3 active" type="button">
-											Société
-										</a>
-									</li>
-								</ul>
-
-								<h6 class="text-muted font-weight-normal" style="font-size: 15.5px;">
-									<?= $d['info_base_client'] ?></br>
-								</h6>
-								<!-- <ul class="nav nav-tabs">
-									<li class="nav-item">
-										<a class="nav-link py-3 active" type="button">
-											Favicon
-											<img src="<?= $d['favicon']; ?>" width="43"></br>
-										</a>
-									</li>
-								</ul> -->
-							</div>
-						</div>
-					</div>
-					<div class="col-auto">
 						<div class="card" style="width: 23rem;">
 							<div class="card-body">
 								<table class="table table-borderless">
@@ -184,29 +169,29 @@
 											Logo
 										</td>
 										<td class="text-center">
-											<?php if($d['logo_client'] == NULL): ?>
-											<?php echo form_open_multipart('Client/upload_logo'); ?>
+											<?php if ($d['logo_client'] == NULL): ?>
+												<?php echo form_open_multipart('Client/upload_logo'); ?>
 
-												<div class="form-group">
+												<div class="form-group m-0">
 													<input type="file" name="logo" id="logo" style="display: none;" onchange="this.form.submit();">
 													<input type="hidden" name="idclients" value="<?= $d['idclients']; ?>">
 													<button type="button" class="btn btn-light btn-sm" onclick="document.getElementById('logo').click();">
 														<i class="fa fa-plus"></i> Ajouter Logo
 													</button>
 												</div>
-											<?php echo form_close(); ?>
+												<?php echo form_close(); ?>
 											<?php endif; ?>
-											<?php if($d['logo_client'] != NULL): ?>
-											<?php echo form_open_multipart('Client/upload_logo'); ?>
+											<?php if ($d['logo_client'] != NULL): ?>
+												<?php echo form_open_multipart('Client/upload_logo'); ?>
 
 												<div class="form-group">
 													<input type="file" name="logo" id="logo" style="display: none;" onchange="this.form.submit();">
 													<input type="hidden" name="idclients" value="<?= $d['idclients']; ?>">
 													<button type="button" class="btn btn-light btn-sm" onclick="document.getElementById('logo').click();">
-														<img src="<?php echo base_url($d['logo_client']); ?>" width="150"/>
+														<img src="<?php echo base_url($d['logo_client']); ?>" width="150" />
 													</button>
 												</div>
-											<?php echo form_close(); ?>
+												<?php echo form_close(); ?>
 											<?php endif; ?>
 										</td>
 									</tr>
@@ -288,7 +273,7 @@
 													<?php if ($u->type_upsell == 5): ?>
 														<span class="badge alert-danger rounded-pill px-4 py-3" style="font-size: 14px; font-weight: 500;">
 															<i class="fa fa-circle mr-1" style="font-size: 10px;"></i>
-															Résiliation complète														</span>
+															Résiliation complète </span>
 													<?php endif; ?>
 													<?php if ($u->type_upsell == 4): ?>
 														<span class="badge alert-warning rounded-pill px-4 py-3" style="font-size: 14px; font-weight: 500;">
@@ -300,26 +285,26 @@
 												<td><?= $u->date_demande ?></td>
 												<td><?= $u->date_upsell ?></td>
 												<td>
-												<?php if ($u->type_upsell == 4): ?>
+													<?php if ($u->type_upsell == 4): ?>
 														Pause
-												<?php endif; ?>
-												<?php if ($u->type_upsell == 5): ?>
+													<?php endif; ?>
+													<?php if ($u->type_upsell == 5): ?>
 														Résilié
-												<?php endif; ?>	
-												<?php if ($u->type_upsell == 1 || $u->type_upsell == 2): ?>
+													<?php endif; ?>
+													<?php if ($u->type_upsell == 1 || $u->type_upsell == 2): ?>
 														<?= $u->budget_initiale ?> €
-												<?php endif; ?>		
+													<?php endif; ?>
 												</td>
-												<td >
-												<?php if ($u->type_upsell == 4): ?>
+												<td>
+													<?php if ($u->type_upsell == 4): ?>
 														Pause
-												<?php endif; ?>
-												<?php if ($u->type_upsell == 5): ?>
+													<?php endif; ?>
+													<?php if ($u->type_upsell == 5): ?>
 														Résilié
-												<?php endif; ?>	
-												<?php if ($u->type_upsell == 1 || $u->type_upsell == 2): ?>
+													<?php endif; ?>
+													<?php if ($u->type_upsell == 1 || $u->type_upsell == 2): ?>
 														<?= $u->budgets ?> €
-												<?php endif; ?>	
+													<?php endif; ?>
 												</td>
 											</tr>
 										<?php endforeach; ?>
@@ -371,11 +356,11 @@
 									<a href="#" class="text-decoration-none text-muted ml-3 stretched-link">AirCall</a>
 									<i class="fa fa-chevron-right ml-auto" style="font-size: 12px;"></i>
 								</div>
-								<?php if( empty($matched_calls[0]->started_at)):?>
-								<h3 class="m-0">Invalide</h3>
+								<?php if (empty($matched_calls[0]->started_at)): ?>
+									<h3 class="m-0">Invalide</h3>
 								<?php endif; ?>
-								<?php if( !empty($matched_calls[0]->started_at)):?>
-								<h3 class="m-0"><?= date('Y-m-d', $matched_calls[0]->started_at) ?></h3>
+								<?php if (!empty($matched_calls[0]->started_at)): ?>
+									<h3 class="m-0"><?= date('Y-m-d', $matched_calls[0]->started_at) ?></h3>
 								<?php endif; ?>
 							</div>
 						</div>
@@ -536,13 +521,13 @@
 										</td>
 										<td>
 											<div class="dropdown no-arrow">
-											<a href="javascript:void(0);" class="text-decoration-none text-muted ta***REMOVED*** dropdown-toggle" role="button" data-toggle="dropdown" aria-expanded="false">
-												<i class="fa fa-ellipsis-v"></i>
-											</a>
-											<div class="dropdown-menu dropdown-menu-right">
-												<button type="button" class="dropdown-item" data-toggle="modal" data-target="#taskModal" data-id="<?= $t->idtask; ?>">Détails</button>
+												<a href="javascript:void(0);" class="text-decoration-none text-muted ta***REMOVED*** dropdown-toggle" role="button" data-toggle="dropdown" aria-expanded="false">
+													<i class="fa fa-ellipsis-v"></i>
+												</a>
+												<div class="dropdown-menu dropdown-menu-right">
+													<button type="button" class="dropdown-item" data-toggle="modal" data-target="#taskModal" data-id="<?= $t->idtask; ?>">Détails</button>
+												</div>
 											</div>
-										</div>
 										</td>
 									</tr>
 								<?php endforeach; ?>
@@ -695,14 +680,14 @@
 		$('#filter_budget_year').change(function() {
 			let year = $(this).data('year');
 			$('.budget-year-row').addClass('d-none');
-			$('.budget-year-row[data-year="'+ year +'"]').removeClass('d-none');
+			$('.budget-year-row[data-year="' + year + '"]').removeClass('d-none');
 		});
 
 		$('#taskModal').on('show.bs.modal', function(event) {
 
 			let button = $(event.relatedTarget);
 			let task_id = $(button).attr('data-id');
-			
+
 			$('#task_discussion_form').data('id', task_id);
 
 			fetch_task(task_id);
@@ -743,8 +728,7 @@
 			});
 		});
 	});
-	
-	</script>
+</script>
 <?php $noteClient = isset($note) ? $note : 0; ?>
 
 <div class="d-flex justify-content-start align-items-center mb-3" id="star-rating">
@@ -754,8 +738,7 @@
 			alt="star"
 			width="20"
 			class="mr-1 star"
-			data-index="<?= $i ?>"
-		>
+			data-index="<?= $i ?>">
 	<?php endfor; ?>
 
 	<!-- Affichage de la couleur -->
@@ -772,49 +755,49 @@
 <!-- ID du client -->
 <input type="hidden" id="idclients" value="<?= $donnees[0]['idclients'] ?>">
 <script>
-document.addEventListener('DOMContentLoaded', function () {
-	const stars = document.querySelectorAll('#star-rating .star');
-	const ratingDisplay = document.getElementById('selected-rating');
-	const idClient = document.getElementById('idclients').value;
+	document.addEventListener('DOMContentLoaded', function() {
+		const stars = document.querySelectorAll('#star-rating .star');
+		const ratingDisplay = document.getElementById('selected-rating');
+		const idClient = document.getElementById('idclients').value;
 
-	const fullStar = "<?= base_url('assets/images/icons/figma/star_full.svg') ?>";
-	const emptyStar = "<?= base_url('assets/images/icons/figma/Empty_Star.svg') ?>";
+		const fullStar = "<?= base_url('assets/images/icons/figma/star_full.svg') ?>";
+		const emptyStar = "<?= base_url('assets/images/icons/figma/Empty_Star.svg') ?>";
 
-	stars.forEach((star, index) => {
-		star.addEventListener('click', () => {
-			const rating = index + 1;
+		stars.forEach((star, index) => {
+			star.addEventListener('click', () => {
+				const rating = index + 1;
 
-			// MAJ visuelle des étoiles
-			stars.forEach((s, i) => {
-				s.src = i < rating ? fullStar : emptyStar;
+				// MAJ visuelle des étoiles
+				stars.forEach((s, i) => {
+					s.src = i < rating ? fullStar : emptyStar;
+				});
+
+				// Afficher la note
+				ratingDisplay.textContent = `${rating}/5`;
+
+				// Envoi AJAX pour enregistrer la note
+				fetch("<?= base_url('Client/enregistrer') ?>", {
+						method: "POST",
+						headers: {
+							'Content-Type': 'application/json'
+						},
+						body: JSON.stringify({
+							rating: rating,
+							idclients: idClient
+						})
+					})
+					.then(response => response.json())
+					.then(data => {
+						if (data.success) {
+							console.log("Note enregistrée avec succès.");
+						} else {
+							console.error("Erreur lors de l’enregistrement :", data.message);
+						}
+					})
+					.catch(error => console.error("Erreur réseau :", error));
 			});
-
-			// Afficher la note
-			ratingDisplay.textContent = `${rating}/5`;
-
-			// Envoi AJAX pour enregistrer la note
-			fetch("<?= base_url('Client/enregistrer') ?>", {
-				method: "POST",
-				headers: {
-					'Content-Type': 'application/json'
-				},
-				body: JSON.stringify({
-					rating: rating,
-					idclients: idClient
-				})
-			})
-			.then(response => response.json())
-			.then(data => {
-				if (data.success) {
-					console.log("Note enregistrée avec succès.");
-				} else {
-					console.error("Erreur lors de l’enregistrement :", data.message);
-				}
-			})
-			.catch(error => console.error("Erreur réseau :", error));
 		});
 	});
-});
 </script>
 
 <?php end_section(); ?>

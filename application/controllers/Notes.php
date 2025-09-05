@@ -20,10 +20,16 @@ class Notes extends MY_Controller
 	public function index()
 	{
 
-		$this->data['notes'] = $this->Note_model->get_for_user($this->current_user->id);
+		$notes = $this->data['notes'] = $this->Note_model->get_for_user($this->current_user->id);
 		$this->data['users'] = $this->Note_model->get_all_users();
 
-		// dd($this->data['notes']);
+		foreach ($notes as $note) {
+
+			$id_note = $note->id;
+			$assigned_users = $this->Note_model->get_assigned_users($id_note);
+			$note->assigned_users = $assigned_users;
+		}
+
 		$this->content = "layouts/note/index.php";
 		$this->layout();
 
@@ -38,7 +44,7 @@ class Notes extends MY_Controller
 		$messages = $this->Note_message_model->get_messages_by_note($id_note);
 
 		foreach ($messages as $message) {
-			
+
 			$created_at = $message->created_at;
 			$message->created_at = (new DateTime($created_at))->format('j M, H:i');
 
@@ -67,7 +73,7 @@ class Notes extends MY_Controller
 
 			$assignedUsers = $this->input->post('assigned_to') ?? [];
 			$assignedUsers[] = $this->current_user->id;
-			
+
 			/* if ($this->input->post('assign_mode') === 'self') {
 				$assignedUsers[] = $this->current_user->id;
 			} else {
