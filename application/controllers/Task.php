@@ -92,6 +92,7 @@ class Task extends MY_Controller
 			'date_due'			=>	$this->input->post('date_due'),
 			'description'		=>	$this->input->post('tache')
 		];
+		// dd($taskId);
 		$this->Task_model->update_task($taskId, $data);
 		redirect('Task');
 	}
