@@ -350,6 +350,14 @@ class Task_model extends CI_Model
 
 		return $this->db->affected_rows() > 0;
 	}
+	public function update_task_statuts($taskId, $data)
+	{
+		// Mettre à jour la tâche dans la base de données
+		$this->db->where('idtask', $taskId);
+		$this->db->update('tasks', $data);
+
+		return $this->db->affected_rows() > 0;
+	}
 
 	// Fonction pour récupérer toutes les tâches
 	public function get_all_tasks()
