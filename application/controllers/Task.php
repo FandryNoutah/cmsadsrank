@@ -101,7 +101,7 @@ class Task extends MY_Controller
 		$data = [
 			'status'	=>	$this->input->post('status'),
 		];
-		$this->Task_model->update_task($taskId, $data);
+		$this->Task_model->update_task_statuts($taskId, $data);
 		redirect('Task');
 	}
 
