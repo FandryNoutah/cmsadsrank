@@ -67,10 +67,10 @@
 										<a class="dropdown-item" href="javscript:void(0);" data-toggle="modal" data-target="#statusModal">Statut Client</a>
 									</div>
 								</div>
-		
+
 								<div class="d-flex justify-content-start align-items-center mb-3" id="star-rating">
 									<?php $noteClient = isset($note) ? $note : 0; ?>
-		
+
 									<div class="d-flex justify-content-start align-items-center mb-3" id="star-rating">
 										<?php for ($i = 1; $i <= 5; $i++): ?>
 											<img
@@ -86,12 +86,12 @@
 									</div>
 									<input type="hidden" id="idclients" value="<?= $donnees[0]['idclients'] ?>">
 								</div>
-		
+
 								<h1 class="mb-3" style="font-size: 48px; font-weight: 500;">
 									<?= $d['nom_client'] ?>
 								</h1>
 								<h5 class="mb-5" style=""><a href="<?= $d['site_client'] ?>" target="_blank" style="color: black"><?= $d['site_client'] ?></a></h5>
-		
+
 								<hr>
 
 								<ul class="nav nav-tabs mb-3" style="margin-top: -15px;">
@@ -101,7 +101,7 @@
 										</a>
 									</li>
 								</ul>
-		
+
 								<h6 class="text-muted font-weight-normal" style="font-size: 15.5px;">
 									<?= $d['info_base_client'] ?></br>
 								</h6>
@@ -601,12 +601,13 @@
 			</div>
 		</div>
 	</div>
-<?php endforeach; ?>
 
-<?php $this->load->view('layouts/client/detail/modal/budget'); ?>
-<?php $this->load->view('layouts/client/detail/modal/edit'); ?>
-<?php $this->load->view('layouts/client/detail/modal/status'); ?>
-<?php $this->load->view('layouts/client/detail/modal/task'); ?>
+	<?php $this->load->view('layouts/client/detail/modal/budget', $d); ?>
+	<?php $this->load->view('layouts/client/detail/modal/edit'); ?>
+	<?php $this->load->view('layouts/client/detail/modal/status'); ?>
+	<?php $this->load->view('layouts/client/detail/modal/task'); ?>
+
+<?php endforeach; ?>
 
 <?php end_section(); ?>
 
@@ -731,7 +732,7 @@
 </script>
 <?php $noteClient = isset($note) ? $note : 0; ?>
 
-<div class="d-flex justify-content-start align-items-center mb-3" id="star-rating">
+<!-- <div class="d-flex justify-content-start align-items-center mb-3" id="star-rating">
 	<?php for ($i = 1; $i <= 5; $i++): ?>
 		<img
 			src="<?= base_url('assets/images/icons/figma/') . ($i <= $noteClient ? 'star_full.svg' : 'Empty_Star.svg') ?>"
@@ -741,16 +742,14 @@
 			data-index="<?= $i ?>">
 	<?php endfor; ?>
 
-	<!-- Affichage de la couleur -->
 	<span class="ml-3 py-1 px-3 badge" style="background-color: #edf2fe; color: #4976f4; font-size: 12px; font-weight: 500;">
 		Bleu
 	</span>
 
-	<!-- Affichage du nombre d'étoiles sélectionnées -->
 	<span id="selected-rating" class="ml-2 font-weight-bold text-primary">
 		<?= $noteClient > 0 ? $noteClient . '/5' : '' ?>
 	</span>
-</div>
+</div> -->
 
 <!-- ID du client -->
 <input type="hidden" id="idclients" value="<?= $donnees[0]['idclients'] ?>">
