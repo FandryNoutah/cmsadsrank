@@ -23,8 +23,8 @@
 						</div>
 					</div>
 					<div class="col form-group">
-						<label for="detail_due_date">Date due</label>
-						<input type="date" name="due_date" id="detail_due_date" class="form-control">
+						<label for="detail_date_due">Date due</label>
+						<input type="date" name="date_due" id="detail_date_due" class="form-control">
 					</div>
 				</div>
 
