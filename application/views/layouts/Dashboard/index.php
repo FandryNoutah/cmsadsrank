@@ -201,6 +201,23 @@ display:grid; place-items:center; background:#fff; cursor:pointer; transition:.2
         </div>
     </div>
 </div>
+<h3>Client</h3>
+Nombre de client : <?php echo $nbr_client; ?></br>
+Nombre de client Actif : <?php echo $nbr_client_actif; ?> Budget : <?php echo $total_budget_actif; ?> €</br>
+Nombre de client En pause : <?php echo $nbr_client_pause;  ?> Budget : <?php echo $total_budget_en_pause; ?> €</br>
+Nombre de client Résilié : <?php echo $nbr_client_resilie; ?>  Budget : <?php echo $total_budget_resilie; ?> €</br>
+<h3>Note</h3>
+<?php foreach($notes as $n ): ?>
+	<?= htmlspecialchars($n->title); ?>
+	
+
+<?php endforeach; ?></br>
+<h3>Discussion tâche</h3></br>
+Nombre de discussion tâche : <?php echo $nbr_discussion_task; ?></br>	
+<h3>Discussion Note</h3></br>
+Nombre de discussion Note : <?php echo $nbr_discussion_note; ?></br>	
+<h3>Discussion GTM</h3></br>
+Nombre de discussion GTM : <?php echo $nbr_discussion_gtm; ?></br>	
 
 <script>
     const completedPlanifie = <?= $nbr_task_planifier ?>;
