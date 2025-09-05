@@ -100,20 +100,21 @@ Notes
 					</div>
 					<div class="card-footer d-flex justify-content-between bg-transparent">
 						<?php
-							echo "De: " . htmlspecialchars($note->author) . " | Pour: ";
+						/* echo "De: " . htmlspecialchars($note->author) . " | Pour: ";
 
 							$recipients = $this->Note_model->get_note_recipients($note->id);
 							echo implode(', ', array_map(function ($r) {
 								return htmlspecialchars($r->username);
-							}, $recipients));
+							}, $recipients)); */
 						?>
 
 						<!-- A UTILISER SI BESOIN D'IMAGE -->
 
-						<!-- <div class="d-flex align-items-center avatar-group">
-							<img src="" class="avatar rounded-circle" width="28" height="28" alt="Client Image">
-							<img src="" class="avatar rounded-circle" width="28" height="28" alt="Client Image">
-						</div> -->
+						<div class="d-flex align-items-center avatar-group">
+							<?php foreach ($note->assigned_users as $assigned_user): ?>
+								<img src="<?= base_url(IMAGES_PATH . $assigned_user->photo_users); ?>" class="avatar rounded-circle" width="28" height="28" alt="Client Image">
+							<?php endforeach; ?>
+						</div>
 
 						<span class="text-muted text-right text-nowrap"><?= $note->date_due; ?></span>
 					</div>
