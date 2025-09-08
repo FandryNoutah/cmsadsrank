@@ -12,8 +12,6 @@ class Notes extends MY_Controller
 		$this->load->model('Note_model');
 		$this->load->model('Note_message_model');
 		$this->load->library('ion_auth');
-
-		// Utilisateur connecté
 		$this->current_user = $this->ion_auth->user()->row();
 	}
 
