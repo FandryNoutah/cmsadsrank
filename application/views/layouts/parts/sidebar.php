@@ -37,7 +37,7 @@
 				</a>
 			</li>
 			<li class="nav-item rounded">
-				<a class="nav-link text-secondary" href="#">
+				<a class="nav-link text-secondary" href="<?= base_url('Discussion'); ?>">
 					<img class="mr-2" src="<?= base_url('assets/images/icons/figma/icon-envelope.svg') ?>" />
 					<span class="nav-label">Discussions</span>
 				</a>
