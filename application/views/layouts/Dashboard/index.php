@@ -113,10 +113,10 @@
 	<h1 class="display-3 mb-4">Bonjour <?= $current_user->first_name; ?></h1>
 
 	<p class="text-muted mb-5">
-		Used and helping over more
+		Nous avons actuellement
 		<span class="text-dark font-weight-bold">
 			<?php echo $nbr_client; ?>
-			Companies
+			Clients
 			<i class="fa fa-globe ml-2"></i>
 		</span>
 	</p>
