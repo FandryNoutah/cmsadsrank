@@ -87,11 +87,11 @@
   <body>
     <div class="sign-in-page" data-model-id="844:78426">
       <div class="illustrational-image">
-        <div class="overlap" style="margin-left: 16%;">
+        <div class="overlap" style="">
           <div class="pattern">
           
           </div>
-          <p class="text-wrapper">Commencez à générer avec le CRM ADSRANK.</p>
+          <p class="text-wrapper">Pilotage Clients – </br>La performance de votre portefeuille</p>
           <div class="companies">
             <div class="company-logo"><img class="vector" src="<?php echo base_url("assets/css/figma/login_page/img/image.svg"); ?>" /></div>
             <div class="div">
@@ -117,7 +117,7 @@
             <div class="rectangle"></div>
             <div class="rectangle-2"></div>
           </div>
-          <p class="p">Gérez toutes vos tâches facilement.</p>
+          
           <div class="illustration">
             <img src="<?php echo base_url("assets/css/figma/login_page/img/capture.jpg"); ?>" style="width: 450px; border-radius: 10px;" />
             <div class="taREMOVEDmodal">
