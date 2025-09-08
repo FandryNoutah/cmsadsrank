@@ -1,5 +1,5 @@
 <div class="modal fade" id="briefModal" tabindex="-1" aria-labelledby="briefModalLabel" aria-hidden="true">
-	<form action="#">
+	<form  action="<?php echo base_url("Client/ajout_brief") ?>" enctype="multipart/form-data" method="post">
 		<div class="modal-dialog modal-dialog-scrollable">
 			<div class="modal-content">
 
@@ -12,7 +12,7 @@
 				<div class="modal-body">
 					<div class="form-group">
 						<label for="brief">Brief</label>
-						<textarea name="brief" id="brief" rows="2" class="form-control"></textarea>
+						<textarea name="information_client" id="brief" rows="2" class="form-control"></textarea>
 					</div>
 				</div>
 				<div class="modal-footer">
