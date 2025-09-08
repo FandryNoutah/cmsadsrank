@@ -6060,6 +6060,12 @@ a.badge-dark.focus {
 	color: #040505;
 }
 
+.alert-purple {
+	color: #954baf;
+	background-color: #f4edf7;
+	border-color: #954baf;
+}
+
 @-webkit-keyframes progress-bar-stripes {
 	from {
 		background-position: 1rem 0;
