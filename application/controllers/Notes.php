@@ -62,37 +62,53 @@ class Notes extends MY_Controller
 	}
 
 	public function create()
-	{
-		if ($this->input->method() === 'post') {
-			$noteData = [
-				'title'       => $this->input->post('title', TRUE),
-				'content'     => $this->input->post('content', TRUE),
-				'type'        => $this->input->post('type', TRUE),
-				'status'      => $this->input->post('status', TRUE),
-				'created_by'  => $this->current_user->id,
-				'date_due'    => $this->input->post('date_due', TRUE),
-			];
+{
+    if ($this->input->method() === 'post') {
+        $this->load->library('upload');
 
-			$assignedUsers = $this->input->post('assigned_to') ?? [];
-			$assignedUsers[] = $this->current_user->id;
+        $fichier_nom = null;
 
-			/* if ($this->input->post('assign_mode') === 'self') {
-				$assignedUsers[] = $this->current_user->id;
-			} else {
-				$assignedUsers = $this->input->post('assigned_to') ?? [];
-			}
+        if (isset($_FILES['fichier']) && $_FILES['fichier']['name'] != '') {
+            $config['upload_path']   = './uploads/';
+            $config['allowed_types'] = 'jpg|png|gif|pdf|doc|docx|xls|xlsx|csv';
+            $config['max_size'] = 10240; 
+            $config['encrypt_name']  = TRUE; 
+            if (!is_dir($config['upload_path'])) {
+                mkdir($config['upload_path'], 0777, true);
+            }
 
-			if (empty($assignedUsers)) {
-				$assignedUsers[] = $this->current_user->id;
-			} */
+            $this->upload->initialize($config);
+            if ($this->upload->do_upload('fichier')) {
+                $uploadData = $this->upload->data();
+                $fichier_nom = 'uploads/' . $uploadData['file_name'];
+            } else {
+                $error = $this->upload->display_errors();
+                log_message('error', 'Échec de l\'upload: ' . $error);
+                $this->session->set_flashdata('error', 'Erreur lors de l\'upload : ' . $error);
+                redirect('notes/create');
+                return;
+            }
+        }
+        $noteData = [
+            'title'       => $this->input->post('title', TRUE),
+            'content'     => $this->input->post('content', TRUE),
+            'type'        => $this->input->post('type', TRUE),
+            'status'      => $this->input->post('status', TRUE),
+            'created_by'  => $this->current_user->id,
+            'date_due'    => $this->input->post('date_due', TRUE),
+            'fichier_nom'  => $fichier_nom, 
+        ];
+        $assignedUsers = $this->input->post('assigned_to') ?? [];
+        $assignedUsers[] = $this->current_user->id;
 
-			$this->Note_model->create($noteData, $assignedUsers);
-			redirect('notes');
-		}
+        $this->Note_model->create($noteData, $assignedUsers);
+        redirect('notes');
+    }
 
-		$data['users'] = $this->Note_model->get_all_users();
-		$this->load->view('layouts/note/create', $data);
-	}
+    $data['users'] = $this->Note_model->get_all_users();
+    $this->load->view('layouts/note/create', $data);
+}
+
 
 	public function edit($id)
 	{
