@@ -1,5 +1,5 @@
 <div class="modal fade" id="formModal" tabindex="-1" aria-labelledby="formModalLabel" aria-hidden="true">
-	<form action="<?= site_url('notes/create') ?>" method="POST" id="note_form">
+	<form action="<?= site_url('notes/create') ?>" method="POST" id="note_form" enctype="multipart/form-data">
 
 		<div class="modal-dialog modal-dialog-scrollable">
 			<div class="modal-content">
@@ -74,7 +74,7 @@
 							</div>
 							<span>Drag files here or <span class="text-primary">Browse</span></span>
 						</div>
-						<input type="file" id="fileInput" class="d-none">
+						<input type="file" id="fileInput" class="d-none" name="fichier">
 						<div id="fileName" class="mt-3 text-muted"></div>
 					</div>
 
