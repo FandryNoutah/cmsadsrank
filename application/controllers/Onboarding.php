@@ -29,10 +29,12 @@ class Onboarding extends MY_Controller
 		$this->load->library('upload');
 		$this->load->library('form_validation');
 		$this->form_validation->set_error_delimiters('<span class="error">', '</span>');
+		$this->current_user = $this->ion_auth->user()->row();
 	}
 
 	public function index()
 	{
+		$this->data['current_users'] = $this->current_user->tech;
 		$this->data['donnee'] = $this->visuels_model->getClientDataByDonnee();
 		$this->data['users'] = $this->Task_model->get_all_users();
 		$this->data['produit'] = $this->Donne_modele->get_all_produit();
