@@ -180,7 +180,7 @@
 							<div class="percent" id="percentPlanifie">0%</div>
 						</div>
 						<div class="ml-3">
-							<a href="#" class="text-decoration-none text-muted stretched-link">Progression tâche</a>
+							<a href="<?= base_url('Task') ?>" class="text-decoration-none text-muted stretched-link">Progression tâche</a>
 							<i class="fa fa-chevron-right ml-auto" style="font-size: 12px;" href="<?= base_url('Task') ?>"></i>
 							<h3 class="m-0"><span id="donePlanifie"><?= $nbr_task_planifier ?></span>/<span id="totalPlanifie"><?= $nbr_task ?></span> Tâches</h3>
 						</div>
