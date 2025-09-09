@@ -89,18 +89,35 @@ echo $cms_name;
 					<div class="row row-cols-2">
 						<div class="col">
 							<div class="card h-100">
-								<div class="nav-link py-3 active"  style="text-align: right; margin-top: 10px; margin-right: 20px;">	
-								installed
+                <?php if( empty($d['tracking_gtm'])): ?>		
+                  <div class="nav-link py-3 active"  style="text-align: right; margin-top: 10px; margin-right: 20px;">	
+								Non installer
 								</div>
+                    <?php endif; ?>	
+                    <?php if( !empty($d['tracking_gtm'])): ?>
+                     <div class="nav-link py-3 active"  style="text-align: right; margin-top: 10px; margin-right: 20px;">	
+								installer
+								</div>	
+								  <?php endif; ?>	
+								
 								<div class="card-body text-center">
 									<h3 class="mb-4">Google Tag Manager</h3>
 									<p class="text-muted mx-5 mb-5" style="font-size: 18px;">
 										Google Tag Manager installé 
 										Action : Demander l’accès administrateur au conteneur GTM (gtm@adsrank.fr) et vérifier la configuration.</p>
-									<span class="badge alert-success rounded-pill px-4 py-3" style="font-size: 14px; font-weight: 500;">
+									
+                  <?php if( !empty($d['tracking_gtm'])): ?>		
+                   <span class="badge alert-success rounded-pill px-4 py-3" style="font-size: 14px; font-weight: 500;">
 										<i class="fa fa-circle mr-1" style="font-size: 10px;"></i>
 										<?php echo $d['tracking_gtm']; ?>
 									</span>
+                    <?php endif; ?>	
+                    <?php if( empty($d['tracking_gtm'])): ?>
+                      <span class="badge alert-danger rounded-pill px-2 py-1" style="font-size: 12px; font-weight: 500;">
+                            <i class="fa fa-circle mr-1" style="font-size: 10px;"></i>
+                            GTM Non installé
+                    </span>		
+								  <?php endif; ?>	
 								</div>
 							</div>
 						</div>
@@ -109,18 +126,29 @@ echo $cms_name;
 								<div class="nav-link py-3 active"  style="text-align: right; margin-top: 10px; margin-right: 20px;">	
 								installed
 								</div>
-								<div class="card-body text-center">
-									<h3 class="mb-4"><?php echo $cms_name; ?></h3>
-									<p class="text-muted mx-5 mb-5" style="font-size: 18px;">
-										<?php echo $cms_name; ?> est installé avec cette URL.
-										Action : Vérifier la présence de GTM puis suivre la procédure correspondante.
-									</p>
-									<div class="row justify-content-center">
-										<div class="col-auto">
-											<img src="<?php echo $d['cms_logo']; ?>" width="43">
-										</div>
-									</div>
-								</div>
+                    <?php if( $d['cms'] != "Inconnu ou non détectable automatiquement"): ?>
+										<div class="card-body text-center">
+                      <h3 class="mb-4"><?php echo $cms_name; ?></h3>
+                      <p class="text-muted mx-5 mb-5" style="font-size: 18px;">
+                        <?php echo $cms_name; ?> est installé avec cette URL.
+                        Action : Vérifier la présence de GTM puis suivre la procédure correspondante.
+                      </p>
+                      <div class="row justify-content-center">
+                        <div class="col-auto">
+                          <img src="<?php echo $d['cms_logo']; ?>" width="43">
+                        </div>
+                      </div>
+                  </div>
+										<?php endif; ?>
+										<?php if( $d['cms'] == "Inconnu ou non détectable automatiquement"): ?>
+										<div class="card-body text-center">
+                      <h3 class="mb-4"><?php echo $cms_name; ?></h3>
+                      <p class="text-muted mx-5 mb-5" style="font-size: 18px;">
+                       CMS Intétectable
+                      </p>
+                    </div>
+										<?php endif; ?>
+								
 							</div>
 						</div>
 
