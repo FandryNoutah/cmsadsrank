@@ -27,6 +27,7 @@ class Discussion extends MY_Controller
 		}
 
 		$this->data['notes'] = $notes;
+		$this->data['tache'] = $this->Task_model->get_all_tâche();
 		$this->content = "layouts/Discussion/index.php";
 		$this->layout();
 	}
