@@ -173,21 +173,36 @@ Dashboard
     </div>
 
     <div class="message-list">
-	<?php foreach($notes as $note): ?>			
-      <div class="message">
-        <div class="message-header">
-          <span class="sender"><?= nl2br(htmlspecialchars($note->author)); ?></span>
-          <span class="date">Dec 4, 2019</span>
-        </div>
-        <div class="subject"><?= htmlspecialchars($note->title); ?></div>
-        <div class="preview"><?= nl2br(htmlspecialchars($note->content)); ?></div>
-        <div class="actions">
-			<button class="action-btn">👍 4</button>
-			<button class="action-btn" data-bs-toggle="modal" data-bs-target="#discussionModal">💬 2</button>
-			</div>
+        <?php foreach($notes as $note): ?>			
+          <div class="message">
+            <div class="message-header">
+              <span class="sender"><?= nl2br(htmlspecialchars($note->author)); ?></span>
+              <span class="date"><?= nl2br(htmlspecialchars($note->date_due)); ?></span>
+            </div>
+            <div class="subject"><?= htmlspecialchars($note->title); ?></div>
+            <div class="preview"><?= nl2br(htmlspecialchars($note->content)); ?></div>
+            <div class="actions">
+          <button class="action-btn">👍 4</button>
+          <button class="action-btn" data-bs-toggle="modal" data-bs-target="#discussionModal">💬 2</button>
+          </div>
 
-      </div>
-	  <?php endforeach; ?>
+          </div>
+        <?php endforeach; ?>
+        <?php foreach($tache as $taches): ?>			
+          <div class="message">
+            <div class="message-header">
+              <span class="sender"><?= nl2br(htmlspecialchars($taches->AM_photo)); ?></span>
+              <span class="date">Dec 4, 2019</span>
+            </div>
+            <div class="subject"><?= htmlspecialchars($taches->title); ?></div>
+            <div class="preview"><?= nl2br(htmlspecialchars($taches->description)); ?></div>
+            <div class="actions">
+          <button class="action-btn">👍 4</button>
+          <button class="action-btn" data-bs-toggle="modal" data-bs-target="#discussionModal">💬 2</button>
+          </div>
+
+          </div>
+        <?php endforeach; ?>
 
     </div>
 	<div class="modal fade" id="discussionModal" tabindex="-1" aria-labelledby="discussionModalLabel" aria-hidden="true">
