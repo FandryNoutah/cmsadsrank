@@ -34,69 +34,14 @@ Onboarding
 
 <?php start_section('page_heading'); ?>
 
-<ul class="nav nav-tabs mr-auto ml-5" role="tablist">
-	<li class="nav-item">
-		<a class="nav-link py-3 active" type="button" id="list_tab" data-toggle="tab" data-target="#list" type="button" role="tab" aria-controls="list" aria-selected="true">
-			<img src="<?= base_url('assets/images/icons/figma/icon-list.svg') ?>" alt="">
-			List
-		</a>
-	</li>
-	<li class="nav-item">
-		<a class="nav-link py-3" type="button" id="kanban_tab" data-toggle="tab" data-target="#kanban" type="button" role="tab" aria-controls="kanban" aria-selected="false">
-			<img src="<?= base_url('assets/images/icons/figma/icon-kanban.svg') ?>" alt="">
-			Kanban
-		</a>
-	</li>
-</ul>
 
-<div class="row mx-lg-2 ml-auto">
-	<div class="col-auto px-1">
-		<button class="btn btn-outline-dark">
-			<img src="<?= base_url('assets/images/icons/figma/icon-funnelsimple.svg') ?>" alt="">
-			Sort By
-		</button>
-	</div>
-	<div class="col-auto px-1">
-		<button class="btn btn-outline-dark">
-			<img src="<?= base_url('assets/images/icons/figma/icon-funnel.svg') ?>" alt="">
-			Filter
-		</button>
-	</div>
-	<div class="col-auto px-1">
-		<button class="btn btn-dark" data-toggle="modal" data-target="#clientModal">
-			<img src="<?= base_url('assets/images/icons/figma/icon-plus.svg') ?>" alt="">
-			Ajouter Client
-		</button>
-	</div>
-</div>
+
 
 <?php end_section(); ?>
 
 <?php start_section('content'); ?>
 
-<div class="container-fluid my-4">
-	<div class="btn-group btn-group-toggle" data-toggle="buttons">
-		<label class="btn btn-light rounded-pill mx-2" style="font-size: 14px;">
-			<input type="radio" name="options" id="option1" checked>
-			All Companies
-		</label>
-		<label class="btn btn-white rounded-pill mx-2 text-muted" style="font-size: 14px;">
-			<input type="radio" name="options" id="option2">
-			<i class="fa fa-circle mr-2" style="font-size: 10px; color: #589E67;"></i>
-			Active
-		</label>
-		<label class="btn btn-white rounded-pill mx-2 text-muted" style="font-size: 14px;">
-			<input type="radio" name="options" id="option3">
-			<i class="fa fa-circle mr-2" style="font-size: 10px; color: #B1AD1B;"></i>
-			Pause
-		</label>
-		<label class="btn btn-white rounded-pill mx-2 text-muted" style="font-size: 14px;">
-			<input type="radio" name="options" id="option3">
-			<i class="fa fa-circle mr-2" style="font-size: 10px; color: #AF4B4B;"></i>
-			Résilier
-		</label>
-	</div>
-</div>
+
 
 <div class="container-fluid">
 	<div class="tab-content" id="clientTabContent">
@@ -111,6 +56,7 @@ Onboarding
 								Client
 								<img src="<?= base_url('assets/images/icons/figma/icon-caretdoublevertical-5.svg') ?>" class="ml-2">
 							</th>
+							<?php if($current_users != 1): ?>
 							<th>
 								Site internet
 								<img src="<?= base_url('assets/images/icons/figma/icon-caretdoublevertical-5.svg') ?>" class="ml-2">
@@ -127,19 +73,17 @@ Onboarding
 								Budget
 								<img src="<?= base_url('assets/images/icons/figma/icon-caretdoublevertical-5.svg') ?>" class="ml-2">
 							</th>
+							<?php endif; ?>
 							<th>
-								Initiative
+								Member
 								<img src="<?= base_url('assets/images/icons/figma/icon-caretdoublevertical-5.svg') ?>" class="ml-2">
 							</th>
-							<th>
-								AM
-								<img src="<?= base_url('assets/images/icons/figma/icon-caretdoublevertical-5.svg') ?>" class="ml-2">
-							</th>
-
+								
 							<th>
 								Création Compte Ads
 								<img src="<?= base_url('assets/images/icons/figma/icon-caretdoublevertical-5.svg') ?>" class="ml-2">
 							</th>
+							
 							<th>
 								DataStudio
 								<img src="<?= base_url('assets/images/icons/figma/icon-caretdoublevertical-5.svg') ?>" class="ml-2">
@@ -148,6 +92,7 @@ Onboarding
 								Annonce en ligne
 								<img src="<?= base_url('assets/images/icons/figma/icon-caretdoublevertical-5.svg') ?>" class="ml-2">
 							</th>
+							<?php if($current_users != 1): ?>
 							<th>
 								Email Onboarding
 								<img src="<?= base_url('assets/images/icons/figma/icon-caretdoublevertical-5.svg') ?>" class="ml-2">
@@ -156,6 +101,7 @@ Onboarding
 								Facturation
 								<img src="<?= base_url('assets/images/icons/figma/icon-caretdoublevertical-5.svg') ?>" class="ml-2">
 							</th>
+								<?php endif; ?>	
 						</tr>
 					</thead>
 					<tbody>
@@ -169,7 +115,7 @@ Onboarding
 										</a>
 									</td>
 
-									<!-- Site internet -->
+									<?php if($current_users != 1): ?>
 									<td><?= htmlspecialchars($C->site_client) ?></td>
 
 									<!-- Déjà client -->
@@ -191,13 +137,10 @@ Onboarding
 									</td>
 
 									<!-- Initiative -->
+									 <?php endif; ?>	
 									<td>
-										<img src="<?= base_url(IMAGES_PATH . htmlspecialchars($C->tech_photo_user)); ?>" width="28" height="28" alt="Initiative">
-									</td>
-
-									<!-- AM -->
-									<td>
-										<img src="<?= base_url(IMAGES_PATH . htmlspecialchars($C->am_photo_user)); ?>" width="28" height="28" alt="AM">
+										<img src="<?= base_url(IMAGES_PATH . htmlspecialchars($C->tech_photo_user)); ?>" width="28" height="28" alt="Initiative"><img src="<?= base_url(IMAGES_PATH . htmlspecialchars($C->am_photo_user)); ?>" width="28" height="28" alt="AM">
+									
 									</td>
 
 									<!-- Gocardless 
@@ -222,10 +165,10 @@ Onboarding
 							<td>
 							  ($C->lien_datastudio == 1) ? anchor('Datastudio/datastudios/' . $C->idonnee, 'Lien', ['target' => '_blank']) : '' ?>
 							</td> -->
-
+											
 									<!-- Création Compte Ads -->
 									<td><?= ($C->Céation_compte_ads != '0000-00-00') ? htmlspecialchars($C->Céation_compte_ads) : 'Ajouter date' ?></td>
-
+											
 									<!-- DataStudio -->
 									<td><?= ($C->datastudio == 1) ? 'Oui' : 'Non' ?></td>
 									
@@ -236,10 +179,12 @@ Onboarding
 									<!-- <td><!?= ($C->paiement_recu == 1) ? 'Oui' : 'Non' ?></td> -->
 
 									<!-- Email Onboarding -->
+									 <?php if($current_users != 1): ?>
 									<td><?= ($C->email_onboarding == 1) ? 'Oui' : 'Non' ?></td>
 
 									<!-- Facturation -->
 									<td><?= ($C->facturation == 1) ? 'Oui' : 'Non' ?></td>
+									<?php endif; ?>
 								</tr>
 						<?php endif;
 						endforeach; ?>
