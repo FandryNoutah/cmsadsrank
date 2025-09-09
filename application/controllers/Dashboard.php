@@ -91,6 +91,8 @@ class Dashboard extends MY_Controller
 		$discussion = $this->data['discussion'] = $this->Dashboard_model->get_discussion_gtm_by_id_users($idusers);
 		$this->data['nbr_discussion_gtm'] = $nbr_discussion_gtm = count($discussion);
 
+		$this->data['notes'] = $this->Dashboard_model->get_for_user($this->current_user->id);
+		$this->data['tache'] = $this->Dashboard_model->get_all_tâche();
 		$this->content = "layouts/dashboard/index.php";
 		$this->layout();
 	}
