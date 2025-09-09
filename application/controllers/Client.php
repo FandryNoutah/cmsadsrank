@@ -245,33 +245,33 @@ class Client extends MY_Controller
 		$this->data["users"] = $this->Task_model->get_all_users();
 		$clients = $this->data["donnees"] = $this->visuels_model->getDonneeById($idclients);
 		// dd($clients);
-		$numero_client = $clients[0]['numero_client'];
-		$numero_am = $clients[0]['am_phone'];
+		//$numero_client = $clients[0]['numero_client'];
+		//$numero_am = $clients[0]['am_phone'];
 
-		$calls = $this->get_all_calls();
+		//$calls = $this->get_all_calls();
 
 		// Numéros à comparer (normalisés)
-		$my_number = $numero_am;
-		$client_number = $numero_client;
-		$count = 0;
-		$matched_calls = [];
+		//$my_number = $numero_am;
+		//$client_number = $numero_client;
+		//$count = 0;
+		//$matched_calls = [];
 
 		// Parcours des appels
-		foreach ($calls as $call) {
-			$aircall_number = isset($call->number->digits) ? preg_replace('/\D/', '', $call->number->digits) : '';
-			$external_number = isset($call->raw_digits) ? preg_replace('/\D/', '', $call->raw_digits) : '';
+		//foreach ($calls as $call) {
+			//$aircall_number = isset($call->number->digits) ? preg_replace('/\D/', '', $call->number->digits) : '';
+			//$external_number = isset($call->raw_digits) ? preg_replace('/\D/', '', $call->raw_digits) : '';
 
-			if (
-				($aircall_number === $my_number && $external_number === $client_number) ||
-				($aircall_number === $client_number && $external_number === $my_number)
-			) {
-				$count++;
-				$matched_calls[] = $call;
-			}
-		}
+			//if (
+				//($aircall_number === $my_number && $external_number === $client_number) ||
+				//($aircall_number === $client_number && $external_number === $my_number)
+			//) {
+				//$count++;
+				//$matched_calls[] = $call;
+			//}
+		//}
 
-		$this->data["call_count"] = $count;
-		$this->data['matched_calls'] = $matched_calls;
+		//$this->data["call_count"] = $count;
+		//$this->data['matched_calls'] = $matched_calls;
 
 		$latestByMonth = [];
 

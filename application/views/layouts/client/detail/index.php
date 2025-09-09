@@ -456,7 +456,13 @@
 								</p>
 								<div class="row justify-content-center">
 									<div class="col-auto">
+										
+										<?php if( $d['cms'] != "Inconnu ou non détectable automatiquement"): ?>
 										<img src="<?= $d['cms_logo']; ?>" width="43">
+										<?php endif; ?>
+										<?php if( $d['cms'] == "Inconnu ou non détectable automatiquement"): ?>
+										Inconnu ou non détectable automatiquement
+										<?php endif; ?>
 									</div>
 								</div>
 							</div>
@@ -470,9 +476,18 @@
 									Venture is audited and certified by few industry that have been leading in Security Third Party standards.
 								</p>
 								<span class="badge alert-success rounded-pill px-4 py-3" style="font-size: 14px; font-weight: 500;">
-									<i class="fa fa-circle mr-1" style="font-size: 10px;"></i>
+								<?php if( !empty($d['tracking_gtm'])): ?>		
+								<i class="fa fa-circle mr-1" style="font-size: 10px;"></i>
 									<?= $d['tracking_gtm'] ?>
 								</span>
+								<?php endif; ?>	
+								<?php if( empty($d['tracking_gtm'])): ?>
+									<span class="badge alert-danger rounded-pill px-2 py-1" style="font-size: 12px; font-weight: 500;">
+												<i class="fa fa-circle mr-1" style="font-size: 10px;"></i>
+												GTM Non installé
+											</span>		
+								
+								<?php endif; ?>	
 							</div>
 						</div>
 					</div>
@@ -481,7 +496,9 @@
 
 				<div class="d-flex justify-content-between">
 					<h1 style="font-size: 48px;">Tâches en cours</h1>
-					<button class="btn btn-outline-dark btn-lg">Voir tout</button>
+					<form action="<?= base_url('Client/tache_client/' . $donnees[0]['idclients']) ?>" method="get">
+						<button class="btn btn-outline-dark btn-lg" type="submit">Voir tout</button>
+					</form>
 				</div><br>
 				<div class="table-responsive">
 					<table class="table">
