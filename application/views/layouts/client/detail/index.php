@@ -39,22 +39,22 @@
 		<div class="col" style="height: calc(100vh - 101px); overflow-y:auto;">
 			<div class="container-fluid pb-5">
 
-				<div class="dropdown">
+				<div class="dropdown" style="text-align: right;">
 					<?php if ($d['resiliation'] == 1):  ?>
-						<a type="button" class="badge alert-success rounded-pill px-4 py-3 mb-3 dropdown-toggle" style="font-size: 12px; font-weight: 500;" id="clientStatusDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-							<i class="fa fa-circle mr-1" style="font-size: 10px;"></i>
+						<a type="button" class="badge alert-success rounded-pill px-4 py-3 mb-3 dropdown-toggle" style="font-size: 14px; font-weight: 500;" id="clientStatusDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+							<i class="fa fa-circle mr-1" style="font-size: 14px;"></i>
 							Active
 						</a>
 					<?php endif; ?>
 					<?php if ($d['resiliation'] == 2):  ?>
-						<a type="button" class="badge alert-warning rounded-pill px-4 py-3 mb-3 dropdown-toggle" style="font-size: 12px; font-weight: 500;" id="clientStatusDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-							<i class="fa fa-circle mr-1" style="font-size: 10px;"></i>
+						<a type="button" class="badge alert-warning rounded-pill px-4 py-3 mb-3 dropdown-toggle" style="font-size: 14px; font-weight: 500;" id="clientStatusDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+							<i class="fa fa-circle mr-1" style="font-size: 14px;"></i>
 							Mis en pause
 						</a>
 					<?php endif; ?>
 					<?php if ($d['resiliation'] == 3):  ?>
-						<a type="button" class="badge alert-danger rounded-pill px-4 py-3 mb-3 dropdown-toggle" style="font-size: 12px; font-weight: 500;" id="clientStatusDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-							<i class="fa fa-circle mr-1" style="font-size: 10px;"></i>
+						<a type="button" class="badge alert-danger rounded-pill px-4 py-3 mb-3 dropdown-toggle" style="font-size: 14px; font-weight: 500;" id="clientStatusDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+							<i class="fa fa-circle mr-1" style="font-size: 14px;"></i>
 							Résilié
 						</a>
 					<?php endif; ?>
@@ -63,10 +63,10 @@
 					</div>
 				</div>
 
-				<div class="d-flex justify-content-start align-items-center mb-3" id="star-rating">
+				<div class="d-flex justify-content-start align-items-center mb-3" id="star-rating" style="margin-top: -50px;">
 					<?php $noteClient = isset($note) ? $note : 0; ?>
 
-					<div class="d-flex justify-content-start align-items-center mb-3" id="star-rating">
+					<div class="d-flex justify-content-start align-items-center mb-3" id="star-rating" >
 						<?php for ($i = 1; $i <= 5; $i++): ?>
 							<img
 								src="<?= base_url('assets/images/icons/figma/') . ($i <= $noteClient ? 'star_full.svg' : 'Empty_Star.svg') ?>"
@@ -75,14 +75,11 @@
 								class="mr-1 star"
 								data-index="<?= $i ?>">
 						<?php endfor; ?>
-						<span class="ml-3 py-1 px-3 badge" style="background-color: #edf2fe; color: #4976f4; font-size: 12px; font-weight: 500;">
-							Bleu
-						</span>
 					</div>
 					<input type="hidden" id="idclients" value="<?= $donnees[0]['idclients'] ?>">
 				</div>
 
-				<h1 class="mb-3" style="font-size: 48px; font-weight: 500;">
+				<h1 class="mb-3" style="font-size: 48px; font-weight: 500; margin-top: -20px;">
 					<?= $d['nom_client'] ?>
 				</h1>
 				<h5 class="mb-5" style=""><a href="<?= $d['site_client'] ?>" target="_blank" style="color: black"><?= $d['site_client'] ?></a></h5>
@@ -99,7 +96,7 @@
 									</li>
 								</ul>
 
-								<h6 class="text-muted font-weight-normal" style="font-size: 15.5px;">
+								<h6 class="text-muted font-weight-normal" style="font-size: 14px;">
 									<?= $d['info_base_client'] ?></br>
 								</h6>
 							</div>
@@ -111,7 +108,10 @@
 							<div class="card-body">
 								<div class="d-flex justify-content-between align-items-center">
 									<button class="btn btn-dark py-3 px-5" data-toggle="modal" data-target="#budgetModal">
-										<?= $d['budget'] ?> €
+										<?php function format_budget($nombre) {
+											return number_format($nombre, 0, '', ' ');
+										} ?>
+										<b><?= format_budget($d['budget']) ?> €</b>
 									</button>
 									<div class="dropdown no-arrow">
 										<a href="javascript:void(0);" class="btn btn-light rounded-pill px-3 nav-link dropdown-toggle" id="clientDetailDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -145,6 +145,52 @@
 									<span class="mr-2">
 										<img src="<?= base_url('assets/images/' . $d['tech_photo_user']) ?>" width="24" height="24">
 									</span>
+								</div>
+								<div class="d-flex justify-content-start mb-4" style="font-size: 15px;">
+									<i class="fa fa-check-square mr-2" style="color: #f0f0f0ff; font-size: 18px;"></i>
+									<span class="mr-2">Client</span>
+										<div class="dropdown" style="display: inline-block;">
+											<?php if($d['Couleur'] == 0): ?>
+											<a class="dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="font-size: 14px; font-weight: 500; color: #Grey; cursor: pointer;">
+												<i class="fa fa-circle mr-1" style="font-size: 14px;" id="colorIcon"></i>Choisir couleur
+											</a>
+											<?php endif; ?>
+											<?php if($d['Couleur'] == 1): ?>
+											<a class="dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="font-size: 14px; font-weight: 500; color: #4976f4; cursor: pointer;">
+												<i class="fa fa-circle mr-1" style="font-size: 14px;" id="colorIcon"></i>
+											</a>
+											<?php endif; ?>
+											<?php if($d['Couleur'] == 2): ?>
+											<a class="dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="font-size: 14px; font-weight: 500; color: #e9165d; cursor: pointer;">
+												<i class="fa fa-circle mr-1" style="font-size: 14px;" id="colorIcon"></i>
+											</a>
+											<?php endif; ?>
+											<?php if($d['Couleur'] == 3): ?>
+											<a class="dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="font-size: 14px; font-weight: 500; color: #f6c500; cursor: pointer;">
+												<i class="fa fa-circle mr-1" style="font-size: 14px;" id="colorIcon"></i>
+											</a>
+											<?php endif; ?>
+											<?php if($d['Couleur'] == 4): ?>
+											<a class="dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="font-size: 14px; font-weight: 500; color: #1da946; cursor: pointer;">
+												<i class="fa fa-circle mr-1" style="font-size: 14px;" id="colorIcon"></i>
+											</a>
+											<?php endif; ?>
+
+											<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+												<a class="dropdown-item" href="#" onclick="changeColor(1, '#0093cf', <?= $d['idclients'] ?>)">
+													<i class="fa fa-circle" style="color: #0093cf;"></i> 
+												</a>
+												<a class="dropdown-item" href="#" onclick="changeColor(2, '#e9165d', <?= $d['idclients'] ?>)">
+													<i class="fa fa-circle" style="color: #e9165d;"></i> 
+												</a>
+												<a class="dropdown-item" href="#" onclick="changeColor(3, '#f6c500', <?= $d['idclients'] ?>)">
+													<i class="fa fa-circle" style="color: #f6c500;"></i> 
+												</a>
+												<a class="dropdown-item" href="#" onclick="changeColor(4, '#1da946', <?= $d['idclients'] ?>)">
+													<i class="fa fa-circle" style="color: #1da946;"></i> 
+												</a>
+											</div>
+										</div>
 								</div>
 								<a href="<?= base_url('Client/onboarding/' . $d['idclients']) ?>" class="btn btn-outline-dark btn-block">Onboarding</a>
 							</div>
@@ -828,6 +874,32 @@
 			});
 		});
 	});
+	function changeColor(colorId, colorHex, idclients, el) {
+												$(el).closest('.dropdown').find('#colorIcon').css('color', colorHex);
+
+												$.ajax({
+													url: '<?= base_url("Client/change_color") ?>',
+													type: 'POST',
+													data: {
+														color_id: colorId,
+														idclients: idclients
+													},
+													success: function(response) {
+													try {
+														const data = JSON.parse(response);
+														if (data.status === 'success' && data.redirect_url) {
+															window.location.href = data.redirect_url;
+														} else {
+															alert('Erreur : ' + (data.message || 'inconnue'));
+														}
+													} catch (e) {
+														console.error('Réponse invalide du serveur:', response);
+														alert('Erreur de traitement de la réponse.');
+													}
+												}
+
+												});
+											}
 </script>
 
 <?php end_section(); ?>

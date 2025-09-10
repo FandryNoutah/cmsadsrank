@@ -147,15 +147,16 @@ Discussion
 <?php start_section('content'); ?>
 <div class="sidebar2">
     <h3>Menu</h3>
-     <ul>
-      <li><a href="<?= base_url('Discussion'); ?>"><img class="mr-2" src="<?= base_url('assets/images/icons/figma/EnvelopeOpen.png') ?>" /> Tout les messages <span>12</span></a></li>
-      <li><a href="<?= base_url('Discussion/Note'); ?>"><img class="mr-2" src="<?= base_url('assets/images/icons/figma/EnvelopeOpen.png') ?>" /> Note <span><?= $totalMessages; ?></span></a></li>
-	    <li><a href="<?= base_url('Discussion/Team_task'); ?>"><img class="mr-2" src="<?= base_url('assets/images/icons/figma/EnvelopeOpen.png') ?>" /> Team Task <span><?= $totalMessages; ?></span></a></li>
-      <li><a href="<?= base_url('Discussion/Brief'); ?>"><img class="mr-2" src="<?= base_url('assets/images/icons/figma/EnvelopeOpen.png') ?>" /> Brief <span>8</span></a></li>
-      <li><a href="<?= base_url('Discussion/Temporaire'); ?>"><img class="mr-2" src="<?= base_url('assets/images/icons/figma/EnvelopeOpen.png') ?>" /> Temporaire <span>24</span></a></li>
-      <li><a href="<?= base_url('Discussion/Gtm'); ?>"><img class="mr-2" src="<?= base_url('assets/images/icons/figma/EnvelopeOpen.png') ?>" /> GTM <span>15</span></a></li>
-      <li><a href="<?= base_url('trash'); ?>"><img class="mr-2" src="<?= base_url('assets/images/icons/figma/EnvelopeOpen.png') ?>" /> Trash <span>28</span></a></li>
-    </ul>
+    <h3>Menu</h3>
+      <ul>
+        <li><a href="<?= base_url('Discussion'); ?>"><img class="mr-2" src="<?= base_url('assets/images/icons/figma/EnvelopeOpen.png') ?>" /> Tout les messages <span>12</span></a></li>
+        <li><a href="<?= base_url('Discussion/Team_Discussion'); ?>"><img class="mr-2" src="<?= base_url('assets/images/icons/figma/EnvelopeOpen.png') ?>" /> Note <span><?= $totalMessages; ?></span></a></li>
+        <li><a href="<?= base_url('Discussion/Team_Discussion'); ?>"><img class="mr-2" src="<?= base_url('assets/images/icons/figma/EnvelopeOpen.png') ?>" /> Team Task <span><?= $totalMessages; ?></span></a></li>
+        <li><a href="<?= base_url('Discussion/Brief'); ?>"><img class="mr-2" src="<?= base_url('assets/images/icons/figma/EnvelopeOpen.png') ?>" /> Brief <span>8</span></a></li>
+        <li><a href="<?= base_url('Discussion/Temporaire'); ?>"><img class="mr-2" src="<?= base_url('assets/images/icons/figma/EnvelopeOpen.png') ?>" /> Temporaire <span>24</span></a></li>
+        <li><a href="<?= base_url('Discussion/Gtm'); ?>"><img class="mr-2" src="<?= base_url('assets/images/icons/figma/EnvelopeOpen.png') ?>" /> GTM <span>15</span></a></li>
+        <li><a href="<?= base_url('trash'); ?>"><img class="mr-2" src="<?= base_url('assets/images/icons/figma/EnvelopeOpen.png') ?>" /> Trash <span>28</span></a></li>
+      </ul>
 
     <div class="label-section">
       <h3>Label</h3>
