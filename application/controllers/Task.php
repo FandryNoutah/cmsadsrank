@@ -86,7 +86,6 @@ class Task extends MY_Controller
 			'type_tache'		=>	$this->input->post('type_tache'),
 			'Statuts_technique'	=>	$this->input->post('Statuts_technique'),
 			'title'				=>	$this->input->post('title'),
-			'idclients'			=>	$this->input->post('idclients'),
 			'assigned_to'		=>	$this->input->post('assigned_to'),
 			'date_demande'		=>	$this->input->post('date_demande'),
 			'date_due'			=>	$this->input->post('date_due'),
