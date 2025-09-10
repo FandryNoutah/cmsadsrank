@@ -43,6 +43,27 @@ class Client extends MY_Controller
 		$this->content = "layouts/client/index.php";
 		$this->layout();
 	}
+	public function change_color()
+	{
+		$color_id = $this->input->post('color_id');
+		$idclients = $this->input->post('idclients');
+
+		if (!in_array($color_id, [1, 2, 3, 4])) {
+			echo json_encode(['status' => 'error', 'message' => 'ID de couleur invalide']);
+			return;
+		}
+
+		$this->visuels_model->update_color($idclients, $color_id);
+
+		// Au lieu de redirect(), on retourne une URL dans la réponse
+		echo json_encode([
+			'status' => 'success',
+			'redirect_url' => base_url('Client/detail_client/' . $idclients)
+		]);
+	}
+		
+
+
 	public function upload_logo()
 	{
 		$idclients = $this->input->post('idclients');

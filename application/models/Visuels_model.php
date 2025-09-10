@@ -42,6 +42,14 @@ class Visuels_model extends CI_Model {
 
 		return $this->db->get()->result();
 	}
+	public function update_color($idclients, $color_id)
+		{
+			$this->db->where('idclients', $idclients);
+			$this->db->update('clients', [
+				'Couleur' => $color_id
+			]);
+		}
+
 
 	public function enregistrer_note($idclients, $rating) {
 		$data = [
