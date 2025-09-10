@@ -36,7 +36,40 @@
     </style>
 </head>
 <body>
+<?php start_section('stylesheet'); ?>
+<style>
+	.table-wrapper {
+		border-spacing: 0 15px !important;
+		border-collapse: separate !important;
+	}
 
+	.table-wrapper td,
+	.table-wrapper th {
+		vertical-align: middle;
+		border: border;
+		border-bottom: 1px solid #dee2e6 !important;
+	}
+
+	.table-wrapper tbody tr td:first-child,
+	.table-wrapper thead tr th:first-child {
+		border-left: 1px solid #dee2e6;
+		border-top-left-radius: 4px;
+		border-bottom-left-radius: 4px;
+	}
+
+	.table-wrapper tbody tr td:last-child,
+	.table-wrapper thead tr th:last-child {
+		border-right: 1px solid #dee2e6;
+		border-top-right-radius: 4px;
+		border-bottom-right-radius: 4px;
+	}
+</style>
+<?php end_section(); ?>
+
+<?php start_section('page_heading'); ?>
+<?php end_section(); ?>
+
+<?php start_section('content'); ?>
 <div style="max-width:1100px;margin:20px auto;">
     <div id="calendar"></div>
 </div>
