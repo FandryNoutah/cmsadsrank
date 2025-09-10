@@ -42,6 +42,12 @@
 					<span class="nav-label">Discussions</span>
 				</a>
 			</li>
+			<li class="nav-item rounded">
+				<a class="nav-link text-secondary" href="<?= base_url('Calendar'); ?>">
+					<img class="mr-2" src="<?= base_url('assets/images/icons/figma/Calendar.png') ?>" />
+					<span class="nav-label">Calendrier</span>
+				</a>
+			</li>
 			
 		</ul>
 
