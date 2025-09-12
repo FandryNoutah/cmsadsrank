@@ -9,14 +9,17 @@ class Discussion extends MY_Controller
 		$this->load->model("Discussion_model");
 		$this->load->model("Note_model");
 		$this->load->model("Task_message_model");
+
 		$this->current_user = $this->ion_auth->user()->row();
+		$idusers = $this->current_user->id;
+		
+		$this->data['nbr_discussion_gtm'] = count($this->Discussion_model->get_discussion_gtm_by_id_users($idusers));
 	}
 
 	public function index()
 	{
 		$idusers = $this->current_user->id;
 		$discussion = $this->data['discussion_note'] = $this->Discussion_model->get_discussion_gtm_by_id_users($idusers);
-		$this->data['nbr_discussion_gtm'] = $nbr_discussion_gtm = count($discussion);
 		$notes = $this->Note_model->get_for_user($this->current_user->id);
 		$this->data['users'] = $this->Note_model->get_all_users();
 
@@ -28,15 +31,16 @@ class Discussion extends MY_Controller
 		}
 
 		$this->data['notes'] = $notes;
-		$this->data['tache'] = $this->Task_model->get_all_tâche();
-		$this->content = "layouts/Discussion/index.php";
+		$this->data['taches'] = $this->Task_model->get_all_tâche();
+		$this->content = "layouts/discussion/index.php";
 		$this->layout();
 	}
+
 	public function Team_task()
 	{
+		
 		$idusers = $this->current_user->id;
 		$discussion = $this->data['discussion_note'] = $this->Discussion_model->get_discussion_gtm_by_id_users($idusers);
-		$this->data['nbr_discussion_gtm'] = $nbr_discussion_gtm = count($discussion);
 		$notes = $this->Note_model->get_for_user($this->current_user->id);
 		$this->data['users'] = $this->Note_model->get_all_users();
 
@@ -72,9 +76,52 @@ class Discussion extends MY_Controller
 		$this->content = "layouts/Discussion/Team_task/index.php";
 		$this->layout();
 	}
+
+	public function Brief()
+	{
+		$idusers = $this->current_user->id;
+		$discussion = $this->data['discussion_note'] = $this->Discussion_model->get_discussion_gtm_by_id_users($idusers);
+		$this->data['nbr_discussion_gtm'] = $nbr_discussion_gtm = count($discussion);
+		$notes = $this->Note_model->get_for_user($this->current_user->id);
+		$this->data['users'] = $this->Note_model->get_all_users();
+
+		foreach ($notes as $note) {
+
+			$id_note = $note->id;
+			$assigned_users = $this->Note_model->get_assigned_users($id_note);
+			$note->assigned_users = $assigned_users;
+		}
+
+		$this->data['notes'] = $notes;
+		$this->data['tache'] = $this->Task_model->get_all_tâche();
+		$this->content = "layouts/discussion/brief/index.php";
+		$this->layout();
+	}
+
+	public function Temporaire()
+	{
+		$idusers = $this->current_user->id;
+		$discussion = $this->data['discussion_note'] = $this->Discussion_model->get_discussion_gtm_by_id_users($idusers);
+		$this->data['nbr_discussion_gtm'] = $nbr_discussion_gtm = count($discussion);
+		$notes = $this->Note_model->get_for_user($this->current_user->id);
+		$this->data['users'] = $this->Note_model->get_all_users();
+
+		foreach ($notes as $note) {
+
+			$id_note = $note->id;
+			$assigned_users = $this->Note_model->get_assigned_users($id_note);
+			$note->assigned_users = $assigned_users;
+		}
+
+		$this->data['notes'] = $notes;
+		$this->data['tache'] = $this->Task_model->get_all_tâche();
+		$this->content = "layouts/discussion/temporaire/index.php";
+		$this->layout();
+	}
+
 	public function Gtm()
 	{
-		$tasks = $this->data['tache'] = $this->Task_model->get_all_tâche();
+		$tasks = $this->data['taches'] = $this->Task_model->get_all_tâche();
 		$this->data['count_planned'] = 0;
 		$this->data['count_upcoming'] = 0;
 		$this->data['count_completed'] = 0;
@@ -95,49 +142,10 @@ class Discussion extends MY_Controller
 					break;
 			}
 		}
-		$this->content = "layouts/Discussion/Gtm/index.php";
+		$this->content = "layouts/discussion/gtm/index.php";
 		$this->layout();
 	}
-	public function Brief()
-	{
-		$idusers = $this->current_user->id;
-		$discussion = $this->data['discussion_note'] = $this->Discussion_model->get_discussion_gtm_by_id_users($idusers);
-		$this->data['nbr_discussion_gtm'] = $nbr_discussion_gtm = count($discussion);
-		$notes = $this->Note_model->get_for_user($this->current_user->id);
-		$this->data['users'] = $this->Note_model->get_all_users();
 
-		foreach ($notes as $note) {
-
-			$id_note = $note->id;
-			$assigned_users = $this->Note_model->get_assigned_users($id_note);
-			$note->assigned_users = $assigned_users;
-		}
-
-		$this->data['notes'] = $notes;
-		$this->data['tache'] = $this->Task_model->get_all_tâche();
-		$this->content = "layouts/Discussion/Brief/index.php";
-		$this->layout();
-	}
-	public function Temporaire()
-	{
-		$idusers = $this->current_user->id;
-		$discussion = $this->data['discussion_note'] = $this->Discussion_model->get_discussion_gtm_by_id_users($idusers);
-		$this->data['nbr_discussion_gtm'] = $nbr_discussion_gtm = count($discussion);
-		$notes = $this->Note_model->get_for_user($this->current_user->id);
-		$this->data['users'] = $this->Note_model->get_all_users();
-
-		foreach ($notes as $note) {
-
-			$id_note = $note->id;
-			$assigned_users = $this->Note_model->get_assigned_users($id_note);
-			$note->assigned_users = $assigned_users;
-		}
-
-		$this->data['notes'] = $notes;
-		$this->data['tache'] = $this->Task_model->get_all_tâche();
-		$this->content = "layouts/Discussion/Temporaire/index.php";
-		$this->layout();
-	}
 	public function fetch_discussion($id_task)
 	{
 
