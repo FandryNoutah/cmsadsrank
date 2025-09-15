@@ -17,7 +17,8 @@ class Discussion_model extends CI_Model {
 		$query = $this->db->query($sql, array($idusers));
 		return $query->result(); 
 
-	}	
+	}
+	
 	public function get_discussion_task_by_id_users($idusers)
 	{
 		$sql = "SELECT group_messages.*, users.*
@@ -39,6 +40,7 @@ class Discussion_model extends CI_Model {
 		return $query->result(); 
 
 	}
+
 	public function getClientDataByDonnee() {
 		// Sélectionner toutes les colonnes nécessaires, y compris les photos des utilisateurs
 		$this->db->select('donnee.*, clients.*, produit.*, 
@@ -63,6 +65,7 @@ class Discussion_model extends CI_Model {
 		// Récupérer les résultats
 		return $this->db->get()->result();
 	}
+	
 	public function get_task_by_id_users($idusers)
 	{
 		$sql = "SELECT tasks.*, users.*, clients.*, am_clients.*, assigned_clients.* 
@@ -76,6 +79,7 @@ class Discussion_model extends CI_Model {
 		return $query->result(); 
 
 	}
+	
 	public function get_task_by_id_users_attribuer($idusers)
 	{
 		$sql = "SELECT tasks.*, users.*, clients.*, am_clients.*, assigned_clients.* 
