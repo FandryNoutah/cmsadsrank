@@ -25,7 +25,7 @@ Discussion
 						<div class="text-muted small mb-2"><?= nl2br(htmlspecialchars($note->content)); ?></div>
 
 						<button class="btn btn-light btn-sm mt-1">👍 4</button>
-						<button class="btn btn-light btn-sm mt-1" data-toggle="modal" data-target="#discussionModal">💬 2</button>
+						<button class="btn btn-light btn-sm mt-1" data-toggle="modal" data-target="#discussionModal" data-type="note" data-id="<?= $note->id; ?>">💬 2</button>
 
 					</div>
 				</div>
@@ -45,7 +45,7 @@ Discussion
 						<div class="text-muted small mb-2"><?= nl2br(htmlspecialchars($tache->description)); ?></div>
 
 						<button class="btn btn-light btn-sm mt-1">👍 4</button>
-						<button class="btn btn-light btn-sm mt-1" data-toggle="modal" data-target="#discussionModal">💬 2</button>
+						<button class="btn btn-light btn-sm mt-1" data-toggle="modal" data-target="#discussionModal" data-type="task" data-id="<?= $tache->idtask; ?>">💬 2</button>
 
 					</div>
 				</div>
@@ -63,60 +63,117 @@ Discussion
 
 	$(function() {
 
-		function fetch_discussion() {
+		function fetch_discussion(id, type) {
+			
+			$.ajax({
+				type: "POST",
+				url: "Discussion/fetch_discussion",
+				data: {
+					"id": id,
+					"type": type
+				},
+				dataType: "json",
+				beforeSend: function() {
+					$('#task_discussion').html('<span class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>');
+				},
+				success: function(response) {
 
-			if (id_task != null) {
+					$('#task_discussion').html('');
+					if (response.length > 0) {
+						$.each(response, function(index, data) {
 
-				$.ajax({
-					type: "POST",
-					url: "Task/fetch_discussion/" + id_task,
-					dataType: "json",
-					beforeSend: function() {
-						$('#task_discussion').html('<span class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>');
-					},
-					success: function(response) {
+							let owner = data.owner;
 
-						$('#task_discussion').html('');
-						if (response.length > 0) {
-							$.each(response, function(index, data) {
+							let alignment = owner ? "justify-content-end" : "justify-content-start";
+							let color = owner ? "bg-dark text-white" : "bg-light border";
+							let sender = owner ? "You" : data.username;
+							let float = owner ? "float-right" : "float-left";
 
-								let owner = data.owner;
-
-								let alignment = owner ? "justify-content-end" : "justify-content-start";
-								let color = owner ? "bg-dark text-white" : "bg-light border";
-								let sender = owner ? "You" : data.username;
-								let float = owner ? "float-right" : "float-left";
-
-								let html = `
-									<div class="d-flex ${alignment}">
-										<div class="message_container mt-3" style="max-width: 75%;">
-											<span class="small text-muted d-block">${sender} ${data.created_at}</span>
-											<div class="p-2 ${color} rounded ${float}" style="width: fit-content;">
-												${data.message}
-											</div>
+							let html = `
+								<div class="d-flex ${alignment}">
+									<div class="message_container mt-3" style="max-width: 75%;">
+										<span class="small text-muted d-block">${sender} ${data.created_at}</span>
+										<div class="p-2 ${color} rounded ${float}" style="width: fit-content;">
+											${data.message}
 										</div>
 									</div>
-								`;
-
-								$('#task_discussion').append(html); // append if ascendant ; prepend if descendant
-							});
-						} else {
-							$('#task_discussion').html(`
-								<div class="alert alert-light" role="alert">
-									Aucune discussion pour le moment!
 								</div>
-							`);
-						}
+							`;
 
-						let modalBody = $('#discussionModal .modal-body'); // current open modal body
-						modalBody.scrollTop(modalBody[0].scrollHeight);
+							$('#task_discussion').append(html); // append if ascendant ; prepend if descendant
+						});
+					} else {
+						$('#task_discussion').html(`
+							<div class="alert alert-light" role="alert">
+								Aucune discussion pour le moment!
+							</div>
+						`);
 					}
-				});
-			}
+
+					let modalBody = $('#discussionModal .modal-body'); // current open modal body
+					modalBody.scrollTop(modalBody[0].scrollHeight);
+				}
+			});
 		}
 
-		$('#discussionModal').on('show.bs.modal', function() {
+		$('#discussionModal').on('show.bs.modal', function(event) {
 			
+			let button = $(event.relatedTarget);
+			
+			let title = $(button).attr('data-title');
+			let id = $(button).attr('data-id');
+			let type = $(button).attr('data-type');
+			let action = $(button).attr('data-action');
+
+			$('#detail_discussion_form').attr('data-id', id);
+			$('#detail_discussion_form').attr('data-type', type);
+			$('#message_form').attr('data-id', id);
+			$('#message_form').attr('data-type', type);
+
+			$('#discussionModalLabel').html('Discussion sur: ' + title ?? "Unknown");
+			
+			fetch_discussion(id, type);
+		});
+
+		$('#discussionModal').on('hide.bs.modal', function(event) {
+			$('#message').val("");
+			$('#message').removeAttr("data-id");
+			$('#message').removeAttr("data-type");
+			$('#message_form').removeAttr("data-id");
+			$('#message_form').removeAttr("data-type");
+		});
+
+		$('#message_form').submit(function(event) {
+
+			event.preventDefault();
+
+			let submitter = event.originalEvent.submitter;
+			let buttonChild = $(submitter).html();
+			let id = $(this).data('id');
+			let type = $(this).data('type');
+
+			$.ajax({
+				type: $(this).attr('method'),
+				url: $(this).attr('action'),
+				data: {
+					"id": id,
+					"type": type,
+					"message": $('#message').val()
+				},
+				dataType: "json",
+				beforeSend: function() {
+					$(submitter).attr('disabled', "disabled");
+					$(submitter).html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>');
+				},
+				success: function(response) {
+
+					$(submitter).removeAttr("disabled");
+					$(submitter).html(buttonChild);
+
+					$('#message').val("");
+					fetch_discussion(id, type);
+				}
+			});
 		});
 	});
 </script>
