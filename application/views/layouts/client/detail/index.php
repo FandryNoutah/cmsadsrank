@@ -151,7 +151,7 @@
 									<span class="mr-2">Client</span>
 										<div class="dropdown" style="display: inline-block;">
 											<?php if($d['Couleur'] == 0): ?>
-											<a class="dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="font-size: 14px; font-weight: 500; color: #Grey; cursor: pointer;">
+											<a class="dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="font-size: 14px; font-weight: 500; color: Grey; cursor: pointer;">
 												<i class="fa fa-circle mr-1" style="font-size: 14px;" id="colorIcon"></i>Choisir couleur
 											</a>
 											<?php endif; ?>
