@@ -7,16 +7,14 @@ class Calendar extends CI_Controller {
     parent::__construct();
     $this->load->model("Event_model");
     $this->load->helper('url');
-    $this->load->library(['ion_auth']); // charge Ion Auth
+    $this->load->library(['ion_auth']);
     $this->current_user = $this->ion_auth->user()->row();
 }
 
     public function index() {
-        // charge la vue principale
         $this->load->view("Layouts/calendar_view/index.php");
     }
 
-    // Retourne les events pour fullcalendar
     public function fetch_events() {
     if (!$this->current_user) {
         show_error('Unauthorized', 401);
@@ -51,7 +49,6 @@ class Calendar extends CI_Controller {
 }
 
 
-    // Endpoint pour récupérer les utilisateurs (pour le select multiple)
     public function fetch_users() {
     if (!$this->current_user) {
         show_error('Unauthorized', 401);
@@ -65,17 +62,21 @@ class Calendar extends CI_Controller {
 
 
 
-    // Ajout d'un event (POST)
     public function add_event() {
     if (!$this->current_user) {
         show_error('Unauthorized', 401);
         return;
     }
-
+    if($this->input->post("custom_title") == NULL):
     $title = $this->input->post("title");
+    endif;
+    if($this->input->post("custom_title") != NULL):
+    $title = $this->input->post("custom_title");
+    endif;
     $description = $this->input->post("description");
-    $start_date = $this->input->post("start_date");
-    $end_date = $this->input->post("end_date");
+    $start_date = date("Y-m-d H:i:s", strtotime($this->input->post("start_date")));
+    $end_date   = date("Y-m-d H:i:s", strtotime($this->input->post("end_date")));
+
     $color = $this->input->post("color");
     $attendees = $this->input->post("attendees");
 
@@ -101,10 +102,33 @@ class Calendar extends CI_Controller {
 
 
 
-    // Détail d'un event (id)
     public function event_detail($id) {
         $event = $this->Event_model->get_event($id);
         header('Content-Type: application/json');
         echo json_encode($event);
     }
+
+public function update_event() {
+    $id = $this->input->post("id");
+    $data = [
+        "title"       => $this->input->post("title"),
+        "description" => $this->input->post("description"),
+        "start_date"  => date("Y-m-d H:i:s", strtotime($this->input->post("start_date"))),
+        "end_date"    => date("Y-m-d H:i:s", strtotime($this->input->post("end_date"))),
+        "color"       => $this->input->post("color"),
+    ];
+
+    $attendees = $this->input->post("attendees");
+    $attendee_ids = !empty($attendees) ? (is_array($attendees) ? array_map('intval', $attendees) : array_map('intval', explode(',', $attendees))) : [];
+
+    $this->Event_model->update_event($id, $data, $attendee_ids);
+    echo json_encode(["status" => true]);
+}
+
+public function delete_event() {
+    $id = $this->input->post("id");
+    $this->Event_model->delete_event($id);
+    echo json_encode(["status" => true]);
+}
+
 }
