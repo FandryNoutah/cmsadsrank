@@ -2,6 +2,27 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Event_model extends CI_Model {
+    public function update_event($id, $data, $attendee_ids = []) {
+    $this->db->where("id", $id)->update("events", $data);
+
+    $this->db->where("event_id", $id)->delete("event_users");
+    if (!empty($attendee_ids)) {
+        foreach($attendee_ids as $uid) {
+            $this->db->insert("event_users", [
+                "event_id" => $id,
+                "user_id"  => $uid
+            ]);
+        }
+    }
+    return true;
+}
+
+public function delete_event($id) {
+    $this->db->where("id", $id)->delete("events");
+    $this->db->where("event_id", $id)->delete("event_users");
+    return true;
+}
+
 public function get_users($exclude_id = null, $limit = 1000) {
     $this->db->select("id, username, email, first_name, last_name");
     if ($exclude_id) {
@@ -12,7 +33,6 @@ public function get_users($exclude_id = null, $limit = 1000) {
 }
 
     public function get_events($start, $end) {
-        // récupère les événements dans l'intervalle et ajoute participants
         $this->db->where("start_date >=", $start);
         $this->db->where("end_date <=", $end);
         $events = $this->db->get("events")->result();
@@ -32,7 +52,6 @@ public function get_users($exclude_id = null, $limit = 1000) {
     }
 
     public function insert_event($data, $attendee_ids = []) {
-        // $data must contain created_by
         $this->db->insert("events", $data);
         $event_id = $this->db->insert_id();
 
