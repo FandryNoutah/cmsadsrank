@@ -12,6 +12,7 @@ class Calendar extends CI_Controller {
 }
 
     public function index() {
+        
         $this->load->view("Layouts/calendar_view/index.php");
     }
 
