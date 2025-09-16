@@ -1,8 +1,9 @@
 <?php
 
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') or exit('No direct script access allowed');
 
-class Discussion_model extends CI_Model {
+class Discussion_model extends CI_Model
+{
 
 	protected $table3 = "clients";
 	protected $table4 = "donnee";
@@ -10,62 +11,64 @@ class Discussion_model extends CI_Model {
 
 	public function get_discussion_note_by_id_users($idusers)
 	{
-		$sql = "SELECT group_messages_note.*, users.*
-				FROM group_messages_note 
-				LEFT JOIN users ON users.id = group_messages_note.user_id 
-				WHERE group_messages_note.user_id = ?";
-		$query = $this->db->query($sql, array($idusers));
-		return $query->result(); 
+		$this->db->select('group_messages_note.*, users.*');
+		$this->db->from('group_messages_note');
+		$this->db->join('users', 'users.id = group_messages_note.user_id', 'left');
+		$this->db->where('group_messages_note.user_id', $idusers);
 
+		$query = $this->db->get();
+		return $query->result();
 	}
-	
+
 	public function get_discussion_task_by_id_users($idusers)
 	{
-		$sql = "SELECT group_messages.*, users.*
-				FROM group_messages 
-				LEFT JOIN users ON users.id = group_messages.user_id 
-				WHERE group_messages.user_id = ?";
-		$query = $this->db->query($sql, array($idusers));
-		return $query->result(); 
+		$this->db->select('group_messages.*, users.*');
+		$this->db->from('group_messages');
+		$this->db->join('users', 'users.id = group_messages.user_id', 'left');
+		$this->db->where('group_messages.user_id', $idusers);
 
+		$query = $this->db->get();
+		return $query->result();
 	}
-	
+
 	public function get_discussion_gtm_by_id_users($idusers)
 	{
-		$sql = "SELECT group_messages_gtm.*, users.*
-				FROM group_messages_gtm 
-				LEFT JOIN users ON users.id = group_messages_gtm.user_id 
-				WHERE group_messages_gtm.user_id = ?";
-		$query = $this->db->query($sql, array($idusers));
-		return $query->result(); 
+		$this->db->select('group_messages_gtm.*, users.*');
+		$this->db->from('group_messages_gtm');
+		$this->db->join('users', 'users.id = group_messages_gtm.user_id', 'left');
+		$this->db->where('group_messages_gtm.user_id', $idusers);
 
+		$query = $this->db->get();
+		return $query->result();
 	}
 
-	public function getClientDataByDonnee() {
+
+	public function getClientDataByDonnee()
+	{
 		// Sélectionner toutes les colonnes nécessaires, y compris les photos des utilisateurs
 		$this->db->select('donnee.*, clients.*, produit.*, 
 						   am_user.photo_users AS am_photo_user, 
 						   tech_user.photo_users AS tech_photo_user');  // Retirer les commentaires
-		
+
 		// Table de base : donnee
 		$this->db->from('donnee');
-		
+
 		// Jointure entre donnee et clients sur idclients
 		$this->db->join('clients', 'donnee.idclients = clients.idclients');
-		
+
 		// Jointure entre donnee et produit sur idproduit
 		$this->db->join('produit', 'donnee.idproduit = produit.idproduit');
-		
+
 		// Jointure entre donnee et users pour l'account_manager (utilisateur qui gère le client)
 		$this->db->join('users AS am_user', 'donnee.account_manager = am_user.id', 'left');
-		
+
 		// Jointure entre donnee et users pour l'initiative (utilisateur responsable de l'initiative)
 		$this->db->join('users AS tech_user', 'donnee.initiative = tech_user.id', 'left');
-		
+
 		// Récupérer les résultats
 		return $this->db->get()->result();
 	}
-	
+
 	public function get_task_by_id_users($idusers)
 	{
 		$sql = "SELECT tasks.*, users.*, clients.*, am_clients.*, assigned_clients.* 
@@ -76,10 +79,9 @@ class Discussion_model extends CI_Model {
 				LEFT JOIN clients AS assigned_clients ON assigned_clients.idclients = tasks.assigned_to 
 				WHERE tasks.assigned_to = ?";
 		$query = $this->db->query($sql, array($idusers));
-		return $query->result(); 
-
+		return $query->result();
 	}
-	
+
 	public function get_task_by_id_users_attribuer($idusers)
 	{
 		$sql = "SELECT tasks.*, users.*, clients.*, am_clients.*, assigned_clients.* 
@@ -90,8 +92,6 @@ class Discussion_model extends CI_Model {
 				LEFT JOIN clients AS assigned_clients ON assigned_clients.idclients = tasks.assigned_to 
 				WHERE tasks.AM = ?";
 		$query = $this->db->query($sql, array($idusers));
-		return $query->result(); 
-
+		return $query->result();
 	}
-		
 }
