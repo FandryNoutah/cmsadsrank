@@ -32,16 +32,40 @@ public function get_users($exclude_id = null, $limit = 1000) {
     return $this->db->get("users")->result();
 }
 
-    public function get_events($start, $end) {
-        $this->db->where("start_date >=", $start);
-        $this->db->where("end_date <=", $end);
-        $events = $this->db->get("events")->result();
+   public function get_events($start, $end, $user_id = null) {
+    $start_dt = date('Y-m-d H:i:s', strtotime($start));
+    $end_dt   = date('Y-m-d H:i:s', strtotime($end));
 
-        foreach($events as $e) {
-            $e->attendees = $this->get_event_attendees($e->id);
-        }
-        return $events;
+    $this->db->select('events.*');
+    $this->db->from('events');
+
+    // chevauchement
+    $this->db->where('start_date <', $end_dt);
+    $this->db->where('end_date >', $start_dt);
+
+    if (!empty($user_id)) {
+        // jointure pour les events partagés
+        $this->db->join('event_users eu', 'events.id = eu.event_id', 'left');
+        $this->db->group_start();
+        $this->db->where('events.created_by', $user_id);
+        $this->db->or_where('eu.user_id', $user_id);
+        $this->db->group_end();
     }
+
+    $this->db->group_by('events.id');
+
+    $query = $this->db->get();
+    $events = $query->result();
+
+    foreach($events as $e) {
+        $e->attendees = $this->get_event_attendees($e->id);
+    }
+
+    return $events;
+}
+
+
+
 
     public function get_event($id) {
         $event = $this->db->get_where("events", ["id" => $id])->row();

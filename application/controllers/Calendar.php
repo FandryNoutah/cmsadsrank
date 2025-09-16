@@ -24,30 +24,43 @@ class Calendar extends CI_Controller {
 
     $start = $this->input->get("start");
     $end   = $this->input->get("end");
-    $events = $this->Event_model->get_events($start, $end);
+    $user_id = $this->input->get("user_id");
 
-    $data = [];
-    foreach($events as $event) {
-        $att_names = [];
-        foreach($event->attendees as $a) {
-            $name = trim(($a->first_name ?: '') . ' ' . ($a->last_name ?: ''));
-            $att_names[] = $name ? $name : ($a->username ?: $a->email);
+    // Si pas de user_id fourni dans le filtre => utilisateur connecté
+    if (empty($user_id)) {
+        $user_id = $this->current_user->id;
+    } else {
+        $user_id = intval($user_id);
+    }
+
+    $events = $this->Event_model->get_events($start, $end, $user_id);
+
+    $result = [];
+    foreach ($events as $e) {
+        $attendees = [];
+        if (!empty($e->attendees)) {
+            foreach($e->attendees as $a) {
+                $attendees[] = trim(($a->first_name ?: '') . ' ' . ($a->last_name ?: $a->username));
+            }
         }
 
-        $data[] = [
-            "id"    => $event->id,
-            "title" => $event->title,
-            "start" => $event->start_date,
-            "end"   => $event->end_date,
-            "color" => $event->color,
-            "description" => $event->description,
-            "created_by"  => $event->created_by,
-            "attendees"   => $att_names
+        $result[] = [
+            "id"    => $e->id,
+            "title" => $e->title,
+            "description" => $e->description,
+            "start" => date("c", strtotime($e->start_date)),
+            "end"   => date("c", strtotime($e->end_date)),
+            "color" => $e->color ?: "#3788d8",
+            "attendees" => $attendees
         ];
     }
-    header('Content-Type: application/json');
-    echo json_encode($data);
+
+    $this->output
+        ->set_content_type('application/json')
+        ->set_output(json_encode($result));
 }
+
+
 
 
     public function fetch_users() {
@@ -75,9 +88,9 @@ class Calendar extends CI_Controller {
     $title = $this->input->post("custom_title");
     endif;
     $description = $this->input->post("description");
-    $start_date = date("Y-m-d H:i:s", strtotime($this->input->post("start_date")));
+     $start_date = date("Y-m-d H:i:s", strtotime($this->input->post("start_date")));
     $end_date   = date("Y-m-d H:i:s", strtotime($this->input->post("end_date")));
-
+    
     $color = $this->input->post("color");
     $attendees = $this->input->post("attendees");
 
