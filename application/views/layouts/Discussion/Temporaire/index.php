@@ -10,20 +10,20 @@ Discussion
 
 	<div class="col" style="height: calc(100vh - 130px); overflow-y:auto;">
 		<div class="container-fluid">
-			<h5 class="mb-4">📥 Message Brief <small>(12 messages)</small></h5>
-			<?php foreach ($notes as $note): ?>
+			<h5 class="mb-4">📥 Message Brief <small>(<?= count($tasks); ?>)</small></h5>
+			<?php foreach ($tasks as $task): ?>
 				<div class="card mb-3">
 					<div class="card-body">
 						<div class="d-flex justify-content-between mb-2">
-							<span class="font-weight-bold"><?= nl2br(htmlspecialchars($note->author)); ?></span>
-							<span class="text-muted small"><?= nl2br(htmlspecialchars($note->date_due)); ?></span>
+							<span class="font-weight-bold"><?= nl2br(htmlspecialchars($taREMOVED>username)); ?></span>
+							<span class="text-muted small"><?= nl2br(htmlspecialchars($taREMOVED>date_due)); ?></span>
 						</div>
 
-						<div class="font-weight-bold mb-1"><?= htmlspecialchars($note->title); ?></div>
-						<div class="text-muted small mb-2"><?= nl2br(htmlspecialchars($note->content)); ?></div>
+						<div class="font-weight-bold mb-1"><?= htmlspecialchars($taREMOVED>title); ?></div>
+						<div class="text-muted small mb-2"><?= nl2br(htmlspecialchars($taREMOVED>description)); ?></div>
 
 						<button class="btn btn-light btn-sm mt-1">👍 4</button>
-						<button class="btn btn-light btn-sm mt-1" data-toggle="modal" data-target="#discussionModal" data-id="<?= $note->id; ?>">💬 2</button>
+						<button class="btn btn-light btn-sm mt-1" data-toggle="modal" data-target="#discussionModal" data-id="<?= $taREMOVED>idtask; ?>">💬 2</button>
 
 					</div>
 				</div>
@@ -39,14 +39,13 @@ Discussion
 
 <?php start_section('script'); ?>
 <script>
-
 	$(function() {
 
 		function fetch_discussion(id) {
-			
+
 			$.ajax({
 				type: "POST",
-				url: "Discussion/fetch_discussion",
+				url: "<?= site_url('Discussion/fetch_discussion'); ?>",
 				data: {
 					"id": id,
 					"type": "temporaire"
@@ -96,9 +95,9 @@ Discussion
 		}
 
 		$('#discussionModal').on('show.bs.modal', function(event) {
-			
+
 			let button = $(event.relatedTarget);
-			
+
 			let title = $(button).attr('data-title');
 			let id = $(button).attr('data-id');
 			let action = $(button).attr('data-action');
@@ -107,8 +106,8 @@ Discussion
 			$('#message_form').attr('data-id', id);
 
 			$('#discussionModalLabel').html('Discussion sur: ' + title ?? "Unknown");
-			
-			fetch_discussion(id, type);
+
+			fetch_discussion(id);
 		});
 
 		$('#discussionModal').on('hide.bs.modal', function(event) {
@@ -144,7 +143,7 @@ Discussion
 					$(submitter).html(buttonChild);
 
 					$('#message').val("");
-					fetch_discussion(id, type);
+					fetch_discussion(id);
 				}
 			});
 		});
