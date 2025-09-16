@@ -43,38 +43,9 @@
 				</a>
 			</li>
 			<li class="nav-item rounded">
-				<a class="nav-link text-secondary" href="<?= base_url('Calendar'); ?>">
-					<img class="mr-2" src="<?= base_url('assets/images/icons/figma/Calendar.png') ?>" />
-					<span class="nav-label">Calendrier</span>
-				</a>
-			</li>
-			
-		</ul>
-
-		<ul class="nav flex-column pt-4 pb-3 px-2 border-bottom">
-			<h6 class="sidebar-heading nav-label text-muted font-weight-light ml-3">
-				DATABASE
-			</h6>
-			<li class="nav-item rounded">
-				<a class="nav-link text-secondary" href="#">
-					<img class="mr-2" src="<?= base_url('assets/images/icons/figma/chartlineup.svg') ?>" />
-					<span class="nav-label">Loocker Studio</span>
-				</a>
-			</li>
-			
-			<li class="nav-item rounded">
 				<a class="nav-link text-secondary" href="<?= base_url('Plan_de_taggage') ?>">
 					<img class="mr-2" src="<?= base_url('assets/images/icons/figma/icon-briefcase.svg') ?>" />
 					<span class="nav-label">Plan de taggage</span>
-				</a>
-			</li>
-		</ul>
-
-		<ul class="nav flex-column pt-4 pb-3 px-2">
-			<li class="nav-item rounded">
-				<a class="nav-link text-secondary" href="#">
-					<img class="mr-2" src="<?= base_url('assets/images/icons/figma/icon-gear.svg') ?>" />
-					<span class="nav-label">Utilisateur</span>
 				</a>
 			</li>
 			<li class="nav-item rounded">
@@ -83,6 +54,38 @@
 					<span class="nav-label">GTM</span>
 				</a>
 			</li>
+			
+		</ul>
+
+		<ul class="nav flex-column pt-4 pb-3 px-2 border-bottom">
+			<h6 class="sidebar-heading nav-label text-muted font-weight-light ml-3">
+				Panning
+			</h6>
+			<li class="nav-item rounded">
+				<a class="nav-link text-secondary" href="<?= base_url('Calendar'); ?>">
+					<img class="mr-2" src="<?= base_url('assets/images/icons/figma/Calendar.png') ?>" />
+					<span class="nav-label">Calendrier</span>
+				</a>
+			</li>
+			
+			
+		</ul>
+
+		<ul class="nav flex-column pt-4 pb-3 px-2">
+			<li class="nav-item rounded">
+				<a class="nav-link text-secondary" href="<?= base_url('Conges') ?>">
+					<img class="mr-2" src="<?= base_url('assets/images/icons/figma/icon-briefcase.svg') ?>" />
+					<span class="nav-label">Congé</span>
+				</a>
+			</li>
+			<li class="nav-item rounded">
+				<a class="nav-link text-secondary" href="#">
+					<img class="mr-2" src="<?= base_url('assets/images/icons/figma/icon-gear.svg') ?>" />
+					<span class="nav-label">Utilisateur</span>
+				</a>
+			</li>
+			
+			
 		</ul>
 	</div>
 </nav>
