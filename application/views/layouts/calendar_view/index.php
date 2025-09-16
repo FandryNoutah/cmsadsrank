@@ -68,6 +68,52 @@
 <?php end_section(); ?>
 
 <?php start_section('content'); ?>
+<div style="text-align:center; margin-bottom: 15px;">
+    <label for="userFilter">Filtrer par utilisateur :</label>
+    <select id="userFilter" style="min-width: 200px;">
+        <option value="">-- Tous les utilisateurs --</option>
+    </select>
+</div>
+<script>
+let calendar;  // global
+
+document.addEventListener('DOMContentLoaded', function() {
+    var calendarEl = document.getElementById('calendar');
+
+    calendar = new FullCalendar.Calendar(calendarEl, {   // <-- sans var
+        initialView: 'dayGridMonth',
+        locale: 'fr',
+        events: function(fetchInfo, successCallback, failureCallback) {
+    var userId = $('#userFilter').val() || '';
+    $.ajax({
+        url: '<?php echo site_url("calendar/fetch_events"); ?>',
+        data: {
+            start: fetchInfo.startStr,
+            end: fetchInfo.endStr,
+            user_id: userId
+        },
+        dataType: 'json',
+        success: function(data) {
+            successCallback(data);
+        },
+        error: function(err) {
+            console.error("Erreur fetch_events", err);
+            failureCallback(err);
+        }
+    });
+}
+
+    });
+
+    calendar.render();
+
+    // maintenant ça marche car calendar est global
+    $('#userFilter').on('change', function() {
+        calendar.refetchEvents();
+    });
+});
+
+</script>
 <div style="max-width:1100px;margin:20px auto;">
     <div id="calendar"></div>
 </div>
@@ -153,37 +199,24 @@
         <button type="button" id="cancelEditBtn">Annuler</button>
     </form>
 </div>
-
 <script>
 document.addEventListener('DOMContentLoaded', function() {
+    // Si une instance existait (par sécurité) on la détruit
+    if (window.calendar && typeof window.calendar.destroy === 'function') {
+        try { window.calendar.destroy(); } catch(e) { /* ignore */ }
+    }
+
     const frenchHolidays = [
-        "2025-01-01",
-        "2025-04-21",
-        "2025-05-01",
-        "2025-05-08",
-        "2025-05-29",
-        "2025-06-09",
-        "2025-07-14",
-        "2025-08-15",
-        "2025-11-01",
-        "2025-11-11",
-        "2025-12-25",
-        "2026-01-01",
-        "2026-04-06",
-        "2026-05-01",
-        "2026-05-08",
-        "2026-05-14",
-        "2026-05-25",
-        "2026-07-14",
-        "2026-08-15",
-        "2026-11-01",
-        "2026-11-11",
-        "2026-12-25"
+        "2025-01-01","2025-04-21","2025-05-01","2025-05-08","2025-05-29","2025-06-09",
+        "2025-07-14","2025-08-15","2025-11-01","2025-11-11","2025-12-25",
+        "2026-01-01","2026-04-06","2026-05-01","2026-05-08","2026-05-14","2026-05-25",
+        "2026-07-14","2026-08-15","2026-11-01","2026-11-11","2026-12-25"
     ];
 
     var calendarEl = document.getElementById('calendar');
 
-    var calendar = new FullCalendar.Calendar(calendarEl, {
+    // Création unique de l'instance (on attache sur window pour être sûr qu'elle soit accessible)
+    window.calendar = new FullCalendar.Calendar(calendarEl, {
         initialView: 'dayGridMonth',
         locale: 'fr',
         timeZone: 'local',
@@ -192,15 +225,34 @@ document.addEventListener('DOMContentLoaded', function() {
             center: 'title',
             right: 'dayGridMonth,timeGridWeek,timeGridDay'
         },
-        events: '<?php echo site_url("calendar/fetch_events"); ?>',
         selectable: true,
         displayEventTime: false,
 
-        dayCellDidMount: function(info) {
-            const dateStr = info.date.getFullYear() + '-' +
-                String(info.date.getMonth() + 1).padStart(2, '0') + '-' +
-                String(info.date.getDate()).padStart(2, '0');
+        // --- récupération des events avec filtrage par user
+        events: function(fetchInfo, successCallback, failureCallback) {
+            var userId = $('#userFilter').val() || '';
+            console.log("fetch events", fetchInfo.startStr, fetchInfo.endStr, "userId=", userId);
+            $.ajax({
+                url: '<?php echo site_url("calendar/fetch_events"); ?>',
+                data: {
+                    start: fetchInfo.startStr,
+                    end: fetchInfo.endStr,
+                    user_id: userId
+                },
+                dataType: 'json',
+                success: function(data) {
+                    successCallback(data);
+                },
+                error: function(err) {
+                    console.error("Erreur fetch_events", err);
+                    failureCallback(err);
+                }
+            });
+        },
 
+        // --- surbrillance jours fériés/week-end
+        dayCellDidMount: function(info) {
+            const dateStr = info.date.toISOString().split("T")[0];
             const day = info.date.getDay();
             if (frenchHolidays.includes(dateStr)) {
                 info.el.style.backgroundColor = '#ffe5e5';
@@ -209,6 +261,7 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         },
 
+        // --- tooltip au hover
         eventMouseEnter: function(info) {
             var tooltip = document.createElement('div');
             tooltip.className = 'fc-tooltip';
@@ -229,25 +282,35 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         },
 
+        // --- clic sur un jour : ouvrir modal ajout
         dateClick: function(info) {
             $('#eventModal').show();
             var d = info.date;
-            var isoDate = d.getFullYear() + "-" +
-                ("0" + (d.getMonth() + 1)).slice(-2) + "-" +
-                ("0" + d.getDate()).slice(-2) + "T" +
-                ("0" + d.getHours()).slice(-2) + ":" +
-                ("0" + d.getMinutes()).slice(-2);
+            var localISO = d.getFullYear() + "-" +
+               String(d.getMonth() + 1).padStart(2, '0') + "-" +
+               String(d.getDate()).padStart(2, '0') + "T" +
+               String(d.getHours()).padStart(2, '0') + ":" +
+               String(d.getMinutes()).padStart(2, '0');
+
+$('input[name=start_date]').val(localISO);
+
+// et pour end date :
+var end = new Date(d.getTime() + 60 * 60 * 1000);
+var endLocalISO = end.getFullYear() + "-" +
+                  String(end.getMonth() + 1).padStart(2, '0') + "-" +
+                  String(end.getDate()).padStart(2, '0') + "T" +
+                  String(end.getHours()).padStart(2, '0') + ":" +
+                  String(end.getMinutes()).padStart(2, '0');
+
+$('input[name=end_date]').val(endLocalISO);
+
             $('input[name=start_date]').val(isoDate);
 
             var end = new Date(d.getTime() + 60 * 60 * 1000);
-            var isoEnd = end.getFullYear() + "-" +
-                ("0" + (end.getMonth() + 1)).slice(-2) + "-" +
-                ("0" + end.getDate()).slice(-2) + "T" +
-                ("0" + end.getHours()).slice(-2) + ":" +
-                ("0" + end.getMinutes()).slice(-2);
-            $('input[name=end_date]').val(isoEnd);
+            $('input[name=end_date]').val(end.toISOString().slice(0,16));
         },
 
+        // --- clic sur événement : détail via AJAX
         eventClick: function(info) {
             var id = info.event.id;
             $.get('<?php echo site_url("calendar/event_detail"); ?>/' + id, function(data){
@@ -263,9 +326,13 @@ document.addEventListener('DOMContentLoaded', function() {
             }, 'json');
         },
 
+        // --- clic droit : menu contextuel (modifier / supprimer)
         eventDidMount: function(info) {
             info.el.addEventListener('contextmenu', function(e) {
                 e.preventDefault();
+
+                // supprimer tout menu existant (sécurité)
+                document.querySelectorAll('.fc-contextmenu').forEach(function(m){ m.remove(); });
 
                 var menu = document.createElement('div');
                 menu.className = 'fc-contextmenu';
@@ -294,29 +361,53 @@ document.addEventListener('DOMContentLoaded', function() {
                     menu.remove();
                 });
 
-                document.addEventListener('click', function handler() {
-                    if (menu) menu.remove();
-                    document.removeEventListener('click', handler);
-                });
+                // fermer le menu au clic ailleurs
+                setTimeout(function(){
+                    document.addEventListener('click', function handler() {
+                        if (menu) menu.remove();
+                        document.removeEventListener('click', handler);
+                    });
+                }, 0);
             });
         }
     });
 
-    calendar.render();
+    // render unique
+    window.calendar.render();
 
+    // --- chargement utilisateurs pour filtre et selects
     function loadUsers() {
         $.get('<?php echo site_url("calendar/fetch_users"); ?>', function(users){
-            var $sel = $('#attendeesSelect');
-            $sel.empty();
+            var $filter = $('#userFilter');
+            $filter.empty();
+            $filter.append('<option value="">-- Tous les utilisateurs --</option>');
             users.forEach(function(u){
-                var name = (u.first_name ? u.first_name : '') + (u.last_name ? ' ' + u.last_name : '');
-                if (!name.trim()) name = u.username || u.email;
-                $sel.append($('<option>').val(u.id).text(name));
+                var name = ((u.first_name ? u.first_name : '') + (u.last_name ? ' ' + u.last_name : '')).trim();
+                if (!name) name = u.username || u.email;
+                $filter.append($('<option>').val(u.id).text(name));
             });
-        }, 'json');
+
+            // participants select (ajout)
+            var $attendees = $('#attendeesSelect');
+            $attendees.empty();
+            users.forEach(function(u){
+                var name = ((u.first_name ? u.first_name : '') + (u.last_name ? ' ' + u.last_name : '')).trim();
+                if (!name) name = u.username || u.email;
+                $attendees.append($('<option>').val(u.id).text(name));
+            });
+        }, 'json').fail(function(err){
+            console.error('Erreur fetch_users', err);
+        });
     }
+
     loadUsers();
 
+    // --- filtre utilisateur
+    $('#userFilter').on('change', function() {
+        window.calendar.refetchEvents();
+    });
+
+    // --- ajout d'un événement
     $('#eventForm').on('submit', function(e){
         e.preventDefault();
         var formData = $(this).serialize();
@@ -326,9 +417,9 @@ document.addEventListener('DOMContentLoaded', function() {
             data: formData,
             success: function(res){
                 $('#eventModal').hide();
-                calendar.refetchEvents();
                 $('#eventForm')[0].reset();
                 loadUsers();
+                window.calendar.refetchEvents();
             },
             error: function(xhr){
                 alert('Erreur: ' + xhr.statusText);
@@ -337,22 +428,32 @@ document.addEventListener('DOMContentLoaded', function() {
     });
     $('#cancelBtn').on('click', function(){ $('#eventModal').hide(); });
 
+    // --- ouverture modal édition
     function openEditModal(event) {
         $('#editEventModal').show();
         $('input[name="id"]').val(event.id);
         $('input[name="title"]').val(event.title);
         $('textarea[name="description"]').val(event.extendedProps.description || '');
+        function toLocalISOString(dt) {
+    return dt.getFullYear() + '-' +
+           String(dt.getMonth() + 1).padStart(2, '0') + '-' +
+           String(dt.getDate()).padStart(2, '0') + 'T' +
+           String(dt.getHours()).padStart(2, '0') + ':' +
+           String(dt.getMinutes()).padStart(2, '0');
+}
 
-        $('input[name="start_date"]').val(event.start.toISOString().slice(0,16));
-        $('input[name="end_date"]').val(event.end ? event.end.toISOString().slice(0,16) : event.start.toISOString().slice(0,16));
-        $('input[name="color"]').val(event.backgroundColor);
+$('input[name="start_date"]').val(toLocalISOString(event.start));
+$('input[name="end_date"]').val(event.end ? toLocalISOString(event.end) : toLocalISOString(event.start));
 
+        $('input[name="color"]').val(event.backgroundColor || event.extendedProps.color || '#3788d8');
+
+        // remplir et pré-sélectionner les participants (par nom, si fetch_events renvoie des noms)
         $.get('<?php echo site_url("calendar/fetch_users"); ?>', function(users){
             var $sel = $('#editAttendeesSelect');
             $sel.empty();
             users.forEach(function(u){
-                var name = (u.first_name ? u.first_name : '') + (u.last_name ? ' ' + u.last_name : '');
-                if (!name.trim()) name = u.username || u.email;
+                var name = ((u.first_name ? u.first_name : '') + (u.last_name ? ' ' + u.last_name : '')).trim();
+                if (!name) name = u.username || u.email;
                 var opt = $('<option>').val(u.id).text(name);
                 if (event.extendedProps.attendees && event.extendedProps.attendees.includes(name)) {
                     opt.prop('selected', true);
@@ -362,6 +463,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }, 'json');
     }
 
+    // --- mise à jour d'un événement
     $('#editEventForm').on('submit', function(e){
         e.preventDefault();
         var formData = $(this).serialize();
@@ -371,7 +473,7 @@ document.addEventListener('DOMContentLoaded', function() {
             data: formData,
             success: function(res){
                 $('#editEventModal').hide();
-                calendar.refetchEvents();
+                window.calendar.refetchEvents();
             },
             error: function(xhr){
                 alert('Erreur: ' + xhr.statusText);
@@ -380,15 +482,21 @@ document.addEventListener('DOMContentLoaded', function() {
     });
     $('#cancelEditBtn').on('click', function(){ $('#editEventModal').hide(); });
 
+    // --- suppression
     function deleteEvent(eventId) {
         if (confirm("Supprimer cet événement ?")) {
             $.post('<?php echo site_url("calendar/delete_event"); ?>', {id: eventId}, function(res){
-                calendar.refetchEvents();
+                window.calendar.refetchEvents();
             }, 'json');
         }
     }
+
+    // expose functions to global if needed (optionnel)
+    window.openEditModal = openEditModal;
+    window.deleteEvent = deleteEvent;
 });
 </script>
+
 
 </body>
 </html>
