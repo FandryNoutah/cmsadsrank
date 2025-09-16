@@ -9,49 +9,49 @@
 				<a href="<?= base_url('Discussion'); ?>" class="nav-link text-decoration-none <?= ($this->uri->segment(2) == "") ? 'bg-light' : ''; ?>">
 					<img class="mr-2" src="<?= base_url('assets/images/icons/figma/EnvelopeOpen.png') ?>">
 					Tout les messages
-					<span class="badge badge-dark ml-2">12</span>
+					<span class="badge badge-dark ml-2"><?= $nbr_discussion_all; ?></span>
 				</a>
 			</li>
 			<li class="nav-item rounded">
 				<a href="<?= base_url('Discussion/Note'); ?>" class="nav-link text-decoration-none <?= ($this->uri->segment(2) == "Note") ? 'bg-light' : ''; ?>">
 					<img class="mr-2" src="<?= base_url('assets/images/icons/figma/EnvelopeOpen.png') ?>">
 					Note
-					<span class="badge badge-dark ml-2">8</span>
+					<span class="badge badge-dark ml-2"><?= $nbr_discussion_note; ?></span>
 				</a>
 			</li>
 			<li class="nav-item rounded">
 				<a href="<?= base_url('Discussion/Team_task'); ?>" class="nav-link text-decoration-none <?= ($this->uri->segment(2) == "Team_task") ? 'bg-light' : ''; ?>">
 					<img class="mr-2" src="<?= base_url('assets/images/icons/figma/EnvelopeOpen.png') ?>">
 					Team Task
-					<span class="badge badge-dark ml-2"><?= $nbr_discussion_gtm; ?></span>
+					<span class="badge badge-dark ml-2"><?= $nbr_discussion_task; ?></span>
 				</a>
 			</li>
 			<li class="nav-item rounded">
 				<a href="<?= base_url('Discussion/Brief'); ?>" class="nav-link text-decoration-none <?= ($this->uri->segment(2) == "Brief") ? 'bg-light' : ''; ?>">
 					<img class="mr-2" src="<?= base_url('assets/images/icons/figma/EnvelopeOpen.png') ?>">
 					Brief
-					<span class="badge badge-dark ml-2">8</span>
+					<span class="badge badge-dark ml-2">0</span>
 				</a>
 			</li>
 			<li class="nav-item rounded">
 				<a href="<?= base_url('Discussion/Temporaire'); ?>" class="nav-link text-decoration-none <?= ($this->uri->segment(2) == "Temporaire") ? 'bg-light' : ''; ?>">
 					<img class="mr-2" src="<?= base_url('assets/images/icons/figma/EnvelopeOpen.png') ?>">
 					Temporaire
-					<span class="badge badge-dark ml-2">24</span>
+					<span class="badge badge-dark ml-2">0</span>
 				</a>
 			</li>
 			<li class="nav-item rounded">
 				<a href="<?= base_url('Discussion/Gtm'); ?>" class="nav-link text-decoration-none <?= ($this->uri->segment(2) == "Gtm") ? 'bg-light' : ''; ?>">
 					<img class="mr-2" src="<?= base_url('assets/images/icons/figma/EnvelopeOpen.png') ?>">
 					GTM
-					<span class="badge badge-dark ml-2">15</span>
+					<span class="badge badge-dark ml-2"><?= $nbr_discussion_gtm; ?></span>
 				</a>
 			</li>
 			<li class="nav-item rounded">
 				<a href="<?= base_url('trash'); ?>" class="nav-link text-decoration-none <?= ($this->uri->segment(2) == "Trash") ? 'bg-light' : ''; ?>">
 					<img class="mr-2" src="<?= base_url('assets/images/icons/figma/EnvelopeOpen.png') ?>">
 					Trash
-					<span class="badge badge-dark ml-2">28</span>
+					<span class="badge badge-dark ml-2">0</span>
 				</a>
 			</li>
 		</ul>
