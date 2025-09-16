@@ -25,8 +25,22 @@ class Discussion extends MY_Controller
 	public function index()
 	{
 		$idusers = $this->current_user->id;
-		$this->data['notes'] = $this->Note_model->get_for_user($idusers);
-		$this->data['tasks'] = $this->Task_model->get_task_for_users_by_type($idusers);
+		$notes = $this->data['notes'] = $this->Note_model->get_for_user($idusers);
+		$tasks = $this->data['tasks'] = $this->Task_model->get_task_for_users_by_type($idusers);
+
+		foreach ($tasks as $index => $task) {
+			$task->count_messages = $this->Task_message_model->count_messages_by_task($task->idtask);
+			if ($task->count_messages <= 0) {
+				unset($tasks[$index]);
+			}
+		}
+
+		foreach ($notes as $index => $note) {
+			$note->count_messages = $this->Note_message_model->count_messages_by_note($note->id);
+			if ($note->count_messages <= 0) {
+				unset($notes[$index]);
+			}
+		}
 
 		$this->content = "layouts/discussion/index.php";
 		$this->layout();
@@ -35,8 +49,15 @@ class Discussion extends MY_Controller
 	public function Note()
 	{
 		$idusers = $this->current_user->id;
-		$this->data['notes'] = $this->Note_model->get_for_user($idusers);
+		$notes = $this->data['notes'] = $this->Note_model->get_for_user($idusers);
 
+		foreach ($notes as $index => $note) {
+			$note->count_messages = $this->Note_message_model->count_messages_by_note($note->id);
+			if ($note->count_messages <= 0) {
+				unset($notes[$index]);
+			}
+		}
+		
 		$this->content = "layouts/discussion/note/index.php";
 		$this->layout();
 	}
@@ -46,6 +67,12 @@ class Discussion extends MY_Controller
 
 		$idusers = $this->current_user->id;
 		$tasks = $this->data['tasks'] = $this->Task_model->get_task_for_users_by_type($idusers, 1);
+		foreach ($tasks as $index => $task) {
+			$task->count_messages = $this->Task_message_model->count_messages_by_task($task->idtask);
+			if ($task->count_messages <= 0) {
+				unset($tasks[$index]);
+			}
+		}
 
 		$this->content = "layouts/Discussion/Team_task/index.php";
 		$this->layout();
@@ -55,6 +82,12 @@ class Discussion extends MY_Controller
 	{
 		$idusers = $this->current_user->id;
 		$tasks = $this->data['tasks'] = $this->Task_model->get_task_for_users_by_type($idusers, 5);
+		foreach ($tasks as $index => $task) {
+			$task->count_messages = $this->Task_message_model->count_messages_by_task($task->idtask);
+			if ($task->count_messages <= 0) {
+				unset($tasks[$index]);
+			}
+		}
 
 		$this->content = "layouts/discussion/brief/index.php";
 		$this->layout();
@@ -64,6 +97,12 @@ class Discussion extends MY_Controller
 	{
 		$idusers = $this->current_user->id;
 		$tasks = $this->data['tasks'] = $this->Task_model->get_task_for_users_by_type($idusers, 2);
+		foreach ($tasks as $index => $task) {
+			$task->count_messages = $this->Task_message_model->count_messages_by_task($task->idtask);
+			if ($task->count_messages <= 0) {
+				unset($tasks[$index]);
+			}
+		}
 
 		$this->content = "layouts/discussion/temporaire/index.php";
 		$this->layout();
@@ -72,7 +111,13 @@ class Discussion extends MY_Controller
 	public function Gtm()
 	{
 		$idusers = $this->current_user->id;
-		$this->data['tasks'] = $this->Task_model->get_all_procedure_gtm($idusers);
+		$tasks = $this->data['tasks'] = $this->Task_model->get_all_procedure_gtm($idusers);
+		foreach ($tasks as $index => $task) {
+			$task->count_messages = $this->Task_message_model->count_messages_by_task($task->idtask);
+			if ($task->count_messages <= 0) {
+				unset($tasks[$index]);
+			}
+		}
 
 		$this->content = "layouts/discussion/gtm/index.php";
 		$this->layout();
