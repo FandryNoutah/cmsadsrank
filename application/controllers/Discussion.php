@@ -25,8 +25,8 @@ class Discussion extends MY_Controller
 	public function index()
 	{
 		$idusers = $this->current_user->id;
-		$notes = $this->data['notes'] = $this->Note_model->get_for_user($idusers);
-		$tasks = $this->data['tasks'] = $this->Task_model->get_task_for_users_by_type($idusers);
+		$tasks = $this->Task_model->get_task_for_users_by_type($idusers);
+		$notes = $this->Note_model->get_for_user($idusers);
 
 		foreach ($tasks as $index => $task) {
 			$taREMOVED>count_messages = $this->Task_message_model->count_messages_by_task($taREMOVED>idtask);
@@ -34,6 +34,7 @@ class Discussion extends MY_Controller
 				unset($tasks[$index]);
 			}
 		}
+		$this->data['tasks'] = $tasks;
 
 		foreach ($notes as $index => $note) {
 			$note->count_messages = $this->Note_message_model->count_messages_by_note($note->id);
@@ -41,6 +42,7 @@ class Discussion extends MY_Controller
 				unset($notes[$index]);
 			}
 		}
+		$this->data['notes'] = $notes;
 
 		$this->content = "layouts/discussion/index.php";
 		$this->layout();
@@ -49,7 +51,7 @@ class Discussion extends MY_Controller
 	public function Note()
 	{
 		$idusers = $this->current_user->id;
-		$notes = $this->data['notes'] = $this->Note_model->get_for_user($idusers);
+		$notes = $this->Note_model->get_for_user($idusers);
 
 		foreach ($notes as $index => $note) {
 			$note->count_messages = $this->Note_message_model->count_messages_by_note($note->id);
@@ -57,6 +59,8 @@ class Discussion extends MY_Controller
 				unset($notes[$index]);
 			}
 		}
+
+		$this->data['notes'] = $notes;
 		
 		$this->content = "layouts/discussion/note/index.php";
 		$this->layout();
@@ -66,13 +70,14 @@ class Discussion extends MY_Controller
 	{
 
 		$idusers = $this->current_user->id;
-		$tasks = $this->data['tasks'] = $this->Task_model->get_task_for_users_by_type($idusers, 1);
+		$tasks = $this->Task_model->get_task_for_users_by_type($idusers, 1);
 		foreach ($tasks as $index => $task) {
 			$taREMOVED>count_messages = $this->Task_message_model->count_messages_by_task($taREMOVED>idtask);
 			if ($taREMOVED>count_messages <= 0) {
 				unset($tasks[$index]);
 			}
 		}
+		$this->data['tasks'] = $tasks;
 
 		$this->content = "layouts/Discussion/Team_task/index.php";
 		$this->layout();
@@ -81,13 +86,14 @@ class Discussion extends MY_Controller
 	public function Brief()
 	{
 		$idusers = $this->current_user->id;
-		$tasks = $this->data['tasks'] = $this->Task_model->get_task_for_users_by_type($idusers, 5);
+		$tasks = $this->Task_model->get_task_for_users_by_type($idusers, 5);
 		foreach ($tasks as $index => $task) {
 			$taREMOVED>count_messages = $this->Task_message_model->count_messages_by_task($taREMOVED>idtask);
 			if ($taREMOVED>count_messages <= 0) {
 				unset($tasks[$index]);
 			}
 		}
+		$this->data['tasks'] = $tasks;
 
 		$this->content = "layouts/discussion/brief/index.php";
 		$this->layout();
@@ -96,13 +102,14 @@ class Discussion extends MY_Controller
 	public function Temporaire()
 	{
 		$idusers = $this->current_user->id;
-		$tasks = $this->data['tasks'] = $this->Task_model->get_task_for_users_by_type($idusers, 2);
+		$tasks = $this->Task_model->get_task_for_users_by_type($idusers, 2);
 		foreach ($tasks as $index => $task) {
 			$taREMOVED>count_messages = $this->Task_message_model->count_messages_by_task($taREMOVED>idtask);
 			if ($taREMOVED>count_messages <= 0) {
 				unset($tasks[$index]);
 			}
 		}
+		$this->data['tasks'] = $tasks;
 
 		$this->content = "layouts/discussion/temporaire/index.php";
 		$this->layout();
@@ -111,13 +118,14 @@ class Discussion extends MY_Controller
 	public function Gtm()
 	{
 		$idusers = $this->current_user->id;
-		$tasks = $this->data['tasks'] = $this->Task_model->get_all_procedure_gtm($idusers);
+		$tasks = $this->Task_model->get_all_procedure_gtm($idusers);
 		foreach ($tasks as $index => $task) {
 			$taREMOVED>count_messages = $this->Task_message_model->count_messages_by_task($taREMOVED>idtask);
 			if ($taREMOVED>count_messages <= 0) {
 				unset($tasks[$index]);
 			}
 		}
+		$this->data['tasks'] = $tasks;
 
 		$this->content = "layouts/discussion/gtm/index.php";
 		$this->layout();
