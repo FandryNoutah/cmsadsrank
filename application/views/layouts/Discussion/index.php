@@ -26,7 +26,7 @@ Discussion
 							<div class="text-muted small mb-2"><?= nl2br(htmlspecialchars($note->content)); ?></div>
 
 							<button class="btn btn-light btn-sm mt-1">👍 4</button>
-							<button class="btn btn-light btn-sm mt-1" data-toggle="modal" data-target="#discussionModal" data-id="<?= $note->id; ?>">
+							<button class="btn btn-light btn-sm mt-1" data-toggle="modal" data-target="#discussionModal" data-type="note" data-id="<?= $note->id; ?>">
 								💬
 								<?= $note->count_messages; ?>
 							</button>
@@ -49,7 +49,7 @@ Discussion
 							<div class="text-muted small mb-2"><?= nl2br(htmlspecialchars($task->description)); ?></div>
 
 							<button class="btn btn-light btn-sm mt-1">👍 4</button>
-							<button class="btn btn-light btn-sm mt-1" data-toggle="modal" data-target="#discussionModal" data-id="<?= $task->idtask; ?>">
+							<button class="btn btn-light btn-sm mt-1" data-toggle="modal" data-target="#discussionModal" data-type="task" data-id="<?= $task->idtask; ?>">
 								💬
 								<?= $task->count_messages; ?>
 							</button>
