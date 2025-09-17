@@ -25,7 +25,10 @@ Discussion
 						<div class="text-muted small mb-2"><?= nl2br(htmlspecialchars($note->content)); ?></div>
 
 						<button class="btn btn-light btn-sm mt-1">👍 4</button>
-						<button class="btn btn-light btn-sm mt-1" data-toggle="modal" data-target="#discussionModal" data-id="<?= $note->id; ?>">💬 2</button>
+						<button class="btn btn-light btn-sm mt-1" data-toggle="modal" data-target="#discussionModal" data-id="<?= $note->id; ?>">
+							💬
+							<?= $note->count_messages; ?>
+						</button>
 
 					</div>
 				</div>
