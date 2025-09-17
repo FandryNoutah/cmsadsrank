@@ -9,6 +9,12 @@ class Discussion_model extends CI_Model
 	protected $table4 = "donnee";
 	protected $table5 = "upsell";
 
+	public function __construct()
+    {
+        parent::__construct();
+        $this->load->database();
+    }
+
 	public function get_discussion_note_by_id_users($idusers)
 	{
 		$this->db->select('group_messages_note.*, users.*');
@@ -20,11 +26,37 @@ class Discussion_model extends CI_Model
 		return $query->result();
 	}
 
-	public function get_discussion_task_by_id_users($idusers)
+	public function get_discussion_teamtask_by_id_users($idusers)
 	{
 		$this->db->select('group_messages.*, users.*');
 		$this->db->from('group_messages');
 		$this->db->join('users', 'users.id = group_messages.user_id', 'left');
+		$this->db->join('users', 'users.id = group_messages.user_id', 'right');
+		$this->db->where('group_messages.user_id', $idusers);
+
+		$query = $this->db->get();
+		return $query->result();
+	}
+
+	public function get_discussion_temporaire_by_id_users($idusers)
+	{
+		$this->db->select('group_messages.*, users.*, tasks.*');
+		$this->db->from('group_messages');
+		$this->db->join('users', 'users.id = group_messages.user_id', 'left');
+		$this->db->join('tasks', 'tasks.idtask = group_messages.task_id', 'right');
+		$this->db->where('group_messages.user_id', $idusers);
+		$this->db->where('tasks.type_tache', 1);
+
+		$query = $this->db->get();
+		return $query->result();
+	}
+
+	public function get_discussion_brief_by_id_users($idusers)
+	{
+		$this->db->select('group_messages.*, users.*');
+		$this->db->from('group_messages');
+		$this->db->join('users', 'users.id = group_messages.user_id', 'left');
+		$this->db->join('users', 'users.id = group_messages.user_id', 'right');
 		$this->db->where('group_messages.user_id', $idusers);
 
 		$query = $this->db->get();
