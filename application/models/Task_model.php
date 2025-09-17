@@ -7,6 +7,21 @@ class Task_model extends CI_Model
 		parent::__construct();
 	}
 
+	public function get_task_for_users_by_type($user_id, $type = 0)
+	{
+		$this->db->select('tasks.*, users.*');
+		$this->db->from('tasks');
+		$this->db->join('users', 'users.id = tasks.AM', 'left');
+
+		$this->db->where('tasks.AM', $user_id);
+		if ($type !== 0) {
+			$this->db->where('tasks.type_tache', $type);
+		}
+
+		$query = $this->db->get();
+		return $query->result();
+	}
+
 	// Méthode pour récupérer une tâche par son ID
 	public function get_All_task_non_complete()
 	{
@@ -296,21 +311,21 @@ class Task_model extends CI_Model
 		// Retourner le résultat sous forme de tableau d'objets
 		return $query->result();
 	}
-	public function get_all_procedure_gtm()
+	public function get_all_procedure_gtm($user_id = null)
 	{
-		// Construire la requête SQL
-		$sql = "SELECT tasks.*, users.*, clients.*, am_clients.*, assigned_clients.* 
-            FROM tasks 
-            LEFT JOIN users ON users.id = tasks.assigned_to 
-            LEFT JOIN clients ON clients.idclients = tasks.idclients 
-            LEFT JOIN clients AS am_clients ON am_clients.idclients = tasks.AM 
-            LEFT JOIN clients AS assigned_clients ON assigned_clients.idclients = tasks.assigned_to 
-            WHERE tasks.procedure_gtm = 1";
+		$this->db->select('tasks.*, users.*, clients.*, am_clients.*, assigned_clients.*');
+		$this->db->from('tasks');
+		$this->db->join('users', 'users.id = tasks.assigned_to', 'left');
+		$this->db->join('clients', 'clients.idclients = tasks.idclients', 'left');
+		$this->db->join('clients as am_clients', 'am_clients.idclients = tasks.AM', 'left');
+		$this->db->join('clients as assigned_clients', 'assigned_clients.idclients = tasks.assigned_to', 'left');
+		$this->db->where('tasks.procedure_gtm', 1);
 
-		// Exécuter la requête avec le paramètre $idclients
-		$query = $this->db->query($sql);
+		if ($user_id !== null) {
+			$this->db->where('tasks.AM', $user_id);
+		}
 
-		// Retourner le résultat sous forme de tableau d'objets
+		$query = $this->db->get();
 		return $query->result();
 	}
 
