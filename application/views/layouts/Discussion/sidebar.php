@@ -9,21 +9,21 @@
 				<a href="<?= base_url('Discussion'); ?>" class="nav-link text-decoration-none <?= ($this->uri->segment(2) == "") ? 'bg-light' : ''; ?>">
 					<img class="mr-2" src="<?= base_url('assets/images/icons/figma/EnvelopeOpen.png') ?>">
 					Tout les messages
-					<span class="badge badge-dark ml-2"><?= $nbr_discussion_all; ?></span>
+					<span class="badge badge-dark ml-2"><!--?= $nbr_discussion_all; ?-->0</span>
 				</a>
 			</li>
 			<li class="nav-item rounded">
 				<a href="<?= base_url('Discussion/Note'); ?>" class="nav-link text-decoration-none <?= ($this->uri->segment(2) == "Note") ? 'bg-light' : ''; ?>">
 					<img class="mr-2" src="<?= base_url('assets/images/icons/figma/EnvelopeOpen.png') ?>">
 					Note
-					<span class="badge badge-dark ml-2"><?= $nbr_discussion_note; ?></span>
+					<span class="badge badge-dark ml-2"><!--?= $nbr_discussion_note; ?-->0</span>
 				</a>
 			</li>
 			<li class="nav-item rounded">
 				<a href="<?= base_url('Discussion/Team_task'); ?>" class="nav-link text-decoration-none <?= ($this->uri->segment(2) == "Team_task") ? 'bg-light' : ''; ?>">
 					<img class="mr-2" src="<?= base_url('assets/images/icons/figma/EnvelopeOpen.png') ?>">
 					Team Task
-					<span class="badge badge-dark ml-2"><?= $nbr_discussion_task; ?></span>
+					<span class="badge badge-dark ml-2"><!--?= $nbr_discussion_task; ?-->0</span>
 				</a>
 			</li>
 			<li class="nav-item rounded">
@@ -44,7 +44,7 @@
 				<a href="<?= base_url('Discussion/Gtm'); ?>" class="nav-link text-decoration-none <?= ($this->uri->segment(2) == "Gtm") ? 'bg-light' : ''; ?>">
 					<img class="mr-2" src="<?= base_url('assets/images/icons/figma/EnvelopeOpen.png') ?>">
 					GTM
-					<span class="badge badge-dark ml-2"><?= $nbr_discussion_gtm; ?></span>
+					<span class="badge badge-dark ml-2"><!--?= $nbr_discussion_gtm; ?-->0</span>
 				</a>
 			</li>
 			<li class="nav-item rounded">

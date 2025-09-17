@@ -1,11 +1,3 @@
-<?php
-$totalMessages = 0;
-
-foreach ($tache as $t) {
-	$totalMessages += $t->count_messages;
-}
-?>
-
 <?php start_section('page_title'); ?>
 Discussion
 <?php end_section(); ?>
@@ -19,22 +11,22 @@ Discussion
 	<div class="col" style="height: calc(100vh - 130px); overflow-y:auto;">
 		<div class="container-fluid">
 
-			<h5 class="mb-4">📥 Message Team Task <small>(<?= $totalMessages; ?> messages)</small></h5>
+			<h5 class="mb-4">📥 Message Team Task <small>(<?= count($tasks); ?> messages)</small></h5>
 
 			<div class="message-list">
-				<?php foreach ($notes as $note): ?>
+				<?php foreach ($tasks as $task): ?>
 					<div class="card mb-3">
 						<div class="card-body">
 							<div class="d-flex justify-content-between mb-2">
-								<span class="font-weight-bold"><?= nl2br(htmlspecialchars($note->author)); ?></span>
-								<span class="text-muted small"><?= nl2br(htmlspecialchars($note->date_due)); ?></span>
+								<span class="font-weight-bold"><?= nl2br(htmlspecialchars($task->username)); ?></span>
+								<span class="text-muted small"><?= nl2br(htmlspecialchars($task->date_due)); ?></span>
 							</div>
 
-							<div class="font-weight-bold mb-1"><?= htmlspecialchars($note->title); ?></div>
-							<div class="text-muted small mb-2"><?= nl2br(htmlspecialchars($note->content)); ?></div>
+							<div class="font-weight-bold mb-1"><?= htmlspecialchars($task->title); ?></div>
+							<div class="text-muted small mb-2"><?= nl2br(htmlspecialchars($task->description)); ?></div>
 
 							<button class="btn btn-light btn-sm mt-1">👍 4</button>
-							<button class="btn btn-light btn-sm mt-1" data-toggle="modal" data-target="#discussionModal" data-id="<?= $note->id; ?>">💬 2</button>
+							<button class="btn btn-light btn-sm mt-1" data-toggle="modal" data-target="#discussionModal" data-id="<?= $task->idtask; ?>">💬 2</button>
 
 						</div>
 					</div>
@@ -57,7 +49,7 @@ Discussion
 
 			$.ajax({
 				type: "POST",
-				url: "Discussion/fetch_discussion",
+				url: "<?= site_url('Discussion/fetch_discussion'); ?>",
 				data: {
 					"id": id,
 				},
@@ -118,7 +110,7 @@ Discussion
 
 			$('#discussionModalLabel').html('Discussion sur: ' + title ?? "Unknown");
 
-			fetch_discussion(id, type);
+			fetch_discussion(id);
 		});
 
 		$('#discussionModal').on('hide.bs.modal', function(event) {
