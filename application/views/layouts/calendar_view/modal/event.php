@@ -9,45 +9,67 @@
 					</button>
 				</div>
 				<div class="modal-body">
-					<label for="title-select">Titre</label><br>
-					<select id="title-select" name="title" style="width:100%" onchange="toggleCustomTitle(this)">
-						<option value="Télétravail">Télétravail</option>
-						<option value="Perso">Perso</option>
-						<option value="Soutenance">Soutenance</option>
-						<option value="Formation">Formation</option>
-						<option value="Maladie">Maladie</option>
-						<option value="Congé">Congé</option>
-						<option value="Contact">Contact</option>
-						<option value="Autre">Autre...</option>
-					</select>
 
-					<div id="custom-title-container" style="margin-top:10px; display:none;">
+					<div class="form-group">
+
+						<label for="title-select">Titre</label><br>
+						<select id="title-select" class="form-control" name="title" onchange="toggleCustomTitle(this)">
+							<option value="Télétravail">Télétravail</option>
+							<option value="Perso">Perso</option>
+							<option value="Soutenance">Soutenance</option>
+							<option value="Formation">Formation</option>
+							<option value="Maladie">Maladie</option>
+							<option value="Congé">Congé</option>
+							<option value="Contact">Contact</option>
+							<option value="Autre">Autre...</option>
+						</select>
+					</div>
+
+					<div class="form-group d-none" id="custom-title-container">
 						<label for="custom-title">Titre personnalisé</label><br>
-						<input type="text" id="custom-title" name="custom_title" style="width:100%">
+						<input type="text" id="custom-title" class="form-control" name="custom_title">
 					</div>
 
 					<br><br>
 
-					<label>Description</label><br>
-					<textarea name="description" placeholder="Description" style="width:100%"></textarea><br><br>
+					<div class="form-group">
 
-					<label>Début</label><br>
-					<input type="datetime-local" name="start_date" required style="width:100%"><br><br>
+						<label>Description</label><br>
+						<textarea name="description" class="form-control" placeholder="Description"></textarea><br><br>
+					</div>
 
-					<label>Fin</label><br>
-					<input type="datetime-local" name="end_date" required style="width:100%"><br><br>
+					<div class="form-group">
+						<label>Début</label><br>
+						<input type="datetime-local" class="form-control" name="start_date" required><br><br>
 
-					<label>Couleur</label><br>
-					<input type="color" name="color" value="#3788d8"><br><br>
+					</div>
 
-					<label>Participants (tagger)</label><br>
-					<select name="attendees[]" id="attendeesSelect" multiple style="width:100%; min-height:90px;">
-					</select>
+					<div class="form-group">
+
+						<label>Fin</label><br>
+						<input type="datetime-local" class="form-control" name="end_date" required><br><br>
+					</div>
+
+					<div class="form-group">
+						<label>Couleur</label><br>
+						<input type="color" name="color" value="#3788d8"><br><br>
+
+					</div>
+
+					<div class="form-group">
+						<label>Participants (tagger)</label><br>
+						<select class="form-control" name="attendees[]" id="attendeesSelect" multiple>
+						</select>
+
+					</div>
+
 					<small>Ctrl/Cmd+Click pour sélectionner plusieurs</small>
 					<br><br>
 
-					<button type="submit">Enregistrer</button>
-					<button type="button" id="cancelBtn">Annuler</button>
+				</div>
+				<div class="modal-footer">
+					<button type="button" id="cancelBtn" class="btn btn-secondary" data-dismiss="modal" aria-label="Close">Annuler</button>
+					<button type="submit" class="btn btn-dark">Enregistrer</button>
 				</div>
 			</div>
 		</div>
