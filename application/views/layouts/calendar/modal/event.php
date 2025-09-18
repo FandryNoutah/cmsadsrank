@@ -1,6 +1,6 @@
 <form id="eventForm">
-	<div class="modal fade" id="eventModal" tabindex="-1" aria-labelledby="eventModalLabel" aria-hidden="true">
-		<div class="modal-dialog modal-dialog-scrollable" style="width: 640px;">
+	<div class="modal fade" id="eventModal" aria-labelledby="eventModalLabel" aria-hidden="true">
+		<div class="modal-dialog modal-dialog-scrollable">
 			<div class="modal-content">
 				<div class="modal-header">
 					<h5 class="modal-title" id="eventModalLabel">Ajouter un événement</h5>
@@ -30,29 +30,29 @@
 						<input type="text" id="custom-title" class="form-control" name="custom_title">
 					</div>
 
-					<br><br>
+					
 
 					<div class="form-group">
 
 						<label>Description</label><br>
-						<textarea name="description" class="form-control" placeholder="Description"></textarea><br><br>
+						<textarea name="description" class="form-control" placeholder="Description"></textarea>
 					</div>
 
 					<div class="form-group">
 						<label>Début</label><br>
-						<input type="datetime-local" class="form-control" name="start_date" required><br><br>
+						<input type="datetime-local" class="form-control" name="start_date" required>
 
 					</div>
 
 					<div class="form-group">
 
 						<label>Fin</label><br>
-						<input type="datetime-local" class="form-control" name="end_date" required><br><br>
+						<input type="datetime-local" class="form-control" name="end_date" required>
 					</div>
 
 					<div class="form-group">
 						<label>Couleur</label><br>
-						<input type="color" name="color" value="#3788d8"><br><br>
+						<input type="color" name="color" value="#3788d8">
 
 					</div>
 
@@ -64,7 +64,7 @@
 					</div>
 
 					<small>Ctrl/Cmd+Click pour sélectionner plusieurs</small>
-					<br><br>
+					
 
 				</div>
 				<div class="modal-footer">

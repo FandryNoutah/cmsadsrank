@@ -5,10 +5,10 @@
 	<meta charset="utf-8" />
 	<title>Calendrier - Google-like (fonctionnel)</title>
 
-	<link href="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.css" rel="stylesheet">
-	<script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.js"></script>
-	<script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/locales/fr.js"></script>
-	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+	<link rel="stylesheet" href="<?= base_url('assets/vendors/bootstrap/css/bootstrap.css') ?>" />
+	<link rel="stylesheet" href="<?= base_url('assets/vendors/fontawesome/css/all.min.css') ?>" />
+	<link rel="stylesheet" href="<?= base_url('assets/vendors/fullcalendar/css/main.min.css') ?>" />
+	<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
 
 	<style>
 		* {
@@ -17,31 +17,17 @@
 
 		body {
 			margin: 0;
-			font-family: "Google Sans", Arial, sans-serif;
+			font-family: 'Roboto', sans-serif;
 			color: #202124;
 			display: flex;
 			min-height: 100vh;
-			background: #fff;
 		}
 
 		.sidebar {
 			width: 260px;
-			border-right: 1px solid #e6e6e6;
-			padding: 16px;
-			background: #fff;
+			/* border-right: 1px solid #e6e6e6; */
+			padding: 12px;
 			overflow: auto;
-		}
-
-		#createEventBtn {
-			background: #1a73e8;
-			color: #fff;
-			border: none;
-			padding: 10px 16px;
-			border-radius: 24px;
-			width: 100%;
-			cursor: pointer;
-			font-weight: 500;
-			margin-bottom: 12px;
 		}
 
 		.sidebar h3 {
@@ -61,15 +47,59 @@
 			padding: 12px;
 		}
 
-		.fc {
-			background: #fff;
+		#calendar,
+		#mini_calendar {
+			font-size: 14px;
+			/* base text size */
+			color: #202124;
+			/* Google’s default text color */
 		}
 
-		.fc .fc-toolbar {
-			padding: 8px 12px;
-			border-bottom: 1px solid #eee;
-			background: #f8f9fa;
-			border-radius: 6px;
+		/* Headers (LUN, MAR, MER …) */
+		#calendar .fc-col-header-cell,
+		#mini_calendar .fc-col-header-cell {
+			font-weight: 500;
+			/* medium, like Google */
+			font-size: 12px;
+			text-transform: uppercase;
+		}
+
+		/* Day numbers (1, 2, 3 …) */
+		#calendar .fc-daygrid-day-top,
+		#mini_calendar .fc-daygrid-day-top {
+			font-weight: 400;
+			font-size: 13px;
+		}
+
+		/* Event titles */
+		#calendar .fc-event,
+		#mini_calendar .fc-event {
+			font-weight: 500;
+			font-size: 12px;
+		}
+
+		#calendar .fc-daygrid,
+		#calendar .fc-timegrid,
+		#calendar .fc-scroller-harness-liquid,
+		#calendar .fc-scrollgrid {
+			border-radius: 28px;
+			overflow: hidden;
+		}
+
+		#calendar .fc-daygrid-day,
+		#calendar .fc-daygrid-day-frame,
+		#calendar .fc-timegrid-slot {
+			overflow: hidden;
+		}
+
+		.fc-col-header-cell {
+			border-bottom: none !important;
+			text-transform: uppercase;
+			padding-top: 10px;
+		}
+
+		#calendar .fc-view {
+			background-color: white;
 		}
 
 		.fc-toolbar-title {
@@ -113,63 +143,12 @@
 			font-size: 13px;
 		}
 
-		.modal {
-			display: none;
-			position: fixed;
-			top: 10%;
-			left: 50%;
-			transform: translateX(-50%);
-			background: #fff;
-			border: 1px solid #ccc;
-			padding: 16px;
-			width: 420px;
-			z-index: 20000;
-		}
-
-		.modal h3 {
-			margin: 0 0 10px;
-		}
-
-		.modal input[type="text"],
-		.modal input[type="datetime-local"],
-		.modal textarea,
-		.modal select,
-		.modal input[type="color"] {
-			width: 100%;
-			padding: 8px;
-			border: 1px solid #ddd;
-			border-radius: 4px;
-			margin-bottom: 10px;
-		}
-
-		.small {
-			font-size: 12px;
-			color: #666;
-		}
-
-		#viewSelect {}
-
-		#custom-controls .fc-button {
-			background: transparent;
-			border: none;
-			color: #1a73e8;
-			font-weight: 500;
-			cursor: pointer;
-			border-radius: 4px;
-			padding: 6px 10px;
-		}
-
-		#custom-controls .fc-button:hover {
-			background: #e8f0fe;
-		}
-
 		.fc-icon {
 			width: 1em;
 			height: 1em;
 			-webkit-user-select: none;
 			user-select: none;
 			font-family: fcicons !important;
-			speak: none;
 			font-style: normal;
 			font-variant: normal;
 			line-height: 1;
@@ -189,22 +168,76 @@
 
 		.fc-direction-ltr .fc-toolbar>*> :not(:first-child) {
 			color: black;
-			background-color: white;
 			border: 1px solid black;
 			border-radius: 25px;
 			padding-left: 25px;
 			padding-right: 25px;
 		}
+
+		#mini_calendar .fc {
+			height: 374px !important;
+		}
+
+		/* 1. Remove outer container borders and shadows */
+		#mini_calendar,
+		#mini_calendar .fc,
+		#mini_calendar .fc-scrollgrid,
+		#mini_calendar .fc-scrollgrid-section,
+		#mini_calendar .fc-col-header,
+		#mini_calendar .fc-col-header-cell {
+			border: none !important;
+			box-shadow: none !important;
+		}
+
+		/* 2. Remove toolbar/header borders and background */
+		#mini_calendar .fc-toolbar,
+		#mini_calendar .fc-toolbar-chunk {
+			border: none !important;
+			box-shadow: none !important;
+			background: transparent !important;
+		}
+
+		/* 3. Remove day cell borders */
+		#mini_calendar .fc-daygrid-day,
+		#mini_calendar .fc-daygrid-body td,
+		#mini_calendar .fc-timegrid-slot {
+			border: none !important;
+		}
+
+		/* 4. Remove event block borders if any */
+		#mini_calendar .fc-event {
+			border: none !important;
+			box-shadow: none !important;
+		}
+
+		/* 5. Remove horizontal lines in week/day views */
+		#mini_calendar .fc-timegrid-slot {
+			border-top: none !important;
+		}
+
+		/* Center weekday headers */
+		#calendar .fc-col-header-cell,
+		#mini_calendar .fc-col-header-cell {
+			text-align: center !important;
+		}
+
+		/* Center day numbers inside grid cells */
+		#calendar .fc-daygrid-day-top,
+		#mini_calendar .fc-daygrid-day-top {
+			justify-content: center !important;
+		}
 	</style>
 </head>
 
-<body>
-
+<body class="bg-light">
 
 	<div class="sidebar">
-		<button id="createEventBtn">+ Créer</button>
+		<button id="createEventBtn" class="btn btn-white border rounded py-3 px-4 shadow-sm">
+			<i class="fa fa-plus"></i>
+			Créer
+		</button>
 
-		<div id="mini-calendar" style="margin-bottom:12px;"></div>
+		<div id="mini_calendar" class="my-3"></div>
 
 		<h3>Mes agendas</h3>
 		<label><input type="checkbox" checked> Télétravail</label>
@@ -222,94 +255,19 @@
 		</select>
 	</div>
 
-	<div style="margin-bottom: 12px;">
-		<select id="viewSelect" style="padding: 6px; font-size: 14px;  border: 1px solid #ddd;
-  border-radius: 4px;
-  background: #fff;
-  color: #202124;">
-			<option value="dayGridMonth">Mois</option>
-			<option value="timeGridWeek">Semaine</option>
-			<option value="timeGridDay">Jour</option>
-		</select>
-	</div>
-
 	<div class="main">
 		<div id="calendar"></div>
 	</div>
 
-	<div id="eventModal" class="modal" aria-hidden="true">
-		<h3>Ajouter un événement</h3>
-		<form id="eventForm">
-			<label for="title-select">Titre</label>
-			<select id="title-select" name="title" onchange="toggleCustomTitle(this)">
-				<option value="Télétravail">Télétravail</option>
-				<option value="Perso">Perso</option>
-				<option value="Soutenance">Soutenance</option>
-				<option value="Formation">Formation</option>
-				<option value="Maladie">Maladie</option>
-				<option value="Congé">Congé</option>
-				<option value="Contact">Contact</option>
-				<option value="Autre">Autre...</option>
-			</select>
+	<?php $this->load->view('layouts/calendar/modal/event'); ?>
+	<?php $this->load->view('layouts/calendar/modal/edit'); ?>
 
-			<div id="custom-title-container" style="display:none; margin-top:8px;">
-				<label for="custom-title">Titre personnalisé</label>
-				<input type="text" id="custom-title" name="custom_title">
-			</div>
+	<script src="<?= base_url('assets/vendors/jquery/jquery.min.js') ?>"></script>
+	<script src="<?= base_url('assets/vendors/bootstrap/js/bootstrap.min.js') ?>"></script>
+	<script src="<?= base_url('assets/vendors/fontawesome/js/all.min.js') ?>"></script>
 
-			<label>Description</label>
-			<textarea name="description" rows="3"></textarea>
-
-			<label>Début</label>
-			<input type="datetime-local" name="start_date" required>
-
-			<label>Fin</label>
-			<input type="datetime-local" name="end_date" required>
-
-			<label>Couleur</label>
-			<input type="color" name="color" value="#3788d8">
-
-			<label>Participants</label>
-			<select id="attendeesSelect" name="attendees[]" multiple style="min-height:80px;"></select>
-			<div class="small">Ctrl/Cmd + Click pour sélectionner plusieurs</div>
-
-			<div style="margin-top:10px;">
-				<button type="submit">Enregistrer</button>
-				<button type="button" id="cancelBtn">Annuler</button>
-			</div>
-		</form>
-	</div>
-
-	<div id="editEventModal" class="modal" aria-hidden="true">
-		<h3>Modifier un événement</h3>
-		<form id="editEventForm">
-			<input type="hidden" name="id">
-
-			<label>Titre</label>
-			<input type="text" name="title">
-
-			<label>Description</label>
-			<textarea name="description" rows="3"></textarea>
-
-			<label>Début</label>
-			<input type="datetime-local" name="start_date">
-
-			<label>Fin</label>
-			<input type="datetime-local" name="end_date">
-
-			<label>Couleur</label>
-			<input type="color" name="color" value="#3788d8">
-
-			<label>Participants</label>
-			<select id="editAttendeesSelect" name="attendees[]" multiple style="min-height:80px;"></select>
-
-			<div style="margin-top:10px;">
-				<button type="submit">Mettre à jour</button>
-				<button type="button" id="cancelEditBtn">Annuler</button>
-				<button type="button" id="deleteBtn" style="color:red;">Supprimer</button>
-			</div>
-		</form>
-	</div>
+	<script src="<?= base_url('assets/vendors/fullcalendar/js/main.min.js') ?>"></script>
+	<script src="<?= base_url('assets/vendors/fullcalendar/js/locale.fr.js') ?>"></script>
 
 	<script>
 		function pad(n) {
@@ -370,13 +328,16 @@
 
 			var miniCalEl = document.createElement('div');
 			miniCalEl.id = 'miniCalInner';
-			document.getElementById('mini-calendar').appendChild(miniCalEl);
+			document.getElementById('mini_calendar').appendChild(miniCalEl);
 
 			var miniCal = new FullCalendar.Calendar(miniCalEl, {
 				initialView: 'dayGridMonth',
 				headerToolbar: false,
 				height: 180,
 				locale: 'fr',
+				dayHeaderFormat: {
+					weekday: 'narrow'
+				},
 				dateClick: function(info) {
 					if (window.calendar) window.calendar.gotoDate(info.date);
 				}
@@ -414,13 +375,12 @@
 				locale: 'fr',
 				timeZone: 'local',
 				headerToolbar: {
-					left: 'prev,next today',
+					left: 'today prev,next',
 					center: 'title',
-					right: ''
+					right: 'dayGridMonth,timeGridWeek,timeGridDay'
 				},
 				selectable: true,
 				displayEventTime: false,
-
 				events: function(fetchInfo, successCallback, failureCallback) {
 					var userId = $('#userFilter').val() || '';
 					$.ajax({
@@ -438,7 +398,6 @@
 						failureCallback(err);
 					});
 				},
-
 				dayCellDidMount: function(info) {
 					var dateStr = info.date.toISOString().split('T')[0];
 					var day = info.date.getDay();
@@ -448,7 +407,6 @@
 						info.el.style.backgroundColor = '#fafafa';
 					}
 				},
-
 				eventMouseEnter: function(info) {
 					var tooltip = document.createElement('div');
 					tooltip.className = 'fc-tooltip';
@@ -471,7 +429,6 @@
 						info.el.removeEventListener('mouseleave', leave);
 					});
 				},
-
 				dateClick: function(info) {
 					$('#eventForm')[0].reset();
 					$('#custom-title-container').style && ($('#custom-title-container').style.display = 'none');
@@ -481,25 +438,23 @@
 
 					$('#eventForm').find('input[name=start_date]').val(toLocalInputString(base));
 					$('#eventForm').find('input[name=end_date]').val(toLocalInputString(baseEnd));
-					$('#eventModal').show();
+					$('#eventModal').modal('show');
 				},
-
 				eventClick: function(info) {
 					var id = info.event.id;
 					if (id) {
 						$.get(URL_EVENT_DETAIL + '/' + id, function(res) {
 							fillEditModalFromObject(res);
-							$('#editEventModal').show();
+							$('#editEventModal').modal('show');
 						}, 'json').fail(function() {
 							fillEditModalFromEvent(info.event);
-							$('#editEventModal').show();
+							$('#editEventModal').modal('show');
 						});
 					} else {
 						fillEditModalFromEvent(info.event);
-						$('#editEventModal').show();
+						$('#editEventModal').modal('show');
 					}
 				},
-
 				eventDidMount: function(info) {
 					info.el.addEventListener('contextmenu', function(e) {
 						e.preventDefault();
@@ -522,7 +477,7 @@
 							var a = ev.target.getAttribute('data-action');
 							if (a === 'edit') {
 								fillEditModalFromEvent(info.event);
-								$('#editEventModal').show();
+								$('#editEventModal').modal('show');
 							} else if (a === 'delete') {
 								var id = info.event.id;
 								if (id) deleteEventAjax(id);
@@ -542,10 +497,6 @@
 			});
 
 			calendar.render();
-			$('#viewSelect').on('change', function() {
-				var selectedView = $(this).val();
-				calendar.changeView(selectedView);
-			});
 
 			calendar.on('datesSet', function() {
 				miniCal.gotoDate(calendar.getDate());
@@ -619,8 +570,9 @@
 				var now = new Date();
 				$('#eventForm').find('input[name=start_date]').val(toLocalInputString(new Date(now.getFullYear(), now.getMonth(), now.getDate(), 9, 0)));
 				$('#eventForm').find('input[name=end_date]').val(toLocalInputString(new Date(now.getFullYear(), now.getMonth(), now.getDate(), 10, 0)));
-				$('#eventModal').show();
+				$('#eventModal').modal('show');
 			});
+
 			$('#cancelBtn').on('click', function() {
 				$('#eventModal').hide();
 			});
@@ -742,13 +694,13 @@
 				if (typeof evOrId === 'string' || typeof evOrId === 'number') {
 					$.get(URL_EVENT_DETAIL + '/' + evOrId, function(res) {
 						fillEditModalFromObject(res);
-						$('#editEventModal').show();
+						$('#editEventModal').modal('show');
 					}, 'json').fail(function() {
 						alert('Impossible de récupérer les détails.');
 					});
 				} else {
 					fillEditModalFromEvent(evOrId);
-					$('#editEventModal').show();
+					$('#editEventModal').modal('show');
 				}
 			};
 			window.deleteEvent = deleteEventAjax;
