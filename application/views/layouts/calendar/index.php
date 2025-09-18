@@ -78,7 +78,7 @@
 			font-size: 12px;
 		}
 
-		#calendar .fc-daygrid,
+		/* #calendar .fc-daygrid,
 		#calendar .fc-timegrid,
 		#calendar .fc-scroller-harness-liquid,
 		#calendar .fc-scrollgrid {
@@ -90,6 +90,22 @@
 		#calendar .fc-daygrid-day-frame,
 		#calendar .fc-timegrid-slot {
 			overflow: hidden;
+		} */
+
+		/* Apply rounded corners only once at the outermost level */
+		#calendar .fc-scrollgrid {
+			border-radius: 28px;
+			overflow: hidden;
+			/* safe here */
+		}
+
+		/* Allow events to stretch across multiple days */
+		#calendar .fc-daygrid,
+		#calendar .fc-timegrid,
+		#calendar .fc-daygrid-day,
+		#calendar .fc-daygrid-day-frame,
+		#calendar .fc-timegrid-slot {
+			overflow: visible !important;
 		}
 
 		.fc-col-header-cell {
@@ -107,11 +123,12 @@
 			font-size: 18px;
 		}
 
-		.fc .fc-button {
+		.fc .fc-next-button,
+		.fc .fc-prev-button {
 			background: transparent;
 			border: none;
-			color: #1a73e8;
 			font-weight: 500;
+			border-radius: 50rem !important;
 		}
 
 		.fc .fc-button:hover {
@@ -157,17 +174,10 @@
 			color: grey;
 		}
 
-		.fc .fc-button-primary:disabled {
+		.fc .fc-today-button,
+		.fc .fc-today-button:disabled {
 			color: black;
 			background-color: white;
-			border: 1px solid black;
-			border-radius: 25px;
-			padding-left: 25px;
-			padding-right: 25px;
-		}
-
-		.fc-direction-ltr .fc-toolbar>*> :not(:first-child) {
-			color: black;
 			border: 1px solid black;
 			border-radius: 25px;
 			padding-left: 25px;
@@ -226,6 +236,20 @@
 		#mini_calendar .fc-daygrid-day-top {
 			justify-content: center !important;
 		}
+
+		#mini_calendar .fc-event {
+			display: none !important;
+		}
+
+		#mini_calendar .fc-daygrid-day-top {
+			justify-content: center !important;
+			align-items: center !important;
+		}
+
+		#mini_calendar .fc-daygrid-day-events {
+			display: none;
+		}
+
 	</style>
 </head>
 
@@ -249,10 +273,12 @@
 		<label><input type="checkbox" checked> Contact</label>
 
 		<h3>Filtres</h3>
-		<label for="userFilter">Filtrer par utilisateur :</label>
-		<select id="userFilter" style="width:100%; padding:6px;">
-			<option value="">-- Tous les utilisateurs --</option>
-		</select>
+		<div class="form-group">
+			<label for="userFilter">Filtrer par utilisateur :</label>
+			<select id="userFilter" class="custom-select" style="width:100%; padding:6px;">
+				<option value="">-- Tous les utilisateurs --</option>
+			</select>
+		</div>
 	</div>
 
 	<div class="main">
@@ -333,7 +359,7 @@
 			var miniCal = new FullCalendar.Calendar(miniCalEl, {
 				initialView: 'dayGridMonth',
 				headerToolbar: false,
-				height: 180,
+				contentHeight: 10,
 				locale: 'fr',
 				dayHeaderFormat: {
 					weekday: 'narrow'
@@ -342,6 +368,7 @@
 					if (window.calendar) window.calendar.gotoDate(info.date);
 				}
 			});
+
 			miniCal.render();
 
 			function loadUsers() {
@@ -399,7 +426,7 @@
 					});
 				},
 				dayCellDidMount: function(info) {
-					var dateStr = info.date.toISOString().split('T')[0];
+					var dateStr = info.date.toLocaleDateString('fr-CA');
 					var day = info.date.getDay();
 					if (frenchHolidays.indexOf(dateStr) !== -1) {
 						info.el.style.backgroundColor = '#e6f4ea';
@@ -574,10 +601,10 @@
 			});
 
 			$('#cancelBtn').on('click', function() {
-				$('#eventModal').hide();
+				$('#eventModal').modal('hide');
 			});
 			$('#cancelEditBtn').on('click', function() {
-				$('#editEventModal').hide();
+				$('#editEventModal').modal('hide');
 			});
 
 			$('#userFilter').on('change', function() {
@@ -607,7 +634,7 @@
 					data: payload,
 					dataType: 'json'
 				}).done(function(res) {
-					$('#eventModal').hide();
+					$('#eventModal').modal('hide');
 					$f[0].reset();
 					calendar.refetchEvents();
 					loadUsers();
@@ -625,7 +652,7 @@
 							attendees: payload.attendees
 						}
 					});
-					$('#eventModal').hide();
+					$('#eventModal').modal('hide');
 					$f[0].reset();
 					alert('Ajout local (le serveur a renvoyé une erreur). Voir console pour détails.');
 				});
@@ -650,7 +677,7 @@
 					data: payload,
 					dataType: 'json'
 				}).done(function() {
-					$('#editEventModal').hide();
+					$('#editEventModal').modal('hide');
 					calendar.refetchEvents();
 				}).fail(function(xhr) {
 					console.error('Erreur update_event', xhr.responseText || xhr.statusText);
@@ -664,7 +691,7 @@
 						} catch (e) {}
 						if (payload.color) ev.setProp('backgroundColor', payload.color);
 					}
-					$('#editEventModal').hide();
+					$('#editEventModal').modal('hide');
 					alert('Mise à jour locale (le serveur a renvoyé une erreur). Voir console.');
 				});
 			});
@@ -681,7 +708,7 @@
 						id: id
 					})
 					.done(function(res) {
-						$('#editEventModal').hide();
+						$('#editEventModal').modal('hide');
 						calendar.refetchEvents();
 					})
 					.fail(function(xhr) {
