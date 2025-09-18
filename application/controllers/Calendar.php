@@ -12,7 +12,7 @@ class Calendar extends CI_Controller {
 }
 
     public function index() {
-        $this->load->view("layouts/calendar_view/index.php");
+        $this->load->view("layouts/calendar/index.php");
     }
 
     public function fetch_events() {
