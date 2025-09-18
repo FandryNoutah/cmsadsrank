@@ -37,89 +37,17 @@
 </head>
 
 <body>
-	<?php start_section('stylesheet'); ?>
-	<style>
-		.table-wrapper {
-			border-spacing: 0 15px !important;
-			border-collapse: separate !important;
-		}
 
-		.table-wrapper td,
-		.table-wrapper th {
-			vertical-align: middle;
-			border: border;
-			border-bottom: 1px solid #dee2e6 !important;
-		}
-
-		.table-wrapper tbody tr td:first-child,
-		.table-wrapper thead tr th:first-child {
-			border-left: 1px solid #dee2e6;
-			border-top-left-radius: 4px;
-			border-bottom-left-radius: 4px;
-		}
-
-		.table-wrapper tbody tr td:last-child,
-		.table-wrapper thead tr th:last-child {
-			border-right: 1px solid #dee2e6;
-			border-top-right-radius: 4px;
-			border-bottom-right-radius: 4px;
-		}
-	</style>
-	<?php end_section(); ?>
-
-	<?php start_section('page_heading'); ?>
-	<?php end_section(); ?>
-
-<?php start_section('content'); ?>
-<div style="text-align:center; margin-bottom: 15px;">
-    <label for="userFilter">Filtrer par utilisateur :</label>
-    <select id="userFilter" style="min-width: 200px;">
-        <option value="">-- Tous les utilisateurs --</option>
-    </select>
-</div>
-<script>
-let calendar;  // global
-
-document.addEventListener('DOMContentLoaded', function() {
-    var calendarEl = document.getElementById('calendar');
-
-    calendar = new FullCalendar.Calendar(calendarEl, {   // <-- sans var
-        initialView: 'dayGridMonth',
-        locale: 'fr',
-        events: function(fetchInfo, successCallback, failureCallback) {
-    var userId = $('#userFilter').val() || '';
-    $.ajax({
-        url: '<?php echo site_url("calendar/fetch_events"); ?>',
-        data: {
-            start: fetchInfo.startStr,
-            end: fetchInfo.endStr,
-            user_id: userId
-        },
-        dataType: 'json',
-        success: function(data) {
-            successCallback(data);
-        },
-        error: function(err) {
-            console.error("Erreur fetch_events", err);
-            failureCallback(err);
-        }
-    });
-}
-
-    });
-
-    calendar.render();
-
-    // maintenant ça marche car calendar est global
-    $('#userFilter').on('change', function() {
-        calendar.refetchEvents();
-    });
-});
-
-</script>
-<div style="max-width:1100px;margin:20px auto;">
-    <div id="calendar"></div>
-</div>
+	<div class="form-group text-center">
+		<label for="userFilter">Filtrer par utilisateur :</label>
+		<select id="userFilter" class="form-control mx-auto" style="max-width: 200px;">
+			<option value="">-- Tous les utilisateurs --</option>
+		</select>
+	</div>
+	
+	<div style="max-width:1100px;margin:20px auto;">
+		<div id="calendar"></div>
+	</div>
 
 	<?php $this->load->view('layouts/calendar_view/modal/event'); ?>
 
@@ -157,6 +85,46 @@ document.addEventListener('DOMContentLoaded', function() {
 	<script src="<?= base_url('assets/vendors/fullcalendar/js/main.min.js') ?>"></script>
 	<script src="<?= base_url('assets/vendors/fullcalendar/js/locale.fr.js') ?>"></script>
 
+	<script>
+		let calendar; // global
+
+		document.addEventListener('DOMContentLoaded', function() {
+			var calendarEl = document.getElementById('calendar');
+
+			calendar = new FullCalendar.Calendar(calendarEl, { // <-- sans var
+				initialView: 'dayGridMonth',
+				locale: 'fr',
+				events: function(fetchInfo, successCallback, failureCallback) {
+					var userId = $('#userFilter').val() || '';
+					$.ajax({
+						url: '<?php echo site_url("calendar/fetch_events"); ?>',
+						data: {
+							start: fetchInfo.startStr,
+							end: fetchInfo.endStr,
+							user_id: userId
+						},
+						dataType: 'json',
+						success: function(data) {
+							successCallback(data);
+						},
+						error: function(err) {
+							console.error("Erreur fetch_events", err);
+							failureCallback(err);
+						}
+					});
+				}
+
+			});
+
+			calendar.render();
+
+			// maintenant ça marche car calendar est global
+			$('#userFilter').on('change', function() {
+				calendar.refetchEvents();
+			});
+		});
+	</script>
+	
 	<script>
 		$(function() {
 
