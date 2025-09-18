@@ -9,74 +9,129 @@
 
 	<link rel="stylesheet" href="<?= base_url('assets/vendors/fullcalendar/css/main.min.css') ?>" />
 
-
 	<style>
-		.fc-tooltip {
-			position: absolute;
-			z-index: 10000;
-			background: #fff;
-			border: 1px solid #ddd;
-			padding: 8px;
-			box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
-			font-size: 13px;
+		.fc .fc-scrollgrid {
+			background-color: #fff !important;
+			border-radius: 28px;
 		}
 
-		/* #eventModal {
-			display: none;
-			position: fixed;
-			top: 10%;
-			left: 50%;
-			transform: translateX(-50%);
+		/* ===== Toolbar Styling ===== */
+		.fc .fc-toolbar {
+			background: #f8f9fa;
+			/* light gray */
+			border-radius: 12px;
+			padding: 10px;
+			margin-bottom: 20px;
+		}
+
+		.fc .fc-toolbar-title {
+			font-size: 1.25rem;
+			font-weight: 500;
+		}
+
+		.fc .fc-button {
+			border-radius: 20px !important;
 			background: white;
-			padding: 20px;
-			border: 1px solid #ccc;
-			z-index: 20000;
-			width: 420px;
-		} */
+			border: 1px solid #dcdcdc;
+			color: #333;
+			padding: 6px 14px;
+			font-weight: 500;
+			box-shadow: none;
+		}
+
+		.fc .fc-button:hover {
+			background: #f0f0f0;
+		}
+
+		.fc .fc-button-primary:not(:disabled).fc-button-active,
+		.fc .fc-button-primary:not(:disabled):active {
+			background: #e6f0ff;
+			border-color: #b3d1ff;
+			color: #0066cc;
+		}
+
+		/* ===== Day Header Styling (Mon, Tue...) ===== */
+		.fc .fc-col-header-cell {
+			background: white;
+			color: #5f6368;
+			/* Google gray */
+			font-weight: 500;
+			text-align: center;
+			border-top-left-radius: 28px;
+			border-top-right-radius: 28px;
+		}
+
+		/* ===== Day Cell Styling ===== */
+		.fc-theme-standard td,
+		.fc-theme-standard th {
+			border: 1px solid #e6e6e6;
+			/* softer borders */
+		}
+
+		.fc .fc-daygrid-day {
+			text-align: center;
+			/* center align numbers */
+			vertical-align: top;
+			border-radius: 10px;
+		}
+
+		.fc .fc-daygrid-day-number {
+			font-weight: 500;
+			color: #3c4043;
+		}
+
+		/* Highlight today */
+		.fc .fc-day-today {
+			background: #eaf2fe !important;
+		}
+
+		/* ===== Events Styling ===== */
+		.fc .fc-event {
+			border-radius: 8px !important;
+			padding: 2px 6px;
+			font-size: 0.85rem;
+			font-weight: 500;
+			border: none;
+		}
+
+		.fc .fc-event:hover {
+			opacity: 0.9;
+		}
+
+		.fc .fc-daygrid-day-top {
+			display: grid !important;
+		}
+
+		.fc .fc-today-button, .fc-today-button:disabled {
+			color: #1f1f1f;
+			border-color: #1f1f1f;
+			background-color: transparent;
+			border-radius: 50rem !important;
+		}
+
+		.fc-prev-button {
+			color: #1f1f1f;
+			background-color: transparent;
+			border: 0px;
+		}
 	</style>
 </head>
 
-<body>
+<body class="bg-light">
 
-	<div class="form-group text-center">
+	<!-- <div class="form-group text-center">
 		<label for="userFilter">Filtrer par utilisateur :</label>
 		<select id="userFilter" class="form-control mx-auto" style="max-width: 200px;">
 			<option value="">-- Tous les utilisateurs --</option>
 		</select>
-	</div>
-	
-	<div style="max-width:1100px;margin:20px auto;">
+	</div> -->
+
+	<div class="container">
 		<div id="calendar"></div>
 	</div>
 
 	<?php $this->load->view('layouts/calendar_view/modal/event'); ?>
-
-	<div id="editEventModal" style="display:none; position:fixed; top:10%; left:50%; transform:translateX(-50%); background:white; padding:20px; border:1px solid #ccc; z-index:20000; width:420px;">
-		<h3>Modifier un événement</h3>
-		<form id="editEventForm">
-			<input type="hidden" name="id">
-			<label>Titre</label><br>
-			<input type="text" name="title" style="width:100%"><br><br>
-
-			<label>Description</label><br>
-			<textarea name="description" style="width:100%"></textarea><br><br>
-
-			<label>Début</label><br>
-			<input type="datetime-local" name="start_date" style="width:100%"><br><br>
-
-			<label>Fin</label><br>
-			<input type="datetime-local" name="end_date" style="width:100%"><br><br>
-
-			<label>Couleur</label><br>
-			<input type="color" name="color" value="#3788d8"><br><br>
-
-			<label>Participants</label><br>
-			<select name="attendees[]" id="editAttendeesSelect" multiple style="width:100%; min-height:90px;"></select><br><br>
-
-			<button type="submit">Mettre à jour</button>
-			<button type="button" id="cancelEditBtn">Annuler</button>
-		</form>
-	</div>
+	<?php $this->load->view('layouts/calendar_view/modal/edit'); ?>
 
 	<script src="<?= base_url('assets/vendors/jquery/jquery.min.js') ?>"></script>
 	<script src="<?= base_url('assets/vendors/bootstrap/js/bootstrap.min.js') ?>"></script>
@@ -85,7 +140,7 @@
 	<script src="<?= base_url('assets/vendors/fullcalendar/js/main.min.js') ?>"></script>
 	<script src="<?= base_url('assets/vendors/fullcalendar/js/locale.fr.js') ?>"></script>
 
-	<script>
+	<!-- <script>
 		let calendar; // global
 
 		document.addEventListener('DOMContentLoaded', function() {
@@ -123,8 +178,8 @@
 				calendar.refetchEvents();
 			});
 		});
-	</script>
-	
+	</script> -->
+
 	<script>
 		$(function() {
 
@@ -170,14 +225,17 @@
 				locale: 'fr',
 				timeZone: 'local',
 				headerToolbar: {
-					left: 'prev,next today',
+					left: 'today prev,next',
 					center: 'title',
 					right: 'dayGridMonth,timeGridWeek,timeGridDay'
 				},
+				navLinks: true, // click day/week names to navigate
+				selectable: true, // select to create events
+				editable: true, // drag/drop and resize events
+				nowIndicator: true,
 				events: '<?php echo site_url("calendar/fetch_events"); ?>',
 				selectable: true,
 				displayEventTime: false,
-
 				dayCellDidMount: function(info) {
 					const dateStr = info.date.getFullYear() + '-' +
 						String(info.date.getMonth() + 1).padStart(2, '0') + '-' +
@@ -190,7 +248,6 @@
 						info.el.style.backgroundColor = '#f0f0f0';
 					}
 				},
-
 				eventMouseEnter: function(info) {
 					var tooltip = document.createElement('div');
 					tooltip.className = 'fc-tooltip';
@@ -210,7 +267,6 @@
 						if (tooltip) tooltip.remove();
 					});
 				},
-
 				dateClick: function(info) {
 					$('#eventModal').modal('show');
 					var d = info.date;
@@ -229,7 +285,6 @@
 						("0" + end.getMinutes()).slice(-2);
 					$('input[name=end_date]').val(isoEnd);
 				},
-
 				eventClick: function(info) {
 					var id = info.event.id;
 					$.get('<?php echo site_url("calendar/event_detail"); ?>/' + id, function(data) {
@@ -244,7 +299,6 @@
 						alert(msg);
 					}, 'json');
 				},
-
 				eventDidMount: function(info) {
 					info.el.addEventListener('contextmenu', function(e) {
 						e.preventDefault();
@@ -281,6 +335,11 @@
 							document.removeEventListener('click', handler);
 						});
 					});
+				},
+				datesSet: function() {
+
+					console.log($('.fc-today-button'));
+					
 				}
 			});
 
@@ -323,7 +382,7 @@
 			});
 
 			function openEditModal(event) {
-				$('#editEventModal').show();
+				$('#editEventModal').modal('show');
 				$('input[name="id"]').val(event.id);
 				$('input[name="title"]').val(event.title);
 				$('textarea[name="description"]').val(event.extendedProps.description || '');
@@ -355,7 +414,7 @@
 					type: 'POST',
 					data: formData,
 					success: function(res) {
-						$('#editEventModal').hide();
+						$('#editEventModal').modal('hide');
 						calendar.refetchEvents();
 					},
 					error: function(xhr) {
@@ -365,7 +424,7 @@
 			});
 
 			$('#cancelEditBtn').on('click', function() {
-				$('#editEventModal').hide();
+				$('#editEventModal').modal('hide');
 			});
 
 			function deleteEvent(eventId) {
@@ -377,9 +436,9 @@
 					}, 'json');
 				}
 			}
+
 		});
 	</script>
-
 
 </body>
 
