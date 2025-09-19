@@ -63,6 +63,10 @@ public function get_users($exclude_id = null, $limit = 1000) {
 
     return $events;
 }
+public function get_user_by_id($id) {
+    $query = $this->db->get_where('users', ['id' => $id]);
+    return $query->row();
+}
 
 
 
