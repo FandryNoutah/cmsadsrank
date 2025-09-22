@@ -49,12 +49,6 @@
 					</div>
 
 					<div class="form-group">
-						<label>Couleur</label><br>
-						<input type="color" name="color" value="#3788d8">
-
-					</div>
-
-					<div class="form-group">
 						<label>Participants (tagger)</label><br>
 						<select class="form-control" name="attendees[]" id="attendeesSelect" multiple>
 						</select>
