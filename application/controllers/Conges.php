@@ -18,9 +18,18 @@ class Conges extends MY_Controller {
     $this->data['demandes'] = $this->Conge_model->get_all_demandes($this->current_user->id, $is_validator);
     $this->data['is_validator'] = $is_validator;
 
-    // Vue principale pour la liste
+    $is_compta = ($this->current_user->tech == 2);
+   
+    $this->data['demandes_valider'] = $this->Conge_model->get_all_demandes_valider($this->current_user->id, $is_compta);
+    $this->data['is_compta'] = intval($this->current_user->tech);
+    if($this->current_user->tech != 2):
     $this->content = "layouts/conges/liste";
     $this->layout();
+    endif;
+    if($this->current_user->tech == 2):
+    $this->content = "layouts/conges/compta/index";
+    $this->layout();
+    endif;
 }
 
 

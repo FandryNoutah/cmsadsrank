@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
 
-class Calendar extends CI_Controller
+class Calendar extends MY_Controller
 {
 
 	public function __construct()
@@ -15,7 +15,8 @@ class Calendar extends CI_Controller
 
 	public function index()
 	{
-		$this->load->view("layouts/calendar/index.php");
+		$this->content = "layouts/calendar/index.php";
+		$this->layout();
 	}
 
 	public function fetch_events()
@@ -28,6 +29,7 @@ class Calendar extends CI_Controller
 		$start = $this->input->get("start");
 		$end   = $this->input->get("end");
 		$user_id = $this->input->get("user_id");
+		$agendaFitlers = $this->input->get("agendaFilters");
 
 		// Si pas de user_id fourni dans le filtre => utilisateur connecté
 		if (empty($user_id)) {
@@ -36,10 +38,11 @@ class Calendar extends CI_Controller
 			$user_id = intval($user_id);
 		}
 
-		$events = $this->Event_model->get_events($start, $end, $user_id);
+		$events = $this->Event_model->get_events($start, $end, $user_id, $agendaFitlers);
 
 		$result = [];
 		foreach ($events as $e) {
+
 			$attendees = [];
 			if (!empty($e->attendees)) {
 				foreach ($e->attendees as $a) {
@@ -47,9 +50,15 @@ class Calendar extends CI_Controller
 				}
 			}
 
+			// Build the title
+			$title = $e->title;
+			if (!empty($attendees)) {
+				$title .= ' de ' . implode(', ', $attendees);
+			}
+
 			$result[] = [
 				"id"    => $e->id,
-				"title" => $e->title,
+				"title" => $title,
 				"description" => $e->description,
 				"start" => date("c", strtotime($e->start_date)),
 				"end"   => date("c", strtotime($e->end_date)),
