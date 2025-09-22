@@ -145,8 +145,7 @@ public function valider($id)
 
         $start_date = date("Y-m-d 01:i:s", strtotime($conge->date_debut));
         $end_date   = date("Y-m-d 01:i:s", strtotime($conge->date_fin));
-        $color = '#FF5733';
-        
+        $color = $conge->couleur;  
         $data_event = [
             "title"       => $title,
             "description" => $description,
