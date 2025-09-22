@@ -30,6 +30,7 @@ class Calendar extends MY_Controller
 		$end   = $this->input->get("end");
 		$user_id = $this->input->get("user_id");
 		$agendaFitlers = $this->input->get("agendaFilters");
+
 		if (empty($user_id)) {
 			$user_id = $this->current_user->id;
 		} else {
@@ -49,7 +50,7 @@ class Calendar extends MY_Controller
 			}
 
 			$title = $e->title;
-			if (!empty($attendees)) {
+			if (!empty($attendees) && !substr($title, 0, strlen("Congé")) === "Congé") {
 				$title .= ' de ' . implode(', ', $attendees);
 			}
 
@@ -99,7 +100,6 @@ class Calendar extends MY_Controller
 		$start_date = date("Y-m-d H:i:s", strtotime($this->input->post("start_date")));
 		$end_date   = date("Y-m-d H:i:s", strtotime($this->input->post("end_date")));
 
-		$color = $this->input->post("color");
 		$attendees = $this->input->post("attendees");
 
 		$data = [
@@ -107,7 +107,7 @@ class Calendar extends MY_Controller
 			"description" => $description,
 			"start_date"  => $start_date,
 			"end_date"    => $end_date,
-			"color"       => $color,
+			"color"       => $this->current_user->couleur,
 			"created_by"  => $this->current_user->id
 		];
 
