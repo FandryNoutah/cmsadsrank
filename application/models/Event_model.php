@@ -111,4 +111,10 @@ class Event_model extends CI_Model
 		$this->db->where("eu.event_id", $event_id);
 		return $this->db->get()->result();
 	}
+	public function get_all_event()
+	{
+		$this->db->select("*");
+		$this->db->from("events");
+		return $this->db->get()->result();
+	}
 }
