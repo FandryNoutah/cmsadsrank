@@ -48,12 +48,20 @@ public function get_all_demandes_valider($user_id = null, $is_validator = false)
                         'commentaire_validation' => $commentaire
                     ]);
 }
-public function update_etat($id, $etat)
+public function update_etat($id, $commentaire, $etat)
 {
-    $data = array('etat' => $etat);
-    $this->db->where('id', $id);
-    return $this->db->update('conges', $data);
+    $result = $this->db->where('id', $id)
+                   ->update('conges', [
+                       'etat' => $etat,
+                       'commentaire_validation' => $commentaire
+                   ]);
+
+if (!$result) {
+    log_message('error', 'Erreur de mise à jour : ' . $this->db->error()['message']);
 }
+
+}
+
 
 public function get_conge_by_id($id)
 {
