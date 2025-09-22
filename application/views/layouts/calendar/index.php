@@ -230,11 +230,11 @@
 			<i class="fa fa-plus"></i>
 			Créer
 		</button>
-	
+
 		<div id="mini_calendar" class="my-3"></div>
-	
+
 		<h3>Mes agendas</h3>
-	
+
 		<div class="custom-control custom-checkbox">
 			<input type="checkbox" class="custom-control-input" id="agenda_Télétravail" name="agendaFilter" value="Télétravail" aria-selected="true" checked>
 			<label class="custom-control-label m-0" for="agenda_Télétravail">Télétravail</label>
@@ -263,7 +263,7 @@
 			<input type="checkbox" class="custom-control-input" id="agenda_Contact" name="agendaFilter" value="Contact" aria-selected="true" checked>
 			<label class="custom-control-label m-0" for="agenda_Contact">Contact</label>
 		</div>
-	
+
 		<h3>Filtres</h3>
 		<div class="form-group">
 			<label for="userFilter">Filtrer par utilisateur :</label>
@@ -272,7 +272,7 @@
 			</select>
 		</div>
 	</div>
-	
+
 	<div class="main">
 		<div id="calendar"></div>
 	</div>
@@ -287,7 +287,6 @@
 <script src="<?= base_url('assets/vendors/fullcalendar/js/locale.fr.js') ?>"></script>
 
 <script>
-
 	$(function() {
 		if (!$('#sidebarMenu').hasClass("collapsed")) {
 			$('#toggleSidebar').click();
@@ -408,7 +407,7 @@
 			headerToolbar: {
 				left: 'today prev,next',
 				center: 'title',
-				right: 'dayGridMonth,timeGridWeek,timeGridDay'
+				right: ''
 			},
 			selectable: true,
 			displayEventTime: false,
@@ -530,7 +529,7 @@
 						});
 					}, 0);
 				});
-			}
+			},
 		});
 
 		calendar.render();
@@ -538,6 +537,33 @@
 		calendar.on('datesSet', function() {
 			miniCal.gotoDate(calendar.getDate());
 		});
+
+		// Inject select into the toolbar container after calendar is rendered
+		(function addViewSelect() {
+			// Toolbar container (right side)
+			var toolbarRight = document.querySelector('#calendar .fc-toolbar-chunk:last-child');
+			if (!toolbarRight) return;
+
+			// Only add once
+			if (!document.querySelector('#fc-view-select')) {
+				var select = document.createElement('select');
+				select.id = 'fc-view-select';
+				select.className = 'custom-select';
+				select.style.width = 'auto';
+				select.innerHTML = `
+					<option value="dayGridMonth">Mois</option>
+					<option value="timeGridWeek">Semaine</option>
+					<option value="timeGridDay">Jour</option>
+				`;
+				select.value = calendar.view.type;
+
+				select.addEventListener('change', function() {
+					calendar.changeView(this.value);
+				});
+
+				toolbarRight.appendChild(select);
+			}
+		})();
 
 		function fillEditModalFromEvent(ev) {
 			const form = $('#editEventForm');
