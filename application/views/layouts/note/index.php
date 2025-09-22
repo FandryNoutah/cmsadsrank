@@ -37,9 +37,6 @@
 </style>
 <?php end_section(); ?>
 
-<?php start_section('page_heading'); ?>
-<?php end_section(); ?>
-
 <?php start_section('content'); ?>
 <div style="max-width:1100px;margin:20px auto;">
     <div id="calendar"></div>
