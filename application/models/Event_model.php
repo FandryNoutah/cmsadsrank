@@ -57,13 +57,33 @@ class Event_model extends CI_Model
 			$this->db->group_end();
 		}
 
-		// Filter by multiple titles
-		if (!empty($titles) && is_array($titles)) {
-			$this->db->group_start();
-			foreach ($titles as $t) {
-				$this->db->or_like('events.title', $t);
+		$predefined = ['Télétravail', 'Perso', 'Soutenance', 'Formation', 'Maladie', 'Congé', 'Contact'];
+		if (is_array($titles)) {
+			// Checked predefined titles
+			$checked = $titles;
+
+			if (!empty($checked)) {
+				$this->db->group_start();
+
+				// Keep checked ones (prefix match)
+				foreach ($checked as $t) {
+					$this->db->or_like('events.title', $t, 'after'); // LIKE 't%'
+				}
+
+				// Always include custom titles (those not starting with predefined ones)
+				$this->db->or_group_start();
+				foreach ($predefined as $t) {
+					$this->db->not_like('events.title', $t, 'after');
+				}
+				$this->db->group_end();
+
+				$this->db->group_end();
+			} else {
+				// If nothing checked, show only custom titles
+				foreach ($predefined as $t) {
+					$this->db->not_like('events.title', $t, 'after');
+				}
 			}
-			$this->db->group_end();
 		}
 
 		$this->db->group_by('events.id');
