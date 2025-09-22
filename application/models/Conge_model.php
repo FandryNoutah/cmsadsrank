@@ -65,7 +65,7 @@ if (!$result) {
 
 public function get_conge_by_id($id)
 {
-    $this->db->select('c.*, u.first_name AS prenom, u.last_name AS nom');
+    $this->db->select('c.*, u.first_name AS prenom, u.last_name AS nom, u.couleur AS couleur');
     $this->db->from('conges c');
     $this->db->join('users u', 'u.id = c.user_id');
     $this->db->where('c.id', $id);
