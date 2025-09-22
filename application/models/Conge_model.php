@@ -14,6 +14,21 @@ class Conge_model extends CI_Model {
     $this->db->order_by('c.date_demande', 'DESC');
     return $this->db->get()->result();
 }
+public function get_all_demandes_valider($user_id = null, $is_validator = false) {
+    $this->db->select('c.*, u.first_name, u.last_name')
+             ->from('conges c')
+             ->join('users u', 'u.id = c.user_id');
+    if (!$is_validator && $user_id !== null) {
+        $this->db->where('c.user_id', $user_id);
+    }
+
+    $this->db->where('c.etat', 'valide');
+
+    $this->db->order_by('c.date_demande', 'DESC');
+
+    return $this->db->get()->result();
+}
+
 
 
     public function add_demande($data) {
