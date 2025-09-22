@@ -25,12 +25,10 @@
 						</select>
 					</div>
 
-					<div class="form-group d-none" id="custom-title-container">
+					<div class="form-group d-none" id="custom_title_container">
 						<label for="custom-title">Titre personnalisé</label><br>
 						<input type="text" id="custom-title" class="form-control" name="custom_title">
 					</div>
-
-					
 
 					<div class="form-group">
 
