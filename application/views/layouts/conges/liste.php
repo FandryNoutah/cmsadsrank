@@ -7,11 +7,13 @@
 <?php end_section(); ?>
 
 <?php start_section('page_heading'); ?>
+<?php if($is_compta != 2): ?>
 <h2>Liste des demandes de congé</h2>
 <?php if (!$is_validator): ?>
     <button class="btn btn-primary" data-toggle="modal" data-target="#demandeModal">
         Faire une demande
     </button>
+<?php endif; ?>
 <?php endif; ?>
 <?php end_section(); ?>
 
@@ -27,6 +29,45 @@
       </tr>
     </thead>
     <tbody>
+      <?php if($is_compta == 2): ?>
+      <?php foreach ($demandes_valider as $d): ?>
+        <tr>
+          <td><?= htmlspecialchars($d->first_name . ' ' . $d->last_name) ?></td>
+          <td><?= htmlspecialchars($d->date_debut) ?></td>
+          <td><?= htmlspecialchars($d->date_fin) ?></td>
+          <td><?= htmlspecialchars($d->motif) ?></td>
+          <td><?= htmlspecialchars($d->etat) ?></td>
+          <?php if ($is_validator): ?>
+            <td><?= htmlspecialchars($d->commentaire_validation ?? '-') ?></td>
+            <?php if($d->etat == "valide"): ?>
+                <td>
+                    Validé
+                </td>
+            <?php endif; ?>
+
+            <?php if($d->etat != "valide"): ?>
+                <td>
+                    <button type="button"
+                            class="btn btn-sm btn-info"
+                            data-toggle="modal"
+                            data-target="#validationModal"
+                            data-id="<?= $d->id ?>"
+                            data-nom="<?= htmlspecialchars($d->first_name . ' ' . $d->last_name, ENT_QUOTES) ?>"
+                            data-date_debut="<?= $d->date_debut ?>"
+                            data-date_fin="<?= $d->date_fin ?>"
+                            data-motif="<?= htmlspecialchars($d->motif, ENT_QUOTES) ?>"
+                            data-etat="<?= $d->etat ?>"
+                            data-commentaire="<?= htmlspecialchars($d->commentaire_validation ?? '', ENT_QUOTES) ?>">
+                        Valider
+                    </button>
+                </td>
+            <?php endif; ?>
+
+          <?php endif; ?>
+        </tr>
+      <?php endforeach; ?>
+      <?php endif; ?>
+       <?php if($is_compta != 2): ?>
       <?php foreach ($demandes as $d): ?>
         <tr>
           <td><?= htmlspecialchars($d->first_name . ' ' . $d->last_name) ?></td>
@@ -36,24 +77,34 @@
           <td><?= htmlspecialchars($d->etat) ?></td>
           <?php if ($is_validator): ?>
             <td><?= htmlspecialchars($d->commentaire_validation ?? '-') ?></td>
-            <td>
-              <button type="button"
-                      class="btn btn-sm btn-info"
-                      data-toggle="modal"
-                      data-target="#validationModal"
-                      data-id="<?= $d->id ?>"
-                      data-nom="<?= htmlspecialchars($d->first_name . ' ' . $d->last_name, ENT_QUOTES) ?>"
-                      data-date_debut="<?= $d->date_debut ?>"
-                      data-date_fin="<?= $d->date_fin ?>"
-                      data-motif="<?= htmlspecialchars($d->motif, ENT_QUOTES) ?>"
-                      data-etat="<?= $d->etat ?>"
-                      data-commentaire="<?= htmlspecialchars($d->commentaire_validation ?? '', ENT_QUOTES) ?>">
-                Valider
-              </button>
-            </td>
+           <?php if($d->etat == "valide"): ?>
+                <td>
+                    Validé
+                </td>
+            <?php endif; ?>
+
+            <?php if($d->etat != "valide"): ?>
+                <td>
+                    <button type="button"
+                            class="btn btn-sm btn-info"
+                            data-toggle="modal"
+                            data-target="#validationModal"
+                            data-id="<?= $d->id ?>"
+                            data-nom="<?= htmlspecialchars($d->first_name . ' ' . $d->last_name, ENT_QUOTES) ?>"
+                            data-date_debut="<?= $d->date_debut ?>"
+                            data-date_fin="<?= $d->date_fin ?>"
+                            data-motif="<?= htmlspecialchars($d->motif, ENT_QUOTES) ?>"
+                            data-etat="<?= $d->etat ?>"
+                            data-commentaire="<?= htmlspecialchars($d->commentaire_validation ?? '', ENT_QUOTES) ?>">
+                        Valider
+                    </button>
+                </td>
+            <?php endif; ?>
+
           <?php endif; ?>
         </tr>
       <?php endforeach; ?>
+      <?php endif; ?>
     </tbody>
   </table>
 </div>
