@@ -30,8 +30,6 @@ class Calendar extends MY_Controller
 		$end   = $this->input->get("end");
 		$user_id = $this->input->get("user_id");
 		$agendaFitlers = $this->input->get("agendaFilters");
-
-		// Si pas de user_id fourni dans le filtre => utilisateur connecté
 		if (empty($user_id)) {
 			$user_id = $this->current_user->id;
 		} else {
@@ -50,7 +48,6 @@ class Calendar extends MY_Controller
 				}
 			}
 
-			// Build the title
 			$title = $e->title;
 			if (!empty($attendees)) {
 				$title .= ' de ' . implode(', ', $attendees);

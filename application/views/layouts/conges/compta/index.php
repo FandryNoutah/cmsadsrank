@@ -274,7 +274,36 @@
 	</div>
 	
 	<div class="main">
-		<div id="calendar"></div>
+		<table class="table table-wrapper">
+    <thead class="bg-light">
+      <tr>
+        <th>Nom</th>
+		<th>Date début</th>
+		<th>Date fin</th>
+		<th>Motif</th>
+		<th>Nbr jours</th>
+		<th>État</th>
+      </tr>
+    </thead>
+    <tbody>
+      <?php foreach ($envets as $d): ?>
+        <tr>
+          <td><?= htmlspecialchars($d->first_name . ' ' . $d->last_name) ?></td>
+          <td><?= htmlspecialchars($d->date_debut) ?></td>
+          <td><?= htmlspecialchars($d->date_fin) ?></td>
+          <td><?= htmlspecialchars($d->motif) ?></td>
+		  <td><?= htmlspecialchars($d->nbr_jour) ?></td>
+          <td><?= htmlspecialchars($d->etat) ?></td>
+            <td><?= htmlspecialchars($d->commentaire_validation ?? '-') ?></td>
+            <?php if($d->etat == "valide"): ?>
+                <td>
+                    Validé
+                </td>
+            <?php endif; ?>
+        </tr>
+      <?php endforeach; ?>
+    </tbody>
+  </table>
 	</div>
 </div>
 
