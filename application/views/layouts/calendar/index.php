@@ -5,6 +5,11 @@
 <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
 
 <style>
+
+	body {
+		overflow: hidden;
+	}
+	
 	* {
 		box-sizing: border-box;
 	}
@@ -224,7 +229,7 @@
 
 <?php start_section('content'); ?>
 
-<div class="d-flex">
+<div class="d-flex bg-light">
 	<div id="calendar_sidebar">
 		<button id="createEventBtn" class="btn btn-white border rounded py-3 px-4 shadow-sm">
 			<i class="fa fa-plus"></i>
@@ -548,7 +553,7 @@
 			if (!document.querySelector('#fc-view-select')) {
 				var select = document.createElement('select');
 				select.id = 'fc-view-select';
-				select.className = 'custom-select';
+				select.className = 'custom-select rounded-pill';
 				select.style.width = 'auto';
 				select.innerHTML = `
 					<option value="dayGridMonth">Mois</option>
