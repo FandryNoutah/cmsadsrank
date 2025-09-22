@@ -31,9 +31,6 @@
 						<input type="datetime-local" class="form-control" name="end_date">
 					</div>
 
-					<label>Couleur</label><br>
-					<input type="color" name="color" value="#3788d8">
-
 					<div class="form-group">
 						<label>Participants</label><br>
 						<select name="attendees[]" id="editAttendeesSelect" class="form-control" multiple></select>
