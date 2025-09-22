@@ -3,6 +3,7 @@
 <h3>Validation de la demande</h3>
 
 <p><strong>Date :</strong> <?= $demande->date_debut ?> au <?= $demande->date_fin ?></p>
+<p><strong>Nombre de jours :</strong> <?= $demande->nbr_jour ?></p>
 <p><strong>Motif :</strong> <?= $demande->motif ?></p>
 
 <form method="post">
