@@ -41,6 +41,13 @@
 						<input type="datetime-local" class="form-control" name="start_date" required>
 
 					</div>
+					<div class="form-group">
+						<label>Premier jours</label>
+						<select name="jours" class="form-control" required>
+						<option value="1">Toute la journée</option>
+						<option value="0.5">Demi-journée</option>
+						</select>
+					</div>
 
 					<div class="form-group">
 
