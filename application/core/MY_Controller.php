@@ -17,7 +17,6 @@ class MY_Controller extends CI_Controller
 		$this->data['before_body'] = '';
 		$this->data['current_user'] = $this->ion_auth->user()->row();
 		$this->ion_auth_model->trigger_events('in_group');
-
 		$id = $this->session->userdata('user_id');
 		$this->data['idusers'] = $id;
 		$this->data['users_groups'] = $this->ion_auth_model->get_users_groups($id)->result();
@@ -34,6 +33,7 @@ class MY_Controller extends CI_Controller
 		$this->load->model("visuels_model");
 		$this->load->model("regisseur_model");
 		$this->load->model("data_model");
+		$this->load->model('Conge_model');
 		/* Form validation */
 
 		$supportdata = array();
@@ -88,6 +88,9 @@ class MY_Controller extends CI_Controller
 		
 		// dd("here"); 
 		// 3. Inject parts
+		$conge =  $this->Conge_model->get_conge_en_cours();
+		$nbr_conge_en_cours = count($conge);
+		$this->data['nbr_conge_en_cours'] = $nbr_conge_en_cours;
 		$this->template["header"] = $this->load->view("layouts/parts/header", $this->data, true);
 		$this->template["footer"] = $this->load->view("layouts/parts/footer", $this->data, true);
 		$this->template["sidebar"] = $this->load->view("layouts/parts/sidebar", $this->data, true);
