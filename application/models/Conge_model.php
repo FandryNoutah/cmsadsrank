@@ -72,6 +72,13 @@ public function get_conge_by_id($id)
     $query = $this->db->get();
     return $query->row();
 }
+public function get_conge_en_cours() {
+		$sql = "SELECT * FROM conges WHERE etat = 'en_attente'";
+		$result = $this->db->query($sql);
+		$retour = $result->result_array();
+		$this->db->close();
+		return $retour;	
+	}
 
 
 
