@@ -1,5 +1,4 @@
 <nav id="sidebarMenu" class="col-auto p-0 d-md-block bg-light sidebar collapse border-right h-100" style="width: 250px;">
-	
 	<a class="navbar-brand d-flex align-items-center justify-content-center p-0 m-0 border-bottom" href="#" style="height: 72px;">
 		<img class="logo-full" src="<?= base_url('assets/images/figma/logo_adsrank.png') ?>" alt="" height="30">
 		<img class="logo-split d-none" src="<?= base_url('assets/images/figma/logo_split.png') ?>" alt="" style="width: 30px;">
@@ -75,11 +74,11 @@
 			<li class="nav-item rounded">
 				<a class="nav-link text-secondary" href="<?= base_url('Conges') ?>">
 					<img class="mr-2" src="<?= base_url('assets/images/icons/figma/icon-briefcase.svg') ?>" />
-					<span class="nav-label">Congé</span>
+					<span class="nav-label">Congé <?php if($nbr_conge_en_cours != 0): ?><?php if($current_user->tech == 3): ?> ( <?php echo $nbr_conge_en_cours; ?> ) <?php endif; ?> <?php endif; ?></span>
 				</a>
 			</li>
 			<li class="nav-item rounded">
-				<a class="nav-link text-secondary" href="#">
+				<a class="nav-link text-secondary" href="<?= base_url('Utilisateur'); ?>">
 					<img class="mr-2" src="<?= base_url('assets/images/icons/figma/icon-gear.svg') ?>" />
 					<span class="nav-label">Utilisateur</span>
 				</a>
