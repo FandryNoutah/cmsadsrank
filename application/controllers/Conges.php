@@ -26,7 +26,12 @@ class Conges extends MY_Controller
 		$this->data['is_compta'] = intval($this->current_user->tech);
 
 		if ($is_compta == 2) {
-			$this->data['envets'] = $this->Event_model->get_all_event();
+			
+			$agendaFitlers = $this->input->get("agendaFilters");
+
+			$events = $this->Event_model->get_all_event();
+			$this->data['events'] = $events;
+			
 			$this->content = "layouts/conges/compta/index";
 			$this->layout();
 		} else {
