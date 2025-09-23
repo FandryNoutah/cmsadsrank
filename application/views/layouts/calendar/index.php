@@ -1,6 +1,4 @@
 <?php start_section('stylesheet'); ?>
-<link rel="stylesheet" href="<?= base_url('assets/vendors/bootstrap/css/bootstrap.css') ?>" />
-<link rel="stylesheet" href="<?= base_url('assets/vendors/fontawesome/css/all.min.css') ?>" />
 <link rel="stylesheet" href="<?= base_url('assets/vendors/fullcalendar/css/main.min.css') ?>" />
 <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
 
@@ -267,6 +265,10 @@
 		<div class="custom-control custom-checkbox">
 			<input type="checkbox" class="custom-control-input" id="agenda_Contact" name="agendaFilter" value="Contact" aria-selected="true" checked>
 			<label class="custom-control-label m-0" for="agenda_Contact">Contact</label>
+		</div>
+		<div class="custom-control custom-checkbox">
+			<input type="checkbox" class="custom-control-input" id="agenda_Autres" name="agendaFilter" value="Autres" aria-selected="true" checked>
+			<label class="custom-control-label m-0" for="agenda_Autres">Autres</label>
 		</div>
 
 		<h3>Filtres</h3>
