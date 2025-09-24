@@ -367,7 +367,7 @@ class Task_model extends CI_Model
 	}
 	public function update_task_statuts($taskId, $data)
 	{
-		// Mettre à jour la tâche dans la base de données
+		$this->load->database();
 		$this->db->where('idtask', $taskId);
 		$this->db->update('tasks', $data);
 
