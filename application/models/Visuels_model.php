@@ -13,8 +13,18 @@ class Visuels_model extends CI_Model {
 	protected $visuels_formats_images = "hm_visuels_formats_images";
     protected $_database;
     public $table_fields = array();
-
-	
+	public function get_upsell_by_id($idupsell) {
+	$sql = "select * from upsell where idupsell='".$idupsell."'";
+	$result = $this->db->query($sql);
+	$retour = $result->result_array();
+	$this->db->close();
+	return $retour;
+	}
+	public function change_statut_en_demande($id,$statut_demande){
+            $sql = "update donnee set statut_demande_en_cours='".$statut_demande."' where idclients ='".$id."'";
+            $this->db->query($sql);
+            $this->db->close();
+    }	
 	public function getClientDataByDonneeWithMonth($month_filter = null) {
 		$this->db->select('donnee.*, clients.*, produit.*, 
 							am_user.photo_users AS am_photo_user, 
@@ -86,12 +96,19 @@ class Visuels_model extends CI_Model {
 		$this->db->query($sql);
 		$this->db->close();
 	}
-	public function create_upsell($type_upsell,$budget_finale,$budget_initiale,$demmande_upsell,$am, $tm, $date_upsell, $date_demande_upsell, $inforamtion_upsell, $statut_upsell,$idclients,$actif){
-		$sql = "INSERT INTO upsell (type_upsell,budget_initiale, budgets,compta, am, tm, date_upsell, date_demande, information, etat, idclients,actif) 
-				VALUES ('$type_upsell', '$budget_initiale', '$budget_finale','$demmande_upsell', '$am', '$tm', '$date_upsell', '$date_demande_upsell', '$inforamtion_upsell', '$statut_upsell', '$idclients', '$actif')";
-		$this->db->query($sql);
-		$this->db->close();
-	}
+	public function create_upsell($type_upsell, $budget_finale, $budget_initiale, $demmande_upsell, $am, $tm, $date_upsell, $date_demande_upsell, $inforamtion_upsell, $statut_upsell, $idclients, $actif){
+    $sql = "INSERT INTO upsell (type_upsell, budget_initiale, budgets, compta, am, tm, date_upsell, date_demande, information, etat, idclients, actif) 
+            VALUES ('$type_upsell', '$budget_initiale', '$budget_finale', '$demmande_upsell', '$am', '$tm', '$date_upsell', '$date_demande_upsell', '$inforamtion_upsell', '$statut_upsell', '$idclients', '$actif')";
+
+    $this->db->query($sql);
+
+    $idupsell = $this->db->insert_id();
+    $this->db->close();
+
+    return $idupsell;
+}
+
+
 	public function update_budget($budget_finale,$idclients){
 		$sql = "update donnee set budget='".$budget_finale."' where idclients='".$idclients."'";
 		$this->db->query($sql);
