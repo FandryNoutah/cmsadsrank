@@ -33,6 +33,32 @@
 		overflow: auto;
 		background: #fff;
 	}
+
+	.table-wrapper {
+		border-spacing: 0 15px !important;
+		border-collapse: separate !important;
+	}
+
+	.table-wrapper td,
+	.table-wrapper th {
+		vertical-align: middle;
+		border: border;
+		border-bottom: 1px solid #dee2e6 !important;
+	}
+
+	.table-wrapper tbody tr td:first-child,
+	.table-wrapper thead tr th:first-child {
+		border-left: 1px solid #dee2e6;
+		border-top-left-radius: 4px;
+		border-bottom-left-radius: 4px;
+	}
+
+	.table-wrapper tbody tr td:last-child,
+	.table-wrapper thead tr th:last-child {
+		border-right: 1px solid #dee2e6;
+		border-top-right-radius: 4px;
+		border-bottom-right-radius: 4px;
+	}
 </style>
 <?php end_section(); ?>
 
@@ -82,7 +108,7 @@
 			</div>
 		</div>
 
-		<table class="table table-bordered table-hover rounded">
+		<table class="table table-hover rounded table-wrapper">
 			<thead class="thead-light">
 				<tr>
 					<th>Titre</th>
@@ -101,27 +127,25 @@
 	</div>
 </div>
 
+<?php $this->load->view('layouts/conges/compta/modal/edit'); ?>
+
 <?php end_section(); ?>
 
 <?php start_section('script'); ?>
 <script src="<?= base_url('assets/vendors/fullcalendar/js/main.min.js') ?>"></script>
 <script src="<?= base_url('assets/vendors/fullcalendar/js/locale.fr.js') ?>"></script>
 <script>
-	document.addEventListener('DOMContentLoaded', function() {
-		var URL_FETCH_EVENTS = '<?= site_url("calendar/fetch_events"); ?>';
+	$(function() {
+
+		// VARIABLE DECLARATION
+		var URL_FETCH_EVENTS = '<?= site_url("Conges/fetch_events"); ?>';
 		var URL_FETCH_USERS = '<?= site_url("calendar/fetch_users"); ?>';
 		var URL_EVENT_DETAIL = '<?= site_url("calendar/event_detail"); ?>';
 		var URL_DELETE_EVENT = '<?= site_url("calendar/delete_event"); ?>';
 
 		var currentDate = new Date();
 
-		var miniCal = new FullCalendar.Calendar(document.getElementById('miniCalendar'), {
-			initialView: 'dayGridMonth',
-			headerToolbar: false,
-			editable: false,
-			dayMaxEvents: false,
-		});
-		miniCal.render();
+		// FUNCTION DECLARATION
 
 		function updateMonthTitle() {
 			var options = {
@@ -133,13 +157,24 @@
 
 		function loadUsers() {
 			$.get(URL_FETCH_USERS, function(users) {
+
 				var $filter = $('#userFilter').empty();
+
 				$filter.append('<option value="">-- Tous les utilisateurs --</option>');
 				users.forEach(function(u) {
 					var name = (u.first_name || '') + ' ' + (u.last_name || '');
 					if (!name.trim()) name = u.username || u.email || ('user-' + u.id);
 					$filter.append($('<option>').val(u.id).text(name));
 				});
+
+				var $ea = $('#editAttendeesSelect').empty();
+
+				users.forEach(function(u) {
+					var name = ((u.first_name ? u.first_name : '') + (u.last_name ? ' ' + u.last_name : '')).trim();
+					if (!name) name = u.username || u.email || ('user-' + u.id);
+					$ea.append($('<option>').val(u.id).text(name));
+				});
+
 			}, 'json');
 		}
 
@@ -179,7 +214,7 @@
 						<td>${ev.end || '-'}</td>
 						<td>${ev.agenda || '-'}</td>
 						<td>
-							<button class="btn btn-sm btn-outline-primary" onclick="openEditModal(${ev.id})">
+							<button class="btn btn-sm btn-outline-primary" data-toggle="modal" data-target="#editEventModal" data-id="${ev.id}">
 								<i class="fa fa-edit"></i>
 							</button>
 							<button class="btn btn-sm btn-outline-danger" onclick="deleteEvent(${ev.id})">
@@ -194,16 +229,64 @@
 			});
 		}
 
+		function fillEditModalFromObject(obj) {
+			const form = $('#editEventForm');
+			form[0].reset();
+
+			form.find('input[name=id]').val(obj.id || '');
+			form.find('input[name=title]').val(obj.title || '');
+			form.find('textarea[name=description]').val(obj.description || '');
+
+			form.find('input[name=start_date]').val(parseDateForInput(obj.start || obj.start_date || obj.datetime || obj.begin));
+			form.find('input[name=end_date]').val(parseDateForInput(obj.end || obj.end_date || obj.finish));
+			form.find('input[name=color]').val(obj.backgroundColor || obj.color || '#3788d8');
+
+			const attendeesRaw = obj.attendees || obj.attendees_ids || [];
+			var attendees = [];
+			attendeesRaw.forEach(function(a) {
+				if (!a) return;
+				if (typeof a === 'object') attendees.push(a.id || a.value || (a.username || a.name) || JSON.stringify(a));
+				else attendees.push(String(a));
+			});
+
+			var $sel = $('#editAttendeesSelect');
+			$sel.find('option').prop('selected', false);
+			attendees.forEach(function(a) {
+				var optByVal = $sel.find('option[value="' + a + '"]');
+				if (optByVal.length) optByVal.prop('selected', true);
+				else $sel.find('option').filter(function() {
+					return $(this).text() === a;
+				}).prop('selected', true);
+			});
+		}
+
+		// BEGIN SCRIPT
+
+		if (!$('#sidebarMenu').hasClass("collapsed")) {
+			$('#toggleSidebar').click();
+		}
+
+		var miniCal = new FullCalendar.Calendar(document.getElementById('miniCalendar'), {
+			initialView: 'dayGridMonth',
+			headerToolbar: false,
+			editable: false,
+			dayMaxEvents: false,
+		});
+		miniCal.render();
+
+
 		$('#todayBtn').on('click', function() {
 			currentDate = new Date();
 			updateMonthTitle();
 			loadEvents();
 		});
+
 		$('#prevBtn').on('click', function() {
 			currentDate.setMonth(currentDate.getMonth() - 1);
 			updateMonthTitle();
 			loadEvents();
 		});
+
 		$('#nextBtn').on('click', function() {
 			currentDate.setMonth(currentDate.getMonth() + 1);
 			updateMonthTitle();
@@ -215,6 +298,21 @@
 		updateMonthTitle();
 		loadUsers();
 		loadEvents();
+
+		$('#editEventModal').on('show.bs.modal', function(event) {
+
+			let button = $(event.relatedTarget);
+			let id = $(button).attr('data-id');
+
+			$.ajax({
+				type: "GET",
+				url: URL_EVENT_DETAIL + "/" + id,
+				dataType: "json",
+				success: function(response) {
+					fillEditModalFromObject(response);
+				}
+			});
+		});
 	});
 </script>
 <?php end_section(); ?>
