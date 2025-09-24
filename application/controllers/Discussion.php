@@ -25,8 +25,8 @@ class Discussion extends MY_Controller
 	public function index()
 	{
 		$idusers = $this->current_user->id;
-		$tasks = $this->Task_model->get_task_for_users_by_type($idusers);
-		$notes = $this->Note_model->get_for_user($idusers);
+		$tasks = $this->Task_model->get_task_for_users_by_type();
+		$notes = $this->Note_model->get_for_user();
 
 		foreach ($tasks as $index => $task) {
 			$taREMOVED>count_messages = $this->Task_message_model->count_messages_by_task($taREMOVED>idtask);
@@ -51,7 +51,7 @@ class Discussion extends MY_Controller
 	public function Note()
 	{
 		$idusers = $this->current_user->id;
-		$notes = $this->Note_model->get_for_user($idusers);
+		$notes = $this->Note_model->get_for_user();
 
 		foreach ($notes as $index => $note) {
 			$note->count_messages = $this->Note_message_model->count_messages_by_note($note->id);
@@ -70,7 +70,7 @@ class Discussion extends MY_Controller
 	{
 
 		$idusers = $this->current_user->id;
-		$tasks = $this->Task_model->get_task_for_users_by_type($idusers, 1);
+		$tasks = $this->Task_model->get_task_for_users_by_type(null, 1);
 		foreach ($tasks as $index => $task) {
 			$taREMOVED>count_messages = $this->Task_message_model->count_messages_by_task($taREMOVED>idtask);
 			if ($taREMOVED>count_messages <= 0) {
@@ -86,7 +86,7 @@ class Discussion extends MY_Controller
 	public function Brief()
 	{
 		$idusers = $this->current_user->id;
-		$tasks = $this->Task_model->get_task_for_users_by_type($idusers, 5);
+		$tasks = $this->Task_model->get_task_for_users_by_type(null, 5);
 		foreach ($tasks as $index => $task) {
 			$taREMOVED>count_messages = $this->Task_message_model->count_messages_by_task($taREMOVED>idtask);
 			if ($taREMOVED>count_messages <= 0) {
@@ -102,7 +102,7 @@ class Discussion extends MY_Controller
 	public function Temporaire()
 	{
 		$idusers = $this->current_user->id;
-		$tasks = $this->Task_model->get_task_for_users_by_type($idusers, 2);
+		$tasks = $this->Task_model->get_task_for_users_by_type(null, 2);
 		foreach ($tasks as $index => $task) {
 			$taREMOVED>count_messages = $this->Task_message_model->count_messages_by_task($taREMOVED>idtask);
 			if ($taREMOVED>count_messages <= 0) {
@@ -118,7 +118,7 @@ class Discussion extends MY_Controller
 	public function Gtm()
 	{
 		$idusers = $this->current_user->id;
-		$tasks = $this->Task_model->get_all_procedure_gtm($idusers);
+		$tasks = $this->Task_model->get_all_procedure_gtm();
 		foreach ($tasks as $index => $task) {
 			$taREMOVED>count_messages = $this->Task_message_model->count_messages_by_task($taREMOVED>idtask);
 			if ($taREMOVED>count_messages <= 0) {
