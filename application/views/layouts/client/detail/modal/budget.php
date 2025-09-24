@@ -15,12 +15,13 @@
 					<div class="modal-body">
 						<div class="form-group">
 							<label for="budget_type">Type</label>
-							<select name="type_upsell" id="budget_type" class="form-control">
+							<select name="type_upsell" id="budget_type" class="form-control" required>
 								<option value="">Séléctionner type</option>
-								<option value="1">Baisse de budget</option>
 								<option value="2">Upsell - création de nouvelle campagne</option>
-								<option value="3">Baisse de budget</option>
+								<option value="1">Baisse de budget</option>
+								<option value="3">Booster (NE FONCTIONNE PAS ENCORE)</option>
 							</select>
+
 						</div>
 
 						<div class="form-group">
@@ -30,7 +31,13 @@
 
 						<div class="form-group">
 							<label for="budget_initial">Budget Initiale</label>
-							<input type="text" readonly name="budget_initiale" id="budget_initial" class="form-control" value="<?= $budget_initial[0]->budgets; ?> €">
+							<?php if(empty($budget_initial[0]->budgets)): 
+								$budget_initial = $d['budget']; 
+							endif;  ?>
+							<?php if(!empty($budget_initial[0]->budgets)): 
+								$budget_initial = $budget_initial[0]->budgets; 
+							endif;  ?>
+							<input type="text" readonly name="budget_initiale" id="budget_initial" class="form-control" value="<?= $budget_initial; ?> €">
 						</div>
 
 						<div class="form-group">
