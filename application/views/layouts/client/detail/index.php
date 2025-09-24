@@ -38,7 +38,7 @@
 
 		<div class="col" style="height: calc(100vh - 101px); overflow-y:auto;">
 			<div class="container-fluid pb-5">
-
+				<?php if ($d['statut_demande_en_cours'] == 0):  ?>
 				<div class="dropdown" style="text-align: right;">
 					<?php if ($d['resiliation'] == 1):  ?>
 						<a type="button" class="badge alert-success rounded-pill px-4 py-3 mb-3 dropdown-toggle" style="font-size: 14px; font-weight: 500;" id="clientStatusDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -62,24 +62,33 @@
 						<a class="dropdown-item" href="javscript:void(0);" data-toggle="modal" data-target="#statusModal">Statut Client</a>
 					</div>
 				</div>
+				<?php endif; ?>
+				<?php if ($d['statut_demande_en_cours'] == 1):  ?>
+				<div style="text-align: right;">
+						<a type="button" class="badge alert-second rounded-pill px-4 py-3 mb-3" style="font-size: 14px; font-weight: 500;" id="clientStatusDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+							<i class="fa fa-circle mr-1" style="font-size: 14px;"></i>
+							En cours de changement
+						</a>
+				</div>	
+				<?php endif; ?>
 
-				<div class="d-flex justify-content-start align-items-center mb-3" id="star-rating" style="margin-top: -50px;">
+				<div class="d-flex justify-content-start align-items-center mb-3" id="star-rating" style="margin-top: -50px; ">
 					<?php $noteClient = isset($note) ? $note : 0; ?>
 
-					<div class="d-flex justify-content-start align-items-center mb-3" id="star-rating" >
-						<?php for ($i = 1; $i <= 5; $i++): ?>
-							<img
-								src="<?= base_url('assets/images/icons/figma/') . ($i <= $noteClient ? 'star_full.svg' : 'Empty_Star.svg') ?>"
-								alt="star"
-								width="20"
-								class="mr-1 star"
-								data-index="<?= $i ?>">
-						<?php endfor; ?>
-					</div>
+					<?php for ($i = 1; $i <= 5; $i++): ?>
+						<img
+							src="<?= base_url('assets/images/icons/figma/') . ($i <= $noteClient ? 'star_full.svg' : 'Empty_Star.svg') ?>"
+							alt="star"
+							width="20"
+							class="mr-1 star"
+							data-index="<?= $i ?>">
+					<?php endfor; ?>
+
 					<input type="hidden" id="idclients" value="<?= $donnees[0]['idclients'] ?>">
 				</div>
 
-				<h1 class="mb-3" style="font-size: 48px; font-weight: 500; margin-top: -20px;">
+
+				<h1 class="mb-3" style="font-size: 48px; font-weight: 500; margin-top: -10px;">
 					<?= $d['nom_client'] ?>
 				</h1>
 				<h5 class="mb-5" style=""><a href="<?= $d['site_client'] ?>" target="_blank" style="color: black"><?= $d['site_client'] ?></a></h5>
@@ -756,10 +765,11 @@
 		}
 
 		$('#filter_budget_year').change(function() {
-			let year = $(this).data('year');
-			$('.budget-year-row').addClass('d-none');
-			$('.budget-year-row[data-year="' + year + '"]').removeClass('d-none');
-		});
+    let year = $(this).val(); // .val() et non .data('year')
+    $('.budget-year-row').addClass('d-none');
+    $('.budget-year-row[data-year="' + year + '"]').removeClass('d-none');
+});
+
 
 		$('#taskModal').on('show.bs.modal', function(event) {
 
@@ -831,49 +841,45 @@
 <!-- ID du client -->
 <input type="hidden" id="idclients" value="<?= $donnees[0]['idclients'] ?>">
 <script>
-	document.addEventListener('DOMContentLoaded', function() {
-		const stars = document.querySelectorAll('#star-rating .star');
-		const ratingDisplay = document.getElementById('selected-rating');
-		const idClient = document.getElementById('idclients').value;
+	document.addEventListener("DOMContentLoaded", function () {
+    const stars = document.querySelectorAll("#star-rating .star");
+    const ratingDisplay = document.getElementById("selected-rating");
+    const idClient = document.getElementById("idclients").value;
 
-		const fullStar = "<?= base_url('assets/images/icons/figma/star_full.svg') ?>";
-		const emptyStar = "<?= base_url('assets/images/icons/figma/Empty_Star.svg') ?>";
+    stars.forEach(star => {
+        star.addEventListener("click", function () {
+            const rating = parseInt(this.dataset.index);
 
-		stars.forEach((star, index) => {
-			star.addEventListener('click', () => {
-				const rating = index + 1;
+            // Mise à jour visuelle des étoiles
+            stars.forEach((s, i) => {
+                s.src = (i < rating)
+                    ? "<?= base_url('assets/images/icons/figma/star_full.svg') ?>"
+                    : "<?= base_url('assets/images/icons/figma/Empty_Star.svg') ?>";
+            });
 
-				// MAJ visuelle des étoiles
-				stars.forEach((s, i) => {
-					s.src = i < rating ? fullStar : emptyStar;
-				});
+            // Affiche la note choisie
+            if (ratingDisplay) ratingDisplay.textContent = rating + "/5";
 
-				// Afficher la note
-				ratingDisplay.textContent = `${rating}/5`;
+            // Envoi AJAX au serveur
+            fetch("<?= base_url('Client/enregistrer') ?>", {
+                method: "POST",
+                headers: { "Content-Type": "application/x-www-form-urlencoded" },
+                body: "rating=" + encodeURIComponent(rating) + "&idclients=" + encodeURIComponent(idClient)
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.status === "success") {
+                    console.log("Note enregistrée !");
+                } else {
+                    console.error("Erreur serveur:", data.message);
+                }
+            })
+            .catch(err => console.error("Erreur AJAX:", err));
+        });
+    });
+});
 
-				// Envoi AJAX pour enregistrer la note
-				fetch("<?= base_url('Client/enregistrer') ?>", {
-						method: "POST",
-						headers: {
-							'Content-Type': 'application/json'
-						},
-						body: JSON.stringify({
-							rating: rating,
-							idclients: idClient
-						})
-					})
-					.then(response => response.json())
-					.then(data => {
-						if (data.success) {
-							console.log("Note enregistrée avec succès.");
-						} else {
-							console.error("Erreur lors de l’enregistrement :", data.message);
-						}
-					})
-					.catch(error => console.error("Erreur réseau :", error));
-			});
-		});
-	});
+
 	function changeColor(colorId, colorHex, idclients, el) {
 												$(el).closest('.dropdown').find('#colorIcon').css('color', colorHex);
 
