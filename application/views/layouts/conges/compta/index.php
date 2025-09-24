@@ -1,31 +1,31 @@
 <?php start_section('stylesheet'); ?>
-<link rel="stylesheet" href="<?= base_url('assets/vendors/bootstrap/css/bootstrap.css') ?>" />
-<link rel="stylesheet" href="<?= base_url('assets/vendors/fontawesome/css/all.min.css') ?>" />
-<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
-<link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.15/index.global.min.css" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.15/index.global.min.js"></script>
+<link rel="stylesheet" href="<?= base_url('assets/vendors/fullcalendar/css/main.min.css') ?>" />
 
 <style>
 	body {
 		overflow: hidden;
 		font-family: 'Roboto', sans-serif;
 	}
+
 	#calendar_sidebar {
 		width: 260px;
 		padding: 12px;
 		overflow: auto;
 		height: calc(100vh - 101px);
 	}
+
 	#calendar_sidebar h3 {
 		margin: 16px 0 8px;
 		color: #5f6368;
 		font-size: 13px;
 	}
+
 	#calendar_sidebar label {
 		display: block;
 		margin-bottom: 6px;
 		font-size: 14px;
 	}
+
 	.main {
 		flex: 1;
 		padding: 12px;
@@ -33,31 +33,37 @@
 		overflow: auto;
 		background: #fff;
 	}
+
 	table.event-table {
 		width: 100%;
 		border-collapse: collapse;
 		background: #fff;
 		border-radius: 12px;
 		overflow: hidden;
-		box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+		box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
 	}
+
 	table.event-table thead {
 		background: #f8f9fa;
 	}
-	table.event-table th, 
+
+	table.event-table th,
 	table.event-table td {
 		padding: 10px 12px;
 		border-bottom: 1px solid #f0f0f0;
 		font-size: 14px;
 		vertical-align: middle;
 	}
+
 	table.event-table th {
 		font-weight: 600;
 		color: #5f6368;
 	}
+
 	table.event-table tr:hover {
 		background: #f9fbfd;
 	}
+
 	.btn-action {
 		padding: 4px 8px;
 		border: none;
@@ -65,9 +71,20 @@
 		cursor: pointer;
 		font-size: 13px;
 	}
-	.btn-edit { background: #e8f0fe; color: #1a73e8; }
-	.btn-delete { background: #fdecea; color: #d93025; }
-	#todayBtn, #prevBtn, #nextBtn {
+
+	.btn-edit {
+		background: #e8f0fe;
+		color: #1a73e8;
+	}
+
+	.btn-delete {
+		background: #fdecea;
+		color: #d93025;
+	}
+
+	#todayBtn,
+	#prevBtn,
+	#nextBtn {
 		background: #f8f9fa;
 		border: 1px solid #ddd;
 		color: #333;
@@ -75,12 +92,17 @@
 		margin-right: 4px;
 		transition: all 0.2s;
 	}
-	#todayBtn:hover, #prevBtn:hover, #nextBtn:hover {
+
+	#todayBtn:hover,
+	#prevBtn:hover,
+	#nextBtn:hover {
 		background: #e8f0fe;
 		border-color: #c2dbfe;
 		color: #1a73e8;
 	}
-	#userFilter, #viewSelect {
+
+	#userFilter,
+	#viewSelect {
 		border-radius: 6px;
 		border: 1px solid #ddd;
 		padding: 6px 8px;
@@ -98,11 +120,11 @@
 		</button>
 		<div id="miniCalendar" class="my-3"></div>
 		<h3>Mes agendas</h3>
-		<?php 
-		$agendas = ["Télétravail","Perso","Soutenance","Formation","Maladie","Congé","Contact"];
-		foreach($agendas as $a): ?>
+		<?php
+		$agendas = ["Télétravail", "Perso", "Soutenance", "Formation", "Maladie", "Congé", "Contact"];
+		foreach ($agendas as $a): ?>
 			<div class="custom-control custom-checkbox">
-				<input type="checkbox" class="custom-control-input" 
+				<input type="checkbox" class="custom-control-input"
 					id="agenda_<?= $a ?>" name="agendaFilter" value="<?= $a ?>" checked>
 				<label class="custom-control-label m-0" for="agenda_<?= $a ?>"><?= $a ?></label>
 			</div>
@@ -142,119 +164,128 @@
 				</tr>
 			</thead>
 			<tbody id="eventTableBody">
-				<tr><td colspan="5" class="text-center text-muted">Chargement...</td></tr>
+				<tr>
+					<td colspan="5" class="text-center text-muted">Chargement...</td>
+				</tr>
 			</tbody>
 		</table>
 	</div>
 </div>
 
-<?php $this->load->view('layouts/calendar/modal/event'); ?>
-<?php $this->load->view('layouts/calendar/modal/edit'); ?>
 <?php end_section(); ?>
 
 <?php start_section('script'); ?>
+<script src="<?= base_url('assets/vendors/fullcalendar/js/main.min.js') ?>"></script>
+<script src="<?= base_url('assets/vendors/fullcalendar/js/locale.fr.js') ?>"></script>
 <script>
-document.addEventListener('DOMContentLoaded', function () {
-	var URL_FETCH_EVENTS = '<?= site_url("calendar/fetch_events"); ?>';
-	var URL_FETCH_USERS = '<?= site_url("calendar/fetch_users"); ?>';
-	var URL_EVENT_DETAIL = '<?= site_url("calendar/event_detail"); ?>';
-	var URL_DELETE_EVENT = '<?= site_url("calendar/delete_event"); ?>';
+	document.addEventListener('DOMContentLoaded', function() {
+		var URL_FETCH_EVENTS = '<?= site_url("calendar/fetch_events"); ?>';
+		var URL_FETCH_USERS = '<?= site_url("calendar/fetch_users"); ?>';
+		var URL_EVENT_DETAIL = '<?= site_url("calendar/event_detail"); ?>';
+		var URL_DELETE_EVENT = '<?= site_url("calendar/delete_event"); ?>';
 
-	var currentDate = new Date();
+		var currentDate = new Date();
 
-	var miniCal = new FullCalendar.Calendar(document.getElementById('miniCalendar'), {
-		initialView: 'dayGridMonth',
-		headerToolbar: false,
-		editable: false,
-		dayMaxEvents: false,
-	});
-	miniCal.render();
+		var miniCal = new FullCalendar.Calendar(document.getElementById('miniCalendar'), {
+			initialView: 'dayGridMonth',
+			headerToolbar: false,
+			editable: false,
+			dayMaxEvents: false,
+		});
+		miniCal.render();
 
-	function updateMonthTitle() {
-		var options = { month: 'long', year: 'numeric' };
-		document.getElementById('monthTitle').innerText = currentDate.toLocaleDateString('fr-FR', options);
-	}
+		function updateMonthTitle() {
+			var options = {
+				month: 'long',
+				year: 'numeric'
+			};
+			document.getElementById('monthTitle').innerText = currentDate.toLocaleDateString('fr-FR', options);
+		}
 
-	function loadUsers() {
-		$.get(URL_FETCH_USERS, function(users) {
-			var $filter = $('#userFilter').empty();
-			$filter.append('<option value="">-- Tous les utilisateurs --</option>');
-			users.forEach(function(u) {
-				var name = (u.first_name||'') + ' ' + (u.last_name||'');
-				if (!name.trim()) name = u.username || u.email || ('user-' + u.id);
-				$filter.append($('<option>').val(u.id).text(name));
-			});
-		}, 'json');
-	}
+		function loadUsers() {
+			$.get(URL_FETCH_USERS, function(users) {
+				var $filter = $('#userFilter').empty();
+				$filter.append('<option value="">-- Tous les utilisateurs --</option>');
+				users.forEach(function(u) {
+					var name = (u.first_name || '') + ' ' + (u.last_name || '');
+					if (!name.trim()) name = u.username || u.email || ('user-' + u.id);
+					$filter.append($('<option>').val(u.id).text(name));
+				});
+			}, 'json');
+		}
 
-	function loadEvents() {
-		var userId = $('#userFilter').val() || '';
-		var agendaFilters = $('input[name="agendaFilter"]:checked').map(function() {
-			return this.value;
-		}).get();
+		function loadEvents() {
+			var userId = $('#userFilter').val() || '';
+			var agendaFilters = $('input[name="agendaFilter"]:checked').map(function() {
+				return this.value;
+			}).get();
 
-		$('#eventTableBody').html('<tr><td colspan="5" class="text-center text-muted">Chargement...</td></tr>');
+			$('#eventTableBody').html('<tr><td colspan="5" class="text-center text-muted">Chargement...</td></tr>');
 
-		$.ajax({
-			url: URL_FETCH_EVENTS,
-			data: {
-				user_id: userId,
-				agendaFilters: agendaFilters,
-				start: new Date(currentDate.getFullYear(), currentDate.getMonth(), 1).toISOString(),
-				end: new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0).toISOString()
-			},
-			dataType: 'json'
-		}).done(function(response) {
-			var events = response;
-			if (response.data) {
-				events = response.data;
-			}
+			$.ajax({
+				url: URL_FETCH_EVENTS,
+				data: {
+					user_id: userId,
+					agendaFilters: agendaFilters,
+					start: new Date(currentDate.getFullYear(), currentDate.getMonth(), 1).toISOString(),
+					end: new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0).toISOString()
+				},
+				dataType: 'json'
+			}).done(function(response) {
+				var events = response;
+				if (response.data) {
+					events = response.data;
+				}
 
-			if (!events.length) {
-				$('#eventTableBody').html('<tr><td colspan="5" class="text-center text-muted">Aucun événement trouvé</td></tr>');
-				return;
-			}
+				if (!events.length) {
+					$('#eventTableBody').html('<tr><td colspan="5" class="text-center text-muted">Aucun événement trouvé</td></tr>');
+					return;
+				}
 
-			var rows = events.map(function(ev) {
-				return `
+				var rows = events.map(function(ev) {
+					return `
 					<tr>
 						<td>${ev.title || '-'}</td>
 						<td>${ev.start || '-'}</td>
 						<td>${ev.end || '-'}</td>
 						<td>${ev.agenda || '-'}</td>
 						<td>
-							<button class="btn btn-sm btn-outline-primary" onclick="openEditModal(${ev.id})">✏️</button>
-							<button class="btn btn-sm btn-outline-danger" onclick="deleteEvent(${ev.id})">🗑️</button>
+							<button class="btn btn-sm btn-outline-primary" onclick="openEditModal(${ev.id})">
+								<i class="fa fa-edit"></i>
+							</button>
+							<button class="btn btn-sm btn-outline-danger" onclick="deleteEvent(${ev.id})">
+								<i class="fa fa-trash"></i>
+							</button>
 						</td>
 					</tr>`;
+				});
+				$('#eventTableBody').html(rows.join(''));
+			}).fail(function() {
+				$('#eventTableBody').html('<tr><td colspan="5" class="text-center text-danger">Erreur de chargement</td></tr>');
 			});
-			$('#eventTableBody').html(rows.join(''));
-		}).fail(function() {
-			$('#eventTableBody').html('<tr><td colspan="5" class="text-center text-danger">Erreur de chargement</td></tr>');
+		}
+
+		$('#todayBtn').on('click', function() {
+			currentDate = new Date();
+			updateMonthTitle();
+			loadEvents();
 		});
-	}
+		$('#prevBtn').on('click', function() {
+			currentDate.setMonth(currentDate.getMonth() - 1);
+			updateMonthTitle();
+			loadEvents();
+		});
+		$('#nextBtn').on('click', function() {
+			currentDate.setMonth(currentDate.getMonth() + 1);
+			updateMonthTitle();
+			loadEvents();
+		});
 
-	$('#todayBtn').on('click', function() {
-		currentDate = new Date();
+		$('#userFilter, input[name="agendaFilter"]').on('change', loadEvents);
+
 		updateMonthTitle();
+		loadUsers();
 		loadEvents();
 	});
-	$('#prevBtn').on('click', function() {
-		currentDate.setMonth(currentDate.getMonth() - 1);
-		updateMonthTitle();
-		loadEvents();
-	});
-	$('#nextBtn').on('click', function() {
-		currentDate.setMonth(currentDate.getMonth() + 1);
-		updateMonthTitle();
-		loadEvents();
-	});
-
-	$('#userFilter, input[name="agendaFilter"]').on('change', loadEvents);
-
-	updateMonthTitle();
-	loadUsers();
-	loadEvents();
-});
 </script>
 <?php end_section(); ?>
