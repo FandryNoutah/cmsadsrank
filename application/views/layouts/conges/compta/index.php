@@ -33,81 +33,6 @@
 		overflow: auto;
 		background: #fff;
 	}
-
-	table.event-table {
-		width: 100%;
-		border-collapse: collapse;
-		background: #fff;
-		border-radius: 12px;
-		overflow: hidden;
-		box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-	}
-
-	table.event-table thead {
-		background: #f8f9fa;
-	}
-
-	table.event-table th,
-	table.event-table td {
-		padding: 10px 12px;
-		border-bottom: 1px solid #f0f0f0;
-		font-size: 14px;
-		vertical-align: middle;
-	}
-
-	table.event-table th {
-		font-weight: 600;
-		color: #5f6368;
-	}
-
-	table.event-table tr:hover {
-		background: #f9fbfd;
-	}
-
-	.btn-action {
-		padding: 4px 8px;
-		border: none;
-		border-radius: 6px;
-		cursor: pointer;
-		font-size: 13px;
-	}
-
-	.btn-edit {
-		background: #e8f0fe;
-		color: #1a73e8;
-	}
-
-	.btn-delete {
-		background: #fdecea;
-		color: #d93025;
-	}
-
-	#todayBtn,
-	#prevBtn,
-	#nextBtn {
-		background: #f8f9fa;
-		border: 1px solid #ddd;
-		color: #333;
-		font-weight: 500;
-		margin-right: 4px;
-		transition: all 0.2s;
-	}
-
-	#todayBtn:hover,
-	#prevBtn:hover,
-	#nextBtn:hover {
-		background: #e8f0fe;
-		border-color: #c2dbfe;
-		color: #1a73e8;
-	}
-
-	#userFilter,
-	#viewSelect {
-		border-radius: 6px;
-		border: 1px solid #ddd;
-		padding: 6px 8px;
-		font-size: 14px;
-	}
 </style>
 <?php end_section(); ?>
 
@@ -132,7 +57,7 @@
 		<h3>Filtres</h3>
 		<div class="form-group">
 			<label for="userFilter">Filtrer par utilisateur :</label>
-			<select id="userFilter" class="custom-select" style="width:100%; padding:6px;">
+			<select id="userFilter" class="custom-select custom-select-sm w-100">
 				<option value="">-- Tous les utilisateurs --</option>
 			</select>
 		</div>
@@ -141,9 +66,13 @@
 	<div class="main">
 		<div class="d-flex justify-content-between align-items-center mb-3">
 			<div>
-				<button id="todayBtn" class="btn btn-sm">Aujourd'hui</button>
-				<button id="prevBtn" class="btn btn-sm">&lt;</button>
-				<button id="nextBtn" class="btn btn-sm">&gt;</button>
+				<button id="todayBtn" class="btn btn-outline-dark rounded-pill px-4 btn-sm">Aujourd'hui</button>
+				<button id="prevBtn" class="btn btn-white">
+					<i class="fa fa-chevron-left"></i>
+				</button>
+				<button id="nextBtn" class="btn btn-white">
+					<i class="fa fa-chevron-right"></i>
+				</button>
 			</div>
 			<h3 id="monthTitle" class="m-0"></h3>
 			<div>
@@ -153,7 +82,7 @@
 			</div>
 		</div>
 
-		<table class="table table-bordered table-hover">
+		<table class="table table-bordered table-hover rounded">
 			<thead class="thead-light">
 				<tr>
 					<th>Titre</th>
