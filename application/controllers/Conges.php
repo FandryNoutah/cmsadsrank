@@ -26,18 +26,69 @@ class Conges extends MY_Controller
 		$this->data['is_compta'] = intval($this->current_user->tech);
 
 		if ($is_compta == 2) {
-			
+
 			$agendaFitlers = $this->input->get("agendaFilters");
 
 			$events = $this->Event_model->get_all_event();
 			$this->data['events'] = $events;
-			
+
 			$this->content = "layouts/conges/compta/index";
 			$this->layout();
 		} else {
 			$this->content = "layouts/conges/index";
 			$this->layout();
 		}
+	}
+
+	public function fetch_events()
+	{
+		if (!$this->current_user) {
+			show_error('Unauthorized', 401);
+			return;
+		}
+
+		$start = $this->input->get("start");
+		$end   = $this->input->get("end");
+		$user_id = $this->input->get("user_id");
+		$agendaFitlers = $this->input->get("agendaFilters");
+
+		if (empty($user_id)) {
+			$user_id = $this->current_user->id;
+		} else {
+			$user_id = intval($user_id);
+		}
+
+		$events = $this->Event_model->get_events($start, $end, $user_id, $agendaFitlers);
+
+		$result = [];
+		foreach ($events as $e) {
+
+			$attendees = [];
+			if (!empty($e->attendees)) {
+				foreach ($e->attendees as $a) {
+					$attendees[] = trim(($a->first_name ?: '') . ' ' . ($a->last_name ?: $a->username));
+				}
+			}
+
+			$title = $e->title;
+			if (!empty($attendees) && !substr($title, 0, strlen("Congé")) === "Congé") {
+				$title .= ' de ' . implode(', ', $attendees);
+			}
+
+			$result[] = [
+				"id"    => $e->id,
+				"title" => $title,
+				"description" => $e->description,
+				"start" => date("c", strtotime($e->start_date)),
+				"end"   => date("c", strtotime($e->end_date)),
+				"color" => $e->color ?: "#3788d8",
+				"attendees" => $attendees
+			];
+		}
+
+		$this->output
+			->set_content_type('application/json')
+			->set_output(json_encode($result));
 	}
 
 	public function demander()
