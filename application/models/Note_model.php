@@ -8,13 +8,17 @@ class Note_model extends CI_Model {
         parent::__construct();
         $this->load->database();
     }
-    public function get_for_user($user_id) {
+    public function get_for_user($user_id = null) {
+
         $this->db->select('n.*, u.username AS author');
         $this->db->from('notes n');
         $this->db->join('users u', 'u.id = n.created_by', 'left');
         $this->db->join('note_users nu', 'nu.note_id = n.id', 'inner');
-        $this->db->where('nu.user_id', $user_id);
+		if ($user_id !== null) {
+			$this->db->where('nu.user_id', $user_id);
+		}
         $this->db->order_by('n.created_at', 'DESC');
+
         return $this->db->get()->result();
     }
 
