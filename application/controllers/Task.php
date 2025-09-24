@@ -97,7 +97,38 @@ class Task extends MY_Controller
 	}
 
 	public function change_status() {
-		$taskId = $this->input->post('taskId');
+		$id_task = $taskId = $this->input->post('taskId');
+		$task = $this->Task_model->get_task_by_id($id_task);
+		if($this->input->post('status') == "effectuée"){
+			if($task->title == "Mise en pause" || $task->title == "Relance client" || $task->title == "Résiliation"){
+				$statut_demande = 0;
+				$id = intval($task->idclients); 
+				$this->visuels_model->change_statut_en_demande($id,$statut_demande);
+			}
+		}
+		if($this->input->post('status') == "effectuée"){
+			if($task->title == "Upsell"){
+				$statut_demande = 0;
+				$id = intval($task->idclients); 
+				$idupsell = $task->idupsell;
+				$upsell = $this->visuels_model->get_upsell_by_id($idupsell);
+				$budget_finale = $upsell[0]['budgets'];
+				$idclients = $upsell[0]['idclients'];
+				$budget_finale = floatval($budget_finale);
+				$this->visuels_model->update_budget($budget_finale,$idclients);
+			}
+			if($task->title == "Baisse"){
+				$statut_demande = 0;
+				$id = intval($task->idclients); 
+				$idupsell = $task->idupsell;
+				$upsell = $this->visuels_model->get_upsell_by_id($idupsell);
+				$budget_finale = $upsell[0]['budgets'];
+				$idclients = $upsell[0]['idclients'];
+				$budget_finale = floatval($budget_finale);
+				$this->visuels_model->update_budget($budget_finale,$idclients);
+			}
+		}
+		$taskId = intval($taskId);
 		$data = [
 			'status'	=>	$this->input->post('status'),
 		];

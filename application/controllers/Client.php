@@ -81,18 +81,17 @@ class Client extends MY_Controller
 		
 	}
 	public function enregistrer() {
-		$data = json_decode(file_get_contents("php://input"), true);
+    $idclients = $this->input->post('idclients');
+    $rating = $this->input->post('rating');
 
-		$idclients = $data['idclients'] ?? null;
-		$rating = $data['rating'] ?? null;
+    if ($idclients && $rating) {
+        $this->visuels_model->enregistrer_note($idclients, $rating);
+        echo json_encode(['success' => true]);
+    } else {
+        echo json_encode(['success' => false, 'message' => 'Données invalides']);
+    }
+}
 
-		if ($idclients && $rating) {
-			$this->visuels_model->enregistrer_note($idclients, $rating);
-			echo json_encode(['success' => true]);
-		} else {
-			echo json_encode(['success' => false, 'message' => 'Données invalides']);
-		}
-	}
 	public function resiliation()
 	{
 		$resiliation = $this->input->post('resiliation');
@@ -127,6 +126,8 @@ class Client extends MY_Controller
 		$id = intval($idclients);
 		$donnee = $this->data["clients"] = $this->visuels_model->getDonneeById($id);
 		$idonnee = $donnee[0]['idonnee'];
+		$statut_demande = 1;
+		$this->visuels_model->change_statut_en_demande($id,$statut_demande);
 		$budget_initiale = $donnee[0]['budget'];
 			$am = $this->input->post('am');
 			$budget_initiale = intval($budget_initiale);
@@ -376,10 +377,10 @@ class Client extends MY_Controller
 			//$date_validation_structure = 0000 - 00 - 00;
 			//$this->visuels_model->update_brief($date_brief, $campagne_actif, $validation_technique, $date_validation_structure, $lien_datastudio, $idclients);
 			$actif = 1;
-			$idclient = $this->visuels_model->create_upsell($type_upsell, $budget_finale, $budget_initiale, $demmande_upsell, $am, $tm, $date_upsell, $date_demande_upsell, $inforamtion_upsell, $statut_upsell, $idclients, $actif);
+			$idupsell = $this->visuels_model->create_upsell($type_upsell, $budget_finale, $budget_initiale, $demmande_upsell, $am, $tm, $date_upsell, $date_demande_upsell, $inforamtion_upsell, $statut_upsell, $idclients, $actif);
 			$type_tache = 1;
 			$title = "Upsell";
-			$tache = "Le client fait une upsell";
+			$tache = "Le client fait une upsell de "  . number_format($budget_finale, 0, ',', ' ') . " €";;
 			$Statuts_technique = 1;
 
 			$data = array(
@@ -391,8 +392,8 @@ class Client extends MY_Controller
 				'assigned_to' => $tm,
 				'title' => $title,
 				'Statuts_technique' => $Statuts_technique,
-				'description' => $tache
-
+				'description' => $tache,
+				'idupsell' => $idupsell
 			);
 
 			$this->Task_model->add_task($data);
@@ -412,9 +413,11 @@ class Client extends MY_Controller
 			//$validation_technique = 0000 - 00 - 00;
 			//$date_validation_structure = 0000 - 00 - 00;
 			//$this->visuels_model->update_brief($date_brief, $campagne_actif, $validation_technique, $date_validation_structure, $lien_datastudio, $idclients);
+			$actif = 1;
+			$idupsell = $this->visuels_model->create_upsell($type_upsell, $budget_finale, $budget_initiale, $demmande_upsell, $am, $tm, $date_upsell, $date_demande_upsell, $inforamtion_upsell, $statut_upsell, $idclients, $actif);	
 			$type_tache = 1;
 			$title = "Baisse";
-			$tache = "Le client fait une baisse";
+			$tache = "Le client fait une baisse de " . number_format($budget_finale, 0, ',', ' ') . " €";
 			$Statuts_technique = 1;
 			$actif = 1;
 			$data = array(
@@ -426,12 +429,12 @@ class Client extends MY_Controller
 				'assigned_to' => $tm,
 				'title' => $title,
 				'Statuts_technique' => $Statuts_technique,
-				'description' => $tache
+				'description' => $tache,
+				'idupsell' => $idupsell
 			);
 
 			$this->Task_model->add_task($data);
-			$idclient = $this->visuels_model->create_upsell($type_upsell, $budget_finale, $budget_initiale, $demmande_upsell, $am, $tm, $date_upsell, $date_demande_upsell, $inforamtion_upsell, $statut_upsell, $idclients, $actif);
-
+			
 
 		endif;
 		//if ($type_upsell == 3):
