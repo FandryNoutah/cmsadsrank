@@ -7,13 +7,16 @@ class Task_model extends CI_Model
 		parent::__construct();
 	}
 
-	public function get_task_for_users_by_type($user_id, $type = 0)
+	public function get_task_for_users_by_type($user_id = null, $type = 0)
 	{
 		$this->db->select('tasks.*, users.*');
 		$this->db->from('tasks');
 		$this->db->join('users', 'users.id = tasks.AM', 'left');
 
-		$this->db->where('tasks.AM', $user_id);
+		if ($user_id !== null) {
+			$this->db->where('tasks.AM', $user_id);
+		}
+
 		if ($type !== 0) {
 			$this->db->where('tasks.type_tache', $type);
 		}
