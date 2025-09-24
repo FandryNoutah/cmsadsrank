@@ -28,14 +28,14 @@ class Calendar extends MY_Controller
 
 		$start = $this->input->get("start");
 		$end   = $this->input->get("end");
-		$user_id = $this->input->get("user_id");
+		$user_id = intval($this->input->get("user_id"));
 		$agendaFitlers = $this->input->get("agendaFilters");
 
-		if (empty($user_id)) {
+		/* if (empty($user_id)) {
 			$user_id = $this->current_user->id;
 		} else {
 			$user_id = intval($user_id);
-		}
+		} */
 
 		$events = $this->Event_model->get_events($start, $end, $user_id, $agendaFitlers);
 
@@ -76,101 +76,101 @@ class Calendar extends MY_Controller
 			show_error('Unauthorized', 401);
 			return;
 		}
-		$users = $this->Event_model->get_users($this->current_user->id);
+		$users = $this->Event_model->get_users();
 		header('Content-Type: application/json');
 		echo json_encode($users);
 	}
 
 	public function add_event()
-{
-	if (!$this->current_user) {
-		show_error('Unauthorized', 401);
-		return;
-	}
+	{
+		if (!$this->current_user) {
+			show_error('Unauthorized', 401);
+			return;
+		}
 
-	$custom_title = trim($this->input->post("custom_title"));
-	$default_title = trim($this->input->post("title"));
-	$title = $custom_title !== '' ? $custom_title : $default_title;
+		$custom_title = trim($this->input->post("custom_title"));
+		$default_title = trim($this->input->post("title"));
+		$title = $custom_title !== '' ? $custom_title : $default_title;
 
-	if (empty($title)) {
-		echo json_encode(['error' => 'Titre requis']);
-		return;
-	}
+		if (empty($title)) {
+			echo json_encode(['error' => 'Titre requis']);
+			return;
+		}
 
-	$description = $this->input->post("description");
+		$description = $this->input->post("description");
 
-	$start_input = $this->input->post("start_date");
-	$end_input = $this->input->post("end_date");
+		$start_input = $this->input->post("start_date");
+		$end_input = $this->input->post("end_date");
 
-	$start_timestamp = strtotime($start_input);
-	$end_timestamp = strtotime($end_input);
+		$start_timestamp = strtotime($start_input);
+		$end_timestamp = strtotime($end_input);
 
-	if (!$start_timestamp || !$end_timestamp) {
-		echo json_encode(['error' => 'Dates invalides']);
-		return;
-	}
+		if (!$start_timestamp || !$end_timestamp) {
+			echo json_encode(['error' => 'Dates invalides']);
+			return;
+		}
 
-	$start_date = date("Y-m-d H:i:s", $start_timestamp);
-	$end_date = date("Y-m-d H:i:s", $end_timestamp);
+		$start_date = date("Y-m-d H:i:s", $start_timestamp);
+		$end_date = date("Y-m-d H:i:s", $end_timestamp);
 
-	$jours_de_demande = (float) $this->input->post("jours");
+		$jours_de_demande = (float) $this->input->post("jours");
 
-	$start = new DateTime($start_date);
-	$end = new DateTime($end_date);
-	$annees = range((int)$start->format('Y'), (int)$end->format('Y'));
+		$start = new DateTime($start_date);
+		$end = new DateTime($end_date);
+		$annees = range((int)$start->format('Y'), (int)$end->format('Y'));
 
-	$jours_feries = [];
-	foreach ($annees as $annee) {
-		$jours_feries = array_merge($jours_feries, $this->get_french_holidays($annee));
-	}
-	$jours_feries = array_unique($jours_feries);
+		$jours_feries = [];
+		foreach ($annees as $annee) {
+			$jours_feries = array_merge($jours_feries, $this->get_french_holidays($annee));
+		}
+		$jours_feries = array_unique($jours_feries);
 
-	$count = 0;
-	$interval = new DateInterval('P1D');
-	$period = new DatePeriod($start, $interval, (clone $end)->modify('+1 day'));
+		$count = 0;
+		$interval = new DateInterval('P1D');
+		$period = new DatePeriod($start, $interval, (clone $end)->modify('+1 day'));
 
-	foreach ($period as $date) {
-		$jour = $date->format('w');
-		$date_str = $date->format('Y-m-d');
-		if ($jour != 0 && $jour != 6 && !in_array($date_str, $jours_feries)) {
-			$count++;
+		foreach ($period as $date) {
+			$jour = $date->format('w');
+			$date_str = $date->format('Y-m-d');
+			if ($jour != 0 && $jour != 6 && !in_array($date_str, $jours_feries)) {
+				$count++;
+			}
+		}
+
+		$nbr_jours = 0;
+		if ($jours_de_demande === 1.0) {
+			$nbr_jours = $count;
+		} elseif ($jours_de_demande === 0.5) {
+			if ($count == 1) {
+				$nbr_jours = 0.5;
+			} elseif ($count > 1) {
+				$nbr_jours = $count - 1 + 0.5;
+			}
+		}
+		$attendees = $this->input->post("attendees");
+		$attendee_ids = [];
+		if (!empty($attendees)) {
+			$attendee_ids = is_array($attendees) ? array_map('intval', $attendees) : array_map('intval', explode(',', $attendees));
+		}
+
+		$data = [
+			"title"       => $title,
+			"description" => $description,
+			"start_date"  => $start_date,
+			"end_date"    => $end_date,
+			"color"       => $this->current_user->couleur,
+			"created_by"  => $this->current_user->id,
+			"nbr_jour"    => $nbr_jours
+		];
+		$event_id = $this->Event_model->insert_event($data, $attendee_ids);
+
+		if ($event_id) {
+			header('Content-Type: application/json');
+			echo json_encode(["status" => true, "event_id" => $event_id]);
+		} else {
+			echo json_encode(["status" => false, "error" => "Échec de l'ajout de l'événement"]);
 		}
 	}
-
-	$nbr_jours = 0;
-	if ($jours_de_demande === 1.0) {
-		$nbr_jours = $count;
-	} elseif ($jours_de_demande === 0.5) {
-		if ($count == 1) {
-			$nbr_jours = 0.5;
-		} elseif ($count > 1) {
-			$nbr_jours = $count - 1 + 0.5;
-		}
-	}
-	$attendees = $this->input->post("attendees");
-	$attendee_ids = [];
-	if (!empty($attendees)) {
-		$attendee_ids = is_array($attendees) ? array_map('intval', $attendees) : array_map('intval', explode(',', $attendees));
-	}
-
-	$data = [
-		"title"       => $title,
-		"description" => $description,
-		"start_date"  => $start_date,
-		"end_date"    => $end_date,
-		"color"       => $this->current_user->couleur,
-		"created_by"  => $this->current_user->id,
-		"nbr_jour"    => $nbr_jours
-	];
-	$event_id = $this->Event_model->insert_event($data, $attendee_ids);
-
-	if ($event_id) {
-		header('Content-Type: application/json');
-		echo json_encode(["status" => true, "event_id" => $event_id]);
-	} else {
-		echo json_encode(["status" => false, "error" => "Échec de l'ajout de l'événement"]);
-	}
-}
 
 
 	public function event_detail($id)
@@ -188,7 +188,7 @@ class Calendar extends MY_Controller
 			"description" => $this->input->post("description"),
 			"start_date"  => date("Y-m-d H:i:s", strtotime($this->input->post("start_date"))),
 			"end_date"    => date("Y-m-d H:i:s", strtotime($this->input->post("end_date"))),
-			"color"       => $this->input->post("color"),
+			"color"       => $this->current_user->couleur,
 		];
 
 		$attendees = $this->input->post("attendees");
