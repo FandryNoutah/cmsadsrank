@@ -114,6 +114,11 @@ class Visuels_model extends CI_Model {
 		$this->db->query($sql);
 		$this->db->close();
 	}
+	public function activer_upsell($statut_actif,$idupsell){
+		$sql = "update upsell set statut_actif='".$statut_actif."' where idupsell='".$idupsell."'";
+		$this->db->query($sql);
+		$this->db->close();
+	}
 	public function update_brief($date_brief,$campagne_actif,$validation_technique,$date_validation_structure,$lien_datastudio,$idclients){
 		$sql = "update donnee set brief='".$date_brief."', campagne_actif='".$campagne_actif."', validation_technique='".$validation_technique."', date_validation_structure='".$date_validation_structure."', lien_datastudio='".$lien_datastudio."' where idclients='".$idclients."'";
 		$this->db->query($sql);
