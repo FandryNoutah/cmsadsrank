@@ -72,7 +72,7 @@
 				</div>	
 				<?php endif; ?>
 
-				<div class="d-flex justify-content-start align-items-center mb-3" id="star-rating" style="margin-top: -50px; ">
+				<div class="d-flex justify-content-start align-items-center mb-3" id="star-rating" style="margin-top: -50px;; ">
 					<?php $noteClient = isset($note) ? $note : 0; ?>
 
 					<?php for ($i = 1; $i <= 5; $i++): ?>
@@ -88,7 +88,7 @@
 				</div>
 
 
-				<h1 class="mb-3" style="font-size: 48px; font-weight: 500; margin-top: -10px;">
+				<h1 class="mb-3" style="font-size: 48px; font-weight: 500; margin-top: 0px;">
 					<?= $d['nom_client'] ?>
 				</h1>
 				<h5 class="mb-5" style=""><a href="<?= $d['site_client'] ?>" target="_blank" style="color: black"><?= $d['site_client'] ?></a></h5>
