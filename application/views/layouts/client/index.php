@@ -197,6 +197,7 @@ Client
 										?>
 										<?= $budget; ?> €</td>
 									<td>
+										<?php if ($d->statut_demande_en_cours != 1):  ?>
 										<?php if ($d->resiliation == 1):  ?>
 											<span class="badge alert-success rounded-pill px-2 py-1" style="font-size: 12px; font-weight: 500;">
 												<i class="fa fa-circle mr-1" style="font-size: 10px;"></i>
@@ -213,6 +214,13 @@ Client
 											<span class="badge alert-danger rounded-pill px-2 py-1" style="font-size: 12px; font-weight: 500;">
 												<i class="fa fa-circle mr-1" style="font-size: 10px;"></i>
 												Résilié
+											</span>
+										<?php endif; ?>
+										<?php endif; ?>
+										<?php if ($d->statut_demande_en_cours == 1):  ?>
+											<span class="badge alert-second rounded-pill px-2 py-1" style="font-size: 12px; font-weight: 500; color: grey;">
+												<i class="fa fa-circle mr-1" style="font-size: 10px;"></i>
+												En cours de changement
 											</span>
 										<?php endif; ?>
 									</td>
