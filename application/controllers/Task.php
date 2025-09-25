@@ -109,8 +109,10 @@ class Task extends MY_Controller
 		if($this->input->post('status') == "effectuée"){
 			if($task->title == "Upsell"){
 				$statut_demande = 0;
+				$statut_actif = 1;
 				$id = intval($task->idclients); 
 				$idupsell = $task->idupsell;
+				$this->visuels_model->activer_upsell($statut_actif,$idupsell);
 				$upsell = $this->visuels_model->get_upsell_by_id($idupsell);
 				$budget_finale = $upsell[0]['budgets'];
 				$idclients = $upsell[0]['idclients'];
@@ -119,8 +121,10 @@ class Task extends MY_Controller
 			}
 			if($task->title == "Baisse"){
 				$statut_demande = 0;
+				$statut_actif = 1;
 				$id = intval($task->idclients); 
 				$idupsell = $task->idupsell;
+				$this->visuels_model->activer_upsell($statut_actif,$idupsell);
 				$upsell = $this->visuels_model->get_upsell_by_id($idupsell);
 				$budget_finale = $upsell[0]['budgets'];
 				$idclients = $upsell[0]['idclients'];
