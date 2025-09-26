@@ -67,44 +67,93 @@ Upsell / Baisse
 <?php end_section(); ?>
 
 <?php start_section('content'); ?>
-
 <div class="container-fluid">
 		<div class="tab-pane fade show active mb-5" id="list" role="tabpanel" aria-labelledby="list_tab">
-		<div class="table-responsive">
+			<div class="row mb-3">
+	<div class="col-md-3">
+		<input type="text" id="searchInput" class="form-control" placeholder="Rechercher un client...">
+	</div>
+	<div class="col-md-2">
+		<select id="typeFilter" class="form-control">
+			<option value="">Tous</option>
+			<option value="Upsell">Upsell</option>
+			<option value="Baisse">Baisse</option>
+		</select>
+	</div>
+	<div class="col-md-2">
+		<input type="month" id="monthFilter" class="form-control">
+	</div>
+	<div class="col-md-2">
+		<input type="date" id="dateStart" class="form-control" placeholder="Date début">
+	</div>
+	<div class="col-md-2">
+		<input type="date" id="dateEnd" class="form-control" placeholder="Date fin">
+	</div>
+</div>
 
+<div class="row mb-2">
+	<div class="col-md-3">
+		<strong>Total Upsell: </strong><span id="totalUpsell">0 €</span>
+	</div>
+	<div class="col-md-3">
+		<strong>Total Baisse: </strong><span id="totalBaisse">0 €</span>
+	</div>
+</div>
+
+		<div class="table-responsive">
+<?php //var_dump($upsell_active); ?>
 			<table class="table table-wrapper">
 				<thead class="bg-light text-muted">
 					<tr>
-						<th>
-							AM
-							<img src="<?= base_url('assets/images/icons/figma/icon-caretdoublevertical-5.svg') ?>" class="ml-2">
-						</th>
 						<th>
 							Client
 							<img src="<?= base_url('assets/images/icons/figma/icon-caretdoublevertical-5.svg') ?>" class="ml-2">
 						</th>
 						<th>
-							Plan de taggage
+							Member
 							<img src="<?= base_url('assets/images/icons/figma/icon-caretdoublevertical-5.svg') ?>" class="ml-2">
 						</th>
 						<th>
-							Etat
+							Date de la demande
+							<img src="<?= base_url('assets/images/icons/figma/icon-caretdoublevertical-5.svg') ?>" class="ml-2">
+						</th>
+						<th>
+							Date Effective
+							<img src="<?= base_url('assets/images/icons/figma/icon-caretdoublevertical-5.svg') ?>" class="ml-2">
+						</th>
+						<th>
+							Type
+							<img src="<?= base_url('assets/images/icons/figma/icon-caretdoublevertical-5.svg') ?>" class="ml-2">
+						</th>
+						<th>
+							Budget
 							<img src="<?= base_url('assets/images/icons/figma/icon-caretdoublevertical-5.svg') ?>" class="ml-2">
 						</th>
 					</tr>
 				</thead>
 				<tbody>
-					<?php foreach($donnee as $C): ?>
-					<tr>
-						
-						<td style="text-align: center">
-							<img src="<?php echo base_url(IMAGES_PATH . htmlspecialchars($C->photo_users)); ?>" alt="avatar" style="width: 40px;" class="avatar-image">
-							<a style="display: none"><?php echo htmlspecialchars($C->nomam); ?></a>
+					<?php foreach($upsell_active as $C): ?>
+					<tr class="data-row"
+	data-client="<?= htmlspecialchars($C['nom_client']); ?>"
+	data-date="<?= htmlspecialchars($C['date_upsell']); ?>"
+	data-type="<?= ($C['type_upsell'] == 2 ? 'Upsell' : 'Baisse'); ?>"
+	data-budget="<?= (float) $C['budgets']; ?>">
+
+						<td><?php echo htmlspecialchars($C['nom_client']); ?></td>  
+						<td>
+							<img src="<?= base_url(IMAGES_PATH . htmlspecialchars($C['am_photo'])); ?>" width="28" height="28" alt="Client Image"><img src="<?= base_url(IMAGES_PATH . htmlspecialchars($C['tm_photo'])); ?>" width="28" height="28" alt="Client Image">
+							<a style="display: none"><?php echo htmlspecialchars($C['nomam']); ?></a>
 						</td>
-						<td style="text-align: center"><?php echo htmlspecialchars($C->nom_client); ?></td>  
-						<td style="text-align: center"><?php echo anchor('Plan_de_taggage/plandetaggage/' . $C->idclients, 'Voir plan', ['style' => 'color: black', 'data-edit' => $C->idclients]); ?></td>
-						<td style="text-align: center"></td>  
-						<td style="text-align: center"></td>  
+						<td><?php echo htmlspecialchars($C['date_demande']); ?></td>  
+						<td><?php echo htmlspecialchars($C['date_upsell']); ?></td>  
+						<td><?php if($C['type_upsell'] == 2) :  ?>
+								Upsell
+							<?php endif; ?>
+							<?php if($C['type_upsell'] ==1) :  ?>
+								Baisse
+							<?php endif; ?>
+						</td> 
+						<td><?php echo htmlspecialchars($C['budgets']); ?> €</td> 
 					</tr>
 					<?php endforeach; ?>
 				</tbody>
@@ -113,183 +162,64 @@ Upsell / Baisse
 	</div>
 </div>
 
-<?php $this->load->view('layouts/note/modal/form'); ?>
-<?php $this->load->view('layouts/note/modal/detail'); ?>
-
 <?php end_section(); ?>
 
 <?php start_section('script'); ?>
-
 <script>
-	$(function() {
+document.addEventListener('DOMContentLoaded', function () {
+	const searchInput = document.getElementById('searchInput');
+	const typeFilter = document.getElementById('typeFilter');
+	const monthFilter = document.getElementById('monthFilter');
+	const dateStart = document.getElementById('dateStart');
+	const dateEnd = document.getElementById('dateEnd');
+	const rows = document.querySelectorAll('.data-row');
+	const totalUpsell = document.getElementById('totalUpsell');
+	const totalBaisse = document.getElementById('totalBaisse');
 
-		function resetDetail() {
-			$('#detail_discussion').html("");
-			$('#detailModalLabel').text("");
-			$('#detail_due_date').removeAttr('value');
-			$('#detail_description').text("");
-			$('#detail_discussion_form').removeAttr('id');
-		}
+	function applyFilters() {
+		let upsellTotal = 0;
+		let baisseTotal = 0;
+		const searchVal = searchInput.value.toLowerCase();
+		const typeVal = typeFilter.value;
+		const monthVal = monthFilter.value;
+		const startVal = dateStart.value;
+		const endVal = dateEnd.value;
 
-		function resetForm() {
-			$('#formModalLabel').text("Nouveau note")
-			$('#note_form').attr('action', "<?= site_url('notes/create'); ?>");
-			$('#note_type').val("");
-			$('#note_status').val("");
-			$('#note_title').val("");
-			$('#note').val("");
-			$('#due_date').val("");
-			$('#note_submit').html("Ajouter");
-		}
+		rows.forEach(row => {
+			const client = row.dataset.client.toLowerCase();
+			const type = row.dataset.type;
+			const date = row.dataset.date;
+			const budget = parseFloat(row.dataset.budget) || 0;
 
-		function fetchDetail(id_note) {
-			$.ajax({
-				type: "GET",
-				url: "Notes/detail_note/" + id_note,
-				dataType: "json",
-				beforeSend: function() {
-					resetDetail();
-				},
-				success: function(response) {
+			let show = true;
 
-					let note = response.note;
-					let messages = response.messages;
+			if (searchVal && !client.includes(searchVal)) show = false;
+			if (typeVal && type !== typeVal) show = false;
+			if (monthVal && !date.startsWith(monthVal)) show = false;
+			if (startVal && date < startVal) show = false;
+			if (endVal && date > endVal) show = false;
 
-					$('#detailModalLabel').text("Note: " + note.title);
-					$('#detail_due_date').val(note.date_due);
-					$('#detail_description').text(note.content);
-					$('#detail_type').text(note.type);
-					$('#detail_status').text(note.status);
+			row.style.display = show ? '' : 'none';
 
-					$.each(messages, function(index, data) {
-
-						let html = `
-							<div class="d-block activity-container mt-3">
-								<div class="d-flex">
-									<div class="mx-1">
-										<img src="${data.photo_users}" alt="" width="32">
-									</div>
-									<div class="flex-fill mx-1">
-										<div class="d-block mb-2">
-											<span class="font-weight-bold">${data.username}</span>
-											${data.message}
-										</div>
-										<div class="d-block mb-2">
-											<span class="text-muted small">${data.created_at}</span>
-										</div>
-									</div>
-									<div class="mx-1">
-										<a href="javascript:void(0);" class="text-decoration-none text-muted">
-											<i class="fa fa-ellipsis-h"></i>
-										</a>
-									</div>
-								</div>
-							</div>
-						`;
-
-						$('#detail_discussion').prepend(html);
-					});
-				}
-			});
-		}
-
-		$('#detailModal').on('show.bs.modal', function(event) {
-
-			let button = $(event.relatedTarget);
-			let id_note = $(button).attr('data-id');
-			$('#detail_discussion_form').data('id', id_note);
-
-			fetchDetail(id_note);
-		});
-
-		$('#detailModal').on('hide.bs.modal', function(event) {
-			resetDetail();
-		});
-
-		$('#formModal').on('show.bs.modal', function(event) {
-
-			let button = $(event.relatedTarget);
-			let id_note = $(button).attr('data-id');
-
-			if (id_note) {
-
-				$('#note_form button[type="submit"]').text("Modifier");
-
-				$.ajax({
-					type: "GET",
-					url: "Notes/detail_note/" + id_note,
-					dataType: "json",
-					beforeSend: function() {
-						resetForm();
-					},
-					success: function(response) {
-
-						let note = response.note;
-						$('#formModalLabel').text("Modification note: " + note.title)
-						$('#note_form').attr('action', "<?= site_url('notes/edit/'); ?>" + note.id);
-						$('#note_type').val(note.type);
-						$('#note_status').val(note.status);
-						$('#note_title').val(note.title);
-						$('#note').val(note.content);
-						$('#due_date').val(note.date_due);
-					}
-				});
-			} else {
-				$('#note_form button[type="submit"]').text("Ajouter");
-				$('#formModalLabel').text("Nouveau note")
-				$('#note_form').attr('action', "<?= site_url('notes/create') ?>");
-			}
-
-		});
-
-		$('#formModal').on('hide.bs.modal', function(event) {
-			resetForm();
-		});
-	});
-</script>
-
-<!-- Attachment script -->
-<script>
-	$(function() {
-		const dropArea = $("#fileDrop");
-		const input = $("#fileInput");
-		const fileName = $("#fileName");
-
-		// Click to trigger input
-		dropArea.click(function() {
-			console.log("here");
-
-			input.click();
-		});
-
-		// Drag & drop events
-		dropArea.on("dragover", function(e) {
-			e.preventDefault();
-			e.stopPropagation();
-			dropArea.addClass("dragover");
-		});
-
-		dropArea.on("dragleave drop", function(e) {
-			e.preventDefault();
-			e.stopPropagation();
-			dropArea.removeClass("dragover");
-		});
-
-		dropArea.on("drop", function(e) {
-			let file = e.originalEvent.dataTransfer.files[0]; // just one file
-			input[0].files = e.originalEvent.dataTransfer.files;
-			showFile(file);
-		});
-
-		input.on("change", function() {
-			if (this.files[0]) {
-				showFile(this.files[0]);
+			if (show) {
+				if (type === 'Upsell') upsellTotal += budget;
+				if (type === 'Baisse') baisseTotal += budget;
 			}
 		});
 
-		function showFile(file) {
-			fileName.text(file.name);
-		}
-	});
+		totalUpsell.textContent = `${upsellTotal.toFixed(2)} €`;
+		totalBaisse.textContent = `${baisseTotal.toFixed(2)} €`;
+	}
+
+	searchInput.addEventListener('input', applyFilters);
+	typeFilter.addEventListener('change', applyFilters);
+	monthFilter.addEventListener('change', applyFilters);
+	dateStart.addEventListener('change', applyFilters);
+	dateEnd.addEventListener('change', applyFilters);
+
+	// Initial calculation
+	applyFilters();
+});
 </script>
+
 <?php end_section(); ?>
