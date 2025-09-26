@@ -7,6 +7,7 @@ class Calendar extends MY_Controller
 	public function __construct()
 	{
 		parent::__construct();
+		$this->load->model("Utilisateur_model");
 		$this->load->model("Event_model");
 		$this->load->helper('url');
 		$this->load->library(['ion_auth']);
@@ -31,11 +32,11 @@ class Calendar extends MY_Controller
 		$user_id = intval($this->input->get("user_id"));
 		$agendaFitlers = $this->input->get("agendaFilters");
 
-		/* if (empty($user_id)) {
-			$user_id = $this->current_user->id;
-		} else {
-			$user_id = intval($user_id);
-		} */
+		if ($user_id) {
+			
+			$user_filter = $this->Utilisateur_model->get_users_by_id($user_id);
+			$user_color = $user_filter->couleur ?? "#3788d8";
+		}
 
 		$events = $this->Event_model->get_events($start, $end, $user_id, $agendaFitlers);
 
@@ -60,7 +61,7 @@ class Calendar extends MY_Controller
 				"description" => $e->description,
 				"start" => date("c", strtotime($e->start_date)),
 				"end"   => date("c", strtotime($e->end_date)),
-				"color" => $e->color ?: "#3788d8",
+				"color" => $user_color ?? $e->color,
 				"attendees" => $attendees
 			];
 		}
