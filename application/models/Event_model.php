@@ -36,7 +36,7 @@ class Event_model extends CI_Model
 		return $this->db->get("users")->result();
 	}
 
-	public function get_events($start, $end, $user_id = null, $titles = [])
+	public function get_events($start, $end, $user_id = 0, $titles = [])
 	{
 		$start_dt = date('Y-m-d H:i:s', strtotime($start));
 		$end_dt   = date('Y-m-d H:i:s', strtotime($end));
@@ -48,7 +48,7 @@ class Event_model extends CI_Model
 		$this->db->where('start_date <', $end_dt);
 		$this->db->where('end_date >', $start_dt);
 
-		if (!empty($user_id)) {
+		if ($user_id) {
 			// jointure pour les events partagés
 			$this->db->join('event_users eu', 'events.id = eu.event_id', 'left');
 			$this->db->group_start();
