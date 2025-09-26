@@ -1,364 +1,363 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="utf-8">
-    <title>Calendrier</title>
-
-   
-</head>
-<body>
 <?php start_section('stylesheet'); ?>
 <style>
-	.table-wrapper {
-		border-spacing: 0 15px !important;
-		border-collapse: separate !important;
+	/* For modal attachment design */
+	.file-drop-area {
+		border: 2px dashed #ccc;
+		border-radius: 8px;
+		padding: 30px;
+		text-align: center;
+		cursor: pointer;
+		transition: border-color 0.3s;
 	}
 
-	.table-wrapper td,
-	.table-wrapper th {
-		vertical-align: middle;
-		border: border;
-		border-bottom: 1px solid #dee2e6 !important;
+	.file-drop-area.dragover {
+		border-color: #0d6efd;
+		/* bootstrap primary */
+		background: #f8f9fa;
 	}
 
-	.table-wrapper tbody tr td:first-child,
-	.table-wrapper thead tr th:first-child {
-		border-left: 1px solid #dee2e6;
-		border-top-left-radius: 4px;
-		border-bottom-left-radius: 4px;
-	}
-
-	.table-wrapper tbody tr td:last-child,
-	.table-wrapper thead tr th:last-child {
-		border-right: 1px solid #dee2e6;
-		border-top-right-radius: 4px;
-		border-bottom-right-radius: 4px;
+	.file-drop-icon {
+		font-size: 40px;
+		color: #6c757d;
+		margin-bottom: 10px;
 	}
 </style>
 <?php end_section(); ?>
 
+<?php start_section('page_title'); ?>
+Notes
+<?php end_section(); ?>
+
+<?php start_section('page_heading'); ?>
+<div class="row mx-lg-2 my-2">
+	<div class="col-auto px-1">
+		<button class="btn btn-outline-dark">
+			<img src="<?= base_url('assets/images/icons/figma/icon-funnelsimple.svg') ?>" alt="">
+			Sort By
+		</button>
+	</div>
+	<div class="col-auto px-1">
+		<select id="note_user_filter" class="custom-select border-dark">
+			<option disabled selected>Filter</option>
+			<option value="0">Tous</option>
+			<?php foreach ($users as $user): ?>
+				<option value="<?= $user->username; ?>"><?= $user->username; ?></option>
+			<?php endforeach; ?>
+		</select>
+	</div>
+	<div class="col-auto px-1">
+		<button class="btn btn-dark" data-toggle="modal" data-target="#formModal">
+			<img src="<?= base_url('assets/images/icons/figma/icon-plus.svg') ?>" alt="">
+			Add Notes
+		</button>
+	</div>
+</div>
+<?php end_section(); ?>
+
 <?php start_section('content'); ?>
-<div style="max-width:1100px;margin:20px auto;">
-    <div id="calendar"></div>
+
+<div class="container-fluid">
+	<div class="row row-cols-3">
+		<?php foreach ($notes as $note): ?>
+
+			<div class="col mb-3 note-filter" data-author="<?= $note->author; ?>">
+				<div class="card h-100">
+					<div class="card-body">
+						<div class="row">
+							<span class="col-auto mx-1 badge alert-warning">
+								<?= htmlspecialchars($note->type); ?>
+							</span>
+							<span class="col-auto mx-1 badge alert-primary">
+								<?= htmlspecialchars($note->status); ?>
+							</span>
+							<div class="col-auto dropdown no-arrow ml-auto">
+								<a href="javascript:void(0);" class="text-decoration-none text-muted note-menu dropdown-toggle" role="button" data-toggle="dropdown" aria-expanded="false">
+									<i class="fa fa-ellipsis-h"></i>
+								</a>
+								<div class="dropdown-menu">
+									<button type="button" class="dropdown-item" data-toggle="modal" data-target="#detailModal" data-id="<?= $note->id; ?>">
+										<i class="fa fa-eye mr-2"></i>
+										Détails
+									</button>
+									<button type="button" class="dropdown-item" data-toggle="modal" data-target="#formModal" data-id="<?= $note->id; ?>">
+										<i class="fa fa-edit mr-2"></i>
+										Modifier
+									</button>
+									<div class="dropdown-divider"></div>
+									<a href="<?= base_url('Notes/delete/' . $note->id); ?>" class="dropdown-item text-danger" data-id="<?= $note->id; ?>">
+										<i class="fa fa-trash mr-2"></i>
+										Supprimer
+									</a>
+								</div>
+							</div>
+						</div>
+						<h6 class="my-3" style="font-size: 16px; font-weight: 500;">
+							<?= htmlspecialchars($note->title); ?>
+						</h6>
+						<p class="text-muted">
+							<?= nl2br(htmlspecialchars($note->content)); ?>
+						</p>
+					</div>
+					<div class="card-footer d-flex bg-transparent">
+
+						<div class="d-flex align-items-center avatar-group">
+							<img src="<?= base_url(IMAGES_PATH . $this->ion_auth->user()->row()->photo_users); ?>" class="avatar rounded-circle" width="28" height="28" alt="Client Image">
+						</div>
+
+						<div class="d-flex align-items-center avatar-group">
+							<?php foreach ($note->assigned_users as $assigned_user): ?>
+								<img src="<?= base_url(IMAGES_PATH . $assigned_user->photo_users); ?>" class="avatar rounded-circle" width="28" height="28" alt="Client Image">
+							<?php endforeach; ?>
+						</div>
+
+						<span class="text-muted text-right text-nowrap ml-auto"><?= $note->date_due; ?></span>
+					</div>
+				</div>
+			</div>
+		<?php endforeach; ?>
+
+	</div>
 </div>
 
-<div id="eventModal" aria-hidden="true">
-    <h3>Ajouter un événement</h3>
-    <form id="eventForm">
-        <label for="title-select">Titre</label><br>
-        <select id="title-select" name="title" style="width:100%" onchange="toggleCustomTitle(this)">
-            <option value="Télétravail">Télétravail</option>
-            <option value="Perso">Perso</option>
-            <option value="Soutenance">Soutenance</option>
-            <option value="Formation">Formation</option>
-            <option value="Maladie">Maladie</option>
-            <option value="Congé">Congé</option>
-            <option value="Contact">Contact</option>
-            <option value="Autre">Autre...</option>
-        </select>
+<?php $this->load->view('layouts/note/modal/form'); ?>
+<?php $this->load->view('layouts/note/modal/detail'); ?>
 
-        <div id="custom-title-container" style="margin-top:10px; display:none;">
-            <label for="custom-title">Titre personnalisé</label><br>
-            <input type="text" id="custom-title" name="custom_title" style="width:100%">
-        </div>
+<?php end_section(); ?>
 
-        <script>
-        function toggleCustomTitle(select) {
-            const customContainer = document.getElementById('custom-title-container');
-            if (select.value === 'Autre') {
-                customContainer.style.display = 'block';
-            } else {
-                customContainer.style.display = 'none';
-            }
-        }
-        </script>
-        <br><br>
-
-        <label>Description</label><br>
-        <textarea name="description" placeholder="Description" style="width:100%"></textarea><br><br>
-
-        <label>Début</label><br>
-        <input type="datetime-local" name="start_date" required style="width:100%"><br><br>
-
-        <label>Fin</label><br>
-        <input type="datetime-local" name="end_date" required style="width:100%"><br><br>
-
-        <label>Couleur</label><br>
-        <input type="color" name="color" value="#3788d8"><br><br>
-
-        <label>Participants (tagger)</label><br>
-        <select name="attendees[]" id="attendeesSelect" multiple style="width:100%; min-height:90px;">
-        </select>
-        <small>Ctrl/Cmd+Click pour sélectionner plusieurs</small>
-        <br><br>
-
-        <button type="submit">Enregistrer</button>
-        <button type="button" id="cancelBtn">Annuler</button>
-    </form>
-</div>
-
-<div id="editEventModal" style="display:none; position:fixed; top:10%; left:50%; transform:translateX(-50%); background:white; padding:20px; border:1px solid #ccc; z-index:20000; width:420px;">
-    <h3>Modifier un événement</h3>
-    <form id="editEventForm">
-        <input type="hidden" name="id">
-        <label>Titre</label><br>
-        <input type="text" name="title" style="width:100%"><br><br>
-
-        <label>Description</label><br>
-        <textarea name="description" style="width:100%"></textarea><br><br>
-
-        <label>Début</label><br>
-        <input type="datetime-local" name="start_date" style="width:100%"><br><br>
-
-        <label>Fin</label><br>
-        <input type="datetime-local" name="end_date" style="width:100%"><br><br>
-
-        <label>Couleur</label><br>
-        <input type="color" name="color" value="#3788d8"><br><br>
-
-        <label>Participants</label><br>
-        <select name="attendees[]" id="editAttendeesSelect" multiple style="width:100%; min-height:90px;"></select><br><br>
-
-        <button type="submit">Mettre à jour</button>
-        <button type="button" id="cancelEditBtn">Annuler</button>
-    </form>
-</div>
+<?php start_section('script'); ?>
 
 <script>
-document.addEventListener('DOMContentLoaded', function() {
-    const frenchHolidays = [
-        "2025-01-01",
-        "2025-04-21",
-        "2025-05-01",
-        "2025-05-08",
-        "2025-05-29",
-        "2025-06-09",
-        "2025-07-14",
-        "2025-08-15",
-        "2025-11-01",
-        "2025-11-11",
-        "2025-12-25",
-        "2026-01-01",
-        "2026-04-06",
-        "2026-05-01",
-        "2026-05-08",
-        "2026-05-14",
-        "2026-05-25",
-        "2026-07-14",
-        "2026-08-15",
-        "2026-11-01",
-        "2026-11-11",
-        "2026-12-25"
-    ];
+	$(function() {
 
-    var calendarEl = document.getElementById('calendar');
+		function resetDetail() {
+			$('#detail_discussion').html("");
+			$('#detailModalLabel').text("");
+			$('#detail_due_date').removeAttr('value');
+			$('#detail_description').text("");
+			$('#detail_discussion_form').removeAttr('id');
+			$('#detail_avatar').html("");
+		}
 
-    var calendar = new FullCalendar.Calendar(calendarEl, {
-        initialView: 'dayGridMonth',
-        locale: 'fr',
-        timeZone: 'local',
-        headerToolbar: {
-            left: 'prev,next today',
-            center: 'title',
-            right: 'dayGridMonth,timeGridWeek,timeGridDay'
-        },
-        events: '<?php echo site_url("calendar/fetch_events"); ?>',
-        selectable: true,
-        displayEventTime: false,
+		function resetForm() {
+			$('#formModalLabel').text("Nouveau note")
+			$('#note_form').attr('action', "<?= site_url('notes/create'); ?>");
+			$('#note_type').val("");
+			$('#note_status').val("");
+			$('#note_title').val("");
+			$('#note').val("");
+			$('#due_date').val("");
+			$('#note_submit').html("Ajouter");
+			$('.assigned-select').prop('checked', false);
+		}
 
-        dayCellDidMount: function(info) {
-            const dateStr = info.date.getFullYear() + '-' +
-                String(info.date.getMonth() + 1).padStart(2, '0') + '-' +
-                String(info.date.getDate()).padStart(2, '0');
+		function fetch_detail(id_note) {
+			$.ajax({
+				type: "GET",
+				url: "Notes/detail_note/" + id_note,
+				dataType: "json",
+				beforeSend: function() {
+					resetDetail();
+				},
+				success: function(response) {
 
-            const day = info.date.getDay();
-            if (frenchHolidays.includes(dateStr)) {
-                info.el.style.backgroundColor = '#ffe5e5';
-            } else if (day === 0 || day === 6) {
-                info.el.style.backgroundColor = '#f0f0f0';
-            }
-        },
+					let note = response.note;
+					let messages = response.messages;
 
-        eventMouseEnter: function(info) {
-            var tooltip = document.createElement('div');
-            tooltip.className = 'fc-tooltip';
-            var attendees_html = '';
-            if (info.event.extendedProps.attendees && info.event.extendedProps.attendees.length) {
-                attendees_html = '<br><strong>Participants :</strong><br>' + info.event.extendedProps.attendees.join(', ');
-            }
-            tooltip.innerHTML = "<strong>" + info.event.title + "</strong><br>" + (info.event.extendedProps.description || '') + attendees_html;
-            document.body.appendChild(tooltip);
+					$('#detailModalLabel').text("Note: " + note.title);
+					$('#detail_due_date').val(note.date_due);
+					$('#detail_description').text(note.content);
+					$('#detail_type').text(note.type);
+					$('#detail_status').text(note.status);
 
-            info.el.addEventListener('mousemove', function(e){
-                tooltip.style.left = (e.pageX + 12) + 'px';
-                tooltip.style.top = (e.pageY + 12) + 'px';
-            });
+					let assigned_users = response.assigned_users;
+					$.each(assigned_users, function(index, value) {
+						let avatar = `<img src = "<?= base_url(IMAGES_PATH) ?>${value.photo_users}"width = "36"class = "rounded-circle avatar" >`;
+						$('#detail_avatar').append(avatar);
+					});
 
-            info.el.addEventListener('mouseleave', function(){
-                if (tooltip) tooltip.remove();
-            });
-        },
+					$.each(messages, function(index, data) {
 
-        dateClick: function(info) {
-            $('#eventModal').show();
-            var d = info.date;
-            var isoDate = d.getFullYear() + "-" +
-                ("0" + (d.getMonth() + 1)).slice(-2) + "-" +
-                ("0" + d.getDate()).slice(-2) + "T" +
-                ("0" + d.getHours()).slice(-2) + ":" +
-                ("0" + d.getMinutes()).slice(-2);
-            $('input[name=start_date]').val(isoDate);
+						let html = `
+							<div class="d-block activity-container mt-3">
+								<div class="d-flex">
+									<div class="mx-1">
+										<img src="${data.photo_users}" alt="" width="32">
+									</div>
+									<div class="flex-fill mx-1">
+										<div class="d-block mb-2">
+											<span class="font-weight-bold">${data.username}</span>
+											${data.message}
+										</div>
+										<div class="d-block mb-2">
+											<span class="text-muted small">${data.created_at}</span>
+										</div>
+									</div>
+									<div class="mx-1">
+										<a href="javascript:void(0);" class="text-decoration-none text-muted">
+											<i class="fa fa-ellipsis-h"></i>
+										</a>
+									</div>
+								</div>
+							</div>
+						`;
 
-            var end = new Date(d.getTime() + 60 * 60 * 1000);
-            var isoEnd = end.getFullYear() + "-" +
-                ("0" + (end.getMonth() + 1)).slice(-2) + "-" +
-                ("0" + end.getDate()).slice(-2) + "T" +
-                ("0" + end.getHours()).slice(-2) + ":" +
-                ("0" + end.getMinutes()).slice(-2);
-            $('input[name=end_date]').val(isoEnd);
-        },
+						$('#detail_discussion').prepend(html);
+					});
+				}
+			});
+		}
 
-        eventClick: function(info) {
-            var id = info.event.id;
-            $.get('<?php echo site_url("calendar/event_detail"); ?>/' + id, function(data){
-                var msg = "<strong>" + data.title + "</strong>\n\n" + (data.description || '') + "\n\nParticipants:\n";
-                if (data.attendees && data.attendees.length) {
-                    data.attendees.forEach(function(a){
-                        msg += "- " + (a.first_name ? (a.first_name + ' ' + a.last_name) : a.username) + "\n";
-                    });
-                } else {
-                    msg += "Aucun participant";
-                }
-                alert(msg);
-            }, 'json');
-        },
+		$('#detailModal').on('show.bs.modal', function(event) {
 
-        eventDidMount: function(info) {
-            info.el.addEventListener('contextmenu', function(e) {
-                e.preventDefault();
+			let button = $(event.relatedTarget);
+			let id_note = $(button).attr('data-id');
+			$('#detail_discussion_form').data('id', id_note);
 
-                var menu = document.createElement('div');
-                menu.className = 'fc-contextmenu';
-                menu.style.position = 'absolute';
-                menu.style.top = e.pageY + 'px';
-                menu.style.left = e.pageX + 'px';
-                menu.style.background = '#fff';
-                menu.style.border = '1px solid #ccc';
-                menu.style.padding = '6px';
-                menu.style.zIndex = 99999;
+			fetch_detail(id_note);
+		});
 
-                menu.innerHTML = `
-                    <div class="menu-item" data-action="edit" style="cursor:pointer; padding:4px;">✏️ Modifier</div>
-                    <div class="menu-item" data-action="delete" style="cursor:pointer; padding:4px; color:red;">🗑️ Supprimer</div>
-                `;
+		$('#detailModal').on('hide.bs.modal', function(event) {
+			resetDetail();
+		});
 
-                document.body.appendChild(menu);
+		$('#formModal').on('show.bs.modal', function(event) {
 
-                menu.addEventListener('click', function(ev) {
-                    var action = ev.target.getAttribute('data-action');
-                    if (action === 'edit') {
-                        openEditModal(info.event);
-                    } else if (action === 'delete') {
-                        deleteEvent(info.event.id);
-                    }
-                    menu.remove();
-                });
+			let button = $(event.relatedTarget);
+			let id_note = $(button).attr('data-id');
 
-                document.addEventListener('click', function handler() {
-                    if (menu) menu.remove();
-                    document.removeEventListener('click', handler);
-                });
-            });
-        }
-    });
+			if (id_note) {
 
-    calendar.render();
+				$('#note_form button[type="submit"]').text("Modifier");
 
-    function loadUsers() {
-        $.get('<?php echo site_url("calendar/fetch_users"); ?>', function(users){
-            var $sel = $('#attendeesSelect');
-            $sel.empty();
-            users.forEach(function(u){
-                var name = (u.first_name ? u.first_name : '') + (u.last_name ? ' ' + u.last_name : '');
-                if (!name.trim()) name = u.username || u.email;
-                $sel.append($('<option>').val(u.id).text(name));
-            });
-        }, 'json');
-    }
-    loadUsers();
+				$.ajax({
+					type: "GET",
+					url: "Notes/detail_note/" + id_note,
+					dataType: "json",
+					beforeSend: function() {
+						resetForm();
+					},
+					success: function(response) {
 
-    $('#eventForm').on('submit', function(e){
-        e.preventDefault();
-        var formData = $(this).serialize();
-        $.ajax({
-            url: '<?php echo site_url("calendar/add_event"); ?>',
-            type: 'POST',
-            data: formData,
-            success: function(res){
-                $('#eventModal').hide();
-                calendar.refetchEvents();
-                $('#eventForm')[0].reset();
-                loadUsers();
-            },
-            error: function(xhr){
-                alert('Erreur: ' + xhr.statusText);
-            }
-        });
-    });
-    $('#cancelBtn').on('click', function(){ $('#eventModal').hide(); });
+						let note = response.note;
+						$('#formModalLabel').text("Modification note: " + note.title)
+						$('#note_form').attr('action', "<?= site_url('notes/edit/'); ?>" + note.id);
+						$('#note_type').val(note.type);
+						$('#note_status').val(note.status);
+						$('#note_title').val(note.title);
+						$('#note').val(note.content);
+						$('#due_date').val(note.date_due);
 
-    function openEditModal(event) {
-        $('#editEventModal').show();
-        $('input[name="id"]').val(event.id);
-        $('input[name="title"]').val(event.title);
-        $('textarea[name="description"]').val(event.extendedProps.description || '');
+						let assigned_users = response.assigned_users;
+						$.each(assigned_users, function(index, value) {
 
-        $('input[name="start_date"]').val(event.start.toISOString().slice(0,16));
-        $('input[name="end_date"]').val(event.end ? event.end.toISOString().slice(0,16) : event.start.toISOString().slice(0,16));
-        $('input[name="color"]').val(event.backgroundColor);
+							let user_id = value.id;
+							$('#assigned_to_' + user_id).prop('checked', true);
+						});
 
-        $.get('<?php echo site_url("calendar/fetch_users"); ?>', function(users){
-            var $sel = $('#editAttendeesSelect');
-            $sel.empty();
-            users.forEach(function(u){
-                var name = (u.first_name ? u.first_name : '') + (u.last_name ? ' ' + u.last_name : '');
-                if (!name.trim()) name = u.username || u.email;
-                var opt = $('<option>').val(u.id).text(name);
-                if (event.extendedProps.attendees && event.extendedProps.attendees.includes(name)) {
-                    opt.prop('selected', true);
-                }
-                $sel.append(opt);
-            });
-        }, 'json');
-    }
+					}
+				});
+			} else {
+				$('#note_form button[type="submit"]').text("Ajouter");
+				$('#formModalLabel').text("Nouveau note")
+				$('#note_form').attr('action', "<?= site_url('notes/create') ?>");
+			}
 
-    $('#editEventForm').on('submit', function(e){
-        e.preventDefault();
-        var formData = $(this).serialize();
-        $.ajax({
-            url: '<?php echo site_url("calendar/update_event"); ?>',
-            type: 'POST',
-            data: formData,
-            success: function(res){
-                $('#editEventModal').hide();
-                calendar.refetchEvents();
-            },
-            error: function(xhr){
-                alert('Erreur: ' + xhr.statusText);
-            }
-        });
-    });
-    $('#cancelEditBtn').on('click', function(){ $('#editEventModal').hide(); });
+		});
 
-    function deleteEvent(eventId) {
-        if (confirm("Supprimer cet événement ?")) {
-            $.post('<?php echo site_url("calendar/delete_event"); ?>', {id: eventId}, function(res){
-                calendar.refetchEvents();
-            }, 'json');
-        }
-    }
-});
+		$('#formModal').on('hide.bs.modal', function(event) {
+			resetForm();
+		});
+
+		$('#users_dd_menu').on('click', function(event) {
+			event.stopPropagation();
+		});
+
+		$('#detail_discussion_form').submit(function(event) {
+
+			event.preventDefault();
+
+			let submitter = event.originalEvent.submitter;
+			let buttonChild = $(submitter).html();
+			let id_note = $(this).data('id');
+
+			$.ajax({
+				type: $(this).attr('method'),
+				url: $(this).attr('action'),
+				data: {
+					"id_note": id_note,
+					"message": $('#detail_message').val()
+				},
+				dataType: "json",
+				beforeSend: function() {
+					$(submitter).attr('disabled', "disabled");
+					$(submitter).html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>');
+				},
+				success: function(response) {
+
+					$(submitter).removeAttr("disabled");
+					$(submitter).html(buttonChild);
+
+					$('#detail_message').val("");
+					fetch_detail(id_note);
+				}
+			});
+		});
+
+		$('#note_user_filter').change(function() {
+			let author = $(this).val();
+
+			if (author == 0) {
+				$('.note-filter').removeClass('d-none');
+			} else {
+				$('.note-filter').addClass('d-none');
+				$('.note-filter[data-author="' + author + '"]').removeClass('d-none');
+			}
+		});
+	});
 </script>
 
-</body>
-</html>
+<!-- Attachment script -->
+<script>
+	$(function() {
+		const dropArea = $("#fileDrop");
+		const input = $("#fileInput");
+		const fileName = $("#fileName");
+
+		// Click to trigger input
+		dropArea.click(function() {
+			console.log("here");
+
+			input.click();
+		});
+
+		// Drag & drop events
+		dropArea.on("dragover", function(e) {
+			e.preventDefault();
+			e.stopPropagation();
+			dropArea.addClass("dragover");
+		});
+
+		dropArea.on("dragleave drop", function(e) {
+			e.preventDefault();
+			e.stopPropagation();
+			dropArea.removeClass("dragover");
+		});
+
+		dropArea.on("drop", function(e) {
+			let file = e.originalEvent.dataTransfer.files[0]; // just one file
+			input[0].files = e.originalEvent.dataTransfer.files;
+			showFile(file);
+		});
+
+		input.on("change", function() {
+			if (this.files[0]) {
+				showFile(this.files[0]);
+			}
+		});
+
+		function showFile(file) {
+			fileName.text(file.name);
+		}
+	});
+</script>
+<?php end_section(); ?>
