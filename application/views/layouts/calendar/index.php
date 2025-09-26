@@ -300,46 +300,6 @@
 		}
 	});
 
-	function pad(n) {
-		return String(n).padStart(2, '0');
-	}
-
-	function toLocalInputString(d) {
-		if (!(d instanceof Date)) d = new Date(d);
-		return d.getFullYear() + '-' + pad(d.getMonth() + 1) + '-' + pad(d.getDate()) + 'T' + pad(d.getHours()) + ':' + pad(d.getMinutes());
-	}
-
-	function parseDateForInput(value) {
-		if (!value) return '';
-		if (value instanceof Date) return toLocalInputString(value);
-
-		var s = String(value).trim();
-
-		if (/^\d+$/.test(s)) {
-			var n = Number(s);
-			if (s.length === 10) n = n * 1000;
-			var dt = new Date(n);
-			if (!isNaN(dt)) return toLocalInputString(dt);
-		}
-
-		var mysqlMatch = s.match(/^(\d{4})-(\d{2})-(\d{2})[ T](\d{2}):(\d{2})(?::(\d{2}))?/);
-		if (mysqlMatch) {
-			var y = Number(mysqlMatch[1]),
-				m = Number(mysqlMatch[2]) - 1,
-				day = Number(mysqlMatch[3]);
-			var hh = Number(mysqlMatch[4]),
-				mm = Number(mysqlMatch[5]),
-				ss = Number(mysqlMatch[6] || 0);
-			return toLocalInputString(new Date(y, m, day, hh, mm, ss));
-		}
-
-		var iso = s.replace(' ', 'T');
-		var dt2 = new Date(iso);
-		if (!isNaN(dt2)) return toLocalInputString(dt2);
-
-		return '';
-	}
-
 	function toggleCustomTitle(select) {
 
 		var el = document.getElementById('custom_title_container');
@@ -487,7 +447,7 @@
 				var id = info.event.id;
 				if (id) {
 					$.get(URL_EVENT_DETAIL + '/' + id, function(res) {
-						fillEditModalFromObject(res);
+						fillEditModalFromObject(res);						
 						$('#editEventModal').modal('show');
 					}, 'json').fail(function() {
 						fillEditModalFromEvent(info.event);
