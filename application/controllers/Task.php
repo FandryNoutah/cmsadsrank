@@ -100,8 +100,13 @@ class Task extends MY_Controller
 		$id_task = $taskId = $this->input->post('taskId');
 		$task = $this->Task_model->get_task_by_id($id_task);
 		if($this->input->post('status') == "effectuée"){
-			if($taREMOVED>title == "Mise en pause" || $taREMOVED>title == "Relance client" || $taREMOVED>title == "Résiliation"){
+			if($taREMOVED>title == "Mise en pause" || $taREMOVED>title == "Résiliation"){
 				$statut_demande = 0;
+				$id = intval($taREMOVED>idclients); 
+				$this->visuels_model->change_statut_en_demande($id,$statut_demande);
+			}
+			if($taREMOVED>title == "Relance client"){
+				$statut_demande = 3;
 				$id = intval($taREMOVED>idclients); 
 				$this->visuels_model->change_statut_en_demande($id,$statut_demande);
 			}
@@ -109,8 +114,10 @@ class Task extends MY_Controller
 		if($this->input->post('status') == "effectuée"){
 			if($taREMOVED>title == "Upsell"){
 				$statut_demande = 0;
+				$statut_actif = 1;
 				$id = intval($taREMOVED>idclients); 
 				$idupsell = $taREMOVED>idupsell;
+				$this->visuels_model->activer_upsell($statut_actif,$idupsell);
 				$upsell = $this->visuels_model->get_upsell_by_id($idupsell);
 				$budget_finale = $upsell[0]['budgets'];
 				$idclients = $upsell[0]['idclients'];
@@ -119,8 +126,10 @@ class Task extends MY_Controller
 			}
 			if($taREMOVED>title == "Baisse"){
 				$statut_demande = 0;
+				$statut_actif = 1;
 				$id = intval($taREMOVED>idclients); 
 				$idupsell = $taREMOVED>idupsell;
+				$this->visuels_model->activer_upsell($statut_actif,$idupsell);
 				$upsell = $this->visuels_model->get_upsell_by_id($idupsell);
 				$budget_finale = $upsell[0]['budgets'];
 				$idclients = $upsell[0]['idclients'];
