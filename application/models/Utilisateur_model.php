@@ -2,13 +2,10 @@
 defined('BASEPATH') or exit('No direct script access allowed');
 class Utilisateur_model extends CI_Model
 {
-	public function get_users_by_id($id)
+	public function get_user_by_id($id)
 	{
-		$sql = "select * from users where id='" . $id . "'";
-		$result = $this->db->query($sql);
-		$retour = $result->result_array();
-		$this->db->close();
-		return $retour;
+		$query = $this->db->get_where('users', ['id' => (int)$id]);
+		return $query->row(); // returns a single user object
 	}
 
 	public function edit_user($data, $id)
@@ -16,7 +13,7 @@ class Utilisateur_model extends CI_Model
 		$this->db->where("id", $id)->update("users", $data);
 		return true;
 	}
-		
+
 	public function change_color($couleur, $id)
 	{
 		$data = [

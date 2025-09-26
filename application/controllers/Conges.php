@@ -53,7 +53,7 @@ class Conges extends MY_Controller
 		$agendaFitlers = $this->input->get("agendaFilters");
 
 		if (empty($user_id)) {
-			$user_id = $this->current_user->id;
+			// $user_id = $this->current_user->id;
 		} else {
 			$user_id = intval($user_id);
 		}
