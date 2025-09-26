@@ -43,6 +43,14 @@ class Client extends MY_Controller
 		$this->content = "layouts/client/index.php";
 		$this->layout();
 	}
+	public function relance()
+	{
+		$id = $this->input->post('idclients');
+		$statut_demande = 0;
+		$id = $id; 
+		$this->visuels_model->change_statut_en_demande($id,$statut_demande);
+		redirect('Client/detail_client/' . $id);
+	}
 	public function change_color()
 	{
 		$color_id = $this->input->post('color_id');

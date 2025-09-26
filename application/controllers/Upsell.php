@@ -9,8 +9,7 @@ class Upsell extends MY_Controller
 	public function __construct()
 	{
 		parent::__construct();
-		$this->load->model('Note_model');
-		$this->load->model('Donne_modele');
+		$this->load->model('Upsell_model');
 		$this->load->library('ion_auth');
 
 		// Utilisateur connecté
@@ -20,11 +19,7 @@ class Upsell extends MY_Controller
 	public function index()
 	{
 
-		$ko = $this->data['donnee'] = $this->visuels_model->getClientDataByDonneeWithPmax();	
-
-		$this->data['produit'] = $this->Donne_modele->get_all_produit();
-		$this->data['am'] = $this->Donne_modele->get_all_am();
-		$this->data['initiative'] = $this->Donne_modele->get_all_initiative();
+		$this->data['upsell_active'] = $this->Upsell_model->get_upsell_active();	
 		$this->content = "layouts/upsell/index.php";
 		$this->layout();
 	}
