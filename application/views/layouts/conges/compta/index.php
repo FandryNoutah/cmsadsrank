@@ -34,79 +34,30 @@
 		background: #fff;
 	}
 
-	table.event-table {
-		width: 100%;
-		border-collapse: collapse;
-		background: #fff;
-		border-radius: 12px;
-		overflow: hidden;
-		box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+	.table-wrapper {
+		border-spacing: 0 15px !important;
+		border-collapse: separate !important;
 	}
 
-	table.event-table thead {
-		background: #f8f9fa;
-	}
-
-	table.event-table th,
-	table.event-table td {
-		padding: 10px 12px;
-		border-bottom: 1px solid #f0f0f0;
-		font-size: 14px;
+	.table-wrapper td,
+	.table-wrapper th {
 		vertical-align: middle;
+		border: border;
+		border-bottom: 1px solid #dee2e6 !important;
 	}
 
-	table.event-table th {
-		font-weight: 600;
-		color: #5f6368;
+	.table-wrapper tbody tr td:first-child,
+	.table-wrapper thead tr th:first-child {
+		border-left: 1px solid #dee2e6;
+		border-top-left-radius: 4px;
+		border-bottom-left-radius: 4px;
 	}
 
-	table.event-table tr:hover {
-		background: #f9fbfd;
-	}
-
-	.btn-action {
-		padding: 4px 8px;
-		border: none;
-		border-radius: 6px;
-		cursor: pointer;
-		font-size: 13px;
-	}
-
-	.btn-edit {
-		background: #e8f0fe;
-		color: #1a73e8;
-	}
-
-	.btn-delete {
-		background: #fdecea;
-		color: #d93025;
-	}
-
-	#todayBtn,
-	#prevBtn,
-	#nextBtn {
-		background: #f8f9fa;
-		border: 1px solid #ddd;
-		color: #333;
-		font-weight: 500;
-		margin-right: 4px;
-		transition: all 0.2s;
-	}
-
-	#todayBtn:hover,
-	#prevBtn:hover,
-	#nextBtn:hover {
-		background: #e8f0fe;
-		border-color: #c2dbfe;
-		color: #1a73e8;
-	}
-
-	#userFilter,
-	#viewSelect {
-		border-radius: 6px;
-		border: 1px solid #ddd;
-		padding: 6px 8px;
-		font-size: 14px;
+	.table-wrapper tbody tr td:last-child,
+	.table-wrapper thead tr th:last-child {
+		border-right: 1px solid #dee2e6;
+		border-top-right-radius: 4px;
+		border-bottom-right-radius: 4px;
 	}
 </style>
 <?php end_section(); ?>
@@ -132,7 +83,7 @@
 		<h3>Filtres</h3>
 		<div class="form-group">
 			<label for="userFilter">Filtrer par utilisateur :</label>
-			<select id="userFilter" class="custom-select" style="width:100%; padding:6px;">
+			<select id="userFilter" class="custom-select custom-select-sm w-100">
 				<option value="">-- Tous les utilisateurs --</option>
 			</select>
 		</div>
@@ -141,9 +92,13 @@
 	<div class="main">
 		<div class="d-flex justify-content-between align-items-center mb-3">
 			<div>
-				<button id="todayBtn" class="btn btn-sm">Aujourd'hui</button>
-				<button id="prevBtn" class="btn btn-sm">&lt;</button>
-				<button id="nextBtn" class="btn btn-sm">&gt;</button>
+				<button id="todayBtn" class="btn btn-outline-dark rounded-pill px-4 btn-sm">Aujourd'hui</button>
+				<button id="prevBtn" class="btn btn-white">
+					<i class="fa fa-chevron-left"></i>
+				</button>
+				<button id="nextBtn" class="btn btn-white">
+					<i class="fa fa-chevron-right"></i>
+				</button>
 			</div>
 			<h3 id="monthTitle" class="m-0"></h3>
 			<div>
@@ -153,7 +108,7 @@
 			</div>
 		</div>
 
-		<table class="table table-bordered table-hover">
+		<table class="table table-hover rounded table-wrapper">
 			<thead class="thead-light">
 				<tr>
 					<th>Titre</th>
@@ -172,27 +127,25 @@
 	</div>
 </div>
 
+<?php $this->load->view('layouts/conges/compta/modal/edit'); ?>
+
 <?php end_section(); ?>
 
 <?php start_section('script'); ?>
 <script src="<?= base_url('assets/vendors/fullcalendar/js/main.min.js') ?>"></script>
 <script src="<?= base_url('assets/vendors/fullcalendar/js/locale.fr.js') ?>"></script>
 <script>
-	document.addEventListener('DOMContentLoaded', function() {
-		var URL_FETCH_EVENTS = '<?= site_url("calendar/fetch_events"); ?>';
+	$(function() {
+
+		// VARIABLE DECLARATION
+		var URL_FETCH_EVENTS = '<?= site_url("Conges/fetch_events"); ?>';
 		var URL_FETCH_USERS = '<?= site_url("calendar/fetch_users"); ?>';
 		var URL_EVENT_DETAIL = '<?= site_url("calendar/event_detail"); ?>';
 		var URL_DELETE_EVENT = '<?= site_url("calendar/delete_event"); ?>';
 
 		var currentDate = new Date();
 
-		var miniCal = new FullCalendar.Calendar(document.getElementById('miniCalendar'), {
-			initialView: 'dayGridMonth',
-			headerToolbar: false,
-			editable: false,
-			dayMaxEvents: false,
-		});
-		miniCal.render();
+		// FUNCTION DECLARATION
 
 		function updateMonthTitle() {
 			var options = {
@@ -204,13 +157,24 @@
 
 		function loadUsers() {
 			$.get(URL_FETCH_USERS, function(users) {
+
 				var $filter = $('#userFilter').empty();
+
 				$filter.append('<option value="">-- Tous les utilisateurs --</option>');
 				users.forEach(function(u) {
 					var name = (u.first_name || '') + ' ' + (u.last_name || '');
 					if (!name.trim()) name = u.username || u.email || ('user-' + u.id);
 					$filter.append($('<option>').val(u.id).text(name));
 				});
+
+				var $ea = $('#editAttendeesSelect').empty();
+
+				users.forEach(function(u) {
+					var name = ((u.first_name ? u.first_name : '') + (u.last_name ? ' ' + u.last_name : '')).trim();
+					if (!name) name = u.username || u.email || ('user-' + u.id);
+					$ea.append($('<option>').val(u.id).text(name));
+				});
+
 			}, 'json');
 		}
 
@@ -250,7 +214,7 @@
 						<td>${ev.end || '-'}</td>
 						<td>${ev.agenda || '-'}</td>
 						<td>
-							<button class="btn btn-sm btn-outline-primary" onclick="openEditModal(${ev.id})">
+							<button class="btn btn-sm btn-outline-primary" data-toggle="modal" data-target="#editEventModal" data-id="${ev.id}">
 								<i class="fa fa-edit"></i>
 							</button>
 							<button class="btn btn-sm btn-outline-danger" onclick="deleteEvent(${ev.id})">
@@ -265,16 +229,64 @@
 			});
 		}
 
+		function fillEditModalFromObject(obj) {
+			const form = $('#editEventForm');
+			form[0].reset();
+
+			form.find('input[name=id]').val(obj.id || '');
+			form.find('input[name=title]').val(obj.title || '');
+			form.find('textarea[name=description]').val(obj.description || '');
+
+			form.find('input[name=start_date]').val(parseDateForInput(obj.start || obj.start_date || obj.datetime || obj.begin));
+			form.find('input[name=end_date]').val(parseDateForInput(obj.end || obj.end_date || obj.finish));
+			form.find('input[name=color]').val(obj.backgroundColor || obj.color || '#3788d8');
+
+			const attendeesRaw = obj.attendees || obj.attendees_ids || [];
+			var attendees = [];
+			attendeesRaw.forEach(function(a) {
+				if (!a) return;
+				if (typeof a === 'object') attendees.push(a.id || a.value || (a.username || a.name) || JSON.stringify(a));
+				else attendees.push(String(a));
+			});
+
+			var $sel = $('#editAttendeesSelect');
+			$sel.find('option').prop('selected', false);
+			attendees.forEach(function(a) {
+				var optByVal = $sel.find('option[value="' + a + '"]');
+				if (optByVal.length) optByVal.prop('selected', true);
+				else $sel.find('option').filter(function() {
+					return $(this).text() === a;
+				}).prop('selected', true);
+			});
+		}
+
+		// BEGIN SCRIPT
+
+		if (!$('#sidebarMenu').hasClass("collapsed")) {
+			$('#toggleSidebar').click();
+		}
+
+		var miniCal = new FullCalendar.Calendar(document.getElementById('miniCalendar'), {
+			initialView: 'dayGridMonth',
+			headerToolbar: false,
+			editable: false,
+			dayMaxEvents: false,
+		});
+		miniCal.render();
+
+
 		$('#todayBtn').on('click', function() {
 			currentDate = new Date();
 			updateMonthTitle();
 			loadEvents();
 		});
+
 		$('#prevBtn').on('click', function() {
 			currentDate.setMonth(currentDate.getMonth() - 1);
 			updateMonthTitle();
 			loadEvents();
 		});
+
 		$('#nextBtn').on('click', function() {
 			currentDate.setMonth(currentDate.getMonth() + 1);
 			updateMonthTitle();
@@ -286,6 +298,21 @@
 		updateMonthTitle();
 		loadUsers();
 		loadEvents();
+
+		$('#editEventModal').on('show.bs.modal', function(event) {
+
+			let button = $(event.relatedTarget);
+			let id = $(button).attr('data-id');
+
+			$.ajax({
+				type: "GET",
+				url: URL_EVENT_DETAIL + "/" + id,
+				dataType: "json",
+				success: function(response) {
+					fillEditModalFromObject(response);
+				}
+			});
+		});
 	});
 </script>
 <?php end_section(); ?>
