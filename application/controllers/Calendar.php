@@ -29,13 +29,13 @@ class Calendar extends MY_Controller
 
 		$start = $this->input->get("start");
 		$end   = $this->input->get("end");
-		$user_id = intval($this->input->get("user_id"));
+		$user_id = $this->input->get("user_id");
 		$agendaFitlers = $this->input->get("agendaFilters");
 
-		if ($user_id) {
-			
-			$user_filter = $this->Utilisateur_model->get_users_by_id($user_id);
-			$user_color = $user_filter->couleur ?? "#3788d8";
+		if (!empty($user_id)) {
+			$user_id = intval($user_id);
+			$user_filter = $this->Utilisateur_model->get_user_by_id($user_id);
+			$user_color = $user_filter->couleur ?: "#3788d8";
 		}
 
 		$events = $this->Event_model->get_events($start, $end, $user_id, $agendaFitlers);
