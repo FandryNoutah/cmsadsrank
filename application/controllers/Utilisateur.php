@@ -17,7 +17,7 @@ class Utilisateur extends MY_Controller
 	{
 		$current_user = $this->current_user = $this->ion_auth->user()->row();
 		$id = $current_user->id;
-		$this->data['users'] = $this->Utilisateur_model->get_users_by_id($id);
+		$this->data['users'] = $this->Utilisateur_model->get_user_by_id($id);
 		$this->content = "layouts/Utilisateur/edit_utilisateur.php";
 		$this->layout();
 	}
