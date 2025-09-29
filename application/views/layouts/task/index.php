@@ -100,10 +100,18 @@ Task
 
 <div class="row mx-lg-2">
 	<div class="col-auto px-1">
-		<button class="btn btn-outline-dark">
-			<img src="<?= base_url('assets/images/icons/figma/icon-funnelsimple.svg') ?>" alt="">
-			Sort By
-		</button>
+		<select id="task_type_filter" class="custom-select border-dark">
+			<option disabled selected>Filter</option>
+			<option value="0">All Task</option>
+			<option value="1">Team Task</option>
+			<option value="2">Temporaire</option>
+			<option value="3">GTM</option>
+			<option value="4">Résiliation</option>
+			<option value="5">Mise en pause</option>
+			<option value="6">Relance</option>
+			<option value="7">Upsell</option>
+			<option value="8">Baisse</option>
+		</select>
 	</div>
 	<div class="col-auto px-1">
 		<select id="task_user_filter" class="custom-select border-dark">
@@ -127,33 +135,6 @@ Task
 <?php start_section('content'); ?>
 
 <div class="container-fluid">
-	<ul class="nav nav-tabs mb-3" role="tablist">
-		<li class="nav-item">
-			<a class="nav-link py-3 active task-filter-button" data-type="0" type="button">
-				All Task
-			</a>
-		</li>
-		<li class="nav-item">
-			<a class="nav-link py-3 task-filter-button" data-type="1" type="button">
-				Team Task
-			</a>
-		</li>
-		<li class="nav-item">
-			<a class="nav-link py-3 task-filter-button" data-type="2" type="button">
-				Temporaire
-			</a>
-		</li>
-		<li class="nav-item">
-			<a class="nav-link py-3 task-filter-button" data-type="3" type="button">
-				GTM
-			</a>
-		</li>
-		<li class="nav-item">
-			<a class="nav-link py-3 task-filter-button" data-type="4" type="button">
-				Plan de taggage
-			</a>
-		</li>
-	</ul>
 
 	<div class="tab-content" id="taskTabContent">
 
@@ -205,12 +186,6 @@ Task
 											<?php endif; ?>
 											<?php if ($t->type_tache == 4): ?>
 												<span class="col-auto mx-1 badge alert-success">Plan de taggage</span>
-											<?php endif; ?>
-											<?php if ($t->Statuts_technique == 1): ?>
-												<span class="col-auto mx-1 badge alert-success">Normal</span>
-											<?php endif; ?>
-											<?php if ($t->Statuts_technique == 2): ?>
-												<span class="col-auto mx-1 badge alert-warning">Priorité</span>
 											<?php endif; ?>
 											<?php if ($t->Statuts_technique == 3): ?>
 												<span class="col-auto mx-1 badge alert-danger">Urgent</span>
@@ -300,12 +275,6 @@ Task
 											<?php if ($t->type_tache == 4): ?>
 												<span class="col-auto mx-1 badge alert-success">Plan de taggage</span>
 											<?php endif; ?>
-											<?php if ($t->Statuts_technique == 1): ?>
-												<span class="col-auto mx-1 badge alert-success">Normal</span>
-											<?php endif; ?>
-											<?php if ($t->Statuts_technique == 2): ?>
-												<span class="col-auto mx-1 badge alert-warning">Priorité</span>
-											<?php endif; ?>
 											<?php if ($t->Statuts_technique == 3): ?>
 												<span class="col-auto mx-1 badge alert-danger">Urgent</span>
 											<?php endif; ?>
@@ -392,12 +361,6 @@ Task
 											<?php if ($t->type_tache == 4): ?>
 												<span class="col-auto mx-1 badge alert-success">Plan de taggage</span>
 											<?php endif; ?>
-											<?php if ($t->Statuts_technique == 1): ?>
-												<span class="col-auto mx-1 badge alert-success">Normal</span>
-											<?php endif; ?>
-											<?php if ($t->Statuts_technique == 2): ?>
-												<span class="col-auto mx-1 badge alert-warning">Priorité</span>
-											<?php endif; ?>
 											<?php if ($t->Statuts_technique == 3): ?>
 												<span class="col-auto mx-1 badge alert-danger">Urgent</span>
 											<?php endif; ?>
@@ -471,16 +434,6 @@ Task
 												<?php if ($t->type_tache == 4): ?>
 													<div class="mr-2">
 														<span class="badge alert-success">Plan de taggage</span>
-													</div>
-												<?php endif; ?>
-												<?php if ($t->Statuts_technique == 1): ?>
-													<div class="mr-2">
-														<span class="badge alert-success">Normal</span>
-													</div>
-												<?php endif; ?>
-												<?php if ($t->Statuts_technique == 2): ?>
-													<div class="mr-2">
-														<span class="badge alert-warning">Priorité</span>
 													</div>
 												<?php endif; ?>
 												<?php if ($t->Statuts_technique == 3): ?>
@@ -575,16 +528,6 @@ Task
 														<span class="badge alert-success">Plan de taggage</span>
 													</div>
 												<?php endif; ?>
-												<?php if ($t->Statuts_technique == 1): ?>
-													<div class="mr-2">
-														<span class="badge alert-success">Normal</span>
-													</div>
-												<?php endif; ?>
-												<?php if ($t->Statuts_technique == 2): ?>
-													<div class="mr-2">
-														<span class="badge alert-warning">Priorité</span>
-													</div>
-												<?php endif; ?>
 												<?php if ($t->Statuts_technique == 3): ?>
 													<div class="mr-2">
 														<span class="badge alert-danger">Urgent</span>
@@ -675,16 +618,6 @@ Task
 														<span class="badge alert-success">Plan de taggage</span>
 													</div>
 												<?php endif; ?>
-												<?php if ($t->Statuts_technique == 1): ?>
-													<div class="mr-2">
-														<span class="badge alert-success">Normal</span>
-													</div>
-												<?php endif; ?>
-												<?php if ($t->Statuts_technique == 2): ?>
-													<div class="mr-2">
-														<span class="badge alert-warning">Priorité</span>
-													</div>
-												<?php endif; ?>
 												<?php if ($t->Statuts_technique == 3): ?>
 													<div class="mr-2">
 														<span class="badge alert-danger">Urgent</span>
@@ -773,12 +706,8 @@ Task
 			}
 		}
 
-		$('.task-filter-button').click(function() {
-
-			let type = $(this).data('type');
-			$('.task-filter-button').removeClass('active');
-			$(this).addClass('active');
-
+		$('#task_type_filter').change(function() {
+			let type = $(this).val();
 			filter_task(type);
 		});
 

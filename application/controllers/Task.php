@@ -59,7 +59,7 @@ class Task extends MY_Controller
 				case "planifié":
 					$this->data['count_planned']++;
 					break;
-				
+
 				case "en cours":
 					$this->data['count_upcoming']++;
 					break;
@@ -74,67 +74,72 @@ class Task extends MY_Controller
 		$this->layout();
 	}
 
-	public function delete_task($task_id) {
+	public function delete_task($task_id)
+	{
 		$this->Task_model->delete_task($task_id);
 		redirect('Task');
 	}
 
-	public function edits_task() {
+	public function edits_task()
+	{
 
 		$taskId = $this->input->post('taskId');
+		$Statuts_technique = $this->input->post('Statuts_technique') !== null ? 3 : 1;
+
 		$data = [
 			'type_tache'		=>	$this->input->post('type_tache'),
-			'Statuts_technique'	=>	$this->input->post('Statuts_technique'),
+			'Statuts_technique'	=>	$Statuts_technique,
 			'title'				=>	$this->input->post('title'),
 			'assigned_to'		=>	$this->input->post('assigned_to'),
 			'date_demande'		=>	$this->input->post('date_demande'),
 			'date_due'			=>	$this->input->post('date_due'),
 			'description'		=>	$this->input->post('tache')
 		];
-		// dd($taskId);
+
 		$this->Task_model->update_task($taskId, $data);
 		redirect('Task');
 	}
 
-	public function change_status() {
+	public function change_status()
+	{
 		$id_task = $taskId = $this->input->post('taskId');
 		$task = $this->Task_model->get_task_by_id($id_task);
-		if($this->input->post('status') == "effectuée"){
-			if($task->title == "Mise en pause" || $task->title == "Résiliation"){
+		if ($this->input->post('status') == "effectuée") {
+			if ($task->title == "Mise en pause" || $task->title == "Résiliation") {
 				$statut_demande = 0;
-				$id = intval($task->idclients); 
-				$this->visuels_model->change_statut_en_demande($id,$statut_demande);
+				$id = intval($task->idclients);
+				$this->visuels_model->change_statut_en_demande($id, $statut_demande);
 			}
-			if($task->title == "Relance client"){
+			if ($task->title == "Relance client") {
 				$statut_demande = 3;
-				$id = intval($task->idclients); 
-				$this->visuels_model->change_statut_en_demande($id,$statut_demande);
+				$id = intval($task->idclients);
+				$this->visuels_model->change_statut_en_demande($id, $statut_demande);
 			}
 		}
-		if($this->input->post('status') == "effectuée"){
-			if($task->title == "Upsell"){
+		if ($this->input->post('status') == "effectuée") {
+			if ($task->title == "Upsell") {
 				$statut_demande = 0;
 				$statut_actif = 1;
-				$id = intval($task->idclients); 
+				$id = intval($task->idclients);
 				$idupsell = $task->idupsell;
-				$this->visuels_model->activer_upsell($statut_actif,$idupsell);
+				$this->visuels_model->activer_upsell($statut_actif, $idupsell);
 				$upsell = $this->visuels_model->get_upsell_by_id($idupsell);
 				$budget_finale = $upsell[0]['budgets'];
 				$idclients = $upsell[0]['idclients'];
 				$budget_finale = floatval($budget_finale);
-				$this->visuels_model->update_budget($budget_finale,$idclients);
+				$this->visuels_model->update_budget($budget_finale, $idclients);
 			}
-			if($task->title == "Baisse"){
+			if ($task->title == "Baisse") {
 				$statut_demande = 0;
 				$statut_actif = 1;
-				$id = intval($task->idclients); 
+				$id = intval($task->idclients);
 				$idupsell = $task->idupsell;
-				$this->visuels_model->activer_upsell($statut_actif,$idupsell);
+				$this->visuels_model->activer_upsell($statut_actif, $idupsell);
 				$upsell = $this->visuels_model->get_upsell_by_id($idupsell);
 				$budget_finale = $upsell[0]['budgets'];
 				$idclients = $upsell[0]['idclients'];
 				$budget_finale = floatval($budget_finale);
-				$this->visuels_model->update_budget($budget_finale,$idclients);
+				$this->visuels_model->update_budget($budget_finale, $idclients);
 			}
 		}
 		$taskId = intval($taskId);
@@ -183,20 +188,21 @@ class Task extends MY_Controller
 		]);
 	}
 
-	public function detail_task($id_task) {
+	public function detail_task($id_task)
+	{
 
 		$task = $this->Task_model->get_task_by_id($id_task);
 		$messages = $this->Task_message_model->get_messages_by_task($id_task);
 
 		foreach ($messages as $message) {
-			
+
 			$created_at = $message->created_at;
 			$message->created_at = (new DateTime($created_at))->format('j M, H:i');
 
 			$photo_users = base_url(IMAGES_PATH . $message->photo_users);
 			$message->photo_users = $photo_users;
 		}
-		
+
 		echo json_encode([
 			'task'		=>	$task,
 			'messages'	=>	$messages
@@ -222,7 +228,7 @@ class Task extends MY_Controller
 		$AM = $this->input->post('am');
 		$assigned_to = $this->input->post('assigned_to');
 		$title = $this->input->post('title');
-		$Statuts_technique = $this->input->post('Statuts_technique');
+		$Statuts_technique = $this->input->post('Statuts_technique') !== null ? 3 : 1;
 		$tache = $this->input->post('tache');
 		$fichier_nom = null;
 
@@ -253,18 +259,18 @@ class Task extends MY_Controller
 				return;
 			}
 		}
-			$data = array(
-				'type_tache' => $type_tache,
-				'date_demande' => $date_demande,
-				'date_due' => $date_due,
-				'idclients' => $idclients,
-				'AM' => $AM,
-				'assigned_to' => $assigned_to,
-				'title' => $title,
-				'Statuts_technique' => $Statuts_technique,
-				'fichier_nom' => $fichier_nom,
-				'description' => $tache
-			);
+		$data = array(
+			'type_tache' => $type_tache,
+			'date_demande' => $date_demande,
+			'date_due' => $date_due,
+			'idclients' => $idclients,
+			'AM' => $AM,
+			'assigned_to' => $assigned_to,
+			'title' => $title,
+			'Statuts_technique' => $Statuts_technique,
+			'fichier_nom' => $fichier_nom,
+			'description' => $tache
+		);
 
 		$this->Task_model->add_task($data);
 		$this->session->set_flashdata('message-succes', "Tâche ajoutée avec succès");
@@ -297,7 +303,7 @@ class Task extends MY_Controller
 		}
 	}
 
-	
+
 	public function file_check($string)
 	{
 		$allowedMimeTypeArray = [
