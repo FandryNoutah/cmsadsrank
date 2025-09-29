@@ -23,13 +23,11 @@
 								<option value="3">GTM</option>
 							</select>
 						</div>
-						<div class="col form-group">
-							<label for="task_status">Statut</label>
-							<select name="Statuts_technique" id="task_status" class="form-control">
-								<option value="1">Normal</option>
-								<option value="2">Priorité</option>
-								<option value="3">Urgent</option>
-							</select>
+						<div class="col form-group d-flex align-items-center">
+							<div class="custom-control custom-checkbox">
+								<input type="checkbox" class="custom-control-input" id="Statuts_technique" name="Statuts_technique" value="3">
+								<label class="custom-control-label" for="Statuts_technique">Urgent</label>
+							</div>
 						</div>
 					</div>
 
