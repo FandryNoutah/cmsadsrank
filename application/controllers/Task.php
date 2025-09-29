@@ -54,6 +54,9 @@ class Task extends MY_Controller
 		$this->data['count_completed'] = 0;
 
 		foreach ($tasks as $task) {
+			
+			$task->expired = (new DateTime($task->date_due)) <= (new DateTime('now'));
+			
 			$task->count_messages = $this->Task_message_model->count_messages_by_task($task->idtask);
 			switch ($task->status) {
 				case "planifié":
