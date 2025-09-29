@@ -173,7 +173,7 @@ Task
 										</span>
 									</td>
 									<td>
-										<span class="text-muted">
+										<span class="<?= ($t->expired) ? "text-danger" : "text-muted" ?>">
 											<img src="<?= base_url('assets/images/icons/figma/calendar.svg') ?>" alt="">
 											<?= $t->date_due; ?>
 										</span>
@@ -278,7 +278,7 @@ Task
 										</span>
 									</td>
 									<td>
-										<span class="text-muted">
+										<span class="<?= ($t->expired) ? "text-danger" : "text-muted" ?>">
 											<img src="<?= base_url('assets/images/icons/figma/calendar.svg') ?>" alt="">
 											<?= $t->date_due; ?>
 										</span>
@@ -381,7 +381,7 @@ Task
 										</span>
 									</td>
 									<td>
-										<span class="text-muted">
+										<span class="<?= ($t->expired) ? "text-danger" : "text-muted" ?>">
 											<img src="<?= base_url('assets/images/icons/figma/calendar.svg') ?>" alt="">
 											<?= $t->date_due; ?>
 										</span>
@@ -519,7 +519,7 @@ Task
 											</div>
 											<h6 class="my-3" style="font-size: 14px;"><?= $t->nom_client; ?></h6>
 											<span class="text-muted d-block mb-3"><?= $t->title; ?></span>
-											<span class="text-muted d-block mb-3">
+											<span class="<?= ($t->expired) ? "text-danger" : "text-muted" ?> d-block mb-3">
 												<img src="<?= base_url('assets/images/icons/figma/calendar.svg') ?>" alt="">
 												Date Due <?= $t->date_due; ?>
 											</span>
@@ -611,7 +611,7 @@ Task
 											</div>
 											<h6 class="my-3" style="font-size: 14px;"><?= $t->nom_client; ?></h6>
 											<span class="text-muted d-block mb-3"><?= $t->title; ?></span>
-											<span class="text-muted d-block mb-3">
+											<span class="<?= ($t->expired) ? "text-danger" : "text-muted" ?> d-block mb-3">
 												<img src="<?= base_url('assets/images/icons/figma/calendar.svg') ?>" alt="">
 												Date Due <?= $t->date_due; ?>
 											</span>
@@ -701,7 +701,7 @@ Task
 											</div>
 											<h6 class="my-3" style="font-size: 14px;"><?= $t->nom_client; ?></h6>
 											<span class="text-muted d-block mb-3"><?= $t->title; ?></span>
-											<span class="text-muted d-block mb-3">
+											<span class="<?= ($t->expired) ? "text-danger" : "text-muted" ?> d-block mb-3">
 												<img src="<?= base_url('assets/images/icons/figma/calendar.svg') ?>" alt="">
 												Date Due <?= $t->date_due; ?>
 											</span>
