@@ -53,6 +53,11 @@
 		width: 5%;
 	}
 
+	.table-synced th:nth-child(7),
+	.table-synced td:nth-child(7) {
+		width: 5%;
+	}
+
 	/* For modal attachment design */
 	.file-drop-area {
 		border: 2px dashed #ccc;
@@ -194,8 +199,25 @@ Task
 									</td>
 									<td>
 										<div class="d-flex align-items-center avatar-group">
-											<img src="<?= base_url(IMAGES_PATH . htmlspecialchars($t->AM_photo)); ?>" class="avatar rounded-circle" width="28" height="28" alt="Client Image">
-											<img src="<?= base_url(IMAGES_PATH . htmlspecialchars($t->assigned_to_photo)); ?>" class="avatar rounded-circle" width="28" height="28" alt="Client Image">
+											<img src="<?= base_url(IMAGES_PATH . htmlspecialchars($t->AM_photo)); ?>" class="avatar rounded-circle bg-white" width="28" height="28" alt="Client Image">
+											<img src="<?= base_url(IMAGES_PATH . htmlspecialchars($t->assigned_to_photo)); ?>" class="avatar rounded-circle bg-white" width="28" height="28" alt="Client Image">
+										</div>
+									</td>
+									<td>
+										<div class="row">
+											<?php if ($t->fichier_nom != null): ?>
+												<span class="col-auto">
+													<a href="#" class="text-muted">
+														<img src="<?= base_url('assets/images/icons/figma/attachment-8.svg') ?>" alt="">
+													</a>
+												</span>
+											<?php endif; ?>
+											<span class="col-auto">
+												<a href="javascript:void(0);" class="text-muted" data-toggle="modal" data-target="#discussionModal" data-id="<?= $t->idtask; ?>" data-title="<?= $t->title; ?>">
+													<img src="<?= base_url('assets/images/icons/figma/chat-9.svg') ?>" alt="">
+													<?= $t->count_messages; ?>
+												</a>
+											</span>
 										</div>
 									</td>
 									<td>
@@ -282,7 +304,24 @@ Task
 									</td>
 									<td>
 										<div class="d-flex align-items-center avatar-group">
-											<img src="<?= base_url(IMAGES_PATH . htmlspecialchars($t->AM_photo)); ?>" class="avatar rounded-circle" width="28" height="28" alt="Client Image"><img src="<?= base_url(IMAGES_PATH . htmlspecialchars($t->assigned_to_photo)); ?>" class="avatar rounded-circle" width="28" height="28" alt="Client Image">
+											<img src="<?= base_url(IMAGES_PATH . htmlspecialchars($t->AM_photo)); ?>" class="avatar rounded-circle bg-white" width="28" height="28" alt="Client Image"><img src="<?= base_url(IMAGES_PATH . htmlspecialchars($t->assigned_to_photo)); ?>" class="avatar rounded-circle bg-white" width="28" height="28" alt="Client Image">
+										</div>
+									</td>
+									<td>
+										<div class="row">
+											<?php if ($t->fichier_nom != null): ?>
+												<span class="col-auto">
+													<a href="#" class="text-muted">
+														<img src="<?= base_url('assets/images/icons/figma/attachment-8.svg') ?>" alt="">
+													</a>
+												</span>
+											<?php endif; ?>
+											<span class="col-auto">
+												<a href="javascript:void(0);" class="text-muted" data-toggle="modal" data-target="#discussionModal" data-id="<?= $t->idtask; ?>" data-title="<?= $t->title; ?>">
+													<img src="<?= base_url('assets/images/icons/figma/chat-9.svg') ?>" alt="">
+													<?= $t->count_messages; ?>
+												</a>
+											</span>
 										</div>
 									</td>
 									<td>
@@ -368,7 +407,24 @@ Task
 									</td>
 									<td>
 										<div class="d-flex align-items-center avatar-group">
-											<img src="<?= base_url(IMAGES_PATH . htmlspecialchars($t->AM_photo)); ?>" class="avatar rounded-circle" width="28" height="28" alt="Client Image"><img src="<?= base_url(IMAGES_PATH . htmlspecialchars($t->assigned_to_photo)); ?>" class="avatar rounded-circle" width="28" height="28" alt="Client Image">
+											<img src="<?= base_url(IMAGES_PATH . htmlspecialchars($t->AM_photo)); ?>" class="avatar rounded-circle bg-white" width="28" height="28" alt="Client Image"><img src="<?= base_url(IMAGES_PATH . htmlspecialchars($t->assigned_to_photo)); ?>" class="avatar rounded-circle bg-white" width="28" height="28" alt="Client Image">
+										</div>
+									</td>
+									<td>
+										<div class="row">
+											<?php if ($t->fichier_nom != null): ?>
+												<span class="col-auto">
+													<a href="#" class="text-muted">
+														<img src="<?= base_url('assets/images/icons/figma/attachment-8.svg') ?>" alt="">
+													</a>
+												</span>
+											<?php endif; ?>
+											<span class="col-auto">
+												<a href="javascript:void(0);" class="text-muted" data-toggle="modal" data-target="#discussionModal" data-id="<?= $t->idtask; ?>" data-title="<?= $t->title; ?>">
+													<img src="<?= base_url('assets/images/icons/figma/chat-9.svg') ?>" alt="">
+													<?= $t->count_messages; ?>
+												</a>
+											</span>
 										</div>
 									</td>
 									<td>
@@ -470,7 +526,7 @@ Task
 											<div class="row no-gutters" style="font-size: 14px;">
 												<div class="col-auto mr-auto">
 													<div class="d-flex align-items-center avatar-group">
-														<img src="<?= base_url(IMAGES_PATH . htmlspecialchars($t->AM_photo)); ?>" class="avatar rounded-circle" width="28" height="28" alt="Client Image"><img src="<?= base_url(IMAGES_PATH . htmlspecialchars($t->assigned_to_photo)); ?>" class="avatar rounded-circle" width="28" height="28" alt="Client Image">
+														<img src="<?= base_url(IMAGES_PATH . htmlspecialchars($t->AM_photo)); ?>" class="avatar rounded-circle bg-white" width="28" height="28" alt="Client Image"><img src="<?= base_url(IMAGES_PATH . htmlspecialchars($t->assigned_to_photo)); ?>" class="avatar rounded-circle bg-white" width="28" height="28" alt="Client Image">
 													</div>
 												</div>
 												<?php if ($t->fichier_nom != null): ?>
@@ -562,7 +618,7 @@ Task
 											<div class="row no-gutters" style="font-size: 14px;">
 												<div class="col-auto mr-auto">
 													<div class="d-flex align-items-center avatar-group">
-														<img src="<?= base_url(IMAGES_PATH . htmlspecialchars($t->AM_photo)); ?>" class="avatar rounded-circle" width="28" height="28" alt="Client Image"><img src="<?= base_url(IMAGES_PATH . htmlspecialchars($t->assigned_to_photo)); ?>" class="avatar rounded-circle" width="28" height="28" alt="Client Image">
+														<img src="<?= base_url(IMAGES_PATH . htmlspecialchars($t->AM_photo)); ?>" class="avatar rounded-circle bg-white" width="28" height="28" alt="Client Image"><img src="<?= base_url(IMAGES_PATH . htmlspecialchars($t->assigned_to_photo)); ?>" class="avatar rounded-circle bg-white" width="28" height="28" alt="Client Image">
 													</div>
 												</div>
 												<?php if ($t->fichier_nom != null): ?>
@@ -652,8 +708,8 @@ Task
 											<div class="row no-gutters" style="font-size: 14px;">
 												<div class="col-auto mr-auto">
 													<div class="d-flex align-items-center avatar-group">
-														<img src="<?= base_url(IMAGES_PATH . htmlspecialchars($t->AM_photo)); ?>" class="avatar rounded-circle" width="28" height="28" alt="Client Image">
-														<img src="<?= base_url(IMAGES_PATH . htmlspecialchars($t->assigned_to_photo)); ?>" class="avatar rounded-circle" width="28" height="28" alt="Client Image">
+														<img src="<?= base_url(IMAGES_PATH . htmlspecialchars($t->AM_photo)); ?>" class="avatar rounded-circle bg-white" width="28" height="28" alt="Client Image">
+														<img src="<?= base_url(IMAGES_PATH . htmlspecialchars($t->assigned_to_photo)); ?>" class="avatar rounded-circle bg-white" width="28" height="28" alt="Client Image">
 													</div>
 												</div>
 												<?php if ($t->fichier_nom != null): ?>
@@ -833,9 +889,9 @@ Task
 					$('#detail_date_due').val(task.date_due);
 					$('#detail_description').text(task.description);
 
-					// let photo_users = `<img src="<?= base_url(IMAGES_PATH); ?>/${task.photo_users}" class="avatar rounded-circle" width="36" height="36" alt="Client Image">`;
-					let am_photo = `<img src="<?= base_url(IMAGES_PATH); ?>/${task.AM_photo}" class="avatar rounded-circle" width="36" height="36" alt="Client Image">`;
-					let assigned_to_photo = `<img src="<?= base_url(IMAGES_PATH); ?>/${task.assigned_to_photo}" class="avatar rounded-circle" width="36" height="36" alt="Client Image">`;
+					// let photo_users = `<img src="<?= base_url(IMAGES_PATH); ?>/${task.photo_users}" class="avatar rounded-circle bg-white" width="36" height="36" alt="Client Image">`;
+					let am_photo = `<img src="<?= base_url(IMAGES_PATH); ?>/${task.AM_photo}" class="avatar rounded-circle bg-white" width="36" height="36" alt="Client Image">`;
+					let assigned_to_photo = `<img src="<?= base_url(IMAGES_PATH); ?>/${task.assigned_to_photo}" class="avatar rounded-circle bg-white" width="36" height="36" alt="Client Image">`;
 
 					$('#detail_avatar').append([am_photo, assigned_to_photo]);
 
