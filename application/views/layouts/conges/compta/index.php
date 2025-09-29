@@ -26,6 +26,20 @@
 		font-size: 14px;
 	}
 
+	#mini_calendar {
+		height: 379px !important;
+	}
+
+	.fc-scroller {
+		overflow: hidden !important;
+	}
+
+	.fc-col-header,
+	.fc-daygrid-body,
+	.fc-scrollgrid-sync-table {
+		width: 100% !important;
+	}
+
 	.main {
 		flex: 1;
 		padding: 12px;
@@ -69,7 +83,9 @@
 			<i class="fa fa-plus"></i>
 			Créer
 		</button>
-		<div id="miniCalendar" class="my-3"></div>
+		
+		<div id="mini_calendar" class="my-3"></div>
+
 		<h3>Mes agendas</h3>
 		<?php
 		$agendas = ["Télétravail", "Perso", "Soutenance", "Formation", "Maladie", "Congé", "Contact"];
@@ -266,7 +282,7 @@
 			$('#toggleSidebar').click();
 		}
 
-		var miniCal = new FullCalendar.Calendar(document.getElementById('miniCalendar'), {
+		var miniCal = new FullCalendar.Calendar(document.getElementById('mini_calendar'), {
 			initialView: 'dayGridMonth',
 			headerToolbar: false,
 			editable: false,
