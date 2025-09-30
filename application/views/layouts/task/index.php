@@ -111,11 +111,11 @@ Task
 			<option value="1">Team Task</option>
 			<option value="2">Temporaire</option>
 			<option value="3">GTM</option>
-			<option value="4">Résiliation</option>
-			<option value="5">Mise en pause</option>
-			<option value="6">Relance</option>
-			<option value="7">Upsell</option>
-			<option value="8">Baisse</option>
+			<option value="7">Résiliation</option>
+			<option value="8">Mise en pause</option>
+			<option value="9">Relance</option>
+			<option value="5">Upsell</option>
+			<option value="6">Baisse</option>
 		</select>
 	</div>
 	<div class="col-auto px-1">
@@ -140,6 +140,22 @@ Task
 <?php start_section('content'); ?>
 
 <div class="container-fluid">
+	<div class="btn-group btn-group-toggle my-4" data-toggle="buttons">
+		<label class="btn btn-light rounded-pill mx-2" style="font-size: 14px;">
+			<input type="radio" class="status-select" name="status_filter" value="0" checked>
+			All Task
+		</label>
+		<label class="btn btn-white rounded-pill mx-2 text-muted" style="font-size: 14px;">
+			<input type="radio" class="status-select" name="status_filter" value="3">
+			<i class="fa fa-circle mr-2" style="font-size: 10px; color: #AF4B4B;"></i>
+			En retard
+		</label>
+		<label class="btn btn-white rounded-pill mx-2 text-muted" style="font-size: 14px;">
+			<input type="radio" class="status-select" name="status_filter" value="3">
+			<i class="fa fa-circle mr-2" style="font-size: 10px; color: #AF4B4B;"></i>
+			Urgent
+		</label>
+	</div>
 
 	<div class="tab-content" id="taskTabContent">
 
@@ -160,9 +176,8 @@ Task
 					<tbody>
 						<?php foreach ($tache as $t):  ?>
 							<?php if ($t->status == "planifié"): ?>
-
-								<tr class="taREMOVEDfilter" data-type="<?= $t->type_tache ?>" data-am="<?= $t->AM; ?>" data-assigned="<?= $t->assigned_to ?>">
-									<td>
+								<tr class="taREMOVEDfilter" data-type="<?= $t->type_tache ?>" data-am="<?= $t->AM; ?>" data-assigned="<?= $t->assigned_to ?>" style="<?= ($t->expired) ? "background-color: rgba(255, 0, 0, 0.05);" : "text-muted" ?>">
+								<td>
 										<h6 class="mb-0 ml-3">
 											<?= $t->nom_client; ?>
 										</h6>
@@ -173,25 +188,59 @@ Task
 										</span>
 									</td>
 									<td>
-										<span class="<?= ($t->expired) ? "text-danger" : "text-muted" ?>">
+										<span class="text-muted">
 											<img src="<?= base_url('assets/images/icons/figma/calendar.svg') ?>" alt="">
 											<?= $t->date_due; ?>
 										</span>
 									</td>
+									
 									<td>
 										<div class="row">
 											<?php if ($t->type_tache == 1): ?>
-												<span class="col-auto mx-1 badge alert-success">Team task</span>
-											<?php endif; ?>
-											<?php if ($t->type_tache == 2): ?>
-												<span class="col-auto mx-1 badge alert-success">Temporaire</span>
-											<?php endif; ?>
-											<?php if ($t->type_tache == 3): ?>
-												<span class="col-auto mx-1 badge alert-success">GTM</span>
-											<?php endif; ?>
-											<?php if ($t->type_tache == 4): ?>
-												<span class="col-auto mx-1 badge alert-success">Plan de taggage</span>
-											<?php endif; ?>
+													<div class="mr-2">
+														<span class="badge alert-success">Team task</span>
+													</div>
+												<?php endif; ?>
+												<?php if ($t->type_tache == 2): ?>
+													<div class="mr-2">
+														<span class="badge alert-success">Temporaire</span>
+													</div>
+												<?php endif; ?>
+												<?php if ($t->type_tache == 3): ?>
+													<div class="mr-2">
+														<span class="badge alert-success">GTM</span>
+													</div>
+												<?php endif; ?>
+												<?php if ($t->type_tache == 4): ?>
+													<div class="mr-2">
+														<span class="badge alert-success">Plan de taggage</span>
+													</div>
+												<?php endif; ?>
+												<?php if ($t->type_tache == 5): ?>
+													<div class="mr-2">
+														<span class="badge alert-success">Upsell</span>
+													</div>
+												<?php endif; ?>
+												<?php if ($t->type_tache == 6): ?>
+													<div class="mr-2">
+														<span class="badge alert-danger">Baisse</span>
+													</div>
+												<?php endif; ?>
+												<?php if ($t->type_tache == 7): ?>
+													<div class="mr-2">
+														<span class="badge alert-danger">Résiliation</span>
+													</div>
+												<?php endif; ?>
+												<?php if ($t->type_tache == 8): ?>
+													<div class="mr-2">
+														<span class="badge alert-warning">Mise en pause</span>
+													</div>
+												<?php endif; ?>
+												<?php if ($t->type_tache == 9): ?>
+													<div class="mr-2">
+														<span class="badge alert-success">Relance</span>
+													</div>
+												<?php endif; ?>
 											<?php if ($t->Statuts_technique == 3): ?>
 												<span class="col-auto mx-1 badge alert-danger">Urgent</span>
 											<?php endif; ?>
@@ -277,8 +326,9 @@ Task
 											<?= $t->title; ?>
 										</span>
 									</td>
+									
 									<td>
-										<span class="<?= ($t->expired) ? "text-danger" : "text-muted" ?>">
+										<span class="text-muted">
 											<img src="<?= base_url('assets/images/icons/figma/calendar.svg') ?>" alt="">
 											<?= $t->date_due; ?>
 										</span>
@@ -286,17 +336,50 @@ Task
 									<td>
 										<div class="row">
 											<?php if ($t->type_tache == 1): ?>
-												<span class="col-auto mx-1 badge alert-success">Team task</span>
-											<?php endif; ?>
-											<?php if ($t->type_tache == 2): ?>
-												<span class="col-auto mx-1 badge alert-success">Temporaire</span>
-											<?php endif; ?>
-											<?php if ($t->type_tache == 3): ?>
-												<span class="col-auto mx-1 badge alert-success">GTM</span>
-											<?php endif; ?>
-											<?php if ($t->type_tache == 4): ?>
-												<span class="col-auto mx-1 badge alert-success">Plan de taggage</span>
-											<?php endif; ?>
+													<div class="mr-2">
+														<span class="badge alert-success">Team task</span>
+													</div>
+												<?php endif; ?>
+												<?php if ($t->type_tache == 2): ?>
+													<div class="mr-2">
+														<span class="badge alert-success">Temporaire</span>
+													</div>
+												<?php endif; ?>
+												<?php if ($t->type_tache == 3): ?>
+													<div class="mr-2">
+														<span class="badge alert-success">GTM</span>
+													</div>
+												<?php endif; ?>
+												<?php if ($t->type_tache == 4): ?>
+													<div class="mr-2">
+														<span class="badge alert-success">Plan de taggage</span>
+													</div>
+												<?php endif; ?>
+												<?php if ($t->type_tache == 5): ?>
+													<div class="mr-2">
+														<span class="badge alert-success">Upsell</span>
+													</div>
+												<?php endif; ?>
+												<?php if ($t->type_tache == 6): ?>
+													<div class="mr-2">
+														<span class="badge alert-danger">Baisse</span>
+													</div>
+												<?php endif; ?>
+												<?php if ($t->type_tache == 7): ?>
+													<div class="mr-2">
+														<span class="badge alert-danger">Résiliation</span>
+													</div>
+												<?php endif; ?>
+												<?php if ($t->type_tache == 8): ?>
+													<div class="mr-2">
+														<span class="badge alert-warning">Mise en pause</span>
+													</div>
+												<?php endif; ?>
+												<?php if ($t->type_tache == 9): ?>
+													<div class="mr-2">
+														<span class="badge alert-success">Relance</span>
+													</div>
+												<?php endif; ?>
 											<?php if ($t->Statuts_technique == 3): ?>
 												<span class="col-auto mx-1 badge alert-danger">Urgent</span>
 											<?php endif; ?>
@@ -381,7 +464,7 @@ Task
 										</span>
 									</td>
 									<td>
-										<span class="<?= ($t->expired) ? "text-danger" : "text-muted" ?>">
+										<span class="text-muted">
 											<img src="<?= base_url('assets/images/icons/figma/calendar.svg') ?>" alt="">
 											<?= $t->date_due; ?>
 										</span>
@@ -389,17 +472,50 @@ Task
 									<td>
 										<div class="row">
 											<?php if ($t->type_tache == 1): ?>
-												<span class="col-auto mx-1 badge alert-success">Team task</span>
-											<?php endif; ?>
-											<?php if ($t->type_tache == 2): ?>
-												<span class="col-auto mx-1 badge alert-success">Temporaire</span>
-											<?php endif; ?>
-											<?php if ($t->type_tache == 3): ?>
-												<span class="col-auto mx-1 badge alert-success">GTM</span>
-											<?php endif; ?>
-											<?php if ($t->type_tache == 4): ?>
-												<span class="col-auto mx-1 badge alert-success">Plan de taggage</span>
-											<?php endif; ?>
+													<div class="mr-2">
+														<span class="badge alert-success">Team task</span>
+													</div>
+												<?php endif; ?>
+												<?php if ($t->type_tache == 2): ?>
+													<div class="mr-2">
+														<span class="badge alert-success">Temporaire</span>
+													</div>
+												<?php endif; ?>
+												<?php if ($t->type_tache == 3): ?>
+													<div class="mr-2">
+														<span class="badge alert-success">GTM</span>
+													</div>
+												<?php endif; ?>
+												<?php if ($t->type_tache == 4): ?>
+													<div class="mr-2">
+														<span class="badge alert-success">Plan de taggage</span>
+													</div>
+												<?php endif; ?>
+												<?php if ($t->type_tache == 5): ?>
+													<div class="mr-2">
+														<span class="badge alert-success">Upsell</span>
+													</div>
+												<?php endif; ?>
+												<?php if ($t->type_tache == 6): ?>
+													<div class="mr-2">
+														<span class="badge alert-danger">Baisse</span>
+													</div>
+												<?php endif; ?>
+												<?php if ($t->type_tache == 7): ?>
+													<div class="mr-2">
+														<span class="badge alert-danger">Résiliation</span>
+													</div>
+												<?php endif; ?>
+												<?php if ($t->type_tache == 8): ?>
+													<div class="mr-2">
+														<span class="badge alert-warning">Mise en pause</span>
+													</div>
+												<?php endif; ?>
+												<?php if ($t->type_tache == 9): ?>
+													<div class="mr-2">
+														<span class="badge alert-success">Relance</span>
+													</div>
+												<?php endif; ?>
 											<?php if ($t->Statuts_technique == 3): ?>
 												<span class="col-auto mx-1 badge alert-danger">Urgent</span>
 											<?php endif; ?>
@@ -469,7 +585,7 @@ Task
 							<span class="text-muted"><?= $count_planned; ?> open tasks</span>
 							<?php foreach ($tache as $t): ?>
 								<?php if ($t->status == "planifié"): ?>
-									<div class="card mt-3 taREMOVEDfilter" data-type="<?= $t->type_tache ?>" data-am="<?= $t->AM; ?>" data-assigned="<?= $t->assigned_to ?>">
+									<div class="card mt-3 taREMOVEDfilter" data-type="<?= $t->type_tache ?>" data-am="<?= $t->AM; ?>" data-assigned="<?= $t->assigned_to ?>" style="<?= ($t->expired) ? "background-color: rgba(255, 0, 0, 0.05);" : "text-muted" ?>">
 										<div class="card-body">
 											<div class="d-flex">
 												<?php if ($t->type_tache == 1): ?>
@@ -490,6 +606,31 @@ Task
 												<?php if ($t->type_tache == 4): ?>
 													<div class="mr-2">
 														<span class="badge alert-success">Plan de taggage</span>
+													</div>
+												<?php endif; ?>
+												<?php if ($t->type_tache == 5): ?>
+													<div class="mr-2">
+														<span class="badge alert-success">Upsell</span>
+													</div>
+												<?php endif; ?>
+												<?php if ($t->type_tache == 6): ?>
+													<div class="mr-2">
+														<span class="badge alert-danger">Baisse</span>
+													</div>
+												<?php endif; ?>
+												<?php if ($t->type_tache == 7): ?>
+													<div class="mr-2">
+														<span class="badge alert-danger">Résiliation</span>
+													</div>
+												<?php endif; ?>
+												<?php if ($t->type_tache == 8): ?>
+													<div class="mr-2">
+														<span class="badge alert-warning">Mise en pause</span>
+													</div>
+												<?php endif; ?>
+												<?php if ($t->type_tache == 9): ?>
+													<div class="mr-2">
+														<span class="badge alert-success">Relance</span>
 													</div>
 												<?php endif; ?>
 												<?php if ($t->Statuts_technique == 3): ?>
@@ -519,7 +660,7 @@ Task
 											</div>
 											<h6 class="my-3" style="font-size: 14px;"><?= $t->nom_client; ?></h6>
 											<span class="text-muted d-block mb-3"><?= $t->title; ?></span>
-											<span class="<?= ($t->expired) ? "text-danger" : "text-muted" ?> d-block mb-3">
+											<span class="text-muted d-block mb-3">
 												<img src="<?= base_url('assets/images/icons/figma/calendar.svg') ?>" alt="">
 												Date Due <?= $t->date_due; ?>
 											</span>
@@ -584,6 +725,31 @@ Task
 														<span class="badge alert-success">Plan de taggage</span>
 													</div>
 												<?php endif; ?>
+												<?php if ($t->type_tache == 5): ?>
+													<div class="mr-2">
+														<span class="badge alert-success">Upsell</span>
+													</div>
+												<?php endif; ?>
+												<?php if ($t->type_tache == 6): ?>
+													<div class="mr-2">
+														<span class="badge alert-danger">Baisse</span>
+													</div>
+												<?php endif; ?>
+												<?php if ($t->type_tache == 7): ?>
+													<div class="mr-2">
+														<span class="badge alert-danger">Résiliation</span>
+													</div>
+												<?php endif; ?>
+												<?php if ($t->type_tache == 8): ?>
+													<div class="mr-2">
+														<span class="badge alert-warning">Mise en pause</span>
+													</div>
+												<?php endif; ?>
+												<?php if ($t->type_tache == 9): ?>
+													<div class="mr-2">
+														<span class="badge alert-success">Relance</span>
+													</div>
+												<?php endif; ?>
 												<?php if ($t->Statuts_technique == 3): ?>
 													<div class="mr-2">
 														<span class="badge alert-danger">Urgent</span>
@@ -611,7 +777,7 @@ Task
 											</div>
 											<h6 class="my-3" style="font-size: 14px;"><?= $t->nom_client; ?></h6>
 											<span class="text-muted d-block mb-3"><?= $t->title; ?></span>
-											<span class="<?= ($t->expired) ? "text-danger" : "text-muted" ?> d-block mb-3">
+											<span class="text-muted d-block mb-3">
 												<img src="<?= base_url('assets/images/icons/figma/calendar.svg') ?>" alt="">
 												Date Due <?= $t->date_due; ?>
 											</span>
@@ -674,6 +840,31 @@ Task
 														<span class="badge alert-success">Plan de taggage</span>
 													</div>
 												<?php endif; ?>
+												<?php if ($t->type_tache == 5): ?>
+													<div class="mr-2">
+														<span class="badge alert-success">Upsell</span>
+													</div>
+												<?php endif; ?>
+												<?php if ($t->type_tache == 6): ?>
+													<div class="mr-2">
+														<span class="badge alert-danger">Baisse</span>
+													</div>
+												<?php endif; ?>
+												<?php if ($t->type_tache == 7): ?>
+													<div class="mr-2">
+														<span class="badge alert-danger">Résiliation</span>
+													</div>
+												<?php endif; ?>
+												<?php if ($t->type_tache == 8): ?>
+													<div class="mr-2">
+														<span class="badge alert-warning">Mise en pause</span>
+													</div>
+												<?php endif; ?>
+												<?php if ($t->type_tache == 9): ?>
+													<div class="mr-2">
+														<span class="badge alert-success">Relance</span>
+													</div>
+												<?php endif; ?>
 												<?php if ($t->Statuts_technique == 3): ?>
 													<div class="mr-2">
 														<span class="badge alert-danger">Urgent</span>
@@ -701,7 +892,7 @@ Task
 											</div>
 											<h6 class="my-3" style="font-size: 14px;"><?= $t->nom_client; ?></h6>
 											<span class="text-muted d-block mb-3"><?= $t->title; ?></span>
-											<span class="<?= ($t->expired) ? "text-danger" : "text-muted" ?> d-block mb-3">
+											<span class="text-muted d-block mb-3">
 												<img src="<?= base_url('assets/images/icons/figma/calendar.svg') ?>" alt="">
 												Date Due <?= $t->date_due; ?>
 											</span>
