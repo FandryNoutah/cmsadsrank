@@ -30,7 +30,7 @@ class Discussion extends MY_Controller
 
 		foreach ($tasks as $index => $task) {
 			$taREMOVED>count_messages = $this->Task_message_model->count_messages_by_task($taREMOVED>idtask);
-			if ($taREMOVED>count_messages <= 0) {
+			if ($taREMOVED>count_messages <= 0 || $taREMOVED>status !== "planifié") {
 				unset($tasks[$index]);
 			}
 		}
@@ -73,7 +73,7 @@ class Discussion extends MY_Controller
 		$tasks = $this->Task_model->get_task_for_users_by_type(null, 1);
 		foreach ($tasks as $index => $task) {
 			$taREMOVED>count_messages = $this->Task_message_model->count_messages_by_task($taREMOVED>idtask);
-			if ($taREMOVED>count_messages <= 0) {
+			if ($taREMOVED>count_messages <= 0 || $taREMOVED>status !== "planifié") {
 				unset($tasks[$index]);
 			}
 		}
@@ -89,7 +89,7 @@ class Discussion extends MY_Controller
 		$tasks = $this->Task_model->get_task_for_users_by_type(null, 5);
 		foreach ($tasks as $index => $task) {
 			$taREMOVED>count_messages = $this->Task_message_model->count_messages_by_task($taREMOVED>idtask);
-			if ($taREMOVED>count_messages <= 0) {
+			if ($taREMOVED>count_messages <= 0 || $taREMOVED>status !== "planifié") {
 				unset($tasks[$index]);
 			}
 		}
@@ -105,7 +105,7 @@ class Discussion extends MY_Controller
 		$tasks = $this->Task_model->get_task_for_users_by_type(null, 2);
 		foreach ($tasks as $index => $task) {
 			$taREMOVED>count_messages = $this->Task_message_model->count_messages_by_task($taREMOVED>idtask);
-			if ($taREMOVED>count_messages <= 0) {
+			if ($taREMOVED>count_messages <= 0 || $taREMOVED>status !== "planifié") {
 				unset($tasks[$index]);
 			}
 		}
@@ -121,7 +121,7 @@ class Discussion extends MY_Controller
 		$tasks = $this->Task_model->get_all_procedure_gtm();
 		foreach ($tasks as $index => $task) {
 			$taREMOVED>count_messages = $this->Task_message_model->count_messages_by_task($taREMOVED>idtask);
-			if ($taREMOVED>count_messages <= 0) {
+			if ($taREMOVED>count_messages <= 0 || $taREMOVED>status !== "planifié") {
 				unset($tasks[$index]);
 			}
 		}
@@ -190,6 +190,28 @@ class Discussion extends MY_Controller
 
 		echo json_encode([
 			"done"	=>	true
+		]);
+	}
+
+	public function detail_task($id_task)
+	{
+
+		$task = $this->Task_model->get_task_by_id($id_task);
+
+		echo json_encode([
+			'task'		=>	$task
+		]);
+	}
+
+	public function detail_note($id_note)
+	{
+
+		$note = $this->Note_model->get_by_id($id_note);
+		$assigned_users = $this->Note_model->get_assigned_users($id_note);
+
+		echo json_encode([
+			'note'		=>	$note,
+			'assigned_users'	=>	$assigned_users
 		]);
 	}
 }
