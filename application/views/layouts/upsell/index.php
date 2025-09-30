@@ -1,22 +1,5 @@
 <?php start_section('stylesheet'); ?>
 <style>
-	/* .table-wrapper {
-		border-collapse: separate !important;
-		border-spacing: 0 10px;
-	}
-
-	.table-wrapper tr {
-		background: #fff;
-		box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
-		border-radius: 8px;
-	}
-
-	.table-wrapper td,
-	.table-wrapper th {
-		vertical-align: middle;
-		padding: 1rem;
-	} */
-
 	.table-wrapper {
 		border-spacing: 0 15px !important;
 		border-collapse: separate !important;
@@ -101,7 +84,6 @@ Upsell / Baisse
 </div>
 
 		<div class="table-responsive">
-<?php //var_dump($upsell_active); ?>
 			<table class="table table-wrapper">
 				<thead class="bg-light text-muted">
 					<tr>
@@ -134,10 +116,10 @@ Upsell / Baisse
 				<tbody>
 					<?php foreach($upsell_active as $C): ?>
 					<tr class="data-row"
-	data-client="<?= htmlspecialchars($C['nom_client']); ?>"
-	data-date="<?= htmlspecialchars($C['date_upsell']); ?>"
-	data-type="<?= ($C['type_upsell'] == 2 ? 'Upsell' : 'Baisse'); ?>"
-	data-budget="<?= (float) $C['budgets']; ?>">
+						data-client="<?= htmlspecialchars($C['nom_client']); ?>"
+						data-date="<?= htmlspecialchars($C['date_upsell']); ?>"
+						data-type="<?= ($C['type_upsell'] == 2 ? 'Upsell' : 'Baisse'); ?>"
+						data-budget="<?= (float) $C['budgets']; ?>">
 
 						<td><?php echo htmlspecialchars($C['nom_client']); ?></td>  
 						<td>
@@ -216,8 +198,6 @@ document.addEventListener('DOMContentLoaded', function () {
 	monthFilter.addEventListener('change', applyFilters);
 	dateStart.addEventListener('change', applyFilters);
 	dateEnd.addEventListener('change', applyFilters);
-
-	// Initial calculation
 	applyFilters();
 });
 </script>
