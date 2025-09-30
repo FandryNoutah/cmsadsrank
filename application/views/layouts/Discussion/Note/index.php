@@ -29,7 +29,9 @@ Discussion
 							💬
 							<?= $note->count_messages; ?>
 						</button>
-
+						<button type="button" class="btn btn-light btn-sm mt-1" data-toggle="modal" data-target="#noteModal" data-id="<?= $note->id; ?>">
+							<i class="fa fa-eye"></i>
+						</button>
 					</div>
 				</div>
 			<?php endforeach; ?>
@@ -38,18 +40,53 @@ Discussion
 </div>
 
 <?php $this->load->view('layouts/discussion/modal'); ?>
+<?php $this->load->view('layouts/discussion/note'); ?>
 
 <?php end_section(); ?>
 
 <?php start_section('script'); ?>
 <script>
-
 	$(function() {
 
+		function resetDetail() {
+			$('#detail_discussion').html("");
+			$('#noteModalLabel').text("");
+			$('#detail_due_date').removeAttr('value');
+			$('#detail_description').text("");
+			$('#detail_avatar').html("");
+		}
+
+		function fetch_detail(id_note) {
+			
+			$.ajax({
+				type: "GET",
+				url: "detail_note/" + id_note,
+				dataType: "json",
+				beforeSend: function() {
+					resetDetail();
+				},
+				success: function(response) {
+					
+					let note = response.note;
+					let messages = response.messages;
+
+					$('#noteModalLabel').text("Note: " + note.title);
+					$('#detail_due_date').val(note.date_due);
+					$('#detail_description').text(note.content);
+					$('#detail_type').text(note.type);
+					$('#detail_status').text(note.status);
+
+					let assigned_users = response.assigned_users;
+					$.each(assigned_users, function(index, value) {
+						let avatar = `<img src = "<?= base_url(IMAGES_PATH) ?>${value.photo_users}"width = "36"class = "rounded-circle avatar" >`;
+						$('#detail_avatar').append(avatar);
+					});
+				}
+			});
+		}
+
 		function fetch_discussion(id) {
-			
-			console.log(id);
-			
+
 			$.ajax({
 				type: "POST",
 				url: "<?= site_url('Discussion/fetch_discussion'); ?>",
@@ -102,17 +139,14 @@ Discussion
 		}
 
 		$('#discussionModal').on('show.bs.modal', function(event) {
-			
+
 			let button = $(event.relatedTarget);
-			
+
 			let title = $(button).attr('data-title');
 			let id = $(button).attr('data-id');
 
-			$('#detail_discussion_form').attr('data-id', id);
-			$('#message_form').attr('data-id', id);
+			$('#noteModalLabel').html('Discussion sur: ' + title ?? "Unknown");
 
-			$('#discussionModalLabel').html('Discussion sur: ' + title ?? "Unknown");
-			
 			fetch_discussion(id);
 		});
 
@@ -152,6 +186,18 @@ Discussion
 					fetch_discussion(id);
 				}
 			});
+		});
+
+		$('#noteModal').on('show.bs.modal', function(event) {
+
+			let button = $(event.relatedTarget);
+			let id_note = $(button).attr('data-id');
+			
+			fetch_detail(id_note);
+		});
+
+		$('#noteModal').on('hide.bs.modal', function(event) {
+			resetDetail();
 		});
 	});
 </script>
