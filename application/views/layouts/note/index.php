@@ -134,7 +134,7 @@ Notes
 			$('#detailModalLabel').text("");
 			$('#detail_due_date').removeAttr('value');
 			$('#detail_description').text("");
-			$('#detail_discussion_form').removeAttr('id');
+			$('#detail_discussion_form').removeAttr('data-id');
 			$('#detail_avatar').html("");
 		}
 
@@ -159,6 +159,8 @@ Notes
 					resetDetail();
 				},
 				success: function(response) {
+
+					$('#detail_discussion_form').attr('data-id', id_note);
 
 					let note = response.note;
 					let messages = response.messages;
@@ -211,8 +213,7 @@ Notes
 
 			let button = $(event.relatedTarget);
 			let id_note = $(button).attr('data-id');
-			$('#detail_discussion_form').data('id', id_note);
-
+			
 			fetch_detail(id_note);
 		});
 
