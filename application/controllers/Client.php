@@ -147,14 +147,17 @@ class Client extends MY_Controller
 			if($type_upsell == 2):
 			$title = "Relance client";
 			$tache = "Le client sera relancer, voir date due";
+			$type_tache = 9;
 			endif;
 			if($type_upsell == 4):
 			$title = "Mise en pause";
 			$tache = "Mettre le client en pause, voir date due";
+			$type_tache = 8;
 			endif;
 			if($type_upsell == 5):
 			$title = "Résiliation";
 			$tache = "Résiliation complète du client, voir date due";
+			$type_tache = 7;
 			endif;
 			$Statuts_technique = 1;
 
@@ -386,7 +389,7 @@ class Client extends MY_Controller
 			//$this->visuels_model->update_brief($date_brief, $campagne_actif, $validation_technique, $date_validation_structure, $lien_datastudio, $idclients);
 			$actif = 1;
 			$idupsell = $this->visuels_model->create_upsell($type_upsell, $budget_finale, $budget_initiale, $demmande_upsell, $am, $tm, $date_upsell, $date_demande_upsell, $inforamtion_upsell, $statut_upsell, $idclients, $actif);
-			$type_tache = 1;
+			$type_tache = 5;
 			$title = "Upsell";
 			$tache = "Le client fait une upsell de "  . number_format($budget_finale, 0, ',', ' ') . " €";;
 			$Statuts_technique = 1;
@@ -423,7 +426,7 @@ class Client extends MY_Controller
 			//$this->visuels_model->update_brief($date_brief, $campagne_actif, $validation_technique, $date_validation_structure, $lien_datastudio, $idclients);
 			$actif = 1;
 			$idupsell = $this->visuels_model->create_upsell($type_upsell, $budget_finale, $budget_initiale, $demmande_upsell, $am, $tm, $date_upsell, $date_demande_upsell, $inforamtion_upsell, $statut_upsell, $idclients, $actif);	
-			$type_tache = 1;
+			$type_tache = 6;
 			$title = "Baisse";
 			$tache = "Le client fait une baisse de " . number_format($budget_finale, 0, ',', ' ') . " €";
 			$Statuts_technique = 1;
