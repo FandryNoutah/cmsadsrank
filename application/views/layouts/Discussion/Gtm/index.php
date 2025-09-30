@@ -28,7 +28,9 @@ Discussion
 								💬
 								<?= $taREMOVED>count_messages; ?>
 							</button>
-
+							<button type="button" class="btn btn-light btn-sm mt-1" data-toggle="modal" data-target="#detailModal" data-id="<?= $taREMOVED>idtask; ?>">
+								<i class="fa fa-eye"></i>
+							</button>
 						</div>
 					</div>
 				<?php endif; ?>
@@ -39,12 +41,99 @@ Discussion
 </div>
 
 <?php $this->load->view('layouts/discussion/modal'); ?>
+<?php $this->load->view('layouts/discussion/detail'); ?>
 
 <?php end_section(); ?>
 
 <?php start_section('script'); ?>
 <script>
 	$(function() {
+
+		function resetDetail() {
+			$('#detail_discussion').html("");
+			$('#detailModalLabel').text("");
+			$('#detail_date_due').removeAttr('value');
+			$('#detail_description').text("");
+			$('#detail_discussion_form').removeAttr('id');
+			$('#detail_type').html("");
+			$('#detail_status').html("");
+			$('#detail_avatar').html("");
+			$('#attachment_download').removeAttr("href");
+			$('#attachment_container').addClass('d-none');
+			$('#change_status').removeAttr("value")
+			$('#status_form input[name="taskId"]').removeAttr("value");
+		}
+
+		function fetch_detail(task_id) {
+
+			$.ajax({
+				type: "GET",
+				url: "detail_task/" + task_id,
+				dataType: "json",
+				beforeSend: function() {
+					resetDetail();
+				},
+				success: function(response) {
+
+					let task = response.task;
+
+					$('#detailModalLabel').text("Tâche: " + task.title);
+					$('#detail_date_due').val(task.date_due);
+					$('#detail_description').text(task.description);
+
+					// let photo_users = `<img src="<?= base_url(IMAGES_PATH); ?>/${task.photo_users}" class="avatar rounded-circle bg-white" width="36" height="36" alt="Client Image">`;
+					let am_photo = `<img src="<?= base_url(IMAGES_PATH); ?>/${task.AM_photo}" class="avatar rounded-circle bg-white" width="36" height="36" alt="Client Image">`;
+					let assigned_to_photo = `<img src="<?= base_url(IMAGES_PATH); ?>/${task.assigned_to_photo}" class="avatar rounded-circle bg-white" width="36" height="36" alt="Client Image">`;
+
+					$('#detail_avatar').append([am_photo, assigned_to_photo]);
+
+					var type = "";
+					switch (task.type_tache) {
+						case "1":
+							type = "Team Task";
+							break;
+						case "2":
+							type = "Temporaire";
+							break;
+						case "3":
+							type = "GTM";
+							break;
+						case "4":
+							type = "Plan de taggage";
+							break;
+					}
+
+					$('#detail_type').html(`<span class="badge alert-success p-2" style="font-size: 14px;">${type}</span>`);
+
+					var status = "";
+					var status_color = "";
+					switch (task.Statuts_technique) {
+						case "1":
+							status = "Normal";
+							status_color = "success";
+							break;
+						case "2":
+							status = "Priorité";
+							status_color = "warning";
+							break;
+						case "3":
+							status = "Urgent";
+							status_color = "danger";
+							break;
+					}
+
+					$('#detail_status').html(`<span class="badge alert-${status_color} p-2" style="font-size: 14px;">${status}</span>`);
+
+					if (task.fichier_nom) {
+						$('#attachment_download').attr('href', "<?= base_url(); ?>/" + task.fichier_nom);
+						$('#attachment_container').removeClass('d-none');
+					}
+
+					$('#change_status').val(task.status);
+					$('#status_form input[name="taskId"]').val(task.idtask);
+				}
+			});
+		}
 
 		function fetch_discussion(id) {
 
@@ -151,6 +240,17 @@ Discussion
 					fetch_discussion(id);
 				}
 			});
+		});
+
+		$('#detailModal').on('show.bs.modal', function(event) {
+
+			let button = $(event.relatedTarget);
+			let task_id = $(button).attr('data-id');
+			fetch_detail(task_id);
+		});
+
+		$('#detailModal').on('hide.bs.modal', function(event) {
+			resetDetail();
 		});
 	});
 </script>

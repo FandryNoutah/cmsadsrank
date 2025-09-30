@@ -1,9 +1,9 @@
-<div class="modal fade" id="detailModal" tabindex="-1" aria-labelledby="detailModalLabel" aria-hidden="true">
+<div class="modal fade" id="noteModal" tabindex="-1" aria-labelledby="noteModalLabel" aria-hidden="true">
 	<div class="modal-dialog modal-lg modal-dialog-scrollable" style="width: 640px;">
 		<div class="modal-content">
 
 			<div class="modal-header">
-				<h5 class="modal-title" id="detailModalLabel"></h5>
+				<h5 class="modal-title" id="noteModalLabel"></h5>
 				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 					<span aria-hidden="true">&times;</span>
 				</button>
@@ -47,33 +47,7 @@
 						</button>
 					</div>
 				</div>
-
-				<form action="<?= site_url('Notes/send_message') ?>" method="POST" id="detail_discussion_form">
-					<div class="form-group input-group">
-						<input type="text" class="form-control border-right-0" placeholder="Add Your Message" id="detail_message">
-						<div class="input-group-append">
-							<a href="#" class="btn btn-outline-secondary border-left-0 border-right-0 d-flex align-items-center">
-								<i class="fa fa-paperclip"></i>
-							</a>
-						</div>
-						<div class="input-group-append">
-							<button type="submit" class="btn btn-outline-secondary border-left-0 d-flex align-items-center">
-								<i class="fa fa-paper-plane"></i>
-							</button>
-						</div>
-					</div>
-				</form>
-
-				<div class="d-flex justify-content-between">
-					<label for="">Discussions</label>
-					<!-- <button class="btn btn-outline-dark">Hide Activity Details</button> -->
-				</div>
-
-				<div id="detail_discussion"></div>
 			</div>
-			<!-- <div class="modal-footer">
-				<button type="submit" class="btn btn-dark px-3">Ajouter</button>
-			</div> -->
 		</div>
 	</div>
 </div>
