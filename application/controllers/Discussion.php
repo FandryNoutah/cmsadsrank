@@ -41,6 +41,10 @@ class Discussion extends MY_Controller
 			if ($note->count_messages <= 0) {
 				unset($notes[$index]);
 			}
+
+			$id_note = $note->id;
+			$assigned_users = $this->Note_model->get_assigned_users($id_note);
+			$note->assigned_users = $assigned_users;
 		}
 		$this->data['notes'] = $notes;
 
@@ -58,6 +62,10 @@ class Discussion extends MY_Controller
 			if ($note->count_messages <= 0) {
 				unset($notes[$index]);
 			}
+
+			$id_note = $note->id;
+			$assigned_users = $this->Note_model->get_assigned_users($id_note);
+			$note->assigned_users = $assigned_users;
 		}
 
 		$this->data['notes'] = $notes;
@@ -131,34 +139,6 @@ class Discussion extends MY_Controller
 		$this->layout();
 	}
 
-	public function fetch_discussion()
-	{
-
-		$currentUser = $this->current_user;
-		$id = $this->input->post('id', TRUE);
-		$type = $this->input->post('type', TRUE);
-
-		switch ($type) {
-			case 'note':
-				$messages = $this->Note_message_model->get_messages_by_note($id);
-				break;
-
-			default:
-				$messages = $this->Task_message_model->get_messages_by_task($id);
-				break;
-		}
-
-		foreach ($messages as $message) {
-
-			$created_at = $message->created_at;
-			$message->created_at = (new DateTime($created_at))->format('j M, H:i');
-
-			$message->owner = $message->user_id === $currentUser->id;
-		}
-
-		echo json_encode($messages);
-	}
-
 	public function send_message()
 	{
 
@@ -197,9 +177,20 @@ class Discussion extends MY_Controller
 	{
 
 		$task = $this->Task_model->get_task_by_id($id_task);
+		$messages = $this->Task_message_model->get_messages_by_task($id_task);
+
+		foreach ($messages as $message) {
+
+			$created_at = $message->created_at;
+			$message->created_at = (new DateTime($created_at))->format('j M, H:i');
+
+			$photo_users = base_url(IMAGES_PATH . $message->photo_users);
+			$message->photo_users = $photo_users;
+		}
 
 		echo json_encode([
-			'task'		=>	$task
+			'task'		=>	$task,
+			'messages'	=>	$messages
 		]);
 	}
 
@@ -208,9 +199,20 @@ class Discussion extends MY_Controller
 
 		$note = $this->Note_model->get_by_id($id_note);
 		$assigned_users = $this->Note_model->get_assigned_users($id_note);
+		$messages = $this->Note_message_model->get_messages_by_note($id_note);
+
+		foreach ($messages as $message) {
+
+			$created_at = $message->created_at;
+			$message->created_at = (new DateTime($created_at))->format('j M, H:i');
+
+			$photo_users = base_url(IMAGES_PATH . $message->photo_users);
+			$message->photo_users = $photo_users;
+		}
 
 		echo json_encode([
 			'note'		=>	$note,
+			'messages'	=>	$messages,
 			'assigned_users'	=>	$assigned_users
 		]);
 	}
