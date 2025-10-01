@@ -25,14 +25,22 @@ Discussion
 							<div class="font-weight-bold mb-1"><?= htmlspecialchars($note->title); ?></div>
 							<div class="text-muted small mb-2"><?= nl2br(htmlspecialchars($note->content)); ?></div>
 
-							<button class="btn btn-light btn-sm mt-1">👍 4</button>
-							<button class="btn btn-light btn-sm mt-1" data-toggle="modal" data-target="#discussionModal" data-type="note" data-id="<?= $note->id; ?>">
-								💬
-								<?= $note->count_messages; ?>
-							</button>
-							<button type="button" class="btn btn-light btn-sm mt-1" data-toggle="modal" data-target="#noteModal" data-id="<?= $note->id; ?>">
-								<i class="fa fa-eye"></i>
-							</button>
+							<div class="d-flex justify-content-between">
+								<div>
+									<button class="btn btn-light btn-sm mt-1">👍 4</button>
+									<button type="button" class="btn btn-light btn-sm mt-1 position-relative" data-toggle="modal" data-target="#noteModal" data-id="<?= $note->id; ?>">
+										<i class="fa fa-eye"></i>
+										<?php if ($note->count_messages > 0): ?>
+											<span class="badge badge-danger position-absolute rounded-circle" style="top: -10px; right: -10px;"><?= $note->count_messages; ?></span>
+										<?php endif; ?>
+									</button>
+								</div>
+								<div class="d-flex align-items-center avatar-group">
+									<?php foreach ($note->assigned_users as $assigned_user): ?>
+										<img src="<?= base_url(IMAGES_PATH . $assigned_user->photo_users); ?>" class="avatar rounded-circle" width="28" height="28" alt="Client Image">
+									<?php endforeach; ?>
+								</div>
+							</div>
 						</div>
 					</div>
 				<?php endif; ?>
@@ -43,21 +51,29 @@ Discussion
 					<div class="card mb-3">
 						<div class="card-body">
 							<div class="d-flex justify-content-between mb-2">
-								<span class="font-weight-bold"><?= nl2br(htmlspecialchars($taREMOVED>username)); ?></span>
+								<span class="font-weight-bold"><?= nl2br(htmlspecialchars($taREMOVED>nom_client)); ?></span>
 								<span class="text-muted small"><?= nl2br(htmlspecialchars($taREMOVED>date_due)); ?></span>
 							</div>
 
 							<div class="font-weight-bold mb-1"><?= htmlspecialchars($taREMOVED>title); ?></div>
 							<div class="text-muted small mb-2"><?= nl2br(htmlspecialchars($taREMOVED>description)); ?></div>
 
-							<button class="btn btn-light btn-sm mt-1">👍 4</button>
-							<button type="button" class="btn btn-light btn-sm mt-1" data-toggle="modal" data-target="#discussionModal" data-type="task" data-id="<?= $taREMOVED>idtask; ?>">
-								💬
-								<?= $taREMOVED>count_messages; ?>
-							</button>
-							<button type="button" class="btn btn-light btn-sm mt-1" data-toggle="modal" data-target="#detailModal" data-id="<?= $taREMOVED>idtask; ?>">
-								<i class="fa fa-eye"></i>
-							</button>
+							<div class="d-flex justify-content-between">
+								<div>
+									<button class="btn btn-light btn-sm mt-1">👍 4</button>
+									<button type="button" class="btn btn-light btn-sm mt-1" data-toggle="modal" data-target="#discussionModal" data-type="task" data-id="<?= $taREMOVED>idtask; ?>">
+										💬
+										<?= $taREMOVED>count_messages; ?>
+									</button>
+									<button type="button" class="btn btn-light btn-sm mt-1" data-toggle="modal" data-target="#detailModal" data-id="<?= $taREMOVED>idtask; ?>">
+										<i class="fa fa-eye"></i>
+									</button>
+								</div>
+								<div class="d-flex align-items-center avatar-group">
+									<img src="<?= base_url(IMAGES_PATH . htmlspecialchars($taREMOVED>AM_photo)); ?>" class="avatar rounded-circle bg-white" width="28" height="28" alt="Client Image">
+									<img src="<?= base_url(IMAGES_PATH . htmlspecialchars($taREMOVED>assigned_to_photo)); ?>" class="avatar rounded-circle bg-white" width="28" height="28" alt="Client Image">
+								</div>
+							</div>
 						</div>
 					</div>
 				<?php endif; ?>
@@ -171,7 +187,7 @@ Discussion
 		}
 
 		function fetch_detail_note(id_note) {
-			
+
 			$.ajax({
 				type: "GET",
 				url: "Discussion/detail_note/" + id_note,
@@ -180,7 +196,7 @@ Discussion
 					resetDetailNote();
 				},
 				success: function(response) {
-					
+
 					let note = response.note;
 					let messages = response.messages;
 
@@ -329,7 +345,7 @@ Discussion
 
 			let button = $(event.relatedTarget);
 			let id_note = $(button).attr('data-id');
-			
+
 			fetch_detail_note(id_note);
 		});
 
