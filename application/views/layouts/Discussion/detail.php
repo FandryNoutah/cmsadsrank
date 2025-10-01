@@ -43,6 +43,29 @@
 					</div>
 				</div>
 
+				<hr>
+				<form action="<?= site_url('Discussion/send_message') ?>" method="POST" id="detail_discussion_form">
+					<div class="form-group input-group">
+						<input type="text" class="form-control border-right-0" placeholder="Add Your Message" id="detail_message">
+						<div class="input-group-append">
+							<a href="#" class="btn btn-outline-secondary border-left-0 border-right-0 d-flex align-items-center">
+								<i class="fa fa-paperclip"></i>
+							</a>
+						</div>
+						<div class="input-group-append">
+							<button type="submit" class="btn btn-outline-secondary border-left-0 d-flex align-items-center">
+								<i class="fa fa-paper-plane"></i>
+							</button>
+						</div>
+					</div>
+				</form>
+
+				<div class="d-flex justify-content-between">
+					<label for="">Discussions</label>
+					<!-- <button class="btn btn-outline-dark">Hide Activity Details</button> -->
+				</div>
+
+				<div id="detail_discussion"></div>
 			</div>
 			<form action="<?= site_url('Task/change_status'); ?>" method="POST" id="status_form">
 
@@ -56,6 +79,7 @@
 					</select>
 					<button type="submit" class="btn btn-dark px-3">Modifier</button>
 				</div>
+
 			</form>
 			<div class="modal-footer">
 				<button type="submit" class="btn btn-light px-3">Fermer</button>

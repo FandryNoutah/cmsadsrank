@@ -16,21 +16,32 @@ Discussion
 					<div class="card mb-3">
 						<div class="card-body">
 							<div class="d-flex justify-content-between mb-2">
-								<span class="font-weight-bold"><?= nl2br(htmlspecialchars($taREMOVED>username)); ?></span>
+								<span class="font-weight-bold"><?= nl2br(htmlspecialchars($taREMOVED>nom_client)); ?></span>
 								<span class="text-muted small"><?= nl2br(htmlspecialchars($taREMOVED>date_due)); ?></span>
 							</div>
 
 							<div class="font-weight-bold mb-1"><?= htmlspecialchars($taREMOVED>title); ?></div>
 							<div class="text-muted small mb-2"><?= nl2br(htmlspecialchars($taREMOVED>description)); ?></div>
 
-							<button class="btn btn-light btn-sm mt-1">👍 4</button>
-							<button class="btn btn-light btn-sm mt-1" data-toggle="modal" data-target="#discussionModal" data-id="<?= $taREMOVED>idtask; ?>">
-								💬
-								<?= $taREMOVED>count_messages; ?>
-							</button>
-							<button type="button" class="btn btn-light btn-sm mt-1" data-toggle="modal" data-target="#detailModal" data-id="<?= $taREMOVED>idtask; ?>">
-								<i class="fa fa-eye"></i>
-							</button>
+							<div class="d-flex justify-content-between">
+								<div>
+									<button class="btn btn-light btn-sm mt-1">👍 4</button>
+									<button type="button" class="btn btn-light btn-sm mt-1" data-toggle="modal" data-target="#discussionModal" data-type="task" data-id="<?= $taREMOVED>idtask; ?>">
+										💬
+										<?= $taREMOVED>count_messages; ?>
+									</button>
+									<button type="button" class="btn btn-light btn-sm mt-1" data-toggle="modal" data-target="#detailModal" data-id="<?= $taREMOVED>idtask; ?>">
+										<i class="fa fa-eye"></i>
+										<?php if ($taREMOVED>count_messages > 0): ?>
+											<span class="badge badge-danger position-absolute rounded-circle" style="top: -10px; right: -10px;"><?= $taREMOVED>count_messages; ?></span>
+										<?php endif; ?>
+									</button>
+								</div>
+								<div class="d-flex align-items-center avatar-group">
+									<img src="<?= base_url(IMAGES_PATH . htmlspecialchars($taREMOVED>AM_photo)); ?>" class="avatar rounded-circle bg-white" width="28" height="28" alt="Client Image">
+									<img src="<?= base_url(IMAGES_PATH . htmlspecialchars($taREMOVED>assigned_to_photo)); ?>" class="avatar rounded-circle bg-white" width="28" height="28" alt="Client Image">
+								</div>
+							</div>
 						</div>
 					</div>
 				<?php endif; ?>
@@ -75,6 +86,7 @@ Discussion
 				success: function(response) {
 
 					let task = response.task;
+					let messages = response.messages;
 
 					$('#detailModalLabel').text("Tâche: " + task.title);
 					$('#detail_date_due').val(task.date_due);
@@ -123,6 +135,35 @@ Discussion
 
 					$('#detail_status').html(`<span class="badge alert-${status_color} p-2" style="font-size: 14px;">${status}</span>`);
 
+					$.each(messages, function(index, data) {
+
+						let html = `
+							<div class="d-block activity-container mt-3">
+								<div class="d-flex">
+									<div class="mx-1">
+										<img src="${data.photo_users}" alt="" width="32">
+									</div>
+									<div class="flex-fill mx-1">
+										<div class="d-block mb-2">
+											<span class="font-weight-bold">${data.username}</span>
+											${data.message}
+										</div>
+										<div class="d-block mb-2">
+											<span class="text-muted small">${data.created_at}</span>
+										</div>
+									</div>
+									<div class="mx-1">
+										<a href="javascript:void(0);" class="text-decoration-none text-muted">
+											<i class="fa fa-ellipsis-h"></i>
+										</a>
+									</div>
+								</div>
+							</div>
+						`;
+
+						$('#detail_discussion').prepend(html);
+					});
+
 					if (task.fichier_nom) {
 						$('#attachment_download').attr('href', "<?= base_url(); ?>/" + task.fichier_nom);
 						$('#attachment_container').removeClass('d-none');
@@ -133,113 +174,6 @@ Discussion
 				}
 			});
 		}
-
-		function fetch_discussion(id) {
-
-			$.ajax({
-				type: "POST",
-				url: "<?= site_url('Discussion/fetch_discussion'); ?>",
-				data: {
-					"id": id,
-					"type": "temporaire"
-				},
-				dataType: "json",
-				beforeSend: function() {
-					$('#task_discussion').html('<span class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>');
-				},
-				success: function(response) {
-
-					$('#task_discussion').html('');
-					if (response.length > 0) {
-						$.each(response, function(index, data) {
-
-							let owner = data.owner;
-
-							let alignment = owner ? "justify-content-end" : "justify-content-start";
-							let color = owner ? "bg-dark text-white" : "bg-light border";
-							let sender = owner ? "You" : data.username;
-							let float = owner ? "float-right" : "float-left";
-
-							let html = `
-								<div class="d-flex ${alignment}">
-									<div class="message_container mt-3" style="max-width: 75%;">
-										<span class="small text-muted d-block">${sender} ${data.created_at}</span>
-										<div class="p-2 ${color} rounded ${float}" style="width: fit-content;">
-											${data.message}
-										</div>
-									</div>
-								</div>
-							`;
-
-							$('#task_discussion').append(html); // append if ascendant ; prepend if descendant
-						});
-					} else {
-						$('#task_discussion').html(`
-							<div class="alert alert-light" role="alert">
-								Aucune discussion pour le moment!
-							</div>
-						`);
-					}
-
-					let modalBody = $('#discussionModal .modal-body'); // current open modal body
-					modalBody.scrollTop(modalBody[0].scrollHeight);
-				}
-			});
-		}
-
-		$('#discussionModal').on('show.bs.modal', function(event) {
-
-			let button = $(event.relatedTarget);
-
-			let title = $(button).attr('data-title');
-			let id = $(button).attr('data-id');
-			let action = $(button).attr('data-action');
-
-			$('#detail_discussion_form').attr('data-id', id);
-			$('#message_form').attr('data-id', id);
-
-			$('#discussionModalLabel').html('Discussion sur: ' + title ?? "Unknown");
-
-			fetch_discussion(id);
-		});
-
-		$('#discussionModal').on('hide.bs.modal', function(event) {
-			$('#message').val("");
-			$('#message').removeAttr("data-id");
-			$('#message_form').removeAttr("data-id");
-		});
-
-		$('#message_form').submit(function(event) {
-
-			event.preventDefault();
-
-			let submitter = event.originalEvent.submitter;
-			let buttonChild = $(submitter).html();
-			let id = $(this).data('id');
-
-			$.ajax({
-				type: $(this).attr('method'),
-				url: $(this).attr('action'),
-				data: {
-					"id": id,
-					"type": "temporaire",
-					"message": $('#message').val()
-				},
-				dataType: "json",
-				beforeSend: function() {
-					$(submitter).attr('disabled', "disabled");
-					$(submitter).html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>');
-				},
-				success: function(response) {
-
-					$(submitter).removeAttr("disabled");
-					$(submitter).html(buttonChild);
-
-					$('#message').val("");
-					fetch_discussion(id);
-				}
-			});
-		});
 
 		$('#detailModal').on('show.bs.modal', function(event) {
 
@@ -252,6 +186,37 @@ Discussion
 
 		$('#detailModal').on('hide.bs.modal', function(event) {
 			resetDetail();
+		});
+
+		$('#detail_discussion_form').submit(function(event) {
+
+			event.preventDefault();
+
+			let submitter = event.originalEvent.submitter;
+			let buttonChild = $(submitter).html();
+			let task_id = $(this).data('id');
+
+			$.ajax({
+				type: $(this).attr('method'),
+				url: $(this).attr('action'),
+				data: {
+					"id": task_id,
+					"message": $('#detail_message').val()
+				},
+				dataType: "json",
+				beforeSend: function() {
+					$(submitter).attr('disabled', "disabled");
+					$(submitter).html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>');
+				},
+				success: function(response) {
+
+					$(submitter).removeAttr("disabled");
+					$(submitter).html(buttonChild);
+
+					$('#detail_message').val("");
+					fetch_detail(task_id);
+				}
+			});
 		});
 	});
 </script>

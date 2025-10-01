@@ -9,10 +9,11 @@ class Task_model extends CI_Model
 
 	public function get_task_for_users_by_type($user_id = null, $type = 0)
 	{
-		$this->db->select('tasks.*, users.*');
+		$this->db->select('tasks.*, clients.nom_client, u1.photo_users as assigned_to_photo, u2.photo_users as AM_photo');
 		$this->db->from('tasks');
-		$this->db->join('users', 'users.id = tasks.AM', 'left');
-
+		$this->db->join('users u1', 'u1.id = tasks.assigned_to', 'left');
+		$this->db->join('users u2', 'u2.id = tasks.AM', 'left');
+		$this->db->join('clients', 'clients.idclients = tasks.idclients', 'left');
 		if ($user_id !== null) {
 			$this->db->where('tasks.AM', $user_id);
 		}
