@@ -43,6 +43,14 @@ class Client extends MY_Controller
 		$this->content = "layouts/client/index.php";
 		$this->layout();
 	}
+	public function ajout_brief()
+	{
+		$id = $this->input->post('idclients');
+		$information_client = $this->input->post('information_client');
+		var_dump($information_client);
+		die();
+		redirect('Client/onboarding/' . $id);
+	}
 	public function relance()
 	{
 		$id = $this->input->post('idclients');
@@ -62,8 +70,6 @@ class Client extends MY_Controller
 		}
 
 		$this->visuels_model->update_color($idclients, $color_id);
-
-		// Au lieu de redirect(), on retourne une URL dans la réponse
 		echo json_encode([
 			'status' => 'success',
 			'redirect_url' => base_url('Client/detail_client/' . $idclients)
@@ -329,8 +335,7 @@ class Client extends MY_Controller
 
 	public function onboarding($idclients)
 	{
-
-		$this->data['idclients'] = $idclients;
+		$this->data["donnees"] = $this->visuels_model->getDonneeById($idclients);
 		$this->content = "layouts/client/onboarding/index.php";
 		$this->layout();
 	}
