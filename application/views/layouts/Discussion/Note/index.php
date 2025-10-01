@@ -24,14 +24,22 @@ Discussion
 						<div class="font-weight-bold mb-1"><?= htmlspecialchars($note->title); ?></div>
 						<div class="text-muted small mb-2"><?= nl2br(htmlspecialchars($note->content)); ?></div>
 
-						<button class="btn btn-light btn-sm mt-1">👍 4</button>
-						<button class="btn btn-light btn-sm mt-1" data-toggle="modal" data-target="#discussionModal" data-id="<?= $note->id; ?>">
-							💬
-							<?= $note->count_messages; ?>
-						</button>
-						<button type="button" class="btn btn-light btn-sm mt-1" data-toggle="modal" data-target="#noteModal" data-id="<?= $note->id; ?>">
-							<i class="fa fa-eye"></i>
-						</button>
+						<div class="d-flex justify-content-between">
+							<div>
+								<button class="btn btn-light btn-sm mt-1">👍 4</button>
+								<button type="button" class="btn btn-light btn-sm mt-1 position-relative" data-toggle="modal" data-target="#noteModal" data-id="<?= $note->id; ?>">
+									<i class="fa fa-eye"></i>
+									<?php if ($note->count_messages > 0): ?>
+										<span class="badge badge-danger position-absolute rounded-circle" style="top: -10px; right: -10px;"><?= $note->count_messages; ?></span>
+									<?php endif; ?>
+								</button>
+							</div>
+							<div class="d-flex align-items-center avatar-group">
+								<?php foreach ($note->assigned_users as $assigned_user): ?>
+									<img src="<?= base_url(IMAGES_PATH . $assigned_user->photo_users); ?>" class="avatar rounded-circle" width="28" height="28" alt="Client Image">
+								<?php endforeach; ?>
+							</div>
+						</div>
 					</div>
 				</div>
 			<?php endforeach; ?>
@@ -54,10 +62,11 @@ Discussion
 			$('#detail_due_date').removeAttr('value');
 			$('#detail_description').text("");
 			$('#detail_avatar').html("");
+			$('#detail_discussion_form').removeAttr('data-id');
 		}
 
 		function fetch_detail(id_note) {
-			
+
 			$.ajax({
 				type: "GET",
 				url: "detail_note/" + id_note,
@@ -66,9 +75,11 @@ Discussion
 					resetDetail();
 				},
 				success: function(response) {
-					
+
 					let note = response.note;
 					let messages = response.messages;
+
+					$('#detail_discussion_form').data('id', id_note);
 
 					$('#noteModalLabel').text("Note: " + note.title);
 					$('#detail_due_date').val(note.date_due);
@@ -81,96 +92,54 @@ Discussion
 						let avatar = `<img src = "<?= base_url(IMAGES_PATH) ?>${value.photo_users}"width = "36"class = "rounded-circle avatar" >`;
 						$('#detail_avatar').append(avatar);
 					});
-				}
-			});
-		}
 
-		function fetch_discussion(id) {
+					$.each(messages, function(index, data) {
 
-			$.ajax({
-				type: "POST",
-				url: "<?= site_url('Discussion/fetch_discussion'); ?>",
-				data: {
-					"id": id,
-					"type": "note"
-				},
-				dataType: "json",
-				beforeSend: function() {
-					$('#task_discussion').html('<span class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>');
-				},
-				success: function(response) {
-
-					$('#task_discussion').html('');
-					if (response.length > 0) {
-						$.each(response, function(index, data) {
-
-							let owner = data.owner;
-
-							let alignment = owner ? "justify-content-end" : "justify-content-start";
-							let color = owner ? "bg-dark text-white" : "bg-light border";
-							let sender = owner ? "You" : data.username;
-							let float = owner ? "float-right" : "float-left";
-
-							let html = `
-								<div class="d-flex ${alignment}">
-									<div class="message_container mt-3" style="max-width: 75%;">
-										<span class="small text-muted d-block">${sender} ${data.created_at}</span>
-										<div class="p-2 ${color} rounded ${float}" style="width: fit-content;">
+						let html = `
+							<div class="d-block activity-container mt-3">
+								<div class="d-flex">
+									<div class="mx-1">
+										<img src="${data.photo_users}" alt="" width="32">
+									</div>
+									<div class="flex-fill mx-1">
+										<div class="d-block mb-2">
+											<span class="font-weight-bold">${data.username}</span>
 											${data.message}
 										</div>
+										<div class="d-block mb-2">
+											<span class="text-muted small">${data.created_at}</span>
+										</div>
+									</div>
+									<div class="mx-1">
+										<a href="javascript:void(0);" class="text-decoration-none text-muted">
+											<i class="fa fa-ellipsis-h"></i>
+										</a>
 									</div>
 								</div>
-							`;
-
-							$('#task_discussion').append(html); // append if ascendant ; prepend if descendant
-						});
-					} else {
-						$('#task_discussion').html(`
-							<div class="alert alert-light" role="alert">
-								Aucune discussion pour le moment!
 							</div>
-						`);
-					}
+						`;
 
-					let modalBody = $('#discussionModal .modal-body'); // current open modal body
-					modalBody.scrollTop(modalBody[0].scrollHeight);
+						$('#detail_discussion').prepend(html);
+					});
 				}
 			});
 		}
 
-		$('#discussionModal').on('show.bs.modal', function(event) {
-
-			let button = $(event.relatedTarget);
-
-			let title = $(button).attr('data-title');
-			let id = $(button).attr('data-id');
-
-			$('#noteModalLabel').html('Discussion sur: ' + title ?? "Unknown");
-
-			fetch_discussion(id);
-		});
-
-		$('#discussionModal').on('hide.bs.modal', function(event) {
-			$('#message').val("");
-			$('#message').removeAttr("data-id");
-			$('#message_form').removeAttr("data-id");
-		});
-
-		$('#message_form').submit(function(event) {
+		$('#detail_discussion_form').submit(function(event) {
 
 			event.preventDefault();
 
 			let submitter = event.originalEvent.submitter;
 			let buttonChild = $(submitter).html();
-			let id = $(this).data('id');
-
+			let id_note = $(this).data('id');
+			
 			$.ajax({
 				type: $(this).attr('method'),
 				url: $(this).attr('action'),
 				data: {
-					"id": id,
+					"id": id_note,
 					"type": "note",
-					"message": $('#message').val()
+					"message": $('#detail_message').val()
 				},
 				dataType: "json",
 				beforeSend: function() {
@@ -182,8 +151,8 @@ Discussion
 					$(submitter).removeAttr("disabled");
 					$(submitter).html(buttonChild);
 
-					$('#message').val("");
-					fetch_discussion(id);
+					$('#detail_message').val("");
+					fetch_detail(id_note);
 				}
 			});
 		});
@@ -192,7 +161,7 @@ Discussion
 
 			let button = $(event.relatedTarget);
 			let id_note = $(button).attr('data-id');
-			
+
 			fetch_detail(id_note);
 		});
 
