@@ -34,7 +34,7 @@ class Googleads extends MY_Controller
 
 	public function index()
 	{
-		
+
 		// $month_filter = $this->input->get('month_filter');
 		// if (isset($month_filter)) {
 		// 	$ko = $this->data['donnee'] = $this->visuels_model->getClientDataByDonneeWithMonth($month_filter);
@@ -92,12 +92,6 @@ class Googleads extends MY_Controller
 		// Redirection
 		redirect('Googleads/campagne/' . $idclients);
 	}
-
-
-
-
-
-
 
 	public function completed_tasks()
 	{
@@ -2046,6 +2040,7 @@ class Googleads extends MY_Controller
 		$this->Donne_modele->update_groupe_pmax($data, $idgroupe_annonce);
 		redirect("Googleads/ajout_groupeannonce_local/" . $idgroupe_annonce);
 	}
+	
 	public function Ajout_Campagne()
 	{
 		if ($this->input->post('type_de_campagne') == 1) {
@@ -2242,12 +2237,6 @@ class Googleads extends MY_Controller
 			$this->layout();
 		} // Fermeture du troisième if
 	}
-
-
-
-
-
-
 
 	public function submitForm()
 	{
