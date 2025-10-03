@@ -136,6 +136,8 @@ Notes
 			$('#detail_description').text("");
 			$('#detail_discussion_form').removeAttr('data-id');
 			$('#detail_avatar').html("");
+			$('#attachment_download').removeAttr("href");
+			$('#attachment_container').addClass('d-none');
 		}
 
 		function resetForm() {
@@ -205,6 +207,11 @@ Notes
 
 						$('#detail_discussion').prepend(html);
 					});
+
+					if (note.fichier_nom) {
+						$('#attachment_download').attr('href', "<?= base_url(); ?>/" + note.fichier_nom);
+						$('#attachment_container').removeClass('d-none');
+					}
 				}
 			});
 		}
