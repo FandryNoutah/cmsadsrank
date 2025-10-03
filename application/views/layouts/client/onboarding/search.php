@@ -1,4 +1,4 @@
-<?php start_section('stylesheet'); ?>
+<?php start_section('stylesheet') ?>
 
 <style>
 	.multi-col {
@@ -54,224 +54,227 @@
 
 			<div class="col">
 
-				<div class="container-fluid pt-4">
+				<form action='<?= site_url('Client/ajout_campagne/'. $idclients) . "?conversion=$conversion&camp_type=$camp_type&gtm=$gtm" ?>' method="POST">
 
-					<h5>Campagne Reseau de Recherche</h5>
-					<hr class="my-4">
-
-					<div class="row align-items-center mb-4">
-						<div class="col-auto">
-							<img src="<?= base_url('assets/images/figma/discu_queue.png') ?>" class="img-thumbnail rounded-circle" width="64">
+					<div class="container-fluid pt-4">
+	
+						<h5>Campagne Reseau de Recherche</h5>
+						<hr class="my-4">
+	
+						<div class="row align-items-center mb-4">
+							<div class="col-auto">
+								<img src="<?= base_url('assets/images/figma/discu_queue.png') ?>" class="img-thumbnail rounded-circle" width="64">
+							</div>
+							<div class="col-auto">
+								<input type="hidden" name="file">
+								<button type="button" class="btn btn-light btn-sm">
+									<i class="fa fa-upload"></i>
+									Upload Company Logo
+								</button>
+							</div>
 						</div>
-						<div class="col-auto">
-							<input type="hidden" name="file">
-							<button type="button" class="btn btn-light btn-sm">
-								<i class="fa fa-upload"></i>
-								Upload Company Logo
-							</button>
-						</div>
-					</div>
-
-					<div class="form-group">
-						<label for="camp_url">URL de la campagne</label>
-						<input type="text" class="form-control" name="camp_url">
-					</div>
-
-					<div class="form-group">
-						<label for="camp_budget">Budget de la campagne</label>
-						<input type="text" class="form-control" name="camp_budget">
-					</div>
-
-					<div class="custom-control custom-switch">
-						<input type="checkbox" class="custom-control-input" id="customSwitch1">
-						<label class="custom-control-label" for="customSwitch1">Souhaitez-vous créer plusieurs groupes d'annonces dans la campagne?</label>
-					</div>
-
-					<div id="groupe_annonce_container" class="mb-4 pt-4">
+	
 						<div class="form-group">
-							<label for="">Groupe d'annonce 1</label>
-							<input type="text" class="form-control">
+							<label for="url_campagne">URL de la campagne</label>
+							<input type="text" class="form-control" name="url_campagne" id="url_campagne">
 						</div>
-
+	
 						<div class="form-group">
-							<label for="">Saisir des mots-clés du groupe d'annonce</label>
-							<textarea name="" class="form-control" maxlength="50"></textarea>
+							<label for="repartition_budget_search">Budget de la campagne</label>
+							<input type="text" class="form-control" name="repartition_budget_search" id="repartition_budget_search">
 						</div>
-
-						<div class="text-center mb-4">
-							<button type="button" class="btn btn-outline-dark btn-sm">
-								<i class="fa fa-plus"></i>
-								Nouveau groupe d'annonce
-							</button>
+	
+						<div class="custom-control custom-switch">
+							<input type="checkbox" class="custom-control-input" id="customSwitch1">
+							<label class="custom-control-label" for="customSwitch1">Souhaitez-vous créer plusieurs groupes d'annonces dans la campagne?</label>
 						</div>
-
+	
+						<div id="groupe_annonce_container" class="mb-4 pt-4">
+							<div class="form-group">
+								<label>Groupe d'annonce 1</label>
+								<input type="text" class="form-control" name="groupe_annonce[]">
+							</div>
+	
+							<div class="form-group">
+								<label>Saisir des mots-clés du groupe d'annonce</label>
+								<textarea name="Mot_cle[]" class="form-control" maxlength="50"></textarea>
+							</div>
+	
+							<div class="text-center mb-4">
+								<button type="button" class="btn btn-outline-dark btn-sm">
+									<i class="fa fa-plus"></i>
+									Nouveau groupe d'annonce
+								</button>
+							</div>
+	
+							<div class="form-group">
+								<label for="">Groupe d'annonce 1</label>
+								<input type="text" class="form-control">
+							</div>
+	
+							<div class="form-group">
+								<label for="">Saisir des mots-clés du groupe d'annonce</label>
+								<textarea name="" class="form-control" maxlength="50"></textarea>
+							</div>
+	
+							<div class="text-center mb-4">
+								<button type="button" class="btn btn-outline-dark btn-sm">
+									<i class="fa fa-plus"></i>
+									Nouveau groupe d'annonce
+								</button>
+							</div>
+						</div>
+	
+						<h5>Paramètres de la campagne</h5>
 						<div class="form-group">
-							<label for="">Groupe d'annonce 1</label>
-							<input type="text" class="form-control">
+							<label for="zone_search">Zone géographique</label>
+							<input type="text" class="form-control" name="zone_search" id="zone_search">
 						</div>
-
+	
 						<div class="form-group">
-							<label for="">Saisir des mots-clés du groupe d'annonce</label>
-							<textarea name="" class="form-control" maxlength="50"></textarea>
+							<label for="">Langues</label>
+							<select name="" class="form-control">
+								<option value="">Lang 1</option>
+								<option value="">Lang 2</option>
+							</select>
 						</div>
-
-						<div class="text-center mb-4">
-							<button type="button" class="btn btn-outline-dark btn-sm">
-								<i class="fa fa-plus"></i>
-								Nouveau groupe d'annonce
-							</button>
+	
+						<div class="form-group">
+							<label for="">Cibles</label>
+							<select name="" class="form-control">
+								<option value="">Cible 1</option>
+								<option value="">Cible 2</option>
+							</select>
 						</div>
-					</div>
-
-					<h5>Paramètres de la campagne</h5>
-					<div class="form-group">
-						<label for="">Zone géographique</label>
-						<input type="text" class="form-control">
-					</div>
-
-					<div class="form-group">
-						<label for="">Langues</label>
-						<select name="" class="form-control">
-							<option value="">Lang 1</option>
-							<option value="">Lang 2</option>
-						</select>
-					</div>
-
-					<div class="form-group">
-						<label for="">Cibles</label>
-						<select name="" class="form-control">
-							<option value="">Cible 1</option>
-							<option value="">Cible 2</option>
-						</select>
-					</div>
-
-					<div class="form-group">
-						<label for="">Tranche d'âges</label>
-						<select name="" class="form-control">
-							<option value="">1</option>
-							<option value="">2</option>
-						</select>
-					</div>
-
-					<div class="form-group">
-						<label for="">Audiences</label>
-						<select name="" class="form-control">
-							<option value="">Audience 1</option>
-							<option value="">Audience 2</option>
-						</select>
-					</div>
-
-					<div class="container">
-						<div class="multi-col" style="height: 200px;">
-							<div class="custom-control custom-checkbox">
-								<input type="checkbox" class="custom-control-input" id="customCheck1">
-								<label class="custom-control-label" for="customCheck1">Affinité</label>
-							</div>
-							<div class="custom-control custom-checkbox">
-								<input type="checkbox" class="custom-control-input" id="customCheck1">
-								<label class="custom-control-label" for="customCheck1">Acheteur</label>
-							</div>
-							<div class="custom-control custom-checkbox">
-								<input type="checkbox" class="custom-control-input" id="customCheck1">
-								<label class="custom-control-label" for="customCheck1">Actualité et politique</label>
-							</div>
-							<div class="custom-control custom-checkbox">
-								<input type="checkbox" class="custom-control-input" id="customCheck1">
-								<label class="custom-control-label" for="customCheck1">Alimentation et restauration</label>
-							</div>
+	
+						<div class="form-group">
+							<label for="">Tranche d'âges</label>
+							<select name="" class="form-control">
+								<option value="">1</option>
+								<option value="">2</option>
+							</select>
 						</div>
-					</div>
-
-					<div class="form-group">
-						<label for="">Appareil</label>
-						<select name="" id="" class="form-control">
-							<option value="">Appareil 1</option>
-							<option value="">Appareil 2</option>
-						</select>
-					</div>
-
-					<button type="button" class="btn btn-dark btn-sm btn-block mb-5">Suivant</button>
-
-					<ul class="nav nav-tabs mb-3">
-						<li class="nav-item">
-							<a class="nav-link py-3 active" type="button">
-								Propositions de mots-clés à exclure
-							</a>
-						</li>
-					</ul>
-
-					<div class="card bg-light">
-						<div class="card-body">
-							<div class="multi-col" style="height: 550px;">
-								<p class="mb-1">micro entreprise</p>
-								<p class="mb-1">auto entrepreneur</p>
-								<p class="mb-1">microentreprise</p>
-								<p class="mb-1">création entreprise</p>
-								<p class="mb-1">freelance</p>
-								<p class="mb-1">business plan</p>
-								<p class="mb-1">statut juridique</p>
-								<p class="mb-1">financement pôle emploi</p>
-								<p class="mb-1">prime création</p>
-								<p class="mb-1">auto-entrepreneur</p>
-								<p class="mb-1">boutique en ligne</p>
-								<p class="mb-1">dropshipping</p>
-								<p class="mb-1">vinted</p>
-								<p class="mb-1">définition</p>
-								<p class="mb-1">comment faire</p>
-								<p class="mb-1">pdf</p>
-								<p class="mb-1">gratuit</p>
-								<p class="mb-1">exemple</p>
-								<p class="mb-1">livre blanc</p>
-								<p class="mb-1">template</p>
-								<p class="mb-1">coursseed</p>
-								<p class="mb-1">pre seed</p>
-								<p class="mb-1">early stage</p>
-								<p class="mb-1">incubateur</p>
-								<p class="mb-1">accélérateur</p>
-								<p class="mb-1">business angel</p>
-								<p class="mb-1">levée de fonds seed</p>
-							</div>
+	
+						<div class="form-group">
+							<label for="">Audiences</label>
+							<select name="" class="form-control">
+								<option value="">Audience 1</option>
+								<option value="">Audience 2</option>
+							</select>
 						</div>
-					</div>
-
-					<ul class="nav nav-tabs mb-3">
-						<li class="nav-item">
-							<a class="nav-link py-3 active" type="button">
-								Proposition d'images
-							</a>
-						</li>
-					</ul>
-
-					<div class="card mb-4">
-						<div class="card-body">
-							<div class="row no-gutters">
-								<div class="col-auto px-2 mb-3">
-									<img src="<?= base_url('assets/images/formats/betewq5osgluxdan7v5blfsgba.jpg') ?>" alt="" width="120">
+	
+						<div class="container">
+							<div class="multi-col" style="height: 200px;">
+								<div class="custom-control custom-checkbox">
+									<input type="checkbox" class="custom-control-input" id="customCheck1">
+									<label class="custom-control-label" for="customCheck1">Affinité</label>
 								</div>
-								<div class="col-auto px-2 mb-3">
-									<img src="<?= base_url('assets/images/formats/betewq5osgluxdan7v5blfsgba.jpg') ?>" alt="" width="120">
+								<div class="custom-control custom-checkbox">
+									<input type="checkbox" class="custom-control-input" id="customCheck1">
+									<label class="custom-control-label" for="customCheck1">Acheteur</label>
 								</div>
-								<div class="col-auto px-2 mb-3">
-									<img src="<?= base_url('assets/images/formats/betewq5osgluxdan7v5blfsgba.jpg') ?>" alt="" width="120">
+								<div class="custom-control custom-checkbox">
+									<input type="checkbox" class="custom-control-input" id="customCheck1">
+									<label class="custom-control-label" for="customCheck1">Actualité et politique</label>
 								</div>
-								<div class="col-auto px-2 mb-3">
-									<img src="<?= base_url('assets/images/formats/betewq5osgluxdan7v5blfsgba.jpg') ?>" alt="" width="120">
-								</div>
-								<div class="col-auto px-2 mb-3">
-									<img src="<?= base_url('assets/images/formats/betewq5osgluxdan7v5blfsgba.jpg') ?>" alt="" width="120">
-								</div>
-								<div class="col-auto px-2 mb-3">
-									<img src="<?= base_url('assets/images/formats/betewq5osgluxdan7v5blfsgba.jpg') ?>" alt="" width="120">
+								<div class="custom-control custom-checkbox">
+									<input type="checkbox" class="custom-control-input" id="customCheck1">
+									<label class="custom-control-label" for="customCheck1">Alimentation et restauration</label>
 								</div>
 							</div>
 						</div>
+	
+						<div class="form-group">
+							<label for="appareil_search">Appareil</label>
+							<select name="appareil_search" id="appareil_search" class="form-control">
+								<option value="">Appareil 1</option>
+								<option value="">Appareil 2</option>
+							</select>
+						</div>
+	
+						<button type="button" class="btn btn-dark btn-sm btn-block mb-5">Suivant</button>
+	
+						<ul class="nav nav-tabs mb-3">
+							<li class="nav-item">
+								<a class="nav-link py-3 active" type="button">
+									Propositions de mots-clés à exclure
+								</a>
+							</li>
+						</ul>
+	
+						<div class="card bg-light">
+							<div class="card-body">
+								<div class="multi-col" style="height: 550px;">
+									<p class="mb-1">micro entreprise</p>
+									<p class="mb-1">auto entrepreneur</p>
+									<p class="mb-1">microentreprise</p>
+									<p class="mb-1">création entreprise</p>
+									<p class="mb-1">freelance</p>
+									<p class="mb-1">business plan</p>
+									<p class="mb-1">statut juridique</p>
+									<p class="mb-1">financement pôle emploi</p>
+									<p class="mb-1">prime création</p>
+									<p class="mb-1">auto-entrepreneur</p>
+									<p class="mb-1">boutique en ligne</p>
+									<p class="mb-1">dropshipping</p>
+									<p class="mb-1">vinted</p>
+									<p class="mb-1">définition</p>
+									<p class="mb-1">comment faire</p>
+									<p class="mb-1">pdf</p>
+									<p class="mb-1">gratuit</p>
+									<p class="mb-1">exemple</p>
+									<p class="mb-1">livre blanc</p>
+									<p class="mb-1">template</p>
+									<p class="mb-1">coursseed</p>
+									<p class="mb-1">pre seed</p>
+									<p class="mb-1">early stage</p>
+									<p class="mb-1">incubateur</p>
+									<p class="mb-1">accélérateur</p>
+									<p class="mb-1">business angel</p>
+									<p class="mb-1">levée de fonds seed</p>
+								</div>
+							</div>
+						</div>
+	
+						<ul class="nav nav-tabs mb-3">
+							<li class="nav-item">
+								<a class="nav-link py-3 active" type="button">
+									Proposition d'images
+								</a>
+							</li>
+						</ul>
+	
+						<div class="card mb-4">
+							<div class="card-body">
+								<div class="row no-gutters">
+									<div class="col-auto px-2 mb-3">
+										<img src="<?= base_url('assets/images/formats/betewq5osgluxdan7v5blfsgba.jpg') ?>" alt="" width="120">
+									</div>
+									<div class="col-auto px-2 mb-3">
+										<img src="<?= base_url('assets/images/formats/betewq5osgluxdan7v5blfsgba.jpg') ?>" alt="" width="120">
+									</div>
+									<div class="col-auto px-2 mb-3">
+										<img src="<?= base_url('assets/images/formats/betewq5osgluxdan7v5blfsgba.jpg') ?>" alt="" width="120">
+									</div>
+									<div class="col-auto px-2 mb-3">
+										<img src="<?= base_url('assets/images/formats/betewq5osgluxdan7v5blfsgba.jpg') ?>" alt="" width="120">
+									</div>
+									<div class="col-auto px-2 mb-3">
+										<img src="<?= base_url('assets/images/formats/betewq5osgluxdan7v5blfsgba.jpg') ?>" alt="" width="120">
+									</div>
+									<div class="col-auto px-2 mb-3">
+										<img src="<?= base_url('assets/images/formats/betewq5osgluxdan7v5blfsgba.jpg') ?>" alt="" width="120">
+									</div>
+								</div>
+							</div>
+						</div>
+	
+						<div class="d-flex justify-content-between mb-5">
+							<button class="btn btn-outline-dark">Ajouter une nouvelle campagne</button>
+							<button class="btn btn-dark">Terminer</button>
+						</div>
 					</div>
-
-					<div class="d-flex justify-content-between mb-5">
-						<button class="btn btn-outline-dark">Ajouter une nouvelle campagne</button>
-						<button class="btn btn-dark">Terminer</button>
-					</div>
-				</div>
+				</form>
 			</div>
 
 			<div class="col-auto px-3 pt-5">

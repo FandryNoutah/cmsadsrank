@@ -338,22 +338,208 @@ class Client extends MY_Controller
 	public function campagne($idclients)
 	{
 
-		$camp_param = $this->input->get('camp_param');
-		$obj = $this->input->get('obj');
-		$gtm = $this->input->get('gtm');
+		$type_page = [
+			1	=>	"search",
+			2	=>	"local",
+			3	=>	"pmax"
+		];
+
+		$this->data['idclients'] = $idclients;
+		$this->data['camp_param'] = $this->input->get('camp_param');
+		$this->data['camp_type'] = $camp_type = $this->input->get('camp_type');
+		$this->data['gtm'] = $this->input->get('gtm');
 		$this->data["donnees"] = $this->visuels_model->getDonneeById($idclients);
 
-		/* switch ($obj) {
-			case "search":
-				$this->content = "layouts/client/onboarding/search.php";
+		$this->content = "layouts/client/onboarding/". $type_page[$camp_type] .".php";
+		$this->layout();
+	}
+
+	public function ajout_campagne($idclients)
+	{
+
+		$camp_type = $this->input->get('camp_type');
+		switch ($camp_type) {
+
+			case 1:
+				// Inputs spécifiques
+				$nom_campagne          = $this->input->post('nom_campagne_search');
+				$information_campagne  = $this->input->post('information_campagne_search');
+				$zones                 = $this->input->post('zone_search');
+				$repartition_budget    = $this->input->post('repartition_budget_search');
+				$date_campagne         = $this->input->post('date_campagne');
+				$appareil              = $this->input->post('appareil_search');
+				$objectif              = $this->input->post('objectif');
+				$url_site              = $this->input->post('url_campagne');
+				$groupes_annonces      = $this->input->post('groupe_annonce');
+				$contexte_groupes      = $this->input->post('contexte_groupe_annonce');
+				$mots_cle              = $this->input->post('Mot_cle');
+
+				// Vérification cohérence
+				if (count($groupes_annonces) == count($contexte_groupes) && count($groupes_annonces) == count($mots_cle)) {
+
+					// Insert campagne
+					$idcampagne = $this->Donne_modele->insert_campagne_am(
+						$idclients,
+						$camp_type,
+						$nom_campagne,
+						$information_campagne,
+						$zones,
+						$repartition_budget,
+						$date_campagne,
+						$appareil,
+						$objectif,
+						$url_site,
+						$mots_cle
+					);
+
+					// Data groupes
+					$data_groups = [];
+					foreach ($groupes_annonces as $index => $groupe) {
+						$data_groups[] = [
+							'groupe_annonce'         => $groupe,
+							'contexte_groupe_annonce' => $contexte_groupes[$index] ?? '',
+							'mot_cle'                => $mots_cle[$index] ?? '',
+							'url_groupe_annonce'     => $url_site,
+							'idcampagne'             => $idcampagne,
+							'idclient'               => $idclients,
+							'camp_type'          => $camp_type
+						];
+					}
+
+					// Insert groupes
+					$this->Donne_modele->insert_gp($data_groups, $idcampagne, $idclients, $camp_type, $contexte_groupes, $mots_cle, $url_site);
+				} else {
+					echo 'Erreur : Le nombre de groupes d\'annonces, de contextes et de mots-clés ne correspond pas.';
+				}
 				break;
 
-			case "pmax":
-				$this->content = "layouts/client/onboarding/pmax.php";
-				break;
-		} */
+			case 2: //local
+				// Inputs spécifiques
+				$nom_campagne          = $this->input->post('nom_campagne_local');
+				$nom_groupe_pmax       = $this->input->post('nom_groupe_local');
+				$information_campagne  = $this->input->post('information_campagne_local');
+				$zones                 = $this->input->post('zone_Local');
+				$repartition_budget    = $this->input->post('repartition_budget_local');
+				$date_campagne         = $this->input->post('date_campagne_local');
+				$appareil              = $this->input->post('appareil_local');
+				$objectif              = $this->input->post('objectif_local');
+				$url_site              = $this->input->post('url_campagne_local');
+				$Mots_cle_potentiels   = $this->input->post('Mot_cle_local');
+				$contextes_client      = $this->input->post('contexte_groupe_local');
 
-		$this->content = "layouts/client/onboarding/$obj.php";
+				// Insert campagne
+				$idcampagne = $this->Donne_modele->insert_campagne_am(
+					$idclients,
+					$camp_type,
+					$nom_campagne,
+					$information_campagne,
+					$zones,
+					$repartition_budget,
+					$date_campagne,
+					$appareil,
+					$objectif,
+					$url_site,
+					$Mots_cle_potentiels
+				);
+
+				// Insert groupe pmax
+				$this->Donne_modele->insert_gppmax($idclients, $nom_groupe_pmax, $camp_type, $url_site, $Mots_cle_potentiels, $idcampagne, $contextes_client);
+				break;
+
+			case 3:
+				// Inputs spécifiques
+				$nom_campagne          = $this->input->post('nom_campagne_pmax');
+				$nom_groupe_pmax       = $this->input->post('nom_groupe_pmax');
+				$information_campagne  = $this->input->post('information_campagne_pmax');
+				$zones                 = $this->input->post('zone_pmax');
+				$repartition_budget    = $this->input->post('repartition_budget_pmax');
+				$date_campagne         = $this->input->post('date_campagne_pmax');
+				$appareil              = $this->input->post('appareil_pmax');
+				$objectif              = $this->input->post('objectif_pmax');
+				$url_site              = $this->input->post('url_campagne_pmax');
+				$Mots_cle_potentiels   = $this->input->post('Mot_cle_pmax');
+				$information_client    = $this->input->post('information_client_pmax');
+				$contextes_client      = $this->input->post('contextes_client_pmax');
+				$choix                 = $this->input->get('conversion');
+
+				// Insert campagne
+				$idcampagne = $this->Donne_modele->insert_campagne_am(
+					$idclients,
+					$camp_type,
+					$nom_campagne,
+					$information_campagne,
+					$zones,
+					$repartition_budget,
+					$date_campagne,
+					$appareil,
+					$objectif,
+					$url_site,
+					$Mots_cle_potentiels
+				);
+
+				// Insert groupe pmax
+				$this->Donne_modele->insert_gppmax($idclients, $nom_groupe_pmax, $camp_type, $url_site, $Mots_cle_potentiels, $idcampagne, $contextes_client);
+
+				// Définir toutes les conversions possibles
+				$conversionSets = [
+
+					"lead" => [
+						['idclients' => $idclients, 'conversion' => 'Lead - Formulaire Page contact', 'actions' => 'Principale', 'types' => 'Formulaire', 'remarque' => '', 'etat' => '', 'conditions' => 'Quand une personne a rempli le formulaire de contact ', 'conversion_id' => '', 'conversion_label' => '', 'extensions_appel' => ''],
+						['idclients' => $idclients, 'conversion' => 'Lead - Demande de devis', 'actions' => 'Principale', 'types' => 'Formulaire', 'remarque' => '', 'etat' => '', 'conditions' => 'Quand une personne a soumis une demande de devis ', 'conversion_id' => '', 'conversion_label' => '', 'extensions_appel' => ''],
+						['idclients' => $idclients, 'conversion' => 'Lead - Téléphone', 'actions' => 'Principale', 'types' => 'Contact', 'remarque' => '', 'etat' => '', 'conditions' => 'Quand une personne a cliqué sur le bouton d’appel téléphonique', 'conversion_id' => '', 'conversion_label' => '', 'extensions_appel' => ''],
+						['idclients' => $idclients, 'conversion' => 'Lead - Email', 'actions' => 'Principale', 'types' => 'Contact', 'remarque' => '', 'etat' => '', 'conditions' => 'Quand une personne a cliqué sur le bouton d’envoi d’email ', 'conversion_id' => '', 'conversion_label' => '', 'extensions_appel' => ''],
+						['idclients' => $idclients, 'conversion' => 'Contact - Chat', 'actions' => 'Principale', 'types' => 'Contact', 'remarque' => '', 'etat' => '', 'conditions' => 'Quand une personne a cliqué sur le bouton chat', 'conversion_id' => '', 'conversion_label' => '', 'extensions_appel' => ''],
+						['idclients' => $idclients, 'conversion' => 'Page vue |', 'actions' => 'Secondaire', 'types' => 'Page_view', 'remarque' => '', 'etat' => '', 'conditions' => 'Quand une personne a visité une page du site ', 'conversion_id' => '', 'conversion_label' => '', 'extensions_appel' => ''],
+						['idclients' => $idclients, 'conversion' => 'Page vue', 'actions' => 'Secondaire', 'types' => 'Page_view', 'remarque' => '', 'etat' => '', 'conditions' => 'Quand une personne a visité une page du site ', 'conversion_id' => '', 'conversion_label' => '', 'extensions_appel' => ''],
+						['idclients' => $idclients, 'conversion' => 'Bouton |', 'actions' => 'Secondaire', 'types' => 'Click', 'remarque' => '', 'etat' => '', 'conditions' => 'Quand une personne a cliqué sur un bouton du site', 'conversion_id' => '', 'conversion_label' => '', 'extensions_appel' => ''],
+						['idclients' => $idclients, 'conversion' => 'Bouton | Télécharger notre catalogue', 'actions' => 'Secondaire', 'types' => 'Click', 'remarque' => '', 'etat' => '', 'conditions' => 'Quand une personne a cliqué sur le bouton "Télécharger notre catalogue"', 'conversion_id' => '', 'conversion_label' => '', 'extensions_appel' => ''],
+					],
+
+					"ecommerce" => [
+						['idclients' => $idclients, 'conversion' => 'Lead | Achat', 'actions' => 'Principale', 'types' => 'Purchase', 'remarque' => '', 'etat' => '', 'conditions' => 'Quand une personne a réalisé un achat', 'conversion_id' => '', 'conversion_label' => '', 'extensions_appel' => ''],
+						['idclients' => $idclients, 'conversion' => 'Lead | Formulaire Page contact', 'actions' => 'Principale', 'types' => 'Formulaire', 'remarque' => '', 'etat' => '', 'conditions' => 'Quand une personne a atteint le begin checkout', 'conversion_id' => '', 'conversion_label' => '', 'extensions_appel' => ''],
+						['idclients' => $idclients, 'conversion' => 'Lead | Demande de devis', 'actions' => 'Principale', 'types' => 'Formulaire', 'remarque' => '', 'etat' => '', 'conditions' => 'Quand une personne a cliqué sur le bouton d appel téléphonique ', 'conversion_id' => '', 'conversion_label' => '', 'extensions_appel' => ''],
+						['idclients' => $idclients, 'conversion' => 'Lead | Téléphone', 'actions' => 'Principale', 'types' => 'Contact', 'remarque' => '', 'etat' => '', 'conditions' => 'Quand une personne a cliqué sur le téléphone', 'conversion_id' => '', 'conversion_label' => '', 'extensions_appel' => ''],
+						['idclients' => $idclients, 'conversion' => 'Lead | Email', 'actions' => 'Principale', 'types' => 'Contact', 'remarque' => '', 'etat' => '', 'conditions' => 'Quand une personne a cliqué sur l email', 'conversion_id' => '', 'conversion_label' => '', 'extensions_appel' => ''],
+						['idclients' => $idclients, 'conversion' => 'Contact - Chat', 'actions' => 'Principale', 'types' => 'Contact', 'remarque' => '', 'etat' => '', 'conditions' => 'Quand une personne a utilisé le chat pour entrer en contact', 'conversion_id' => '', 'conversion_label' => '', 'extensions_appel' => ''],
+						['idclients' => $idclients, 'conversion' => 'Checkout', 'actions' => 'Secondaire', 'types' => 'begin_checkout', 'remarque' => '', 'etat' => '', 'conditions' => 'Quand une personne a atteint le début du processus de commande', 'conversion_id' => '', 'conversion_label' => '', 'extensions_appel' => ''],
+						['idclients' => $idclients, 'conversion' => 'Ajout au panier', 'actions' => 'Secondaire', 'types' => 'Add to cart', 'remarque' => '', 'etat' => '', 'conditions' => 'Quand une personne a ajouté un article au panier', 'conversion_id' => '', 'conversion_label' => '', 'extensions_appel' => ''],
+						['idclients' => $idclients, 'conversion' => 'Page vue | Vue d\'un article', 'actions' => 'Secondaire', 'types' => 'View item', 'remarque' => '', 'etat' => '', 'conditions' => 'Quand une personne a visité un article', 'conversion_id' => '', 'conversion_label' => '', 'extensions_appel' => ''],
+						['idclients' => $idclients, 'conversion' => 'Page vue |', 'actions' => 'Secondaire', 'types' => 'Page_view', 'remarque' => '', 'etat' => '', 'conditions' => 'Quand une personne a visité une page du site ', 'conversion_id' => '', 'conversion_label' => '', 'extensions_appel' => ''],
+						['idclients' => $idclients, 'conversion' => 'Bouton | Télécharger notre catalogue', 'actions' => 'Secondaire', 'types' => 'Click', 'remarque' => '', 'etat' => '', 'conditions' => 'Quand une personne a cliqué sur "Télécharger notre catalogue"', 'conversion_id' => '', 'conversion_label' => '', 'extensions_appel' => ''],
+						['idclients' => $idclients, 'conversion' => 'Bouton |', 'actions' => 'Secondaire', 'types' => 'Click', 'remarque' => '', 'etat' => '', 'conditions' => 'Quand une personne a cliqué sur un bouton du site', 'conversion_id' => '', 'conversion_label' => '', 'extensions_appel' => ''],
+						['idclients' => $idclients, 'conversion' => 'Newsletter', 'actions' => 'Secondaire', 'types' => 'inscription', 'remarque' => '', 'etat' => '', 'conditions' => 'Quand une personne s est inscrite à la newsletter', 'conversion_id' => '', 'conversion_label' => '', 'extensions_appel' => ''],
+						['idclients' => $idclients, 'conversion' => 'Création de compte Client', 'actions' => 'Secondaire', 'types' => 'inscription', 'remarque' => '', 'etat' => '', 'conditions' => 'Quand une personne a créé un compte client', 'conversion_id' => '', 'conversion_label' => '', 'extensions_appel' => ''],
+					],
+
+					"reservation" => [
+						['idclients' => $idclients, 'conversion' => 'Lead | Réservation', 'actions' => 'Principale', 'types' => 'Purchase', 'remarque' => '', 'etat' => '', 'conditions' => 'Quand une personne a effectué une réservation', 'conversion_id' => '', 'conversion_label' => '', 'extensions_appel' => ''],
+						['idclients' => $idclients, 'conversion' => 'Lead | Formulaire Page contact', 'actions' => 'Principale', 'types' => 'Formulaire', 'remarque' => '', 'etat' => '', 'conditions' => 'Quand une personne a rempli le formulaire de contact', 'conversion_id' => '', 'conversion_label' => '', 'extensions_appel' => ''],
+						['idclients' => $idclients, 'conversion' => 'Lead | Demande de devis', 'actions' => 'Principale', 'types' => 'Formulaire', 'remarque' => '', 'etat' => '', 'conditions' => 'Quand une personne a soumis une demande de devis ', 'conversion_id' => '', 'conversion_label' => '', 'extensions_appel' => ''],
+						['idclients' => $idclients, 'conversion' => 'Lead | Téléphone', 'actions' => 'Principale', 'types' => 'Contact', 'remarque' => '', 'etat' => '', 'conditions' => 'Quand une personne a cliqué sur le bouton d’appel téléphonique', 'conversion_id' => '', 'conversion_label' => '', 'extensions_appel' => ''],
+						['idclients' => $idclients, 'conversion' => 'Lead | Email', 'actions' => 'Principale', 'types' => 'Contact', 'remarque' => '', 'etat' => '', 'conditions' => 'Quand une personne a cliqué sur le bouton d’email ', 'conversion_id' => '', 'conversion_label' => '', 'extensions_appel' => ''],
+						['idclients' => $idclients, 'conversion' => 'Checkout', 'actions' => 'Secondaire', 'types' => 'begin_checkout', 'remarque' => '', 'etat' => '', 'conditions' => 'Quand une personne a atteint le début du checkout', 'conversion_id' => '', 'conversion_label' => '', 'extensions_appel' => ''],
+						['idclients' => $idclients, 'conversion' => 'Ajout au panier', 'actions' => 'Secondaire', 'types' => 'Add to cart', 'remarque' => '', 'etat' => '', 'conditions' => 'Quand une personne a ajouté un article au panier', 'conversion_id' => '', 'conversion_label' => '', 'extensions_appel' => ''],
+						['idclients' => $idclients, 'conversion' => 'Page vue | Vue d\'un article', 'actions' => 'Secondaire', 'types' => 'View item', 'remarque' => '', 'etat' => '', 'conditions' => 'Quand une personne a visité une page produit', 'conversion_id' => '', 'conversion_label' => '', 'extensions_appel' => ''],
+						['idclients' => $idclients, 'conversion' => 'Page vue |', 'actions' => 'Secondaire', 'types' => 'Page_view', 'remarque' => '', 'etat' => '', 'conditions' => 'Quand une personne a visité une page du site', 'conversion_id' => '', 'conversion_label' => '', 'extensions_appel' => ''],
+						['idclients' => $idclients, 'conversion' => 'Bouton | Télécharger notre catalogue', 'actions' => 'Secondaire', 'types' => 'Click', 'remarque' => '', 'etat' => '', 'conditions' => 'Quand une personne a cliqué sur "Télécharger notre catalogue"', 'conversion_id' => '', 'conversion_label' => '', 'extensions_appel' => ''],
+						['idclients' => $idclients, 'conversion' => 'Bouton |', 'actions' => 'Secondaire', 'types' => 'Click', 'remarque' => '', 'etat' => '', 'conditions' => 'Quand une personne a cliqué sur un autre bouton du site', 'conversion_id' => '', 'conversion_label' => '', 'extensions_appel' => ''],
+						['idclients' => $idclients, 'conversion' => 'Newsletter', 'actions' => 'Secondaire', 'types' => 'inscription', 'remarque' => '', 'etat' => '', 'conditions' => 'Quand une personne s est inscrite à la newsletter', 'conversion_id' => '', 'conversion_label' => '', 'extensions_appel' => ''],
+						['idclients' => $idclients, 'conversion' => 'Création de compte Client', 'actions' => 'Secondaire', 'types' => 'inscription', 'remarque' => '', 'etat' => '', 'conditions' => 'Quand une personne a créé un compte client', 'conversion_id' => '', 'conversion_label' => '', 'extensions_appel' => ''],
+					]
+				];
+
+				// Sélection en fonction du choix
+				$conversions = $conversionSets[$choix] ?? [];
+
+				$this->Donne_modele->insert_conversions($conversions);
+				$this->Donne_modele->update_type_clients($choix, $idclients);
+				break;
+		}
+
+		// Bloc final commun
+		$this->session->set_flashdata('success', 'Campagne ajouter avec succès.');
+		redirect('Googleads/campagne/' . $idclients, 'refresh');
 		$this->layout();
 	}
 
@@ -761,198 +947,5 @@ class Client extends MY_Controller
 		$config['file_name']        = url_title(iconv("UTF-8", "ASCII//TRANSLIT", $prefix . '_' . $file), '_', TRUE);
 		$config['overwrite']        = FALSE;
 		return $config;
-	}
-
-	public function ajout_campagne()
-	{
-
-		// Variables communes
-		$idclients     = $this->input->post('idclient');
-		$type_campagne = $this->input->post('type_de_campagne');
-
-		switch ($type_campagne) {
-
-			case 1:
-				// Inputs spécifiques
-				$nom_campagne          = $this->input->post('nom_campagne_search');
-				$information_campagne  = $this->input->post('information_campagne_search');
-				$zones                 = $this->input->post('zone_search');
-				$repartition_budget    = $this->input->post('repartition_budget_search');
-				$date_campagne         = $this->input->post('date_campagne');
-				$appareil              = $this->input->post('appareil_search');
-				$objectif              = $this->input->post('objectif');
-				$url_site              = $this->input->post('url_campagne');
-				$Mots_cle_potentiels   = $this->input->post('Mot_cle');
-				$groupes_annonces      = $this->input->post('groupe_annonce');
-				$contexte_groupes      = $this->input->post('contexte_groupe_annonce');
-				$mots_cle              = $this->input->post('Mot_cle');
-
-				// Vérification cohérence
-				if (count($groupes_annonces) == count($contexte_groupes) && count($groupes_annonces) == count($mots_cle)) {
-
-					// Insert campagne
-					$idcampagne = $this->Donne_modele->insert_campagne_am(
-						$idclients,
-						$type_campagne,
-						$nom_campagne,
-						$information_campagne,
-						$zones,
-						$repartition_budget,
-						$date_campagne,
-						$appareil,
-						$objectif,
-						$url_site,
-						$Mots_cle_potentiels
-					);
-
-					// Data groupes
-					$data_groups = [];
-					foreach ($groupes_annonces as $index => $groupe) {
-						$data_groups[] = [
-							'groupe_annonce'         => $groupe,
-							'contexte_groupe_annonce' => $contexte_groupes[$index] ?? '',
-							'mot_cle'                => $mots_cle[$index] ?? '',
-							'url_groupe_annonce'     => $url_site,
-							'idcampagne'             => $idcampagne,
-							'idclient'               => $idclients,
-							'type_campagne'          => $type_campagne
-						];
-					}
-
-					// Insert groupes
-					$this->Donne_modele->insert_gp($data_groups, $idcampagne, $idclients, $type_campagne, $contexte_groupes, $mots_cle, $url_site);
-				} else {
-					echo 'Erreur : Le nombre de groupes d\'annonces, de contextes et de mots-clés ne correspond pas.';
-				}
-				break;
-
-			case 2:
-				// Inputs spécifiques
-				$nom_campagne          = $this->input->post('nom_campagne_local');
-				$nom_groupe_pmax       = $this->input->post('nom_groupe_local');
-				$information_campagne  = $this->input->post('information_campagne_local');
-				$zones                 = $this->input->post('zone_Local');
-				$repartition_budget    = $this->input->post('repartition_budget_local');
-				$date_campagne         = $this->input->post('date_campagne_local');
-				$appareil              = $this->input->post('appareil_local');
-				$objectif              = $this->input->post('objectif_local');
-				$url_site              = $this->input->post('url_campagne_local');
-				$Mots_cle_potentiels   = $this->input->post('Mot_cle_local');
-				$contextes_client      = $this->input->post('contexte_groupe_local');
-
-				// Insert campagne
-				$idcampagne = $this->Donne_modele->insert_campagne_am(
-					$idclients,
-					$type_campagne,
-					$nom_campagne,
-					$information_campagne,
-					$zones,
-					$repartition_budget,
-					$date_campagne,
-					$appareil,
-					$objectif,
-					$url_site,
-					$Mots_cle_potentiels
-				);
-
-				// Insert groupe pmax
-				$this->Donne_modele->insert_gppmax($idclients, $nom_groupe_pmax, $type_campagne, $url_site, $Mots_cle_potentiels, $idcampagne, $contextes_client);
-				break;
-
-			case 3:
-				// Inputs spécifiques
-				$nom_campagne          = $this->input->post('nom_campagne_pmax');
-				$nom_groupe_pmax       = $this->input->post('nom_groupe_pmax');
-				$information_campagne  = $this->input->post('information_campagne_pmax');
-				$zones                 = $this->input->post('zone_pmax');
-				$repartition_budget    = $this->input->post('repartition_budget_pmax');
-				$date_campagne         = $this->input->post('date_campagne_pmax');
-				$appareil              = $this->input->post('appareil_pmax');
-				$objectif              = $this->input->post('objectif_pmax');
-				$url_site              = $this->input->post('url_campagne_pmax');
-				$Mots_cle_potentiels   = $this->input->post('Mot_cle_pmax');
-				$information_client    = $this->input->post('information_client_pmax');
-				$contextes_client      = $this->input->post('contextes_client_pmax');
-				$choix                 = $this->input->post('choix');
-
-				// Insert campagne
-				$idcampagne = $this->Donne_modele->insert_campagne_am(
-					$idclients,
-					$type_campagne,
-					$nom_campagne,
-					$information_campagne,
-					$zones,
-					$repartition_budget,
-					$date_campagne,
-					$appareil,
-					$objectif,
-					$url_site,
-					$Mots_cle_potentiels
-				);
-
-				// Insert groupe pmax
-				$this->Donne_modele->insert_gppmax($idclients, $nom_groupe_pmax, $type_campagne, $url_site, $Mots_cle_potentiels, $idcampagne, $contextes_client);
-
-				// Définir toutes les conversions possibles
-				$conversionSets = [
-
-					"lead" => [
-						['idclients' => $idclients, 'conversion' => 'Lead - Formulaire Page contact', 'actions' => 'Principale', 'types' => 'Formulaire', 'remarque' => '', 'etat' => '', 'conditions' => 'Quand une personne a rempli le formulaire de contact ', 'conversion_id' => '', 'conversion_label' => '', 'extensions_appel' => ''],
-						['idclients' => $idclients, 'conversion' => 'Lead - Demande de devis', 'actions' => 'Principale', 'types' => 'Formulaire', 'remarque' => '', 'etat' => '', 'conditions' => 'Quand une personne a soumis une demande de devis ', 'conversion_id' => '', 'conversion_label' => '', 'extensions_appel' => ''],
-						['idclients' => $idclients, 'conversion' => 'Lead - Téléphone', 'actions' => 'Principale', 'types' => 'Contact', 'remarque' => '', 'etat' => '', 'conditions' => 'Quand une personne a cliqué sur le bouton d’appel téléphonique', 'conversion_id' => '', 'conversion_label' => '', 'extensions_appel' => ''],
-						['idclients' => $idclients, 'conversion' => 'Lead - Email', 'actions' => 'Principale', 'types' => 'Contact', 'remarque' => '', 'etat' => '', 'conditions' => 'Quand une personne a cliqué sur le bouton d’envoi d’email ', 'conversion_id' => '', 'conversion_label' => '', 'extensions_appel' => ''],
-						['idclients' => $idclients, 'conversion' => 'Contact - Chat', 'actions' => 'Principale', 'types' => 'Contact', 'remarque' => '', 'etat' => '', 'conditions' => 'Quand une personne a cliqué sur le bouton chat', 'conversion_id' => '', 'conversion_label' => '', 'extensions_appel' => ''],
-						['idclients' => $idclients, 'conversion' => 'Page vue |', 'actions' => 'Secondaire', 'types' => 'Page_view', 'remarque' => '', 'etat' => '', 'conditions' => 'Quand une personne a visité une page du site ', 'conversion_id' => '', 'conversion_label' => '', 'extensions_appel' => ''],
-						['idclients' => $idclients, 'conversion' => 'Page vue', 'actions' => 'Secondaire', 'types' => 'Page_view', 'remarque' => '', 'etat' => '', 'conditions' => 'Quand une personne a visité une page du site ', 'conversion_id' => '', 'conversion_label' => '', 'extensions_appel' => ''],
-						['idclients' => $idclients, 'conversion' => 'Bouton |', 'actions' => 'Secondaire', 'types' => 'Click', 'remarque' => '', 'etat' => '', 'conditions' => 'Quand une personne a cliqué sur un bouton du site', 'conversion_id' => '', 'conversion_label' => '', 'extensions_appel' => ''],
-						['idclients' => $idclients, 'conversion' => 'Bouton | Télécharger notre catalogue', 'actions' => 'Secondaire', 'types' => 'Click', 'remarque' => '', 'etat' => '', 'conditions' => 'Quand une personne a cliqué sur le bouton "Télécharger notre catalogue"', 'conversion_id' => '', 'conversion_label' => '', 'extensions_appel' => ''],
-					],
-
-					"ecommerce" => [
-						['idclients' => $idclients, 'conversion' => 'Lead | Achat', 'actions' => 'Principale', 'types' => 'Purchase', 'remarque' => '', 'etat' => '', 'conditions' => 'Quand une personne a réalisé un achat', 'conversion_id' => '', 'conversion_label' => '', 'extensions_appel' => ''],
-						['idclients' => $idclients, 'conversion' => 'Lead | Formulaire Page contact', 'actions' => 'Principale', 'types' => 'Formulaire', 'remarque' => '', 'etat' => '', 'conditions' => 'Quand une personne a atteint le begin checkout', 'conversion_id' => '', 'conversion_label' => '', 'extensions_appel' => ''],
-						['idclients' => $idclients, 'conversion' => 'Lead | Demande de devis', 'actions' => 'Principale', 'types' => 'Formulaire', 'remarque' => '', 'etat' => '', 'conditions' => 'Quand une personne a cliqué sur le bouton d appel téléphonique ', 'conversion_id' => '', 'conversion_label' => '', 'extensions_appel' => ''],
-						['idclients' => $idclients, 'conversion' => 'Lead | Téléphone', 'actions' => 'Principale', 'types' => 'Contact', 'remarque' => '', 'etat' => '', 'conditions' => 'Quand une personne a cliqué sur le téléphone', 'conversion_id' => '', 'conversion_label' => '', 'extensions_appel' => ''],
-						['idclients' => $idclients, 'conversion' => 'Lead | Email', 'actions' => 'Principale', 'types' => 'Contact', 'remarque' => '', 'etat' => '', 'conditions' => 'Quand une personne a cliqué sur l email', 'conversion_id' => '', 'conversion_label' => '', 'extensions_appel' => ''],
-						['idclients' => $idclients, 'conversion' => 'Contact - Chat', 'actions' => 'Principale', 'types' => 'Contact', 'remarque' => '', 'etat' => '', 'conditions' => 'Quand une personne a utilisé le chat pour entrer en contact', 'conversion_id' => '', 'conversion_label' => '', 'extensions_appel' => ''],
-						['idclients' => $idclients, 'conversion' => 'Checkout', 'actions' => 'Secondaire', 'types' => 'begin_checkout', 'remarque' => '', 'etat' => '', 'conditions' => 'Quand une personne a atteint le début du processus de commande', 'conversion_id' => '', 'conversion_label' => '', 'extensions_appel' => ''],
-						['idclients' => $idclients, 'conversion' => 'Ajout au panier', 'actions' => 'Secondaire', 'types' => 'Add to cart', 'remarque' => '', 'etat' => '', 'conditions' => 'Quand une personne a ajouté un article au panier', 'conversion_id' => '', 'conversion_label' => '', 'extensions_appel' => ''],
-						['idclients' => $idclients, 'conversion' => 'Page vue | Vue d\'un article', 'actions' => 'Secondaire', 'types' => 'View item', 'remarque' => '', 'etat' => '', 'conditions' => 'Quand une personne a visité un article', 'conversion_id' => '', 'conversion_label' => '', 'extensions_appel' => ''],
-						['idclients' => $idclients, 'conversion' => 'Page vue |', 'actions' => 'Secondaire', 'types' => 'Page_view', 'remarque' => '', 'etat' => '', 'conditions' => 'Quand une personne a visité une page du site ', 'conversion_id' => '', 'conversion_label' => '', 'extensions_appel' => ''],
-						['idclients' => $idclients, 'conversion' => 'Bouton | Télécharger notre catalogue', 'actions' => 'Secondaire', 'types' => 'Click', 'remarque' => '', 'etat' => '', 'conditions' => 'Quand une personne a cliqué sur "Télécharger notre catalogue"', 'conversion_id' => '', 'conversion_label' => '', 'extensions_appel' => ''],
-						['idclients' => $idclients, 'conversion' => 'Bouton |', 'actions' => 'Secondaire', 'types' => 'Click', 'remarque' => '', 'etat' => '', 'conditions' => 'Quand une personne a cliqué sur un bouton du site', 'conversion_id' => '', 'conversion_label' => '', 'extensions_appel' => ''],
-						['idclients' => $idclients, 'conversion' => 'Newsletter', 'actions' => 'Secondaire', 'types' => 'inscription', 'remarque' => '', 'etat' => '', 'conditions' => 'Quand une personne s est inscrite à la newsletter', 'conversion_id' => '', 'conversion_label' => '', 'extensions_appel' => ''],
-						['idclients' => $idclients, 'conversion' => 'Création de compte Client', 'actions' => 'Secondaire', 'types' => 'inscription', 'remarque' => '', 'etat' => '', 'conditions' => 'Quand une personne a créé un compte client', 'conversion_id' => '', 'conversion_label' => '', 'extensions_appel' => ''],
-					],
-
-					"reservation" => [
-						['idclients' => $idclients, 'conversion' => 'Lead | Réservation', 'actions' => 'Principale', 'types' => 'Purchase', 'remarque' => '', 'etat' => '', 'conditions' => 'Quand une personne a effectué une réservation', 'conversion_id' => '', 'conversion_label' => '', 'extensions_appel' => ''],
-						['idclients' => $idclients, 'conversion' => 'Lead | Formulaire Page contact', 'actions' => 'Principale', 'types' => 'Formulaire', 'remarque' => '', 'etat' => '', 'conditions' => 'Quand une personne a rempli le formulaire de contact', 'conversion_id' => '', 'conversion_label' => '', 'extensions_appel' => ''],
-						['idclients' => $idclients, 'conversion' => 'Lead | Demande de devis', 'actions' => 'Principale', 'types' => 'Formulaire', 'remarque' => '', 'etat' => '', 'conditions' => 'Quand une personne a soumis une demande de devis ', 'conversion_id' => '', 'conversion_label' => '', 'extensions_appel' => ''],
-						['idclients' => $idclients, 'conversion' => 'Lead | Téléphone', 'actions' => 'Principale', 'types' => 'Contact', 'remarque' => '', 'etat' => '', 'conditions' => 'Quand une personne a cliqué sur le bouton d’appel téléphonique', 'conversion_id' => '', 'conversion_label' => '', 'extensions_appel' => ''],
-						['idclients' => $idclients, 'conversion' => 'Lead | Email', 'actions' => 'Principale', 'types' => 'Contact', 'remarque' => '', 'etat' => '', 'conditions' => 'Quand une personne a cliqué sur le bouton d’email ', 'conversion_id' => '', 'conversion_label' => '', 'extensions_appel' => ''],
-						['idclients' => $idclients, 'conversion' => 'Checkout', 'actions' => 'Secondaire', 'types' => 'begin_checkout', 'remarque' => '', 'etat' => '', 'conditions' => 'Quand une personne a atteint le début du checkout', 'conversion_id' => '', 'conversion_label' => '', 'extensions_appel' => ''],
-						['idclients' => $idclients, 'conversion' => 'Ajout au panier', 'actions' => 'Secondaire', 'types' => 'Add to cart', 'remarque' => '', 'etat' => '', 'conditions' => 'Quand une personne a ajouté un article au panier', 'conversion_id' => '', 'conversion_label' => '', 'extensions_appel' => ''],
-						['idclients' => $idclients, 'conversion' => 'Page vue | Vue d\'un article', 'actions' => 'Secondaire', 'types' => 'View item', 'remarque' => '', 'etat' => '', 'conditions' => 'Quand une personne a visité une page produit', 'conversion_id' => '', 'conversion_label' => '', 'extensions_appel' => ''],
-						['idclients' => $idclients, 'conversion' => 'Page vue |', 'actions' => 'Secondaire', 'types' => 'Page_view', 'remarque' => '', 'etat' => '', 'conditions' => 'Quand une personne a visité une page du site', 'conversion_id' => '', 'conversion_label' => '', 'extensions_appel' => ''],
-						['idclients' => $idclients, 'conversion' => 'Bouton | Télécharger notre catalogue', 'actions' => 'Secondaire', 'types' => 'Click', 'remarque' => '', 'etat' => '', 'conditions' => 'Quand une personne a cliqué sur "Télécharger notre catalogue"', 'conversion_id' => '', 'conversion_label' => '', 'extensions_appel' => ''],
-						['idclients' => $idclients, 'conversion' => 'Bouton |', 'actions' => 'Secondaire', 'types' => 'Click', 'remarque' => '', 'etat' => '', 'conditions' => 'Quand une personne a cliqué sur un autre bouton du site', 'conversion_id' => '', 'conversion_label' => '', 'extensions_appel' => ''],
-						['idclients' => $idclients, 'conversion' => 'Newsletter', 'actions' => 'Secondaire', 'types' => 'inscription', 'remarque' => '', 'etat' => '', 'conditions' => 'Quand une personne s est inscrite à la newsletter', 'conversion_id' => '', 'conversion_label' => '', 'extensions_appel' => ''],
-						['idclients' => $idclients, 'conversion' => 'Création de compte Client', 'actions' => 'Secondaire', 'types' => 'inscription', 'remarque' => '', 'etat' => '', 'conditions' => 'Quand une personne a créé un compte client', 'conversion_id' => '', 'conversion_label' => '', 'extensions_appel' => ''],
-					]
-				];
-
-				// Sélection en fonction du choix
-				$conversions = $conversionSets[$choix] ?? [];
-
-				$this->Donne_modele->insert_conversions($conversions);
-				$this->Donne_modele->update_type_clients($choix, $idclients);
-				break;
-		}
-
-		// Bloc final commun
-		$this->session->set_flashdata('success', 'Campagne ajouter avec succès.');
-		redirect('Googleads/campagne/' . $idclients, 'refresh');
-		$this->layout();
 	}
 }
