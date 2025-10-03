@@ -189,62 +189,62 @@
 						</p>
 						<div class="row row-cols-3 mt-4 mb-3">
 							<div class="col">
-								<div class="card camp-container">
+								<div class="card conversion-container">
 									<div class="card-body">
 										<div class="d-block mb-3">
 											<i class="fa fa-database" style="font-size: 22px;"></i>
 										</div>
 										<h3>Sales</h3>
 										<p class="text-muted">A centralized repository storing all contact information.</p>
-										<a href="javascript:void(0);" class="stretched-link text-dark font-weight-bold select-camp" data-target="#camp_sale">
+										<a href="javascript:void(0);" class="stretched-link text-dark font-weight-bold select-conversion" data-target="#conversion_ecommerce">
 											Discover More
 											<i class="fa fa-arrow-right"></i>
 										</a>
-										<input type="radio" name="camp_param" id="camp_sale" value="sales" class="d-none">
+										<input type="radio" name="conversion" id="conversion_ecommerce" value="ecommerce" class="d-none">
 									</div>
 								</div>
 							</div>
 							<div class="col">
-								<div class="card camp-container">
+								<div class="card conversion-container">
 									<div class="card-body">
 										<div class="d-block mb-3">
 											<i class="fa fa-link" style="font-size: 22px;"></i>
 										</div>
 										<h3>Lead</h3>
 										<p class="text-muted">Setting tasks, follow-ups, or reminders associated with specific contacts.</p>
-										<a href="javascript:void(0);" class="stretched-link text-dark font-weight-bold select-camp" data-target="#camp_lead">
+										<a href="javascript:void(0);" class="stretched-link text-dark font-weight-bold select-conversion" data-target="#conversion_lead">
 											Discover More
 											<i class="fa fa-arrow-right"></i>
 										</a>
-										<input type="radio" name="camp_param" id="camp_lead" value="lead" class="d-none">
+										<input type="radio" name="conversion" id="conversion_lead" value="lead" class="d-none">
 									</div>
 								</div>
 							</div>
 							<div class="col">
-								<div class="card camp-container">
+								<div class="card conversion-container">
 									<div class="card-body">
 										<div class="d-block mb-3">
 											<i class="fa fa-cloud" style="font-size: 22px;"></i>
 										</div>
 										<h3>Réservation</h3>
 										<p class="text-muted">Automatically updating and enriching contact data.</p>
-										<a href="javascript:void(0);" class="stretched-link text-dark font-weight-bold select-camp" data-target="#camp_resa">
+										<a href="javascript:void(0);" class="stretched-link text-dark font-weight-bold select-conversion" data-target="#conversion_reservation">
 											Discover More
 											<i class="fa fa-arrow-right"></i>
 										</a>
-										<input type="radio" name="camp_param" id="camp_resa" value="resa" class="d-none">
+										<input type="radio" name="conversion" id="conversion_reservation" value="reservation" class="d-none">
 									</div>
 								</div>
 							</div>
 						</div>
 
 						<div class="d-flex justify-content-end align-items-center">
-							<button class="btn btn-dark px-4 float-right next-button" data-input="camp_param">Suivant</button>
+							<button class="btn btn-dark px-4 float-right next-button" data-input="conversion">Suivant</button>
 						</div>
 					</div>
 
 					<!-- OBJECTIF -->
-					<div id="objectif_step" class="step mb-4">
+					<div id="camp_type_step" class="step mb-4">
 						<h1 class="display-1 text-center mt-5" style="font-size: 42px;">
 							Choisissez votre objectif
 						</h1>
@@ -253,50 +253,50 @@
 						</p>
 						<div class="row row-cols-3 mt-4 mb-3">
 							<div class="col">
-								<div class="card h-100 obj-container">
+								<div class="card h-100 camp-type-container">
 									<div class="card-body">
 										<img src="<?= base_url('assets/images/icons/figma/content_icon.png') ?>" alt="" class="mb-3" width="110">
 										<h3>Search</h3>
 										<p class="text-muted">Create, customize, and manage email marketing campaigns.</p>
-										<a href="javascript:void(0);" class="stretched-link text-dark font-weight-bold select-obj" data-target="#obj_search">
+										<a href="javascript:void(0);" class="stretched-link text-dark font-weight-bold select-conversion-type" data-target="#camp_1">
 											Discover More
 											<i class="fa fa-arrow-right"></i>
 										</a>
-										<input type="radio" name="obj" id="obj_search" value="search" class="d-none">
+										<input type="radio" name="camp_type" id="camp_1" value="1" class="d-none">
 									</div>
 								</div>
 							</div>
 							<div class="col">
-								<div class="card h-100 obj-container">
+								<div class="card h-100 camp-type-container">
 									<div class="card-body">
 										<img src="<?= base_url('assets/images/icons/figma/content_icon.png') ?>" alt="" class="mb-3" width="110">
 										<h3>Performance Max</h3>
 										<p class="text-muted">Tailor emails by segmenting contacts based on demographics, behavior.</p>
-										<a href="javascript:void(0);" class="stretched-link text-dark font-weight-bold select-obj" data-target="#obj_pmax">
+										<a href="javascript:void(0);" class="stretched-link text-dark font-weight-bold select-conversion-type" data-target="#camp_3">
 											Discover More
 											<i class="fa fa-arrow-right"></i>
 										</a>
-										<input type="radio" name="obj" id="obj_pmax" value="pmax" class="d-none">
+										<input type="radio" name="camp_type" id="camp_3" value="3" class="d-none">
 									</div>
 								</div>
 							</div>
 							<div class="col">
-								<div class="card h-100 obj-container">
+								<div class="card h-100 camp-type-container">
 									<div class="card-body">
 										<img src="<?= base_url('assets/images/icons/figma/relation_icon.png') ?>" alt="" class="mb-3" width="90">
 										<h3>Locale</h3>
 										<p class="text-muted">Create, customize, and manage email marketing campaigns.</p>
-										<a href="javascript:void(0);" class="stretched-link text-dark font-weight-bold select-obj" data-target="#obj_locale">
+										<a href="javascript:void(0);" class="stretched-link text-dark font-weight-bold select-conversion-type" data-target="#camp_2">
 											Discover More
 											<i class="fa fa-arrow-right"></i>
 										</a>
-										<input type="radio" name="obj" id="obj_locale" value="locale" class="d-none">
+										<input type="radio" name="camp_type" id="camp_2" value="2" class="d-none">
 									</div>
 								</div>
 							</div>
 						</div>
 						<div class="d-flex justify-content-end align-items-center">
-							<button class="btn btn-dark px-4 float-right next-button" data-input="obj">Suivant</button>
+							<button class="btn btn-dark px-4 float-right next-button" data-input="camp_type">Suivant</button>
 						</div>
 					</div>
 
@@ -354,22 +354,22 @@
 
 		});
 
-		$('.select-camp').click(function() {
+		$('.select-conversion').click(function() {
 
 			let target = $(this).data('target');
 
 			$(target).prop('checked', true);
-			$('.camp-container').removeClass('border-dark border-danger shadow');
-			$(this).parents('.camp-container').addClass('border-dark shadow');
+			$('.conversion-container').removeClass('border-dark border-danger shadow');
+			$(this).parents('.conversion-container').addClass('border-dark shadow');
 		});
 
-		$('.select-obj').click(function() {
+		$('.select-conversion-type').click(function() {
 
 			let target = $(this).data('target');
 
 			$(target).prop('checked', true);
-			$('.obj-container').removeClass('border-dark border-danger shadow');
-			$(this).parents('.obj-container').addClass('border-dark shadow');
+			$('.camp-type-container').removeClass('border-dark border-danger shadow');
+			$(this).parents('.camp-type-container').addClass('border-dark shadow');
 		});
 
 		// STEP CODE
@@ -395,15 +395,15 @@
 		
 		$('#final_button').click(function() {
 
-			let camp_param = $('input[name="camp_param"]:checked').val();
-			let obj = $('input[name="obj"]:checked').val();
+			let conversion = $('input[name="conversion"]:checked').val();
+			let camp_type = $('input[name="camp_type"]:checked').val();
 			let gtm = $('input[name="gtm"]').is(':checked');
 
-			if (!camp_param || !obj) {
+			if (!conversion || !camp_type) {
 				alert("Veuillez d'abord choisir les options précédentes!");
 			} else {
 				
-				let url = "<?= site_url('Client/campagne/'. $idclients); ?>?camp_param="+ camp_param +"&obj="+ obj +"&gtm="+ gtm;
+				let url = "<?= site_url('Client/campagne/'. $idclients); ?>?conversion="+ conversion +"&camp_type="+ camp_type +"&gtm="+ gtm;
 				window.location.href = url;
 			}
 		});
