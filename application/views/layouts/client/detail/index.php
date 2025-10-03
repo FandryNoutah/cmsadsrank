@@ -32,83 +32,81 @@
 <?php start_section('content'); ?>
 
 <?php foreach ($donnees as $d): ?>
-			<?php if ($d['statut_demande_en_cours'] == 3): ?>
-				
-				<div class="modal fade" id="choixCampagneModal" tabindex="-1" aria-labelledby="choixCampagneLabel" aria-hidden="true">
-				<div class="modal-dialog modal-xl modal-dialog-centered">
-					<div class="modal-content rounded-3 shadow-lg">
+	<?php if ($d['statut_demande_en_cours'] == 3): ?>
+
+		<div class="modal fade" id="choixCampagneModal" tabindex="-1" aria-labelledby="choixCampagneLabel" aria-hidden="true">
+			<div class="modal-dialog modal-xl modal-dialog-centered">
+				<div class="modal-content rounded-3 shadow-lg">
 					<div class="modal-header">
 						<h2 class="modal-title" id="choixCampagneLabel">Relance client</h2>
 					</div>
 					<div class="modal-body">
 						<form method="post" action="<?= site_url('Client/relance'); ?>">
-						
-						<input type="hidden" name="idclients" value="<?= $d['idclients']; ?>">
-						<div class="row row-cols-2 mt-4 mb-2">
-							<div class="col">
-							<div class="card camp-container h-100">
-								<div class="card-body">
-								<div class="d-block mb-2">
-									<i class="fa fa-cloud" style="font-size: 22px;"></i>
+
+							<input type="hidden" name="idclients" value="<?= $d['idclients']; ?>">
+							<div class="row row-cols-2 mt-4 mb-2">
+								<div class="col">
+									<div class="card camp-container h-100">
+										<div class="card-body">
+											<div class="d-block mb-2">
+												<i class="fa fa-cloud" style="font-size: 22px;"></i>
+											</div>
+											<h3>Campagne précédente</h3>
+											<p class="text-muted">Continuer avec la campagne existante.</p>
+											<a href="javascript:void(0);" class="stretched-link text-dark font-weight-bold select-camp" data-target="#camp_resa">
+												<i class="fa fa-arrow-right"></i>
+											</a>
+											<input type="radio" name="camp_param" id="camp_resa" value="1" class="d-none">
+										</div>
+									</div>
 								</div>
-								<h3>Campagne précédente</h3>
-								<p class="text-muted">Continuer avec la campagne existante.</p>
-								<a href="javascript:void(0);" class="stretched-link text-dark font-weight-bold select-camp" data-target="#camp_resa">
-									<i class="fa fa-arrow-right"></i>
-								</a>
-								<input type="radio" name="camp_param" id="camp_resa" value="1" class="d-none">
+								<div class="col">
+									<div class="card camp-container h-100">
+										<div class="card-body">
+											<div class="d-block mb-2">
+												<i class="fa fa-database" style="font-size: 22px;"></i>
+											</div>
+											<h3>Nouvelle campagne</h3>
+											<p class="text-muted">Démarrer une nouvelle campagne à partir de zéro.</p>
+											<a href="javascript:void(0);" class="stretched-link text-dark font-weight-bold select-camp" data-target="#camp_sale">
+												<i class="fa fa-arrow-right"></i>
+											</a>
+											<input type="radio" name="camp_param" id="camp_sale" value="2" class="d-none">
+										</div>
+									</div>
 								</div>
+
+
 							</div>
+							<div class="text-end mt-4">
+								<button type="submit" class="btn btn-primary">Valider</button>
 							</div>
-							<div class="col">
-							<div class="card camp-container h-100">
-								<div class="card-body">
-								<div class="d-block mb-2">
-									<i class="fa fa-database" style="font-size: 22px;"></i>
-								</div>
-								<h3>Nouvelle campagne</h3>
-								<p class="text-muted">Démarrer une nouvelle campagne à partir de zéro.</p>
-								<a href="javascript:void(0);" class="stretched-link text-dark font-weight-bold select-camp" data-target="#camp_sale">
-									<i class="fa fa-arrow-right"></i>
-								</a>
-								<input type="radio" name="camp_param" id="camp_sale" value="2" class="d-none">
-								</div>
-							</div>
-							</div>
-							
-							
-						</div>
-						<div class="text-end mt-4">
-							<button type="submit" class="btn btn-primary">Valider</button>
-						</div>
 						</form>
 					</div>
-					</div>
 				</div>
-				</div>
+			</div>
+		</div>
 
-				<script>
-				document.addEventListener("DOMContentLoaded", function(){
+		<script>
+			document.addEventListener("DOMContentLoaded", function() {
 				var modal = new bootstrap.Modal(document.getElementById('choixCampagneModal'));
 				modal.show();
 
-				document.querySelectorAll('.select-camp').forEach(function(el){
-					el.addEventListener('click', function(){
-					var target = document.querySelector(this.dataset.target);
-					if(target){
-						target.checked = true;
-						document.querySelectorAll('.camp-container').forEach(c => c.classList.remove('border-primary'));
-						this.closest('.camp-container').classList.add('border', 'border-primary');
-					}
+				document.querySelectorAll('.select-camp').forEach(function(el) {
+					el.addEventListener('click', function() {
+						var target = document.querySelector(this.dataset.target);
+						if (target) {
+							target.checked = true;
+							document.querySelectorAll('.camp-container').forEach(c => c.classList.remove('border-primary'));
+							this.closest('.camp-container').classList.add('border', 'border-primary');
+						}
 					});
 				});
-				});
-				</script>
+			});
+		</script>
 
-				<?php endif; ?>
+	<?php endif; ?>
 
-
-	
 	<div class="row no-gutters h-100">
 
 		<?php $this->load->view('layouts/client/detail/sidebar'); ?>
@@ -765,7 +763,7 @@
 	</div>
 
 	<?php $this->load->view('layouts/client/detail/modal/budget', $d); ?>
-	<?php $this->load->view('layouts/client/detail/modal/edit'); ?>
+	<?php $this->load->view('layouts/client/detail/modal/edit', ['d' => $d]); ?>
 	<?php $this->load->view('layouts/client/detail/modal/status'); ?>
 	<?php $this->load->view('layouts/client/detail/modal/task'); ?>
 
