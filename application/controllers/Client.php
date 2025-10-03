@@ -806,7 +806,7 @@ class Client extends MY_Controller
 
 	private function get_summary_from_chatgpt($headings, $paragraphs)
 	{
-		$api_key = '***REMOVED***-Il3DFS-ATHmSKydbqWGNqIZtuCsC2bD67DR5YhlXtsMAoe_tdMtjg_glXcnIhSb_qPVFz-z7y2T3BlbkFJUvVzia2NBnS5TagyZylJRG36YatVpkw27ZfVfhPB06yEiBeYLQDDfIFv3_oG2LClCuw8eNtTEA'; // 🔐 Remplace avec ta clé
+		$api_key = '***REMOVED***-KGXpO5Dmjtk3iBGWNYAxp_Jtm07qeTY7jCQx3wR7a06GWqgWMdJA1O-DqdSX1ZANFEBDF83TQXT3BlbkFJB6Grrdt1s68eRcq7Ry6lbzpKM4X5At0U_f6q_dS-Jc_j6H6ATB3LVOd_hX0p7eJ-rPLgsW5UEA'; // 🔐 Remplace avec ta clé
 		$model = 'gpt-4'; // ou 'gpt-3.5-turbo'
 
 		$input_text = "Voici les titres et paragraphes d’un site web. Résume ce que fait ce site, son activité, son objectif ou secteur, en **deux paragraphes distincts, séparés par une ligne vide**.\n\n";
