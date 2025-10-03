@@ -12,79 +12,76 @@
 				<div class="form-row">
 					<div class="form-group col">
 						<label for="edit_name">Nom</label>
-						<input type="text" value="Test" id="edit_name" name="edit_name" class="form-control">
+						<input type="text" value="<?= $d['nom_client']; ?>" id="edit_name" name="edit_name" class="form-control">
 					</div>
 					<div class="form-group col">
 						<label for="edit_email">Email</label>
-						<input type="email" value="mavreen.bassin@adsrank.fr" id="edit_email" name="edit_email" class="form-control">
+						<input type="email" value="<?= $d['email_client']; ?>" id="edit_email" name="edit_email" class="form-control">
 					</div>
 				</div>
 
 				<div class="form-row">
 					<div class="form-group col">
 						<label for="edit_number">Numéro</label>
-						<input type="number" value="09999999" id="edit_number" name="edit_number" class="form-control">
+						<input type="number" value="<?= $d['numero_client']; ?>" id="edit_number" name="edit_number" class="form-control">
 					</div>
 					<div class="form-group col">
 						<label for="edit_site">Site client</label>
-						<input type="url" value="fairlkink.fr" id="edit_site" name="edit_site" class="form-control">
+						<input type="url" value="<?= $d['site_client']; ?>" id="edit_site" name="edit_site" class="form-control">
 					</div>
 				</div>
 
 				<div class="form-row">
 					<div class="form-group col">
 						<label for="edit_budget">Budget</label>
-						<input type="number" value="4500" id="edit_budget" name="edit_budget" class="form-control">
+						<input type="number" value="<?= $d['budget']; ?>" id="edit_budget" name="edit_budget" class="form-control">
 					</div>
 					<div class="form-group col">
 						<label for="edit_activity_sector">Secteur d'activité</label>
-						<input type="email" value="Entreprise de Travaux" id="edit_activity_sector" name="edit_activity_sector" class="form-control">
+						<input type="email" value="<?= $d['secteur_activite']; ?>" id="edit_activity_sector" name="edit_activity_sector" class="form-control">
 					</div>
 				</div>
 
 				<div class="form-group">
 					<label for="edit_commentaire">Commentaire client</label>
-					<textarea name="edit_commentaire" id="edit_commentaire" rows="2" class="form-control">Campagne en pause</textarea>
+					<textarea name="edit_commentaire" id="edit_commentaire" rows="2" class="form-control"><?= $d['commentaire_client']; ?></textarea>
 				</div>
 
 				<div class="form-group">
 					<label for="edit_produit">Produit</label>
 					<select name="edit_produit" id="edit_produit" class="form-control">
-						<option value="">Google Ads (Actuellement)</option>
-						<option value="">GTM</option>
+						<option value="<?= $d['idproduit']; ?>" selected><?= $d['label_produit']; ?></option>
 					</select>
 				</div>
 
 				<div class="form-group">
 					<label for="edit_initiative">Initiative</label>
 					<select name="edit_initiative" id="edit_initiative" class="form-control">
-						<option value="">Mavreen Bassin (Actuellement)</option>
-						<option value="">Admin</option>
+						<option value="<?= $d['initiative']; ?>" selected><?= $d['initiative']; ?></option>
 					</select>
 				</div>
 
 				<div class="form-group">
 					<label for="edit_account_manager">Account Manager</label>
 					<select name="edit_account_manager" id="edit_account_manager" class="form-control">
-						<option value="">Audrey Adsrank (Actuellement)</option>
-						<option value="">Admin</option>
+						<option value="<?= $d['account_manager']; ?>" selected><?= $d['account_manager']; ?></option>
 					</select>
 				</div>
 
 				<div class="form-row">
 					<div class="form-group col">
 						<label for="edit_payment_date">Mise en place paiement</label>
-						<input type="month" name="edit_payment_date" id="edit_payment_date" class="form-control">
+						<input type="month" name="edit_payment_date" value="<?= $d['mis_en_place_paiement']; ?>" id="edit_payment_date" class="form-control">
 					</div>
 
 					<div class="form-group col">
 						<label for="edit_brief">Brief</label>
-						<input type="month" name="edit_brief" id="edit_brief" class="form-control">
+						<input type="month" name="edit_brief" id="edit_brief" class="form-control" value="<?= $d['Brief']; ?>">
 					</div>
 
 					<div class="form-group col">
 						<label for="edit_online_date">Date de mise en ligne</label>
-						<input type="month" name="edit_online_date" id="edit_online_date" class="form-control">
+						<input type="month" name="edit_online_date" id="edit_online_date" class="form-control" value="">
 					</div>
 				</div>
 
@@ -92,25 +89,19 @@
 					<div class="form-group col">
 						<label for="edit_payment_received">¨Paiement reçu</label>
 						<select name="edit_payment_received" id="edit_payment_received" class="form-control">
-							<option value="">Non (Actuellement)</option>
-							<option value="">Oui</option>
-							<option value="">Non</option>
+							<option value="<?= $d['paiement_recu']; ?>"><?= $d['paiement_recu']; ?></option>
 						</select>
 					</div>
 					<div class="form-group col">
 						<label for="edit_email_onboarding">Email Onboarding</label>
 						<select name="edit_email_onboarding" id="edit_email_onboarding" class="form-control">
-							<option value="">Non (Actuellement)</option>
-							<option value="">Oui</option>
-							<option value="">Non</option>
+							<option value="<?= $d['email_onboarding']; ?>"><?= $d['email_onboarding']; ?></option>
 						</select>
 					</div>
 					<div class="form-group col">
 						<label for="edit_facturation">Facturation</label>
 						<select name="edit_facturation" id="edit_facturation" class="form-control">
-							<option value="">Non (Actuellement)</option>
-							<option value="">Oui</option>
-							<option value="">Non</option>
+							<option value="<?= $d['facturation']; ?>"><?= $d['facturation']; ?></option>
 						</select>
 					</div>
 				</div>
@@ -120,7 +111,7 @@
 						<h5>Technique</h5>
 						<label for="edit_datastudio">DataStudio</label>
 						<select name="edit_datastudio" id="edit_datastudio" class="form-control">
-							<option value="planifier">Planifier</option>
+							<option value="<?= $d['datastudio']; ?>"><?= $d['datastudio']; ?></option>
 						</select>
 					</div>
 				</div>
