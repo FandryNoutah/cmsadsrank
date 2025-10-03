@@ -57,12 +57,12 @@ Discussion
 	$(function() {
 
 		function resetDetail() {
-			$('#detail_discussion').html("");
+			$('#note_detail_discussion').html("");
 			$('#noteModalLabel').text("");
-			$('#detail_due_date').removeAttr('value');
-			$('#detail_description').text("");
-			$('#detail_avatar').html("");
-			$('#detail_discussion_form').removeAttr('data-id');
+			$('#note_detail_due_date').removeAttr('value');
+			$('#note_detail_description').text("");
+			$('#note_detail_avatar').html("");
+			$('#note_detail_discussion_form').removeAttr('data-id');
 		}
 
 		function fetch_detail(id_note) {
@@ -79,18 +79,18 @@ Discussion
 					let note = response.note;
 					let messages = response.messages;
 
-					$('#detail_discussion_form').data('id', id_note);
+					$('#note_detail_discussion_form').data('id', id_note);
 
 					$('#noteModalLabel').text("Note: " + note.title);
-					$('#detail_due_date').val(note.date_due);
-					$('#detail_description').text(note.content);
-					$('#detail_type').text(note.type);
-					$('#detail_status').text(note.status);
+					$('#note_detail_due_date').val(note.date_due);
+					$('#note_detail_description').text(note.content);
+					$('#note_detail_type').text(note.type);
+					$('#note_detail_status').text(note.status);
 
 					let assigned_users = response.assigned_users;
 					$.each(assigned_users, function(index, value) {
 						let avatar = `<img src = "<?= base_url(IMAGES_PATH) ?>${value.photo_users}"width = "36"class = "rounded-circle avatar" >`;
-						$('#detail_avatar').append(avatar);
+						$('#note_detail_avatar').append(avatar);
 					});
 
 					$.each(messages, function(index, data) {
@@ -119,13 +119,13 @@ Discussion
 							</div>
 						`;
 
-						$('#detail_discussion').prepend(html);
+						$('#note_detail_discussion').prepend(html);
 					});
 				}
 			});
 		}
 
-		$('#detail_discussion_form').submit(function(event) {
+		$('#note_detail_discussion_form').submit(function(event) {
 
 			event.preventDefault();
 
@@ -139,7 +139,7 @@ Discussion
 				data: {
 					"id": id_note,
 					"type": "note",
-					"message": $('#detail_message').val()
+					"message": $('#note_detail_message').val()
 				},
 				dataType: "json",
 				beforeSend: function() {
@@ -151,7 +151,7 @@ Discussion
 					$(submitter).removeAttr("disabled");
 					$(submitter).html(buttonChild);
 
-					$('#detail_message').val("");
+					$('#note_detail_message').val("");
 					fetch_detail(id_note);
 				}
 			});
