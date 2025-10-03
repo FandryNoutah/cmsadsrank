@@ -1,4 +1,4 @@
-<div class="modal fade" id="detailModal" tabindex="-1" aria-labelledby="detailModalLabel" aria-hidden="true">
+<div class="modal fade" id="detailModal" tabindex="-1" aria-labelledby="detailModalLabel">
 	<div class="modal-dialog modal-lg modal-dialog-scrollable" style="width: 640px;">
 		<div class="modal-content">
 
@@ -48,11 +48,6 @@
 					<div class="form-group input-group">
 						<input type="text" class="form-control border-right-0" placeholder="Add Your Message" id="detail_message">
 						<div class="input-group-append">
-							<a href="#" class="btn btn-outline-secondary border-left-0 border-right-0 d-flex align-items-center">
-								<i class="fa fa-paperclip"></i>
-							</a>
-						</div>
-						<div class="input-group-append">
 							<button type="submit" class="btn btn-outline-secondary border-left-0 d-flex align-items-center">
 								<i class="fa fa-paper-plane"></i>
 							</button>
@@ -67,8 +62,8 @@
 
 				<div id="detail_discussion"></div>
 			</div>
-			<form action="<?= site_url('Task/change_status'); ?>" method="POST" id="status_form">
 
+			<form action="<?= site_url('Task/change_status'); ?>" method="POST" id="status_form">
 				<input type="hidden" name="taskId">
 				<div class="modal-footer d-flex justify-content-between">
 					<select name="status" id="change_status" class="form-control w-50">
@@ -79,10 +74,9 @@
 					</select>
 					<button type="submit" class="btn btn-dark px-3">Modifier</button>
 				</div>
-
 			</form>
 			<div class="modal-footer">
-				<button type="submit" class="btn btn-light px-3">Fermer</button>
+				<button type="button" data-dismiss="modal" aria-label="Close" class="btn btn-light px-3">Fermer</button>
 			</div>
 		</div>
 	</div>
