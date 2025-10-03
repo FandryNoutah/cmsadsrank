@@ -1,4 +1,4 @@
-<div class="modal fade" id="noteModal" tabindex="-1" aria-labelledby="noteModalLabel" aria-hidden="true">
+<div class="modal fade" id="noteModal" tabindex="-1" aria-labelledby="noteModalLabel">
 	<div class="modal-dialog modal-lg modal-dialog-scrollable" style="width: 640px;">
 		<div class="modal-content">
 
@@ -13,27 +13,27 @@
 				<div class="row">
 					<div class="col form-group">
 						<label for="add_member">Members</label>
-						<div class="d-flex align-items-center avatar-group" id="detail_avatar"></div>
+						<div class="d-flex align-items-center avatar-group" id="note_detail_avatar"></div>
 					</div>
 					<div class="col form-group">
 						<label for="add_member">Add Labels</label>
 						<div class="d-flex align-items-center">
 							<div class="mr-2">
-								<span class="badge alert-success p-2" style="font-size: 14px;" id="detail_type"></span>
+								<span class="badge alert-success p-2" style="font-size: 14px;" id="note_detail_type"></span>
 							</div>
 							<div class="mr-2">
-								<span class="badge alert-warning p-2" style="font-size: 14px;" id="detail_status"></span>
+								<span class="badge alert-warning p-2" style="font-size: 14px;" id="note_detail_status"></span>
 							</div>
 						</div>
 					</div>
 					<div class="col form-group">
 						<label for="detail_due_date">Date due</label>
-						<input type="date" name="due_date" id="detail_due_date" class="form-control">
+						<input type="date" name="due_date" id="note_detail_due_date" class="form-control">
 					</div>
 				</div>
 
 				<label>Description</label>
-				<p class="text-muted" id="detail_description">Monthly Product Discussion by Design and Marketing Teams with CEO to Plan our future products sales and reports</p>
+				<p class="text-muted" id="note_detail_description">Monthly Product Discussion by Design and Marketing Teams with CEO to Plan our future products sales and reports</p>
 
 				<div class="form-group">
 					<p>Attachment</p>
@@ -49,14 +49,9 @@
 				</div>
 
 				<hr>
-				<form action="<?= site_url('Discussion/send_message') ?>" method="POST" id="detail_discussion_form">
+				<form action="<?= site_url('Discussion/send_message') ?>" method="POST" id="note_detail_discussion_form">
 					<div class="form-group input-group">
-						<input type="text" class="form-control border-right-0" placeholder="Add Your Message" id="detail_message">
-						<div class="input-group-append">
-							<a href="#" class="btn btn-outline-secondary border-left-0 border-right-0 d-flex align-items-center">
-								<i class="fa fa-paperclip"></i>
-							</a>
-						</div>
+						<input type="text" class="form-control border-right-0" placeholder="Add Your Message" id="note_detail_message">
 						<div class="input-group-append">
 							<button type="submit" class="btn btn-outline-secondary border-left-0 d-flex align-items-center">
 								<i class="fa fa-paper-plane"></i>
@@ -70,7 +65,7 @@
 					<!-- <button class="btn btn-outline-dark">Hide Activity Details</button> -->
 				</div>
 
-				<div id="detail_discussion"></div>
+				<div id="note_detail_discussion"></div>
 			</div>
 			<!-- <div class="modal-footer">
 				<button type="submit" class="btn btn-dark px-3">Ajouter</button>
