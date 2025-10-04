@@ -1307,7 +1307,7 @@ Task
 						$('#assigned_to').val(task.assigned_to);
 						$('#date_demande').val(task.date_demande);
 						$('#date_due').val(task.date_due);
-						$('#tache').val(task.tache);
+						$('#tache').val(task.description);
 						$('#taskId').val(task.idtask);
 						$('#task_form button[type="submit"]').text("Modifier");
 
