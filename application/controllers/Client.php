@@ -709,8 +709,7 @@ class Client extends MY_Controller
 		$date_annonce = $this->input->post('date_annonce');
 		$dejaclient = $this->input->post('dejaclient');
 		$logo = $this->file_upload_field = 'logo';
-
-
+		
 		$this->form_validation->set_rules('site_client', 'URL', 'required|trim');
 
 		if ($this->form_validation->run() == FALSE) {
@@ -809,40 +808,67 @@ class Client extends MY_Controller
 		$api_key = '***REMOVED***-KGXpO5Dmjtk3iBGWNYAxp_Jtm07qeTY7jCQx3wR7a06GWqgWMdJA1O-DqdSX1ZANFEBDF83TQXT3BlbkFJB6Grrdt1s68eRcq7Ry6lbzpKM4X5At0U_f6q_dS-Jc_j6H6ATB3LVOd_hX0p7eJ-rPLgsW5UEA'; // 🔐 Remplace avec ta clé
 		$model = 'gpt-4'; // ou 'gpt-3.5-turbo'
 
-		$input_text = "Voici les titres et paragraphes d’un site web. Résume ce que fait ce site, son activité, son objectif ou secteur, en **deux paragraphes distincts, séparés par une ligne vide**.\n\n";
-		$input_text .= "Titres :\n";
-		foreach ($headings as $h) {
-			$input_text .= "- ({$h['tag']}) {$h['text']}\n";
-		}
-		$input_text .= "\nParagraphes :\n";
-		foreach (array_slice($paragraphs, 0, 10) as $p) {
-			$input_text .= "- $p\n";
-		}
+		   $input_text = "Voici les titres et paragraphes d’un site web.\n\n";
+    $input_text .= "Ta tâche est de rédiger un résumé informatif en **deux paragraphes distincts**, séparés par une **ligne vide** (un simple saut de ligne).\n\n";
 
-		$data = [
-			"model" => $model,
-			"messages" => [
-				["role" => "user", "content" => $input_text]
-			],
-			"temperature" => 0.7
-		];
+    $input_text .= "✍️ Le résumé total doit contenir **entre 175 et 190 mots maximum**, répartis de façon naturelle entre les deux paragraphes.\n";
+    $input_text .= "Le premier paragraphe doit présenter l'activité ou le secteur du site.\n";
+    $input_text .= "Le second paragraphe doit décrire l’objectif, les services ou la valeur ajoutée.\n\n";
 
-		$ch = curl_init('https://api.openai.com/v1/chat/completions');
-		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-		curl_setopt($ch, CURLOPT_HTTPHEADER, [
-			'Content-Type: application/json',
-			'Authorization: Bearer ' . $api_key
-		]);
-		curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
+    $input_text .= "Titres :\n";
+    foreach ($headings as $h) {
+        $input_text .= "- ({$h['tag']}) {$h['text']}\n";
+    }
 
-		$response = curl_exec($ch);
-		if (curl_errno($ch)) {
-			return 'Erreur OpenAI : ' . curl_error($ch);
-		}
+    $input_text .= "\nParagraphes :\n";
+    foreach (array_slice($paragraphs, 0, 10) as $p) {
+        $input_text .= "- $p\n";
+    }
 
-		curl_close($ch);
-		$result = json_decode($response, true);
-		return $result['choices'][0]['message']['content'] ?? 'Résumé non disponible.';
+    // Requête à l'API OpenAI
+    $data = [
+        "model" => $model,
+        "messages" => [
+            ["role" => "user", "content" => $input_text]
+        ],
+        "temperature" => 0.7
+    ];
+
+    $ch = curl_init('https://api.openai.com/v1/chat/completions');
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_HTTPHEADER, [
+        'Content-Type: application/json',
+        'Authorization: Bearer ' . $api_key
+    ]);
+    curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
+
+    $response = curl_exec($ch);
+    if (curl_errno($ch)) {
+        return 'Erreur OpenAI : ' . curl_error($ch);
+    }
+
+    curl_close($ch);
+    $result = json_decode($response, true);
+    $raw_output = $result['choices'][0]['message']['content'] ?? 'Résumé non disponible.';
+
+    // Séparation des deux paragraphes
+    $paragraphs_split = preg_split('/\n\s*\n/', trim($raw_output));
+
+    if (count($paragraphs_split) >= 2) {
+        $para1 = trim($paragraphs_split[0]);
+        $para2 = trim($paragraphs_split[1]);
+
+        // Comptage des mots (utile pour test ou journalisation)
+        $word_count1 = str_word_count(strip_tags($para1));
+        $word_count2 = str_word_count(strip_tags($para2));
+        $total_words = $word_count1 + $word_count2;
+
+        // Retourne toujours le contenu, sans alerte
+        return $para1 . "\n\n" . $para2;
+    }
+
+    // Fallback si le texte généré n'a pas deux paragraphes distincts
+    return $raw_output;
 	}
 
 	// Fonction cURL pour récupérer le contenu HTML
