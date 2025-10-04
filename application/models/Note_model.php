@@ -18,6 +18,7 @@ class Note_model extends CI_Model {
 			$this->db->where('nu.user_id', $user_id);
 		}
         $this->db->order_by('n.created_at', 'DESC');
+		$this->db->group_by('nu.note_id');
 
         return $this->db->get()->result();
     }
