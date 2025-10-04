@@ -60,7 +60,9 @@ Notes
 	<div class="row row-cols-3">
 		<?php foreach ($notes as $note): ?>
 
-			<div class="col mb-3 note-filter" data-author="<?= $note->author; ?>">
+			<div class="col mb-3 note-filter" data-filters="<?= $note->author; ?>,<?php foreach ($note->assigned_users as $assigned_user) {
+																						echo $assigned_user->username . ",";
+																					} ?>">
 				<div class="card h-100">
 					<div class="card-body">
 						<div class="row">
@@ -220,7 +222,7 @@ Notes
 
 			let button = $(event.relatedTarget);
 			let id_note = $(button).attr('data-id');
-			
+
 			fetch_detail(id_note);
 		});
 
@@ -312,13 +314,19 @@ Notes
 		});
 
 		$('#note_user_filter').change(function() {
-			let author = $(this).val();
+			let filter = $(this).val();
 
-			if (author == 0) {
+			if (filter == 0) {
 				$('.note-filter').removeClass('d-none');
 			} else {
-				$('.note-filter').addClass('d-none');
-				$('.note-filter[data-author="' + author + '"]').removeClass('d-none');
+				$('.note-filter').each(function() {
+					const filters = $(this).data('filters').toString().split(',');
+					if (filters.includes(filter)) {
+						$(this).removeClass('d-none');
+					} else {
+						$(this).addClass('d-none');
+					}
+				});
 			}
 		});
 	});

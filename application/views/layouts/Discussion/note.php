@@ -35,16 +35,15 @@
 				<label>Description</label>
 				<p class="text-muted" id="note_detail_description">Monthly Product Discussion by Design and Marketing Teams with CEO to Plan our future products sales and reports</p>
 
-				<div class="form-group">
+				<div class="form-group" id="note_attachment_container">
 					<p>Attachment</p>
 					<div class="btn-group" role="group">
 						<button class="btn btn-outline-dark btn-sm" type="button">
 							<i class="fa fa-image"></i>
 						</button>
-						<button class="btn btn-outline-primary btn-sm">
-							<i class="fa fa-download"></i>
-							Télécharger le fichier
-						</button>
+						<a class="btn btn-outline-primary btn-sm" target="_blank" download id="note_attachment_download">
+							Télécharger la pièce jointe
+						</a>
 					</div>
 				</div>
 

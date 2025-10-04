@@ -27,7 +27,7 @@ class Notes extends MY_Controller
 			$assigned_users = $this->Note_model->get_assigned_users($id_note);
 			$note->assigned_users = $assigned_users;
 		}
-
+		
 		$this->data['notes'] = $notes;
 
 		$this->content = "layouts/note/index.php";
