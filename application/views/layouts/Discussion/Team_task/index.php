@@ -28,7 +28,6 @@ Discussion
 
 								<div class="d-flex justify-content-between">
 									<div>
-										<button class="btn btn-light btn-sm mt-1">👍 4</button>
 										<button type="button" class="btn btn-light btn-sm mt-1 position-relative" data-toggle="modal" data-target="#detailModal" data-id="<?= $taREMOVED>idtask; ?>">
 											<i class="fa fa-eye"></i>
 											<?php if ($taREMOVED>count_messages > 0): ?>
