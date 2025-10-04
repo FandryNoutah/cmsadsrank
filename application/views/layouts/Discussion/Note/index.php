@@ -26,7 +26,6 @@ Discussion
 
 						<div class="d-flex justify-content-between">
 							<div>
-								<button class="btn btn-light btn-sm mt-1">👍 4</button>
 								<button type="button" class="btn btn-light btn-sm mt-1 position-relative" data-toggle="modal" data-target="#noteModal" data-id="<?= $note->id; ?>">
 									<i class="fa fa-eye"></i>
 									<?php if ($note->count_messages > 0): ?>
@@ -63,6 +62,8 @@ Discussion
 			$('#note_detail_description').text("");
 			$('#note_detail_avatar').html("");
 			$('#note_detail_discussion_form').removeAttr('data-id');
+			$('#attachment_download').removeAttr("href");
+			$('#attachment_container').addClass('d-none');
 		}
 
 		function fetch_detail(id_note) {
@@ -121,6 +122,11 @@ Discussion
 
 						$('#note_detail_discussion').prepend(html);
 					});
+
+					if (note.fichier_nom) {
+						$('#note_attachment_download').attr('href', "<?= base_url(); ?>/" + note.fichier_nom);
+						$('#note_attachment_container').removeClass('d-none');
+					}
 				}
 			});
 		}

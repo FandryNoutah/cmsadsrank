@@ -26,9 +26,8 @@ Discussion
 							<div class="text-muted small mb-2"><?= nl2br(htmlspecialchars($note->content)); ?></div>
 
 							<div class="d-flex justify-content-between">
-								<div>
-									<button class="btn btn-light btn-sm mt-1">👍 4</button>
-									<button type="button" class="btn btn-light btn-sm mt-1 position-relative" data-toggle="modal" data-target="#noteModal" data-type="note" data-id="<?= $note->id; ?>">
+							<div>
+								<button type="button" class="btn btn-light btn-sm mt-1 position-relative" data-toggle="modal" data-target="#noteModal" data-type="note" data-id="<?= $note->id; ?>">
 										<i class="fa fa-eye"></i>
 										<?php if ($note->count_messages > 0): ?>
 											<span class="badge badge-danger position-absolute rounded-circle" style="top: -10px; right: -10px;"><?= $note->count_messages; ?></span>
@@ -59,9 +58,8 @@ Discussion
 							<div class="text-muted small mb-2"><?= nl2br(htmlspecialchars($task->description)); ?></div>
 
 							<div class="d-flex justify-content-between">
-								<div>
-									<button class="btn btn-light btn-sm mt-1">👍 4</button>
-									<button type="button" class="btn btn-light btn-sm mt-1 position-relative" data-toggle="modal" data-target="#detailModal" data-type="task" data-id="<?= $task->idtask; ?>">
+							<div>
+								<button type="button" class="btn btn-light btn-sm mt-1 position-relative" data-toggle="modal" data-target="#detailModal" data-type="task" data-id="<?= $task->idtask; ?>">
 										<i class="fa fa-eye"></i>
 										<?php if ($task->count_messages > 0): ?>
 											<span class="badge badge-danger position-absolute rounded-circle" style="top: -10px; right: -10px;"><?= $task->count_messages; ?></span>
@@ -113,6 +111,8 @@ Discussion
 			$('#note_detail_description').text("");
 			$('#note_detail_avatar').html("");
 			$('#note_detail_discussion_form').removeAttr('data-id');
+			$('#note_attachment_download').removeAttr("href");
+			$('#note_attachment_container').addClass('d-none');
 		}
 
 		function fetch_detail(task_id) {
@@ -211,9 +211,6 @@ Discussion
 						$('#attachment_download').attr('href', "<?= base_url(); ?>/" + task.fichier_nom);
 						$('#attachment_container').removeClass('d-none');
 					}
-
-					$('#change_status').val(task.status);
-					$('#status_form input[name="taskId"]').val(task.idtask);
 				}
 			});
 		}
@@ -274,6 +271,11 @@ Discussion
 
 						$('#note_detail_discussion').prepend(html);
 					});
+
+					if (note.fichier_nom) {
+						$('#note_attachment_download').attr('href', "<?= base_url(); ?>/" + note.fichier_nom);
+						$('#note_attachment_container').removeClass('d-none');
+					}
 				}
 			});
 		}
