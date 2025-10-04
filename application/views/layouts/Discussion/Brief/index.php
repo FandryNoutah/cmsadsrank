@@ -27,7 +27,6 @@ Discussion
 
 							<div class="d-flex justify-content-between">
 								<div>
-									<button class="btn btn-light btn-sm mt-1">👍 4</button>
 									<button type="button" class="btn btn-light btn-sm mt-1" data-toggle="modal" data-target="#discussionModal" data-type="task" data-id="<?= $taREMOVED>idtask; ?>">
 										💬
 										<?= $taREMOVED>count_messages; ?>

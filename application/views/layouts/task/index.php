@@ -50,7 +50,7 @@
 
 	.table-synced th:nth-child(6),
 	.table-synced td:nth-child(6) {
-		width: 5%;
+		width: 10%;
 	}
 
 	.table-synced th:nth-child(7),
@@ -142,16 +142,16 @@ Task
 <div class="container-fluid">
 	<div class="btn-group btn-group-toggle my-4" data-toggle="buttons">
 		<label class="btn btn-light rounded-pill mx-2" style="font-size: 14px;">
-			<input type="radio" class="status-select" name="status_filter" value="0" checked>
+			<input type="radio" class="status-select" name="status_filter" value="all" checked>
 			All Task
 		</label>
-		<label class="btn btn-white rounded-pill mx-2 text-muted" style="font-size: 14px;">
-			<input type="radio" class="status-select" name="status_filter" value="3">
-			<i class="fa fa-circle mr-2" style="font-size: 10px; color: #AF4B4B;"></i>
-			En retard
+		<label class="btn btn-white rounded-pill mx-2" style="font-size: 14px;">
+			<input type="radio" class="status-select" name="status_filter" value="expired">
+			<i class="fa fa-circle mr-2 text-danger" style="font-size: 10px; color: #AF4B4B;"></i>
+			En Retard
 		</label>
-		<label class="btn btn-white rounded-pill mx-2 text-muted" style="font-size: 14px;">
-			<input type="radio" class="status-select" name="status_filter" value="3">
+		<label class="btn btn-white rounded-pill mx-2" style="font-size: 14px;">
+			<input type="radio" class="status-select" name="status_filter" value="urgent">
 			<i class="fa fa-circle mr-2" style="font-size: 10px; color: #AF4B4B;"></i>
 			Urgent
 		</label>
@@ -176,7 +176,7 @@ Task
 					<tbody>
 						<?php foreach ($tache as $t):  ?>
 							<?php if ($t->status == "planifié"): ?>
-								<tr class="taREMOVEDfilter" data-type="<?= $t->type_tache ?>" data-am="<?= $t->AM; ?>" data-assigned="<?= $t->assigned_to ?>" style="<?= ($t->expired) ? "background-color: rgba(255, 0, 0, 0.05);" : "text-muted" ?>">
+								<tr class="taREMOVEDfilter" data-type="<?= $t->type_tache ?>" data-am="<?= $t->AM; ?>" data-assigned="<?= $t->assigned_to ?>" <?php if ($t->expired): ?> data-expired="true" style="background-color: rgba(255, 0, 0, 0.05);" <?php endif; ?> data-urgent="<?= $t->Statuts_technique == 3; ?>">
 								<td>
 										<h6 class="mb-0 ml-3">
 											<?= $t->nom_client; ?>
@@ -254,6 +254,12 @@ Task
 									</td>
 									<td>
 										<div class="row">
+											<span class="col-auto">
+												<a href="javascript:void(0);" class="text-muted" data-toggle="modal" data-target="#discussionModal" data-id="<?= $t->idtask; ?>" data-title="<?= $t->title; ?>">
+													<img src="<?= base_url('assets/images/icons/figma/chat-9.svg') ?>" alt="">
+													<?= $t->count_messages; ?>
+												</a>
+											</span>
 											<?php if ($t->fichier_nom != null): ?>
 												<span class="col-auto">
 													<a href="#" class="text-muted">
@@ -261,12 +267,6 @@ Task
 													</a>
 												</span>
 											<?php endif; ?>
-											<span class="col-auto">
-												<a href="javascript:void(0);" class="text-muted" data-toggle="modal" data-target="#discussionModal" data-id="<?= $t->idtask; ?>" data-title="<?= $t->title; ?>">
-													<img src="<?= base_url('assets/images/icons/figma/chat-9.svg') ?>" alt="">
-													<?= $t->count_messages; ?>
-												</a>
-											</span>
 										</div>
 									</td>
 									<td>
@@ -279,6 +279,7 @@ Task
 													<i class="fa fa-eye mr-2"></i>
 													Détails
 												</button>
+												<?php if ($this->current_user->id === $t->AM): ?>
 												<button type="button" class="dropdown-item" data-toggle="modal" data-target="#formModal" data-id="<?= $t->idtask; ?>">
 													<i class="fa fa-edit mr-2"></i>
 													Modifier
@@ -287,6 +288,7 @@ Task
 													<i class="fa fa-trash mr-2"></i>
 													Supprimer
 												</a>
+												<?php endif; ?>
 											</div>
 										</div>
 									</td>
@@ -315,7 +317,7 @@ Task
 					<tbody>
 						<?php foreach ($tache as $t): ?>
 							<?php if ($t->status == "en cours"): ?>
-								<tr class="taREMOVEDfilter" data-type="<?= $t->type_tache ?>" data-am="<?= $t->AM; ?>" data-assigned="<?= $t->assigned_to ?>">
+								<tr class="taREMOVEDfilter" data-type="<?= $t->type_tache ?>" data-am="<?= $t->AM; ?>" data-assigned="<?= $t->assigned_to ?>" <?php if ($t->expired): ?> data-expired="true" style="background-color: rgba(255, 0, 0, 0.05);" <?php endif; ?> data-urgent="<?= $t->Statuts_technique == 3; ?>">
 									<td>
 										<h6 class="mb-0 ml-3">
 											<?= $t->nom_client; ?>
@@ -392,6 +394,12 @@ Task
 									</td>
 									<td>
 										<div class="row">
+											<span class="col-auto">
+												<a href="javascript:void(0);" class="text-muted" data-toggle="modal" data-target="#discussionModal" data-id="<?= $t->idtask; ?>" data-title="<?= $t->title; ?>">
+													<img src="<?= base_url('assets/images/icons/figma/chat-9.svg') ?>" alt="">
+													<?= $t->count_messages; ?>
+												</a>
+											</span>
 											<?php if ($t->fichier_nom != null): ?>
 												<span class="col-auto">
 													<a href="#" class="text-muted">
@@ -399,12 +407,6 @@ Task
 													</a>
 												</span>
 											<?php endif; ?>
-											<span class="col-auto">
-												<a href="javascript:void(0);" class="text-muted" data-toggle="modal" data-target="#discussionModal" data-id="<?= $t->idtask; ?>" data-title="<?= $t->title; ?>">
-													<img src="<?= base_url('assets/images/icons/figma/chat-9.svg') ?>" alt="">
-													<?= $t->count_messages; ?>
-												</a>
-											</span>
 										</div>
 									</td>
 									<td>
@@ -417,6 +419,7 @@ Task
 													<i class="fa fa-eye mr-2"></i>
 													Détails
 												</button>
+												<?php if ($this->current_user->id === $t->AM): ?>
 												<button type="button" class="dropdown-item" data-toggle="modal" data-target="#formModal" data-id="<?= $t->idtask; ?>">
 													<i class="fa fa-edit mr-2"></i>
 													Modifier
@@ -425,6 +428,7 @@ Task
 													<i class="fa fa-trash mr-2"></i>
 													Supprimer
 												</a>
+												<?php endif; ?>
 											</div>
 										</div>
 									</td>
@@ -452,7 +456,7 @@ Task
 					<tbody>
 						<?php foreach ($tache as $t): ?>
 							<?php if ($t->status == "effectuée"): ?>
-								<tr class="taREMOVEDfilter" data-type="<?= $t->type_tache ?>" data-am="<?= $t->AM; ?>" data-assigned="<?= $t->assigned_to ?>">
+								<tr class="taREMOVEDfilter" data-type="<?= $t->type_tache ?>" data-am="<?= $t->AM; ?>" data-assigned="<?= $t->assigned_to ?>" <?php if ($t->expired): ?> data-expired="true" style="background-color: rgba(255, 0, 0, 0.05);" <?php endif; ?> data-urgent="<?= $t->Statuts_technique == 3; ?>">
 									<td>
 										<h6 class="mb-0 ml-3">
 											<?= $t->nom_client; ?>
@@ -528,6 +532,12 @@ Task
 									</td>
 									<td>
 										<div class="row">
+											<span class="col-auto">
+												<a href="javascript:void(0);" class="text-muted" data-toggle="modal" data-target="#discussionModal" data-id="<?= $t->idtask; ?>" data-title="<?= $t->title; ?>">
+													<img src="<?= base_url('assets/images/icons/figma/chat-9.svg') ?>" alt="">
+													<?= $t->count_messages; ?>
+												</a>
+											</span>
 											<?php if ($t->fichier_nom != null): ?>
 												<span class="col-auto">
 													<a href="#" class="text-muted">
@@ -535,12 +545,6 @@ Task
 													</a>
 												</span>
 											<?php endif; ?>
-											<span class="col-auto">
-												<a href="javascript:void(0);" class="text-muted" data-toggle="modal" data-target="#discussionModal" data-id="<?= $t->idtask; ?>" data-title="<?= $t->title; ?>">
-													<img src="<?= base_url('assets/images/icons/figma/chat-9.svg') ?>" alt="">
-													<?= $t->count_messages; ?>
-												</a>
-											</span>
 										</div>
 									</td>
 									<td>
@@ -553,6 +557,7 @@ Task
 													<i class="fa fa-eye mr-2"></i>
 													Détails
 												</button>
+												<?php if ($this->current_user->id === $t->AM): ?>
 												<button type="button" class="dropdown-item" data-toggle="modal" data-target="#formModal" data-id="<?= $t->idtask; ?>">
 													<i class="fa fa-edit mr-2"></i>
 													Modifier
@@ -561,6 +566,7 @@ Task
 													<i class="fa fa-trash mr-2"></i>
 													Supprimer
 												</a>
+												<?php endif; ?>
 											</div>
 										</div>
 									</td>
@@ -585,7 +591,7 @@ Task
 							<span class="text-muted"><?= $count_planned; ?> open tasks</span>
 							<?php foreach ($tache as $t): ?>
 								<?php if ($t->status == "planifié"): ?>
-									<div class="card mt-3 taREMOVEDfilter" data-type="<?= $t->type_tache ?>" data-am="<?= $t->AM; ?>" data-assigned="<?= $t->assigned_to ?>" style="<?= ($t->expired) ? "background-color: rgba(255, 0, 0, 0.05);" : "text-muted" ?>">
+									<div class="card mt-3 taREMOVEDfilter" data-type="<?= $t->type_tache ?>" data-am="<?= $t->AM; ?>" data-assigned="<?= $t->assigned_to ?>" <?php if ($t->expired): ?> data-expired="true" style="background-color: rgba(255, 0, 0, 0.05);" <?php endif; ?> data-urgent="<?= $t->Statuts_technique == 3; ?>">
 										<div class="card-body">
 											<div class="d-flex">
 												<?php if ($t->type_tache == 1): ?>
@@ -702,7 +708,7 @@ Task
 							<!-- Eto no manao foreach -->
 							<?php foreach ($tache as $t): ?>
 								<?php if ($t->status == "en cours"): ?>
-									<div class="card mt-3 taREMOVEDfilter" data-type="<?= $t->type_tache ?>" data-am="<?= $t->AM; ?>" data-assigned="<?= $t->assigned_to ?>">
+									<div class="card mt-3 taREMOVEDfilter" data-type="<?= $t->type_tache ?>" data-am="<?= $t->AM; ?>" data-assigned="<?= $t->assigned_to ?>" <?php if ($t->expired): ?> data-expired="true" style="background-color: rgba(255, 0, 0, 0.05);" <?php endif; ?> data-urgent="<?= $t->Statuts_technique == 3; ?>">
 										<div class="card-body">
 											<div class="d-flex">
 												<?php if ($t->type_tache == 1): ?>
@@ -817,7 +823,7 @@ Task
 							<!-- Eto no manao foreach -->
 							<?php foreach ($tache as $t): ?>
 								<?php if ($t->status == "effectuée"): ?>
-									<div class="card mt-3 taREMOVEDfilter" data-type="<?= $t->type_tache ?>" data-am="<?= $t->AM; ?>" data-assigned="<?= $t->assigned_to ?>">
+									<div class="card mt-3 taREMOVEDfilter" data-type="<?= $t->type_tache ?>" data-am="<?= $t->AM; ?>" data-assigned="<?= $t->assigned_to ?>" <?php if ($t->expired): ?> data-expired="true" style="background-color: rgba(255, 0, 0, 0.05);" <?php endif; ?> data-urgent="<?= $t->Statuts_technique == 3; ?>">
 										<div class="card-body">
 											<div class="d-flex">
 												<?php if ($t->type_tache == 1): ?>
@@ -993,6 +999,7 @@ Task
 			$('#attachment_container').addClass('d-none');
 			$('#change_status').removeAttr("value")
 			$('#status_form input[name="taskId"]').removeAttr("value");
+			$('#status_form').addClass('d-none');
 		}
 
 		function resetForm() {
@@ -1157,8 +1164,12 @@ Task
 						$('#attachment_container').removeClass('d-none');
 					}
 
-					$('#change_status').val(task.status);
-					$('#status_form input[name="taskId"]').val(task.idtask);
+					if (task.assigned_to == <?= $this->current_user->id ?> || task.AM == <?= $this->current_user->id ?>) {
+						$('#change_status').val(task.status);
+						$('#status_form input[name="taskId"]').val(task.idtask);
+
+						$('#status_form').removeClass('d-none');
+					}
 				}
 			});
 		}
@@ -1312,6 +1323,29 @@ Task
 
 		$('#formModal').on('hide.bs.modal', function(event) {
 			resetForm();
+		});
+
+		$('.status-select').change(function() {
+			let filter = $(this).val();
+			
+			$('.status-select').parent('label.btn-light').removeClass('btn-light').addClass('btn-white');
+			$(this).parent('label').addClass('btn-light').removeClass('btn-white');
+			
+			switch (filter) {
+				case "expired":
+					$('.taREMOVEDfilter').addClass('d-none');
+					$('.taREMOVEDfilter[data-expired="true"]').removeClass('d-none');
+					break;
+					
+				case "urgent":
+					$('.taREMOVEDfilter').addClass('d-none');
+					$('.taREMOVEDfilter[data-urgent="1"]').removeClass('d-none');
+					break;
+					
+				default:
+					$('.taREMOVEDfilter').removeClass('d-none');
+					break;
+			}
 		});
 	});
 </script>
