@@ -699,7 +699,6 @@ class Client extends MY_Controller
 		$client = $this->input->post('client');
 		$email_client = $this->input->post('email_client');
 		$numero_client = $this->input->post('numero_client');
-		$dejaclient = $this->input->post('dejaclient');
 		$budget = $this->input->post('budget');
 		$secteur_activite = $this->input->post('secteur_activite');
 		$product_choice = $this->input->post('product_choice');
@@ -708,6 +707,7 @@ class Client extends MY_Controller
 		$date_mis_en_place = $this->input->post('date_mis_en_place');
 		$date_brief = $this->input->post('date_brief');
 		$date_annonce = $this->input->post('date_annonce');
+		$dejaclient = $this->input->post('dejaclient');
 		$logo = $this->file_upload_field = 'logo';
 
 
