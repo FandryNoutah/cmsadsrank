@@ -62,19 +62,6 @@
 
 				<div id="detail_discussion"></div>
 			</div>
-
-			<form action="<?= site_url('Task/change_status'); ?>" method="POST" id="status_form">
-				<input type="hidden" name="taskId">
-				<div class="modal-footer d-flex justify-content-between">
-					<select name="status" id="change_status" class="form-control w-50">
-						<option value="planifié">Planifié</option>
-						<option value="en cours">En cours</option>
-						<option value="effectuée">Terminé</option>
-						<option value="annulée">Annulé</option>
-					</select>
-					<button type="submit" class="btn btn-dark px-3">Modifier</button>
-				</div>
-			</form>
 			<div class="modal-footer">
 				<button type="button" data-dismiss="modal" aria-label="Close" class="btn btn-light px-3">Fermer</button>
 			</div>
