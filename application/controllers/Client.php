@@ -19,6 +19,7 @@ class Client extends MY_Controller
 		$this->load->model("Image_model");
 		$this->load->model("Message_model");
 		$this->load->model("Task_model");
+		$this->load->model("Discussion_model");
 		$this->data['visuels'] = $this->visuels_model->get_all();
 		// $this->load->library('PHPExcel');
 		// $this->load->library('excel');
@@ -61,14 +62,19 @@ class Client extends MY_Controller
 			echo json_encode(['status' => 'error', 'message' => 'ID de couleur invalide']);
 			return;
 		}
-
 		$this->visuels_model->update_color($idclients, $color_id);
 		echo json_encode([
 			'status' => 'success',
 			'redirect_url' => base_url('Client/detail_client/' . $idclients)
 		]);
 	}
-
+	public function date_google_meet()
+	{
+		$meetingDate = $this->input->post('meetingDate');
+		$idclients = $this->input->post('idclients');
+		$this->visuels_model->change_meetingDate($idclients, $meetingDate);
+		redirect('Client/detail_client/' . $idclients);
+	}
 	public function upload_logo()
 	{
 		$idclients = $this->input->post('idclients');
@@ -311,6 +317,7 @@ class Client extends MY_Controller
 		$this->data['note'] = $this->visuels_model->get_note_par_client($idclients);
 		$this->data['upsell'] = $this->visuels_model->getupsellbyidclient($idclients);
 		$this->data['budget_initial'] = $this->visuels_model->getdernierbyidclient($idclients);
+		$this->data['discussion'] = $this->Discussion_model->getdiscussionbyidclient($idclients);
 		$t = $this->data['task'] = $this->Task_model->get_task_by_id_client($idclients);
 		$t = count($t);
 		$this->data['nbr_task'] = $t;
@@ -615,7 +622,7 @@ class Client extends MY_Controller
 			$idupsell = $this->visuels_model->create_upsell($type_upsell, $budget_finale, $budget_initiale, $demmande_upsell, $am, $tm, $date_upsell, $date_demande_upsell, $inforamtion_upsell, $statut_upsell, $idclients, $actif);
 			$type_tache = 5;
 			$title = "Upsell";
-			$tache = "Le client fait une upsell de "  . number_format($budget_finale, 0, ',', ' ') . " €";;
+			$tache = "Le client fait une upsell de "  . number_format($budget_upsell, 0, ',', ' ') . " €";;
 			$Statuts_technique = 1;
 
 			$data = array(
