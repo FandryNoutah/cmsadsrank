@@ -4,7 +4,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
 class Client extends MY_Controller
 {
 	private $api_url = 'https://api.aircall.io/v1/calls';
-	private $api_auth = 'e69c2f6c77144ad053a54bf77088aa09:6ab56a32536bc017ed6b2adb619338e0';
+	private $api_auth = '';
 	protected $file_upload_field;
 
 
