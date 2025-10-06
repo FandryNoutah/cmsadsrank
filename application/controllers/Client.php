@@ -860,7 +860,7 @@ class Client extends MY_Controller
 		$api_key = ''; 
 		$model = 'gpt-4'; 
 
-		   $input_text = "Voici les titres et paragraphes d’un site web.\n\n";
+	$input_text = "Voici les titres et paragraphes d’un site web.\n\n";
     $input_text .= "Ta tâche est de rédiger un résumé informatif en **deux paragraphes distincts**, séparés par une **ligne vide** (un simple saut de ligne).\n\n";
 
     $input_text .= "✍️ Le résumé total doit contenir **entre 175 et 190 mots maximum**, répartis de façon naturelle entre les deux paragraphes.\n";
