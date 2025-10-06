@@ -74,7 +74,6 @@
 						<option value="planifié">Planifié</option>
 						<option value="en cours">En cours</option>
 						<option value="effectuée">Terminé</option>
-						<option value="annulée">Annulé</option>
 					</select>
 					<button type="submit" class="btn btn-dark px-3">Modifier</button>
 				</div>

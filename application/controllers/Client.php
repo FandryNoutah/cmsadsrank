@@ -30,6 +30,9 @@ class Client extends MY_Controller
 		$this->load->library('upload');
 		$this->load->library('form_validation');
 		$this->form_validation->set_error_delimiters('<span class="error">', '</span>');
+
+		$this->current_user = $this->ion_auth->user()->row();
+
 	}
 
 	public function index()
