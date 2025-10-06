@@ -146,19 +146,24 @@
 		function resetDetail() {
 			$('#detail_discussion').html("");
 			$('#detailModalLabel').text("");
-			$('#detail_due_date').removeAttr('value');
+			$('#detail_date_due').removeAttr('value');
 			$('#detail_description').text("");
 			$('#detail_discussion_form').removeAttr('id');
 			$('#detail_type').html("");
 			$('#detail_status').html("");
 			$('#detail_avatar').html("");
+			$('#attachment_download').removeAttr("href");
+			$('#attachment_container').addClass('d-none');
+			$('#change_status').removeAttr("value")
+			$('#status_form input[name="taskId"]').removeAttr("value");
+			$('#status_form').addClass('d-none');
 		}
 
 		function fetch_detail(task_id) {
 
 			$.ajax({
 				type: "GET",
-				url: "<?= base_url('Task/detail_task/') ?>"+ task_id,
+				url: "<?= site_url('Task/detail_task/') ?>" + task_id,
 				dataType: "json",
 				beforeSend: function() {
 					resetDetail();
@@ -169,13 +174,14 @@
 					let messages = response.messages;
 
 					$('#detailModalLabel').text("Tâche: " + task.title);
-					$('#detail_due_date').val(task.date_due);
+					$('#detail_date_due').val(task.date_due);
 					$('#detail_description').text(task.description);
 
-					let photo_users = `<img src="<?= base_url(IMAGES_PATH); ?>/${task.photo_users}" class="avatar rounded-circle" width="36" height="36" alt="Client Image">`;
-					// let assigned_photo = `<img src="<?= base_url(IMAGES_PATH); ?>/${task.assigned_to_photo}" class="avatar rounded-circle" width="28" height="28" alt="Client Image">`;
+					// let photo_users = `<img src="<?= base_url(IMAGES_PATH); ?>/${task.photo_users}" class="avatar rounded-circle bg-white" width="36" height="36" alt="Client Image">`;
+					let am_photo = `<img src="<?= base_url(IMAGES_PATH); ?>/${task.AM_photo}" class="avatar rounded-circle bg-white" width="36" height="36" alt="Client Image">`;
+					let assigned_to_photo = `<img src="<?= base_url(IMAGES_PATH); ?>/${task.assigned_to_photo}" class="avatar rounded-circle bg-white" width="36" height="36" alt="Client Image">`;
 
-					$('#detail_avatar').append(photo_users);
+					$('#detail_avatar').append([am_photo, assigned_to_photo]);
 
 					var type = "";
 					switch (task.type_tache) {
@@ -242,6 +248,18 @@
 
 						$('#detail_discussion').prepend(html);
 					});
+
+					if (task.fichier_nom) {
+						$('#attachment_download').attr('href', "<?= base_url(); ?>/" + task.fichier_nom);
+						$('#attachment_container').removeClass('d-none');
+					}
+
+					if (task.assigned_to == <?= $this->current_user->id ?> || task.AM == <?= $this->current_user->id ?>) {
+						$('#change_status').val(task.status);
+						$('#status_form input[name="taskId"]').val(task.idtask);
+
+						$('#status_form').removeClass('d-none');
+					}
 				}
 			});
 		}
