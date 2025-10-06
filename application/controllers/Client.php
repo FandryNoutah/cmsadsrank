@@ -858,6 +858,7 @@ class Client extends MY_Controller
 	private function get_summary_from_chatgpt($headings, $paragraphs)
 	{
 		
+		$api_key = getenv('OPENAI_API_KEY');
 
 	$input_text = "Voici les titres et paragraphes d’un site web.\n\n";
     $input_text .= "Ta tâche est de rédiger un résumé informatif en **deux paragraphes distincts**, séparés par une **ligne vide** (un simple saut de ligne).\n\n";
