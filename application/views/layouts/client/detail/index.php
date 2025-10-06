@@ -781,11 +781,19 @@
 		const currentMonthIndex = new Date().getMonth();
 
 		function resetTask() {
-			$('#task_discussion').html("");
+			$('#task_detail_discussion').html("");
 			$('#taskModalLabel').text("");
-			$('#task_due_date').removeAttr('value');
-			$('#task_description').text("");
-			$('#task_discussion_form').removeAttr('id');
+			$('#task_detail_date_due').removeAttr('value');
+			$('#task_detail_description').text("");
+			$('#task_detail_discussion_form').removeAttr('id');
+			$('#task_detail_type').html("");
+			$('#task_detail_status').html("");
+			$('#task_detail_avatar').html("");
+			$('#task_attachment_download').removeAttr("href");
+			$('#task_attachment_container').addClass('d-none');
+			$('#task_change_status').removeAttr("value")
+			$('#task_status_form input[name="taskId"]').removeAttr("value");
+			$('#task_status_form').addClass('d-none');
 		}
 
 		function fetch_task(task_id) {
@@ -802,9 +810,52 @@
 					let task = response.task;
 					let messages = response.messages;
 
-					$('#taskModalLabel').text("Tâche: " + task.title);
-					$('#task_due_date').val(task.date_due);
-					$('#task_description').text(task.description);
+					$('#task_detailModalLabel').text("Tâche: " + task.title);
+					$('#task_detail_date_due').val(task.date_due);
+					$('#task_detail_description').text(task.description);
+
+					// let photo_users = `<img src="<?= base_url(IMAGES_PATH); ?>/${task.photo_users}" class="avatar rounded-circle bg-white" width="36" height="36" alt="Client Image">`;
+					let am_photo = `<img src="<?= base_url(IMAGES_PATH); ?>/${task.AM_photo}" class="avatar rounded-circle bg-white" width="36" height="36" alt="Client Image">`;
+					let assigned_to_photo = `<img src="<?= base_url(IMAGES_PATH); ?>/${task.assigned_to_photo}" class="avatar rounded-circle bg-white" width="36" height="36" alt="Client Image">`;
+
+					$('#task_detail_avatar').append([am_photo, assigned_to_photo]);
+
+					var type = "";
+					switch (task.type_tache) {
+						case "1":
+							type = "Team Task";
+							break;
+						case "2":
+							type = "Temporaire";
+							break;
+						case "3":
+							type = "GTM";
+							break;
+						case "4":
+							type = "Plan de taggage";
+							break;
+					}
+
+					$('#task_detail_type').html(`<span class="badge alert-success p-2" style="font-size: 14px;">${type}</span>`);
+
+					var status = "";
+					var status_color = "";
+					switch (task.Statuts_technique) {
+						case "1":
+							status = "Normal";
+							status_color = "success";
+							break;
+						case "2":
+							status = "Priorité";
+							status_color = "warning";
+							break;
+						case "3":
+							status = "Urgent";
+							status_color = "danger";
+							break;
+					}
+
+					$('#task_detail_status').html(`<span class="badge alert-${status_color} p-2" style="font-size: 14px;">${status}</span>`);
 
 					$.each(messages, function(index, data) {
 
@@ -832,8 +883,20 @@
 							</div>
 						`;
 
-						$('#task_discussion').prepend(html);
+						$('#task_detail_discussion').prepend(html);
 					});
+
+					if (task.fichier_nom) {
+						$('#task_attachment_download').attr('href', "<?= base_url(); ?>/" + task.fichier_nom);
+						$('#task_attachment_container').removeClass('d-none');
+					}
+
+					if (task.assigned_to == <?= $this->current_user->id ?> || task.AM == <?= $this->current_user->id ?>) {
+						$('#task_change_status').val(task.status);
+						$('#task_status_form input[name="taskId"]').val(task.idtask);
+
+						$('#task_status_form').removeClass('d-none');
+					}
 				}
 			});
 		}
@@ -850,7 +913,7 @@
 			let button = $(event.relatedTarget);
 			let task_id = $(button).attr('data-id');
 
-			$('#task_discussion_form').data('id', task_id);
+			$('#task_detail_discussion_form').data('id', task_id);
 
 			fetch_task(task_id);
 		});
@@ -859,7 +922,7 @@
 			resetTask();
 		});
 
-		$('#task_discussion_form').submit(function(event) {
+		$('#task_detail_discussion_form').submit(function(event) {
 
 			event.preventDefault();
 
@@ -872,7 +935,7 @@
 				url: $(this).attr('action'),
 				data: {
 					"id_task": task_id,
-					"message": $('#task_message').val()
+					"message": $('#task_detail_message').val()
 				},
 				dataType: "json",
 				beforeSend: function() {
@@ -884,7 +947,7 @@
 					$(submitter).removeAttr("disabled");
 					$(submitter).html(buttonChild);
 
-					$('#task_message').val("");
+					$('#task_detail_message').val("");
 					fetch_task(task_id);
 				}
 			});
