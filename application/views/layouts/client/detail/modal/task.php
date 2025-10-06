@@ -13,54 +13,39 @@
 				<div class="row">
 					<div class="col form-group">
 						<label for="add_member">Members</label>
-						<div class="d-flex align-items-center avatar-group">
-							<img src="<?= base_url('assets/images/figma/user_frame.png') ?>" width="36" class="rounded-circle avatar" alt="Avatar 1">
-							<img src="<?= base_url('assets/images/figma/user_frame.png') ?>" width="36" class="rounded-circle avatar" alt="Avatar 2">
-							<img src="<?= base_url('assets/images/figma/user_frame.png') ?>" width="36" class="rounded-circle avatar" alt="Avatar 3">
-							<img src="<?= base_url('assets/images/figma/user_frame.png') ?>" width="36" class="rounded-circle avatar" alt="Avatar 4">
-							<button type="button" class="btn btn-outline-dark rounded-circle d-block ml-2 py-2">
-								<i class="fa fa-user-plus"></i>
-							</button>
-						</div>
+						<div class="d-flex align-items-center avatar-group" id="task_detail_avatar"></div>
 					</div>
 					<div class="col form-group">
-						<label for="add_member">Add Labels</label>
+						<label for="add_member">Label</label>
 						<div class="d-flex align-items-center">
-							<div class="mr-2">
-								<span class="badge alert-success p-2" style="font-size: 14px;">Internal</span>
-							</div>
-							<div class="mr-2">
-								<span class="badge alert-warning p-2" style="font-size: 14px;">Marketing</span>
-							</div>
-							<button type="button" class="btn btn-outline-dark rounded-circle d-block">
-								<i class="fa fa-tag"></i>
-							</button>
+							<div class="mr-2" id="task_detail_type"></div>
+							<div class="mr-2" id="task_detail_status"></div>
 						</div>
 					</div>
 					<div class="col form-group">
-						<label for="task_due_date">Date due</label>
-						<input type="date" name="due_date" id="task_due_date" class="form-control">
+						<label for="task_detail_date_due">Date due</label>
+						<input type="date" name="date_due" id="task_detail_date_due" class="form-control">
 					</div>
 				</div>
 
 				<label>Description</label>
-				<p class="text-muted" id="task_description">Monthly Product Discussion by Design and Marketing Teams with CEO to Plan our future products sales and reports</p>
+				<p class="text-muted" id="task_detail_description"></p>
 
-				<div class="form-group">
-					<label for="attachment">Attachment</label>
-					<div class="file-drop-area" id="fileDrop">
-						<div class="file-drop-icon">
-							<i class="fas fa-image"></i>
-						</div>
-						<span>Drag files here or <span class="text-primary">Browse</span></span>
+				<div class="form-group" id="task_attachment_container">
+					<p>Attachment</p>
+					<div class="btn-group" role="group">
+						<button class="btn btn-outline-dark btn-sm" type="button">
+							<i class="fa fa-image"></i>
+						</button>
+						<a class="btn btn-outline-primary btn-sm" target="_blank" download id="task_attachment_download">
+							Télécharger la pièce jointe
+						</a>
 					</div>
-					<input type="file" id="fileInput" class="d-none">
-					<div id="fileName" class="mt-3 text-muted"></div>
 				</div>
 
-				<form action="<?= site_url('Task/send_message') ?>" method="POST" id="task_discussion_form">
+				<form action="<?= site_url('Task/send_message') ?>" method="POST" id="task_detail_discussion_form">
 					<div class="form-group input-group">
-						<input type="text" class="form-control border-right-0" placeholder="Add Your Message" id="task_message">
+						<input type="text" class="form-control border-right-0" placeholder="Add Your Message" id="task_detail_message">
 						<div class="input-group-append">
 							<a href="#" class="btn btn-outline-secondary border-left-0 border-right-0 d-flex align-items-center">
 								<i class="fa fa-paperclip"></i>
@@ -76,11 +61,24 @@
 
 				<div class="d-flex justify-content-between">
 					<label for="">Discussions</label>
-					<!-- <button class="btn btn-outline-dark">Hide Activity tasks</button> -->
+					<!-- <button class="btn btn-outline-dark">Hide Activity Details</button> -->
 				</div>
 
-				<div id="task_discussion"></div>
+				<div id="task_detail_discussion"></div>
 			</div>
+			<form action="<?= site_url('Task/change_status'); ?>" method="POST" id="task_status_form">
+
+				<input type="hidden" name="taskId">
+				<div class="modal-footer d-flex justify-content-between">
+					<select name="status" id="task_change_status" class="form-control w-50">
+						<option value="planifié">Planifié</option>
+						<option value="en cours">En cours</option>
+						<option value="effectuée">Terminé</option>
+					</select>
+					<button type="submit" class="btn btn-dark px-3">Modifier</button>
+				</div>
+
+			</form>
 			<div class="modal-footer">
 				<button type="submit" class="btn btn-light px-3">Fermer</button>
 			</div>
