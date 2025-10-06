@@ -230,15 +230,59 @@ class Client extends MY_Controller
 		$this->content = "layouts/client/detail/gtm/index.php";
 		$this->layout();
 	}
+	public function updateDonneeClient()
+{
+	$idclient = $this->input->post('idclient');
+	$idonnee = $this->input->post('idonnee');
+	$client = $this->input->post('Client');
+	$email_client = $this->input->post('Email_client');
+	$numero_client = $this->input->post('Numero_client');
+	$site_client = $this->input->post('Site_client');
+	$budget = $this->input->post('budget');
+	$secteur_activite = $this->input->post('secteur_activite');
+	$Produit = $this->input->post('Produit');
+	$Initiative = $this->input->post('Initiative');
+	$Am = $this->input->post('Am');
+	$mis_en_place_paiement = $this->input->post('mis_en_place_paiement');
+	$Brief = $this->input->post('Brief');
+	$annonce = $this->input->post('annonce');
+	$commentaire_client = $this->input->post('commentaire_client') ?: NULL;
+	$paiement_recu = (int) $this->input->post('paiement_recu');
+	$datastudio = (int) $this->input->post('datastudio');
+	$email_onboarding = (int) $this->input->post('email_onboarding');
+	$facturation = (int) $this->input->post('facturation');
+
+	$this->Donne_modele->update_client($idclient, $client, $email_client, $numero_client, $site_client);
+	$this->Donne_modele->update_donnee_client(
+		$budget, $secteur_activite, $Produit, $Initiative, $Am,
+		$mis_en_place_paiement, $Brief, $annonce, $commentaire_client,
+		$paiement_recu, $datastudio, $email_onboarding, $facturation, $idonnee
+	);
+
+	$this->session->set_flashdata('message-succes', "Données mises à jour avec succès");
+	redirect('Onboarding', 'refresh');
+}
+
 
 	public function activer_processus_tache()
 	{
+		    header('Content-Type: application/json');
+
+    // DEBUG temporaire
+    $debug = array(
+        'POST' => $this->input->post(),
+    );
+
+    if (empty($debug['POST']['idclients']) || empty($debug['POST']['am']) || empty($debug['POST']['assigned_to']) || empty($debug['POST']['date'])) {
+        $debug['error'] = 'Un ou plusieurs champs POST sont vides';
+        echo json_encode($debug);
+        return;
+    }
 		$type_tache = 3;
 		$title = "Demande de procédure GTM";
 		$description = "Activer le procédure GTM";
 		$Statuts_technique = 1;
 		$procedure_gtm = 1;
-
 		$idclients = $this->input->post('idclients');
 		$am = $this->input->post('am');
 		$tm = $this->input->post('assigned_to');
@@ -258,8 +302,6 @@ class Client extends MY_Controller
 		);
 
 		$this->Task_model->add_task($data);
-
-		// Retourner une réponse JSON avec l’URL de redirection
 		echo json_encode(['redirect_url' => base_url('Client/application/' . $idclients)]);
 	}
 
@@ -778,8 +820,8 @@ class Client extends MY_Controller
 			'date_demande' => $date_mis_en_place,
 			'date_due' => $date_brief,
 			'idclients' => $idclient,
-			'AM' => $am,
-			'assigned_to' => $initiative,
+			'AM' => $initiative,
+			'assigned_to' => $am,
 			'title' => $title,
 			'Statuts_technique' => $Statuts_technique,
 			'description' => $tache
@@ -805,8 +847,8 @@ class Client extends MY_Controller
 
 	private function get_summary_from_chatgpt($headings, $paragraphs)
 	{
-		$api_key = '***REMOVED***-KGXpO5Dmjtk3iBGWNYAxp_Jtm07qeTY7jCQx3wR7a06GWqgWMdJA1O-DqdSX1ZANFEBDF83TQXT3BlbkFJB6Grrdt1s68eRcq7Ry6lbzpKM4X5At0U_f6q_dS-Jc_j6H6ATB3LVOd_hX0p7eJ-rPLgsW5UEA'; // 🔐 Remplace avec ta clé
-		$model = 'gpt-4'; // ou 'gpt-3.5-turbo'
+		$api_key = ''; 
+		$model = 'gpt-4'; 
 
 		   $input_text = "Voici les titres et paragraphes d’un site web.\n\n";
     $input_text .= "Ta tâche est de rédiger un résumé informatif en **deux paragraphes distincts**, séparés par une **ligne vide** (un simple saut de ligne).\n\n";
