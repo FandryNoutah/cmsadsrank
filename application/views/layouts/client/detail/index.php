@@ -147,7 +147,7 @@
 				</div>
 
 				<div class="d-flex justify-content-start align-items-center mb-2" id="star_rating">
-					<?php $noteClient = isset($note) ? $note : 0; ?>
+					<?php $noteClient = isset($noteClient) ? $noteClient : 0; ?>
 
 					<?php for ($i = 1; $i <= 5; $i++): ?>
 						<img
@@ -697,66 +697,67 @@
 					</table>
 				</div><br><br></br></br>
 
-				<h1 style="font-size: 48px;">Point Bilan</h1>
+				<h1 style="font-size: 48px;">Notes</h1>
 				</br>
 				<div class="row row-cols-3">
-					<div class="col">
-						<div class="card h-100">
-							<div class="card-body">
-								<div class="row justify-content-star">
-									<span class="col-auto mx-1 p-2 badge" style="background-color: #f7f7e8; color: #b1ab1d; font-size: 12px; font-weight: 500;">Weekly</span>
-									<span class="col-auto mx-1 p-2 badge" style="background-color: #edf2fe; color: #4976f4; font-size: 12px; font-weight: 500;">Product</span>
+					<?php foreach ($notes as $note): ?>
+
+						<div class="col mb-3">
+							<div class="card h-100">
+								<div class="card-body">
+									<div class="row">
+										<span class="col-auto mx-1 badge alert-warning">
+											<?= htmlspecialchars($note->type); ?>
+										</span>
+										<span class="col-auto mx-1 badge alert-primary">
+											<?= htmlspecialchars($note->status); ?>
+										</span>
+										<div class="col-auto dropdown no-arrow ml-auto">
+											<a href="javascript:void(0);" class="d-none text-decoration-none text-muted note-menu dropdown-toggle" role="button" data-toggle="dropdown" aria-expanded="false">
+												<i class="fa fa-ellipsis-h"></i>
+											</a>
+											<div class="dropdown-menu">
+												<button type="button" class="dropdown-item" data-toggle="modal" data-target="#detailModal" data-id="<?= $note->id; ?>">
+													<i class="fa fa-eye mr-2"></i>
+													Détails
+												</button>
+												<button type="button" class="dropdown-item" data-toggle="modal" data-target="#formModal" data-id="<?= $note->id; ?>">
+													<i class="fa fa-edit mr-2"></i>
+													Modifier
+												</button>
+												<div class="dropdown-divider"></div>
+												<a href="<?= base_url('Notes/delete/' . $note->id); ?>" class="dropdown-item text-danger" data-id="<?= $note->id; ?>">
+													<i class="fa fa-trash mr-2"></i>
+													Supprimer
+												</a>
+											</div>
+										</div>
+									</div>
+									<h6 class="my-3" style="font-size: 16px; font-weight: 500;">
+										<?= htmlspecialchars($note->title); ?>
+									</h6>
+									<p class="text-muted">
+										<?= nl2br(htmlspecialchars($note->content)); ?>
+									</p>
 								</div>
-								<br>
-								<h5 class="text-dark">Product Team Meeting</h5>
-								<br>
-								<p class="text-muted">
-									This monthly progress agenda is following this items:
+								<div class="card-footer d-flex bg-transparent">
 
-									Introduction to Newest Product Plan
+									<div class="d-flex align-items-center avatar-group">
+										<img src="<?= base_url(IMAGES_PATH . $this->ion_auth->user()->row()->photo_users); ?>" class="avatar rounded-circle" width="28" height="28" alt="Client Image">
+									</div>
 
-									Monthly Revenue updates for each products
-								</p>
+									<!-- <div class="d-flex align-items-center avatar-group">
+										<?php foreach ($note->assigned_users as $assigned_user): ?>
+											<img src="<?= base_url(IMAGES_PATH . $assigned_user->photo_users); ?>" class="avatar rounded-circle" width="28" height="28" alt="Client Image">
+										<?php endforeach; ?>
+									</div> -->
+
+									<span class="text-muted text-right text-nowrap ml-auto"><?= $note->date_due; ?></span>
+								</div>
 							</div>
 						</div>
-					</div>
-					<div class="col">
-						<div class="card h-100">
-							<div class="card-body">
-								<div class="row justify-content-star">
-									<span class="col-auto mx-1 p-2 badge" style="background-color: #f7f7e8; color: #b1ab1d; font-size: 12px; font-weight: 500;">Weekly</span>
-									<span class="col-auto mx-1 p-2 badge" style="background-color: #edf2fe; color: #4976f4; font-size: 12px; font-weight: 500;">Product</span>
-								</div>
-								<br>
-								<h5 class="text-dark">Product Team Meeting</h5>
-								<br>
-								<p class="text-muted">
-									This monthly progress agenda is following this items:
-
-									Introduction to Newest Product Plan
-
-									Monthly Revenue updates for each products
-								</p>
-							</div>
-						</div>
-					</div>
-					<div class="col">
-						<div class="card h-100">
-							<div class="card-body">
-								<div class="row justify-content-star">
-									<span class="col-auto mx-1 p-2 badge" style="background-color: #f7f7e8; color: #b1ab1d; font-size: 12px; font-weight: 500;">Weekly</span>
-									<span class="col-auto mx-1 p-2 badge" style="background-color: #edf2fe; color: #4976f4; font-size: 12px; font-weight: 500;">Product</span>
-								</div>
-								<br>
-								<br>
-								<br>
-								<button class="btn btn-light btn-block">
-									<i class="fa fa-plus"></i>
-									Create Task
-								</button>
-							</div>
-						</div>
-					</div>
+						
+					<?php endforeach; ?>
 				</div>
 			</div>
 		</div>
@@ -954,29 +955,6 @@
 		});
 	});
 </script>
-<?php $noteClient = isset($note) ? $note : 0; ?>
-
-<!-- <div class="d-flex justify-content-start align-items-center mb-3" id="star_rating">
-	<?php for ($i = 1; $i <= 5; $i++): ?>
-		<img
-			src="<?= base_url('assets/images/icons/figma/') . ($i <= $noteClient ? 'star_full.svg' : 'Empty_Star.svg') ?>"
-			alt="star"
-			width="20"
-			class="mr-1 star"
-			data-index="<?= $i ?>">
-	<?php endfor; ?>
-
-	<span class="ml-3 py-1 px-3 badge" style="background-color: #edf2fe; color: #4976f4; font-size: 12px; font-weight: 500;">
-		Bleu
-	</span>
-
-	<span id="selected-rating" class="ml-2 font-weight-bold text-primary">
-		<?= $noteClient > 0 ? $noteClient . '/5' : '' ?>
-	</span>
-</div> -->
-
-<!-- ID du client -->
-<input type="hidden" id="idclients" value="<?= $donnees[0]['idclients'] ?>">
 <script>
 	document.addEventListener("DOMContentLoaded", function() {
 		const stars = document.querySelectorAll("#star_rating .star");

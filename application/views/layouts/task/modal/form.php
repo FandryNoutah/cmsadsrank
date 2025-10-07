@@ -66,7 +66,6 @@
 						</div>
 					</div>
 
-
 					<div class="form-group">
 						<label for="tache">Tâches</label>
 						<textarea name="tache" id="tache" rows="2" class="form-control"></textarea>
