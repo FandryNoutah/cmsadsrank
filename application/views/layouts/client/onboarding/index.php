@@ -42,6 +42,31 @@
 		display: block;
 	}
 
+	.table-wrapper {
+		border-spacing: 0 15px !important;
+		border-collapse: separate !important;
+	}
+
+	.table-wrapper td,
+	.table-wrapper th {
+		vertical-align: middle;
+		border: border;
+		border-bottom: 1px solid #dee2e6 !important;
+	}
+
+	.table-wrapper tbody tr td:first-child,
+	.table-wrapper thead tr th:first-child {
+		border-left: 1px solid #dee2e6;
+		border-top-left-radius: 4px;
+		border-bottom-left-radius: 4px;
+	}
+
+	.table-wrapper tbody tr td:last-child,
+	.table-wrapper thead tr th:last-child {
+		border-right: 1px solid #dee2e6;
+		border-top-right-radius: 4px;
+		border-bottom-right-radius: 4px;
+	}
 </style>
 <?php end_section() ?>
 
@@ -172,7 +197,67 @@
 					</div>
 				</div>
 
-				<button class="btn btn-dark mt-5" id="create_camp_button">
+				<!-- BRIEF -->
+				<h1 class="display-1 text-center mt-4" style="font-size: 42px;">
+					Campagne
+				</h1>
+				<div class="table-responsive">
+					<table class="table table-hover table-wrapper">
+						<thead class="thead-light text-muted">
+							<tr>
+								<th>ID</th>
+								<th>Nom campagne</th>
+								<th>Client</th>
+								<th>Type</th>
+								<th>URL du site</th>
+								<th>Actif</th>
+								<th>Publication technique</th>
+							</tr>
+						</thead>
+						<tbody>
+							<?php if (!empty($campagnes)): ?>
+								<?php foreach ($campagnes as $campagne): ?>
+									<tr>
+										<td><?= $campagne['idcampagne']; ?></td>
+										<td><?= $campagne['nom_campagne']; ?></td>
+										<td><?= $campagne['idclients']; ?></td>
+										<td><?= $campagne['type_campagne']; ?></td>
+										<td>
+											<?php if (!empty($campagne['url_site'])): ?>
+												<a href="<?= $campagne['url_site']; ?>" target="_blank">
+													<?= $campagne['url_site']; ?>
+												</a>
+											<?php endif; ?>
+										</td>
+										<td>
+											<?php if ($campagne['actif'] == 1): ?>
+												<span class="badge badge-success">Active</span>
+											<?php else: ?>
+												<span class="badge badge-secondary">Inactive</span>
+											<?php endif; ?>
+										</td>
+										<td>
+											<?php if ($campagne['publier_techinque'] == 1): ?>
+												<span class="badge badge-info">Publiée</span>
+											<?php else: ?>
+												<span class="badge badge-warning">Non publiée</span>
+											<?php endif; ?>
+										</td>
+									</tr>
+								<?php endforeach; ?>
+							<?php else: ?>
+								<tr>
+									<td colspan="14" class="text-center text-muted">
+										Aucune campagne trouvée.
+									</td>
+								</tr>
+							<?php endif; ?>
+						</tbody>
+					</table>
+
+				</div>
+
+				<button class="btn btn-dark" id="create_camp_button">
 					<img src="<?= base_url('assets/images/icons/figma/icon-plus.svg') ?>" alt="">
 					Création Nouvelle Campagne
 				</button>
@@ -376,13 +461,13 @@
 		$('.next-button').click(function() {
 
 			let input = $(this).data('input');
-			let value = $('input[name="'+ input +'"]:checked').val();
+			let value = $('input[name="' + input + '"]:checked').val();
 
 			if (!value) {
-				$('input[name="'+ input +'"]').parents('.card').removeClass('border-dark');
-				$('input[name="'+ input +'"]').parents('.card').addClass('border-danger shadow');
+				$('input[name="' + input + '"]').parents('.card').removeClass('border-dark');
+				$('input[name="' + input + '"]').parents('.card').addClass('border-danger shadow');
 			} else {
-				$('input[name="'+ input +'"]').parents('.card').removeClass('border-danger');
+				$('input[name="' + input + '"]').parents('.card').removeClass('border-danger');
 				// $(this).parents('.step').removeClass('active');
 				$(this).parents('.step').next('.step').addClass('active');
 
@@ -390,9 +475,9 @@
 					scrollTop: $('.scroll-container')[0].scrollHeight
 				}, 1000);
 			}
-			
+
 		});
-		
+
 		$('#final_button').click(function() {
 
 			let conversion = $('input[name="conversion"]:checked').val();
@@ -402,8 +487,8 @@
 			if (!conversion || !camp_type) {
 				alert("Veuillez d'abord choisir les options précédentes!");
 			} else {
-				
-				let url = "<?= site_url('Client/campagne/'. $idclients); ?>?conversion="+ conversion +"&camp_type="+ camp_type +"&gtm="+ gtm;
+
+				let url = "<?= site_url('Client/campagne/' . $idclients); ?>?conversion=" + conversion + "&camp_type=" + camp_type + "&gtm=" + gtm;
 				window.location.href = url;
 			}
 		});
