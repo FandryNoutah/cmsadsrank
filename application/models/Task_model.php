@@ -395,10 +395,6 @@ class Task_model extends CI_Model
 		return $query->result();
 	}
 
-
-
-
-
 	public function get_all_tasks_by_idclients($id)
 	{
 		$this->db->select('tasks.*, users1.first_name as users1_first_name, users1.last_name as users1_last_name, users2.first_name as users2_first_name, users2.last_name as users2_last_name');
@@ -414,10 +410,6 @@ class Task_model extends CI_Model
 		$query = $this->db->get();
 		return $query->result();
 	}
-
-
-
-
 
 	// Fonction pour récupérer les tâches effectuées
 	public function get_completed_tasks()

@@ -1,4 +1,6 @@
 <?php start_section('stylesheet'); ?>
+<link href="<?= base_url('assets/vendors/select2/css/select2.min.css'); ?>" rel="stylesheet" />
+
 <style>
 	/* For modal attachment design */
 	.file-drop-area {
@@ -128,8 +130,11 @@ Notes
 
 <?php start_section('script'); ?>
 
+<script src="<?= base_url('assets/vendors/select2/js/select2.min.js'); ?>"></script>
 <script>
 	$(function() {
+
+		$('.select2').select2();
 
 		function resetDetail() {
 			$('#detail_discussion').html("");
