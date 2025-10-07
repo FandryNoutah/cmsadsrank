@@ -54,13 +54,13 @@
 
 			<div class="col">
 
-				<form action='<?= site_url('Client/ajout_campagne/'. $idclients) . "?conversion=$conversion&camp_type=$camp_type&gtm=$gtm" ?>' method="POST">
+				<form action='<?= site_url('Client/ajout_campagne/' . $idclients) . "?conversion=$conversion&camp_type=$camp_type&gtm=$gtm" ?>' method="POST">
 
 					<div class="container-fluid pt-4">
-	
+
 						<h5>Campagne Reseau de Recherche</h5>
 						<hr class="my-4">
-	
+
 						<div class="row align-items-center mb-4">
 							<div class="col-auto">
 								<img src="<?= base_url('assets/images/figma/discu_queue.png') ?>" class="img-thumbnail rounded-circle" width="64">
@@ -73,64 +73,60 @@
 								</button>
 							</div>
 						</div>
-	
+
+						<div class="form-group">
+							<label for="nom_campagne_search">Nom de la campagne</label>
+							<input type="text" class="form-control" name="nom_campagne_search" id="nom_campagne_search">
+						</div>
+
+						<div class="form-group">
+							<label for="information_campagne_search">Information de la campagne</label>
+							<textarea class="form-control" name="information_campagne_search" id="information_campagne_search"></textarea>
+						</div>
+						
 						<div class="form-group">
 							<label for="url_campagne">URL de la campagne</label>
 							<input type="text" class="form-control" name="url_campagne" id="url_campagne">
 						</div>
-	
+
 						<div class="form-group">
 							<label for="repartition_budget_search">Budget de la campagne</label>
 							<input type="text" class="form-control" name="repartition_budget_search" id="repartition_budget_search">
 						</div>
-	
+
 						<div class="custom-control custom-switch">
-							<input type="checkbox" class="custom-control-input" id="customSwitch1">
-							<label class="custom-control-label" for="customSwitch1">Souhaitez-vous créer plusieurs groupes d'annonces dans la campagne?</label>
+							<input type="checkbox" class="custom-control-input" id="multiple_groupe_annonce">
+							<label class="custom-control-label" for="multiple_groupe_annonce">Souhaitez-vous créer plusieurs groupes d'annonces dans la campagne?</label>
 						</div>
-	
+
 						<div id="groupe_annonce_container" class="mb-4 pt-4">
-							<div class="form-group">
-								<label>Groupe d'annonce 1</label>
-								<input type="text" class="form-control" name="groupe_annonce[]">
+
+							<div class="group-annonce-content original">
+								<div class="form-group">
+									<label>Groupe d'annonce 1</label>
+									<input type="text" class="form-control" name="groupe_annonce[]">
+								</div>
+
+								<div class="form-group">
+									<label>Saisir des mots-clés du groupe d'annonce</label>
+									<textarea name="Mot_cle[]" class="form-control" maxlength="50"></textarea>
+								</div>
 							</div>
-	
-							<div class="form-group">
-								<label>Saisir des mots-clés du groupe d'annonce</label>
-								<textarea name="Mot_cle[]" class="form-control" maxlength="50"></textarea>
-							</div>
-	
-							<div class="text-center mb-4">
-								<button type="button" class="btn btn-outline-dark btn-sm">
-									<i class="fa fa-plus"></i>
-									Nouveau groupe d'annonce
-								</button>
-							</div>
-	
-							<div class="form-group">
-								<label for="">Groupe d'annonce 1</label>
-								<input type="text" class="form-control">
-							</div>
-	
-							<div class="form-group">
-								<label for="">Saisir des mots-clés du groupe d'annonce</label>
-								<textarea name="" class="form-control" maxlength="50"></textarea>
-							</div>
-	
-							<div class="text-center mb-4">
-								<button type="button" class="btn btn-outline-dark btn-sm">
-									<i class="fa fa-plus"></i>
-									Nouveau groupe d'annonce
+
+							<div class="text-center d-none mb-4">
+								<button type="button" class="btn btn-outline-dark btn-sm" id="add_groupe_annonce">
+									<i class="fa fa-plus"></i> Nouveau groupe d'annonce
 								</button>
 							</div>
 						</div>
-	
+
+
 						<h5>Paramètres de la campagne</h5>
 						<div class="form-group">
 							<label for="zone_search">Zone géographique</label>
 							<input type="text" class="form-control" name="zone_search" id="zone_search">
 						</div>
-	
+
 						<div class="form-group">
 							<label for="">Langues</label>
 							<select name="" class="form-control">
@@ -138,7 +134,7 @@
 								<option value="">Lang 2</option>
 							</select>
 						</div>
-	
+
 						<div class="form-group">
 							<label for="">Cibles</label>
 							<select name="" class="form-control">
@@ -146,7 +142,7 @@
 								<option value="">Cible 2</option>
 							</select>
 						</div>
-	
+
 						<div class="form-group">
 							<label for="">Tranche d'âges</label>
 							<select name="" class="form-control">
@@ -154,7 +150,7 @@
 								<option value="">2</option>
 							</select>
 						</div>
-	
+
 						<div class="form-group">
 							<label for="">Audiences</label>
 							<select name="" class="form-control">
@@ -162,7 +158,7 @@
 								<option value="">Audience 2</option>
 							</select>
 						</div>
-	
+
 						<div class="container">
 							<div class="multi-col" style="height: 200px;">
 								<div class="custom-control custom-checkbox">
@@ -183,7 +179,7 @@
 								</div>
 							</div>
 						</div>
-	
+
 						<div class="form-group">
 							<label for="appareil_search">Appareil</label>
 							<select name="appareil_search" id="appareil_search" class="form-control">
@@ -191,9 +187,9 @@
 								<option value="">Appareil 2</option>
 							</select>
 						</div>
-	
+
 						<button type="button" class="btn btn-dark btn-sm btn-block mb-5">Suivant</button>
-	
+
 						<ul class="nav nav-tabs mb-3">
 							<li class="nav-item">
 								<a class="nav-link py-3 active" type="button">
@@ -201,7 +197,7 @@
 								</a>
 							</li>
 						</ul>
-	
+
 						<div class="card bg-light">
 							<div class="card-body">
 								<div class="multi-col" style="height: 550px;">
@@ -235,7 +231,7 @@
 								</div>
 							</div>
 						</div>
-	
+
 						<ul class="nav nav-tabs mb-3">
 							<li class="nav-item">
 								<a class="nav-link py-3 active" type="button">
@@ -243,7 +239,7 @@
 								</a>
 							</li>
 						</ul>
-	
+
 						<div class="card mb-4">
 							<div class="card-body">
 								<div class="row no-gutters">
@@ -268,10 +264,10 @@
 								</div>
 							</div>
 						</div>
-	
+
 						<div class="d-flex justify-content-between mb-5">
-							<button class="btn btn-outline-dark">Ajouter une nouvelle campagne</button>
-							<button class="btn btn-dark">Terminer</button>
+							<button type="reset" class="btn btn-outline-dark">Ajouter une nouvelle campagne</button>
+							<button type="submit" class="btn btn-dark">Terminer</button>
 						</div>
 					</div>
 				</form>
@@ -359,3 +355,42 @@
 	</div>
 <?php endforeach; ?>
 <?php end_section() ?>
+
+<?php start_section('script'); ?>
+<script>
+	$(function() {
+
+		$('#add_groupe_annonce').on('click', function() {
+			// Clone the original group
+			let $original = $('#groupe_annonce_container .original').first();
+			let $newGroup = $original.clone();
+
+			// Clear input values
+			$newGroup.find('input, textarea').val('');
+
+			// Count existing groups for labeling
+			let count = $('#groupe_annonce_container .group-annonce-content').length + 1;
+			$newGroup.find('label:first').text("Groupe d'annonce " + count);
+
+			// Add a remove button if not already there
+			$newGroup.append('<button type="button" class="btn btn-sm btn-danger remove_groupe_annonce mt-2">Supprimer</button>');
+			$newGroup.prepend('<hr>');
+
+			// Insert before the "Add" button
+			$newGroup.removeClass('original'); // So we know it’s not the first
+			$newGroup.insertBefore($('#groupe_annonce_container .text-center'));
+		});
+
+		// Remove only newly added groups
+		$(document).on('click', '.remove_groupe_annonce', function() {
+			$(this).closest('.group-annonce-content').remove();
+		});
+
+		$('#multiple_groupe_annonce').change(function() {
+
+			let checked = $(this).is(':checked');
+			$('#add_groupe_annonce').parent('.text-center').toggleClass('d-none', !checked);
+		});
+	});
+</script>
+<?php end_section(); ?>
