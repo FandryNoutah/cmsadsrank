@@ -19,6 +19,7 @@ class Notes extends MY_Controller
 	{
 
 		$notes = $this->Note_model->get_for_user($this->current_user->id);
+		$this->data['donnee'] = $this->visuels_model->getClientDataByDonnee();
 		$this->data['users'] = $this->Note_model->get_all_users();
 
 		foreach ($notes as $note) {
@@ -87,14 +88,16 @@ class Notes extends MY_Controller
 					return;
 				}
 			}
+
 			$noteData = [
-				'title'       => $this->input->post('title', TRUE),
-				'content'     => $this->input->post('content', TRUE),
-				'type'        => $this->input->post('type', TRUE),
-				'status'      => $this->input->post('status', TRUE),
-				'created_by'  => $this->current_user->id,
-				'date_due'    => $this->input->post('date_due', TRUE),
-				'fichier_nom'  => $fichier_nom,
+				'idclients'		=>	$this->input->post('idclients', TRUE),
+				'title'       	=>	$this->input->post('title', TRUE),
+				'content'     	=>	$this->input->post('content', TRUE),
+				'type'        	=>	$this->input->post('type', TRUE),
+				'status'      	=>	$this->input->post('status', TRUE),
+				'created_by'  	=>	$this->current_user->id,
+				'date_due'    	=>	$this->input->post('date_due', TRUE),
+				'fichier_nom'  	=>	$fichier_nom,
 			];
 			$assignedUsers = $this->input->post('assigned_to') ?? [];
 			$assignedUsers[] = $this->current_user->id;
