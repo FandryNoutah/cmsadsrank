@@ -19,8 +19,8 @@ class Client extends MY_Controller
 		$this->load->model("Image_model");
 		$this->load->model("Message_model");
 		$this->load->model("Task_model");
+		$this->load->model("Note_model");
 		$this->load->model("Gtm_model");
-		$this->load->model("Discussion_model");
 		$this->data['visuels'] = $this->visuels_model->get_all();
 		// $this->load->library('PHPExcel');
 		// $this->load->library('excel');
@@ -372,7 +372,7 @@ class Client extends MY_Controller
 	public function detail_client($idclients)
 	{
 
-		$this->data['note'] = $this->visuels_model->get_note_par_client($idclients);
+		$this->data['noteClient'] = $this->visuels_model->get_note_par_client($idclients);
 		$this->data['upsell'] = $this->visuels_model->getupsellbyidclient($idclients);
 		$this->data['budget_initial'] = $this->visuels_model->getdernierbyidclient($idclients);
 		$this->data['discussion'] = $this->Discussion_model->getdiscussionbyidclient($idclients);
@@ -381,35 +381,16 @@ class Client extends MY_Controller
 		$this->data['nbr_task'] = $t;
 		$this->data["users"] = $this->Task_model->get_all_users();
 		$clients = $this->data["donnees"] = $this->visuels_model->getDonneeById($idclients);
-		// dd($clients);
-		//$numero_client = $clients[0]['numero_client'];
-		//$numero_am = $clients[0]['am_phone'];
 
-		//$calls = $this->get_all_calls();
+		$notes = $this->Note_model->get_all_by_idclients($idclients);
+		foreach ($notes as $note) {
 
-		// Numéros à comparer (normalisés)
-		//$my_number = $numero_am;
-		//$client_number = $numero_client;
-		//$count = 0;
-		//$matched_calls = [];
-
-		// Parcours des appels
-		//foreach ($calls as $call) {
-		//$aircall_number = isset($call->number->digits) ? preg_replace('/\D/', '', $call->number->digits) : '';
-		//$external_number = isset($call->raw_digits) ? preg_replace('/\D/', '', $call->raw_digits) : '';
-
-		//if (
-		//($aircall_number === $my_number && $external_number === $client_number) ||
-		//($aircall_number === $client_number && $external_number === $my_number)
-		//) {
-		//$count++;
-		//$matched_calls[] = $call;
-		//}
-		//}
-
-		//$this->data["call_count"] = $count;
-		//$this->data['matched_calls'] = $matched_calls;
-
+			$id_note = $note->id;
+			$assigned_users = $this->Note_model->get_assigned_users($id_note);
+			$note->assigned_users = $assigned_users;
+		}
+		$this->data['notes'] = $notes;
+		
 		$latestByMonth = [];
 
 		$clientUpsells = $this->visuels_model->getupsell();
@@ -433,7 +414,10 @@ class Client extends MY_Controller
 
 	public function onboarding($idclients)
 	{
-		$this->data["donnees"] = $this->visuels_model->getDonneeById($idclients);
+
+		$this->data['idclients'] = $idclients;
+		$campagnes = $this->data["campagnes"] = $this->visuels_model->getCampagneByIdclient($idclients);
+
 		$this->content = "layouts/client/onboarding/index.php";
 		$this->layout();
 	}
@@ -448,7 +432,7 @@ class Client extends MY_Controller
 		];
 
 		$this->data['idclients'] = $idclients;
-		$this->data['camp_param'] = $this->input->get('camp_param');
+		$this->data['conversion'] = $this->input->get('conversion');
 		$this->data['camp_type'] = $camp_type = $this->input->get('camp_type');
 		$this->data['gtm'] = $this->input->get('gtm');
 		$this->data["donnees"] = $this->visuels_model->getDonneeById($idclients);
@@ -465,20 +449,20 @@ class Client extends MY_Controller
 
 			case 1:
 				// Inputs spécifiques
-				$nom_campagne          = $this->input->post('nom_campagne_search');
-				$information_campagne  = $this->input->post('information_campagne_search');
-				$zones                 = $this->input->post('zone_search');
-				$repartition_budget    = $this->input->post('repartition_budget_search');
-				$date_campagne         = $this->input->post('date_campagne');
-				$appareil              = $this->input->post('appareil_search');
-				$objectif              = $this->input->post('objectif');
-				$url_site              = $this->input->post('url_campagne');
-				$groupes_annonces      = $this->input->post('groupe_annonce');
-				$contexte_groupes      = $this->input->post('contexte_groupe_annonce');
-				$mots_cle              = $this->input->post('Mot_cle');
+				$nom_campagne          = $this->input->post('nom_campagne_search'); // not in view
+				$information_campagne  = $this->input->post('information_campagne_search'); // not in view
+				$zones                 = $this->input->post('zone_search'); // OK
+				$repartition_budget    = $this->input->post('repartition_budget_search'); // OK
+				$date_campagne         = $this->input->post('date_campagne'); // not in view
+				$appareil              = $this->input->post('appareil_search'); // OK
+				$objectif              = $this->input->post('objectif'); // not in view
+				$url_site              = $this->input->post('url_campagne'); // OK
+				$groupes_annonces      = $this->input->post('groupe_annonce'); // OK
+				$contexte_groupes      = $this->input->post('contexte_groupe_annonce'); // not in view
+				$mots_cle              = $this->input->post('Mot_cle'); // OK
 
 				// Vérification cohérence
-				if (count($groupes_annonces) == count($contexte_groupes) && count($groupes_annonces) == count($mots_cle)) {
+				if (/* count($groupes_annonces) == count($contexte_groupes) &&  */count($groupes_annonces) == count($mots_cle)) {
 
 					// Insert campagne
 					$idcampagne = $this->Donne_modele->insert_campagne_am(
@@ -499,13 +483,13 @@ class Client extends MY_Controller
 					$data_groups = [];
 					foreach ($groupes_annonces as $index => $groupe) {
 						$data_groups[] = [
-							'groupe_annonce'         => $groupe,
-							'contexte_groupe_annonce' => $contexte_groupes[$index] ?? '',
-							'mot_cle'                => $mots_cle[$index] ?? '',
-							'url_groupe_annonce'     => $url_site,
-							'idcampagne'             => $idcampagne,
-							'idclient'               => $idclients,
-							'camp_type'          => $camp_type
+							'groupe_annonce'         	=>	$groupe,
+							'contexte_groupe_annonce' 	=>	$contexte_groupes[$index] ?? '',
+							'mot_cle'                	=>	$mots_cle[$index] ?? '',
+							'url_groupe_annonce'     	=>	$url_site,
+							'idcampagne'             	=>	$idcampagne,
+							'idclient'               	=>	$idclients,
+							'camp_type'          		=>	$camp_type
 						];
 					}
 
@@ -642,7 +626,8 @@ class Client extends MY_Controller
 
 		// Bloc final commun
 		$this->session->set_flashdata('success', 'Campagne ajouter avec succès.');
-		redirect('Googleads/campagne/' . $idclients, 'refresh');
+		redirect('Client/onboarding/' . $idclients, 'refresh');
+
 		$this->layout();
 	}
 
