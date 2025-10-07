@@ -4,11 +4,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
 class Client extends MY_Controller
 {
 	private $api_url = 'https://api.aircall.io/v1/calls';
-<<<<<<< HEAD
 	private $api_auth = '';
-=======
-	private $api_auth = 'e69c2f6c77144ad053a54bf77088aa09:6ab56a32536bc017ed6b2adb619338e0';
->>>>>>> 4902006f3c9383b7f302706a508b91fcf7f9ac9c
 	protected $file_upload_field;
 
 
@@ -24,10 +20,7 @@ class Client extends MY_Controller
 		$this->load->model("Message_model");
 		$this->load->model("Task_model");
 		$this->load->model("Note_model");
-<<<<<<< HEAD
-		$this->load->model("Gtm_model");
-=======
->>>>>>> 4902006f3c9383b7f302706a508b91fcf7f9ac9c
+		//$this->load->model("Gtm_model");
 		$this->data['visuels'] = $this->visuels_model->get_all();
 		// $this->load->library('PHPExcel');
 		// $this->load->library('excel');
@@ -39,10 +32,7 @@ class Client extends MY_Controller
 		$this->load->library('upload');
 		$this->load->library('form_validation');
 		$this->form_validation->set_error_delimiters('<span class="error">', '</span>');
-<<<<<<< HEAD
-=======
 
->>>>>>> 4902006f3c9383b7f302706a508b91fcf7f9ac9c
 		$this->current_user = $this->ion_auth->user()->row();
 
 	}
@@ -58,7 +48,6 @@ class Client extends MY_Controller
 		$this->content = "layouts/client/index.php";
 		$this->layout();
 	}
-<<<<<<< HEAD
 	public function change_rappor_base()
 	{
 		$id = $this->input->post('idclients');
@@ -82,9 +71,6 @@ class Client extends MY_Controller
 		$this->visuels_model->change_bilan_annuele($id, $bilan_annuele);
 		redirect('Client/detail_client/' . $id);
 	}
-=======
-
->>>>>>> 4902006f3c9383b7f302706a508b91fcf7f9ac9c
 	public function relance()
 	{
 		$id = $this->input->post('idclients');
@@ -103,20 +89,12 @@ class Client extends MY_Controller
 			echo json_encode(['status' => 'error', 'message' => 'ID de couleur invalide']);
 			return;
 		}
-<<<<<<< HEAD
 		$this->visuels_model->update_color($idclients, $color_id);
-=======
-
-		$this->visuels_model->update_color($idclients, $color_id);
-
-		// Au lieu de redirect(), on retourne une URL dans la réponse
->>>>>>> 4902006f3c9383b7f302706a508b91fcf7f9ac9c
 		echo json_encode([
 			'status' => 'success',
 			'redirect_url' => base_url('Client/detail_client/' . $idclients)
 		]);
 	}
-<<<<<<< HEAD
 	public function date_google_meet()
 	{
 		$meetingDate = $this->input->post('meetingDate');
@@ -124,9 +102,6 @@ class Client extends MY_Controller
 		$this->visuels_model->change_meetingDate($idclients, $meetingDate);
 		redirect('Client/detail_client/' . $idclients);
 	}
-=======
-
->>>>>>> 4902006f3c9383b7f302706a508b91fcf7f9ac9c
 	public function upload_logo()
 	{
 		$idclients = $this->input->post('idclients');
@@ -280,7 +255,6 @@ class Client extends MY_Controller
 	{
 
 		$this->data["donnees"] = $this->visuels_model->getDonneeById($idclients);
-<<<<<<< HEAD
 		$this->data["gtm"] = $this->visuels_model->get_gtm($idclients);
 		$this->content = "layouts/client/detail/gtm/index.php";
 		$this->layout();
@@ -358,28 +332,11 @@ class Client extends MY_Controller
         echo json_encode($debug);
         return;
     }
-=======
-		$this->data['donnee'] = $this->visuels_model->getClientDataByDonnee();
-		$this->data['users'] = $this->Task_model->get_all_users();
-		$this->data['produit'] = $this->Donne_modele->get_all_produit();
-		$this->data['am'] = $this->Donne_modele->get_all_am();
-		$this->data['initiative'] = $this->Donne_modele->get_all_initiative();
-		$this->content = "layouts/client/detail/gtm/index.php";
-		$this->layout();
-	}
-
-	public function activer_processus_tache()
-	{
->>>>>>> 4902006f3c9383b7f302706a508b91fcf7f9ac9c
 		$type_tache = 3;
 		$title = "Demande de procédure GTM";
 		$description = "Activer le procédure GTM";
 		$Statuts_technique = 1;
 		$procedure_gtm = 1;
-<<<<<<< HEAD
-=======
-
->>>>>>> 4902006f3c9383b7f302706a508b91fcf7f9ac9c
 		$idclients = $this->input->post('idclients');
 		$am = $this->input->post('am');
 		$tm = $this->input->post('assigned_to');
@@ -400,7 +357,6 @@ class Client extends MY_Controller
 
 		$this->Task_model->add_task($data);
 
-<<<<<<< HEAD
 
 
 			$data_gtm = array(
@@ -411,9 +367,6 @@ class Client extends MY_Controller
 			);
 			$this->Gtm_model->add_gtm_process($data_gtm);
 
-=======
-		// Retourner une réponse JSON avec l’URL de redirection
->>>>>>> 4902006f3c9383b7f302706a508b91fcf7f9ac9c
 		echo json_encode(['redirect_url' => base_url('Client/application/' . $idclients)]);
 	}
 
@@ -423,10 +376,7 @@ class Client extends MY_Controller
 		$this->data['noteClient'] = $this->visuels_model->get_note_par_client($idclients);
 		$this->data['upsell'] = $this->visuels_model->getupsellbyidclient($idclients);
 		$this->data['budget_initial'] = $this->visuels_model->getdernierbyidclient($idclients);
-<<<<<<< HEAD
 		$this->data['discussion'] = $this->Discussion_model->getdiscussionbyidclient($idclients);
-=======
->>>>>>> 4902006f3c9383b7f302706a508b91fcf7f9ac9c
 		$t = $this->data['task'] = $this->Task_model->get_task_by_id_client($idclients);
 		$t = count($t);
 		$this->data['nbr_task'] = $t;
@@ -716,11 +666,7 @@ class Client extends MY_Controller
 			$idupsell = $this->visuels_model->create_upsell($type_upsell, $budget_finale, $budget_initiale, $demmande_upsell, $am, $tm, $date_upsell, $date_demande_upsell, $inforamtion_upsell, $statut_upsell, $idclients, $actif);
 			$type_tache = 5;
 			$title = "Upsell";
-<<<<<<< HEAD
 			$tache = "Le client fait une upsell de "  . number_format($budget_upsell, 0, ',', ' ') . " €";;
-=======
-			$tache = "Le client fait une upsell de "  . number_format($budget_finale, 0, ',', ' ') . " €";;
->>>>>>> 4902006f3c9383b7f302706a508b91fcf7f9ac9c
 			$Statuts_technique = 1;
 
 			$data = array(
@@ -846,10 +792,6 @@ class Client extends MY_Controller
 		$client = $this->input->post('client');
 		$email_client = $this->input->post('email_client');
 		$numero_client = $this->input->post('numero_client');
-<<<<<<< HEAD
-=======
-		$dejaclient = $this->input->post('dejaclient');
->>>>>>> 4902006f3c9383b7f302706a508b91fcf7f9ac9c
 		$budget = $this->input->post('budget');
 		$secteur_activite = $this->input->post('secteur_activite');
 		$product_choice = $this->input->post('product_choice');
@@ -858,15 +800,9 @@ class Client extends MY_Controller
 		$date_mis_en_place = $this->input->post('date_mis_en_place');
 		$date_brief = $this->input->post('date_brief');
 		$date_annonce = $this->input->post('date_annonce');
-<<<<<<< HEAD
 		$dejaclient = $this->input->post('dejaclient');
 		$logo = $this->file_upload_field = 'logo';
 		
-=======
-		$logo = $this->file_upload_field = 'logo';
-
-
->>>>>>> 4902006f3c9383b7f302706a508b91fcf7f9ac9c
 		$this->form_validation->set_rules('site_client', 'URL', 'required|trim');
 
 		if ($this->form_validation->run() == FALSE) {
@@ -935,13 +871,8 @@ class Client extends MY_Controller
 			'date_demande' => $date_mis_en_place,
 			'date_due' => $date_brief,
 			'idclients' => $idclient,
-<<<<<<< HEAD
 			'AM' => $initiative,
 			'assigned_to' => $am,
-=======
-			'AM' => $am,
-			'assigned_to' => $initiative,
->>>>>>> 4902006f3c9383b7f302706a508b91fcf7f9ac9c
 			'title' => $title,
 			'Statuts_technique' => $Statuts_technique,
 			'description' => $tache
@@ -967,11 +898,8 @@ class Client extends MY_Controller
 
 	private function get_summary_from_chatgpt($headings, $paragraphs)
 	{
-<<<<<<< HEAD
 		
-	$api_key = '***REMOVED***-KGXpO5Dmjtk3iBGWNYAxp_Jtm07qeTY7jCQx3wR7a06GWqgWMdJA1O-DqdSX1ZANFEBDF83TQXT3BlbkFJB6Grrdt1s68eRcq7Ry6lbzpKM4X5At0U_f6q_dS-Jc_j6H6ATB3LVOd_hX0p7eJ-rPLgsW5UEA'; 
-	$model = 'gpt-4'; 
-
+	
 	$input_text = "Voici les titres et paragraphes d’un site web.\n\n";
     $input_text .= "Ta tâche est de rédiger un résumé informatif en **deux paragraphes distincts**, séparés par une **ligne vide** (un simple saut de ligne).\n\n";
 
@@ -1033,45 +961,6 @@ class Client extends MY_Controller
 
     // Fallback si le texte généré n'a pas deux paragraphes distincts
     return $raw_output;
-=======
-		$api_key = '***REMOVED***-Il3DFS-ATHmSKydbqWGNqIZtuCsC2bD67DR5YhlXtsMAoe_tdMtjg_glXcnIhSb_qPVFz-z7y2T3BlbkFJUvVzia2NBnS5TagyZylJRG36YatVpkw27ZfVfhPB06yEiBeYLQDDfIFv3_oG2LClCuw8eNtTEA'; // 🔐 Remplace avec ta clé
-		$model = 'gpt-4'; // ou 'gpt-3.5-turbo'
-
-		$input_text = "Voici les titres et paragraphes d’un site web. Résume ce que fait ce site, son activité, son objectif ou secteur, en **deux paragraphes distincts, séparés par une ligne vide**.\n\n";
-		$input_text .= "Titres :\n";
-		foreach ($headings as $h) {
-			$input_text .= "- ({$h['tag']}) {$h['text']}\n";
-		}
-		$input_text .= "\nParagraphes :\n";
-		foreach (array_slice($paragraphs, 0, 10) as $p) {
-			$input_text .= "- $p\n";
-		}
-
-		$data = [
-			"model" => $model,
-			"messages" => [
-				["role" => "user", "content" => $input_text]
-			],
-			"temperature" => 0.7
-		];
-
-		$ch = curl_init('https://api.openai.com/v1/chat/completions');
-		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-		curl_setopt($ch, CURLOPT_HTTPHEADER, [
-			'Content-Type: application/json',
-			'Authorization: Bearer ' . $api_key
-		]);
-		curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
-
-		$response = curl_exec($ch);
-		if (curl_errno($ch)) {
-			return 'Erreur OpenAI : ' . curl_error($ch);
-		}
-
-		curl_close($ch);
-		$result = json_decode($response, true);
-		return $result['choices'][0]['message']['content'] ?? 'Résumé non disponible.';
->>>>>>> 4902006f3c9383b7f302706a508b91fcf7f9ac9c
 	}
 
 	// Fonction cURL pour récupérer le contenu HTML
