@@ -334,6 +334,8 @@ class Client extends MY_Controller
 	{
 
 		$this->data['idclients'] = $idclients;
+		$campagnes = $this->data["campagnes"] = $this->visuels_model->getCampagneByIdclient($idclients);
+
 		$this->content = "layouts/client/onboarding/index.php";
 		$this->layout();
 	}
@@ -348,7 +350,7 @@ class Client extends MY_Controller
 		];
 
 		$this->data['idclients'] = $idclients;
-		$this->data['camp_param'] = $this->input->get('camp_param');
+		$this->data['conversion'] = $this->input->get('conversion');
 		$this->data['camp_type'] = $camp_type = $this->input->get('camp_type');
 		$this->data['gtm'] = $this->input->get('gtm');
 		$this->data["donnees"] = $this->visuels_model->getDonneeById($idclients);
@@ -365,20 +367,20 @@ class Client extends MY_Controller
 
 			case 1:
 				// Inputs spécifiques
-				$nom_campagne          = $this->input->post('nom_campagne_search');
-				$information_campagne  = $this->input->post('information_campagne_search');
-				$zones                 = $this->input->post('zone_search');
-				$repartition_budget    = $this->input->post('repartition_budget_search');
-				$date_campagne         = $this->input->post('date_campagne');
-				$appareil              = $this->input->post('appareil_search');
-				$objectif              = $this->input->post('objectif');
-				$url_site              = $this->input->post('url_campagne');
-				$groupes_annonces      = $this->input->post('groupe_annonce');
-				$contexte_groupes      = $this->input->post('contexte_groupe_annonce');
-				$mots_cle              = $this->input->post('Mot_cle');
+				$nom_campagne          = $this->input->post('nom_campagne_search'); // not in view
+				$information_campagne  = $this->input->post('information_campagne_search'); // not in view
+				$zones                 = $this->input->post('zone_search'); // OK
+				$repartition_budget    = $this->input->post('repartition_budget_search'); // OK
+				$date_campagne         = $this->input->post('date_campagne'); // not in view
+				$appareil              = $this->input->post('appareil_search'); // OK
+				$objectif              = $this->input->post('objectif'); // not in view
+				$url_site              = $this->input->post('url_campagne'); // OK
+				$groupes_annonces      = $this->input->post('groupe_annonce'); // OK
+				$contexte_groupes      = $this->input->post('contexte_groupe_annonce'); // not in view
+				$mots_cle              = $this->input->post('Mot_cle'); // OK
 
 				// Vérification cohérence
-				if (count($groupes_annonces) == count($contexte_groupes) && count($groupes_annonces) == count($mots_cle)) {
+				if (/* count($groupes_annonces) == count($contexte_groupes) &&  */count($groupes_annonces) == count($mots_cle)) {
 
 					// Insert campagne
 					$idcampagne = $this->Donne_modele->insert_campagne_am(
@@ -399,13 +401,13 @@ class Client extends MY_Controller
 					$data_groups = [];
 					foreach ($groupes_annonces as $index => $groupe) {
 						$data_groups[] = [
-							'groupe_annonce'         => $groupe,
-							'contexte_groupe_annonce' => $contexte_groupes[$index] ?? '',
-							'mot_cle'                => $mots_cle[$index] ?? '',
-							'url_groupe_annonce'     => $url_site,
-							'idcampagne'             => $idcampagne,
-							'idclient'               => $idclients,
-							'camp_type'          => $camp_type
+							'groupe_annonce'         	=>	$groupe,
+							'contexte_groupe_annonce' 	=>	$contexte_groupes[$index] ?? '',
+							'mot_cle'                	=>	$mots_cle[$index] ?? '',
+							'url_groupe_annonce'     	=>	$url_site,
+							'idcampagne'             	=>	$idcampagne,
+							'idclient'               	=>	$idclients,
+							'camp_type'          		=>	$camp_type
 						];
 					}
 
@@ -542,7 +544,8 @@ class Client extends MY_Controller
 
 		// Bloc final commun
 		$this->session->set_flashdata('success', 'Campagne ajouter avec succès.');
-		redirect('Googleads/campagne/' . $idclients, 'refresh');
+		redirect('Client/onboarding/' . $idclients, 'refresh');
+
 		$this->layout();
 	}
 
