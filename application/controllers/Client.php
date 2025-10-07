@@ -19,6 +19,7 @@ class Client extends MY_Controller
 		$this->load->model("Image_model");
 		$this->load->model("Message_model");
 		$this->load->model("Task_model");
+		$this->load->model("Note_model");
 		$this->data['visuels'] = $this->visuels_model->get_all();
 		// $this->load->library('PHPExcel');
 		// $this->load->library('excel');
@@ -272,7 +273,7 @@ class Client extends MY_Controller
 	public function detail_client($idclients)
 	{
 
-		$this->data['note'] = $this->visuels_model->get_note_par_client($idclients);
+		$this->data['noteClient'] = $this->visuels_model->get_note_par_client($idclients);
 		$this->data['upsell'] = $this->visuels_model->getupsellbyidclient($idclients);
 		$this->data['budget_initial'] = $this->visuels_model->getdernierbyidclient($idclients);
 		$t = $this->data['task'] = $this->Task_model->get_task_by_id_client($idclients);
@@ -280,35 +281,16 @@ class Client extends MY_Controller
 		$this->data['nbr_task'] = $t;
 		$this->data["users"] = $this->Task_model->get_all_users();
 		$clients = $this->data["donnees"] = $this->visuels_model->getDonneeById($idclients);
-		// dd($clients);
-		//$numero_client = $clients[0]['numero_client'];
-		//$numero_am = $clients[0]['am_phone'];
 
-		//$calls = $this->get_all_calls();
+		$notes = $this->Note_model->get_all_by_idclients($idclients);
+		foreach ($notes as $note) {
 
-		// Numéros à comparer (normalisés)
-		//$my_number = $numero_am;
-		//$client_number = $numero_client;
-		//$count = 0;
-		//$matched_calls = [];
-
-		// Parcours des appels
-		//foreach ($calls as $call) {
-		//$aircall_number = isset($call->number->digits) ? preg_replace('/\D/', '', $call->number->digits) : '';
-		//$external_number = isset($call->raw_digits) ? preg_replace('/\D/', '', $call->raw_digits) : '';
-
-		//if (
-		//($aircall_number === $my_number && $external_number === $client_number) ||
-		//($aircall_number === $client_number && $external_number === $my_number)
-		//) {
-		//$count++;
-		//$matched_calls[] = $call;
-		//}
-		//}
-
-		//$this->data["call_count"] = $count;
-		//$this->data['matched_calls'] = $matched_calls;
-
+			$id_note = $note->id;
+			$assigned_users = $this->Note_model->get_assigned_users($id_note);
+			$note->assigned_users = $assigned_users;
+		}
+		$this->data['notes'] = $notes;
+		
 		$latestByMonth = [];
 
 		$clientUpsells = $this->visuels_model->getupsell();
