@@ -1,4 +1,4 @@
-<div class="modal fade" id="formModal" tabindex="-1" aria-labelledby="formModalLabel" aria-hidden="true">
+<div class="modal fade" id="formModal" aria-labelledby="formModalLabel" aria-hidden="true">
 	<form action="<?= site_url('notes/create') ?>" method="POST" id="note_form" enctype="multipart/form-data">
 
 		<div class="modal-dialog modal-dialog-scrollable">
@@ -34,6 +34,17 @@
 					<div class="form-group">
 						<label for="note_title">Titre du note</label>
 						<input type="text" name="title" id="note_title" class="form-control" placeholder="Entrer le titre du note">
+					</div>
+
+					<div class="form-group">
+						<label for="task_title">Client</label>
+						<select name="idclients" id="idclients" class="select2" style="width: 100%; padding: 12px 16px;">
+							<?php foreach ($donnee as $d): ?>
+								<option value="<?php echo $d->idclients; ?>" data-budget="<?php echo $d->budget; ?>">
+									<?php echo htmlspecialchars($d->nom_client); ?>
+								</option>
+							<?php endforeach; ?>
+						</select>
 					</div>
 
 					<div class="form-row">
