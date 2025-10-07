@@ -19,6 +19,7 @@ class Client extends MY_Controller
 		$this->load->model("Image_model");
 		$this->load->model("Message_model");
 		$this->load->model("Task_model");
+		$this->load->model("Gtm_model");
 		$this->load->model("Discussion_model");
 		$this->data['visuels'] = $this->visuels_model->get_all();
 		// $this->load->library('PHPExcel');
@@ -31,7 +32,6 @@ class Client extends MY_Controller
 		$this->load->library('upload');
 		$this->load->library('form_validation');
 		$this->form_validation->set_error_delimiters('<span class="error">', '</span>');
-
 		$this->current_user = $this->ion_auth->user()->row();
 
 	}
@@ -46,6 +46,29 @@ class Client extends MY_Controller
 
 		$this->content = "layouts/client/index.php";
 		$this->layout();
+	}
+	public function change_rappor_base()
+	{
+		$id = $this->input->post('idclients');
+		$rapport_base = $this->input->post('rapport_base');
+		$this->visuels_model->change_rapport_base($id, $rapport_base);
+		redirect('Client/detail_client/' . $id);
+	}
+
+
+	public function change_conversions()
+	{
+		$id = $this->input->post('idclients');
+		$rapport_conversion = $this->input->post('rapport_conversion');
+		$this->visuels_model->change_rapport_conversion($id, $rapport_conversion);
+		redirect('Client/detail_client/' . $id);
+	}
+	public function change_bilan_annuelle()
+	{
+		$id = $this->input->post('idclients');
+		$bilan_annuele = $this->input->post('bilan_annuele');
+		$this->visuels_model->change_bilan_annuele($id, $bilan_annuele);
+		redirect('Client/detail_client/' . $id);
 	}
 	public function relance()
 	{
@@ -231,14 +254,35 @@ class Client extends MY_Controller
 	{
 
 		$this->data["donnees"] = $this->visuels_model->getDonneeById($idclients);
-		$this->data['donnee'] = $this->visuels_model->getClientDataByDonnee();
-		$this->data['users'] = $this->Task_model->get_all_users();
-		$this->data['produit'] = $this->Donne_modele->get_all_produit();
-		$this->data['am'] = $this->Donne_modele->get_all_am();
-		$this->data['initiative'] = $this->Donne_modele->get_all_initiative();
+		$this->data["gtm"] = $this->visuels_model->get_gtm($idclients);
 		$this->content = "layouts/client/detail/gtm/index.php";
 		$this->layout();
 	}
+	public function get_gtm_by_id($id)
+	{
+		$data = $this->Gtm_model->get_by_id($id);
+		echo json_encode($data);
+	}
+	public function update_gtm()
+	{
+		$id = $this->input->post('id_gtm');
+		$idclients = $this->input->post('idclients');
+		var_dump($idclients);
+		die();
+		$data = [
+			'date_demande'      => $this->input->post('date_demande'),
+			'invitation_reçu'   => $this->input->post('invitation_reçu'),
+			'gtm'               => $this->input->post('gtm'),
+			'statut'            => $this->input->post('statut'),
+		];
+
+		$this->Gtm_model->update($id, $data);
+
+		redirect('Client/gtm/' . $idclients); 
+	}
+
+
+
 	public function updateDonneeClient()
 {
 	$idclient = $this->input->post('idclient');
@@ -311,6 +355,17 @@ class Client extends MY_Controller
 		);
 
 		$this->Task_model->add_task($data);
+
+
+
+			$data_gtm = array(
+				'idclients' => $idclients,
+				'am' => $am,
+				'tm' => $tm,
+				'date_demande' => $date
+			);
+			$this->Gtm_model->add_gtm_process($data_gtm);
+
 		echo json_encode(['redirect_url' => base_url('Client/application/' . $idclients)]);
 	}
 
@@ -858,7 +913,8 @@ class Client extends MY_Controller
 	private function get_summary_from_chatgpt($headings, $paragraphs)
 	{
 		
-		$api_key = getenv('OPENAI_API_KEY');
+	$api_key = '***REMOVED***-KGXpO5Dmjtk3iBGWNYAxp_Jtm07qeTY7jCQx3wR7a06GWqgWMdJA1O-DqdSX1ZANFEBDF83TQXT3BlbkFJB6Grrdt1s68eRcq7Ry6lbzpKM4X5At0U_f6q_dS-Jc_j6H6ATB3LVOd_hX0p7eJ-rPLgsW5UEA'; 
+	$model = 'gpt-4'; 
 
 	$input_text = "Voici les titres et paragraphes d’un site web.\n\n";
     $input_text .= "Ta tâche est de rédiger un résumé informatif en **deux paragraphes distincts**, séparés par une **ligne vide** (un simple saut de ligne).\n\n";
