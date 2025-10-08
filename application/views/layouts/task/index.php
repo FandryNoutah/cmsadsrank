@@ -83,7 +83,7 @@
 <?php end_section(); ?>
 
 <?php start_section('page_title'); ?>
-Task
+<h1 class="h4">Task</h1>
 <?php end_section(); ?>
 
 <?php start_section('page_heading'); ?>
