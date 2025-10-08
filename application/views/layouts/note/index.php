@@ -27,7 +27,7 @@
 <?php end_section(); ?>
 
 <?php start_section('page_title'); ?>
-Notes
+<h1 class="h4">Notes</h1>
 <?php end_section(); ?>
 
 <?php start_section('page_heading'); ?>

@@ -29,7 +29,7 @@
 <?php end_section(); ?>
 
 <?php start_section('page_title'); ?>
-Upsell / Baisse
+<h1 class="h4">Upsell / Baisse</h1>
 <?php end_section(); ?>
 
 <?php start_section('page_heading'); ?>
