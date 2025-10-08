@@ -71,7 +71,7 @@
 <?php end_section(); ?>
 
 <?php start_section('page_title'); ?>
-Client
+<h1 class="h4">Client</h1>
 <?php end_section(); ?>
 
 <?php start_section('page_heading'); ?>
