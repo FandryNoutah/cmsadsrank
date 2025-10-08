@@ -64,7 +64,7 @@
 
 					<?php if (isset($content) && $content != ""): ?>
 						<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center mb-3 px-3 pt-1 border-bottom">
-							<h1 class="h4"><?= $page_title ?></h1>
+							<?= $page_title ?>
 							<?= $page_heading ?>
 						</div>
 

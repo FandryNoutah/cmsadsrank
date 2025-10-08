@@ -1,9 +1,36 @@
-<!-- views/layouts/conges/liste.php -->
-
 <?php start_section('stylesheet'); ?>
-<style>
-/* tes styles ici pour le tableau etc */
-</style>
+	<style>
+		.table-wrapper {
+			border-spacing: 0 15px !important;
+			border-collapse: separate !important;
+		}
+
+		.table-wrapper td,
+		.table-wrapper th {
+			vertical-align: middle;
+			border: border;
+			border-bottom: 1px solid #dee2e6 !important;
+			padding: 14px !important;
+		}
+
+		.table-wrapper tbody tr td:first-child,
+		.table-wrapper thead tr th:first-child {
+			border-left: 1px solid #dee2e6;
+			border-top-left-radius: 4px;
+			border-bottom-left-radius: 4px;
+		}
+
+		.table-wrapper tbody tr td:last-child,
+		.table-wrapper thead tr th:last-child {
+			border-right: 1px solid #dee2e6;
+			border-top-right-radius: 4px;
+			border-bottom-right-radius: 4px;
+		}
+	</style>
+<?php end_section(); ?>
+
+<?php start_section('page_title'); ?>
+	<h1 class="h4 py-2">Liste des demandes de congé</h1>
 <?php end_section(); ?>
 
 <?php start_section('page_heading'); ?>
@@ -198,43 +225,43 @@
 
 <!-- Modal de validation -->
 <div class="modal fade" id="validationModal" tabindex="-1" role="dialog" aria-labelledby="validationModalLabel" aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <form id="validationForm" method="post" action="">
-        <div class="modal-header">
-          <h5 class="modal-title" id="validationModalLabel">Validation de la demande</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Fermer">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-        <div class="modal-body">
-          <!-- Voici où on affiche le nom du demandeur -->
-          <p><strong>Demandeur :</strong> <span id="val_nom_demandeur">--</span></p>
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<form id="validationForm" method="post" action="">
+				<div class="modal-header">
+					<h5 class="modal-title" id="validationModalLabel">Validation de la demande</h5>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Fermer">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body">
+					<!-- Voici où on affiche le nom du demandeur -->
+					<p><strong>Demandeur :</strong> <span id="val_nom_demandeur">--</span></p>
 
-          <p><strong>Date :</strong> <span id="val_date_debut">--</span> au <span id="val_date_fin">--</span></p>
-          <p><strong>Nbr de jours :</strong> <span id="nbr_jour"></span> Jours</p>
-          <p><strong>Motif :</strong> <span id="val_motif">--</span></p>
+					<p><strong>Date :</strong> <span id="val_date_debut">--</span> au <span id="val_date_fin">--</span></p>
+					<p><strong>Nbr de jours :</strong> <span id="nbr_jour"></span> Jours</p>
+					<p><strong>Motif :</strong> <span id="val_motif">--</span></p>
 
-          <div class="form-group">
-            <label>Statut :</label>
-            <select name="etat" class="form-control" required>
-              <option value="en_attente">En attente</option>
-              <option value="valide">Validé</option>
-              <option value="refuse">Refusé</option>
-            </select>
-          </div>
-          <div class="form-group">
-            <label>Commentaire :</label>
-            <textarea name="commentaire" class="form-control" rows="3"></textarea>
-          </div>
-        </div>
-        <div class="modal-footer">
-          <button type="submit" class="btn btn-primary">Mettre à jour</button>
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Annuler</button>
-        </div>
-      </form>
-    </div>
-  </div>
+					<div class="form-group">
+						<label>Statut :</label>
+						<select name="etat" class="form-control" required>
+							<option value="en_attente">En attente</option>
+							<option value="valide">Validé</option>
+							<option value="refuse">Refusé</option>
+						</select>
+					</div>
+					<div class="form-group">
+						<label>Commentaire :</label>
+						<textarea name="commentaire" class="form-control" rows="3"></textarea>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<button type="submit" class="btn btn-primary">Mettre à jour</button>
+					<button type="button" class="btn btn-secondary" data-dismiss="modal">Annuler</button>
+				</div>
+			</form>
+		</div>
+	</div>
 </div>
 <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered modal-lg">
@@ -308,16 +335,16 @@ $(document).ready(function(){
     var etat = button.data('etat');
     var commentaire = button.data('commentaire');
 
-    var modal = $(this);
-    modal.find('#validationForm').attr('action', '<?= site_url('conges/valider/') ?>' + id);
-    modal.find('#val_nom_demandeur').text(nom);
-    modal.find('#val_date_debut').text(date_debut);
-    modal.find('#val_date_fin').text(date_fin);
-    modal.find('#nbr_jour').text(nbr_jour);
-    modal.find('#val_motif').text(motif);
-    modal.find('select[name="etat"]').val(etat);
-    modal.find('textarea[name="commentaire"]').val(commentaire);
-  });
-});
+			var modal = $(this);
+			modal.find('#validationForm').attr('action', '<?= site_url('conges/valider/') ?>' + id);
+			modal.find('#val_nom_demandeur').text(nom);
+			modal.find('#val_date_debut').text(date_debut);
+			modal.find('#val_date_fin').text(date_fin);
+			modal.find('#nbr_jour').text(nbr_jour);
+			modal.find('#val_motif').text(motif);
+			modal.find('select[name="etat"]').val(etat);
+			modal.find('textarea[name="commentaire"]').val(commentaire);
+		});
+	});
 </script>
 <?php end_section(); ?>
