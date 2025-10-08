@@ -1,5 +1,5 @@
 <?php start_section('page_title'); ?>
-Discussion
+<h1 class="h4 py-2">Discussion</h1>
 <?php end_section(); ?>
 
 <?php start_section('content'); ?>
