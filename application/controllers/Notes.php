@@ -60,7 +60,7 @@ class Notes extends MY_Controller
 		]);
 	}
 
-	public function create()
+	public function create($idclients = null)
 	{
 		if ($this->input->method() === 'post') {
 			$this->load->library('upload');
@@ -90,7 +90,7 @@ class Notes extends MY_Controller
 			}
 
 			$noteData = [
-				'idclients'		=>	$this->input->post('idclients', TRUE),
+				'idclients'		=>	$idclients = $idclients ?? $this->input->post('idclients', TRUE) ?? null,
 				'title'       	=>	$this->input->post('title', TRUE),
 				'content'     	=>	$this->input->post('content', TRUE),
 				'type'        	=>	$this->input->post('type', TRUE),
@@ -103,7 +103,11 @@ class Notes extends MY_Controller
 			$assignedUsers[] = $this->current_user->id;
 
 			$this->Note_model->create($noteData, $assignedUsers);
-			redirect('notes');
+			if ($idclients != null) {
+				redirect('Client/detail_client/'. $idclients);
+			} else {
+				redirect('Notes');
+			}
 		}
 
 		$data['users'] = $this->Note_model->get_all_users();

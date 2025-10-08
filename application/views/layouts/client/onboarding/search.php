@@ -53,9 +53,7 @@
 			</nav>
 
 			<div class="col">
-
 				<form action='<?= site_url('Client/ajout_campagne/' . $idclients) . "?conversion=$conversion&camp_type=$camp_type&gtm=$gtm" ?>' method="POST">
-
 					<div class="container-fluid pt-4">
 
 						<h5>Campagne Reseau de Recherche</h5>
@@ -86,12 +84,12 @@
 						
 						<div class="form-group">
 							<label for="url_campagne">URL de la campagne</label>
-							<input type="text" class="form-control" name="url_campagne" id="url_campagne">
+							<input type="url" class="form-control" name="url_campagne" id="url_campagne">
 						</div>
 
 						<div class="form-group">
 							<label for="repartition_budget_search">Budget de la campagne</label>
-							<input type="text" class="form-control" name="repartition_budget_search" id="repartition_budget_search">
+							<input type="number" class="form-control" name="repartition_budget_search" id="repartition_budget_search">
 						</div>
 
 						<div class="custom-control custom-switch">

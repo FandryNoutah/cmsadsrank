@@ -56,7 +56,7 @@
 				<form action='<?= site_url('Client/ajout_campagne/' . $idclients) . "?conversion=$conversion&camp_type=$camp_type&gtm=$gtm" ?>' method="POST">
 					<div class="container-fluid pt-4">
 
-						<h5>Campagne Pmax</h5>
+						<h5>Campagne Performance Maximum</h5>
 						<hr class="my-4">
 
 						<div class="row align-items-center mb-4">
@@ -73,13 +73,23 @@
 						</div>
 
 						<div class="form-group">
+							<label for="nom_campagne_pmax">Nom de la campagne</label>
+							<input type="text" class="form-control" name="nom_campagne_pmax" id="nom_campagne_pmax">
+						</div>
+
+						<div class="form-group">
+							<label for="information_campagne_pmax">Information de la campagne</label>
+							<textarea class="form-control" name="information_campagne_pmax" id="information_campagne_pmax"></textarea>
+						</div>
+
+						<div class="form-group">
 							<label for="url_campagne_pmax">URL de la campagne</label>
-							<input type="text" class="form-control" name="url_campagne_pmax" id="url_campagne_pmax">
+							<input type="url" class="form-control" name="url_campagne_pmax" id="url_campagne_pmax">
 						</div>
 
 						<div class="form-group">
 							<label for="repartition_budget_pmax">Budget de la campagne</label>
-							<input type="text" class="form-control" name="repartition_budget_pmax" id="repartition_budget_pmax">
+							<input type="number" class="form-control" name="repartition_budget_pmax" id="repartition_budget_pmax">
 						</div>
 
 						<div class="form-group">
@@ -94,8 +104,8 @@
 
 						<h5>Paramètres de la campagne</h5>
 						<div class="form-group">
-							<label for="">Zone géographique</label>
-							<input type="text" class="form-control">
+							<label for="zone_pmax">Zone géographique</label>
+							<input type="text" class="form-control" name="zone_pmax" id="zone_pmax">
 						</div>
 
 						<div class="form-group">
@@ -188,8 +198,8 @@
 						</div>
 
 						<div class="form-group">
-							<label for="">Appareil</label>
-							<select name="" id="" class="form-control">
+							<label for="appareil_pmax">Appareil</label>
+							<select name="appareil_pmax" id="appareil_pmax" class="form-control">
 								<option value="">Appareil 1</option>
 								<option value="">Appareil 2</option>
 							</select>
@@ -273,8 +283,8 @@
 						</div>
 
 						<div class="d-flex justify-content-between mb-5">
-							<button class="btn btn-outline-dark">Ajouter une nouvelle campagne</button>
-							<button class="btn btn-dark">Terminer</button>
+							<button class="btn btn-outline-dark" type="reset">Ajouter une nouvelle campagne</button>
+							<button class="btn btn-dark" type="submit">Terminer</button>
 						</div>
 					</div>
 				</form>

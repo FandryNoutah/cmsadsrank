@@ -436,14 +436,14 @@ class Client extends MY_Controller
 			case 3:
 				// Inputs spécifiques
 				$nom_campagne          = $this->input->post('nom_campagne_pmax');
-				$nom_groupe_pmax       = $this->input->post('nom_groupe_pmax');
 				$information_campagne  = $this->input->post('information_campagne_pmax');
-				$zones                 = $this->input->post('zone_pmax');
+				$url_site              = $this->input->post('url_campagne_pmax');
 				$repartition_budget    = $this->input->post('repartition_budget_pmax');
+				$zones                 = $this->input->post('zone_pmax');
+				$nom_groupe_pmax       = $this->input->post('nom_groupe_pmax');
 				$date_campagne         = $this->input->post('date_campagne_pmax');
 				$appareil              = $this->input->post('appareil_pmax');
 				$objectif              = $this->input->post('objectif_pmax');
-				$url_site              = $this->input->post('url_campagne_pmax');
 				$Mots_cle_potentiels   = $this->input->post('Mot_cle_pmax');
 				$information_client    = $this->input->post('information_client_pmax');
 				$contextes_client      = $this->input->post('contextes_client_pmax');
