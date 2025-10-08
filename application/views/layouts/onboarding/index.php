@@ -52,7 +52,7 @@
 <?php end_section(); ?>
 
 <?php start_section('page_title'); ?>
-Onboarding
+<h1 class="h4 py-2">Onboarding</h1>
 <?php end_section(); ?>
 <?php start_section('page_heading'); ?><?php end_section(); ?>
 
