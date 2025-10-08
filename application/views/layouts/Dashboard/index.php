@@ -101,9 +101,7 @@
 <?php end_section(); ?>
 
 <?php start_section('page_title'); ?>
-<p class="my-2">
-	Dashboard
-</p>
+<h1 class="h4 py-2">Dashboard</h1>
 <?php end_section(); ?>
 
 <?php start_section('content'); ?>

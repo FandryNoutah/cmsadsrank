@@ -27,6 +27,29 @@
 		border-top-right-radius: 4px;
 		border-bottom-right-radius: 4px;
 	} */
+
+	/* For modal attachment design */
+	.file-drop-area {
+		border: 2px dashed #ccc;
+		border-radius: 8px;
+		padding: 30px;
+		text-align: center;
+		cursor: pointer;
+		transition: border-color 0.3s;
+	}
+
+	.file-drop-area.dragover {
+		border-color: #0d6efd;
+		/* bootstrap primary */
+		background: #f8f9fa;
+	}
+
+	.file-drop-icon {
+		font-size: 40px;
+		color: #6c757d;
+		margin-bottom: 10px;
+	}
+
 </style>
 <?php end_section(); ?>
 
@@ -881,6 +904,17 @@
 						</div>
 						
 					<?php endforeach; ?>
+
+					<div class="col mb-3">
+						<div class="card h-100">
+							<div class="card-body d-flex align-items-center">
+								<button class="btn btn-light btn-block btn-sm" type="button" data-toggle="modal" data-target="#noteModal">
+									<i class="fa fa-plus"></i>
+									Nouvelle Note
+								</button>
+							</div>
+						</div>
+					</div>
 				</div>
 			</div>
 		</div>
@@ -890,6 +924,7 @@
 	<?php $this->load->view('layouts/client/detail/modal/edit', ['d' => $d]); ?>
 	<?php $this->load->view('layouts/client/detail/modal/status'); ?>
 	<?php $this->load->view('layouts/client/detail/modal/task'); ?>
+	<?php $this->load->view('layouts/client/detail/modal/note', ['d' => $d]); ?>
 
 <?php endforeach; ?>
 
@@ -1075,6 +1110,10 @@
 					fetch_task(task_id);
 				}
 			});
+		});
+
+		$('#users_dd_menu').on('click', function(event) {
+			event.stopPropagation();
 		});
 	});
 </script>

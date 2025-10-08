@@ -3,9 +3,7 @@
 <?php end_section(); ?>
 
 <?php start_section('page_title'); ?>
-<p class="my-2">
-	Edit utilisateur
-</p>
+<h1 class="h4 py-2">Edit utilisateur</h1>
 <?php end_section(); ?>
 
 <?php start_section('content'); ?>
