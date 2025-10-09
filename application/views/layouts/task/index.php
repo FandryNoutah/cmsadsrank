@@ -184,7 +184,12 @@ Task
 									</td>
 									<td>
 										<span class="text-muted">
-											<?= $t->title; ?>
+											<?= $t->title; ?>  
+											<?php if ($t->type_tache == 5 || $t->type_tache == 6): 
+												$Budget = $t->budgets - $t->budget_initiale;	
+											?>
+												de <?= $Budget; ?> €
+											<?php endif; ?>
 										</span>
 									</td>
 									<td>
@@ -306,7 +311,7 @@ Task
 				<p class="mb-0">
 					<i class="fa fa-chevron-up toggle-icon mr-2"></i>
 					<i class="fa fa-circle text-primary" style="font-size: 10px;"></i>
-					<span class="h5 mx-2 w-auto">En Cours</span>
+					<span class="h5 mx-2 w-auto">Programmé</span>
 					<span class="text-muted"><?= $count_upcoming; ?> open tasks</span>
 				</p>
 			</a>
@@ -326,6 +331,11 @@ Task
 									<td>
 										<span class="text-muted">
 											<?= $t->title; ?>
+											<?php if ($t->type_tache == 5 || $t->type_tache == 6): 
+												$Budget = $t->budgets - $t->budget_initiale;	
+											?>
+												de <?= $Budget; ?> €
+											<?php endif; ?>
 										</span>
 									</td>
 									
@@ -464,7 +474,12 @@ Task
 									</td>
 									<td>
 										<span class="text-muted">
-											<?= $t->title; ?>
+											<?= $t->title; ?> 
+											<?php if ($t->type_tache == 5 || $t->type_tache == 6): 
+												$Budget = $t->budgets - $t->budget_initiale;	
+											?>
+												de <?= $Budget; ?> €
+											<?php endif; ?>
 										</span>
 									</td>
 									<td>
@@ -665,7 +680,11 @@ Task
 												</div>
 											</div>
 											<h6 class="my-3" style="font-size: 14px;"><?= $t->nom_client; ?></h6>
-											<span class="text-muted d-block mb-3"><?= $t->title; ?></span>
+											<span class="text-muted d-block mb-3"><?= $t->title; ?> <?php if ($t->type_tache == 5 || $t->type_tache == 6): 
+												$Budget = $t->budgets - $t->budget_initiale;	
+											?>
+												de <?= $Budget; ?> €
+											<?php endif; ?></span>
 											<span class="text-muted d-block mb-3">
 												<img src="<?= base_url('assets/images/icons/figma/calendar.svg') ?>" alt="">
 												Date Due <?= $t->date_due; ?>
@@ -702,7 +721,7 @@ Task
 					<div class="card" style="border-radius: 8px;">
 						<div class="card-body">
 							<i class="fa fa-circle text-primary" style="font-size: 10px;"></i>
-							<span class="h4 mx-2 w-auto">En cours</span>
+							<span class="h4 mx-2 w-auto">Programmé</span>
 							<span class="text-muted"><?= $count_upcoming; ?> open tasks</span>
 
 							<!-- Eto no manao foreach -->
@@ -782,7 +801,11 @@ Task
 												</div>
 											</div>
 											<h6 class="my-3" style="font-size: 14px;"><?= $t->nom_client; ?></h6>
-											<span class="text-muted d-block mb-3"><?= $t->title; ?></span>
+											<span class="text-muted d-block mb-3"><?= $t->title; ?> <?php if ($t->type_tache == 5 || $t->type_tache == 6): 
+												$Budget = $t->budgets - $t->budget_initiale;	
+											?>
+												de <?= $Budget; ?> €
+											<?php endif; ?></span>
 											<span class="text-muted d-block mb-3">
 												<img src="<?= base_url('assets/images/icons/figma/calendar.svg') ?>" alt="">
 												Date Due <?= $t->date_due; ?>
@@ -897,7 +920,11 @@ Task
 												</div>
 											</div>
 											<h6 class="my-3" style="font-size: 14px;"><?= $t->nom_client; ?></h6>
-											<span class="text-muted d-block mb-3"><?= $t->title; ?></span>
+											<span class="text-muted d-block mb-3"><?= $t->title; ?> <?php if ($t->type_tache == 5 || $t->type_tache == 6): 
+												$Budget = $t->budgets - $t->budget_initiale;	
+											?>
+												de <?= $Budget; ?> €
+											<?php endif; ?></span>
 											<span class="text-muted d-block mb-3">
 												<img src="<?= base_url('assets/images/icons/figma/calendar.svg') ?>" alt="">
 												Date Due <?= $t->date_due; ?>

@@ -38,11 +38,16 @@
 
 				<div class="form-group">
 					<label for="status_date">Date</label>
-					<input type="date" name="date_resiliation" id="status_date" class="form-control">
+					<input type="date" name="date_resiliation" id="date_resiliation" class="form-control">
 				</div>
-
+				<script>
+							document.addEventListener("DOMContentLoaded", function () {
+								const today = new Date().toISOString().split('T')[0];
+								document.getElementById("date_resiliation").value = today;
+							});
+						</script>					
 				<div class="form-group">
-					<label for="status_date_resiliation">Date de résiliation</label>
+					<label for="status_date_resiliation">Date due</label>
 					<input type="date" name="fin_campagne" id="status_date_resiliation" class="form-control">
 				</div>
 
