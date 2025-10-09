@@ -155,31 +155,36 @@ class Task_model extends CI_Model
 		return $query->result();
 	}
 
-	public function get_all_tâche($status = null)
-	{
-		$this->db->select('tasks.*, u1.first_name as assigned_to_name, u1.photo_users as assigned_to_photo, u2.first_name as AM_name, u2.photo_users as AM_photo, clients.*');
-		$this->db->from('tasks');
+public function get_all_tâche($status = null)
+{
+	$this->db->select('tasks.*, 
+		u1.first_name as assigned_to_name, u1.photo_users as assigned_to_photo, 
+		u2.first_name as AM_name, u2.photo_users as AM_photo, 
+		clients.*,
+		upsell.*'); // <-- Ajout des colonnes de upsell
 
-		// Jointure avec la table users pour "assigned_to" (utilisateur assigné à la tâche)
-		$this->db->join('users u1', 'u1.id = tasks.assigned_to', 'left');
+	$this->db->from('tasks');
 
-		// Jointure avec la table clients
-		$this->db->join('clients', 'clients.idclients = tasks.idclients', 'left');
+	// Jointure avec la table users pour "assigned_to"
+	$this->db->join('users u1', 'u1.id = tasks.assigned_to', 'left');
 
-		// Jointure avec la table users pour "AM" (utilisateur AM)
-		$this->db->join('users u2', 'u2.id = tasks.AM', 'left');
+	// Jointure avec la table clients
+	$this->db->join('clients', 'clients.idclients = tasks.idclients', 'left');
 
-		if ($status !== null) {
-			$this->db->where('Statuts_technique', $status); // Exact match
-			// OR use $this->db->where('Statuts_technique !=', $status) if you want "not equal"
-		}
+	// Jointure avec la table users pour "AM"
+	$this->db->join('users u2', 'u2.id = tasks.AM', 'left');
 
-		// Exécution de la requête
-		$query = $this->db->get();
+	// Jointure avec la table upsell via idupsell
+	$this->db->join('upsell', 'upsell.idupsell = tasks.idupsell', 'left');
 
-		// Retourner les résultats
-		return $query->result();
+	if ($status !== null) {
+		$this->db->where('Statuts_technique', $status);
 	}
+
+	$query = $this->db->get();
+	return $query->result();
+}
+
 
 	public function get_task_temporaire($status = null)
 	{
