@@ -1,4 +1,5 @@
 <?php start_section('stylesheet');  ?>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 <style>
 	.table-wrapper {
 		border-spacing: 15px 0 !important;
@@ -179,7 +180,7 @@
 								</ul>
 
 								<h6 class="text-muted font-weight-normal" style="font-size: 14px;">
-									<?= $d['info_base_client'] ?></br>
+										<?= nl2br($d['info_base_client']) ?></br>
 								</h6>
 							</div>
 						</div>
@@ -219,14 +220,14 @@
 									<i class="fa fa-check-square mr-2" style="color: #f0f0f0ff; font-size: 18px;"></i>
 									<span class="mr-2">Commerciale</span>
 									<span class="mr-2">
-										<img src="<?= base_url('assets/images/' . $d['am_photo_user']) ?>" width="24" height="24">
+										<img src="<?= base_url('assets/images/' . $d['tech_photo_user']) ?>" width="24" height="24">
 									</span>
 								</div>
 								<div class="d-flex justify-content-start mb-4" style="font-size: 15px;">
 									<i class="fa fa-check-square mr-2" style="color: #f0f0f0ff; font-size: 18px;"></i>
 									<span class="mr-2">Account Manager</span>
 									<span class="mr-2">
-										<img src="<?= base_url('assets/images/' . $d['tech_photo_user']) ?>" width="24" height="24">
+										<img src="<?= base_url('assets/images/' . $d['am_photo_user']) ?>" width="24" height="24">
 									</span>
 								</div>
 								<div class="d-flex justify-content-start mb-4" style="font-size: 15px;">
@@ -448,6 +449,9 @@
 													<?php if ($u->type_upsell == 1 || $u->type_upsell == 2): ?>
 														<?= $u->budgets ?> €
 													<?php endif; ?>
+													<?php if ($u->statut_actif == 1): ?>
+														Check
+													<?php endif; ?>
 												</td>
 											</tr>
 										<?php endforeach; ?>
@@ -475,7 +479,7 @@
 									<a href="#" class="text-decoration-none text-muted ml-3 stretched-link">File de discussion</a>
 									<i class="fa fa-chevron-right ml-auto" style="font-size: 12px;"></i>
 								</div>
-								<h3 class="m-0">51 Discussions</h3>
+								<h3 class="m-0" style="font-size: 21px;">0 Discussions</h3>
 							</div>
 						</div>
 					</div>
@@ -484,13 +488,27 @@
 							<div class="card-body">
 								<div class="d-flex align-items-center mb-2">
 									<img src="<?= base_url('assets/images/figma/google_meet.png') ?>" width="43">
-									<a href="#" class="text-decoration-none text-muted ml-3 stretched-link">Google Meet</a>
+									<a href="#" 
+									class="text-decoration-none text-muted ml-3 stretched-link"
+									data-bs-toggle="modal"
+									data-bs-target="#dateModal">
+										Google Meet
+									</a>
 									<i class="fa fa-chevron-right ml-auto" style="font-size: 12px;"></i>
 								</div>
-								<h3 class="m-0">2025-07-12</h3>
+								<h3 class="m-0" style="font-size: 21px;">
+									<?php if($d['meetingDate'] != NULL): ?>
+										<?= $d['meetingDate'] ?> 
+									<?php endif; ?>
+									<?php if($d['meetingDate'] == NULL): ?>
+										Ajouter une date
+									<?php endif; ?>
+								
+								</h3>
 							</div>
 						</div>
 					</div>
+
 					<div class="col">
 						<div class="card h-100">
 							<div class="card-body">
@@ -500,10 +518,10 @@
 									<i class="fa fa-chevron-right ml-auto" style="font-size: 12px;"></i>
 								</div>
 								<?php if (empty($matched_calls[0]->started_at)): ?>
-									<h3 class="m-0">Invalide</h3>
+									<h3 class="m-0"  style="font-size: 21px;">Invalide</h3>
 								<?php endif; ?>
 								<?php if (!empty($matched_calls[0]->started_at)): ?>
-									<h3 class="m-0"><?= date('Y-m-d', $matched_calls[0]->started_at) ?></h3>
+									<h3 class="m-0"  style="font-size: 21px;"><?= date('Y-m-d', $matched_calls[0]->started_at) ?></h3>
 								<?php endif; ?>
 							</div>
 						</div>
@@ -516,7 +534,7 @@
 									<a href="<?= base_url('Client/tache_client/' . $donnees[0]['idclients']) ?>" class="text-decoration-none text-muted ml-3 stretched-link">Teams Tasks</a>
 									<i class="fa fa-chevron-right ml-auto" style="font-size: 12px;"></i>
 								</div>
-								<h3 class="m-0"><?= $nbr_task ?> Tâches en cours</h3>
+								<h3 class="m-0"  style="font-size: 21px;"><?= $nbr_task ?> Tâches en cours</h3>
 							</div>
 						</div>
 					</div>
@@ -527,43 +545,148 @@
 					<h1 style="font-size: 48px;">Loocker Studio</h1>
 				</div><br>
 				<div class="row row-cols-3">
+					<!-- Carte 1 -->
 					<div class="col">
 						<div class="card h-100">
 							<div class="card-body text-center">
 								<h5>Rapport Basic</h5>
+								<?php if(!empty($donnees[0]['rapport'])): ?>
+								</br>
 								<span class="text-muted">
-									<i class="fa fa-circle mr-2" style="color: #589e67;"></i>
-									Active
+									<i class="fa fa-circle mr-2" style="color: #589e67;"></i> Active
 								</span>
-								<button class="btn btn-soutline-dark btn-block">Loocker Studio</button>
+								<?php endif; ?>
+								<?php if(empty($donnees[0]['rapport'])): ?>
+								</br>
+								<button type="button" class="btn btn-light btn-block" data-bs-toggle="modal" data-bs-target="#modalBasic">
+									<i class="fa fa-plus"></i> Create
+								</button>
+								<?php endif; ?>
+								
+
+								<!-- Modal pour Rapport Basic -->
+								<div class="modal fade" id="modalBasic" tabindex="-1" aria-labelledby="labelModalBasic" aria-hidden="true">
+									<div class="modal-dialog">
+										<form action="<?= base_url("Client/change_rappor_base") ?>" method="POST">
+											<div class="modal-content">
+												<div class="modal-header">
+													<h5 class="modal-title" id="labelModalBasic">Rapport Basic</h5>
+													<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fermer"></button>
+												</div>
+												<div class="modal-body">
+													<div class="form-group">
+														<label for="inputBasic">Lien ou texte</label>
+														<input type="text" class="form-control" id="inputBasic" name="rapport_base" required>
+													</div>
+													<input type="hidden" name="idclients" value="<?php echo $donnees[0]['idclients']; ?>">
+												</div>
+												<div class="modal-footer">
+													<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+													<button type="submit" class="btn btn-primary">Valider</button>
+												</div>
+											</div>
+										</form>
+									</div>
+								</div>
 							</div>
 						</div>
 					</div>
+
+					<!-- Carte 2 -->
 					<div class="col">
 						<div class="card h-100">
 							<div class="card-body text-center">
 								<h5>Rapport de conversion</h5>
+								<?php if(!empty($donnees[0]['rapport_conversions'])): ?>
+								</br>
 								<span class="text-muted">
-									<i class="fa fa-circle mr-2" style="color: #589e67;"></i>
-									Active
+									<i class="fa fa-circle mr-2" style="color: #589e67;"></i> Active
 								</span>
-								<button class="btn btn-soutline-dark btn-block">Loocker Studio</button>
+								<?php endif; ?>
+								<?php if(empty($donnees[0]['rapport_conversions'])): ?>
+								</br>
+								<button type="button" class="btn btn-light btn-block" data-bs-toggle="modal" data-bs-target="#modalConversion">
+									<i class="fa fa-plus"></i> Create
+								</button>
+								<?php endif; ?>
+								
+
+								<!-- Modal pour Rapport de conversion -->
+								<div class="modal fade" id="modalConversion" tabindex="-1" aria-labelledby="labelModalConversion" aria-hidden="true">
+									<div class="modal-dialog">
+										<form action="<?= base_url("Client/change_conversions") ?>" method="POST">
+											<div class="modal-content">
+												<div class="modal-header">
+													<h5 class="modal-title" id="labelModalConversion">Rapport de conversion</h5>
+													<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fermer"></button>
+												</div>
+												<div class="modal-body">
+													<div class="form-group">
+														<label for="inputConversion">Lien ou texte</label>
+														<input type="text" class="form-control" id="inputConversion" name="rapport_conversion" required>
+													</div>
+													<input type="hidden" name="idclients" value="<?php echo $donnees[0]['idclients']; ?>">
+												</div>
+												<div class="modal-footer">
+													<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+													<button type="submit" class="btn btn-primary">Valider</button>
+												</div>
+											</div>
+										</form>
+									</div>
+								</div>
 							</div>
 						</div>
 					</div>
+
+					<!-- Carte 3 -->
 					<div class="col">
 						<div class="card h-100">
 							<div class="card-body text-center">
+								
 								<h5>Rapport Bilan Annuel</h5>
-								<br>
-								<button class="btn btn-light btn-block">
-									<i class="fa fa-plus"></i>
-									Create Task
+								<?php if(!empty($donnees[0]['rapport_conversions'])): ?>
+								</br>
+								<span class="text-muted">
+									<i class="fa fa-circle mr-2" style="color: #589e67;"></i> Active
+								</span>
+								<?php endif; ?>
+								<?php if(empty($donnees[0]['rapport_conversions'])): ?>
+								</br>
+								<button type="button" class="btn btn-light btn-block" data-bs-toggle="modal" data-bs-target="#modalBilan">
+								<i class="fa fa-plus"></i> Create
 								</button>
+								<?php endif; ?>
+
+								<!-- Modal pour Rapport Bilan Annuel -->
+								<div class="modal fade" id="modalBilan" tabindex="-1" aria-labelledby="labelModalBilan" aria-hidden="true">
+									<div class="modal-dialog">
+										<form action="<?= base_url("Client/change_bilan_annuelle") ?>" method="POST">
+											<div class="modal-content">
+												<div class="modal-header">
+													<h5 class="modal-title" id="labelModalBilan">Rapport Bilan Annuel</h5>
+													<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fermer"></button>
+												</div>
+												<div class="modal-body">
+													<div class="form-group">
+														<label for="inputBilan">Lien ou texte</label>
+														<input type="text" class="form-control" id="inputBilan" name="bilan_annuele" required>
+													</div>
+													<input type="hidden" name="idclients" value="<?php echo $donnees[0]['idclients']; ?>">
+												</div>
+												<div class="modal-footer">
+													<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+													<button type="submit" class="btn btn-primary">Valider</button>
+												</div>
+											</div>
+										</form>
+									</div>
+								</div>
 							</div>
 						</div>
 					</div>
 				</div>
+
 
 				</br></br></br></br>
 

@@ -233,7 +233,13 @@
 			<i class="fa fa-plus"></i>
 			Créer
 		</button>
-
+		<h3>Filtrer par utilisateur :</h3>
+		<div class="form-group">
+			<select id="userFilter" class="custom-select" style="width:100%; padding:6px;">
+				<option value="">-- Tous les utilisateurs --</option>
+			</select>
+		</div>
+</br>
 		<div id="mini_calendar" class="my-3"></div>
 
 		<h3>Mes agendas</h3>
@@ -271,13 +277,7 @@
 			<label class="custom-control-label m-0" for="agenda_Autres">Autres</label>
 		</div>
 
-		<h3>Filtres</h3>
-		<div class="form-group">
-			<label for="userFilter">Filtrer par utilisateur :</label>
-			<select id="userFilter" class="custom-select" style="width:100%; padding:6px;">
-				<option value="">-- Tous les utilisateurs --</option>
-			</select>
-		</div>
+		
 	</div>
 
 	<div class="main">
