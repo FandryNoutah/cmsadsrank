@@ -14,7 +14,16 @@ class Discussion_model extends CI_Model
         parent::__construct();
         $this->load->database();
     }
+		public function getdiscussionbyidclient($idclients)
+	{
+		$this->db->select('group_messages_note.*, users.*');
+		$this->db->from('group_messages_note');
+		$this->db->join('users', 'users.id = group_messages_note.user_id', 'left');
+		$this->db->where('group_messages_note.user_id', $idclients);
 
+		$query = $this->db->get();
+		return $query->result();
+	}
 	public function get_discussion_note_by_id_users($idusers)
 	{
 		$this->db->select('group_messages_note.*, users.*');

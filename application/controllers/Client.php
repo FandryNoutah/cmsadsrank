@@ -20,7 +20,8 @@ class Client extends MY_Controller
 		$this->load->model("Message_model");
 		$this->load->model("Task_model");
 		$this->load->model("Note_model");
-		//$this->load->model("Gtm_model");
+		$this->load->model("Discussion_model");
+		$this->load->model("Gtm_model");
 		$this->data['visuels'] = $this->visuels_model->get_all();
 		// $this->load->library('PHPExcel');
 		// $this->load->library('excel');
@@ -163,8 +164,11 @@ class Client extends MY_Controller
 		$inforamtion_upsell = $information_resiliation;
 		$statut_upsell = $statut_resiliation;
 		$id = intval($idclients);
+		$idclients = $id;
 		$donnee = $this->data["clients"] = $this->visuels_model->getDonneeById($id);
 		$idonnee = $donnee[0]['idonnee'];
+		$account_manager = $donnee[0]['account_manager'];
+		$initiative = $donnee[0]['initiative'];
 		$statut_demande = 1;
 		$this->visuels_model->change_statut_en_demande($id, $statut_demande);
 		$budget_initiale = $donnee[0]['budget'];
@@ -173,22 +177,63 @@ class Client extends MY_Controller
 		$budget_upsell = intval($budget_initiale);
 		$budget_finale = $budget_initiale;
 		$actif = 1;
-		$idclient = $this->visuels_model->create_upsell($type_upsell, $budget_finale, $budget_initiale, $demmande_upsell, $am, $tm, $date_upsell, $date_demande_upsell, $inforamtion_upsell, $statut_upsell, $idclients, $actif);
+		$idupsell = $this->visuels_model->create_upsell($type_upsell, $budget_finale, $budget_initiale, $demmande_upsell, $am, $tm, $date_upsell, $date_demande_upsell, $inforamtion_upsell, $statut_upsell, $idclients, $actif);
 		$type_tache = 1;
 		if ($type_upsell == 2):
 			$title = "Relance client";
 			$tache = "Le client sera relancer, voir date due";
 			$type_tache = 9;
+			$dejaclient = 4;
+			$type_upsell = 9;
+			$data_upsell = array(
+				'idupsell' => $idupsell,
+				'idclients' => $idclients,
+				'dejaclient' => $dejaclient,
+				'budget' => $budget_finale,
+				'account_manager' => $account_manager,
+				'initiative' => $initiative,
+				'type_upsell' => $type_upsell,
+				'budget_upsell' => $budget_upsell
+
+			);
+			$this->visuels_model->add_upsell_onboarding($data_upsell);
+			
 		endif;
 		if ($type_upsell == 4):
 			$title = "Mise en pause";
 			$tache = "Mettre le client en pause, voir date due";
 			$type_tache = 8;
+			$dejaclient = 4;
+			$data_upsell = array(
+				'idupsell' => $idupsell,
+				'idclients' => $idclients,
+				'dejaclient' => $dejaclient,
+				'budget' => $budget_finale,
+				'account_manager' => $account_manager,
+				'initiative' => $initiative,
+				'type_upsell' => $type_upsell,
+				'budget_upsell' => $budget_upsell
+
+			);
+			$this->visuels_model->add_upsell_onboarding($data_upsell);
 		endif;
 		if ($type_upsell == 5):
 			$title = "Résiliation";
 			$tache = "Résiliation complète du client, voir date due";
 			$type_tache = 7;
+			$dejaclient = 5;
+			$data_upsell = array(
+				'idupsell' => $idupsell,
+				'idclients' => $idclients,
+				'dejaclient' => $dejaclient,
+				'budget' => $budget_finale,
+				'account_manager' => $am,
+				'initiative' => $initiative,
+				'type_upsell' => $type_upsell,
+				'budget_upsell' => $budget_upsell
+
+			);
+			$this->visuels_model->add_upsell_onboarding($data_upsell);
 		endif;
 		$Statuts_technique = 1;
 
@@ -206,6 +251,7 @@ class Client extends MY_Controller
 		);
 
 		$this->Task_model->add_task($data);
+		
 		$this->session->set_flashdata('message-succes', "Client résilier avec succès");
 		redirect('Client/detail_client/' . $idclients, 'refresh');
 		$this->layout();
@@ -255,7 +301,7 @@ class Client extends MY_Controller
 	{
 
 		$this->data["donnees"] = $this->visuels_model->getDonneeById($idclients);
-		$this->data["gtm"] = $this->visuels_model->get_gtm($idclients);
+		$t = $this->data["gtm"] = $this->visuels_model->get_gtm($idclients);
 		$this->content = "layouts/client/detail/gtm/index.php";
 		$this->layout();
 	}
@@ -645,6 +691,7 @@ class Client extends MY_Controller
 		$statut_upsell = $this->input->post('statut_upsell');
 		$id = $idclients;
 		$donnee = $this->data["clients"] = $this->visuels_model->getDonneeById($id);
+		$initiative = $donnee[0]['initiative'];
 		$idonnee = $donnee[0]['idonnee'];
 		$buget_initiale = $donnee[0]['budget'];
 		if ($type_upsell == 2):
@@ -683,6 +730,24 @@ class Client extends MY_Controller
 			);
 
 			$this->Task_model->add_task($data);
+				$client = $idclients;
+			$dejaclient = 1;
+			$budget = $budget_upsell;
+			$am = $am;
+			$type_upsell = $type_upsell;
+
+			$data_upsell = array(
+				'idupsell' => $idupsell,
+				'idclients' => $idclients,
+				'dejaclient' => $dejaclient,
+				'budget' => $budget_finale,
+				'account_manager' => $am,
+				'initiative' => $initiative,
+				'type_upsell' => $type_upsell,
+				'budget_upsell' => $budget_upsell
+
+			);
+			$this->visuels_model->add_upsell_onboarding($data_upsell);
 		endif;
 		if ($type_upsell == 1):
 			$am = $this->input->post('am');
@@ -720,7 +785,24 @@ class Client extends MY_Controller
 			);
 
 			$this->Task_model->add_task($data);
+			$client = $idclients;
+			$dejaclient = 1;
+			$budget = $budget_upsell;
+			$initiative = $tm;
+			$am = $am;
+			$type_upsell = $type_upsell;
 
+			$data_upsell = array(
+				'idclients' => $idclients,
+				'dejaclient' => $dejaclient,
+				'budget' => $budget_finale,
+				'account_manager' => $am,
+				'initiative' => $tm,
+				'type_upsell' => $type_upsell,
+				'budget_upsell' => $budget_upsell
+
+			);
+			$this->visuels_model->add_upsell_onboarding($data_upsell);
 
 		endif;
 		//if ($type_upsell == 3):
@@ -800,8 +882,10 @@ class Client extends MY_Controller
 		$date_mis_en_place = $this->input->post('date_mis_en_place');
 		$date_brief = $this->input->post('date_brief');
 		$date_annonce = $this->input->post('date_annonce');
-		$dejaclient = $this->input->post('dejaclient');
+		$dejaclient = 0;
 		$logo = $this->file_upload_field = 'logo';
+		$tm = $initiative;
+		
 		
 		$this->form_validation->set_rules('site_client', 'URL', 'required|trim');
 
@@ -861,6 +945,7 @@ class Client extends MY_Controller
 
 		// ✅ Insérer le résumé à la place du paragraphe le plus long
 		$idclient = $this->visuels_model->insertclient($client, $site_client, $email_client, $numero_client, $favicon, $cms, $cms_logo, $summary);
+		$idclient_onboarding = $idclient; 
 		$this->visuels_model->insertfiche($idclient, $budget, $secteur_activite, $product_choice, $initiative, $am, $date_mis_en_place, $date_brief, $date_annonce, $dejaclient, $gtm_code);
 		$title = "Création de Brief";
 		$tache = "En attente de brief";
@@ -892,15 +977,26 @@ class Client extends MY_Controller
 		$date_demande_upsell = $date_mis_en_place;
 		$inforamtion_upsell = "Budget initial";
 		$idclient = $this->visuels_model->create_upsell($type_upsell, $budget_finale, $budget_initiale, $demmande_upsell, $am, $tm, $date_upsell, $date_demande_upsell, $inforamtion_upsell, $statut_upsell, $idclients, $actif);
+		$data_upsell = array(
+				'idclients' => $idclient_onboarding,
+				'dejaclient' => $dejaclient,
+				'budget' => $budget,
+				'account_manager' => $am,
+				'initiative' => $initiative,
+				'idproduit' => $product_choice,
+				'mis_en_place_paiement' => $date_mis_en_place,
+				'Brief' => $date_brief,
+				'annonce' => $date_annonce
 
+			);
+			$this->visuels_model->add_upsell_onboarding($data_upsell);
 		redirect('Client');
 	}
 
 	private function get_summary_from_chatgpt($headings, $paragraphs)
 	{
-		
 	
-	$input_text = "Voici les titres et paragraphes d’un site web.\n\n";
+		   $input_text = "Voici les titres et paragraphes d’un site web.\n\n";
     $input_text .= "Ta tâche est de rédiger un résumé informatif en **deux paragraphes distincts**, séparés par une **ligne vide** (un simple saut de ligne).\n\n";
 
     $input_text .= "✍️ Le résumé total doit contenir **entre 175 et 190 mots maximum**, répartis de façon naturelle entre les deux paragraphes.\n";
@@ -962,6 +1058,7 @@ class Client extends MY_Controller
     // Fallback si le texte généré n'a pas deux paragraphes distincts
     return $raw_output;
 	}
+
 
 	// Fonction cURL pour récupérer le contenu HTML
 	private function fetch_url($url)
