@@ -315,8 +315,19 @@ class Client extends MY_Controller
 	public function onboarding($idclients)
 	{
 
+		$type_campagne = [
+			1	=> "SEARCH",
+			2	=>	"LOCAL",
+			3	=>	"PERFORMANCE MAX"
+		];
 		$this->data['idclients'] = $idclients;
-		$campagnes = $this->data["campagnes"] = $this->visuels_model->getCampagneByIdclient($idclients);
+		$campagnes = $this->visuels_model->getCampagneByIdclient($idclients);
+		
+		foreach ($campagnes as $index => $campagne) {
+			$campagnes[$index]['type_campagne'] = $type_campagne[$campagne['type_campagne']];
+		}
+		
+		$this->data['campagnes'] = $campagnes;
 
 		$this->content = "layouts/client/onboarding/index.php";
 		$this->layout();
