@@ -203,45 +203,43 @@
 				</h1>
 				<div class="table-responsive">
 					<table class="table table-hover table-wrapper">
-						<thead class="thead-light text-muted">
+						<thead class="thead-light">
 							<tr>
-								<th>ID</th>
-								<th>Nom campagne</th>
-								<th>Client</th>
-								<th>Type</th>
-								<th>URL du site</th>
-								<th>Actif</th>
-								<th>Publication technique</th>
+								<th class="text-muted">TYPE</th>
+								<th class="text-muted">CAMPAGNES</th>
+								<th class="text-muted">BUDGET</th>
+								<th class="text-muted">DEMANDE</th>
+								<th class="text-muted">STATUT</th>
+								<th class="text-muted">ACTION</th>
 							</tr>
 						</thead>
 						<tbody>
 							<?php if (!empty($campagnes)): ?>
 								<?php foreach ($campagnes as $campagne): ?>
 									<tr>
-										<td><?= $campagne['idcampagne']; ?></td>
-										<td><?= $campagne['nom_campagne']; ?></td>
-										<td><?= $campagne['idclients']; ?></td>
 										<td><?= $campagne['type_campagne']; ?></td>
+										<td><?= $campagne['nom_campagne']; ?></td>
+										<td><?= $campagne['repartition_budget'] ?: 0; ?> Euro</td>
 										<td>
-											<?php if (!empty($campagne['url_site'])): ?>
-												<a href="<?= $campagne['url_site']; ?>" target="_blank">
-													<?= $campagne['url_site']; ?>
-												</a>
-											<?php endif; ?>
+											<span class="badge alert-primary">GTM</span>
 										</td>
 										<td>
 											<?php if ($campagne['actif'] == 1): ?>
-												<span class="badge badge-success">Active</span>
+												<span class="badge alert-primary">
+													<i class="fa fa-circle"></i>
+													En cours
+												</span>
 											<?php else: ?>
-												<span class="badge badge-secondary">Inactive</span>
+												<span class="badge alert-success">
+													<i class="fa fa-circle"></i>
+													Terminée
+												</span>
 											<?php endif; ?>
 										</td>
 										<td>
-											<?php if ($campagne['publier_techinque'] == 1): ?>
-												<span class="badge badge-info">Publiée</span>
-											<?php else: ?>
-												<span class="badge badge-warning">Non publiée</span>
-											<?php endif; ?>
+											<a href="javascript:void(0);" class="text-decoration-none">
+												<i class="fa fa-ellipsis-v"></i>
+											</a>
 										</td>
 									</tr>
 								<?php endforeach; ?>
