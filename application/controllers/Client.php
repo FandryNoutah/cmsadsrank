@@ -6,7 +6,7 @@ class Client extends MY_Controller
 	private $api_url = 'https://api.aircall.io/v1/calls';
 	private $api_auth = '';
 	protected $file_upload_field;
-	private $openai_api_key = '***REMOVED***-KGXpO5Dmjtk3iBGWNYAxp_Jtm07qeTY7jCQx3wR7a06GWqgWMdJA1O-DqdSX1ZANFEBDF83TQXT3BlbkFJB6Grrdt1s68eRcq7Ry6lbzpKM4X5At0U_f6q_dS-Jc_j6H6ATB3LVOd_hX0p7eJ-rPLgsW5UEA';
+	private $openai_api_key = getenv('OPENAI_API_KEY');
 
 	public function __construct()
 	{
@@ -512,9 +512,21 @@ class Client extends MY_Controller
 	public function onboarding($idclients)
 	{
 
+		$type_campagne = [
+			1	=> "SEARCH",
+			2	=>	"LOCAL",
+			3	=>	"PERFORMANCE MAX"
+		];
 		$this->data['idclients'] = $idclients;
 		$this->data["donnees"] = $this->visuels_model->getDonneeById($idclients);
 		$campagnes = $this->data["campagnes"] = $this->visuels_model->getCampagneByIdclient($idclients);
+		$campagnes = $this->visuels_model->getCampagneByIdclient($idclients);
+		
+		foreach ($campagnes as $index => $campagne) {
+			$campagnes[$index]['type_campagne'] = $type_campagne[$campagne['type_campagne']];
+		}
+		
+		$this->data['campagnes'] = $campagnes;
 
 		$this->content = "layouts/client/onboarding/index.php";
 		$this->layout();
@@ -1116,7 +1128,7 @@ class Client extends MY_Controller
 
 	private function get_summary_from_chatgpt($headings, $paragraphs)
 	{
-		$api_key = '***REMOVED***-KGXpO5Dmjtk3iBGWNYAxp_Jtm07qeTY7jCQx3wR7a06GWqgWMdJA1O-DqdSX1ZANFEBDF83TQXT3BlbkFJB6Grrdt1s68eRcq7Ry6lbzpKM4X5At0U_f6q_dS-Jc_j6H6ATB3LVOd_hX0p7eJ-rPLgsW5UEA'; // 🔐 Remplace avec ta clé
+		$api_key = getenv('OPENAI_API_KEY');
 		$model = 'gpt-4'; // ou 'gpt-3.5-turbo'
 
 		   $input_text = "Voici les titres et paragraphes d’un site web.\n\n";
