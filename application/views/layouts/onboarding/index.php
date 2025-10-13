@@ -48,17 +48,62 @@
 }
 
 
+
 </style>
 <?php end_section(); ?>
 
 <?php start_section('page_title'); ?>
 <h1 class="h4 py-2">Onboarding</h1>
 <?php end_section(); ?>
+
 <?php start_section('page_heading'); ?><?php end_section(); ?>
 
 <?php start_section('content'); ?>
 <?php //var_dump($onboarding); die(); ?>
 <div class="container-fluid">
+  <div class="row row-cols-2" style="position: sticky;">
+					<div class="col" >
+							<div class="btn-group btn-group-toggle my-4" data-toggle="buttons">
+                <label class="btn btn-light rounded-pill mx-2" style="font-size: 14px;">
+                    <input type="radio" class="status-select" name="status_filter" value="all" checked>
+                    All
+                  </label>
+
+                  <label class="btn btn-white rounded-pill mx-2 text-muted" style="font-size: 14px;">
+                    <input type="radio" class="status-select" name="status_filter" value="nouveau">
+                    <i class="fa fa-circle mr-2" style="font-size: 10px; color: #727272;"></i>
+                    Nouveau client
+                  </label>
+
+                  <label class="btn btn-white rounded-pill mx-2 text-muted" style="font-size: 14px;">
+                    <input type="radio" class="status-select" name="status_filter" value="upsell">
+                    <i class="fa fa-circle mr-2" style="font-size: 10px; color: #589E67;"></i>
+                    Upsell
+                  </label>
+
+                  <label class="btn btn-white rounded-pill mx-2 text-muted" style="font-size: 14px;">
+                    <input type="radio" class="status-select" name="status_filter" value="pause">
+                    <i class="fa fa-circle mr-2" style="font-size: 10px; color: #B1AD1B;"></i>
+                    Mise en pause
+                  </label>
+
+                  <label class="btn btn-white rounded-pill mx-2 text-muted" style="font-size: 14px;">
+                    <input type="radio" class="status-select" name="status_filter" value="relance">
+                    <i class="fa fa-circle mr-2" style="font-size: 10px; color: #589E67;"></i>
+                    Relance
+                  </label>
+             
+						</div>
+					</div>
+					<div class="col" >
+							<div class="form-group px-2" style="max-width: 300px;">
+                <input type="text" class="form-control" id="searchInput" placeholder="Rechercher un client...">
+					    </div>
+				  </div>
+        </div>
+
+
+  
 	<div class="tab-content" id="clientTabContent">
 		<div class="tab-pane fade show active mb-5" id="list" role="tabpanel" aria-labelledby="list_tab">
 			<div class="table-responsive">
@@ -67,10 +112,10 @@
 						<tr>
 							<th></th>
 							<th>Client <img src="<?= base_url('assets/images/icons/figma/icon-caretdoublevertical-5.svg') ?>" class="ml-2"></th>
-							<?php if($current_users != 1): ?>
+							<?php //if($current_users != 1): ?>
 							<th>Déjà client ? <img src="<?= base_url('assets/images/icons/figma/icon-caretdoublevertical-5.svg') ?>" class="ml-2"></th>
 							<th>Budget <img src="<?= base_url('assets/images/icons/figma/icon-caretdoublevertical-5.svg') ?>" class="ml-2"></th>
-							<?php endif; ?>
+							<?php //endif; ?>
 							<th>Member</th>
 							<th>Gocardless</th>
 							<th>Brief</th>
@@ -88,8 +133,31 @@
 						</tr>
 					</thead>
 					<tbody>
-						<?php foreach ($onboarding as $d): if ($d->budget != 0): ?>
-							<tr>
+            <?php //var_dump($onboarding); die(); ?>
+						<?php foreach ($onboarding as $d): 
+                  if (
+                      $d->budget != 0 &&
+                      !in_array($d->type_upsell, [10 , 5]) 
+                  ):
+              ?>
+
+							<?php
+              $status = 'unknown';
+              if ($d->dejaclient == 0) {
+                $status = 'nouveau';
+              } else {
+                switch ($d->type_upsell) {
+                  case 1: $status = 'baisse'; break;
+                  case 2: $status = 'upsell'; break;
+                  case 4: $status = 'pause'; break;
+                  case 5: $status = 'resiliation'; break; 
+                  case 9: $status = 'relance'; break;
+                  default: $status = 'autre'; break;
+                }
+              }
+            ?>
+            <tr data-type="<?= $status ?>">
+
 								<!-- Menu actions -->
 								<td>
 									<div class="dropdown no-arrow">
@@ -123,21 +191,22 @@
 
 								<!-- Client -->
 								<td>
-									<a href="<?= base_url('Client/detail_client/' . $d->idclients) ?>" class="d-flex align-items-center text-decoration-none text-dark">
+                  <?php //var_dump($d->type_upsell); ?>
+									<a href="<?= base_url('Client/detail_client/' . $d->idclients) ?>"  class="d-flex align-items-center text-decoration-none text-dark">
 										<img src="<?= $d->favicon ?>" class="img-thumbnail" width="28" height="28" alt="Favicon" style="margin-right:8px;">
 										<?= htmlspecialchars($d->nom_client) ?>
 									</a>
 								</td>
 
-								<?php if($current_users != 1): ?>
+								<?php //if($current_users != 1): ?>
 								<td>
 									<?php if ($d->dejaclient == 0): ?>
-										<span class="badge alert-warning px-2 py-1">Non</span>
+										<span class="badge alert-warning px-2 py-1" style="color: #727272; background-color: #eae7e79e">Nouveau client</span>
 									<?php else: ?>
 										<?php if ($d->type_upsell == 2): ?>
-											<span class="badge alert-success px-2 py-1">Upsell</br></br> NC : <?= $d->budget_upsell ?> €</span>
+											<span class="badge alert-success px-2 py-1">Upsell</span>
 										<?php elseif ($d->type_upsell == 1): ?>
-											<span class="badge alert-danger px-2 py-1">Baisse</br></br> <?= $d->budget_upsell ?> €</span>
+											<span class="badge alert-danger px-2 py-1">Baisse</span>
                       <?php elseif ($d->type_upsell == 4): ?>
 											<span class="badge alert-warning px-2 py-1">Mise en pause</span>
                       <?php elseif ($d->type_upsell == 5): ?>
@@ -150,7 +219,7 @@
 
 
 									<td><?= round(($d->budget / 2) / 30.6, 2) ?> €</td>
-								<?php endif; ?>
+								<?php //endif; ?>
 
 								<td>
 									<img src="<?= base_url(IMAGES_PATH . htmlspecialchars($d->tech_photo_user)); ?>" width="28" height="28">
@@ -317,6 +386,47 @@
 <?php end_section(); ?>
 
 <?php start_section('script'); ?>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  const statusInputs = document.querySelectorAll('.status-select');
+  const rows = document.querySelectorAll('tbody tr');
+  const searchInput = document.getElementById('searchInput');
+
+  function filterRows() {
+    const selectedStatus = Array.from(statusInputs)
+      .filter(input => input.checked)
+      .map(input => input.value);
+
+    const searchTerm = searchInput.value.toLowerCase();
+
+    rows.forEach(row => {
+      const type = row.getAttribute('data-type');
+      const textContent = row.textContent.toLowerCase();
+
+      const matchesStatus = selectedStatus.includes('all') || selectedStatus.includes(type);
+      const matchesSearch = textContent.includes(searchTerm);
+
+      if (matchesStatus && matchesSearch) {
+        row.style.display = '';
+      } else {
+        row.style.display = 'none';
+      }
+    });
+  }
+
+  statusInputs.forEach(input => {
+    input.addEventListener('change', filterRows);
+  });
+
+  searchInput.addEventListener('input', filterRows);
+
+  // Initial display
+  filterRows();
+});
+</script>
+
+
+
 <script>
 $('#editModal').on('show.bs.modal', function (event) {
   var button = $(event.relatedTarget);
