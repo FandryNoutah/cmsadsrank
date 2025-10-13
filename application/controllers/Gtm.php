@@ -16,6 +16,7 @@ class Gtm extends MY_Controller
 		$this->load->model("Donne_modele");
 		$this->load->model("Data_modele");
 		$this->load->model("Image_model");
+		$this->load->model("Gtm_model");
 		$this->load->model("Task_message_model");
 		$this->load->model("Task_model");
 		$this->data['visuels'] = $this->visuels_model->get_all();
@@ -35,11 +36,41 @@ class Gtm extends MY_Controller
 
 	public function index()
 	{
-		$this->data['gtm_task'] = $this->Task_model->get_all_procedure_gtm();
-		// dd($this->data['gtm_task']);
+		//$this->data['gtm_task'] = $this->Task_model->get_all_procedure_gtm();
+		$this->data["gtm"] = $this->Gtm_model->get_all_gtm();
+		$this->data["optimisation_gtm"] = $this->Gtm_model->get_all_optimisation_gtm();
 		$this->content = "layouts/gtm/index.php";
 		$this->layout();
 	}
+	public function get_gtm_by_id($id)
+	{
+		$data = $this->Gtm_model->get_by_id($id);
+		echo json_encode($data);
+	}
+	public function update_gtm()
+	{
+		$id = $this->input->post('id_gtm');
+		$idclients = $this->input->post('idclients');
+		$date_du_jour = date('Y-m-d');
+		$data = [
+			'date_demande'      => $this->input->post('date_demande'),
+			'invitation_reçu'   => $this->input->post('invitation_reçu'),
+			'gtm'               => $this->input->post('gtm'),
+			'statut'            => $this->input->post('statut'),
+		];
+		//$this->Gtm_model->update($id, $data);
+		if($this->input->post('statut') == "Implémenté"){
+			$data_optimisation = [
+				'idclients'        => $this->input->post('idclients'),
+				'date_demande'     => $date_du_jour,
+				'mois'  => $date_du_jour
+			];
+			$this->Gtm_model->insert_optimisation($data_optimisation);
+		}
+
+		redirect('Gtm'); 
+	}
+
 
 	public function fetch_discussion($id_task)
 	{

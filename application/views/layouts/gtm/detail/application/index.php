@@ -1,6 +1,4 @@
 <?php start_section('stylesheet'); ?>
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
 <style>
   .section-title {
     font-size: 16px;
@@ -91,66 +89,38 @@ echo $cms_name;
 					<div class="row row-cols-2">
 						<div class="col">
 							<div class="card h-100">
-                <?php if(empty($d['tracking_gtm'])): ?>		
-                  <div class="nav-link py-3 active"  style="text-align: right; margin-top: 10px; margin-right: 20px;">	
-								  <a href="<?= base_url('Client/mis_a_jour_gtm/' . $d['idclients']) ?>">Mettre à jour</a>
+								<div class="nav-link py-3 active"  style="text-align: right; margin-top: 10px; margin-right: 20px;">	
+								installed
 								</div>
-                    <?php endif; ?>	
-                    <?php if( !empty($d['tracking_gtm'])): ?>
-                     <div class="nav-link py-3 active"  style="text-align: right; margin-top: 10px; margin-right: 20px;">	
-                    <a href="<?= base_url('Client/mis_a_jour_gtm/' . $d['idclients']) ?>">Mettre à jour</a>
-                    </div>	
-								  <?php endif; ?>	
-								
 								<div class="card-body text-center">
 									<h3 class="mb-4">Google Tag Manager</h3>
 									<p class="text-muted mx-5 mb-5" style="font-size: 18px;">
 										Google Tag Manager installé 
 										Action : Demander l’accès administrateur au conteneur GTM (gtm@adsrank.fr) et vérifier la configuration.</p>
-									
-                  <?php if( !empty($d['tracking_gtm'])): ?>		
-                   <span class="badge alert-success rounded-pill px-4 py-3" style="font-size: 14px; font-weight: 500;">
+									<span class="badge alert-success rounded-pill px-4 py-3" style="font-size: 14px; font-weight: 500;">
 										<i class="fa fa-circle mr-1" style="font-size: 10px;"></i>
 										<?php echo $d['tracking_gtm']; ?>
 									</span>
-                    <?php endif; ?>	
-                    <?php if( empty($d['tracking_gtm'])): ?>
-                      <span class="badge alert-danger rounded-pill px-4 py-3" style="font-size: 14px; font-weight: 500;">
-															<i class="fa fa-circle mr-1" style="font-size: 10px;"></i>
-															GTM non installé
-														</span>
-								  <?php endif; ?>	
 								</div>
 							</div>
 						</div>
 						<div class="col">
 							<div class="card h-100">
 								<div class="nav-link py-3 active"  style="text-align: right; margin-top: 10px; margin-right: 20px;">	
-								<a href="<?= base_url('Client/mis_a_jour_cms/' . $d['idclients']) ?>">Mettre à jour</a>
+								installed
 								</div>
-                    <?php if( $d['cms'] != "Inconnu ou non détectable automatiquement"): ?>
-										<div class="card-body text-center">
-                      <h3 class="mb-4"><?php echo $cms_name; ?></h3>
-                      <p class="text-muted mx-5 mb-5" style="font-size: 18px;">
-                        <?php echo $cms_name; ?> est installé avec cette URL.
-                      
-                      </p>
-                      <div class="row justify-content-center">
-                        <div class="col-auto">
-                          <img src="<?php echo $d['cms_logo']; ?>" width="43">
-                        </div>
-                      </div>
-                    </div>
-										<?php endif; ?>
-										<?php if( $d['cms'] == "Inconnu ou non détectable automatiquement"): ?>
-										<div class="card-body text-center">
-                      <h3 class="mb-4"><?php echo $cms_name; ?></h3>
-                      <p class="text-muted mx-5 mb-5" style="font-size: 18px;">
-                       CMS Intétectable
-                      </p>
-                    </div>
-										<?php endif; ?>
-								
+								<div class="card-body text-center">
+									<h3 class="mb-4"><?php echo $cms_name; ?></h3>
+									<p class="text-muted mx-5 mb-5" style="font-size: 18px;">
+										<?php echo $cms_name; ?> est installé avec cette URL.
+										Action : Vérifier la présence de GTM puis suivre la procédure correspondante.
+									</p>
+									<div class="row justify-content-center">
+										<div class="col-auto">
+											<img src="<?php echo $d['cms_logo']; ?>" width="43">
+										</div>
+									</div>
+								</div>
 							</div>
 						</div>
 
@@ -179,17 +149,17 @@ echo $cms_name;
           </label>
              <?php endif; ?>
             <?php if (!empty($procedure_gtm)): ?>
-      <label class="toggle" aria-label="Activer procédure">
-        <input type="checkbox" class="activer-procedure"
-              data-idclient="<?php echo $d['idclients']; ?>"
-              data-am="<?php echo $d['initiative']; ?>"
-              data-assigned="<?php echo $d['account_manager']; ?>"
-              checked disabled />
-        <span class="switch">
-          <span class="knob"></span>
-        </span>
-      </label>
-    <?php endif; ?>
+  <label class="toggle" aria-label="Activer procédure">
+    <input type="checkbox" class="activer-procedure"
+           data-idclient="<?php echo $d['idclients']; ?>"
+           data-am="<?php echo $d['initiative']; ?>"
+           data-assigned="<?php echo $d['account_manager']; ?>"
+           checked disabled />
+    <span class="switch">
+      <span class="knob"></span>
+    </span>
+  </label>
+<?php endif; ?>
 
 
           </div>
@@ -249,7 +219,6 @@ echo $cms_name;
   $(document).ready(function () {
     $('.activer-procedure').change(function () {
         if (this.checked) {
-
             let idclients = $(this).data('idclient');
             let am = $(this).data('am');
             let assigned_to = $(this).data('assigned');
@@ -271,7 +240,7 @@ echo $cms_name;
                     alert("Erreur lors de l'activation du processus.");
                 }
             });
-            }
+        }
     });
 });
 </script>

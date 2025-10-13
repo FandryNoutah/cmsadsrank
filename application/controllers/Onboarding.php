@@ -35,7 +35,7 @@ class Onboarding extends MY_Controller
 	public function index()
 	{
 		$this->data['current_users'] = $this->current_user->tech;
-		$this->data['donnee'] = $this->visuels_model->getClientDataByDonnee();
+		$this->data['onboarding'] = $this->visuels_model->getClientDataonboarding();
 		$this->data['users'] = $this->Task_model->get_all_users();
 		$this->data['produit'] = $this->Donne_modele->get_all_produit();
 		$this->data['am'] = $this->Donne_modele->get_all_am();
@@ -195,7 +195,38 @@ public function activer_processus_tache()
 		$this->content = "layouts/client/onboarding/index.php";
 		$this->layout();
 	}
+	public function updateDonneeClient()
+	{
+		$idclient = $this->input->post('idclient');
+		$idonboarding = $this->input->post('idonboarding');
+		$client = $this->input->post('Client');
+		$email_client = $this->input->post('Email_client');
+		$numero_client = $this->input->post('Numero_client');
+		$site_client = $this->input->post('Site_client');
+		$budget = $this->input->post('budget');
+		$secteur_activite = $this->input->post('secteur_activite');
+		$Produit = $this->input->post('Produit');
+		$Initiative = $this->input->post('Initiative');
+		$Am = $this->input->post('Am');
+		$mis_en_place_paiement = $this->input->post('mis_en_place_paiement');
+		$Brief = $this->input->post('Brief');
+		$annonce = $this->input->post('annonce');
+		$commentaire_client = $this->input->post('commentaire_client') ?: NULL;
+		$paiement_recu = (int) $this->input->post('paiement_recu');
+		$datastudio = (int) $this->input->post('datastudio');
+		$email_onboarding = (int) $this->input->post('email_onboarding');
+		$facturation = (int) $this->input->post('facturation');
 
+		$this->Donne_modele->update_client($idclient, $client, $email_client, $numero_client, $site_client);
+		$this->Donne_modele->update_onboarding_client(
+			$budget, $secteur_activite, $Produit, $Initiative, $Am,
+			$mis_en_place_paiement, $Brief, $annonce, $commentaire_client,
+			$paiement_recu, $datastudio, $email_onboarding, $facturation, $idonboarding
+		);
+
+		$this->session->set_flashdata('message-succes', "Données mises à jour avec succès");
+		redirect('Onboarding', 'refresh');
+	}
 	public function creer_upsell()
 	{
 		$type_upsell = $this->input->post('type_upsell');
@@ -247,6 +278,10 @@ public function activer_processus_tache()
 			);
 
 			$this->Task_model->add_task($data);
+<<<<<<< HEAD
+=======
+		
+>>>>>>> 9091c7eca10d8d61e634280953442404f0c6a109
 		endif;
 		if ($type_upsell == 1):
 			$am = $this->input->post('am');

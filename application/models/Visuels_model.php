@@ -13,6 +13,42 @@ class Visuels_model extends CI_Model {
 	protected $visuels_formats_images = "hm_visuels_formats_images";
     protected $_database;
     public $table_fields = array();
+
+	public function ajout_brief($id, $information_client)
+		{
+			$this->db->where('idclients', $id);
+			$this->db->update('donnee', [
+				'information_client' => $information_client
+			]);
+		}
+
+	public function mis_a_jour_cms($idclients, $cms)
+    {
+        $data = [
+            'cms' => $cms
+        ];
+
+        $this->db->where('idclients', $idclients);
+        return $this->db->update('clients', $data);
+    }
+	public function mis_a_jour_gtm($idclients, $gtm_code)
+    {
+        $data = [
+            'tracking_gtm' => $gtm_code
+        ];
+
+        $this->db->where('idclients', $idclients);
+        return $this->db->update('donnee', $data);
+    }
+	public function change_meetingDate($idclients, $meetingDate)
+    {
+        $data = [
+            'meetingDate' => $meetingDate
+        ];
+
+        $this->db->where('idclients', $idclients);
+        return $this->db->update('clients', $data);
+    }
 	public function get_upsell_by_id($idupsell) {
 	$sql = "select * from upsell where idupsell='".$idupsell."'";
 	$result = $this->db->query($sql);
@@ -20,6 +56,12 @@ class Visuels_model extends CI_Model {
 	$this->db->close();
 	return $retour;
 	}
+	
+		public function add_upsell_onboarding($data_upsell)
+		{
+			$this->load->database();
+			$this->db->insert('onboarding', $data_upsell);
+		}
 	public function change_statut_en_demande($id,$statut_demande){
             $sql = "update donnee set statut_demande_en_cours='".$statut_demande."' where idclients ='".$id."'";
             $this->db->query($sql);
@@ -107,8 +149,42 @@ class Visuels_model extends CI_Model {
 
     return $idupsell;
 }
-
-
+public function change_rapport_base($id, $rapport_base)
+		{
+			$this->db->where('idclients', $id);
+			$this->db->update('donnee', [
+				'rapport' => $rapport_base
+			]);
+		}
+		public function change_rapport_conversion($id, $rapport_conversion)
+		{
+			$this->db->where('idclients', $id);
+			$this->db->update('donnee', [
+				'rapport_conversions' => $rapport_conversion
+			]);
+		}
+		public function change_bilan_annuele($id, $bilan_annuele)
+		{
+			$this->db->where('idclients', $id);
+			$this->db->update('donnee', [
+				'bilan' => $bilan_annuele
+			]);
+		}
+public function get_gtm($idclients) {
+			$this->db->select('gtm.*, clients.*,users.*,donnee.tracking_gtm');
+			$this->db->from('gtm');
+			$this->db->join('clients', 'gtm.idclients = clients.idclients');
+			$this->db->join('users', 'gtm.tm = users.id');
+			$this->db->join('donnee', 'gtm.idclients = donnee.idclients');
+			$this->db->where('gtm.idclients', $idclients);
+			$result = $this->db->get();
+			return $result->result_array();
+			}
+	public function update_status_upsell($statut_upsell, $idupsell){
+		$sql = "update onboarding set statut_upsell='".$statut_upsell."' where idupsell='".$idupsell."'";
+		$this->db->query($sql);
+		$this->db->close();
+	}
 	public function update_budget($budget_finale,$idclients){
 		$sql = "update donnee set budget='".$budget_finale."' where idclients='".$idclients."'";
 		$this->db->query($sql);
@@ -1142,6 +1218,22 @@ public function insertclient($client, $site_client, $email_client, $numero_clien
 		// Récupérer les résultats
 		return $this->db->get()->result();
 	}	
+	public function getClientDataonboarding() {
+	$this->db->select('onboarding.*, clients.*, produit.*, 
+					   am_user.photo_users AS am_photo_user, 
+					   tech_user.photo_users AS tech_photo_user, upsell.budgets');
+					   
+	$this->db->from('onboarding');
+	$this->db->join('clients', 'onboarding.idclients = clients.idclients');
+	$this->db->join('produit', 'onboarding.idproduit = produit.idproduit');
+	$this->db->join('users AS am_user', 'onboarding.account_manager = am_user.id', 'left');
+	$this->db->join('users AS tech_user', 'onboarding.initiative = tech_user.id', 'left');
+	$this->db->join('upsell', 'onboarding.idupsell = upsell.idupsell', 'left'); 
+	//$this->db->join('upsell', 'onboarding.idupsell = upsell.idupsell', 'left'); 
+	
+	return $this->db->get()->result();
+}
+
 public function getDonneeByCampagneNonActif() {
 	// Sélection des colonnes nécessaires
 	$this->db->select('
@@ -1412,4 +1504,5 @@ public function getDonneeByenattentedeenvoyestructure() {
         }
 		return;
 	}
+	
 }

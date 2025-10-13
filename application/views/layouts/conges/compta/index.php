@@ -83,6 +83,13 @@
 			<i class="fa fa-plus"></i>
 			Créer
 		</button>
+		<h3>Filtrer par utilisateur :</h3>
+		<div class="form-group">
+			<select id="userFilter" class="custom-select custom-select-sm w-100">
+				<option value="">-- Tous les utilisateurs --</option>
+			</select>
+		</div>
+		</br>
 		
 		<div id="mini_calendar" class="my-3"></div>
 
@@ -96,13 +103,7 @@
 				<label class="custom-control-label m-0" for="agenda_<?= $a ?>"><?= $a ?></label>
 			</div>
 		<?php endforeach; ?>
-		<h3>Filtres</h3>
-		<div class="form-group">
-			<label for="userFilter">Filtrer par utilisateur :</label>
-			<select id="userFilter" class="custom-select custom-select-sm w-100">
-				<option value="">-- Tous les utilisateurs --</option>
-			</select>
-		</div>
+		
 	</div>
 
 	<div class="main">
