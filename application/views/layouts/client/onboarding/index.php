@@ -116,12 +116,7 @@
 										<b><?= format_budget($d['budget']) ?> €</b>
 									</button>
 									<div class="dropdown no-arrow">
-										<a href="javascript:void(0);" class="btn btn-light rounded-pill px-3 nav-link dropdown-toggle" id="clientDetailDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-											<i class="fa fa-ellipsis-v" style="font-size: 16px;"></i>
-										</a>
-										<div class="dropdown-menu dropdown-menu-right animated--grow-in" aria-labelledby="clientDetailDropdown">
-											<a class="dropdown-item" href="javscript:void(0);" data-toggle="modal" data-target="#editModal">Modifier</a>
-										</div>
+										<img class="mr-2" src="<?= base_url('assets/images/ico/Eye.png') ?>" />
 									</div>
 								</div>
 								<br><br>
