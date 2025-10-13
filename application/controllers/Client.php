@@ -6,7 +6,8 @@ class Client extends MY_Controller
 	private $api_url = 'https://api.aircall.io/v1/calls';
 	private $api_auth = '';
 	protected $file_upload_field;
-	private $openai_api_key = getenv('OPENAI_API_KEY');
+	private $api_key = getenv('OPENAI_API_KEY');
+
 
 	public function __construct()
 	{
@@ -601,7 +602,7 @@ class Client extends MY_Controller
 
         $headers = [
             "Content-Type: application/json",
-            "Authorization: " . "Bearer " . $this->openai_api_key
+            "Authorization: " . "Bearer " . $this->api_key
         ];
 
         $ch = curl_init();
@@ -1129,6 +1130,7 @@ class Client extends MY_Controller
 	private function get_summary_from_chatgpt($headings, $paragraphs)
 	{
 		$api_key = getenv('OPENAI_API_KEY');
+
 		$model = 'gpt-4'; // ou 'gpt-3.5-turbo'
 
 		   $input_text = "Voici les titres et paragraphes d’un site web.\n\n";
