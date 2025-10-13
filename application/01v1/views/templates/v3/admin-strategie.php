@@ -38,11 +38,11 @@
     display: none;
 }
 
-.ta***REMOVED*** {
+.task-details {
     display: none;
 }
 
-.ta***REMOVED*** {
+.task-form {
     width: 100%;
     margin: 50px auto;
     background-color: #f9f9f9;
@@ -162,8 +162,8 @@
                             </thead>
                             <tbody>
                                 <?php foreach($tache_team as $T): ?>
-                                <tr data-ta***REMOVED***="<?php echo $T->idtask; ?>" class="ta***REMOVED***">
-                                    <td><a href="javascript:void(0);" class="client-name" data-ta***REMOVED***="<?php echo $T->idtask; ?>"><?php echo htmlspecialchars($T->reference); ?></a></td>
+                                <tr data-task-id="<?php echo $T->idtask; ?>" class="task-row">
+                                    <td><a href="javascript:void(0);" class="client-name" data-task-id="<?php echo $T->idtask; ?>"><?php echo htmlspecialchars($T->reference); ?></a></td>
                                     <td><?php echo htmlspecialchars($T->date_demande); ?></td>
                                     <td><?php echo htmlspecialchars($T->date_due); ?></td>
                                     <td><?php echo htmlspecialchars($T->nom_client); ?></td>
@@ -178,11 +178,11 @@
                                     <td><?php echo htmlspecialchars($T->priorite); ?></td>
                                 </tr>
 
-                                <div id="ta***REMOVED***-<?php echo $T->idtask; ?>" class="ta***REMOVED*** client-details" style="display:none;">
+                                <div id="task-details-<?php echo $T->idtask; ?>" class="task-details client-details" style="display:none;">
         
                                     <?php var_dump($T); ?>
                                     <h3>Détails de la tâche</h3>
-                                    <form action="<?php echo site_url('Strategie/update_task/' . $T->idtask); ?>" method="POST" class="ta***REMOVED***">
+                                    <form action="<?php echo site_url('Strategie/update_task/' . $T->idtask); ?>" method="POST" class="task-form">
                                         <input type="hidden" name="idtask" class="form-input" value="<?php echo htmlspecialchars($T->idtask); ?>" />
                                         <label for="date_demande" class="form-label">Date de la demande :</label>
                                         <input type="date" name="date_demande" class="form-input" value="<?php echo htmlspecialchars($T->date_demande); ?>" required />
@@ -256,8 +256,8 @@
                             </thead>
                             <tbody>
                                 <?php foreach($tache_team as $T): ?>
-                                <tr data-ta***REMOVED***="<?php echo $T->idtask; ?>" class="ta***REMOVED***">
-                                    <td><a href="javascript:void(0);" class="client-name" data-ta***REMOVED***="<?php echo $T->idtask; ?>"><?php echo htmlspecialchars($T->reference); ?></a></td>
+                                <tr data-task-id="<?php echo $T->idtask; ?>" class="task-row">
+                                    <td><a href="javascript:void(0);" class="client-name" data-task-id="<?php echo $T->idtask; ?>"><?php echo htmlspecialchars($T->reference); ?></a></td>
                                     <td><?php echo htmlspecialchars($T->date_demande); ?></td>
                                     <td><?php echo htmlspecialchars($T->date_due); ?></td>
                                     <td><?php echo htmlspecialchars($T->nom_client); ?></td>
@@ -272,11 +272,11 @@
                                     <td><?php echo htmlspecialchars($T->priorite); ?></td>
                                 </tr>
 
-                                <div id="ta***REMOVED***-<?php echo $T->idtask; ?>" class="ta***REMOVED*** client-details" style="display:none;">
+                                <div id="task-details-<?php echo $T->idtask; ?>" class="task-details client-details" style="display:none;">
         
                                     <?php var_dump($T); ?>
                                     <h3>Détails de la tâche</h3>
-                                    <form action="<?php echo site_url('Strategie/update_task/' . $T->idtask); ?>" method="POST" class="ta***REMOVED***">
+                                    <form action="<?php echo site_url('Strategie/update_task/' . $T->idtask); ?>" method="POST" class="task-form">
                                         <input type="hidden" name="idtask" class="form-input" value="<?php echo htmlspecialchars($T->idtask); ?>" />
                                         <label for="date_demande" class="form-label">Date de la demande :</label>
                                         <input type="date" name="date_demande" class="form-input" value="<?php echo htmlspecialchars($T->date_demande); ?>" required />
@@ -352,8 +352,8 @@
                             </thead>
                             <tbody>
                                 <?php foreach($tache_team as $T): ?>
-                                <tr data-ta***REMOVED***="<?php echo $T->idtask; ?>" class="ta***REMOVED***">
-                                    <td><a href="javascript:void(0);" class="client-name" data-ta***REMOVED***="<?php echo $T->idtask; ?>"><?php echo htmlspecialchars($T->reference); ?></a></td>
+                                <tr data-task-id="<?php echo $T->idtask; ?>" class="task-row">
+                                    <td><a href="javascript:void(0);" class="client-name" data-task-id="<?php echo $T->idtask; ?>"><?php echo htmlspecialchars($T->reference); ?></a></td>
                                     <td><?php echo htmlspecialchars($T->date_demande); ?></td>
                                     <td><?php echo htmlspecialchars($T->date_due); ?></td>
                                     <td><?php echo htmlspecialchars($T->nom_client); ?></td>
@@ -393,8 +393,8 @@
                             </thead>
                             <tbody>
                                 <?php foreach($tache_team as $T): ?>
-                                <tr data-ta***REMOVED***="<?php echo $T->idtask; ?>" class="ta***REMOVED***">
-                                    <td><a href="javascript:void(0);" class="client-name" data-ta***REMOVED***="<?php echo $T->idtask; ?>"><?php echo htmlspecialchars($T->reference); ?></a></td>
+                                <tr data-task-id="<?php echo $T->idtask; ?>" class="task-row">
+                                    <td><a href="javascript:void(0);" class="client-name" data-task-id="<?php echo $T->idtask; ?>"><?php echo htmlspecialchars($T->reference); ?></a></td>
                                     <td><?php echo htmlspecialchars($T->date_demande); ?></td>
                                     <td><?php echo htmlspecialchars($T->date_due); ?></td>
                                     <td><?php echo htmlspecialchars($T->nom_client); ?></td>
@@ -425,32 +425,32 @@ $(document).ready(function() {
 
     // Lorsqu'on clique sur le nom du client
     $(".client-name").click(function() {
-        var taskId = $(this).data("ta***REMOVED***");
+        var taskId = $(this).data("task-id");
         console.log(taskId);
 
         // Cacher tous les blocs de détails
-        $(".ta***REMOVED***").hide();
+        $(".task-details").hide();
 
         // Afficher le formulaire de détails de la tâche spécifique
-        $('#ta***REMOVED***-' + taskId).show();
+        $('#task-details-' + taskId).show();
 
         // Afficher l'overlay et le formulaire de modification
         $('#overlay').show();
-        $('#ta***REMOVED***-' + taskId).addClass('show');
+        $('#task-details-' + taskId).addClass('show');
     });
 
     // Fermeture lorsque l'on clique sur l'overlay
     $('#overlay').click(function() {
-        $('.ta***REMOVED***').removeClass('show');
+        $('.task-details').removeClass('show');
         $('#overlay').hide();
 
         setTimeout(function() {
-            $('.ta***REMOVED***').hide();
+            $('.task-details').hide();
         }, 500);
     });
 
     // Empêche la fermeture si l'on clique à l'intérieur du bloc de détails
-    $('.ta***REMOVED***').click(function(event) {
+    $('.task-details').click(function(event) {
         event.stopPropagation();
     });
 
