@@ -107,7 +107,7 @@
 						<div class="d-flex align-items-center avatar-group">
 							<img src="<?= base_url(IMAGES_PATH . $this->ion_auth->user()->row()->photo_users); ?>" class="avatar rounded-circle" width="28" height="28" alt="Client Image">
 						</div>
-
+																					
 						<div class="d-flex align-items-center avatar-group">
 							<?php foreach ($note->assigned_users as $assigned_user): ?>
 								<img src="<?= base_url(IMAGES_PATH . $assigned_user->photo_users); ?>" class="avatar rounded-circle" width="28" height="28" alt="Client Image">

@@ -7,10 +7,19 @@ class Gtm_model extends CI_Model
 		parent::__construct();
 	}
 	public function get_all_gtm() {
-			$this->db->select('gtm.*, clients.*,users.*');
+			$this->db->select('gtm.*, clients.*,users.*,donnee.tracking_gtm');
 			$this->db->from('gtm');
 			$this->db->join('clients', 'gtm.idclients = clients.idclients');
 			$this->db->join('users', 'gtm.tm = users.id');
+			$this->db->join('donnee', 'gtm.idclients = donnee.idclients');
+			$result = $this->db->get();
+			return $result->result_array();
+			}
+			public function get_all_optimisation_gtm() {
+			$this->db->select('optimisation_gtm.*, clients.*,donnee.tracking_gtm');
+			$this->db->from('optimisation_gtm');
+			$this->db->join('clients', 'optimisation_gtm.idclients = clients.idclients');
+			$this->db->join('donnee', 'optimisation_gtm.idclients = donnee.idclients');
 			$result = $this->db->get();
 			return $result->result_array();
 			}
@@ -27,6 +36,9 @@ class Gtm_model extends CI_Model
 		return $this->db->where('id_gtm', $id)
 						->update('gtm', $data);
 	}
+	public function insert_optimisation($data_optimisation) {
+        return $this->db->insert('optimisation_gtm', $data_optimisation); 
+    }
 
 
 }

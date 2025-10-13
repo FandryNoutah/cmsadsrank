@@ -39,7 +39,6 @@
         Faire une demande
     </button>
 <?php end_section(); ?>
-<?php //var_dump($demandes); die(); ?>
 <?php start_section('content'); ?>
 <div class="table-responsive">
   <table class="table table-wrapper">
@@ -335,16 +334,16 @@ $(document).ready(function(){
     var etat = button.data('etat');
     var commentaire = button.data('commentaire');
 
-			var modal = $(this);
-			modal.find('#validationForm').attr('action', '<?= site_url('conges/valider/') ?>' + id);
-			modal.find('#val_nom_demandeur').text(nom);
-			modal.find('#val_date_debut').text(date_debut);
-			modal.find('#val_date_fin').text(date_fin);
-			modal.find('#nbr_jour').text(nbr_jour);
-			modal.find('#val_motif').text(motif);
-			modal.find('select[name="etat"]').val(etat);
-			modal.find('textarea[name="commentaire"]').val(commentaire);
-		});
-	});
+    var modal = $(this);
+    modal.find('#validationForm').attr('action', '<?= site_url('conges/valider/') ?>' + id);
+    modal.find('#val_nom_demandeur').text(nom);
+    modal.find('#val_date_debut').text(date_debut);
+    modal.find('#val_date_fin').text(date_fin);
+    modal.find('#nbr_jour').text(nbr_jour);
+    modal.find('#val_motif').text(motif);
+    modal.find('select[name="etat"]').val(etat);
+    modal.find('textarea[name="commentaire"]').val(commentaire);
+  });
+});
 </script>
 <?php end_section(); ?>
