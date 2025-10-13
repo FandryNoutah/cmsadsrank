@@ -62,10 +62,11 @@
                                     <th>Invitation reçu<img src="<?= base_url('assets/images/icons/figma/icon-caretdoublevertical-5.svg') ?>" class="ml-2"></th>
                                     <th>GTM<img src="<?= base_url('assets/images/icons/figma/icon-caretdoublevertical-5.svg') ?>" class="ml-2"></th>
                                     <th>Status<img src="<?= base_url('assets/images/icons/figma/icon-caretdoublevertical-5.svg') ?>" class="ml-2"></th>
-                                    <th></th>
+                                    <!-- <th></th> -->
                                 </tr>
                             </thead>
                             <tbody>
+                                <?php //var_dump($gtm); die(); ?>
                                 <?php foreach ($gtm as $d): ?>
                                 <tr>
                                     <td>
@@ -93,7 +94,7 @@
                                         <?php endif; ?>
                                     </td>
                                     <td>
-                                        <?php if ($d['gtm'] == null): ?>
+                                        <?php if (empty($d['tracking_gtm'])): ?>
                                         <span class="badge alert-danger rounded-pill px-2 py-1" style="font-size: 12px; font-weight: 500;">
                                             <i class="fa fa-circle mr-1" style="font-size: 10px;"></i> Non installé
                                         </span>
@@ -118,7 +119,7 @@
                                         </span>
                                         <?php endif; ?>
                                     </td>
-                                    <td>
+                                    <!-- <td>
                                         <div class="dropdown no-arrow">
                                             <a href="javascript:void(0);" class="text-decoration-none text-muted ta***REMOVED*** dropdown-toggle" role="button" data-toggle="dropdown" aria-expanded="false">
                                                 <i class="fa fa-ellipsis-v"></i>
@@ -132,7 +133,7 @@
                                                 </button>
                                             </div>
                                         </div>
-                                    </td>
+                                    </td> --->
                                 </tr>
                                 <?php endforeach; ?>
                             </tbody>
@@ -197,7 +198,7 @@
                                     <th>Octobre<img src="<?= base_url('assets/images/icons/figma/icon-caretdoublevertical-5.svg') ?>" class="ml-2"></th>
                                     <th>Novembre<img src="<?= base_url('assets/images/icons/figma/icon-caretdoublevertical-5.svg') ?>" class="ml-2"></th>
                                     <th>Décembre<img src="<?= base_url('assets/images/icons/figma/icon-caretdoublevertical-5.svg') ?>" class="ml-2"></th>
-                                    <th></th>
+                                    <!-- <th></th> -->
                                 </tr>
                             </thead>
                             <tbody>
@@ -223,7 +224,7 @@
                                     <td class="text-muted">
                                         <span class="badge alert-warning rounded-pill px-2 py-1"><i class="fa fa-circle mr-1" style="font-size: 10px;"></i>16/08/2013</span>
                                     </td>
-                                    <td>
+                                    <!-- <td>
                                         <div class="dropdown no-arrow">
                                             <a href="javascript:void(0);" class="text-decoration-none text-muted ta***REMOVED*** dropdown-toggle" role="button" data-toggle="dropdown" aria-expanded="false">
                                                 <i class="fa fa-ellipsis-v"></i>
@@ -241,7 +242,7 @@
                                                 </a>
                                             </div>
                                         </div>
-                                    </td>
+                                    </td> -->
                                 </tr>
                             </tbody>
                         </table>

@@ -29,6 +29,7 @@
     <div id="multi-users" style="display:none; margin-top:10px;">
         <label>Choisir les destinataires :</label>
         <?php foreach ($users as $user): ?>
+            
             <div>
                 <input type="checkbox" name="assigned_to[]" value="<?= $user->id; ?>">
                 <?= htmlspecialchars($user->username); ?>

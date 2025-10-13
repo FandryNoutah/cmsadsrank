@@ -512,9 +512,10 @@
 								<div class="d-flex align-items-center mb-2">
 									<img src="<?= base_url('assets/images/figma/google_meet.png') ?>" width="43">
 									<a href="#" 
-									class="text-decoration-none text-muted ml-3 stretched-link"
+									class="text-decoration-none text-muted ml-3 stretched-link open-date-modal"
 									data-bs-toggle="modal"
-									data-bs-target="#dateModal">
+									data-bs-target="#dateModal"
+									data-idclient="<?= $d['idclients'] ?>">
 										Google Meet
 									</a>
 									<i class="fa fa-chevron-right ml-auto" style="font-size: 12px;"></i>
@@ -522,15 +523,39 @@
 								<h3 class="m-0" style="font-size: 21px;">
 									<?php if($d['meetingDate'] != NULL): ?>
 										<?= $d['meetingDate'] ?> 
-									<?php endif; ?>
-									<?php if($d['meetingDate'] == NULL): ?>
+									<?php else: ?>
 										Ajouter une date
 									<?php endif; ?>
-								
 								</h3>
 							</div>
 						</div>
 					</div>
+					<div class="modal fade" id="dateModal" tabindex="-1" aria-labelledby="dateModalLabel" aria-hidden="true" style="margin-left: 42%; margin-top: 12%;">
+						<div class="modal-dialog">
+							<div class="modal-content" >
+							<form action="<?= site_url('Client/date_google_meet') ?>" method="post">
+								<div class="modal-content">
+									<div class="modal-header">
+										<h5 class="modal-title" id="dateModalLabel">Choisir une date pour Google Meet</h5>
+										<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fermer"></button>
+									</div>
+									<div class="modal-body">
+										<input type="hidden" name="idclients" id="modal-idclients">
+										<div class="mb-3">
+											<label for="meetingDate" class="form-label">Date</label>
+											<input type="date" class="form-control" name="meetingDate" required>
+										</div>
+									</div>
+									<div class="modal-footer">
+										<button type="submit" class="btn btn-primary">Enregistrer</button>
+									</div>
+								</div>
+							</form>
+							</div>
+						</div>
+					</div>
+
+
 
 					<div class="col">
 						<div class="card h-100">
@@ -668,13 +693,13 @@
 							<div class="card-body text-center">
 								
 								<h5>Rapport Bilan Annuel</h5>
-								<?php if(!empty($donnees[0]['rapport_conversions'])): ?>
+								<?php if(!empty($donnees[0]['bilan'])): ?>
 								</br>
 								<span class="text-muted">
 									<i class="fa fa-circle mr-2" style="color: #589e67;"></i> Active
 								</span>
 								<?php endif; ?>
-								<?php if(empty($donnees[0]['rapport_conversions'])): ?>
+								<?php if(empty($donnees[0]['bilan'])): ?>
 								</br>
 								<button type="button" class="btn btn-light btn-block" data-bs-toggle="modal" data-bs-target="#modalBilan">
 								<i class="fa fa-plus"></i> Create
@@ -725,12 +750,14 @@
 					<div class="col">
 						<div class="card h-100">
 							<div class="card-body text-center">
-								<h3 class="mb-4">6+ Apps connectés</h3>
-								<p class="text-muted mx-5 mb-5" style="font-size: 18px;">
-									Embark on a transformative journey with our venture. Over 60 powerful tools to make your work more efficient and effective.
-								</p>
-								<div class="row justify-content-center">
-									<div class="col-auto">
+								<?php if( $d['cms'] != "Inconnu ou non détectable automatiquement"): ?>
+										<div class="card-body text-center">
+									<h3 class="mb-4"><?php echo $d['cms']; ?></h3>
+									<p class="text-muted mx-5 mb-5" style="font-size: 18px;">
+										<?php echo $d['cms']; ?> est installé avec cette URL.
+									</p>
+									<div class="row justify-content-center">
+										<div class="col-auto">
 
 										<?php if ($d['cms'] != "Inconnu ou non détectable automatiquement"): ?>
 											<img src="<?= $d['cms_logo']; ?>" width="43">
@@ -739,7 +766,9 @@
 											Inconnu ou non détectable automatiquement
 										<?php endif; ?>
 									</div>
-								</div>
+									</div>
+									</div>
+									<?php endif; ?>
 							</div>
 						</div>
 					</div>
@@ -757,10 +786,10 @@
 								</span>
 							<?php endif; ?>
 							<?php if (empty($d['tracking_gtm'])): ?>
-								<span class="badge alert-danger rounded-pill px-2 py-1" style="font-size: 12px; font-weight: 500;">
-									<i class="fa fa-circle mr-1" style="font-size: 10px;"></i>
-									GTM Non installé
-								</span>
+								<span class="badge alert-danger rounded-pill px-4 py-3" style="font-size: 14px; font-weight: 500;">
+															<i class="fa fa-circle mr-1" style="font-size: 10px;"></i>
+															GTM non installé
+														</span>
 
 							<?php endif; ?>
 							</div>
@@ -789,14 +818,6 @@
 							</tr>
 						</thead>
 						<tbody>
-							<tr>
-								<td colspan="6">
-									<a href="#" class="text-dark">
-										<i class="fa fa-plus"></i>
-										New Task
-									</a>
-								</td>
-							</tr>
 							<?php if ($task != NULL): ?>
 								<?php foreach ($task as $t): ?>
 									<tr>
@@ -820,10 +841,25 @@
 											</div>
 										</td>
 										<td class="align-middle">
-											<span class="badge alert-warning rounded-pill px-3 py-2" style="font-size: 12px; font-weight: 500;">
+											<?php if ($t->status == "planifié"): ?>
+												<span class="badge alert-warning rounded-pill px-3 py-2" style="font-size: 12px; font-weight: 500;">
 												<i class="fa fa-circle mr-1" style="font-size: 10px;"></i>
-												Planned
-											</span>
+												Plannifier
+											</span>	
+											<?php endif; ?>	
+											<?php if ($t->status == "en cours"): ?>
+												<span class="badge alert-warning rounded-pill px-3 py-2" style="font-size: 12px; font-weight: 500;">
+												<i class="fa fa-circle mr-1" style="font-size: 10px;"></i>
+												Programmé
+											</span>	
+											<?php endif; ?>	
+											<?php if ($t->status == "effectuée"): ?>
+												<span class="badge alert-success rounded-pill px-3 py-2" style="font-size: 12px; font-weight: 500;">
+												<i class="fa fa-circle mr-1" style="font-size: 10px;"></i>
+												Effectuée
+											</span>	
+											<?php endif; ?>	
+											
 										</td>
 										<td>
 											<div class="dropdown no-arrow">
@@ -843,7 +879,7 @@
 					</table>
 				</div><br><br></br></br>
 
-				<h1 style="font-size: 48px;">Notes</h1>
+				<h1 style="font-size: 48px;">Bilan</h1>
 				</br>
 				<div class="row row-cols-3">
 					<?php foreach ($notes as $note): ?>
@@ -910,7 +946,7 @@
 							<div class="card-body d-flex align-items-center">
 								<button class="btn btn-light btn-block btn-sm" type="button" data-toggle="modal" data-target="#noteModal">
 									<i class="fa fa-plus"></i>
-									Nouvelle Note
+									Nouvelle Bilan
 								</button>
 							</div>
 						</div>
@@ -933,8 +969,21 @@
 <?php start_section('script'); ?>
 
 <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const links = document.querySelectorAll(".open-date-modal");
+
+    links.forEach(link => {
+      link.addEventListener("click", function () {
+        const clientId = this.getAttribute("data-idclient");
+        document.getElementById("modal-idclients").value = clientId;
+      });
+    });
+  });
+</script>
 
 <script>
+	
 	$(function() {
 
 		const currentMonthIndex = new Date().getMonth();

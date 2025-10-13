@@ -196,39 +196,12 @@
 							</li>
 						</ul>
 
-						<div class="card bg-light">
-							<div class="card-body">
-								<div class="multi-col" style="height: 550px;">
-									<p class="mb-1">micro entreprise</p>
-									<p class="mb-1">auto entrepreneur</p>
-									<p class="mb-1">microentreprise</p>
-									<p class="mb-1">création entreprise</p>
-									<p class="mb-1">freelance</p>
-									<p class="mb-1">business plan</p>
-									<p class="mb-1">statut juridique</p>
-									<p class="mb-1">financement pôle emploi</p>
-									<p class="mb-1">prime création</p>
-									<p class="mb-1">auto-entrepreneur</p>
-									<p class="mb-1">boutique en ligne</p>
-									<p class="mb-1">dropshipping</p>
-									<p class="mb-1">vinted</p>
-									<p class="mb-1">définition</p>
-									<p class="mb-1">comment faire</p>
-									<p class="mb-1">pdf</p>
-									<p class="mb-1">gratuit</p>
-									<p class="mb-1">exemple</p>
-									<p class="mb-1">livre blanc</p>
-									<p class="mb-1">template</p>
-									<p class="mb-1">coursseed</p>
-									<p class="mb-1">pre seed</p>
-									<p class="mb-1">early stage</p>
-									<p class="mb-1">incubateur</p>
-									<p class="mb-1">accélérateur</p>
-									<p class="mb-1">business angel</p>
-									<p class="mb-1">levée de fonds seed</p>
-								</div>
-							</div>
+						<div class="form-group">
+							<label>Propositions de mots-clés à exclure</label>
+							<textarea class="form-control" rows="15"><?= $mots_exclus ?></textarea>
 						</div>
+
+
 
 						<ul class="nav nav-tabs mb-3">
 							<li class="nav-item">
@@ -351,10 +324,35 @@
 			</div>
 		</div>
 	</div>
-<?php endforeach; ?>
+
 <?php end_section() ?>
 
 <?php start_section('script'); ?>
+	<script>
+	document.getElementById('btn_generate_keywords').addEventListener('click', function() {
+		const info = `<?= addslashes($d['information_client']); ?>`;
+		const site = `<?= addslashes($d['site_client']); ?>`;
+
+		document.getElementById('keywords_exclus').innerHTML = "<p>⏳ Génération en cours...</p>";
+
+		fetch("<?= site_url('Client/generer_mots_exclus') ?>", {
+			method: "POST",
+			headers: {
+				"Content-Type": "application/x-www-form-urlencoded"
+			},
+			body: "information_client=" + encodeURIComponent(info) + "&site_client=" + encodeURIComponent(site)
+		})
+		.then(res => res.text())
+		.then(data => {
+			document.getElementById('keywords_exclus').innerHTML = data;
+		})
+		.catch(err => {
+			document.getElementById('keywords_exclus').innerHTML = "<p class='text-danger'>Erreur lors de la génération.</p>";
+			console.error(err);
+		});
+	});
+	</script>
+<?php endforeach; ?>
 <script>
 	$(function() {
 

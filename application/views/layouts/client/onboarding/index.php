@@ -71,7 +71,7 @@
 <?php end_section() ?>
 
 <?php start_section('content'); ?>
-
+<?php foreach($donnees as $d): ?>
 <div class="container-fluid p-0 h-100">
 	<div class="row no-gutters h-100">
 		<?php $this->load->view('layouts/client/onboarding/sidebar'); ?>
@@ -80,15 +80,14 @@
 			<div class="container-fluid mb-5">
 
 				<!-- DETAIL -->
-				<h1 class="display-1 text-center" style="font-size: 42px;">
-					Onboarding Client: <br>
-					Ouest lyonnais climatisation plomberie SARL <br>
-					Search Engine
+				<h1 class="display-1 text" style="font-size: 42px;">
+				Onboarding :
+				<?= $d['nom_client'] ?>
 				</h1>
 
-				<div class="row no-gutters">
-					<div class="col pr-2" style="margin-right: 30px;">
-						<div class="card h-100 mb-5" style="margin-bottom: 0rem !important;">
+				<div class="row mb-3">
+					<div class="col">
+						<div class="card">
 							<div class="card-body">
 								<ul class="nav nav-tabs mb-3" style="margin-top: -15px;">
 									<li class="nav-item">
@@ -98,21 +97,23 @@
 									</li>
 								</ul>
 
-								<h6 class="text-muted font-weight-normal" style="font-size: 15.5px;">
-									Meta Platforms, Inc., doing business as Meta and formerly named Facebook, Inc., and TheFacebook, Inc., is an American multinational technology conglomerate based in Menlo Park, California.
-
-									The company owns Facebook, Instagram, and WhatsApp, among other products and services. The company owns Facebook, Instagram, and WhatsApp, among other products and services.The company owns Facebook, Instagram, and WhatsApp, among other products and
+								<h6 class="text-muted font-weight-normal" style="font-size: 14px;">
+										<?= nl2br($d['info_base_client']) ?></br>
 								</h6>
 							</div>
 						</div>
 					</div>
 
 					<div class="col-auto">
-						<div class="card h-100" style="width: 420px;">
+						<div class="card" style="width: 23rem;">
 							<div class="card-body">
 								<div class="d-flex justify-content-between align-items-center">
 									<button class="btn btn-dark py-3 px-5" data-toggle="modal" data-target="#budgetModal">
-										3000 $
+										<?php function format_budget($nombre)
+										{
+											return number_format($nombre, 0, '', ' ');
+										} ?>
+										<b><?= format_budget($d['budget']) ?> €</b>
 									</button>
 									<div class="dropdown no-arrow">
 										<a href="javascript:void(0);" class="btn btn-light rounded-pill px-3 nav-link dropdown-toggle" id="clientDetailDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -120,40 +121,37 @@
 										</a>
 										<div class="dropdown-menu dropdown-menu-right animated--grow-in" aria-labelledby="clientDetailDropdown">
 											<a class="dropdown-item" href="javscript:void(0);" data-toggle="modal" data-target="#editModal">Modifier</a>
-											<a class="dropdown-item" href="javscript:void(0);" data-toggle="modal" data-target="#statusModal">Statut Client</a>
 										</div>
 									</div>
 								</div>
 								<br><br>
-								<div class="d-flex justify-content-start mb-3" style="font-size: 18px;">
-									<span class="badge badge-light mr-3" style="width: 20px; height: 20px; background-color: #f2f2f2;">&nbsp;</span>
-									<span class="mr-2">Date Anniversaire | 20/07/2026</span>
+								<div class="d-flex justify-content-start mb-3" style="font-size: 15px;">
+									<i class="fa fa-check-square mr-2" style="color: #f0f0f0ff; font-size: 18px;"></i>
+									<span class="mr-2">Date d'anniversaire : <?= $d['mis_en_place_paiement'] ?></span>
 								</div>
-								<div class="d-flex justify-content-start mb-3" style="font-size: 18px;">
-									<span class="badge badge-light mr-3" style="width: 20px; height: 20px; background-color: #f2f2f2;">&nbsp;</span>
-									<span class="mr-2">Date de Mise en Ligne | 20/07/2026</span>
+								<div class="d-flex justify-content-start mb-3" style="font-size: 15px;">
+									<i class="fa fa-check-square mr-2" style="color: #f0f0f0ff; font-size: 18px;"></i>
+									<span class="mr-2">Date de mise en ligne : <?= $d['annonce'] ?></span>
 
 								</div>
-								<div class="d-flex justify-content-start mb-3" style="font-size: 18px;">
-									<span class="badge badge-light mr-3" style="width: 20px; height: 20px; background-color: #f2f2f2;">&nbsp;</span>
+								<div class="d-flex justify-content-start mb-3" style="font-size: 15px;">
+									<i class="fa fa-check-square mr-2" style="color: #f0f0f0ff; font-size: 18px;"></i>
 									<span class="mr-2">Commerciale</span>
 									<span class="mr-2">
-										<img src="<?= base_url('assets/images/icons/figma/frame-5518.png') ?>" width="24" height="24">
+										<img src="<?= base_url('assets/images/' . $d['tech_photo_user']) ?>" width="24" height="24">
 									</span>
 								</div>
-								<div class="d-flex justify-content-start mb-4" style="font-size: 18px;">
-									<span class="badge badge-light mr-3" style="width: 20px; height: 20px; background-color: #f2f2f2;">&nbsp;</span>
+								<div class="d-flex justify-content-start mb-4" style="font-size: 15px;">
+									<i class="fa fa-check-square mr-2" style="color: #f0f0f0ff; font-size: 18px;"></i>
 									<span class="mr-2">Account Manager</span>
 									<span class="mr-2">
-										<img src="<?= base_url('assets/images/icons/figma/frame-5518.png') ?>" width="24" height="24">
+										<img src="<?= base_url('assets/images/' . $d['am_photo_user']) ?>" width="24" height="24">
 									</span>
 								</div>
 							</div>
 						</div>
 					</div>
 				</div>
-
-				<!-- BRIEF -->
 				<h1 class="display-1 text-center mt-4" style="font-size: 42px;">
 					Brief
 				</h1>
@@ -164,39 +162,30 @@
 								Brief client
 							</a>
 						</li>
-						<li class="nav-item">
-							<a class="nav-link py-3" type="button">
-								Information Importante
-							</a>
-						</li>
-						<li class="nav-item">
-							<a class="nav-link py-3" type="button">
-								Valeur Ajouté
-							</a>
-						</li>
 					</ul>
 					<div class="d-inline">
+						<?php if(!empty($d['information_client'])): ?>
 						<button class="btn btn-dark">
 							<img src="<?= base_url('assets/images/icons/figma/icon-plus.svg') ?>" alt="">
 							Modifier Brief
 						</button>
-					</div>
-				</div>
-				<div class="card" style="height: 400px;">
-					<div class="card-body">
-						<!-- IF BRIEF VIDE -->
-						<div class="d-flex align-items-center justify-content-center h-100">
+						<?php endif; ?>
+						<?php if(empty($d['information_client'])): ?>
 							<button class="btn btn-dark stretched-link" data-toggle="modal" data-target="#briefModal">
 								<img src="<?= base_url('assets/images/icons/figma/icon-plus.svg') ?>" alt="">
 								Ajouter Brief
 							</button>
-						</div>
-
-						<!-- IF BRIEF EXISTE -->
-						<!-- <p class="text-muted">Test</p> -->
+						<?php endif; ?>
 					</div>
 				</div>
-
+				<?php if(!empty($d['information_client'])): ?>
+				<div class="card">
+					<div class="card-body">
+							<?= nl2br($d['information_client']); ?> 							
+					</div>
+				</div>
+				<?php endif; ?>
+				
 				<!-- BRIEF -->
 				<h1 class="display-1 text-center mt-4" style="font-size: 42px;">
 					Campagne
@@ -263,7 +252,7 @@
 				</button>
 
 				<div id="camp_creation_step" class="d-none">
-
+					<p style="display: none;"><?= nl2br($d['information_client']); ?> 	</p>			
 					<!-- CAMPAGNE -->
 					<div id="campagne_step" class="step active mb-4">
 						<h1 class="display-1 text-center mt-5" style="font-size: 42px;">
@@ -421,7 +410,7 @@
 		</div>
 	</div>
 </div>
-
+<?php endforeach; ?>
 <?php $this->load->view('layouts/client/onboarding/brief-modal') ?>
 <?php end_section(); ?>
 
