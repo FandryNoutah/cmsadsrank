@@ -180,7 +180,7 @@
 					<tbody>
 						<?php foreach ($tache as $t):  ?>
 							<?php if ($t->status == "planifié"): ?>
-								<tr class="ta***REMOVED***" data-type="<?= $t->type_tache ?>" data-am="<?= $t->AM; ?>" data-assigned="<?= $t->assigned_to ?>" <?php if ($t->expired): ?> data-expired="true" style="background-color: rgba(255, 0, 0, 0.05);" <?php endif; ?> data-urgent="<?= $t->Statuts_technique == 3; ?>">
+								<tr class="task-filter" data-type="<?= $t->type_tache ?>" data-am="<?= $t->AM; ?>" data-assigned="<?= $t->assigned_to ?>" <?php if ($t->expired): ?> data-expired="true" style="background-color: rgba(255, 0, 0, 0.05);" <?php endif; ?> data-urgent="<?= $t->Statuts_technique == 3; ?>">
 								<td>
 										<h6 class="mb-0 ml-3">
 											<?= $t->nom_client; ?>
@@ -280,7 +280,7 @@
 									</td>
 									<td>
 										<div class="dropdown no-arrow">
-											<a href="javascript:void(0);" class="text-decoration-none text-muted ta***REMOVED*** dropdown-toggle" role="button" data-toggle="dropdown" aria-expanded="false">
+											<a href="javascript:void(0);" class="text-decoration-none text-muted task-menu dropdown-toggle" role="button" data-toggle="dropdown" aria-expanded="false">
 												<i class="fa fa-ellipsis-v"></i>
 											</a>
 											<div class="dropdown-menu dropdown-menu-right">
@@ -326,7 +326,7 @@
 					<tbody>
 						<?php foreach ($tache as $t): ?>
 							<?php if ($t->status == "en cours"): ?>
-								<tr class="ta***REMOVED***" data-type="<?= $t->type_tache ?>" data-am="<?= $t->AM; ?>" data-assigned="<?= $t->assigned_to ?>" <?php if ($t->expired): ?> data-expired="true" style="background-color: rgba(255, 0, 0, 0.05);" <?php endif; ?> data-urgent="<?= $t->Statuts_technique == 3; ?>">
+								<tr class="task-filter" data-type="<?= $t->type_tache ?>" data-am="<?= $t->AM; ?>" data-assigned="<?= $t->assigned_to ?>" <?php if ($t->expired): ?> data-expired="true" style="background-color: rgba(255, 0, 0, 0.05);" <?php endif; ?> data-urgent="<?= $t->Statuts_technique == 3; ?>">
 									<td>
 										<h6 class="mb-0 ml-3">
 											<?= $t->nom_client; ?>
@@ -425,7 +425,7 @@
 									</td>
 									<td>
 										<div class="dropdown no-arrow">
-											<a href="javascript:void(0);" class="text-decoration-none text-muted ta***REMOVED*** dropdown-toggle" role="button" data-toggle="dropdown" aria-expanded="false">
+											<a href="javascript:void(0);" class="text-decoration-none text-muted task-menu dropdown-toggle" role="button" data-toggle="dropdown" aria-expanded="false">
 												<i class="fa fa-ellipsis-v"></i>
 											</a>
 											<div class="dropdown-menu dropdown-menu-right">
@@ -470,7 +470,7 @@
 					<tbody>
 						<?php foreach ($tache as $t): ?>
 							<?php if ($t->status == "effectuée"): ?>
-								<tr class="ta***REMOVED***" data-type="<?= $t->type_tache ?>" data-am="<?= $t->AM; ?>" data-assigned="<?= $t->assigned_to ?>" <?php if ($t->expired): ?> data-expired="true" style="background-color: rgba(255, 0, 0, 0.05);" <?php endif; ?> data-urgent="<?= $t->Statuts_technique == 3; ?>">
+								<tr class="task-filter" data-type="<?= $t->type_tache ?>" data-am="<?= $t->AM; ?>" data-assigned="<?= $t->assigned_to ?>" <?php if ($t->expired): ?> data-expired="true" style="background-color: rgba(255, 0, 0, 0.05);" <?php endif; ?> data-urgent="<?= $t->Statuts_technique == 3; ?>">
 									<td>
 										<h6 class="mb-0 ml-3">
 											<?= $t->nom_client; ?>
@@ -568,7 +568,7 @@
 									</td>
 									<td>
 										<div class="dropdown no-arrow">
-											<a href="javascript:void(0);" class="text-decoration-none text-muted ta***REMOVED*** dropdown-toggle" role="button" data-toggle="dropdown" aria-expanded="false">
+											<a href="javascript:void(0);" class="text-decoration-none text-muted task-menu dropdown-toggle" role="button" data-toggle="dropdown" aria-expanded="false">
 												<i class="fa fa-ellipsis-v"></i>
 											</a>
 											<div class="dropdown-menu dropdown-menu-right">
@@ -610,7 +610,7 @@
 							<span class="text-muted"><?= $count_planned; ?> open tasks</span>
 							<?php foreach ($tache as $t): ?>
 								<?php if ($t->status == "planifié"): ?>
-									<div class="card mt-3 ta***REMOVED***" data-type="<?= $t->type_tache ?>" data-am="<?= $t->AM; ?>" data-assigned="<?= $t->assigned_to ?>" <?php if ($t->expired): ?> data-expired="true" style="background-color: rgba(255, 0, 0, 0.05);" <?php endif; ?> data-urgent="<?= $t->Statuts_technique == 3; ?>">
+									<div class="card mt-3 task-filter" data-type="<?= $t->type_tache ?>" data-am="<?= $t->AM; ?>" data-assigned="<?= $t->assigned_to ?>" <?php if ($t->expired): ?> data-expired="true" style="background-color: rgba(255, 0, 0, 0.05);" <?php endif; ?> data-urgent="<?= $t->Statuts_technique == 3; ?>">
 										<div class="card-body">
 											<div class="d-flex">
 												<?php if ($t->type_tache == 1): ?>
@@ -664,7 +664,7 @@
 													</div>
 												<?php endif; ?>
 												<div class="dropdown no-arrow ml-auto">
-													<a href="javascript:void(0);" class="text-decoration-none text-muted ta***REMOVED*** dropdown-toggle" role="button" data-toggle="dropdown" aria-expanded="false">
+													<a href="javascript:void(0);" class="text-decoration-none text-muted task-menu dropdown-toggle" role="button" data-toggle="dropdown" aria-expanded="false">
 														<i class="fa fa-ellipsis-h"></i>
 													</a>
 													<div class="dropdown-menu dropdown-menu-right">
@@ -731,7 +731,7 @@
 							<!-- Eto no manao foreach -->
 							<?php foreach ($tache as $t): ?>
 								<?php if ($t->status == "en cours"): ?>
-									<div class="card mt-3 ta***REMOVED***" data-type="<?= $t->type_tache ?>" data-am="<?= $t->AM; ?>" data-assigned="<?= $t->assigned_to ?>" <?php if ($t->expired): ?> data-expired="true" style="background-color: rgba(255, 0, 0, 0.05);" <?php endif; ?> data-urgent="<?= $t->Statuts_technique == 3; ?>">
+									<div class="card mt-3 task-filter" data-type="<?= $t->type_tache ?>" data-am="<?= $t->AM; ?>" data-assigned="<?= $t->assigned_to ?>" <?php if ($t->expired): ?> data-expired="true" style="background-color: rgba(255, 0, 0, 0.05);" <?php endif; ?> data-urgent="<?= $t->Statuts_technique == 3; ?>">
 										<div class="card-body">
 											<div class="d-flex">
 												<?php if ($t->type_tache == 1): ?>
@@ -785,7 +785,7 @@
 													</div>
 												<?php endif; ?>
 												<div class="dropdown no-arrow ml-auto">
-													<a href="javascript:void(0);" class="text-decoration-none text-muted ta***REMOVED*** dropdown-toggle" role="button" data-toggle="dropdown" aria-expanded="false">
+													<a href="javascript:void(0);" class="text-decoration-none text-muted task-menu dropdown-toggle" role="button" data-toggle="dropdown" aria-expanded="false">
 														<i class="fa fa-ellipsis-h"></i>
 													</a>
 													<div class="dropdown-menu dropdown-menu-right">
@@ -850,7 +850,7 @@
 							<!-- Eto no manao foreach -->
 							<?php foreach ($tache as $t): ?>
 								<?php if ($t->status == "effectuée"): ?>
-									<div class="card mt-3 ta***REMOVED***" data-type="<?= $t->type_tache ?>" data-am="<?= $t->AM; ?>" data-assigned="<?= $t->assigned_to ?>" <?php if ($t->expired): ?> data-expired="true" style="background-color: rgba(255, 0, 0, 0.05);" <?php endif; ?> data-urgent="<?= $t->Statuts_technique == 3; ?>">
+									<div class="card mt-3 task-filter" data-type="<?= $t->type_tache ?>" data-am="<?= $t->AM; ?>" data-assigned="<?= $t->assigned_to ?>" <?php if ($t->expired): ?> data-expired="true" style="background-color: rgba(255, 0, 0, 0.05);" <?php endif; ?> data-urgent="<?= $t->Statuts_technique == 3; ?>">
 										<div class="card-body">
 											<div class="d-flex">
 												<?php if ($t->type_tache == 1): ?>
@@ -904,7 +904,7 @@
 													</div>
 												<?php endif; ?>
 												<div class="dropdown no-arrow ml-auto">
-													<a href="javascript:void(0);" class="text-decoration-none text-muted ta***REMOVED*** dropdown-toggle" role="button" data-toggle="dropdown" aria-expanded="false">
+													<a href="javascript:void(0);" class="text-decoration-none text-muted task-menu dropdown-toggle" role="button" data-toggle="dropdown" aria-expanded="false">
 														<i class="fa fa-ellipsis-h"></i>
 													</a>
 													<div class="dropdown-menu dropdown-menu-right">
@@ -981,11 +981,11 @@ $(function() {
 
     function filter_task_by_user(id) {
         if (id == 0) {
-            $('.ta***REMOVED***').removeClass('d-none');
+            $('.task-filter').removeClass('d-none');
         } else {
-            $('.ta***REMOVED***').addClass('d-none');
-            $('.ta***REMOVED***[data-am="' + id + '"]').removeClass('d-none');
-            $('.ta***REMOVED***[data-assigned="' + id + '"]').removeClass('d-none');
+            $('.task-filter').addClass('d-none');
+            $('.task-filter[data-am="' + id + '"]').removeClass('d-none');
+            $('.task-filter[data-assigned="' + id + '"]').removeClass('d-none');
         }
     }
 
@@ -1356,17 +1356,17 @@ $(function() {
 			
 			switch (filter) {
 				case "expired":
-					$('.ta***REMOVED***').addClass('d-none');
-					$('.ta***REMOVED***[data-expired="true"]').removeClass('d-none');
+					$('.task-filter').addClass('d-none');
+					$('.task-filter[data-expired="true"]').removeClass('d-none');
 					break;
 					
 				case "urgent":
-					$('.ta***REMOVED***').addClass('d-none');
-					$('.ta***REMOVED***[data-urgent="1"]').removeClass('d-none');
+					$('.task-filter').addClass('d-none');
+					$('.task-filter[data-urgent="1"]').removeClass('d-none');
 					break;
 					
 				default:
-					$('.ta***REMOVED***').removeClass('d-none');
+					$('.task-filter').removeClass('d-none');
 					break;
 			}
 		});
