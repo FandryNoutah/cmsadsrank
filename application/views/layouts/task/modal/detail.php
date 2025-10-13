@@ -79,9 +79,6 @@
 				</div>
 
 			</form>
-			<div class="modal-footer">
-				<button type="submit" class="btn btn-light px-3">Fermer</button>
-			</div>
 		</div>
 	</div>
 </div>

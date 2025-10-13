@@ -7,7 +7,7 @@
 			<div class="modal-dialog">
 				<div class="modal-content">
 					<div class="modal-header">
-						<h5 class="modal-title" id="budgetModalLabel">Créer Upsell - Baisse</h5>
+						<h5 class="modal-title" id="budgetModalLabel">Demande Upsell - Baisse</h5>
 						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 							<span aria-hidden="true">&times;</span>
 						</button>
@@ -48,6 +48,7 @@
 						<div class="form-group">
 							<label for="am_select">AM</label>
 							<select name="am" id="budget_type" class="form-control">
+								<option value="<?= $current_user->id; ?>"><?= $current_user->first_name; ?> <?= $current_user->last_name; ?></option>
 								<?php foreach ($users as $u): ?>
 									<option value="<?= $u->id; ?>">
 										<?= $u->first_name; ?> <?= $u->last_name; ?>
@@ -60,18 +61,25 @@
 							<label for="am_select">TM</label>
 							<select name="tm" id="budget_type" class="form-control">
 								<?php foreach ($users as $u): ?>
+									<?php if($u->tech == 1): ?>
 									<option value="<?= $u->id; ?>">
-										<?= $u->last_name; ?> <?= $u->first_name; ?>
+										<?= $u->first_name; ?> <?= $u->last_name; ?>
 									</option>
+									<?php endif; ?>
 								<?php endforeach; ?>
 							</select>
 						</div>
 
 						<div class="form-group">
-							<label for="budget_date_demand">Date de demande</label>
+							<label for="budget_date_demand">Date Gocardless</label>
 							<input type="date" name="date_demande_upsell" id="budget_date_demand" class="form-control">
 						</div>
-
+						<script>
+							document.addEventListener("DOMContentLoaded", function () {
+								const today = new Date().toISOString().split('T')[0];
+								document.getElementById("budget_date_demand").value = today;
+							});
+						</script>			
 						<div class="form-group">
 							<label for="budget_date_upsell">Date Upsell / Baisse</label>
 							<input type="date" name="date_upsell" id="budget_date_upsell" class="form-control">
