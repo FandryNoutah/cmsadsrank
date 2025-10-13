@@ -91,15 +91,15 @@ echo $cms_name;
 					<div class="row row-cols-2">
 						<div class="col">
 							<div class="card h-100">
-                <?php if( empty($d['tracking_gtm'])): ?>		
+                <?php if(empty($d['tracking_gtm'])): ?>		
                   <div class="nav-link py-3 active"  style="text-align: right; margin-top: 10px; margin-right: 20px;">	
-								Non installer
+								  <a href="<?= base_url('Client/mis_a_jour_gtm/' . $d['idclients']) ?>">Mettre à jour</a>
 								</div>
                     <?php endif; ?>	
                     <?php if( !empty($d['tracking_gtm'])): ?>
                      <div class="nav-link py-3 active"  style="text-align: right; margin-top: 10px; margin-right: 20px;">	
-								installer
-								</div>	
+                    <a href="<?= base_url('Client/mis_a_jour_gtm/' . $d['idclients']) ?>">Mettre à jour</a>
+                    </div>	
 								  <?php endif; ?>	
 								
 								<div class="card-body text-center">
@@ -115,10 +115,10 @@ echo $cms_name;
 									</span>
                     <?php endif; ?>	
                     <?php if( empty($d['tracking_gtm'])): ?>
-                      <span class="badge alert-danger rounded-pill px-2 py-1" style="font-size: 12px; font-weight: 500;">
-                            <i class="fa fa-circle mr-1" style="font-size: 10px;"></i>
-                            GTM Non installé
-                    </span>		
+                      <span class="badge alert-danger rounded-pill px-4 py-3" style="font-size: 14px; font-weight: 500;">
+															<i class="fa fa-circle mr-1" style="font-size: 10px;"></i>
+															GTM non installé
+														</span>
 								  <?php endif; ?>	
 								</div>
 							</div>
@@ -126,21 +126,21 @@ echo $cms_name;
 						<div class="col">
 							<div class="card h-100">
 								<div class="nav-link py-3 active"  style="text-align: right; margin-top: 10px; margin-right: 20px;">	
-								installed
+								<a href="<?= base_url('Client/mis_a_jour_cms/' . $d['idclients']) ?>">Mettre à jour</a>
 								</div>
                     <?php if( $d['cms'] != "Inconnu ou non détectable automatiquement"): ?>
 										<div class="card-body text-center">
                       <h3 class="mb-4"><?php echo $cms_name; ?></h3>
                       <p class="text-muted mx-5 mb-5" style="font-size: 18px;">
                         <?php echo $cms_name; ?> est installé avec cette URL.
-                        Action : Vérifier la présence de GTM puis suivre la procédure correspondante.
+                      
                       </p>
                       <div class="row justify-content-center">
                         <div class="col-auto">
                           <img src="<?php echo $d['cms_logo']; ?>" width="43">
                         </div>
                       </div>
-                  </div>
+                    </div>
 										<?php endif; ?>
 										<?php if( $d['cms'] == "Inconnu ou non détectable automatiquement"): ?>
 										<div class="card-body text-center">

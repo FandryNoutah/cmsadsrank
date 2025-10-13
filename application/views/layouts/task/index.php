@@ -118,14 +118,18 @@
 			<option value="6">Baisse</option>
 		</select>
 	</div>
+
 	<div class="col-auto px-1">
 		<select id="task_user_filter" class="custom-select border-dark">
-			<option disabled selected>Filter</option>
-			<option value="0">Tous</option>
+			<option value="<?= $current_user->id; ?>" selected><?= $current_user->first_name . " " . $current_user->last_name; ?></option>
 			<?php foreach ($users as $u): ?>
-				<option value="<?= $u['id']; ?>"><?= $u['first_name'] . " " . $u['last_name']; ?></option>
+				<?php if ($u['id'] != $current_user->id): ?>
+					<option value="<?= $u['id']; ?>"><?= $u['first_name'] . " " . $u['last_name']; ?></option>
+				<?php endif; ?>
 			<?php endforeach; ?>
+			<option value="0">Tous</option>
 		</select>
+
 	</div>
 	<div class="col-auto px-1">
 		<button class="btn btn-dark" data-toggle="modal" data-target="#formModal">
@@ -972,38 +976,30 @@
 
 <script src="<?= base_url('assets/vendors/select2/js/select2.min.js'); ?>"></script>
 
-<!-- Task filter script -->
 <script>
-	$(function() {
+$(function() {
 
-		function filter_task(type) {
+    function filter_task_by_user(id) {
+        if (id == 0) {
+            $('.ta***REMOVED***').removeClass('d-none');
+        } else {
+            $('.ta***REMOVED***').addClass('d-none');
+            $('.ta***REMOVED***[data-am="' + id + '"]').removeClass('d-none');
+            $('.ta***REMOVED***[data-assigned="' + id + '"]').removeClass('d-none');
+        }
+    }
 
-			if (type == 0) {
-				$('.ta***REMOVED***').removeClass('d-none');
-			} else {
-				$('.ta***REMOVED***').addClass('d-none');
-				$('.ta***REMOVED***[data-type="' + type + '"]').removeClass('d-none');
-			}
-		}
+    $('#task_user_filter').change(function() {
+        let id = $(this).val();
+        filter_task_by_user(id);
+    });
 
-		$('#task_type_filter').change(function() {
-			let type = $(this).val();
-			filter_task(type);
-		});
+    let defaultUserId = $('#task_user_filter').val();
+    filter_task_by_user(defaultUserId);
 
-		$('#task_user_filter').change(function() {
-			let id = $(this).val();
-
-			if (id == 0) {
-				$('.ta***REMOVED***').removeClass('d-none');
-			} else {
-				$('.ta***REMOVED***').addClass('d-none');
-				$('.ta***REMOVED***[data-am="' + id + '"]').removeClass('d-none');
-				$('.ta***REMOVED***[data-assigned="' + id + '"]').removeClass('d-none');
-			}
-		});
-	});
+});
 </script>
+
 
 <!-- Index page script -->
 <script>
