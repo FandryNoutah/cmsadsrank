@@ -1,0 +1,17 @@
+8edad49494056b77be6b50ccd2105377b9072b35,MODIFY,regular-file,application/01v1/views/templates/v3/admin-strategie.php,32971,41;45;165-166;181;185;259-260;275;279;355-356;396-397;428;432;435;439;444;448;453
+a802074ee4451868b402fe68d195e094d4046027,MODIFY,regular-file,application/afqsfsdfsdf/views/templates/v3/admin-strategie.php,75300,44;191-192;218;220;320-321;348;352;457-458;483;487;693-694;719;723;928-929;955;959;1031;1035;1216-1217;1243;1247;1447;1454;1459
+d025ddc82b3b6e7843dab48b8b1cc6d7911d9aa1,MODIFY,regular-file,application/afqsfsdfsdf/views/templates/v3/admin-strategie_old.php,61673,45;51;193-194;219;221;250-251;277;281;355-356;407-408;433;437;616-617;643;647;825-826;853;857;1035-1036;1179;1183;1186;1190;1195;1199;1204
+a4033e2eb610e04c671998d2dae58e0be02c0f96,MODIFY,regular-file,application/afqsfsdfsdf/views/templates/v3/ajout_groupe_annonce_technique.php,19159,6
+e315bf201d7770850d1217975c6b13e6f8eb4593,MODIFY,regular-file,application/controllers/Client.php,42252,812
+7a94aa8021ab47a8387241e10c5bd3fc6de022c0,MODIFY,regular-file,application/controllers/Onboarding.php,20321,464
+98015ff25f5f51d348d2ef6f1e67e5d3c2ab649f,MODIFY,regular-file,application/views/layouts/client/detail/gtm/index.php,10296,134;234
+20bb2ed75d1d5362be4e37431d09a941fa4e4a1c,MODIFY,regular-file,application/views/layouts/client/detail/index.php,39939,707
+5dc6160654d130c388fd2fdb6c4418caa55cef09,MODIFY,regular-file,application/views/layouts/gtm/index.php,12654,142;241
+75bc6383559387ddcda40ce22a0d8e21230661d4,MODIFY,regular-file,application/views/layouts/login/index.html,52975,128;169;209;263;302;342;383;424;480;519;683;722;762;803;844;889
+9c597128bcf388a351ff210226141857e88e4781,MODIFY,regular-file,application/views/layouts/login/index.php,11879,123
+a35c6ed04d024073d565988a0cbf0bef14b9c0d9,MODIFY,regular-file,application/views/layouts/task/index.php,51962,179;274;320;414;459;552;594;648;711;765;826;880;955;957-958;971;973-975;1336-1337;1341-1342;1346
+a802074ee4451868b402fe68d195e094d4046027,MODIFY,regular-file,application/views/templates/v3/admin-strategie.php,75300,44;191-192;218;220;320-321;348;352;457-458;483;487;693-694;719;723;928-929;955;959;1031;1035;1216-1217;1243;1247;1447;1454;1459
+d025ddc82b3b6e7843dab48b8b1cc6d7911d9aa1,MODIFY,regular-file,application/views/templates/v3/admin-strategie_old.php,61673,45;51;193-194;219;221;250-251;277;281;355-356;407-408;433;437;616-617;643;647;825-826;853;857;1035-1036;1179;1183;1186;1190;1195;1199;1204
+35665615e5ad4b86a50e025aad63878e9a84c5b5,MODIFY,regular-file,application/views/templates/v3/ajout_groupe_annonce_technique.php,20535,6
+23f0f58a7f68ee3a900edf57fc7d9117b177f2c3,MODIFY,regular-file,assets/css/figma/login_page/style.css,65721,324-325;797;1090;1264;1469;1921;2103;2182;2841-2842
+9f068dceb7163dd2a4ea782693fdbdc8225625e7,MODIFY,regular-file,assets/fonts/icomoon.css,126316,1195;1618
