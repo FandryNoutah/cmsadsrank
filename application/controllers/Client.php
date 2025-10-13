@@ -6,7 +6,7 @@ class Client extends MY_Controller
 	private $api_url = 'https://api.aircall.io/v1/calls';
 	private $api_auth = '';
 	protected $file_upload_field;
-
+	private $openai_api_key = '***REMOVED***-KGXpO5Dmjtk3iBGWNYAxp_Jtm07qeTY7jCQx3wR7a06GWqgWMdJA1O-DqdSX1ZANFEBDF83TQXT3BlbkFJB6Grrdt1s68eRcq7Ry6lbzpKM4X5At0U_f6q_dS-Jc_j6H6ATB3LVOd_hX0p7eJ-rPLgsW5UEA';
 
 	public function __construct()
 	{
@@ -49,6 +49,54 @@ class Client extends MY_Controller
 		$this->content = "layouts/client/index.php";
 		$this->layout();
 	}
+	public function mis_a_jour_gtm($idclients)
+	{
+		$id = $idclients;
+		$client = $this->visuels_model->getDonneeById($id);
+		$site_client = $client[0]['site_client'];
+		if (!preg_match('#^https?://#i', $site_client)) {
+			$site_client = 'https://' . $site_client;
+		}
+		$html = $this->fetch_url($site_client);
+		if ($html === false) {
+			die("Erreur : impossible d'accéder à l'URL $site_client");
+		}
+		preg_match('/GTM-[A-Z0-9]+/', $html, $matches);
+		$gtm_code = !empty($matches) ? $matches[0] : null;
+		if($gtm_code != Null):
+			$this->visuels_model->mis_a_jour_gtm($idclients, $gtm_code);
+		endif;
+		redirect('Client/application/' . $idclients);
+	}
+	public function mis_a_jour_cms($idclients)
+	{
+		$id = $idclients;
+		$client = $this->visuels_model->getDonneeById($id);
+		$site_client = $client[0]['site_client'];
+		if (!preg_match('#^https?://#i', $site_client)) {
+			$site_client = 'https://' . $site_client;
+		}
+		$html = $this->fetch_url($site_client);
+		if ($html === false) {
+			die("Erreur : impossible d'accéder à l'URL $site_client");
+		}
+		preg_match('/GTM-[A-Z0-9]+/', $html, $matches);
+		$gtm_code = !empty($matches) ? $matches[0] : null;
+		$cms = $this->detect_cms($html, $site_client);
+		if ($cms !== null) {
+			$this->visuels_model->mis_a_jour_cms($idclients, $cms);
+		}
+
+		redirect('Client/application/' . $idclients);
+	}
+	public function ajout_brief()
+	{
+		$id = $this->input->post('idclients');
+		$information_client = $this->input->post('information_client');
+		$this->visuels_model->ajout_brief($id, $information_client);
+		redirect('Client/onboarding/' . $id);
+	}
+		
 	public function change_rappor_base()
 	{
 		$id = $this->input->post('idclients');
@@ -204,6 +252,7 @@ class Client extends MY_Controller
 			$tache = "Mettre le client en pause, voir date due";
 			$type_tache = 8;
 			$dejaclient = 4;
+
 			$data_upsell = array(
 				'idupsell' => $idupsell,
 				'idclients' => $idclients,
@@ -238,6 +287,7 @@ class Client extends MY_Controller
 		$Statuts_technique = 1;
 
 		$data = array(
+			'idupsell' => $idupsell,
 			'type_tache' => $type_tache,
 			'date_demande' => $date_demande_upsell,
 			'date_due' => $fin_campagne,
@@ -463,6 +513,7 @@ class Client extends MY_Controller
 	{
 
 		$this->data['idclients'] = $idclients;
+		$this->data["donnees"] = $this->visuels_model->getDonneeById($idclients);
 		$campagnes = $this->data["campagnes"] = $this->visuels_model->getCampagneByIdclient($idclients);
 
 		$this->content = "layouts/client/onboarding/index.php";
@@ -470,23 +521,98 @@ class Client extends MY_Controller
 	}
 
 	public function campagne($idclients)
-	{
+		{
+			$type_page = [
+				1 => "search",
+				2 => "local",
+				3 => "pmax"
+			];
 
-		$type_page = [
-			1	=>	"search",
-			2	=>	"local",
-			3	=>	"pmax"
-		];
+			$this->data['idclients'] = $idclients;
+			$this->data['conversion'] = $this->input->get('conversion');
+			$this->data['camp_type'] = $camp_type = $this->input->get('camp_type');
+			$this->data['gtm'] = $this->input->get('gtm');
+			$this->data["donnees"] = $this->visuels_model->getDonneeById($idclients);
 
-		$this->data['idclients'] = $idclients;
-		$this->data['conversion'] = $this->input->get('conversion');
-		$this->data['camp_type'] = $camp_type = $this->input->get('camp_type');
-		$this->data['gtm'] = $this->input->get('gtm');
-		$this->data["donnees"] = $this->visuels_model->getDonneeById($idclients);
+			$information_client = $this->data["donnees"]->information ?? '';
+			$site_client = $this->data["donnees"]->url ?? '';
+			$prompt = "Tu es un expert Google Ads. 
+				Génère une liste de 60 mots-clés à exclure pour une campagne Google Ads sur le réseau de recherche. 
+				Voici les informations disponibles : 
+				- Informations sur le client : $information_client
+				- Site web du client : $site_client
 
-		$this->content = "layouts/client/onboarding/". $type_page[$camp_type] .".php";
-		$this->layout();
-	}
+				⚠️ Tu ne peux pas visiter de site web.
+				Même si les informations sont partielles, propose une liste pertinente et standard de mots-clés à exclure en français pour éviter les recherches non qualifiées.
+				Donne UNIQUEMENT les mots, séparés par des virgules, sans introduction ni phrase explicative.";
+
+
+			$raw_keywords = $this->call_openai($prompt);
+			$raw_keywords = trim($raw_keywords);
+			if (preg_match('/([a-zA-ZÀ-ÿ0-9,\s]+)/', $raw_keywords, $matches)) {
+				$raw_keywords = $matches[1];
+			}
+			$clean_keywords = preg_replace('/,\s*/', "\n", $raw_keywords);
+
+			$this->data["mots_exclus"] = $clean_keywords;
+
+			$this->content = "layouts/client/onboarding/" . $type_page[$camp_type] . ".php";
+			$this->layout();
+		}
+
+
+	public function generer_mots_exclus()
+    {
+        $information_client = $this->input->post('information_client');
+        $site_client = $this->input->post('site_client');
+
+        $prompt = "À partir de ces informations : $information_client 
+        et en analysant le site : $site_client, génère une liste de 60 mots-clés à exclure pour une campagne Google Ads (type search). 
+        Ne donne que les mots, séparés par des virgules ou des retours à la ligne.";
+
+        $response = $this->call_openai($prompt);
+
+        echo $response ? nl2br(htmlspecialchars($response)) : "❌ Erreur lors de la génération.";
+    }
+
+    private function call_openai($prompt)
+    {
+        $url = "https://api.openai.com/v1/chat/completions";
+        $data = [
+            "model" => "gpt-4o-mini",
+            "messages" => [
+                ["role" => "system", "content" => "Tu es un expert Google Ads."],
+                ["role" => "user", "content" => $prompt]
+            ],
+            "temperature" => 0.7
+        ];
+
+        $headers = [
+            "Content-Type: application/json",
+            "Authorization: " . "Bearer " . $this->openai_api_key
+        ];
+
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_POST, true);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
+        $result = curl_exec($ch);
+
+        if (curl_errno($ch)) {
+            log_message('error', 'Erreur CURL OpenAI: ' . curl_error($ch));
+        }
+
+        curl_close($ch);
+
+        if ($result) {
+            $json = json_decode($result, true);
+            return $json['choices'][0]['message']['content'] ?? null;
+        }
+
+        return null;
+    }
 
 	public function ajout_campagne($idclients)
 	{
@@ -688,6 +814,7 @@ class Client extends MY_Controller
 		$date_upsell = $this->input->post('date_upsell');
 		$date_demande_upsell = $this->input->post('date_demande_upsell');
 		$inforamtion_upsell = $this->input->post('information_upsell');
+
 		$statut_upsell = $this->input->post('statut_upsell');
 		$id = $idclients;
 		$donnee = $this->data["clients"] = $this->visuels_model->getDonneeById($id);
@@ -697,80 +824,21 @@ class Client extends MY_Controller
 		if ($type_upsell == 2):
 			$am = $this->input->post('am');
 			$budget_initiale = $this->input->post('budget_initiale');
-			//$idclient = $this->visuels_model->create_upsell($type_upsell, $budget_upsell, $budget_initiale, $demmande_upsell, $am, $tm, $date_upsell, $date_demande_upsell, $inforamtion_upsell, $statut_upsell, $idclients);
 			$budget_initiale = intval($budget_initiale);
 			$budget_upsell = intval($budget_upsell);
 			$budget_finale = $budget_upsell + $budget_initiale;
-			//var_dump($budget_finale );die();
-			//$this->visuels_model->update_budget($budget_finale, $idclients);
-			//$date_brief = 0000 - 00 - 00;
-			//$campagne_actif = 0;
-			//$lien_datastudio = 0;
-			//$validation_technique = 0000 - 00 - 00;
-			//$date_validation_structure = 0000 - 00 - 00;
-			//$this->visuels_model->update_brief($date_brief, $campagne_actif, $validation_technique, $date_validation_structure, $lien_datastudio, $idclients);
 			$actif = 1;
 			$idupsell = $this->visuels_model->create_upsell($type_upsell, $budget_finale, $budget_initiale, $demmande_upsell, $am, $tm, $date_upsell, $date_demande_upsell, $inforamtion_upsell, $statut_upsell, $idclients, $actif);
 			$type_tache = 5;
 			$title = "Upsell";
-			$tache = "Le client fait une upsell de "  . number_format($budget_upsell, 0, ',', ' ') . " €";;
+			if($inforamtion_upsell == Null){
+				$tache = "Le client fait une upsell de "  . number_format($budget_upsell, 0, ',', ' ') . " €";
+			}
+			if($inforamtion_upsell != Null){
+				$tache = "Le client fait une upsell de " . number_format($budget_upsell, 0, ',', ' ') . " €" . " avec les informations suivantes :\n" . $inforamtion_upsell;
+			}
 			$Statuts_technique = 1;
 
-			$data = array(
-				'type_tache' => $type_tache,
-				'date_demande' => $date_demande_upsell,
-				'date_due' => $date_demande_upsell,
-				'idclients' => $idclients,
-				'AM' => $am,
-				'assigned_to' => $tm,
-				'title' => $title,
-				'Statuts_technique' => $Statuts_technique,
-				'description' => $tache,
-				'idupsell' => $idupsell
-			);
-
-			$this->Task_model->add_task($data);
-				$client = $idclients;
-			$dejaclient = 1;
-			$budget = $budget_upsell;
-			$am = $am;
-			$type_upsell = $type_upsell;
-
-			$data_upsell = array(
-				'idupsell' => $idupsell,
-				'idclients' => $idclients,
-				'dejaclient' => $dejaclient,
-				'budget' => $budget_finale,
-				'account_manager' => $am,
-				'initiative' => $initiative,
-				'type_upsell' => $type_upsell,
-				'budget_upsell' => $budget_upsell
-
-			);
-			$this->visuels_model->add_upsell_onboarding($data_upsell);
-		endif;
-		if ($type_upsell == 1):
-			$am = $this->input->post('am');
-			$budget_initiale = $this->input->post('budget_initiale');
-			//$idclient = $this->visuels_model->create_upsell($type_upsell, $budget_upsell, $budget_initiale, $demmande_upsell, $am, $tm, $date_upsell, $date_demande_upsell, $inforamtion_upsell, $statut_upsell, $idclients);
-			$budget_initiale = intval($budget_initiale);
-			$budget_upsell = intval($budget_upsell);
-			$budget_finale = $budget_initiale - $budget_upsell;
-			//var_dump($budget_finale );die();
-			//$this->visuels_model->update_budget($budget_finale, $idclients);
-			//$date_brief = 0000 - 00 - 00;
-			//$campagne_actif = 0;
-			//$lien_datastudio = 0;
-			//$validation_technique = 0000 - 00 - 00;
-			//$date_validation_structure = 0000 - 00 - 00;
-			//$this->visuels_model->update_brief($date_brief, $campagne_actif, $validation_technique, $date_validation_structure, $lien_datastudio, $idclients);
-			$actif = 1;
-			$idupsell = $this->visuels_model->create_upsell($type_upsell, $budget_finale, $budget_initiale, $demmande_upsell, $am, $tm, $date_upsell, $date_demande_upsell, $inforamtion_upsell, $statut_upsell, $idclients, $actif);
-			$type_tache = 6;
-			$title = "Baisse";
-			$tache = "Le client fait une baisse de " . number_format($budget_finale, 0, ',', ' ') . " €";
-			$Statuts_technique = 1;
-			$actif = 1;
 			$data = array(
 				'type_tache' => $type_tache,
 				'date_demande' => $date_demande_upsell,
@@ -788,11 +856,63 @@ class Client extends MY_Controller
 			$client = $idclients;
 			$dejaclient = 1;
 			$budget = $budget_upsell;
+			$am = $am;
+			$type_upsell = $type_upsell;
+			$data_upsell = array(
+				'idupsell' => $idupsell,
+				'idclients' => $idclients,
+				'dejaclient' => $dejaclient,
+				'budget' => $budget_finale,
+				'account_manager' => $am,
+				'initiative' => $initiative,
+				'type_upsell' => $type_upsell,
+				'budget_upsell' => $budget_upsell
+
+			);
+			$this->visuels_model->add_upsell_onboarding($data_upsell);
+		endif;
+		if ($type_upsell == 1):
+			$am = $this->input->post('am');
+			$budget_initiale = $this->input->post('budget_initiale');
+			$budget_initiale = intval($budget_initiale);
+			$budget_upsell = intval($budget_upsell);
+			$budget_finale = $budget_initiale - $budget_upsell;
+			$actif = 1;
+			$idupsell = $this->visuels_model->create_upsell($type_upsell, $budget_finale, $budget_initiale, $demmande_upsell, $am, $tm, $date_upsell, $date_demande_upsell, $inforamtion_upsell, $statut_upsell, $idclients, $actif);
+			$type_tache = 6;
+			$title = "Baisse";
+			if($inforamtion_upsell == Null){
+				$tache = "Le client fait une baisse de "  . number_format($budget_upsell, 0, ',', ' ') . " €";
+			}
+			if($inforamtion_upsell != Null){
+				$tache = "Le client fait une baisse de " . number_format($budget_upsell, 0, ',', ' ') . " €" . " avec les informations suivantes :\n" . $inforamtion_upsell;
+			}
+			$Statuts_technique = 1;
+			$actif = 1;
+			$data = array(
+				'type_tache' => $type_tache,
+				'date_demande' => $date_demande_upsell,
+				'date_due' => $date_demande_upsell,
+				'idclients' => $idclients,
+				'AM' => $am,
+				'assigned_to' => $tm,
+				'title' => $title,
+				'Statuts_technique' => $Statuts_technique,
+				'description' => $tache,
+				'idupsell' => $idupsell
+			);
+
+			$this->Task_model->add_task($data);
+			$client = $idclients;
+			$idupsell = $idupsell;
+			$dejaclient = 1;
+			$budget = $budget_upsell;
 			$initiative = $tm;
 			$am = $am;
 			$type_upsell = $type_upsell;
 
 			$data_upsell = array(
+				'idupsell' => $idupsell,
 				'idclients' => $idclients,
 				'dejaclient' => $dejaclient,
 				'budget' => $budget_finale,
@@ -944,8 +1064,9 @@ class Client extends MY_Controller
 		$favicon = $this->get_favicon($html, $site_client);
 
 		// ✅ Insérer le résumé à la place du paragraphe le plus long
-		$idclient = $this->visuels_model->insertclient($client, $site_client, $email_client, $numero_client, $favicon, $cms, $cms_logo, $summary);
-		$idclient_onboarding = $idclient; 
+		$idclients = $this->visuels_model->insertclient($client, $site_client, $email_client, $numero_client, $favicon, $cms, $cms_logo, $summary);
+		$idclient_onboarding = $idclients; 
+		$idclient = $idclients;
 		$this->visuels_model->insertfiche($idclient, $budget, $secteur_activite, $product_choice, $initiative, $am, $date_mis_en_place, $date_brief, $date_annonce, $dejaclient, $gtm_code);
 		$title = "Création de Brief";
 		$tache = "En attente de brief";
@@ -955,7 +1076,7 @@ class Client extends MY_Controller
 			'type_tache' => $type_tache,
 			'date_demande' => $date_mis_en_place,
 			'date_due' => $date_brief,
-			'idclients' => $idclient,
+			'idclients' => $idclients,
 			'AM' => $initiative,
 			'assigned_to' => $am,
 			'title' => $title,
@@ -968,7 +1089,7 @@ class Client extends MY_Controller
 		$budget_finale = $budget;
 		$budget_initiale = $budget;
 		$statut_upsell = 1;
-		$idclients = $idclient;
+		$idclients = $idclients;
 		$demmande_upsell = $am;
 		$am = $am;
 		$tm = $am;
@@ -995,7 +1116,9 @@ class Client extends MY_Controller
 
 	private function get_summary_from_chatgpt($headings, $paragraphs)
 	{
-	
+		$api_key = '***REMOVED***-KGXpO5Dmjtk3iBGWNYAxp_Jtm07qeTY7jCQx3wR7a06GWqgWMdJA1O-DqdSX1ZANFEBDF83TQXT3BlbkFJB6Grrdt1s68eRcq7Ry6lbzpKM4X5At0U_f6q_dS-Jc_j6H6ATB3LVOd_hX0p7eJ-rPLgsW5UEA'; // 🔐 Remplace avec ta clé
+		$model = 'gpt-4'; // ou 'gpt-3.5-turbo'
+
 		   $input_text = "Voici les titres et paragraphes d’un site web.\n\n";
     $input_text .= "Ta tâche est de rédiger un résumé informatif en **deux paragraphes distincts**, séparés par une **ligne vide** (un simple saut de ligne).\n\n";
 
@@ -1100,6 +1223,15 @@ class Client extends MY_Controller
 		} elseif (strpos($html, 'Magento') !== false || strpos($html, 'mage/') !== false) {
 			return 'Magento';
 		}
+		elseif (strpos($html, 'Magento') !== false || strpos($html, 'mage/') !== false) {
+			return 'Magento';
+		}
+		elseif (strpos($html, 'PrestaShop') !== false || strpos($html, 'mage/') !== false) {
+			return 'PrestaShop';
+		}
+		elseif (strpos($html, 'Google') !== false || strpos($html, 'mage/') !== false) {
+			return 'Google';
+		}
 		$headers = @get_headers($url, 1);
 		if ($headers && isset($headers['X-Powered-By'])) {
 			return $headers['X-Powered-By'];
@@ -1115,7 +1247,10 @@ class Client extends MY_Controller
 			'Joomla' => 'joomla.png',
 			'Drupal' => 'drupal.png',
 			'Shopify' => 'shopify.png',
-			'Magento' => 'magento.png'
+			'Magento' => 'Magento.png',
+			'Wix' => 'wix.png',
+			'PrestaShop' => 'prestashop.png',
+			'Google' => 'site_kit.png'
 		];
 
 		foreach ($cms_logos as $key => $file) {

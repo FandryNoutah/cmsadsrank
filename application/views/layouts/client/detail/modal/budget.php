@@ -71,7 +71,7 @@
 						</div>
 
 						<div class="form-group">
-							<label for="budget_date_demand">Date de demande</label>
+							<label for="budget_date_demand">Date Gocardless</label>
 							<input type="date" name="date_demande_upsell" id="budget_date_demand" class="form-control">
 						</div>
 						<script>
