@@ -7,8 +7,7 @@ class Client extends MY_Controller
 	private $api_auth = '';
 	protected $file_upload_field;
 	private $api_key = getenv('OPENAI_API_KEY');
-	
-	public function __construct()
+		public function __construct()
 	{
 		parent::__construct();
 
@@ -544,10 +543,14 @@ class Client extends MY_Controller
 			$this->data['conversion'] = $this->input->get('conversion');
 			$this->data['camp_type'] = $camp_type = $this->input->get('camp_type');
 			$this->data['gtm'] = $this->input->get('gtm');
-			$this->data["donnees"] = $this->visuels_model->getDonneeById($idclients);
+			$d = $this->data["donnees"] = $this->visuels_model->getDonneeById($idclients);
 
 			$information_client = $this->data["donnees"]->information ?? '';
-			$site_client = $this->data["donnees"]->url ?? '';
+			$site_client = $d[0]['site_client'];
+			$images_site = $this->fetch_all_images_from_site($site_client, 8);
+
+			$this->data["images_site"] = $images_site;
+
 			$prompt = "Tu es un expert Google Ads. 
 				Génère une liste de 60 mots-clés à exclure pour une campagne Google Ads sur le réseau de recherche. 
 				Voici les informations disponibles : 
@@ -571,8 +574,281 @@ class Client extends MY_Controller
 			$this->content = "layouts/client/onboarding/" . $type_page[$camp_type] . ".php";
 			$this->layout();
 		}
+private function fetch_all_images_from_site($site_url, $max_images = 8, $max_pages = 20)
+{
+    if (!preg_match('#^https?://#', $site_url)) {
+        $site_url = 'http://' . $site_url;
+    }
+
+    $visited = [];
+    $to_visit = [$site_url];
+    $images = [];
+
+    while (!empty($to_visit) && count($visited) < $max_pages && count($images) < $max_images) {
+        $current_url = array_shift($to_visit);
+        if (isset($visited[$current_url])) continue;
+        $visited[$current_url] = true;
+
+        $html = @file_get_contents($current_url);
+        if (!$html) continue;
+
+        // 1. Extraire les images
+        $img_urls = $this->extract_image_urls($html, $current_url);
+        foreach ($img_urls as $img_url) {
+            if ($this->looks_like_logo_or_icon($img_url) || $this->is_data_uri($img_url)) continue;
+
+            $meta = $this->get_image_metadata($img_url);
+            if (!$meta) continue;
+
+            if (!$this->is_photo_mime($meta['mime'])) continue;
+            if ($meta['width'] < 150 || $meta['height'] < 150) continue;
+
+            $images[] = $img_url;
+            if (count($images) >= $max_images) break 2;
+        }
+
+        // 2. Extraire les liens internes pour crawler
+        $dom = new DOMDocument();
+        libxml_use_internal_errors(true);
+        $dom->loadHTML($html);
+        $xpath = new DOMXPath($dom);
+        $links = $xpath->query('//a[@href]');
+        foreach ($links as $link) {
+            $href = $link->getAttribute('href');
+            $url = $this->resolve_url($href, $current_url);
+            if (!$this->is_internal_link($url, $site_url)) continue;
+            if (!isset($visited[$url]) && !in_array($url, $to_visit)) {
+                $to_visit[] = $url;
+            }
+        }
+    }
+
+    return array_slice($images, 0, $max_images);
+}
+
+		private function fetch_images_from_site($site_url, $max_images = 8)
+{
+    $site_url = trim($site_url);
+    if (empty($site_url)) return [];
+
+    if (!preg_match('#^https?://#', $site_url)) {
+        $site_url = 'http://' . $site_url;
+    }
+
+    $html = @file_get_contents($site_url);
+    if (!$html) return [];
+
+    libxml_use_internal_errors(true);
+    $dom = new DOMDocument();
+    $dom->loadHTML($html);
+    $xpath = new DOMXPath($dom);
+
+    $imgs = $xpath->query('//img');
+    $images = [];
+
+    foreach ($imgs as $img) {
+        $src = $img->getAttribute('src');
+        if (!$src) continue;
+
+        // ignore logos/icônes
+        $src_lc = strtolower($src);
+        if (strpos($src_lc, 'logo') !== false || strpos($src_lc, 'icon') !== false || strpos($src_lc, 'svg') !== false) {
+            continue;
+        }
+
+        // construire l'URL absolue
+        $img_url = $this->resolve_url($src, $site_url);
+
+        // vérifie si l’image est valide
+        $img_info = @getimagesize($img_url);
+        if (!$img_info || $img_info[0] < 150 || $img_info[1] < 150) continue;
+
+        $images[] = $img_url;
+
+        if (count($images) >= $max_images) break;
+    }
+
+    return $images;
+}
+
+private function resolve_url($relative, $base)
+{
+    if (empty($relative)) return '';
+
+    // ignore les data:uri
+    if (preg_match('#^data:#', $relative)) return '';
+    if (preg_match('#^https?://#', $relative)) return $relative;
+    if (strpos($relative, '//') === 0) {
+        $scheme = parse_url($base, PHP_URL_SCHEME) ?: 'http';
+        return $scheme . ':' . $relative;
+    }
+
+    // gestion des chemins relatifs
+    $parsed_base = parse_url($base);
+    $scheme = $parsed_base['scheme'] ?? 'http';
+    $host = $parsed_base['host'] ?? '';
+    $base_path = rtrim(dirname($parsed_base['path'] ?? '/'), '/');
+
+    $path = ($relative[0] === '/') ? $relative : $base_path . '/' . $relative;
+
+    return $scheme . '://' . $host . '/' . ltrim($path, '/');
+}
 
 
+    private function extract_image_urls($html, $base_url)
+    {
+        $urls = [];
+        libxml_use_internal_errors(true);
+        $dom = new DOMDocument();
+        $dom->loadHTML($html);
+
+        // <img src>
+        $imgs = $dom->getElementsByTagName('img');
+        foreach ($imgs as $img) {
+            $src = $img->getAttribute('src');
+            if (!$src) continue;
+            $urls[] = $this->resolve_url($src, $base_url);
+            // srcset handling: prend la plus grande candidate si existe
+            $srcset = $img->getAttribute('srcset');
+            if ($srcset) {
+                $best = $this->pick_best_from_srcset($srcset, $base_url);
+                if ($best) $urls[] = $best;
+            }
+        }
+
+        // inline styles background-image: url(...)
+        $xpath = new DOMXPath($dom);
+        $nodes = $xpath->query('//*[@style]');
+        foreach ($nodes as $node) {
+            $style = $node->getAttribute('style');
+            if (preg_match_all('/background(?:-image)?:\s*url\((["\']?)(.*?)\1\)/i', $style, $m)) {
+                foreach ($m[2] as $bg) {
+                    $urls[] = $this->resolve_url($bg, $base_url);
+                }
+            }
+        }
+
+        return array_values(array_unique($urls));
+    }
+
+    private function pick_best_from_srcset($srcset, $base_url)
+    {
+        // srcset format: url1 1x, url2 2x, or url w, ...
+        $parts = preg_split('/\s*,\s*/', trim($srcset));
+        $bestUrl = null;
+        $bestScore = 0;
+        foreach ($parts as $p) {
+            // "url 2x" or "url 300w" or just "url"
+            $sub = preg_split('/\s+/', trim($p));
+            $url = $sub[0];
+            $score = 1;
+            if (isset($sub[1])) {
+                if (strpos($sub[1], 'w') !== false) {
+                    $score = intval($sub[1]);
+                } elseif (strpos($sub[1], 'x') !== false) {
+                    $score = floatval($sub[1]) * 1000;
+                }
+            }
+            if ($score > $bestScore) {
+                $bestScore = $score;
+                $bestUrl = $url;
+            }
+        }
+        return $bestUrl ? $this->resolve_url($bestUrl, $base_url) : null;
+    }
+
+    private function is_internal_link($url, $base)
+    {
+        $uHost = parse_url($url, PHP_URL_HOST);
+        $bHost = parse_url($base, PHP_URL_HOST);
+        return $uHost && $bHost && (strcasecmp($uHost, $bHost) === 0);
+    }
+
+    private function looks_like_logo_or_icon($url)
+    {
+        $lower = strtolower($url);
+        // mots courants pour logos/icônes
+        $bad_words = ['logo', 'icon', 'sprite', 'favicon', 'badge', 'btn', 'spacer', 'pixel', 'placeholder', 'thumb', 'avatar'];
+        foreach ($bad_words as $w) {
+            if (strpos($lower, '/' . $w) !== false) return true;
+            if (strpos($lower, '-' . $w) !== false) return true;
+            if (strpos($lower, '_' . $w) !== false) return true;
+            if (strpos($lower, $w . '.') !== false) return true;
+        }
+        // svg files often logos/illustrations — on peut exclure si souhaité
+        if (preg_match('/\.svg(\?|$)/i', $lower)) return true;
+        return false;
+    }
+
+    private function is_data_uri($s)
+    {
+        return preg_match('#^data:#i', $s);
+    }
+
+    private function is_photo_mime($mime)
+    {
+        // accepter jpg/png/webp/gif (gif peut être animé)
+        $allowed = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp', 'image/gif'];
+        return in_array(strtolower($mime), $allowed);
+    }
+
+    private function get_image_metadata($img_url)
+    {
+        // tente HEAD pour obtenir content-type et content-length
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $img_url);
+        curl_setopt($ch, CURLOPT_NOBODY, true);
+        curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_USERAGENT, 'Mozilla/5.0 (compatible; SiteImageBot/1.0)');
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+        curl_exec($ch);
+        $http = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        $ctype = curl_getinfo($ch, CURLINFO_CONTENT_TYPE);
+        $clen = curl_getinfo($ch, CURLINFO_CONTENT_LENGTH_DOWNLOAD);
+        curl_close($ch);
+        if ($http >= 400) return false;
+
+        // si content-type absent ou pas image, on essaie de télécharger les premiers octets
+        $mime = $ctype ?: '';
+        // pour récupérer width/height, on télécharge un bloc
+        $imgData = $this->fetch_partial($img_url, 0, 200000); // 200KB max
+        if ($imgData === false) return false;
+
+        // utilise getimagesizefromstring pour obtenir dims
+        $info = @getimagesizefromstring($imgData);
+        if ($info === false) return false;
+        $width = $info[0];
+        $height = $info[1];
+        $mime_from_info = $info['mime'] ?? null;
+        if (empty($mime) && $mime_from_info) $mime = $mime_from_info;
+
+        // taille en octets : si content-length dispo, sinon length du blob (estimation)
+        $filesize = ($clen > 0) ? $clen : strlen($imgData);
+
+        return [
+            'width' => intval($width),
+            'height' => intval($height),
+            'mime' => $mime ?: 'application/octet-stream',
+            'filesize' => intval($filesize)
+        ];
+    }
+
+    private function fetch_partial($url, $start = 0, $maxBytes = 200000)
+    {
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
+        curl_setopt($ch, CURLOPT_RANGE, "$start-" . ($start + $maxBytes - 1));
+        curl_setopt($ch, CURLOPT_USERAGENT, 'Mozilla/5.0 (compatible; SiteImageBot/1.0)');
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+        $data = curl_exec($ch);
+        $http = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        curl_close($ch);
+        if ($http >= 400) return false;
+        return $data;
+    }
 	public function generer_mots_exclus()
     {
         $information_client = $this->input->post('information_client');
@@ -677,7 +953,6 @@ class Client extends MY_Controller
 							'camp_type'          		=>	$camp_type
 						];
 					}
-
 					// Insert groupes
 					$this->Donne_modele->insert_gp($data_groups, $idcampagne, $idclients, $camp_type, $contexte_groupes, $mots_cle, $url_site);
 				} else {
