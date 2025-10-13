@@ -142,12 +142,18 @@
 						</div>
 
 						<div class="form-group">
-							<label for="">Tranche d'âges</label>
-							<select name="" class="form-control">
-								<option value="">1</option>
-								<option value="">2</option>
-							</select>
-						</div>
+    						<label for="age-range">Tranche d'âges</label>
+								<select name="age-range" id="age-range" class="form-control">
+									<option value="">-- Sélectionnez une tranche d'âge --</option>
+									<option value="18-24">18 - 24 ans</option>
+									<option value="25-34">25 - 34 ans</option>
+									<option value="35-44">35 - 44 ans</option>
+									<option value="45-54">45 - 54 ans</option>
+									<option value="55-64">55 - 64 ans</option>
+									<option value="65+">65 ans et plus</option>
+								</select>
+							</div>
+
 
 						<div class="form-group">
 							<label for="">Audiences</label>
@@ -181,8 +187,13 @@
 						<div class="form-group">
 							<label for="appareil_search">Appareil</label>
 							<select name="appareil_search" id="appareil_search" class="form-control">
-								<option value="">Appareil 1</option>
-								<option value="">Appareil 2</option>
+								<option value="Ordinateur / Mobile / Tablette">Ordinateur / Mobile / Tablette</option>
+                                <option value="Ordinateur">Ordinateur</option>
+                                <option value="Mobile">Mobile</option>
+                                <option value="Tablette">Tablette</option>
+                                <option value="Ordinateur / Mobile">Ordinateur / Mobile</option>
+                                <option value="Ordinateur / Tablette">Ordinateur / Tablette</option>
+                                <option value="Mobile / Tablette">Mobile / Tablette</option>
 							</select>
 						</div>
 
@@ -211,30 +222,20 @@
 							</li>
 						</ul>
 
+						<?php if (!empty($images_site)): ?>
 						<div class="card mb-4">
 							<div class="card-body">
 								<div class="row no-gutters">
+									<?php foreach ($images_site as $img): ?>
 									<div class="col-auto px-2 mb-3">
-										<img src="<?= base_url('assets/images/formats/betewq5osgluxdan7v5blfsgba.jpg') ?>" alt="" width="120">
+										<img src="<?= $img ?>" alt="Image site client" width="120" style="object-fit: cover; border-radius: 4px;">
 									</div>
-									<div class="col-auto px-2 mb-3">
-										<img src="<?= base_url('assets/images/formats/betewq5osgluxdan7v5blfsgba.jpg') ?>" alt="" width="120">
-									</div>
-									<div class="col-auto px-2 mb-3">
-										<img src="<?= base_url('assets/images/formats/betewq5osgluxdan7v5blfsgba.jpg') ?>" alt="" width="120">
-									</div>
-									<div class="col-auto px-2 mb-3">
-										<img src="<?= base_url('assets/images/formats/betewq5osgluxdan7v5blfsgba.jpg') ?>" alt="" width="120">
-									</div>
-									<div class="col-auto px-2 mb-3">
-										<img src="<?= base_url('assets/images/formats/betewq5osgluxdan7v5blfsgba.jpg') ?>" alt="" width="120">
-									</div>
-									<div class="col-auto px-2 mb-3">
-										<img src="<?= base_url('assets/images/formats/betewq5osgluxdan7v5blfsgba.jpg') ?>" alt="" width="120">
-									</div>
+									<?php endforeach; ?>
 								</div>
 							</div>
 						</div>
+						<?php endif; ?>
+
 
 						<div class="d-flex justify-content-between mb-5">
 							<button type="reset" class="btn btn-outline-dark">Ajouter une nouvelle campagne</button>
@@ -251,14 +252,6 @@
 							<button class="btn btn-dark py-3 px-5" data-toggle="modal" data-target="#budgetModal">
 								<?= $d['budget'] ?> €
 							</button>
-							<div class="dropdown no-arrow">
-								<a href="javascript:void(0);" class="btn btn-light rounded-pill px-3 nav-link dropdown-toggle" id="clientDetailDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-									<i class="fa fa-ellipsis-v" style="font-size: 16px;"></i>
-								</a>
-								<div class="dropdown-menu dropdown-menu-right animated--grow-in" aria-labelledby="clientDetailDropdown">
-									<a class="dropdown-item" href="javscript:void(0);" data-toggle="modal" data-target="#editModal">Modifier</a>
-								</div>
-							</div>
 						</div>
 						<br><br>
 						<div class="d-flex justify-content-start mb-3" style="font-size: 15px;">
@@ -284,7 +277,6 @@
 								<img src="<?= base_url('assets/images/' . $d['tech_photo_user']) ?>" width="24" height="24">
 							</span>
 						</div>
-						<a href="<?= base_url('Client/onboarding/' . $d['idclients']) ?>" class="btn btn-outline-dark btn-block">Onboarding</a>
 					</div>
 				</div>
 
@@ -299,8 +291,7 @@
 				<div class="card mb-3" style="width: 23rem;">
 					<div class="card-body">
 						<p class="text-muted font-weight-normal" style="font-size: 15.5px;">
-							Meta Platforms, Inc., doing business as Meta and formerly named Facebook, Inc., and TheFacebook, Inc., is an American multinational technology conglomerate based in Menlo Park, California.
-							The company owns Facebook, Instagram, and WhatsApp, among other products and services. The company owns Facebook, Instagram, and WhatsApp, among other products and services.The company owns Facebook, Instagram, and WhatsApp, among other products and
+							<?= nl2br($donnees[0]['info_base_client']); ?>	
 						</p>
 					</div>
 				</div>
@@ -316,8 +307,7 @@
 				<div class="card" style="width: 23rem;">
 					<div class="card-body">
 						<p class="text-muted font-weight-normal" style="font-size: 15.5px;">
-							Meta Platforms, Inc., doing business as Meta and formerly named Facebook, Inc., and TheFacebook, Inc., is an American multinational technology conglomerate based in Menlo Park, California.
-							The company owns Facebook, Instagram, and WhatsApp, among other products and services. The company owns Facebook, Instagram, and WhatsApp, among other products and services.The company owns Facebook, Instagram, and WhatsApp, among other products and
+							<?= nl2br($donnees[0]['information_client']); ?>	
 						</p>
 					</div>
 				</div>
