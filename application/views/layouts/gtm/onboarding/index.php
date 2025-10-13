@@ -42,36 +42,11 @@
 		display: block;
 	}
 
-	.table-wrapper {
-		border-spacing: 0 15px !important;
-		border-collapse: separate !important;
-	}
-
-	.table-wrapper td,
-	.table-wrapper th {
-		vertical-align: middle;
-		border: border;
-		border-bottom: 1px solid #dee2e6 !important;
-	}
-
-	.table-wrapper tbody tr td:first-child,
-	.table-wrapper thead tr th:first-child {
-		border-left: 1px solid #dee2e6;
-		border-top-left-radius: 4px;
-		border-bottom-left-radius: 4px;
-	}
-
-	.table-wrapper tbody tr td:last-child,
-	.table-wrapper thead tr th:last-child {
-		border-right: 1px solid #dee2e6;
-		border-top-right-radius: 4px;
-		border-bottom-right-radius: 4px;
-	}
 </style>
 <?php end_section() ?>
 
 <?php start_section('content'); ?>
-<?php foreach($donnees as $d): ?>
+
 <div class="container-fluid p-0 h-100">
 	<div class="row no-gutters h-100">
 		<?php $this->load->view('layouts/client/onboarding/sidebar'); ?>
@@ -80,14 +55,15 @@
 			<div class="container-fluid mb-5">
 
 				<!-- DETAIL -->
-				<h1 class="display-1 text" style="font-size: 42px;">
-				Onboarding :
-				<?= $d['nom_client'] ?>
+				<h1 class="display-1 text-center" style="font-size: 42px;">
+					Onboarding Client: <br>
+					Ouest lyonnais climatisation plomberie SARL <br>
+					Search Engine
 				</h1>
 
-				<div class="row mb-3">
-					<div class="col">
-						<div class="card">
+				<div class="row no-gutters">
+					<div class="col pr-2" style="margin-right: 30px;">
+						<div class="card h-100 mb-5" style="margin-bottom: 0rem !important;">
 							<div class="card-body">
 								<ul class="nav nav-tabs mb-3" style="margin-top: -15px;">
 									<li class="nav-item">
@@ -97,56 +73,62 @@
 									</li>
 								</ul>
 
-								<h6 class="text-muted font-weight-normal" style="font-size: 14px;">
-										<?= nl2br($d['info_base_client']) ?></br>
+								<h6 class="text-muted font-weight-normal" style="font-size: 15.5px;">
+									Meta Platforms, Inc., doing business as Meta and formerly named Facebook, Inc., and TheFacebook, Inc., is an American multinational technology conglomerate based in Menlo Park, California.
+
+									The company owns Facebook, Instagram, and WhatsApp, among other products and services. The company owns Facebook, Instagram, and WhatsApp, among other products and services.The company owns Facebook, Instagram, and WhatsApp, among other products and
 								</h6>
 							</div>
 						</div>
 					</div>
 
 					<div class="col-auto">
-						<div class="card" style="width: 23rem;">
+						<div class="card h-100" style="width: 420px;">
 							<div class="card-body">
 								<div class="d-flex justify-content-between align-items-center">
 									<button class="btn btn-dark py-3 px-5" data-toggle="modal" data-target="#budgetModal">
-										<?php function format_budget($nombre)
-										{
-											return number_format($nombre, 0, '', ' ');
-										} ?>
-										<b><?= format_budget($d['budget']) ?> €</b>
+										3000 $
 									</button>
 									<div class="dropdown no-arrow">
-										<img class="mr-2" src="<?= base_url('assets/images/ico/Eye.png') ?>" />
+										<a href="javascript:void(0);" class="btn btn-light rounded-pill px-3 nav-link dropdown-toggle" id="clientDetailDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+											<i class="fa fa-ellipsis-v" style="font-size: 16px;"></i>
+										</a>
+										<div class="dropdown-menu dropdown-menu-right animated--grow-in" aria-labelledby="clientDetailDropdown">
+											<a class="dropdown-item" href="javscript:void(0);" data-toggle="modal" data-target="#editModal">Modifier</a>
+											<a class="dropdown-item" href="javscript:void(0);" data-toggle="modal" data-target="#statusModal">Statut Client</a>
+										</div>
 									</div>
 								</div>
 								<br><br>
-								<div class="d-flex justify-content-start mb-3" style="font-size: 15px;">
-									<i class="fa fa-check-square mr-2" style="color: #f0f0f0ff; font-size: 18px;"></i>
-									<span class="mr-2">Date d'anniversaire : <?= $d['mis_en_place_paiement'] ?></span>
+								<div class="d-flex justify-content-start mb-3" style="font-size: 18px;">
+									<span class="badge badge-light mr-3" style="width: 20px; height: 20px; background-color: #f2f2f2;">&nbsp;</span>
+									<span class="mr-2">Date Anniversaire | 20/07/2026</span>
 								</div>
-								<div class="d-flex justify-content-start mb-3" style="font-size: 15px;">
-									<i class="fa fa-check-square mr-2" style="color: #f0f0f0ff; font-size: 18px;"></i>
-									<span class="mr-2">Date de mise en ligne : <?= $d['annonce'] ?></span>
+								<div class="d-flex justify-content-start mb-3" style="font-size: 18px;">
+									<span class="badge badge-light mr-3" style="width: 20px; height: 20px; background-color: #f2f2f2;">&nbsp;</span>
+									<span class="mr-2">Date de Mise en Ligne | 20/07/2026</span>
 
 								</div>
-								<div class="d-flex justify-content-start mb-3" style="font-size: 15px;">
-									<i class="fa fa-check-square mr-2" style="color: #f0f0f0ff; font-size: 18px;"></i>
+								<div class="d-flex justify-content-start mb-3" style="font-size: 18px;">
+									<span class="badge badge-light mr-3" style="width: 20px; height: 20px; background-color: #f2f2f2;">&nbsp;</span>
 									<span class="mr-2">Commerciale</span>
 									<span class="mr-2">
-										<img src="<?= base_url('assets/images/' . $d['tech_photo_user']) ?>" width="24" height="24">
+										<img src="<?= base_url('assets/images/icons/figma/frame-5518.png') ?>" width="24" height="24">
 									</span>
 								</div>
-								<div class="d-flex justify-content-start mb-4" style="font-size: 15px;">
-									<i class="fa fa-check-square mr-2" style="color: #f0f0f0ff; font-size: 18px;"></i>
+								<div class="d-flex justify-content-start mb-4" style="font-size: 18px;">
+									<span class="badge badge-light mr-3" style="width: 20px; height: 20px; background-color: #f2f2f2;">&nbsp;</span>
 									<span class="mr-2">Account Manager</span>
 									<span class="mr-2">
-										<img src="<?= base_url('assets/images/' . $d['am_photo_user']) ?>" width="24" height="24">
+										<img src="<?= base_url('assets/images/icons/figma/frame-5518.png') ?>" width="24" height="24">
 									</span>
 								</div>
 							</div>
 						</div>
 					</div>
 				</div>
+
+				<!-- BRIEF -->
 				<h1 class="display-1 text-center mt-4" style="font-size: 42px;">
 					Brief
 				</h1>
@@ -157,95 +139,46 @@
 								Brief client
 							</a>
 						</li>
+						<li class="nav-item">
+							<a class="nav-link py-3" type="button">
+								Information Importante
+							</a>
+						</li>
+						<li class="nav-item">
+							<a class="nav-link py-3" type="button">
+								Valeur Ajouté
+							</a>
+						</li>
 					</ul>
 					<div class="d-inline">
-						<?php if(!empty($d['information_client'])): ?>
 						<button class="btn btn-dark">
 							<img src="<?= base_url('assets/images/icons/figma/icon-plus.svg') ?>" alt="">
 							Modifier Brief
 						</button>
-						<?php endif; ?>
-						<?php if(empty($d['information_client'])): ?>
+					</div>
+				</div>
+				<div class="card" style="height: 400px;">
+					<div class="card-body">
+						<!-- IF BRIEF VIDE -->
+						<div class="d-flex align-items-center justify-content-center h-100">
 							<button class="btn btn-dark stretched-link" data-toggle="modal" data-target="#briefModal">
 								<img src="<?= base_url('assets/images/icons/figma/icon-plus.svg') ?>" alt="">
 								Ajouter Brief
 							</button>
-						<?php endif; ?>
+						</div>
+
+						<!-- IF BRIEF EXISTE -->
+						<!-- <p class="text-muted">Test</p> -->
 					</div>
 				</div>
-				<?php if(!empty($d['information_client'])): ?>
-				<div class="card">
-					<div class="card-body">
-							<?= nl2br($d['information_client']); ?> 							
-					</div>
-				</div>
-				<?php endif; ?>
-				
-				<!-- BRIEF -->
-				<h1 class="display-1 text-center mt-4" style="font-size: 42px;">
-					Campagne
-				</h1>
-				<div class="table-responsive">
-					<table class="table table-hover table-wrapper">
-						<thead class="thead-light">
-							<tr>
-								<th class="text-muted">TYPE</th>
-								<th class="text-muted">CAMPAGNES</th>
-								<th class="text-muted">BUDGET</th>
-								<th class="text-muted">DEMANDE</th>
-								<th class="text-muted">STATUT</th>
-								<th class="text-muted">ACTION</th>
-							</tr>
-						</thead>
-						<tbody>
-							<?php if (!empty($campagnes)): ?>
-								<?php foreach ($campagnes as $campagne): ?>
-									<tr>
-										<td><?= $campagne['type_campagne']; ?></td>
-										<td><?= $campagne['nom_campagne']; ?></td>
-										<td><?= $campagne['repartition_budget'] ?: 0; ?> Euro</td>
-										<td>
-											<span class="badge alert-primary">GTM</span>
-										</td>
-										<td>
-											<?php if ($campagne['actif'] == 1): ?>
-												<span class="badge alert-primary">
-													<i class="fa fa-circle"></i>
-													En cours
-												</span>
-											<?php else: ?>
-												<span class="badge alert-success">
-													<i class="fa fa-circle"></i>
-													Terminée
-												</span>
-											<?php endif; ?>
-										</td>
-										<td>
-											<a href="javascript:void(0);" class="text-decoration-none">
-												<i class="fa fa-ellipsis-v"></i>
-											</a>
-										</td>
-									</tr>
-								<?php endforeach; ?>
-							<?php else: ?>
-								<tr>
-									<td colspan="14" class="text-center text-muted">
-										Aucune campagne trouvée.
-									</td>
-								</tr>
-							<?php endif; ?>
-						</tbody>
-					</table>
 
-				</div>
-
-				<button class="btn btn-dark" id="create_camp_button">
+				<button class="btn btn-dark mt-5" id="create_camp_button">
 					<img src="<?= base_url('assets/images/icons/figma/icon-plus.svg') ?>" alt="">
 					Création Nouvelle Campagne
 				</button>
 
 				<div id="camp_creation_step" class="d-none">
-					<p style="display: none;"><?= nl2br($d['information_client']); ?> 	</p>			
+
 					<!-- CAMPAGNE -->
 					<div id="campagne_step" class="step active mb-4">
 						<h1 class="display-1 text-center mt-5" style="font-size: 42px;">
@@ -256,62 +189,62 @@
 						</p>
 						<div class="row row-cols-3 mt-4 mb-3">
 							<div class="col">
-								<div class="card conversion-container">
+								<div class="card camp-container">
 									<div class="card-body">
 										<div class="d-block mb-3">
 											<i class="fa fa-database" style="font-size: 22px;"></i>
 										</div>
 										<h3>Sales</h3>
 										<p class="text-muted">A centralized repository storing all contact information.</p>
-										<a href="javascript:void(0);" class="stretched-link text-dark font-weight-bold select-conversion" data-target="#conversion_ecommerce">
+										<a href="javascript:void(0);" class="stretched-link text-dark font-weight-bold select-camp" data-target="#camp_sale">
 											Discover More
 											<i class="fa fa-arrow-right"></i>
 										</a>
-										<input type="radio" name="conversion" id="conversion_ecommerce" value="ecommerce" class="d-none">
+										<input type="radio" name="camp_param" id="camp_sale" value="sales" class="d-none">
 									</div>
 								</div>
 							</div>
 							<div class="col">
-								<div class="card conversion-container">
+								<div class="card camp-container">
 									<div class="card-body">
 										<div class="d-block mb-3">
 											<i class="fa fa-link" style="font-size: 22px;"></i>
 										</div>
 										<h3>Lead</h3>
 										<p class="text-muted">Setting tasks, follow-ups, or reminders associated with specific contacts.</p>
-										<a href="javascript:void(0);" class="stretched-link text-dark font-weight-bold select-conversion" data-target="#conversion_lead">
+										<a href="javascript:void(0);" class="stretched-link text-dark font-weight-bold select-camp" data-target="#camp_lead">
 											Discover More
 											<i class="fa fa-arrow-right"></i>
 										</a>
-										<input type="radio" name="conversion" id="conversion_lead" value="lead" class="d-none">
+										<input type="radio" name="camp_param" id="camp_lead" value="lead" class="d-none">
 									</div>
 								</div>
 							</div>
 							<div class="col">
-								<div class="card conversion-container">
+								<div class="card camp-container">
 									<div class="card-body">
 										<div class="d-block mb-3">
 											<i class="fa fa-cloud" style="font-size: 22px;"></i>
 										</div>
 										<h3>Réservation</h3>
 										<p class="text-muted">Automatically updating and enriching contact data.</p>
-										<a href="javascript:void(0);" class="stretched-link text-dark font-weight-bold select-conversion" data-target="#conversion_reservation">
+										<a href="javascript:void(0);" class="stretched-link text-dark font-weight-bold select-camp" data-target="#camp_resa">
 											Discover More
 											<i class="fa fa-arrow-right"></i>
 										</a>
-										<input type="radio" name="conversion" id="conversion_reservation" value="reservation" class="d-none">
+										<input type="radio" name="camp_param" id="camp_resa" value="resa" class="d-none">
+
 									</div>
 								</div>
 							</div>
 						</div>
-
 						<div class="d-flex justify-content-end align-items-center">
-							<button class="btn btn-dark px-4 float-right next-button" data-input="conversion">Suivant</button>
+							<button class="btn btn-dark px-4 float-right next-button" data-input="camp_param">Suivant</button>
 						</div>
 					</div>
 
 					<!-- OBJECTIF -->
-					<div id="camp_type_step" class="step mb-4">
+					<div id="objectif_step" class="step mb-4">
 						<h1 class="display-1 text-center mt-5" style="font-size: 42px;">
 							Choisissez votre objectif
 						</h1>
@@ -320,50 +253,50 @@
 						</p>
 						<div class="row row-cols-3 mt-4 mb-3">
 							<div class="col">
-								<div class="card h-100 camp-type-container">
+								<div class="card h-100 obj-container">
 									<div class="card-body">
 										<img src="<?= base_url('assets/images/icons/figma/content_icon.png') ?>" alt="" class="mb-3" width="110">
 										<h3>Search</h3>
 										<p class="text-muted">Create, customize, and manage email marketing campaigns.</p>
-										<a href="javascript:void(0);" class="stretched-link text-dark font-weight-bold select-conversion-type" data-target="#camp_1">
+										<a href="javascript:void(0);" class="stretched-link text-dark font-weight-bold select-obj" data-target="#obj_search">
 											Discover More
 											<i class="fa fa-arrow-right"></i>
 										</a>
-										<input type="radio" name="camp_type" id="camp_1" value="1" class="d-none">
+										<input type="radio" name="obj" id="obj_search" value="search" class="d-none">
 									</div>
 								</div>
 							</div>
 							<div class="col">
-								<div class="card h-100 camp-type-container">
+								<div class="card h-100 obj-container">
 									<div class="card-body">
 										<img src="<?= base_url('assets/images/icons/figma/content_icon.png') ?>" alt="" class="mb-3" width="110">
 										<h3>Performance Max</h3>
 										<p class="text-muted">Tailor emails by segmenting contacts based on demographics, behavior.</p>
-										<a href="javascript:void(0);" class="stretched-link text-dark font-weight-bold select-conversion-type" data-target="#camp_3">
+										<a href="javascript:void(0);" class="stretched-link text-dark font-weight-bold select-obj" data-target="#obj_pmax">
 											Discover More
 											<i class="fa fa-arrow-right"></i>
 										</a>
-										<input type="radio" name="camp_type" id="camp_3" value="3" class="d-none">
+										<input type="radio" name="obj" id="obj_pmax" value="pmax" class="d-none">
 									</div>
 								</div>
 							</div>
 							<div class="col">
-								<div class="card h-100 camp-type-container">
+								<div class="card h-100 obj-container">
 									<div class="card-body">
 										<img src="<?= base_url('assets/images/icons/figma/relation_icon.png') ?>" alt="" class="mb-3" width="90">
 										<h3>Locale</h3>
 										<p class="text-muted">Create, customize, and manage email marketing campaigns.</p>
-										<a href="javascript:void(0);" class="stretched-link text-dark font-weight-bold select-conversion-type" data-target="#camp_2">
+										<a href="javascript:void(0);" class="stretched-link text-dark font-weight-bold select-obj" data-target="#obj_locale">
 											Discover More
 											<i class="fa fa-arrow-right"></i>
 										</a>
-										<input type="radio" name="camp_type" id="camp_2" value="2" class="d-none">
+										<input type="radio" name="obj" id="obj_locale" value="locale" class="d-none">
 									</div>
 								</div>
 							</div>
 						</div>
 						<div class="d-flex justify-content-end align-items-center">
-							<button class="btn btn-dark px-4 float-right next-button" data-input="camp_type">Suivant</button>
+							<button class="btn btn-dark px-4 float-right next-button" data-input="obj">Suivant</button>
 						</div>
 					</div>
 
@@ -403,7 +336,7 @@
 		</div>
 	</div>
 </div>
-<?php endforeach; ?>
+
 <?php $this->load->view('layouts/client/onboarding/brief-modal') ?>
 <?php end_section(); ?>
 
@@ -415,64 +348,46 @@
 
 			$('#camp_creation_step').removeClass('d-none');
 
-			$('.scroll-container').animate({
-				scrollTop: $('.scroll-container')[0].scrollHeight
-			}, 1000);
+			$('html, body').animate({
+				scrollTop: $("#create_camp_button").offset().top
+			}, 500);
 
 		});
 
-		$('.select-conversion').click(function() {
+		$('.select-camp').click(function() {
 
 			let target = $(this).data('target');
 
 			$(target).prop('checked', true);
-			$('.conversion-container').removeClass('border-dark border-danger shadow');
-			$(this).parents('.conversion-container').addClass('border-dark shadow');
+			$('.camp-container').removeClass('border-dark shadow');
+			$(this).parents('.camp-container').addClass('border-dark shadow');
 		});
 
-		$('.select-conversion-type').click(function() {
+		$('.select-obj').click(function() {
 
 			let target = $(this).data('target');
 
 			$(target).prop('checked', true);
-			$('.camp-type-container').removeClass('border-dark border-danger shadow');
-			$(this).parents('.camp-type-container').addClass('border-dark shadow');
+			$('.obj-container').removeClass('border-dark shadow');
+			$(this).parents('.obj-container').addClass('border-dark shadow');
 		});
 
 		// STEP CODE
 		$('.next-button').click(function() {
 
 			let input = $(this).data('input');
-			let value = $('input[name="' + input + '"]:checked').val();
-
-			if (!value) {
-				$('input[name="' + input + '"]').parents('.card').removeClass('border-dark');
-				$('input[name="' + input + '"]').parents('.card').addClass('border-danger shadow');
-			} else {
-				$('input[name="' + input + '"]').parents('.card').removeClass('border-danger');
-				// $(this).parents('.step').removeClass('active');
-				$(this).parents('.step').next('.step').addClass('active');
-
-				$('.scroll-container').animate({
-					scrollTop: $('.scroll-container')[0].scrollHeight
-				}, 1000);
-			}
+			console.log(input);
 
 		});
-
+		
 		$('#final_button').click(function() {
 
-			let conversion = $('input[name="conversion"]:checked').val();
-			let camp_type = $('input[name="camp_type"]:checked').val();
+			let camp_param = $('input[name="camp_param"]:checked').val();
+			let obj = $('input[name="obj"]:checked').val();
 			let gtm = $('input[name="gtm"]').is(':checked');
 
-			if (!conversion || !camp_type) {
-				alert("Veuillez d'abord choisir les options précédentes!");
-			} else {
+			console.log(camp_param, obj, gtm);
 
-				let url = "<?= site_url('Client/campagne/' . $idclients); ?>?conversion=" + conversion + "&camp_type=" + camp_type + "&gtm=" + gtm;
-				window.location.href = url;
-			}
 		});
 	});
 </script>
