@@ -20,7 +20,7 @@
 				<i class="fa fa-chevron-down"></i>
 			</a>
 			<div class="dropdown-menu dropdown-menu-right animated--grow-in" aria-labelledby="userDropdown">
-				<a class="dropdown-item" href="<?php echo base_url("admin/user/edit/" . $current_user->id); ?>">Profile</a>
+				<a class="dropdown-item" href="<?= base_url('Utilisateur'); ?>">Profile</a>
 				<div class="dropdown-divider"></div>
 				<a class="dropdown-item text-danger" href="<?php echo base_url("admin/user/logout"); ?>">Logout</a>
 			</div>

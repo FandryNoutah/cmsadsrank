@@ -1033,6 +1033,49 @@ class Donne_modele extends CI_Model
 		// Fermer la connexion à la base de données
 		$this->db->close();
 	}
+	public function update_onboarding_client($budget, $secteur_activite, $Produit, $Initiative, $Am, $mis_en_place_paiement, $Brief, $annonce, $commentaire_client, $paiement_recu, $datastudio, $email_onboarding, $facturation, $idonboarding)
+	{
+		// Charger la base de données
+		$this->load->database();
+
+		// Échapper les valeurs pour éviter les injections SQL
+		$budget = $this->db->escape($budget);
+		$secteur_activite = $this->db->escape($secteur_activite);
+		$Produit = $this->db->escape($Produit);
+		$Initiative = $this->db->escape($Initiative);
+		$Am = $this->db->escape($Am);
+		$mis_en_place_paiement = $this->db->escape($mis_en_place_paiement);
+		$Brief = $this->db->escape($Brief);
+		$annonce = $this->db->escape($annonce);
+		$commentaire_client = $this->db->escape($commentaire_client);
+		$paiement_recu = $this->db->escape($paiement_recu);
+		$datastudio = $this->db->escape($datastudio);
+		$email_onboarding = $this->db->escape($email_onboarding);
+		$facturation = $this->db->escape($facturation);
+		$idonboarding = $this->db->escape($idonboarding);
+
+		// Construire la requête avec les valeurs échappées
+		$sql = "UPDATE onboarding SET 
+					budget = $budget, 
+					secteur_activite = $secteur_activite, 
+					idproduit = $Produit, 
+					mis_en_place_paiement = $mis_en_place_paiement, 
+					Brief = $Brief, 
+					annonce = $annonce, 
+					modifier_par = $Am, 
+					commentaire_client = $commentaire_client, 
+					paiement_recu = $paiement_recu, 
+					datastudio = $datastudio, 
+					email_onboarding = $email_onboarding, 
+					facturation = $facturation 
+				WHERE idonboarding = $idonboarding";
+
+		// Exécuter la requête
+		$this->db->query($sql);
+
+		// Fermer la connexion à la base de données
+		$this->db->close();
+	}
 
 	public function update_produit($product_choice, $idonnee)
 	{

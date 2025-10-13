@@ -89,14 +89,6 @@
 							</tr>
 						</thead>
 						<tbody>
-							<tr>
-								<td colspan="6">
-									<a href="#" class="text-dark">
-										<i class="fa fa-plus"></i>
-										New Task
-									</a>
-								</td>
-							</tr>
 							<?php if ($task != NULL): ?>
 								<?php foreach ($task as $t): ?>
 									<tr>
@@ -114,10 +106,24 @@
 										</td>
 
 										<td class="align-middle">
-											<span class="badge alert-warning rounded-pill px-3 py-2" style="font-size: 12px; font-weight: 500;">
+											<?php if ($t->status == "planifié"): ?>
+												<span class="badge alert-warning rounded-pill px-3 py-2" style="font-size: 12px; font-weight: 500;">
 												<i class="fa fa-circle mr-1" style="font-size: 10px;"></i>
-												Planned
-											</span>
+												Plannifier
+											</span>	
+											<?php endif; ?>	
+											<?php if ($t->status == "en cours"): ?>
+												<span class="badge alert-warning rounded-pill px-3 py-2" style="font-size: 12px; font-weight: 500;">
+												<i class="fa fa-circle mr-1" style="font-size: 10px;"></i>
+												Programmé
+											</span>	
+											<?php endif; ?>	
+											<?php if ($t->status == "effectuée"): ?>
+												<span class="badge alert-success rounded-pill px-3 py-2" style="font-size: 12px; font-weight: 500;">
+												<i class="fa fa-circle mr-1" style="font-size: 10px;"></i>
+												Effectuée
+											</span>	
+											<?php endif; ?>	
 										</td>
 										<td>
 											<a href="javascript:void(0);" data-toggle="modal" data-target="#detailModal" data-id="<?= $t->idtask; ?>">
