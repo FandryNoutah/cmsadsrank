@@ -42,13 +42,13 @@
 	}
 
 
-	.ta***REMOVED*** {
+	.taREMOVEDdetails {
 		display: none;
 		/* Par défaut, tous les blocs de détails sont cachés */
 	}
 
 	/* Global form styling */
-	.ta***REMOVED*** {
+	.taREMOVEDform {
 		width: 100%;
 		margin: 50px auto;
 		background-color: #f9f9f9;
@@ -190,8 +190,8 @@
 							</thead>
 							<tbody>
 								<?php foreach ($tache_team_non_complete as $T): ?>
-									<tr data-ta***REMOVED***="<?php echo $T->idtask; ?>" class="ta***REMOVED***">
-										<td><a href="javascript:void(0);" class="client-name" data-ta***REMOVED***="<?php echo $T->idtask; ?>"><?php echo htmlspecialchars($T->reference); ?></a></td>
+									<tr data-taREMOVEDid="<?php echo $T->idtask; ?>" class="taREMOVEDrow">
+										<td><a href="javascript:void(0);" class="client-name" data-taREMOVEDid="<?php echo $T->idtask; ?>"><?php echo htmlspecialchars($T->reference); ?></a></td>
 										<td><img src="<?php echo base_url(IMAGES_PATH . htmlspecialchars($T->AM_photo)); ?>" alt="Tech Avatar" style="width: 40px;" class="avatar-image" data-id="<?php echo htmlspecialchars($T->AM_photo); ?>"></td>
 										<td><img src="<?php echo base_url(IMAGES_PATH . htmlspecialchars($T->assigned_to_photo)); ?>" alt="Tech Avatar" style="width: 40px;" class="avatar-image" data-id="<?php echo htmlspecialchars($T->assigned_to_photo); ?>"></td>
 										
@@ -216,9 +216,9 @@
 										</td>
 										<td><?php echo htmlspecialchars($T->note_technique); ?></td>
 									</tr>
-									<div id="ta***REMOVED***-<?php echo $T->idtask; ?>" class="ta***REMOVED*** client-details" style="display:none;">
+									<div id="taREMOVEDdetails-<?php echo $T->idtask; ?>" class="taREMOVEDdetails client-details" style="display:none;">
 										<h3>Détails de la tâche</h3>
-										<form action="<?php echo site_url('Strategie/update_task/' . $T->idtask); ?>" method="POST" class="ta***REMOVED***">
+										<form action="<?php echo site_url('Strategie/update_task/' . $T->idtask); ?>" method="POST" class="taREMOVEDform">
 											<!-- Form content remains the same -->
 										</form>
 									</div>
@@ -247,8 +247,8 @@
 							</thead>
 							<tbody>
 								<?php foreach ($temporaire_non_complete as $T): ?>
-									<tr data-ta***REMOVED***="<?php echo $T->idtask; ?>" class="ta***REMOVED***">
-										<td><a href="javascript:void(0);" class="client-name" data-ta***REMOVED***="<?php echo $T->idtask; ?>"><?php echo htmlspecialchars($T->reference); ?></a></td>
+									<tr data-taREMOVEDid="<?php echo $T->idtask; ?>" class="taREMOVEDrow">
+										<td><a href="javascript:void(0);" class="client-name" data-taREMOVEDid="<?php echo $T->idtask; ?>"><?php echo htmlspecialchars($T->reference); ?></a></td>
 										<td><img src="<?php echo base_url(IMAGES_PATH . htmlspecialchars($T->AM_photo)); ?>" alt="Tech Avatar" style="width: 40px;" class="avatar-image" data-id="<?php echo htmlspecialchars($T->AM_photo); ?>">
 										</td>
 										<td><img src="<?php echo base_url(IMAGES_PATH . htmlspecialchars($T->assigned_to_photo)); ?>" alt="Tech Avatar" style="width: 40px;" class="avatar-image" data-id="<?php echo htmlspecialchars($T->assigned_to_photo); ?>"></td>
@@ -274,11 +274,11 @@
 
 
 									</tr>
-									<div id="ta***REMOVED***-<?php echo $T->idtask; ?>" class="ta***REMOVED*** client-details" style="display:none;">
+									<div id="taREMOVEDdetails-<?php echo $T->idtask; ?>" class="taREMOVEDdetails client-details" style="display:none;">
 
 										<?php ?>
 										<h3>Détails de la tâche</h3>
-										<form action="<?php echo site_url('Strategie/update_task/' . $T->idtask); ?>" method="POST" class="ta***REMOVED***">
+										<form action="<?php echo site_url('Strategie/update_task/' . $T->idtask); ?>" method="POST" class="taREMOVEDform">
 											<input type="hidden" name="idtask" class="form-input" value="<?php echo htmlspecialchars($T->idtask); ?>" />
 											<label for="date_demande" class="form-label">Date de la demande :</label>
 											<input type="date" name="date_demande" class="form-input" value="<?php echo htmlspecialchars($T->date_demande); ?>" required />
@@ -352,8 +352,8 @@
 							</thead>
 							<tbody>
 								<?php foreach ($gtm_non_complete as $T): ?>
-									<tr data-ta***REMOVED***="<?php echo $T->idtask; ?>" class="ta***REMOVED***">
-										<td><a href="javascript:void(0);" class="client-name" data-ta***REMOVED***="<?php echo $T->idtask; ?>"><?php echo htmlspecialchars($T->reference); ?></a></td>
+									<tr data-taREMOVEDid="<?php echo $T->idtask; ?>" class="taREMOVEDrow">
+										<td><a href="javascript:void(0);" class="client-name" data-taREMOVEDid="<?php echo $T->idtask; ?>"><?php echo htmlspecialchars($T->reference); ?></a></td>
 										<td><img src="<?php echo base_url(IMAGES_PATH . htmlspecialchars($T->AM_photo)); ?>" alt="Tech Avatar" style="width: 40px;" class="avatar-image" data-id="<?php echo htmlspecialchars($T->AM_photo); ?>">
 										</td>
 										<td><img src="<?php echo base_url(IMAGES_PATH . htmlspecialchars($T->assigned_to_photo)); ?>" alt="Tech Avatar" style="width: 40px;" class="avatar-image" data-id="<?php echo htmlspecialchars($T->assigned_to_photo); ?>"></td>
@@ -404,8 +404,8 @@
 							</thead>
 							<tbody>
 								<?php foreach ($All_task_non_complete as $T): ?>
-									<tr data-ta***REMOVED***="<?php echo $T->idtask; ?>" class="ta***REMOVED***">
-										<td><a style="text-decoration: none; color: #373a3c" href="javascript:void(0);" class="client-name" data-ta***REMOVED***="<?php echo $T->idtask; ?>"><?php echo htmlspecialchars($T->reference); ?></a></td>
+									<tr data-taREMOVEDid="<?php echo $T->idtask; ?>" class="taREMOVEDrow">
+										<td><a style="text-decoration: none; color: #373a3c" href="javascript:void(0);" class="client-name" data-taREMOVEDid="<?php echo $T->idtask; ?>"><?php echo htmlspecialchars($T->reference); ?></a></td>
 										<td><img src="<?php echo base_url(IMAGES_PATH . htmlspecialchars($T->AM_photo)); ?>" alt="Tech Avatar" style="width: 40px;" class="avatar-image" data-id="<?php echo htmlspecialchars($T->AM_photo); ?>">
 										</td>
 										<td><img src="<?php echo base_url(IMAGES_PATH . htmlspecialchars($T->assigned_to_photo)); ?>" alt="Tech Avatar" style="width: 40px;" class="avatar-image" data-id="<?php echo htmlspecialchars($T->assigned_to_photo); ?>"></td>
@@ -430,11 +430,11 @@
 										<td><?php echo htmlspecialchars($T->note_technique); ?></td>
 										<td><?php echo htmlspecialchars($T->priorite); ?></td>
 									</tr>
-									<div id="ta***REMOVED***-<?php echo $T->idtask; ?>" class="ta***REMOVED*** client-details" style="display:none;">
+									<div id="taREMOVEDdetails-<?php echo $T->idtask; ?>" class="taREMOVEDdetails client-details" style="display:none;">
 
 										<?php ?>
 										<h3>Détails de la tâche</h3>
-										<form action="<?php echo site_url('Strategie/update_task/' . $T->idtask); ?>" method="POST" class="ta***REMOVED***">
+										<form action="<?php echo site_url('Strategie/update_task/' . $T->idtask); ?>" method="POST" class="taREMOVEDform">
 											<input type="hidden" name="idtask" class="form-input" value="<?php echo htmlspecialchars($T->idtask); ?>" />
 											<label for="date_demande" class="form-label">Date de la demande :</label>
 											<input type="date" name="date_demande" class="form-input" value="<?php echo htmlspecialchars($T->date_demande); ?>" required />
@@ -613,8 +613,8 @@
 							</thead>
 							<tbody>
 								<?php foreach ($tache_team as $T): ?>
-									<tr data-ta***REMOVED***="<?php echo $T->idtask; ?>" class="ta***REMOVED***">
-										<td><a href="javascript:void(0);" class="client-name" data-ta***REMOVED***="<?php echo $T->idtask; ?>"><?php echo htmlspecialchars($T->reference); ?></a></td>
+									<tr data-taREMOVEDid="<?php echo $T->idtask; ?>" class="taREMOVEDrow">
+										<td><a href="javascript:void(0);" class="client-name" data-taREMOVEDid="<?php echo $T->idtask; ?>"><?php echo htmlspecialchars($T->reference); ?></a></td>
 										<td><img src="<?php echo base_url(IMAGES_PATH . htmlspecialchars($T->AM_photo)); ?>" alt="Tech Avatar" style="width: 40px;" class="avatar-image" data-id="<?php echo htmlspecialchars($T->AM_photo); ?>">
 
 										<td><img src="<?php echo base_url(IMAGES_PATH . htmlspecialchars($T->assigned_to_photo)); ?>" alt="Tech Avatar" style="width: 40px;" class="avatar-image" data-id="<?php echo htmlspecialchars($T->assigned_to_photo); ?>"></td>
@@ -640,11 +640,11 @@
 										<td><?php echo htmlspecialchars($T->note_technique); ?></td>
 										<td><?php echo htmlspecialchars($T->priorite); ?></td>
 									</tr>
-									<div id="ta***REMOVED***-<?php echo $T->idtask; ?>" class="ta***REMOVED*** client-details" style="display:none;">
+									<div id="taREMOVEDdetails-<?php echo $T->idtask; ?>" class="taREMOVEDdetails client-details" style="display:none;">
 
 										<?php ?>
 										<h3>Détails de la tâche</h3>
-										<form action="<?php echo site_url('Strategie/update_task/' . $T->idtask); ?>" method="POST" class="ta***REMOVED***">
+										<form action="<?php echo site_url('Strategie/update_task/' . $T->idtask); ?>" method="POST" class="taREMOVEDform">
 											<input type="hidden" name="idtask" class="form-input" value="<?php echo htmlspecialchars($T->idtask); ?>" />
 											<label for="date_demande" class="form-label">Date de la demande :</label>
 											<input type="date" name="date_demande" class="form-input" value="<?php echo htmlspecialchars($T->date_demande); ?>" required />
@@ -822,8 +822,8 @@
 							</thead>
 							<tbody>
 								<?php foreach ($temporaire as $T): ?>
-									<tr data-ta***REMOVED***="<?php echo $T->idtask; ?>" class="ta***REMOVED***">
-										<td><a href="javascript:void(0);" class="client-name" data-ta***REMOVED***="<?php echo $T->idtask; ?>"><?php echo htmlspecialchars($T->reference); ?></a></td>
+									<tr data-taREMOVEDid="<?php echo $T->idtask; ?>" class="taREMOVEDrow">
+										<td><a href="javascript:void(0);" class="client-name" data-taREMOVEDid="<?php echo $T->idtask; ?>"><?php echo htmlspecialchars($T->reference); ?></a></td>
 										<td><img src="<?php echo base_url(IMAGES_PATH . htmlspecialchars($T->AM_photo)); ?>" alt="Tech Avatar" style="width: 40px;" class="avatar-image" data-id="<?php echo htmlspecialchars($T->AM_photo); ?>">
 										</td>
 										<td><img src="<?php echo base_url(IMAGES_PATH . htmlspecialchars($T->assigned_to_photo)); ?>" alt="Tech Avatar" style="width: 40px;" class="avatar-image" data-id="<?php echo htmlspecialchars($T->assigned_to_photo); ?>"></td>
@@ -850,11 +850,11 @@
 
 
 									</tr>
-									<div id="ta***REMOVED***-<?php echo $T->idtask; ?>" class="ta***REMOVED*** client-details" style="display:none;">
+									<div id="taREMOVEDdetails-<?php echo $T->idtask; ?>" class="taREMOVEDdetails client-details" style="display:none;">
 
 										<?php ?>
 										<h3>Détails de la tâche</h3>
-										<form action="<?php echo site_url('Strategie/update_task/' . $T->idtask); ?>" method="POST" class="ta***REMOVED***">
+										<form action="<?php echo site_url('Strategie/update_task/' . $T->idtask); ?>" method="POST" class="taREMOVEDform">
 											<input type="hidden" name="idtask" class="form-input" value="<?php echo htmlspecialchars($T->idtask); ?>" />
 											<label for="date_demande" class="form-label">Date de la demande :</label>
 											<input type="date" name="date_demande" class="form-input" value="<?php echo htmlspecialchars($T->date_demande); ?>" required />
@@ -1032,8 +1032,8 @@
 							</thead>
 							<tbody>
 								<?php foreach ($gtm as $T): ?>
-									<tr data-ta***REMOVED***="<?php echo $T->idtask; ?>" class="ta***REMOVED***">
-										<td><a href="javascript:void(0);" class="client-name" data-ta***REMOVED***="<?php echo $T->idtask; ?>"><?php echo htmlspecialchars($T->reference); ?></a></td>
+									<tr data-taREMOVEDid="<?php echo $T->idtask; ?>" class="taREMOVEDrow">
+										<td><a href="javascript:void(0);" class="client-name" data-taREMOVEDid="<?php echo $T->idtask; ?>"><?php echo htmlspecialchars($T->reference); ?></a></td>
 										<td><img src="<?php echo base_url(IMAGES_PATH . htmlspecialchars($T->AM_photo)); ?>" alt="Tech Avatar" style="width: 40px;" class="avatar-image" data-id="<?php echo htmlspecialchars($T->AM_photo); ?>">
 										</td>
 										<td><img src="<?php echo base_url(IMAGES_PATH . htmlspecialchars($T->assigned_to_photo)); ?>" alt="Tech Avatar" style="width: 40px;" class="avatar-image" data-id="<?php echo htmlspecialchars($T->assigned_to_photo); ?>"></td>
@@ -1176,32 +1176,32 @@
 
 			// Lorsqu'on clique sur le nom du client
 			$(".client-name").click(function() {
-				var taskId = $(this).data("ta***REMOVED***");
+				var taskId = $(this).data("taREMOVEDid");
 				console.log(taskId);
 
 				// Cacher tous les blocs de détails
-				$(".ta***REMOVED***").hide();
+				$(".taREMOVEDdetails").hide();
 
 				// Afficher le formulaire de détails de la tâche spécifique
-				$('#ta***REMOVED***-' + taskId).show();
+				$('#taREMOVEDdetails-' + taskId).show();
 
 				// Afficher l'overlay et le formulaire de modification
 				$('#overlay').show();
-				$('#ta***REMOVED***-' + taskId).addClass('show');
+				$('#taREMOVEDdetails-' + taskId).addClass('show');
 			});
 
 			// Fermeture lorsque l'on clique sur l'overlay
 			$('#overlay').click(function() {
-				$('.ta***REMOVED***').removeClass('show');
+				$('.taREMOVEDdetails').removeClass('show');
 				$('#overlay').hide();
 
 				setTimeout(function() {
-					$('.ta***REMOVED***').hide();
+					$('.taREMOVEDdetails').hide();
 				}, 500);
 			});
 
 			// Empêche la fermeture si l'on clique à l'intérieur du bloc de détails
-			$('.ta***REMOVED***').click(function(event) {
+			$('.taREMOVEDdetails').click(function(event) {
 				event.stopPropagation();
 			});
 

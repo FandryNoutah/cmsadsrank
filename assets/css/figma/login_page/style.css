@@ -321,8 +321,8 @@
   border-radius: 8.49px;
   background: linear-gradient(180deg, rgba(255, 255, 255, 0.2) 0%, rgba(255, 255, 255, 0.07) 100%);
   -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-  -webkit-ma***REMOVED***: xor;
-  ma***REMOVED***: exclude;
+  -webkit-maREMOVEDcomposite: xor;
+  maREMOVEDcomposite: exclude;
   z-index: 1;
   pointer-events: none;
 }
@@ -794,7 +794,7 @@
   white-space: nowrap;
 }
 
-.sign-in-page .cards-ta***REMOVED*** {
+.sign-in-page .cards-taREMOVEDcard {
   display: flex;
   flex-direction: column;
   width: 98.74px;
@@ -1087,7 +1087,7 @@
   background-position: 50% 50%;
 }
 
-.sign-in-page .cards-ta***REMOVED***-2 {
+.sign-in-page .cards-taREMOVEDcard-2 {
   width: 98.74px;
   margin-bottom: -0.31px;
   margin-right: -0.31px;
@@ -1261,7 +1261,7 @@
   background-position: 50% 50%;
 }
 
-.sign-in-page .cards-ta***REMOVED***-3 {
+.sign-in-page .cards-taREMOVEDcard-3 {
   width: 30.7px;
   display: flex;
   flex-direction: column;
@@ -1466,7 +1466,7 @@
   height: 4.91px;
 }
 
-.sign-in-page .cards-ta***REMOVED***-4 {
+.sign-in-page .cards-taREMOVEDcard-4 {
   width: 30.7px;
   margin-bottom: -0.31px;
   display: flex;
@@ -1918,7 +1918,7 @@
   position: relative;
 }
 
-.sign-in-page .cards-ta***REMOVED***-5 {
+.sign-in-page .cards-taREMOVEDcard-5 {
   width: 98.74px;
   margin-right: -3.25px;
   display: flex;
@@ -2100,7 +2100,7 @@
   background-position: 50% 50%;
 }
 
-.sign-in-page .cards-ta***REMOVED***-6 {
+.sign-in-page .cards-taREMOVEDcard-6 {
   width: 98.74px;
   margin-bottom: -0.31px;
   margin-right: -3.25px;
@@ -2179,7 +2179,7 @@
   filter: blur(5.26px);
 }
 
-.sign-in-page .ta***REMOVED*** {
+.sign-in-page .taREMOVEDmodal {
   display: flex;
   flex-direction: column;
   width: 16px;
@@ -2838,8 +2838,8 @@
   border-radius: 4px;
   background: linear-gradient(180deg, rgba(255, 255, 255, 0.2) 0%, rgba(255, 255, 255, 0.07) 100%);
   -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-  -webkit-ma***REMOVED***: xor;
-  ma***REMOVED***: exclude;
+  -webkit-maREMOVEDcomposite: xor;
+  maREMOVEDcomposite: exclude;
   z-index: 1;
   pointer-events: none;
 }
