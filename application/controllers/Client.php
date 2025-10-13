@@ -4,11 +4,10 @@ defined('BASEPATH') or exit('No direct script access allowed');
 class Client extends MY_Controller
 {
 	private $api_url = 'https://api.aircall.io/v1/calls';
-	private $api_auth = 'e69c2f6c77144ad053a54bf77088aa09:6ab56a32536bc017ed6b2adb619338e0';
+	private $api_auth = '';
 	protected $file_upload_field;
-
-
-	public function __construct()
+	private $api_key = getenv('OPENAI_API_KEY');
+		public function __construct()
 	{
 		parent::__construct();
 
@@ -20,6 +19,8 @@ class Client extends MY_Controller
 		$this->load->model("Message_model");
 		$this->load->model("Task_model");
 		$this->load->model("Note_model");
+		$this->load->model("Discussion_model");
+		$this->load->model("Gtm_model");
 		$this->data['visuels'] = $this->visuels_model->get_all();
 		// $this->load->library('PHPExcel');
 		// $this->load->library('excel');
@@ -47,7 +48,77 @@ class Client extends MY_Controller
 		$this->content = "layouts/client/index.php";
 		$this->layout();
 	}
+	public function mis_a_jour_gtm($idclients)
+	{
+		$id = $idclients;
+		$client = $this->visuels_model->getDonneeById($id);
+		$site_client = $client[0]['site_client'];
+		if (!preg_match('#^https?://#i', $site_client)) {
+			$site_client = 'https://' . $site_client;
+		}
+		$html = $this->fetch_url($site_client);
+		if ($html === false) {
+			die("Erreur : impossible d'accéder à l'URL $site_client");
+		}
+		preg_match('/GTM-[A-Z0-9]+/', $html, $matches);
+		$gtm_code = !empty($matches) ? $matches[0] : null;
+		if($gtm_code != Null):
+			$this->visuels_model->mis_a_jour_gtm($idclients, $gtm_code);
+		endif;
+		redirect('Client/application/' . $idclients);
+	}
+	public function mis_a_jour_cms($idclients)
+	{
+		$id = $idclients;
+		$client = $this->visuels_model->getDonneeById($id);
+		$site_client = $client[0]['site_client'];
+		if (!preg_match('#^https?://#i', $site_client)) {
+			$site_client = 'https://' . $site_client;
+		}
+		$html = $this->fetch_url($site_client);
+		if ($html === false) {
+			die("Erreur : impossible d'accéder à l'URL $site_client");
+		}
+		preg_match('/GTM-[A-Z0-9]+/', $html, $matches);
+		$gtm_code = !empty($matches) ? $matches[0] : null;
+		$cms = $this->detect_cms($html, $site_client);
+		if ($cms !== null) {
+			$this->visuels_model->mis_a_jour_cms($idclients, $cms);
+		}
 
+		redirect('Client/application/' . $idclients);
+	}
+	public function ajout_brief()
+	{
+		$id = $this->input->post('idclients');
+		$information_client = $this->input->post('information_client');
+		$this->visuels_model->ajout_brief($id, $information_client);
+		redirect('Client/onboarding/' . $id);
+	}
+		
+	public function change_rappor_base()
+	{
+		$id = $this->input->post('idclients');
+		$rapport_base = $this->input->post('rapport_base');
+		$this->visuels_model->change_rapport_base($id, $rapport_base);
+		redirect('Client/detail_client/' . $id);
+	}
+
+
+	public function change_conversions()
+	{
+		$id = $this->input->post('idclients');
+		$rapport_conversion = $this->input->post('rapport_conversion');
+		$this->visuels_model->change_rapport_conversion($id, $rapport_conversion);
+		redirect('Client/detail_client/' . $id);
+	}
+	public function change_bilan_annuelle()
+	{
+		$id = $this->input->post('idclients');
+		$bilan_annuele = $this->input->post('bilan_annuele');
+		$this->visuels_model->change_bilan_annuele($id, $bilan_annuele);
+		redirect('Client/detail_client/' . $id);
+	}
 	public function relance()
 	{
 		$id = $this->input->post('idclients');
@@ -66,16 +137,19 @@ class Client extends MY_Controller
 			echo json_encode(['status' => 'error', 'message' => 'ID de couleur invalide']);
 			return;
 		}
-
 		$this->visuels_model->update_color($idclients, $color_id);
-
-		// Au lieu de redirect(), on retourne une URL dans la réponse
 		echo json_encode([
 			'status' => 'success',
 			'redirect_url' => base_url('Client/detail_client/' . $idclients)
 		]);
 	}
-
+	public function date_google_meet()
+	{
+		$meetingDate = $this->input->post('meetingDate');
+		$idclients = $this->input->post('idclients');
+		$this->visuels_model->change_meetingDate($idclients, $meetingDate);
+		redirect('Client/detail_client/' . $idclients);
+	}
 	public function upload_logo()
 	{
 		$idclients = $this->input->post('idclients');
@@ -137,8 +211,11 @@ class Client extends MY_Controller
 		$inforamtion_upsell = $information_resiliation;
 		$statut_upsell = $statut_resiliation;
 		$id = intval($idclients);
+		$idclients = $id;
 		$donnee = $this->data["clients"] = $this->visuels_model->getDonneeById($id);
 		$idonnee = $donnee[0]['idonnee'];
+		$account_manager = $donnee[0]['account_manager'];
+		$initiative = $donnee[0]['initiative'];
 		$statut_demande = 1;
 		$this->visuels_model->change_statut_en_demande($id, $statut_demande);
 		$budget_initiale = $donnee[0]['budget'];
@@ -147,26 +224,69 @@ class Client extends MY_Controller
 		$budget_upsell = intval($budget_initiale);
 		$budget_finale = $budget_initiale;
 		$actif = 1;
-		$idclient = $this->visuels_model->create_upsell($type_upsell, $budget_finale, $budget_initiale, $demmande_upsell, $am, $tm, $date_upsell, $date_demande_upsell, $inforamtion_upsell, $statut_upsell, $idclients, $actif);
+		$idupsell = $this->visuels_model->create_upsell($type_upsell, $budget_finale, $budget_initiale, $demmande_upsell, $am, $tm, $date_upsell, $date_demande_upsell, $inforamtion_upsell, $statut_upsell, $idclients, $actif);
 		$type_tache = 1;
 		if ($type_upsell == 2):
 			$title = "Relance client";
 			$tache = "Le client sera relancer, voir date due";
 			$type_tache = 9;
+			$dejaclient = 4;
+			$type_upsell = 9;
+			$data_upsell = array(
+				'idupsell' => $idupsell,
+				'idclients' => $idclients,
+				'dejaclient' => $dejaclient,
+				'budget' => $budget_finale,
+				'account_manager' => $account_manager,
+				'initiative' => $initiative,
+				'type_upsell' => $type_upsell,
+				'budget_upsell' => $budget_upsell
+
+			);
+			$this->visuels_model->add_upsell_onboarding($data_upsell);
+			
 		endif;
 		if ($type_upsell == 4):
 			$title = "Mise en pause";
 			$tache = "Mettre le client en pause, voir date due";
 			$type_tache = 8;
+			$dejaclient = 4;
+
+			$data_upsell = array(
+				'idupsell' => $idupsell,
+				'idclients' => $idclients,
+				'dejaclient' => $dejaclient,
+				'budget' => $budget_finale,
+				'account_manager' => $account_manager,
+				'initiative' => $initiative,
+				'type_upsell' => $type_upsell,
+				'budget_upsell' => $budget_upsell
+
+			);
+			$this->visuels_model->add_upsell_onboarding($data_upsell);
 		endif;
 		if ($type_upsell == 5):
 			$title = "Résiliation";
 			$tache = "Résiliation complète du client, voir date due";
 			$type_tache = 7;
+			$dejaclient = 5;
+			$data_upsell = array(
+				'idupsell' => $idupsell,
+				'idclients' => $idclients,
+				'dejaclient' => $dejaclient,
+				'budget' => $budget_finale,
+				'account_manager' => $am,
+				'initiative' => $initiative,
+				'type_upsell' => $type_upsell,
+				'budget_upsell' => $budget_upsell
+
+			);
+			$this->visuels_model->add_upsell_onboarding($data_upsell);
 		endif;
 		$Statuts_technique = 1;
 
 		$data = array(
+			'idupsell' => $idupsell,
 			'type_tache' => $type_tache,
 			'date_demande' => $date_demande_upsell,
 			'date_due' => $fin_campagne,
@@ -180,6 +300,7 @@ class Client extends MY_Controller
 		);
 
 		$this->Task_model->add_task($data);
+		
 		$this->session->set_flashdata('message-succes', "Client résilier avec succès");
 		redirect('Client/detail_client/' . $idclients, 'refresh');
 		$this->layout();
@@ -229,23 +350,88 @@ class Client extends MY_Controller
 	{
 
 		$this->data["donnees"] = $this->visuels_model->getDonneeById($idclients);
-		$this->data['donnee'] = $this->visuels_model->getClientDataByDonnee();
-		$this->data['users'] = $this->Task_model->get_all_users();
-		$this->data['produit'] = $this->Donne_modele->get_all_produit();
-		$this->data['am'] = $this->Donne_modele->get_all_am();
-		$this->data['initiative'] = $this->Donne_modele->get_all_initiative();
+		$t = $this->data["gtm"] = $this->visuels_model->get_gtm($idclients);
 		$this->content = "layouts/client/detail/gtm/index.php";
 		$this->layout();
 	}
+	public function get_gtm_by_id($id)
+	{
+		$data = $this->Gtm_model->get_by_id($id);
+		echo json_encode($data);
+	}
+	public function update_gtm()
+	{
+		$id = $this->input->post('id_gtm');
+		$idclients = $this->input->post('idclients');
+		var_dump($idclients);
+		die();
+		$data = [
+			'date_demande'      => $this->input->post('date_demande'),
+			'invitation_reçu'   => $this->input->post('invitation_reçu'),
+			'gtm'               => $this->input->post('gtm'),
+			'statut'            => $this->input->post('statut'),
+		];
+
+		$this->Gtm_model->update($id, $data);
+
+		redirect('Client/gtm/' . $idclients); 
+	}
+
+
+
+	public function updateDonneeClient()
+{
+	$idclient = $this->input->post('idclient');
+	$idonnee = $this->input->post('idonnee');
+	$client = $this->input->post('Client');
+	$email_client = $this->input->post('Email_client');
+	$numero_client = $this->input->post('Numero_client');
+	$site_client = $this->input->post('Site_client');
+	$budget = $this->input->post('budget');
+	$secteur_activite = $this->input->post('secteur_activite');
+	$Produit = $this->input->post('Produit');
+	$Initiative = $this->input->post('Initiative');
+	$Am = $this->input->post('Am');
+	$mis_en_place_paiement = $this->input->post('mis_en_place_paiement');
+	$Brief = $this->input->post('Brief');
+	$annonce = $this->input->post('annonce');
+	$commentaire_client = $this->input->post('commentaire_client') ?: NULL;
+	$paiement_recu = (int) $this->input->post('paiement_recu');
+	$datastudio = (int) $this->input->post('datastudio');
+	$email_onboarding = (int) $this->input->post('email_onboarding');
+	$facturation = (int) $this->input->post('facturation');
+
+	$this->Donne_modele->update_client($idclient, $client, $email_client, $numero_client, $site_client);
+	$this->Donne_modele->update_donnee_client(
+		$budget, $secteur_activite, $Produit, $Initiative, $Am,
+		$mis_en_place_paiement, $Brief, $annonce, $commentaire_client,
+		$paiement_recu, $datastudio, $email_onboarding, $facturation, $idonnee
+	);
+
+	$this->session->set_flashdata('message-succes', "Données mises à jour avec succès");
+	redirect('Onboarding', 'refresh');
+}
+
 
 	public function activer_processus_tache()
 	{
+		    header('Content-Type: application/json');
+
+    // DEBUG temporaire
+    $debug = array(
+        'POST' => $this->input->post(),
+    );
+
+    if (empty($debug['POST']['idclients']) || empty($debug['POST']['am']) || empty($debug['POST']['assigned_to']) || empty($debug['POST']['date'])) {
+        $debug['error'] = 'Un ou plusieurs champs POST sont vides';
+        echo json_encode($debug);
+        return;
+    }
 		$type_tache = 3;
 		$title = "Demande de procédure GTM";
 		$description = "Activer le procédure GTM";
 		$Statuts_technique = 1;
 		$procedure_gtm = 1;
-
 		$idclients = $this->input->post('idclients');
 		$am = $this->input->post('am');
 		$tm = $this->input->post('assigned_to');
@@ -266,7 +452,16 @@ class Client extends MY_Controller
 
 		$this->Task_model->add_task($data);
 
-		// Retourner une réponse JSON avec l’URL de redirection
+
+
+			$data_gtm = array(
+				'idclients' => $idclients,
+				'am' => $am,
+				'tm' => $tm,
+				'date_demande' => $date
+			);
+			$this->Gtm_model->add_gtm_process($data_gtm);
+
 		echo json_encode(['redirect_url' => base_url('Client/application/' . $idclients)]);
 	}
 
@@ -276,6 +471,7 @@ class Client extends MY_Controller
 		$this->data['noteClient'] = $this->visuels_model->get_note_par_client($idclients);
 		$this->data['upsell'] = $this->visuels_model->getupsellbyidclient($idclients);
 		$this->data['budget_initial'] = $this->visuels_model->getdernierbyidclient($idclients);
+		$this->data['discussion'] = $this->Discussion_model->getdiscussionbyidclient($idclients);
 		$t = $this->data['task'] = $this->Task_model->get_task_by_id_client($idclients);
 		$t = count($t);
 		$this->data['nbr_task'] = $t;
@@ -321,6 +517,8 @@ class Client extends MY_Controller
 			3	=>	"PERFORMANCE MAX"
 		];
 		$this->data['idclients'] = $idclients;
+		$this->data["donnees"] = $this->visuels_model->getDonneeById($idclients);
+		$campagnes = $this->data["campagnes"] = $this->visuels_model->getCampagneByIdclient($idclients);
 		$campagnes = $this->visuels_model->getCampagneByIdclient($idclients);
 		
 		foreach ($campagnes as $index => $campagne) {
@@ -334,23 +532,375 @@ class Client extends MY_Controller
 	}
 
 	public function campagne($idclients)
-	{
+		{
+			$type_page = [
+				1 => "search",
+				2 => "local",
+				3 => "pmax"
+			];
 
-		$type_page = [
-			1	=>	"search",
-			2	=>	"local",
-			3	=>	"pmax"
-		];
+			$this->data['idclients'] = $idclients;
+			$this->data['conversion'] = $this->input->get('conversion');
+			$this->data['camp_type'] = $camp_type = $this->input->get('camp_type');
+			$this->data['gtm'] = $this->input->get('gtm');
+			$d = $this->data["donnees"] = $this->visuels_model->getDonneeById($idclients);
 
-		$this->data['idclients'] = $idclients;
-		$this->data['conversion'] = $this->input->get('conversion');
-		$this->data['camp_type'] = $camp_type = $this->input->get('camp_type');
-		$this->data['gtm'] = $this->input->get('gtm');
-		$this->data["donnees"] = $this->visuels_model->getDonneeById($idclients);
+			$information_client = $this->data["donnees"]->information ?? '';
+			$site_client = $d[0]['site_client'];
+			$images_site = $this->fetch_all_images_from_site($site_client, 8);
 
-		$this->content = "layouts/client/onboarding/". $type_page[$camp_type] .".php";
-		$this->layout();
-	}
+			$this->data["images_site"] = $images_site;
+
+			$prompt = "Tu es un expert Google Ads. 
+				Génère une liste de 60 mots-clés à exclure pour une campagne Google Ads sur le réseau de recherche. 
+				Voici les informations disponibles : 
+				- Informations sur le client : $information_client
+				- Site web du client : $site_client
+
+				⚠️ Tu ne peux pas visiter de site web.
+				Même si les informations sont partielles, propose une liste pertinente et standard de mots-clés à exclure en français pour éviter les recherches non qualifiées.
+				Donne UNIQUEMENT les mots, séparés par des virgules, sans introduction ni phrase explicative.";
+
+
+			$raw_keywords = $this->call_openai($prompt);
+			$raw_keywords = trim($raw_keywords);
+			if (preg_match('/([a-zA-ZÀ-ÿ0-9,\s]+)/', $raw_keywords, $matches)) {
+				$raw_keywords = $matches[1];
+			}
+			$clean_keywords = preg_replace('/,\s*/', "\n", $raw_keywords);
+
+			$this->data["mots_exclus"] = $clean_keywords;
+
+			$this->content = "layouts/client/onboarding/" . $type_page[$camp_type] . ".php";
+			$this->layout();
+		}
+private function fetch_all_images_from_site($site_url, $max_images = 8, $max_pages = 20)
+{
+    if (!preg_match('#^https?://#', $site_url)) {
+        $site_url = 'http://' . $site_url;
+    }
+
+    $visited = [];
+    $to_visit = [$site_url];
+    $images = [];
+
+    while (!empty($to_visit) && count($visited) < $max_pages && count($images) < $max_images) {
+        $current_url = array_shift($to_visit);
+        if (isset($visited[$current_url])) continue;
+        $visited[$current_url] = true;
+
+        $html = @file_get_contents($current_url);
+        if (!$html) continue;
+
+        // 1. Extraire les images
+        $img_urls = $this->extract_image_urls($html, $current_url);
+        foreach ($img_urls as $img_url) {
+            if ($this->looks_like_logo_or_icon($img_url) || $this->is_data_uri($img_url)) continue;
+
+            $meta = $this->get_image_metadata($img_url);
+            if (!$meta) continue;
+
+            if (!$this->is_photo_mime($meta['mime'])) continue;
+            if ($meta['width'] < 150 || $meta['height'] < 150) continue;
+
+            $images[] = $img_url;
+            if (count($images) >= $max_images) break 2;
+        }
+
+        // 2. Extraire les liens internes pour crawler
+        $dom = new DOMDocument();
+        libxml_use_internal_errors(true);
+        $dom->loadHTML($html);
+        $xpath = new DOMXPath($dom);
+        $links = $xpath->query('//a[@href]');
+        foreach ($links as $link) {
+            $href = $link->getAttribute('href');
+            $url = $this->resolve_url($href, $current_url);
+            if (!$this->is_internal_link($url, $site_url)) continue;
+            if (!isset($visited[$url]) && !in_array($url, $to_visit)) {
+                $to_visit[] = $url;
+            }
+        }
+    }
+
+    return array_slice($images, 0, $max_images);
+}
+
+		private function fetch_images_from_site($site_url, $max_images = 8)
+{
+    $site_url = trim($site_url);
+    if (empty($site_url)) return [];
+
+    if (!preg_match('#^https?://#', $site_url)) {
+        $site_url = 'http://' . $site_url;
+    }
+
+    $html = @file_get_contents($site_url);
+    if (!$html) return [];
+
+    libxml_use_internal_errors(true);
+    $dom = new DOMDocument();
+    $dom->loadHTML($html);
+    $xpath = new DOMXPath($dom);
+
+    $imgs = $xpath->query('//img');
+    $images = [];
+
+    foreach ($imgs as $img) {
+        $src = $img->getAttribute('src');
+        if (!$src) continue;
+
+        // ignore logos/icônes
+        $src_lc = strtolower($src);
+        if (strpos($src_lc, 'logo') !== false || strpos($src_lc, 'icon') !== false || strpos($src_lc, 'svg') !== false) {
+            continue;
+        }
+
+        // construire l'URL absolue
+        $img_url = $this->resolve_url($src, $site_url);
+
+        // vérifie si l’image est valide
+        $img_info = @getimagesize($img_url);
+        if (!$img_info || $img_info[0] < 150 || $img_info[1] < 150) continue;
+
+        $images[] = $img_url;
+
+        if (count($images) >= $max_images) break;
+    }
+
+    return $images;
+}
+
+private function resolve_url($relative, $base)
+{
+    if (empty($relative)) return '';
+
+    // ignore les data:uri
+    if (preg_match('#^data:#', $relative)) return '';
+    if (preg_match('#^https?://#', $relative)) return $relative;
+    if (strpos($relative, '//') === 0) {
+        $scheme = parse_url($base, PHP_URL_SCHEME) ?: 'http';
+        return $scheme . ':' . $relative;
+    }
+
+    // gestion des chemins relatifs
+    $parsed_base = parse_url($base);
+    $scheme = $parsed_base['scheme'] ?? 'http';
+    $host = $parsed_base['host'] ?? '';
+    $base_path = rtrim(dirname($parsed_base['path'] ?? '/'), '/');
+
+    $path = ($relative[0] === '/') ? $relative : $base_path . '/' . $relative;
+
+    return $scheme . '://' . $host . '/' . ltrim($path, '/');
+}
+
+
+    private function extract_image_urls($html, $base_url)
+    {
+        $urls = [];
+        libxml_use_internal_errors(true);
+        $dom = new DOMDocument();
+        $dom->loadHTML($html);
+
+        // <img src>
+        $imgs = $dom->getElementsByTagName('img');
+        foreach ($imgs as $img) {
+            $src = $img->getAttribute('src');
+            if (!$src) continue;
+            $urls[] = $this->resolve_url($src, $base_url);
+            // srcset handling: prend la plus grande candidate si existe
+            $srcset = $img->getAttribute('srcset');
+            if ($srcset) {
+                $best = $this->pick_best_from_srcset($srcset, $base_url);
+                if ($best) $urls[] = $best;
+            }
+        }
+
+        // inline styles background-image: url(...)
+        $xpath = new DOMXPath($dom);
+        $nodes = $xpath->query('//*[@style]');
+        foreach ($nodes as $node) {
+            $style = $node->getAttribute('style');
+            if (preg_match_all('/background(?:-image)?:\s*url\((["\']?)(.*?)\1\)/i', $style, $m)) {
+                foreach ($m[2] as $bg) {
+                    $urls[] = $this->resolve_url($bg, $base_url);
+                }
+            }
+        }
+
+        return array_values(array_unique($urls));
+    }
+
+    private function pick_best_from_srcset($srcset, $base_url)
+    {
+        // srcset format: url1 1x, url2 2x, or url w, ...
+        $parts = preg_split('/\s*,\s*/', trim($srcset));
+        $bestUrl = null;
+        $bestScore = 0;
+        foreach ($parts as $p) {
+            // "url 2x" or "url 300w" or just "url"
+            $sub = preg_split('/\s+/', trim($p));
+            $url = $sub[0];
+            $score = 1;
+            if (isset($sub[1])) {
+                if (strpos($sub[1], 'w') !== false) {
+                    $score = intval($sub[1]);
+                } elseif (strpos($sub[1], 'x') !== false) {
+                    $score = floatval($sub[1]) * 1000;
+                }
+            }
+            if ($score > $bestScore) {
+                $bestScore = $score;
+                $bestUrl = $url;
+            }
+        }
+        return $bestUrl ? $this->resolve_url($bestUrl, $base_url) : null;
+    }
+
+    private function is_internal_link($url, $base)
+    {
+        $uHost = parse_url($url, PHP_URL_HOST);
+        $bHost = parse_url($base, PHP_URL_HOST);
+        return $uHost && $bHost && (strcasecmp($uHost, $bHost) === 0);
+    }
+
+    private function looks_like_logo_or_icon($url)
+    {
+        $lower = strtolower($url);
+        // mots courants pour logos/icônes
+        $bad_words = ['logo', 'icon', 'sprite', 'favicon', 'badge', 'btn', 'spacer', 'pixel', 'placeholder', 'thumb', 'avatar'];
+        foreach ($bad_words as $w) {
+            if (strpos($lower, '/' . $w) !== false) return true;
+            if (strpos($lower, '-' . $w) !== false) return true;
+            if (strpos($lower, '_' . $w) !== false) return true;
+            if (strpos($lower, $w . '.') !== false) return true;
+        }
+        // svg files often logos/illustrations — on peut exclure si souhaité
+        if (preg_match('/\.svg(\?|$)/i', $lower)) return true;
+        return false;
+    }
+
+    private function is_data_uri($s)
+    {
+        return preg_match('#^data:#i', $s);
+    }
+
+    private function is_photo_mime($mime)
+    {
+        // accepter jpg/png/webp/gif (gif peut être animé)
+        $allowed = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp', 'image/gif'];
+        return in_array(strtolower($mime), $allowed);
+    }
+
+    private function get_image_metadata($img_url)
+    {
+        // tente HEAD pour obtenir content-type et content-length
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $img_url);
+        curl_setopt($ch, CURLOPT_NOBODY, true);
+        curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_USERAGENT, 'Mozilla/5.0 (compatible; SiteImageBot/1.0)');
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+        curl_exec($ch);
+        $http = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        $ctype = curl_getinfo($ch, CURLINFO_CONTENT_TYPE);
+        $clen = curl_getinfo($ch, CURLINFO_CONTENT_LENGTH_DOWNLOAD);
+        curl_close($ch);
+        if ($http >= 400) return false;
+
+        // si content-type absent ou pas image, on essaie de télécharger les premiers octets
+        $mime = $ctype ?: '';
+        // pour récupérer width/height, on télécharge un bloc
+        $imgData = $this->fetch_partial($img_url, 0, 200000); // 200KB max
+        if ($imgData === false) return false;
+
+        // utilise getimagesizefromstring pour obtenir dims
+        $info = @getimagesizefromstring($imgData);
+        if ($info === false) return false;
+        $width = $info[0];
+        $height = $info[1];
+        $mime_from_info = $info['mime'] ?? null;
+        if (empty($mime) && $mime_from_info) $mime = $mime_from_info;
+
+        // taille en octets : si content-length dispo, sinon length du blob (estimation)
+        $filesize = ($clen > 0) ? $clen : strlen($imgData);
+
+        return [
+            'width' => intval($width),
+            'height' => intval($height),
+            'mime' => $mime ?: 'application/octet-stream',
+            'filesize' => intval($filesize)
+        ];
+    }
+
+    private function fetch_partial($url, $start = 0, $maxBytes = 200000)
+    {
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
+        curl_setopt($ch, CURLOPT_RANGE, "$start-" . ($start + $maxBytes - 1));
+        curl_setopt($ch, CURLOPT_USERAGENT, 'Mozilla/5.0 (compatible; SiteImageBot/1.0)');
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+        $data = curl_exec($ch);
+        $http = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        curl_close($ch);
+        if ($http >= 400) return false;
+        return $data;
+    }
+	public function generer_mots_exclus()
+    {
+        $information_client = $this->input->post('information_client');
+        $site_client = $this->input->post('site_client');
+
+        $prompt = "À partir de ces informations : $information_client 
+        et en analysant le site : $site_client, génère une liste de 60 mots-clés à exclure pour une campagne Google Ads (type search). 
+        Ne donne que les mots, séparés par des virgules ou des retours à la ligne.";
+
+        $response = $this->call_openai($prompt);
+
+        echo $response ? nl2br(htmlspecialchars($response)) : "❌ Erreur lors de la génération.";
+    }
+
+    private function call_openai($prompt)
+    {
+        $url = "https://api.openai.com/v1/chat/completions";
+        $data = [
+            "model" => "gpt-4o-mini",
+            "messages" => [
+                ["role" => "system", "content" => "Tu es un expert Google Ads."],
+                ["role" => "user", "content" => $prompt]
+            ],
+            "temperature" => 0.7
+        ];
+
+        $headers = [
+            "Content-Type: application/json",
+            "Authorization: " . "Bearer " . $this->api_key
+        ];
+
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_POST, true);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
+        $result = curl_exec($ch);
+
+        if (curl_errno($ch)) {
+            log_message('error', 'Erreur CURL OpenAI: ' . curl_error($ch));
+        }
+
+        curl_close($ch);
+
+        if ($result) {
+            $json = json_decode($result, true);
+            return $json['choices'][0]['message']['content'] ?? null;
+        }
+
+        return null;
+    }
 
 	public function ajout_campagne($idclients)
 	{
@@ -403,7 +953,6 @@ class Client extends MY_Controller
 							'camp_type'          		=>	$camp_type
 						];
 					}
-
 					// Insert groupes
 					$this->Donne_modele->insert_gp($data_groups, $idcampagne, $idclients, $camp_type, $contexte_groupes, $mots_cle, $url_site);
 				} else {
@@ -552,31 +1101,29 @@ class Client extends MY_Controller
 		$date_upsell = $this->input->post('date_upsell');
 		$date_demande_upsell = $this->input->post('date_demande_upsell');
 		$inforamtion_upsell = $this->input->post('information_upsell');
+
 		$statut_upsell = $this->input->post('statut_upsell');
 		$id = $idclients;
 		$donnee = $this->data["clients"] = $this->visuels_model->getDonneeById($id);
+		$initiative = $donnee[0]['initiative'];
 		$idonnee = $donnee[0]['idonnee'];
 		$buget_initiale = $donnee[0]['budget'];
 		if ($type_upsell == 2):
 			$am = $this->input->post('am');
 			$budget_initiale = $this->input->post('budget_initiale');
-			//$idclient = $this->visuels_model->create_upsell($type_upsell, $budget_upsell, $budget_initiale, $demmande_upsell, $am, $tm, $date_upsell, $date_demande_upsell, $inforamtion_upsell, $statut_upsell, $idclients);
 			$budget_initiale = intval($budget_initiale);
 			$budget_upsell = intval($budget_upsell);
 			$budget_finale = $budget_upsell + $budget_initiale;
-			//var_dump($budget_finale );die();
-			//$this->visuels_model->update_budget($budget_finale, $idclients);
-			//$date_brief = 0000 - 00 - 00;
-			//$campagne_actif = 0;
-			//$lien_datastudio = 0;
-			//$validation_technique = 0000 - 00 - 00;
-			//$date_validation_structure = 0000 - 00 - 00;
-			//$this->visuels_model->update_brief($date_brief, $campagne_actif, $validation_technique, $date_validation_structure, $lien_datastudio, $idclients);
 			$actif = 1;
 			$idupsell = $this->visuels_model->create_upsell($type_upsell, $budget_finale, $budget_initiale, $demmande_upsell, $am, $tm, $date_upsell, $date_demande_upsell, $inforamtion_upsell, $statut_upsell, $idclients, $actif);
 			$type_tache = 5;
 			$title = "Upsell";
-			$tache = "Le client fait une upsell de "  . number_format($budget_finale, 0, ',', ' ') . " €";;
+			if($inforamtion_upsell == Null){
+				$tache = "Le client fait une upsell de "  . number_format($budget_upsell, 0, ',', ' ') . " €";
+			}
+			if($inforamtion_upsell != Null){
+				$tache = "Le client fait une upsell de " . number_format($budget_upsell, 0, ',', ' ') . " €" . " avec les informations suivantes :\n" . $inforamtion_upsell;
+			}
 			$Statuts_technique = 1;
 
 			$data = array(
@@ -593,27 +1140,40 @@ class Client extends MY_Controller
 			);
 
 			$this->Task_model->add_task($data);
+			$client = $idclients;
+			$dejaclient = 1;
+			$budget = $budget_upsell;
+			$am = $am;
+			$type_upsell = $type_upsell;
+			$data_upsell = array(
+				'idupsell' => $idupsell,
+				'idclients' => $idclients,
+				'dejaclient' => $dejaclient,
+				'budget' => $budget_finale,
+				'account_manager' => $am,
+				'initiative' => $initiative,
+				'type_upsell' => $type_upsell,
+				'budget_upsell' => $budget_upsell
+
+			);
+			$this->visuels_model->add_upsell_onboarding($data_upsell);
 		endif;
 		if ($type_upsell == 1):
 			$am = $this->input->post('am');
 			$budget_initiale = $this->input->post('budget_initiale');
-			//$idclient = $this->visuels_model->create_upsell($type_upsell, $budget_upsell, $budget_initiale, $demmande_upsell, $am, $tm, $date_upsell, $date_demande_upsell, $inforamtion_upsell, $statut_upsell, $idclients);
 			$budget_initiale = intval($budget_initiale);
 			$budget_upsell = intval($budget_upsell);
 			$budget_finale = $budget_initiale - $budget_upsell;
-			//var_dump($budget_finale );die();
-			//$this->visuels_model->update_budget($budget_finale, $idclients);
-			//$date_brief = 0000 - 00 - 00;
-			//$campagne_actif = 0;
-			//$lien_datastudio = 0;
-			//$validation_technique = 0000 - 00 - 00;
-			//$date_validation_structure = 0000 - 00 - 00;
-			//$this->visuels_model->update_brief($date_brief, $campagne_actif, $validation_technique, $date_validation_structure, $lien_datastudio, $idclients);
 			$actif = 1;
 			$idupsell = $this->visuels_model->create_upsell($type_upsell, $budget_finale, $budget_initiale, $demmande_upsell, $am, $tm, $date_upsell, $date_demande_upsell, $inforamtion_upsell, $statut_upsell, $idclients, $actif);
 			$type_tache = 6;
 			$title = "Baisse";
-			$tache = "Le client fait une baisse de " . number_format($budget_finale, 0, ',', ' ') . " €";
+			if($inforamtion_upsell == Null){
+				$tache = "Le client fait une baisse de "  . number_format($budget_upsell, 0, ',', ' ') . " €";
+			}
+			if($inforamtion_upsell != Null){
+				$tache = "Le client fait une baisse de " . number_format($budget_upsell, 0, ',', ' ') . " €" . " avec les informations suivantes :\n" . $inforamtion_upsell;
+			}
 			$Statuts_technique = 1;
 			$actif = 1;
 			$data = array(
@@ -630,7 +1190,26 @@ class Client extends MY_Controller
 			);
 
 			$this->Task_model->add_task($data);
+			$client = $idclients;
+			$idupsell = $idupsell;
+			$dejaclient = 1;
+			$budget = $budget_upsell;
+			$initiative = $tm;
+			$am = $am;
+			$type_upsell = $type_upsell;
 
+			$data_upsell = array(
+				'idupsell' => $idupsell,
+				'idclients' => $idclients,
+				'dejaclient' => $dejaclient,
+				'budget' => $budget_finale,
+				'account_manager' => $am,
+				'initiative' => $tm,
+				'type_upsell' => $type_upsell,
+				'budget_upsell' => $budget_upsell
+
+			);
+			$this->visuels_model->add_upsell_onboarding($data_upsell);
 
 		endif;
 		//if ($type_upsell == 3):
@@ -702,7 +1281,6 @@ class Client extends MY_Controller
 		$client = $this->input->post('client');
 		$email_client = $this->input->post('email_client');
 		$numero_client = $this->input->post('numero_client');
-		$dejaclient = $this->input->post('dejaclient');
 		$budget = $this->input->post('budget');
 		$secteur_activite = $this->input->post('secteur_activite');
 		$product_choice = $this->input->post('product_choice');
@@ -711,9 +1289,11 @@ class Client extends MY_Controller
 		$date_mis_en_place = $this->input->post('date_mis_en_place');
 		$date_brief = $this->input->post('date_brief');
 		$date_annonce = $this->input->post('date_annonce');
+		$dejaclient = 0;
 		$logo = $this->file_upload_field = 'logo';
-
-
+		$tm = $initiative;
+		
+		
 		$this->form_validation->set_rules('site_client', 'URL', 'required|trim');
 
 		if ($this->form_validation->run() == FALSE) {
@@ -771,7 +1351,9 @@ class Client extends MY_Controller
 		$favicon = $this->get_favicon($html, $site_client);
 
 		// ✅ Insérer le résumé à la place du paragraphe le plus long
-		$idclient = $this->visuels_model->insertclient($client, $site_client, $email_client, $numero_client, $favicon, $cms, $cms_logo, $summary);
+		$idclients = $this->visuels_model->insertclient($client, $site_client, $email_client, $numero_client, $favicon, $cms, $cms_logo, $summary);
+		$idclient_onboarding = $idclients; 
+		$idclient = $idclients;
 		$this->visuels_model->insertfiche($idclient, $budget, $secteur_activite, $product_choice, $initiative, $am, $date_mis_en_place, $date_brief, $date_annonce, $dejaclient, $gtm_code);
 		$title = "Création de Brief";
 		$tache = "En attente de brief";
@@ -781,9 +1363,9 @@ class Client extends MY_Controller
 			'type_tache' => $type_tache,
 			'date_demande' => $date_mis_en_place,
 			'date_due' => $date_brief,
-			'idclients' => $idclient,
-			'AM' => $am,
-			'assigned_to' => $initiative,
+			'idclients' => $idclients,
+			'AM' => $initiative,
+			'assigned_to' => $am,
 			'title' => $title,
 			'Statuts_technique' => $Statuts_technique,
 			'description' => $tache
@@ -794,7 +1376,7 @@ class Client extends MY_Controller
 		$budget_finale = $budget;
 		$budget_initiale = $budget;
 		$statut_upsell = 1;
-		$idclients = $idclient;
+		$idclients = $idclients;
 		$demmande_upsell = $am;
 		$am = $am;
 		$tm = $am;
@@ -803,50 +1385,89 @@ class Client extends MY_Controller
 		$date_demande_upsell = $date_mis_en_place;
 		$inforamtion_upsell = "Budget initial";
 		$idclient = $this->visuels_model->create_upsell($type_upsell, $budget_finale, $budget_initiale, $demmande_upsell, $am, $tm, $date_upsell, $date_demande_upsell, $inforamtion_upsell, $statut_upsell, $idclients, $actif);
+		$data_upsell = array(
+				'idclients' => $idclient_onboarding,
+				'dejaclient' => $dejaclient,
+				'budget' => $budget,
+				'account_manager' => $am,
+				'initiative' => $initiative,
+				'idproduit' => $product_choice,
+				'mis_en_place_paiement' => $date_mis_en_place,
+				'Brief' => $date_brief,
+				'annonce' => $date_annonce
 
+			);
+			$this->visuels_model->add_upsell_onboarding($data_upsell);
 		redirect('Client');
 	}
 
 	private function get_summary_from_chatgpt($headings, $paragraphs)
 	{
-		$api_key = 'REMOVEDproj-Il3DFS-ATHmSKydbqWGNqIZtuCsC2bD67DR5YhlXtsMAoe_tdMtjg_glXcnIhSb_qPVFz-z7y2T3BlbkFJUvVzia2NBnS5TagyZylJRG36YatVpkw27ZfVfhPB06yEiBeYLQDDfIFv3_oG2LClCuw8eNtTEA'; // 🔐 Remplace avec ta clé
-		$model = 'gpt-4'; // ou 'gpt-3.5-turbo'
+		$model = 'gpt-4';
 
-		$input_text = "Voici les titres et paragraphes d’un site web. Résume ce que fait ce site, son activité, son objectif ou secteur, en **deux paragraphes distincts, séparés par une ligne vide**.\n\n";
-		$input_text .= "Titres :\n";
-		foreach ($headings as $h) {
-			$input_text .= "- ({$h['tag']}) {$h['text']}\n";
-		}
-		$input_text .= "\nParagraphes :\n";
-		foreach (array_slice($paragraphs, 0, 10) as $p) {
-			$input_text .= "- $p\n";
-		}
+		   $input_text = "Voici les titres et paragraphes d’un site web.\n\n";
+    $input_text .= "Ta tâche est de rédiger un résumé informatif en **deux paragraphes distincts**, séparés par une **ligne vide** (un simple saut de ligne).\n\n";
 
-		$data = [
-			"model" => $model,
-			"messages" => [
-				["role" => "user", "content" => $input_text]
-			],
-			"temperature" => 0.7
-		];
+    $input_text .= "✍️ Le résumé total doit contenir **entre 175 et 190 mots maximum**, répartis de façon naturelle entre les deux paragraphes.\n";
+    $input_text .= "Le premier paragraphe doit présenter l'activité ou le secteur du site.\n";
+    $input_text .= "Le second paragraphe doit décrire l’objectif, les services ou la valeur ajoutée.\n\n";
 
-		$ch = curl_init('https://api.openai.com/v1/chat/completions');
-		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-		curl_setopt($ch, CURLOPT_HTTPHEADER, [
-			'Content-Type: application/json',
-			'Authorization: Bearer ' . $api_key
-		]);
-		curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
+    $input_text .= "Titres :\n";
+    foreach ($headings as $h) {
+        $input_text .= "- ({$h['tag']}) {$h['text']}\n";
+    }
 
-		$response = curl_exec($ch);
-		if (curl_errno($ch)) {
-			return 'Erreur OpenAI : ' . curl_error($ch);
-		}
+    $input_text .= "\nParagraphes :\n";
+    foreach (array_slice($paragraphs, 0, 10) as $p) {
+        $input_text .= "- $p\n";
+    }
 
-		curl_close($ch);
-		$result = json_decode($response, true);
-		return $result['choices'][0]['message']['content'] ?? 'Résumé non disponible.';
+    // Requête à l'API OpenAI
+    $data = [
+        "model" => $model,
+        "messages" => [
+            ["role" => "user", "content" => $input_text]
+        ],
+        "temperature" => 0.7
+    ];
+
+    $ch = curl_init('https://api.openai.com/v1/chat/completions');
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_HTTPHEADER, [
+        'Content-Type: application/json',
+        'Authorization: Bearer ' . $api_key
+    ]);
+    curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
+
+    $response = curl_exec($ch);
+    if (curl_errno($ch)) {
+        return 'Erreur OpenAI : ' . curl_error($ch);
+    }
+
+    curl_close($ch);
+    $result = json_decode($response, true);
+    $raw_output = $result['choices'][0]['message']['content'] ?? 'Résumé non disponible.';
+
+    // Séparation des deux paragraphes
+    $paragraphs_split = preg_split('/\n\s*\n/', trim($raw_output));
+
+    if (count($paragraphs_split) >= 2) {
+        $para1 = trim($paragraphs_split[0]);
+        $para2 = trim($paragraphs_split[1]);
+
+        // Comptage des mots (utile pour test ou journalisation)
+        $word_count1 = str_word_count(strip_tags($para1));
+        $word_count2 = str_word_count(strip_tags($para2));
+        $total_words = $word_count1 + $word_count2;
+
+        // Retourne toujours le contenu, sans alerte
+        return $para1 . "\n\n" . $para2;
+    }
+
+    // Fallback si le texte généré n'a pas deux paragraphes distincts
+    return $raw_output;
 	}
+
 
 	// Fonction cURL pour récupérer le contenu HTML
 	private function fetch_url($url)
@@ -888,6 +1509,15 @@ class Client extends MY_Controller
 		} elseif (strpos($html, 'Magento') !== false || strpos($html, 'mage/') !== false) {
 			return 'Magento';
 		}
+		elseif (strpos($html, 'Magento') !== false || strpos($html, 'mage/') !== false) {
+			return 'Magento';
+		}
+		elseif (strpos($html, 'PrestaShop') !== false || strpos($html, 'mage/') !== false) {
+			return 'PrestaShop';
+		}
+		elseif (strpos($html, 'Google') !== false || strpos($html, 'mage/') !== false) {
+			return 'Google';
+		}
 		$headers = @get_headers($url, 1);
 		if ($headers && isset($headers['X-Powered-By'])) {
 			return $headers['X-Powered-By'];
@@ -903,7 +1533,10 @@ class Client extends MY_Controller
 			'Joomla' => 'joomla.png',
 			'Drupal' => 'drupal.png',
 			'Shopify' => 'shopify.png',
-			'Magento' => 'magento.png'
+			'Magento' => 'Magento.png',
+			'Wix' => 'wix.png',
+			'PrestaShop' => 'prestashop.png',
+			'Google' => 'site_kit.png'
 		];
 
 		foreach ($cms_logos as $key => $file) {

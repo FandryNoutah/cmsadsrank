@@ -118,14 +118,18 @@
 			<option value="6">Baisse</option>
 		</select>
 	</div>
+
 	<div class="col-auto px-1">
 		<select id="task_user_filter" class="custom-select border-dark">
-			<option disabled selected>Filter</option>
-			<option value="0">Tous</option>
+			<option value="<?= $current_user->id; ?>" selected><?= $current_user->first_name . " " . $current_user->last_name; ?></option>
 			<?php foreach ($users as $u): ?>
-				<option value="<?= $u['id']; ?>"><?= $u['first_name'] . " " . $u['last_name']; ?></option>
+				<?php if ($u['id'] != $current_user->id): ?>
+					<option value="<?= $u['id']; ?>"><?= $u['first_name'] . " " . $u['last_name']; ?></option>
+				<?php endif; ?>
 			<?php endforeach; ?>
+			<option value="0">Tous</option>
 		</select>
+
 	</div>
 	<div class="col-auto px-1">
 		<button class="btn btn-dark" data-toggle="modal" data-target="#formModal">
@@ -184,7 +188,12 @@
 									</td>
 									<td>
 										<span class="text-muted">
-											<?= $t->title; ?>
+											<?= $t->title; ?>  
+											<?php if ($t->type_tache == 5 || $t->type_tache == 6): 
+												$Budget = $t->budgets - $t->budget_initiale;	
+											?>
+												de <?= $Budget; ?> €
+											<?php endif; ?>
 										</span>
 									</td>
 									<td>
@@ -306,7 +315,7 @@
 				<p class="mb-0">
 					<i class="fa fa-chevron-up toggle-icon mr-2"></i>
 					<i class="fa fa-circle text-primary" style="font-size: 10px;"></i>
-					<span class="h5 mx-2 w-auto">En Cours</span>
+					<span class="h5 mx-2 w-auto">Programmé</span>
 					<span class="text-muted"><?= $count_upcoming; ?> open tasks</span>
 				</p>
 			</a>
@@ -326,6 +335,11 @@
 									<td>
 										<span class="text-muted">
 											<?= $t->title; ?>
+											<?php if ($t->type_tache == 5 || $t->type_tache == 6): 
+												$Budget = $t->budgets - $t->budget_initiale;	
+											?>
+												de <?= $Budget; ?> €
+											<?php endif; ?>
 										</span>
 									</td>
 									
@@ -464,7 +478,12 @@
 									</td>
 									<td>
 										<span class="text-muted">
-											<?= $t->title; ?>
+											<?= $t->title; ?> 
+											<?php if ($t->type_tache == 5 || $t->type_tache == 6): 
+												$Budget = $t->budgets - $t->budget_initiale;	
+											?>
+												de <?= $Budget; ?> €
+											<?php endif; ?>
 										</span>
 									</td>
 									<td>
@@ -665,7 +684,11 @@
 												</div>
 											</div>
 											<h6 class="my-3" style="font-size: 14px;"><?= $t->nom_client; ?></h6>
-											<span class="text-muted d-block mb-3"><?= $t->title; ?></span>
+											<span class="text-muted d-block mb-3"><?= $t->title; ?> <?php if ($t->type_tache == 5 || $t->type_tache == 6): 
+												$Budget = $t->budgets - $t->budget_initiale;	
+											?>
+												de <?= $Budget; ?> €
+											<?php endif; ?></span>
 											<span class="text-muted d-block mb-3">
 												<img src="<?= base_url('assets/images/icons/figma/calendar.svg') ?>" alt="">
 												Date Due <?= $t->date_due; ?>
@@ -702,7 +725,7 @@
 					<div class="card" style="border-radius: 8px;">
 						<div class="card-body">
 							<i class="fa fa-circle text-primary" style="font-size: 10px;"></i>
-							<span class="h4 mx-2 w-auto">En cours</span>
+							<span class="h4 mx-2 w-auto">Programmé</span>
 							<span class="text-muted"><?= $count_upcoming; ?> open tasks</span>
 
 							<!-- Eto no manao foreach -->
@@ -782,7 +805,11 @@
 												</div>
 											</div>
 											<h6 class="my-3" style="font-size: 14px;"><?= $t->nom_client; ?></h6>
-											<span class="text-muted d-block mb-3"><?= $t->title; ?></span>
+											<span class="text-muted d-block mb-3"><?= $t->title; ?> <?php if ($t->type_tache == 5 || $t->type_tache == 6): 
+												$Budget = $t->budgets - $t->budget_initiale;	
+											?>
+												de <?= $Budget; ?> €
+											<?php endif; ?></span>
 											<span class="text-muted d-block mb-3">
 												<img src="<?= base_url('assets/images/icons/figma/calendar.svg') ?>" alt="">
 												Date Due <?= $t->date_due; ?>
@@ -897,7 +924,11 @@
 												</div>
 											</div>
 											<h6 class="my-3" style="font-size: 14px;"><?= $t->nom_client; ?></h6>
-											<span class="text-muted d-block mb-3"><?= $t->title; ?></span>
+											<span class="text-muted d-block mb-3"><?= $t->title; ?> <?php if ($t->type_tache == 5 || $t->type_tache == 6): 
+												$Budget = $t->budgets - $t->budget_initiale;	
+											?>
+												de <?= $Budget; ?> €
+											<?php endif; ?></span>
 											<span class="text-muted d-block mb-3">
 												<img src="<?= base_url('assets/images/icons/figma/calendar.svg') ?>" alt="">
 												Date Due <?= $t->date_due; ?>
@@ -945,38 +976,30 @@
 
 <script src="<?= base_url('assets/vendors/select2/js/select2.min.js'); ?>"></script>
 
-<!-- Task filter script -->
 <script>
-	$(function() {
+$(function() {
 
-		function filter_task(type) {
+    function filter_task_by_user(id) {
+        if (id == 0) {
+            $('.taREMOVEDfilter').removeClass('d-none');
+        } else {
+            $('.taREMOVEDfilter').addClass('d-none');
+            $('.taREMOVEDfilter[data-am="' + id + '"]').removeClass('d-none');
+            $('.taREMOVEDfilter[data-assigned="' + id + '"]').removeClass('d-none');
+        }
+    }
 
-			if (type == 0) {
-				$('.taREMOVEDfilter').removeClass('d-none');
-			} else {
-				$('.taREMOVEDfilter').addClass('d-none');
-				$('.taREMOVEDfilter[data-type="' + type + '"]').removeClass('d-none');
-			}
-		}
+    $('#task_user_filter').change(function() {
+        let id = $(this).val();
+        filter_task_by_user(id);
+    });
 
-		$('#task_type_filter').change(function() {
-			let type = $(this).val();
-			filter_task(type);
-		});
+    let defaultUserId = $('#task_user_filter').val();
+    filter_task_by_user(defaultUserId);
 
-		$('#task_user_filter').change(function() {
-			let id = $(this).val();
-
-			if (id == 0) {
-				$('.taREMOVEDfilter').removeClass('d-none');
-			} else {
-				$('.taREMOVEDfilter').addClass('d-none');
-				$('.taREMOVEDfilter[data-am="' + id + '"]').removeClass('d-none');
-				$('.taREMOVEDfilter[data-assigned="' + id + '"]').removeClass('d-none');
-			}
-		});
-	});
+});
 </script>
+
 
 <!-- Index page script -->
 <script>
