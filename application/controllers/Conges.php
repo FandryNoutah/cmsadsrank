@@ -147,12 +147,49 @@ class Conges extends MY_Controller
 			redirect('conges');
 		}
 	}
+	public function edit()
+{
+	$this->load->model('Conge_model');
+	$id = $this->input->post('id');
+	$date_debut = $this->input->post('date_debut');
+	$date_fin = $this->input->post('date_fin');
+	$motif = $this->input->post('motif');
+	$date_demande = $this->input->post('date_demande');
+	$date_validation = $this->input->post('date_validation');
+	$commentaire_validation = $this->input->post('commentaire_validation');
+
+	$dtDebut = new DateTime($date_debut);
+	$dtFin = new DateTime($date_fin);
+	$dtFinInclus = clone $dtFin;
+	$dtFinInclus->modify('+1 day');
+
+	// Jours fériés pour les années concernées
+	$annees = range((int)$dtDebut->format('Y'), (int)$dtFin->format('Y'));
+	$jours_feries = [];
+	foreach ($annees as $annee) {
+		$jours_feries = array_merge($jours_feries, $this->get_french_holidays($annee));
+	}
+
+	// Calcul des jours ouvrés
+	$jours_ouvres = 0;
+	$periode = new DatePeriod($dtDebut, new DateInterval('P1D'), $dtFinInclus);
+	foreach ($periode as $date) {
+		$jour = $date->format('N'); // 6 = samedi, 7 = dimanche
+		$dateStr = $date->format('Y-m-d');
+		if ($jour < 6 && !in_array($dateStr, $jours_feries)) {
+			$jours_ouvres++;
+		}
+	}
+	$this->Conge_model->edit_conges($id, $date_debut, $date_fin, $motif, $commentaire_validation, $jours_ouvres);
+
+	redirect('conges');
+}
 
 	public function valider($id)
 	{
 		$this->load->model('Conge_model');
 		$this->load->model('Event_model');
-
+		$id_validator = $this->current_user->id;
 		$etat = $this->input->post('etat');
 		$commentaire = $this->input->post('commentaire');
 		$conge = $this->Conge_model->get_conge_by_id($id);
@@ -167,7 +204,7 @@ class Conges extends MY_Controller
 		// Traitement selon l'état choisi
 		if ($etat === 'valide') {
 			// Mettre à jour l'état dans la base
-			$this->Conge_model->update_etat($id, $commentaire, 'valide');
+			$this->Conge_model->update_etat($id, $commentaire,$id_validator, 'valide');
 
 			// Calcul des jours ouvrés
 			$dtDebut = new DateTime($conge->date_debut);
@@ -219,9 +256,9 @@ class Conges extends MY_Controller
 
 			$this->Event_model->insert_event($data_event, $attendee_ids);
 		} elseif ($etat === 'en_attente') {
-			$this->Conge_model->update_etat($id, $commentaire, 'en_attente');
+			$this->Conge_model->update_etats($id, $commentaire, 'en_attente');
 		} elseif ($etat === 'refuse') {
-			$this->Conge_model->update_etat($id, $commentaire, 'refuse');
+			$this->Conge_model->update_etats($id, $commentaire, 'refuse');
 		}
 
 		// Redirection à la liste des congés
