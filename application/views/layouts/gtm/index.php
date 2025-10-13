@@ -27,6 +27,9 @@
 	}
 </style>
 <?php end_section(); ?>
+<?php start_section('page_title'); ?>
+<h1 class="h4 py-2">GTM</h1>
+<?php end_section(); ?>
 
 <?php start_section('page_heading'); ?>
 
@@ -95,7 +98,7 @@
                                         <?php endif; ?>
                                     </td>
                                     <td>
-                                        <?php if ($d['gtm'] == null): ?>
+                                        <?php if (empty($d['tracking_gtm'])): ?>
                                         <span class="badge alert-danger rounded-pill px-2 py-1" style="font-size: 12px; font-weight: 500;">
                                             <i class="fa fa-circle mr-1" style="font-size: 10px;"></i> Non installé
                                         </span>
@@ -193,37 +196,38 @@
                         <table class="table table-wrapper">
                             <thead class="bg-light text-muted">
                                 <tr>
-                                    <th>Task Name<img src="<?= base_url('assets/images/icons/figma/icon-caretdoublevertical-5.svg') ?>" class="ml-2"></th>
+                                    <th>client<img src="<?= base_url('assets/images/icons/figma/icon-caretdoublevertical-5.svg') ?>" class="ml-2"></th>
                                     <th>Débogage<img src="<?= base_url('assets/images/icons/figma/icon-caretdoublevertical-5.svg') ?>" class="ml-2"></th>
-                                    <th>Discussion<img src="<?= base_url('assets/images/icons/figma/icon-caretdoublevertical-5.svg') ?>" class="ml-2"></th>
-                                    <th>Octobre<img src="<?= base_url('assets/images/icons/figma/icon-caretdoublevertical-5.svg') ?>" class="ml-2"></th>
-                                    <th>Novembre<img src="<?= base_url('assets/images/icons/figma/icon-caretdoublevertical-5.svg') ?>" class="ml-2"></th>
-                                    <th>Décembre<img src="<?= base_url('assets/images/icons/figma/icon-caretdoublevertical-5.svg') ?>" class="ml-2"></th>
+                                    <th>Mois</th>
                                     <th></th>
                                 </tr>
                             </thead>
                             <tbody>
+                                <?php foreach ($optimisation_gtm as $d): ?>
                                 <tr>
-                                    <td>Test</td>
-                                    <td class="text-muted">
+                                    <td>
+                                        <a href="<?= base_url('Client/detail_client/' . $d['idclients']) ?>" style="display: flex; align-items: center; text-decoration: none; color: inherit;">
+                                            <img src="<?= $d['favicon'] ?>" class="img-thumbnail" width="28" height="28" alt="Client Image" style="margin-right: 8px;">
+                                            <?= htmlspecialchars($d['nom_client']) ?>
+                                        </a>
+                                    </td>
+                                        <td>
+                                        <?php if ($d['Débogage'] == "à vérifier"): ?>
+                                        <span class="badge alert-warning rounded-pill px-2 py-1" style="font-size: 12px; font-weight: 500;">
+                                            <i class="fa fa-circle mr-1" style="font-size: 10px;"></i> à vérifier
+                                        </span>
+                                        <?php elseif ($d['Débogage'] == "Erreur"): ?>
                                         <span class="badge alert-danger rounded-pill px-2 py-1" style="font-size: 12px; font-weight: 500;">
                                             <i class="fa fa-circle mr-1" style="font-size: 10px;"></i> Erreur
                                         </span>
-                                    </td>
-                                    <td>
-                                        <div class="d-flex align-items-center avatar-group">
-                                            <img src="<?= base_url(IMAGES_PATH . '/icons/figma/frame-5518.png'); ?>" class="avatar rounded-circle" width="28" height="28" alt="Client Image">
-                                            <img src="<?= base_url(IMAGES_PATH . '/icons/figma/frame-5518.png'); ?>" class="avatar rounded-circle" width="28" height="28" alt="Client Image">
-                                        </div>
-                                    </td>
-                                    <td class="text-muted">
-                                        <span class="badge alert-warning rounded-pill px-2 py-1"><i class="fa fa-circle mr-1" style="font-size: 10px;"></i>16/08/2013</span>
+                                        <?php elseif ($d['Débogage'] == "Implémenté"): ?>
+                                        <span class="badge alert-success rounded-pill px-2 py-1" style="font-size: 12px; font-weight: 500;">
+                                            <i class="fa fa-circle mr-1" style="font-size: 10px;"></i> Implémenté
+                                        </span>
+                                        <?php endif; ?>
                                     </td>
                                     <td class="text-muted">
-                                        <span class="badge alert-warning rounded-pill px-2 py-1"><i class="fa fa-circle mr-1" style="font-size: 10px;"></i>16/08/2013</span>
-                                    </td>
-                                    <td class="text-muted">
-                                        <span class="badge alert-warning rounded-pill px-2 py-1"><i class="fa fa-circle mr-1" style="font-size: 10px;"></i>16/08/2013</span>
+                                        <i class="fa fa-calendar"></i> <?= htmlspecialchars($d['mois']) ?>
                                     </td>
                                     <td>
                                         <div class="dropdown no-arrow">
@@ -231,20 +235,17 @@
                                                 <i class="fa fa-ellipsis-v"></i>
                                             </a>
                                             <div class="dropdown-menu">
-                                                <button type="button" class="dropdown-item" data-toggle="modal" data-target="#detailModal" data-id="">
+                                                <button type="button" class="dropdown-item" data-toggle="modal" data-target="#detailModal" data-id="<?= $d['id_optimisation_gtm']; ?>">
                                                     <i class="fa fa-eye mr-2"></i> Détails
                                                 </button>
-                                                <button type="button" class="dropdown-item" data-toggle="modal" data-target="#formModal" data-id="">
+                                                <button type="button" class="dropdown-item" data-toggle="modal" data-target="#formModal" data-id="<?= $d['id_optimisation_gtm']; ?>">
                                                     <i class="fa fa-edit mr-2"></i> Modifier
                                                 </button>
-                                                <div class="dropdown-divider"></div>
-                                                <a href="#" class="dropdown-item text-danger" data-id="<?= $d->idonnee; ?>">
-                                                    <i class="fa fa-trash mr-2"></i> Supprimer
-                                                </a>
                                             </div>
                                         </div>
                                     </td>
                                 </tr>
+                                <?php endforeach; ?>
                             </tbody>
                         </table>
                     </div>
