@@ -48,12 +48,121 @@ class Client extends MY_Controller
 		$this->content = "layouts/client/index.php";
 		$this->layout();
 	}
+	public function Ajoutgroupes()
+	{
+		$idgroupe_annonce = $this->input->post('idgroupe_annonce');
+		$idcampagne = $this->input->post('idcampagne');
+		$idclients = $this->input->post('idclients');
+		$chemin1 = $this->input->post('chemin1');
+		$chemin2 = $this->input->post('chemin2');
+		$titres = is_array($this->input->post('titres')) ? $this->input->post('titres') : [];
+		$titres_longs = is_array($this->input->post('titres_longs')) ? $this->input->post('titres_longs') : [];
+		$descriptions = is_array($this->input->post('descriptions')) ? $this->input->post('descriptions') : [];
+
+		$statut = 1;
+
+		$data = array(
+			'idgroupe_annonce' => $idgroupe_annonce,
+			'idcampagne'       => $idcampagne,
+			'idclients'        => $idclients,
+			'chemin1'          => $chemin1,
+			'chemin2'          => $chemin2,
+			'statut'           => $statut
+		);
+
+		for ($i = 0; $i < 12; $i++) {
+			$data['titre' . ($i + 1)] = $titres[$i] ?? null;
+		}
+
+		for ($i = 0; $i < 5; $i++) {
+			$data['longtitre' . ($i + 1)] = $titres_longs[$i] ?? null;
+		}
+
+		for ($i = 0; $i < 4; $i++) {
+			$data['descriptions' . ($i + 1)] = $descriptions[$i] ?? null;
+		}
+
+		$this->Donne_modele->update_groupe_search($idgroupe_annonce, $data);
+
+		redirect('Client/onboarding/' . $idclients, 'refresh');
+	}
+
+
 	public function insertgroupeannonce($id)
 	{
-		$this->data['donnees'] = $this->visuels_model->getDonneeById($id);
+		$k = $this->data["groupe"] = $this->visuels_model->getgpid($id);
+		$id = $k[0]['idclients'];
+		$id = intval($id);
+		$d =$this->data['donnees'] = $this->visuels_model->getDonneeById($id);
+		$information_base = $d[0]['info_base_client'];
+		$information_client = $d[0]['information_client'];
+		$site_client = $d[0]['site_client'];
+		$type_campagne = $k[0]['type_campagne'];
+		$adsContent = $this->generateGoogleAdsCopy($information_base, $information_client, $site_client);
+		$this->data['ads_titres'] = $adsContent['titres'];
+		$this->data['ads_titres_longs'] = $adsContent['titres_longs'];
+		$this->data['ads_descriptions'] = $adsContent['descriptions'];
+		
+		if($type_campagne == 1){
 		$this->content = "layouts/client/onboarding/annonce_search";
+		}
+		if($type_campagne == 3){
+		$this->content = "layouts/client/onboarding/annonce_pmax";
+		}
 		$this->layout();
 	}
+
+
+	private function generateGoogleAdsCopy($info_base, $info_client, $site)
+	{
+		$prompt = "Tu es un expert en Google Ads. 
+	À partir de ces informations :
+	- Informations de base : $info_base
+	- Brief client : $info_client
+	- Site web : $site
+
+	Génère :
+	- 12 titres courts accrocheurs (max 30 caractères chacun),
+	- 4 titres longs (max 90 caractères chacun),
+	- 4 descriptions (max 90 caractères chacune).
+
+	Retourne uniquement une réponse JSON structurée comme ceci :
+	{
+	\"titres\": [\"titre1\", \"titre2\", ...],
+	\"titres_longs\": [\"titre_long1\", ...],
+	\"descriptions\": [\"description1\", ...]
+	}";
+
+		$curl = curl_init();
+		curl_setopt_array($curl, [
+			CURLOPT_URL => 'https://api.openai.com/v1/chat/completions',
+			CURLOPT_RETURNTRANSFER => true,
+			CURLOPT_HTTPHEADER => [
+				'Content-Type: application/json',
+				'Authorization: Bearer ' . $this->api_key
+			],
+			CURLOPT_POST => true,
+			CURLOPT_POSTFIELDS => json_encode([
+				'model' => 'gpt-4',
+				'messages' => [
+					['role' => 'system', 'content' => 'Tu es un expert en publicité Google Ads.'],
+					['role' => 'user', 'content' => $prompt]
+				],
+				'temperature' => 0.7
+			])
+		]);
+
+		$response = curl_exec($curl);
+		curl_close($curl);
+
+		$decoded = json_decode($response, true);
+		$content = $decoded['choices'][0]['message']['content'] ?? '';
+
+		$result = json_decode($content, true);
+
+		return $result ?: ['titres' => [], 'titres_longs' => [], 'descriptions' => []];
+	}
+
 	public function details_ajax($id)
 	{
 	$idclients = $id;
@@ -70,6 +179,22 @@ class Client extends MY_Controller
 		}
 		
 	$data['campagnes'] = $campagnes;
+	$donne_valider = $this->Donne_modele->getcclientvalidationbyidclients($idclients);
+		$groupe_valider = $this->Donne_modele->getcampagnegroupevalidationbyidclients($idclients);
+		$groupes_par_campagne = [];
+		foreach ($groupe_valider as $groupe) {
+			$idcampagne = $groupe['idcampagne'];
+			if (!isset($groupes_par_campagne[$idcampagne])) {
+				$groupes_par_campagne[$idcampagne] = [];
+			}
+			$groupes_par_campagne[$idcampagne][] = $groupe;
+		}
+		foreach ($donne_valider as &$campagne) {
+			$idcampagne = $campagne['idcampagne'];
+			$campagne['groupes_annonces'] = isset($groupes_par_campagne[$idcampagne]) ? $groupes_par_campagne[$idcampagne] : [];
+		}
+		unset($campagne);
+	$data['donne_valider'] = $donne_valider;
 	$data['id'] = $id; 
 	$this->load->view('layouts/client/onboarding/detail_campagne', $data);
 	}
@@ -91,7 +216,22 @@ class Client extends MY_Controller
 		}
 
 		$data['campagnes'] = $campagnes;
-
+		$donne_valider = $this->Donne_modele->getcclientvalidationbyidclients($idclients);
+		$groupe_valider = $this->Donne_modele->getcampagnegroupevalidationbyidclients($idclients);
+		$groupes_par_campagne = [];
+		foreach ($groupe_valider as $groupe) {
+			$idcampagne = $groupe['idcampagne'];
+			if (!isset($groupes_par_campagne[$idcampagne])) {
+				$groupes_par_campagne[$idcampagne] = [];
+			}
+			$groupes_par_campagne[$idcampagne][] = $groupe;
+		}
+		foreach ($donne_valider as &$campagne) {
+			$idcampagne = $campagne['idcampagne'];
+			$campagne['groupes_annonces'] = isset($groupes_par_campagne[$idcampagne]) ? $groupes_par_campagne[$idcampagne] : [];
+		}
+		unset($campagne);
+	$data['donne_valider'] = $donne_valider;
 		$html = $this->load->view('layouts/client/onboarding/detail_campagne_pdf', $data, true);
 
 		$this->pdf->loadHtml($html);
@@ -778,6 +918,9 @@ class Client extends MY_Controller
 				$information_client    = $this->input->post('information_client_pmax');
 				$contextes_client      = $this->input->post('contextes_client_pmax');
 				$choix                 = $this->input->get('conversion');
+				$groupes_annonces      = $this->input->post('groupe_annonce'); // OK
+				$contexte_groupes      = $this->input->post('contexte_groupe_annonce'); // not in view
+				$mots_cle              = $this->input->post('Mot_cle'); // OK
 
 				// Insert campagne
 				$idcampagne = $this->Donne_modele->insert_campagne_am(
@@ -846,11 +989,24 @@ class Client extends MY_Controller
 					]
 				];
 
-				// Sélection en fonction du choix
 				$conversions = $conversionSets[$choix] ?? [];
 
 				$this->Donne_modele->insert_conversions($conversions);
 				$this->Donne_modele->update_type_clients($choix, $idclients);
+
+				$data_groups = [];
+					foreach ($groupes_annonces as $index => $groupe) {
+						$data_groups[] = [
+							'groupe_annonce'         	=>	$groupe,
+							'contexte_groupe_annonce' 	=>	$contexte_groupes[$index] ?? '',
+							'mot_cle'                	=>	$mots_cle[$index] ?? '',
+							'url_groupe_annonce'     	=>	$url_site,
+							'idcampagne'             	=>	$idcampagne,
+							'idclient'               	=>	$idclients,
+							'camp_type'          		=>	$camp_type
+						];
+					}
+				$this->Donne_modele->insert_gp($data_groups, $idcampagne, $idclients, $camp_type);
 				break;
 		}
 

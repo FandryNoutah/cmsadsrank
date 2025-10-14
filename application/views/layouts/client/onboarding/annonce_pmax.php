@@ -75,34 +75,70 @@
 					<!-- INFOS ENTREPRISE -->
 					<div class="form-group">
 						<label for="nom_entreprise">Nom de l'entreprise</label>
-						<input type="text" class="form-control" name="nom_entreprise" id="nom_entreprise">
+						<input type="text" class="form-control" name="nom_entreprise" id="nom_entreprise" value="<?php echo $d['nom_client']; ?>">
+
 					</div>
 
 					<div class="form-group">
 						<label for="url_campagne">URL de la campagne</label>
-						<input type="url" class="form-control" name="url_campagne" id="url_campagne">
+						<input type="text" class="form-control" name="url_campagne" id="url_campagne" value="<?php echo $groupe[0]['url_site']; ?>">
 					</div>
 
-					<!-- TITRES -->
-					<div class="form-section-title">Titres (max 15)</div>
+				<div class="form-section-title">Titres (max 15)</div>
 					<div id="titres-container">
-						<input type="text" class="form-control mb-2" name="titres[]">
+						<?php if (!empty($ads_titres)) : ?>
+							<?php foreach ($ads_titres as $titre) : ?>
+								<div class="form-group-wrapper mb-2">
+									<input type="text" class="form-control" name="titres[]" value="<?= htmlspecialchars($titre) ?>">
+									<span class="remove-btn">&times;</span>
+								</div>
+							<?php endforeach; ?>
+						<?php else : ?>
+							<div class="form-group-wrapper mb-2">
+								<input type="text" class="form-control" name="titres[]">
+								<span class="remove-btn">&times;</span>
+							</div>
+						<?php endif; ?>
 					</div>
 					<button type="button" class="btn btn-outline-dark btn-sm mb-3" id="add_titre">+ Ajouter un titre</button>
 
-					<!-- TITRES LONGS -->
+
 					<div class="form-section-title">Titres longs (max 5)</div>
 					<div id="titres-longs-container">
-						<input type="text" class="form-control mb-2" name="titres_longs[]">
+						<?php if (!empty($ads_titres_longs)) : ?>
+							<?php foreach ($ads_titres_longs as $titre_long) : ?>
+								<div class="form-group-wrapper mb-2">
+									<input type="text" class="form-control" name="titres_longs[]" value="<?= htmlspecialchars($titre_long) ?>">
+									<span class="remove-btn">&times;</span>
+								</div>
+							<?php endforeach; ?>
+						<?php else : ?>
+							<div class="form-group-wrapper mb-2">
+								<input type="text" class="form-control" name="titres_longs[]">
+								<span class="remove-btn">&times;</span>
+							</div>
+						<?php endif; ?>
 					</div>
 					<button type="button" class="btn btn-outline-dark btn-sm mb-3" id="add_titre_long">+ Ajouter un titre long</button>
 
-					<!-- DESCRIPTIONS -->
-					<div class="form-section-title">Descriptions (max 4)</div>
-					<div id="descriptions-container">
-						<input type="text" class="form-control mb-2" name="descriptions[]">
-					</div>
-					<button type="button" class="btn btn-outline-dark btn-sm mb-3" id="add_description">+ Ajouter une description</button>
+
+				<div class="form-section-title">Descriptions (max 4)</div>
+				<div id="descriptions-container">
+					<?php if (!empty($ads_descriptions)) : ?>
+						<?php foreach ($ads_descriptions as $desc) : ?>
+							<div class="form-group-wrapper mb-2">
+								<input type="text" class="form-control" name="descriptions[]" value="<?= htmlspecialchars($desc) ?>">
+								<span class="remove-btn">&times;</span>
+							</div>
+						<?php endforeach; ?>
+					<?php else : ?>
+						<div class="form-group-wrapper mb-2">
+							<input type="text" class="form-control" name="descriptions[]">
+							<span class="remove-btn">&times;</span>
+						</div>
+					<?php endif; ?>
+				</div>
+				<button type="button" class="btn btn-outline-dark btn-sm mb-3" id="add_description">+ Ajouter une description</button>
 
 					<!-- IMAGES -->
 					<div class="form-section-title">Images</div>
@@ -202,7 +238,7 @@
 <div class="container-fluid mt-5 preview-card">
 	<h5 class="mb-3">Aperçu de l'annonce</h5>
 	<table class="table table-bordered">
-		<tr><th>Campagne</th><td><?= $d['nom_campagne'] ?></td></tr>
+		<tr><th>Campagne</th><td><?= $groupe[0]['nom_campagne'] ?></td></tr>
 		<tr><th>Titres</th><td id="preview-titres"></td></tr>
 		<tr><th>Descriptions</th><td id="preview-descriptions"></td></tr>
 		<tr><th>URL</th><td id="preview-url"></td></tr>
@@ -213,13 +249,10 @@
 <?php end_section() ?>
 
 <?php start_section('script'); ?>
-	<script>
-	// Fonction générique pour supprimer le bloc parent
+		<script>
 	$(document).on('click', '.remove-btn', function () {
 		$(this).closest('.form-group-wrapper').remove();
 	});
-
-	// TITRES
 	$('#add_titre').on('click', () => {
 		const bloc = `
 			<div class="form-group-wrapper mb-2">
@@ -229,7 +262,6 @@
 		$('#titres-container').append(bloc);
 	});
 
-	// TITRES LONGS
 	$('#add_titre_long').on('click', () => {
 		const bloc = `
 			<div class="form-group-wrapper mb-2">
@@ -239,7 +271,6 @@
 		$('#titres-longs-container').append(bloc);
 	});
 
-	// DESCRIPTIONS
 	$('#add_description').on('click', () => {
 		const bloc = `
 			<div class="form-group-wrapper mb-2">
@@ -249,7 +280,6 @@
 		$('#descriptions-container').append(bloc);
 	});
 
-	// LIENS ANNEXES
 	$('#add_lien_annexe').on('click', () => {
 		const bloc = `
 			<div class="form-group-wrapper mb-3 p-2 border rounded">
