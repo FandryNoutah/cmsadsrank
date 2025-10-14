@@ -236,7 +236,6 @@
 								<?php endif; ?>
 							</tbody>
 						</table>
-
 					</div>
 
 					<button class="btn btn-dark" id="create_camp_button">
