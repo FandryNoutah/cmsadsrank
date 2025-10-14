@@ -13,19 +13,19 @@
 			</li>
 			<li class="nav-item rounded">
 				<a class="nav-link text-secondary" href="<?= base_url('Onboarding') ?>">
-					<img class="mr-2" src="<?= base_url('assets/images/icons/figma/icon-calendar.svg') ?>" />
+					<img class="mr-2" src="<?= base_url('assets/images/icons/figma/AlignLeft.png') ?>" />
 					<span class="nav-label">Onboarding</span>
 				</a>
 			</li>
 			<li class="nav-item rounded <?= ($this->uri->segment(1) == "Client") ? 'bg-white' : ''; ?>">
 				<a class="nav-link text-secondary" href="<?= base_url('Client') ?>">
-					<img class="mr-2" src="<?= base_url('assets/images/icons/figma/icon-clipboardtext.svg') ?>" />
+					<img class="mr-2" src="<?= base_url('assets/images/icons/figma/UserList.png') ?>" />
 					<span class="nav-label">Clients</span>
 				</a>
 			</li>
 			<li class="nav-item rounded <?= ($this->uri->segment(1) == "Task") ? 'bg-white' : ''; ?>">
 				<a class="nav-link text-secondary" href="<?= base_url('Task') ?>">
-					<img class="mr-2" src="<?= base_url('assets/images/icons/figma/icon-clipboardtext.svg') ?>" />
+					<img class="mr-2" src="<?= base_url('assets/images/icons/figma/ClipboardText.png') ?>" />
 					<span class="nav-label">Tâches</span>
 				</a>
 			</li>
@@ -44,13 +44,13 @@
 
 			<li class="nav-item rounded">
 				<a class="nav-link text-secondary" href="<?= base_url('Gtm') ?>">
-					<img class="mr-2" src="<?= base_url('assets/images/icons/figma/icon-gear.svg') ?>" />
+					<img class="mr-2" src="<?= base_url('assets/images/icons/figma/GoogleLogo.png') ?>" />
 					<span class="nav-label">GTM</span>
 				</a>
 			</li>
 			<li class="nav-item rounded">
 				<a class="nav-link text-secondary" href="<?= base_url('Upsell') ?>">
-					<img class="mr-2" src="<?= base_url('assets/images/icons/figma/icon-gear.svg') ?>" />
+					<img class="mr-2" src="<?= base_url('assets/images/icons/figma/TrendUp.png') ?>" />
 					<span class="nav-label">Upsell / Baisse</span>
 				</a>
 			</li>
@@ -63,7 +63,7 @@
 			</h6>
 			<li class="nav-item rounded">
 				<a class="nav-link text-secondary" href="<?= base_url('Calendar'); ?>">
-					<img class="mr-2" src="<?= base_url('assets/images/icons/figma/Calendar.png') ?>" />
+					<img class="mr-2" src="<?= base_url('assets/images/icons/figma/calendrier.png') ?>" />
 					<span class="nav-label">Calendrier</span>
 				</a>
 			</li>
