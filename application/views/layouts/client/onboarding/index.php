@@ -85,14 +85,150 @@
 						<?= $d['nom_client'] ?>
 					</h1>
 
-					<div class="row mb-3">
-						<div class="col">
-							<div class="card">
-								<div class="card-body">
-									<ul class="nav nav-tabs mb-3" style="margin-top: -15px;">
-										<li class="nav-item">
-											<a class="nav-link py-3 active" type="button">
-												Société
+				<div class="row mb-3">
+					<div class="col">
+						<div class="card">
+							<div class="card-body">
+								<ul class="nav nav-tabs mb-3" style="margin-top: -15px;">
+									<li class="nav-item">
+										<a class="nav-link py-3 active" type="button">
+											Société
+										</a>
+									</li>
+								</ul>
+
+								<h6 class="text-muted font-weight-normal" style="font-size: 14px;">
+										<?= nl2br($d['info_base_client']) ?></br>
+								</h6>
+							</div>
+						</div>
+					</div>
+
+					<div class="col-auto">
+						<div class="card" style="width: 23rem;">
+							<div class="card-body">
+								<div class="d-flex justify-content-between align-items-center">
+									<button class="btn btn-dark py-3 px-5" data-toggle="modal" data-target="#budgetModal">
+										<?php function format_budget($nombre)
+										{
+											return number_format($nombre, 0, '', ' ');
+										} ?>
+										<b><?= format_budget($d['budget']) ?> €</b>
+									</button>
+									<div class="dropdown no-arrow">
+										<img 
+											class="mr-2 eye-icon" 
+											src="<?= base_url('assets/images/icons/figma/Eye.png') ?>"
+											data-id="<?= $d['idclients'] ?>" 
+											style="cursor:pointer;" 
+										/>
+
+									</div>
+								</div>
+								<br><br>
+								<div class="d-flex justify-content-start mb-3" style="font-size: 15px;">
+									<i class="fa fa-check-square mr-2" style="color: Black; font-size: 18px;"></i>
+									<span class="mr-2">Date d'anniversaire : <?= $d['mis_en_place_paiement'] ?></span>
+								</div>
+								<div class="d-flex justify-content-start mb-3" style="font-size: 15px;">
+									<i class="fa fa-check-square mr-2" style="color: Black; font-size: 18px;"></i>
+									<span class="mr-2">Date de mise en ligne : <?= $d['annonce'] ?></span>
+
+								</div>
+								<div class="d-flex justify-content-start mb-3" style="font-size: 15px;">
+									<i class="fa fa-check-square mr-2" style="color: Black; font-size: 18px;"></i>
+									<span class="mr-2">Commerciale</span>
+									<span class="mr-2">
+										<img src="<?= base_url('assets/images/' . $d['tech_photo_user']) ?>" width="24" height="24">
+									</span>
+								</div>
+								<div class="d-flex justify-content-start mb-4" style="font-size: 15px;">
+									<i class="fa fa-check-square mr-2" style="color: Black; font-size: 18px;"></i>
+									<span class="mr-2">Account Manager</span>
+									<span class="mr-2">
+										<img src="<?= base_url('assets/images/' . $d['am_photo_user']) ?>" width="24" height="24">
+									</span>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<h1 class="display-1 text-center mt-4" style="font-size: 42px;">
+					Brief
+				</h1>
+				<div class="d-flex justify-content-between">
+					<ul class="nav nav-tabs mb-3" style="margin-top: -15px;">
+						<li class="nav-item">
+							<a class="nav-link py-3 active" type="button">
+								Brief client
+							</a>
+						</li>
+					</ul>
+					<div class="d-inline">
+						<?php if(!empty($d['information_client'])): ?>
+						<button class="btn btn-dark">
+							<img src="<?= base_url('assets/images/icons/figma/icon-plus.svg') ?>" alt="">
+							Modifier Brief
+						</button>
+						<?php endif; ?>
+						<?php if(empty($d['information_client'])): ?>
+							<button class="btn btn-dark stretched-link" data-toggle="modal" data-target="#briefModal">
+								<img src="<?= base_url('assets/images/icons/figma/icon-plus.svg') ?>" alt="">
+								Ajouter Brief
+							</button>
+						<?php endif; ?>
+					</div>
+				</div>
+				<?php if(!empty($d['information_client'])): ?>
+				<div class="card">
+					<div class="card-body">
+							<?= nl2br($d['information_client']); ?> 							
+					</div>
+				</div>
+				<?php endif; ?>
+				
+				<!-- BRIEF -->
+				<h1 class="display-1 text-center mt-4" style="font-size: 42px;">
+					Campagne
+				</h1>
+				<div class="table-responsive">
+					<table class="table table-hover table-wrapper">
+						<thead class="thead-light">
+							<tr>
+								<th class="text-muted">TYPE</th>
+								<th class="text-muted">CAMPAGNES</th>
+								<th class="text-muted">BUDGET</th>
+								<th class="text-muted">DEMANDE</th>
+								<th class="text-muted">STATUT</th>
+								<th class="text-muted">ACTION</th>
+							</tr>
+						</thead>
+						<tbody>
+							<?php if (!empty($campagnes)): ?>
+								<?php foreach ($campagnes as $campagne): ?>
+									<tr>
+										<td><?= $campagne['type_campagne']; ?></td>
+										<td><?= $campagne['nom_campagne']; ?></td>
+										<td><?= $campagne['repartition_budget'] ?: 0; ?> Euro</td>
+										<td>
+											<span class="badge alert-primary">GTM</span>
+										</td>
+										<td>
+											<?php if ($campagne['actif'] == 1): ?>
+												<span class="badge alert-primary">
+													<i class="fa fa-circle"></i>
+													En cours
+												</span>
+											<?php else: ?>
+												<span class="badge alert-success">
+													<i class="fa fa-circle"></i>
+													Terminée
+												</span>
+											<?php endif; ?>
+										</td>
+										<td>
+											<a href="javascript:void(0);" class="text-decoration-none">
+												<i class="fa fa-ellipsis-v"></i>
 											</a>
 										</li>
 									</ul>
@@ -402,11 +538,53 @@
 			</div>
 		</div>
 	</div>
+</div>
+<div class="modal fade" id="clientModal" tabindex="-1" role="dialog" aria-labelledby="clientModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="clientModalLabel">Détails du Client</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Fermer">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body" id="clientModalContent">
+        Chargement...
+      </div>
+    </div>
+  </div>
+</div>
+
 <?php endforeach; ?>
 <?php $this->load->view('layouts/client/onboarding/brief-modal') ?>
 <?php end_section(); ?>
 
-<?php start_section('script') ?>
+<?php start_section('script') ?>.
+<script>
+$(document).ready(function(){
+    $('.eye-icon').on('click', function(){
+        var clientId = $(this).data('id');
+
+        // Affiche la modal
+        $('#clientModal').modal('show');
+
+        // Charge le contenu via AJAX
+        $('#clientModalContent').html('Chargement...');
+
+        $.ajax({
+            url: '<?= site_url("Client/details_ajax") ?>/' + clientId,
+            type: 'GET',
+            success: function(response){
+                $('#clientModalContent').html(response);
+            },
+            error: function(){
+                $('#clientModalContent').html("Erreur lors du chargement.");
+            }
+        });
+    });
+});
+</script>
+
 <script>
 	$(function() {
 
