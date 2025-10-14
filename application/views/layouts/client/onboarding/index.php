@@ -180,7 +180,7 @@
 							</div>
 						</div>
 					<?php endif; ?>
-					
+
 					<!-- BRIEF -->
 					<h1 class="display-1 text-center mt-4" style="font-size: 42px;">
 						Campagne
@@ -286,8 +286,6 @@
 								<?php endif; ?>
 							</tbody>
 						</table>
-
-
 					</div>
 
 					<button class="btn btn-dark" id="create_camp_button">
