@@ -116,28 +116,34 @@
 										<b><?= format_budget($d['budget']) ?> €</b>
 									</button>
 									<div class="dropdown no-arrow">
-										<img class="mr-2" src="<?= base_url('assets/images/ico/Eye.png') ?>" />
+										<img 
+											class="mr-2 eye-icon" 
+											src="<?= base_url('assets/images/icons/figma/Eye.png') ?>"
+											data-id="<?= $d['idclients'] ?>" 
+											style="cursor:pointer;" 
+										/>
+
 									</div>
 								</div>
 								<br><br>
 								<div class="d-flex justify-content-start mb-3" style="font-size: 15px;">
-									<i class="fa fa-check-square mr-2" style="color: #f0f0f0ff; font-size: 18px;"></i>
+									<i class="fa fa-check-square mr-2" style="color: Black; font-size: 18px;"></i>
 									<span class="mr-2">Date d'anniversaire : <?= $d['mis_en_place_paiement'] ?></span>
 								</div>
 								<div class="d-flex justify-content-start mb-3" style="font-size: 15px;">
-									<i class="fa fa-check-square mr-2" style="color: #f0f0f0ff; font-size: 18px;"></i>
+									<i class="fa fa-check-square mr-2" style="color: Black; font-size: 18px;"></i>
 									<span class="mr-2">Date de mise en ligne : <?= $d['annonce'] ?></span>
 
 								</div>
 								<div class="d-flex justify-content-start mb-3" style="font-size: 15px;">
-									<i class="fa fa-check-square mr-2" style="color: #f0f0f0ff; font-size: 18px;"></i>
+									<i class="fa fa-check-square mr-2" style="color: Black; font-size: 18px;"></i>
 									<span class="mr-2">Commerciale</span>
 									<span class="mr-2">
 										<img src="<?= base_url('assets/images/' . $d['tech_photo_user']) ?>" width="24" height="24">
 									</span>
 								</div>
 								<div class="d-flex justify-content-start mb-4" style="font-size: 15px;">
-									<i class="fa fa-check-square mr-2" style="color: #f0f0f0ff; font-size: 18px;"></i>
+									<i class="fa fa-check-square mr-2" style="color: Black; font-size: 18px;"></i>
 									<span class="mr-2">Account Manager</span>
 									<span class="mr-2">
 										<img src="<?= base_url('assets/images/' . $d['am_photo_user']) ?>" width="24" height="24">
@@ -403,11 +409,52 @@
 		</div>
 	</div>
 </div>
+<div class="modal fade" id="clientModal" tabindex="-1" role="dialog" aria-labelledby="clientModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="clientModalLabel">Détails du Client</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Fermer">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body" id="clientModalContent">
+        Chargement...
+      </div>
+    </div>
+  </div>
+</div>
+
 <?php endforeach; ?>
 <?php $this->load->view('layouts/client/onboarding/brief-modal') ?>
 <?php end_section(); ?>
 
-<?php start_section('script') ?>
+<?php start_section('script') ?>.
+<script>
+$(document).ready(function(){
+    $('.eye-icon').on('click', function(){
+        var clientId = $(this).data('id');
+
+        // Affiche la modal
+        $('#clientModal').modal('show');
+
+        // Charge le contenu via AJAX
+        $('#clientModalContent').html('Chargement...');
+
+        $.ajax({
+            url: '<?= site_url("Client/details_ajax") ?>/' + clientId,
+            type: 'GET',
+            success: function(response){
+                $('#clientModalContent').html(response);
+            },
+            error: function(){
+                $('#clientModalContent').html("Erreur lors du chargement.");
+            }
+        });
+    });
+});
+</script>
+
 <script>
 	$(function() {
 
