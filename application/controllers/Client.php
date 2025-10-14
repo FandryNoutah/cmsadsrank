@@ -6,8 +6,9 @@ class Client extends MY_Controller
 	private $api_url = 'https://api.aircall.io/v1/calls';
 	private $api_auth = '';
 	protected $file_upload_field;
-	private $api_key = getenv('OPENAI_API_KEY');
-		public function __construct()
+	// private $api_key = getenv('OPENAI_API_KEY');
+
+	public function __construct()
 	{
 		parent::__construct();
 
@@ -34,7 +35,6 @@ class Client extends MY_Controller
 		$this->form_validation->set_error_delimiters('<span class="error">', '</span>');
 
 		$this->current_user = $this->ion_auth->user()->row();
-
 	}
 
 	public function index()
@@ -62,7 +62,7 @@ class Client extends MY_Controller
 		}
 		preg_match('/GTM-[A-Z0-9]+/', $html, $matches);
 		$gtm_code = !empty($matches) ? $matches[0] : null;
-		if($gtm_code != Null):
+		if ($gtm_code != Null):
 			$this->visuels_model->mis_a_jour_gtm($idclients, $gtm_code);
 		endif;
 		redirect('Client/application/' . $idclients);
@@ -95,7 +95,7 @@ class Client extends MY_Controller
 		$this->visuels_model->ajout_brief($id, $information_client);
 		redirect('Client/onboarding/' . $id);
 	}
-		
+
 	public function change_rappor_base()
 	{
 		$id = $this->input->post('idclients');
@@ -244,7 +244,7 @@ class Client extends MY_Controller
 
 			);
 			$this->visuels_model->add_upsell_onboarding($data_upsell);
-			
+
 		endif;
 		if ($type_upsell == 4):
 			$title = "Mise en pause";
@@ -300,7 +300,7 @@ class Client extends MY_Controller
 		);
 
 		$this->Task_model->add_task($data);
-		
+
 		$this->session->set_flashdata('message-succes', "Client résilier avec succès");
 		redirect('Client/detail_client/' . $idclients, 'refresh');
 		$this->layout();
@@ -374,59 +374,70 @@ class Client extends MY_Controller
 
 		$this->Gtm_model->update($id, $data);
 
-		redirect('Client/gtm/' . $idclients); 
+		redirect('Client/gtm/' . $idclients);
 	}
 
 
 
 	public function updateDonneeClient()
-{
-	$idclient = $this->input->post('idclient');
-	$idonnee = $this->input->post('idonnee');
-	$client = $this->input->post('Client');
-	$email_client = $this->input->post('Email_client');
-	$numero_client = $this->input->post('Numero_client');
-	$site_client = $this->input->post('Site_client');
-	$budget = $this->input->post('budget');
-	$secteur_activite = $this->input->post('secteur_activite');
-	$Produit = $this->input->post('Produit');
-	$Initiative = $this->input->post('Initiative');
-	$Am = $this->input->post('Am');
-	$mis_en_place_paiement = $this->input->post('mis_en_place_paiement');
-	$Brief = $this->input->post('Brief');
-	$annonce = $this->input->post('annonce');
-	$commentaire_client = $this->input->post('commentaire_client') ?: NULL;
-	$paiement_recu = (int) $this->input->post('paiement_recu');
-	$datastudio = (int) $this->input->post('datastudio');
-	$email_onboarding = (int) $this->input->post('email_onboarding');
-	$facturation = (int) $this->input->post('facturation');
+	{
+		$idclient = $this->input->post('idclient');
+		$idonnee = $this->input->post('idonnee');
+		$client = $this->input->post('Client');
+		$email_client = $this->input->post('Email_client');
+		$numero_client = $this->input->post('Numero_client');
+		$site_client = $this->input->post('Site_client');
+		$budget = $this->input->post('budget');
+		$secteur_activite = $this->input->post('secteur_activite');
+		$Produit = $this->input->post('Produit');
+		$Initiative = $this->input->post('Initiative');
+		$Am = $this->input->post('Am');
+		$mis_en_place_paiement = $this->input->post('mis_en_place_paiement');
+		$Brief = $this->input->post('Brief');
+		$annonce = $this->input->post('annonce');
+		$commentaire_client = $this->input->post('commentaire_client') ?: NULL;
+		$paiement_recu = (int) $this->input->post('paiement_recu');
+		$datastudio = (int) $this->input->post('datastudio');
+		$email_onboarding = (int) $this->input->post('email_onboarding');
+		$facturation = (int) $this->input->post('facturation');
 
-	$this->Donne_modele->update_client($idclient, $client, $email_client, $numero_client, $site_client);
-	$this->Donne_modele->update_donnee_client(
-		$budget, $secteur_activite, $Produit, $Initiative, $Am,
-		$mis_en_place_paiement, $Brief, $annonce, $commentaire_client,
-		$paiement_recu, $datastudio, $email_onboarding, $facturation, $idonnee
-	);
+		$this->Donne_modele->update_client($idclient, $client, $email_client, $numero_client, $site_client);
+		$this->Donne_modele->update_donnee_client(
+			$budget,
+			$secteur_activite,
+			$Produit,
+			$Initiative,
+			$Am,
+			$mis_en_place_paiement,
+			$Brief,
+			$annonce,
+			$commentaire_client,
+			$paiement_recu,
+			$datastudio,
+			$email_onboarding,
+			$facturation,
+			$idonnee
+		);
 
-	$this->session->set_flashdata('message-succes', "Données mises à jour avec succès");
-	redirect('Onboarding', 'refresh');
-}
+		$this->session->set_flashdata('message-succes', "Données mises à jour avec succès");
+		redirect('Onboarding', 'refresh');
+	}
 
 
 	public function activer_processus_tache()
 	{
-		    header('Content-Type: application/json');
+		header('Content-Type: application/json');
 
-    // DEBUG temporaire
-    $debug = array(
-        'POST' => $this->input->post(),
-    );
+		// DEBUG temporaire
+		$debug = array(
+			'POST' => $this->input->post(),
+		);
 
-    if (empty($debug['POST']['idclients']) || empty($debug['POST']['am']) || empty($debug['POST']['assigned_to']) || empty($debug['POST']['date'])) {
-        $debug['error'] = 'Un ou plusieurs champs POST sont vides';
-        echo json_encode($debug);
-        return;
-    }
+		if (empty($debug['POST']['idclients']) || empty($debug['POST']['am']) || empty($debug['POST']['assigned_to']) || empty($debug['POST']['date'])) {
+			$debug['error'] = 'Un ou plusieurs champs POST sont vides';
+			echo json_encode($debug);
+			return;
+		}
 		$type_tache = 3;
 		$title = "Demande de procédure GTM";
 		$description = "Activer le procédure GTM";
@@ -454,13 +465,13 @@ class Client extends MY_Controller
 
 
 
-			$data_gtm = array(
-				'idclients' => $idclients,
-				'am' => $am,
-				'tm' => $tm,
-				'date_demande' => $date
-			);
-			$this->Gtm_model->add_gtm_process($data_gtm);
+		$data_gtm = array(
+			'idclients' => $idclients,
+			'am' => $am,
+			'tm' => $tm,
+			'date_demande' => $date
+		);
+		$this->Gtm_model->add_gtm_process($data_gtm);
 
 		echo json_encode(['redirect_url' => base_url('Client/application/' . $idclients)]);
 	}
@@ -486,7 +497,7 @@ class Client extends MY_Controller
 			$note->assigned_users = $assigned_users;
 		}
 		$this->data['notes'] = $notes;
-		
+
 		$latestByMonth = [];
 
 		$clientUpsells = $this->visuels_model->getupsell();
@@ -520,11 +531,11 @@ class Client extends MY_Controller
 		$this->data["donnees"] = $this->visuels_model->getDonneeById($idclients);
 		$campagnes = $this->data["campagnes"] = $this->visuels_model->getCampagneByIdclient($idclients);
 		$campagnes = $this->visuels_model->getCampagneByIdclient($idclients);
-		
+
 		foreach ($campagnes as $index => $campagne) {
 			$campagnes[$index]['type_campagne'] = $type_campagne[$campagne['type_campagne']];
 		}
-		
+
 		$this->data['campagnes'] = $campagnes;
 
 		$this->content = "layouts/client/onboarding/index.php";
@@ -532,26 +543,26 @@ class Client extends MY_Controller
 	}
 
 	public function campagne($idclients)
-		{
-			$type_page = [
-				1 => "search",
-				2 => "local",
-				3 => "pmax"
-			];
+	{
+		$type_page = [
+			1 => "search",
+			2 => "local",
+			3 => "pmax"
+		];
 
-			$this->data['idclients'] = $idclients;
-			$this->data['conversion'] = $this->input->get('conversion');
-			$this->data['camp_type'] = $camp_type = $this->input->get('camp_type');
-			$this->data['gtm'] = $this->input->get('gtm');
-			$d = $this->data["donnees"] = $this->visuels_model->getDonneeById($idclients);
+		$this->data['idclients'] = $idclients;
+		$this->data['conversion'] = $this->input->get('conversion');
+		$this->data['camp_type'] = $camp_type = $this->input->get('camp_type');
+		$this->data['gtm'] = $this->input->get('gtm');
+		$d = $this->data["donnees"] = $this->visuels_model->getDonneeById($idclients);
 
-			$information_client = $this->data["donnees"]->information ?? '';
-			$site_client = $d[0]['site_client'];
-			$images_site = $this->fetch_all_images_from_site($site_client, 8);
+		$information_client = $this->data["donnees"]->information ?? '';
+		$site_client = $d[0]['site_client'];
+		$images_site = $this->fetch_all_images_from_site($site_client, 8);
 
-			$this->data["images_site"] = $images_site;
+		$this->data["images_site"] = $images_site;
 
-			$prompt = "Tu es un expert Google Ads. 
+		$prompt = "Tu es un expert Google Ads. 
 				Génère une liste de 60 mots-clés à exclure pour une campagne Google Ads sur le réseau de recherche. 
 				Voici les informations disponibles : 
 				- Informations sur le client : $information_client
@@ -562,345 +573,18 @@ class Client extends MY_Controller
 				Donne UNIQUEMENT les mots, séparés par des virgules, sans introduction ni phrase explicative.";
 
 
-			$raw_keywords = $this->call_openai($prompt);
-			$raw_keywords = trim($raw_keywords);
-			if (preg_match('/([a-zA-ZÀ-ÿ0-9,\s]+)/', $raw_keywords, $matches)) {
-				$raw_keywords = $matches[1];
-			}
-			$clean_keywords = preg_replace('/,\s*/', "\n", $raw_keywords);
-
-			$this->data["mots_exclus"] = $clean_keywords;
-
-			$this->content = "layouts/client/onboarding/" . $type_page[$camp_type] . ".php";
-			$this->layout();
+		$raw_keywords = $this->call_openai($prompt);
+		$raw_keywords = trim($raw_keywords);
+		if (preg_match('/([a-zA-ZÀ-ÿ0-9,\s]+)/', $raw_keywords, $matches)) {
+			$raw_keywords = $matches[1];
 		}
-private function fetch_all_images_from_site($site_url, $max_images = 8, $max_pages = 20)
-{
-    if (!preg_match('#^https?://#', $site_url)) {
-        $site_url = 'http://' . $site_url;
-    }
+		$clean_keywords = preg_replace('/,\s*/', "\n", $raw_keywords);
 
-    $visited = [];
-    $to_visit = [$site_url];
-    $images = [];
+		$this->data["mots_exclus"] = $clean_keywords;
 
-    while (!empty($to_visit) && count($visited) < $max_pages && count($images) < $max_images) {
-        $current_url = array_shift($to_visit);
-        if (isset($visited[$current_url])) continue;
-        $visited[$current_url] = true;
-
-        $html = @file_get_contents($current_url);
-        if (!$html) continue;
-
-        // 1. Extraire les images
-        $img_urls = $this->extract_image_urls($html, $current_url);
-        foreach ($img_urls as $img_url) {
-            if ($this->looks_like_logo_or_icon($img_url) || $this->is_data_uri($img_url)) continue;
-
-            $meta = $this->get_image_metadata($img_url);
-            if (!$meta) continue;
-
-            if (!$this->is_photo_mime($meta['mime'])) continue;
-            if ($meta['width'] < 150 || $meta['height'] < 150) continue;
-
-            $images[] = $img_url;
-            if (count($images) >= $max_images) break 2;
-        }
-
-        // 2. Extraire les liens internes pour crawler
-        $dom = new DOMDocument();
-        libxml_use_internal_errors(true);
-        $dom->loadHTML($html);
-        $xpath = new DOMXPath($dom);
-        $links = $xpath->query('//a[@href]');
-        foreach ($links as $link) {
-            $href = $link->getAttribute('href');
-            $url = $this->resolve_url($href, $current_url);
-            if (!$this->is_internal_link($url, $site_url)) continue;
-            if (!isset($visited[$url]) && !in_array($url, $to_visit)) {
-                $to_visit[] = $url;
-            }
-        }
-    }
-
-    return array_slice($images, 0, $max_images);
-}
-
-		private function fetch_images_from_site($site_url, $max_images = 8)
-{
-    $site_url = trim($site_url);
-    if (empty($site_url)) return [];
-
-    if (!preg_match('#^https?://#', $site_url)) {
-        $site_url = 'http://' . $site_url;
-    }
-
-    $html = @file_get_contents($site_url);
-    if (!$html) return [];
-
-    libxml_use_internal_errors(true);
-    $dom = new DOMDocument();
-    $dom->loadHTML($html);
-    $xpath = new DOMXPath($dom);
-
-    $imgs = $xpath->query('//img');
-    $images = [];
-
-    foreach ($imgs as $img) {
-        $src = $img->getAttribute('src');
-        if (!$src) continue;
-
-        // ignore logos/icônes
-        $src_lc = strtolower($src);
-        if (strpos($src_lc, 'logo') !== false || strpos($src_lc, 'icon') !== false || strpos($src_lc, 'svg') !== false) {
-            continue;
-        }
-
-        // construire l'URL absolue
-        $img_url = $this->resolve_url($src, $site_url);
-
-        // vérifie si l’image est valide
-        $img_info = @getimagesize($img_url);
-        if (!$img_info || $img_info[0] < 150 || $img_info[1] < 150) continue;
-
-        $images[] = $img_url;
-
-        if (count($images) >= $max_images) break;
-    }
-
-    return $images;
-}
-
-private function resolve_url($relative, $base)
-{
-    if (empty($relative)) return '';
-
-    // ignore les data:uri
-    if (preg_match('#^data:#', $relative)) return '';
-    if (preg_match('#^https?://#', $relative)) return $relative;
-    if (strpos($relative, '//') === 0) {
-        $scheme = parse_url($base, PHP_URL_SCHEME) ?: 'http';
-        return $scheme . ':' . $relative;
-    }
-
-    // gestion des chemins relatifs
-    $parsed_base = parse_url($base);
-    $scheme = $parsed_base['scheme'] ?? 'http';
-    $host = $parsed_base['host'] ?? '';
-    $base_path = rtrim(dirname($parsed_base['path'] ?? '/'), '/');
-
-    $path = ($relative[0] === '/') ? $relative : $base_path . '/' . $relative;
-
-    return $scheme . '://' . $host . '/' . ltrim($path, '/');
-}
-
-
-    private function extract_image_urls($html, $base_url)
-    {
-        $urls = [];
-        libxml_use_internal_errors(true);
-        $dom = new DOMDocument();
-        $dom->loadHTML($html);
-
-        // <img src>
-        $imgs = $dom->getElementsByTagName('img');
-        foreach ($imgs as $img) {
-            $src = $img->getAttribute('src');
-            if (!$src) continue;
-            $urls[] = $this->resolve_url($src, $base_url);
-            // srcset handling: prend la plus grande candidate si existe
-            $srcset = $img->getAttribute('srcset');
-            if ($srcset) {
-                $best = $this->pick_best_from_srcset($srcset, $base_url);
-                if ($best) $urls[] = $best;
-            }
-        }
-
-        // inline styles background-image: url(...)
-        $xpath = new DOMXPath($dom);
-        $nodes = $xpath->query('//*[@style]');
-        foreach ($nodes as $node) {
-            $style = $node->getAttribute('style');
-            if (preg_match_all('/background(?:-image)?:\s*url\((["\']?)(.*?)\1\)/i', $style, $m)) {
-                foreach ($m[2] as $bg) {
-                    $urls[] = $this->resolve_url($bg, $base_url);
-                }
-            }
-        }
-
-        return array_values(array_unique($urls));
-    }
-
-    private function pick_best_from_srcset($srcset, $base_url)
-    {
-        // srcset format: url1 1x, url2 2x, or url w, ...
-        $parts = preg_split('/\s*,\s*/', trim($srcset));
-        $bestUrl = null;
-        $bestScore = 0;
-        foreach ($parts as $p) {
-            // "url 2x" or "url 300w" or just "url"
-            $sub = preg_split('/\s+/', trim($p));
-            $url = $sub[0];
-            $score = 1;
-            if (isset($sub[1])) {
-                if (strpos($sub[1], 'w') !== false) {
-                    $score = intval($sub[1]);
-                } elseif (strpos($sub[1], 'x') !== false) {
-                    $score = floatval($sub[1]) * 1000;
-                }
-            }
-            if ($score > $bestScore) {
-                $bestScore = $score;
-                $bestUrl = $url;
-            }
-        }
-        return $bestUrl ? $this->resolve_url($bestUrl, $base_url) : null;
-    }
-
-    private function is_internal_link($url, $base)
-    {
-        $uHost = parse_url($url, PHP_URL_HOST);
-        $bHost = parse_url($base, PHP_URL_HOST);
-        return $uHost && $bHost && (strcasecmp($uHost, $bHost) === 0);
-    }
-
-    private function looks_like_logo_or_icon($url)
-    {
-        $lower = strtolower($url);
-        // mots courants pour logos/icônes
-        $bad_words = ['logo', 'icon', 'sprite', 'favicon', 'badge', 'btn', 'spacer', 'pixel', 'placeholder', 'thumb', 'avatar'];
-        foreach ($bad_words as $w) {
-            if (strpos($lower, '/' . $w) !== false) return true;
-            if (strpos($lower, '-' . $w) !== false) return true;
-            if (strpos($lower, '_' . $w) !== false) return true;
-            if (strpos($lower, $w . '.') !== false) return true;
-        }
-        // svg files often logos/illustrations — on peut exclure si souhaité
-        if (preg_match('/\.svg(\?|$)/i', $lower)) return true;
-        return false;
-    }
-
-    private function is_data_uri($s)
-    {
-        return preg_match('#^data:#i', $s);
-    }
-
-    private function is_photo_mime($mime)
-    {
-        // accepter jpg/png/webp/gif (gif peut être animé)
-        $allowed = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp', 'image/gif'];
-        return in_array(strtolower($mime), $allowed);
-    }
-
-    private function get_image_metadata($img_url)
-    {
-        // tente HEAD pour obtenir content-type et content-length
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, $img_url);
-        curl_setopt($ch, CURLOPT_NOBODY, true);
-        curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_USERAGENT, 'Mozilla/5.0 (compatible; SiteImageBot/1.0)');
-        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-        curl_exec($ch);
-        $http = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-        $ctype = curl_getinfo($ch, CURLINFO_CONTENT_TYPE);
-        $clen = curl_getinfo($ch, CURLINFO_CONTENT_LENGTH_DOWNLOAD);
-        curl_close($ch);
-        if ($http >= 400) return false;
-
-        // si content-type absent ou pas image, on essaie de télécharger les premiers octets
-        $mime = $ctype ?: '';
-        // pour récupérer width/height, on télécharge un bloc
-        $imgData = $this->fetch_partial($img_url, 0, 200000); // 200KB max
-        if ($imgData === false) return false;
-
-        // utilise getimagesizefromstring pour obtenir dims
-        $info = @getimagesizefromstring($imgData);
-        if ($info === false) return false;
-        $width = $info[0];
-        $height = $info[1];
-        $mime_from_info = $info['mime'] ?? null;
-        if (empty($mime) && $mime_from_info) $mime = $mime_from_info;
-
-        // taille en octets : si content-length dispo, sinon length du blob (estimation)
-        $filesize = ($clen > 0) ? $clen : strlen($imgData);
-
-        return [
-            'width' => intval($width),
-            'height' => intval($height),
-            'mime' => $mime ?: 'application/octet-stream',
-            'filesize' => intval($filesize)
-        ];
-    }
-
-    private function fetch_partial($url, $start = 0, $maxBytes = 200000)
-    {
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, $url);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
-        curl_setopt($ch, CURLOPT_RANGE, "$start-" . ($start + $maxBytes - 1));
-        curl_setopt($ch, CURLOPT_USERAGENT, 'Mozilla/5.0 (compatible; SiteImageBot/1.0)');
-        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-        $data = curl_exec($ch);
-        $http = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-        curl_close($ch);
-        if ($http >= 400) return false;
-        return $data;
-    }
-	public function generer_mots_exclus()
-    {
-        $information_client = $this->input->post('information_client');
-        $site_client = $this->input->post('site_client');
-
-        $prompt = "À partir de ces informations : $information_client 
-        et en analysant le site : $site_client, génère une liste de 60 mots-clés à exclure pour une campagne Google Ads (type search). 
-        Ne donne que les mots, séparés par des virgules ou des retours à la ligne.";
-
-        $response = $this->call_openai($prompt);
-
-        echo $response ? nl2br(htmlspecialchars($response)) : "❌ Erreur lors de la génération.";
-    }
-
-    private function call_openai($prompt)
-    {
-        $url = "https://api.openai.com/v1/chat/completions";
-        $data = [
-            "model" => "gpt-4o-mini",
-            "messages" => [
-                ["role" => "system", "content" => "Tu es un expert Google Ads."],
-                ["role" => "user", "content" => $prompt]
-            ],
-            "temperature" => 0.7
-        ];
-
-        $headers = [
-            "Content-Type: application/json",
-            "Authorization: " . "Bearer " . $this->api_key
-        ];
-
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, $url);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_POST, true);
-        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
-        $result = curl_exec($ch);
-
-        if (curl_errno($ch)) {
-            log_message('error', 'Erreur CURL OpenAI: ' . curl_error($ch));
-        }
-
-        curl_close($ch);
-
-        if ($result) {
-            $json = json_decode($result, true);
-            return $json['choices'][0]['message']['content'] ?? null;
-        }
-
-        return null;
-    }
+		$this->content = "layouts/client/onboarding/" . $type_page[$camp_type] . ".php";
+		$this->layout();
+	}
 
 	public function ajout_campagne($idclients)
 	{
@@ -1090,6 +774,334 @@ private function resolve_url($relative, $base)
 
 		$this->layout();
 	}
+	
+	private function fetch_all_images_from_site($site_url, $max_images = 8, $max_pages = 20)
+	{
+		if (!preg_match('#^https?://#', $site_url)) {
+			$site_url = 'http://' . $site_url;
+		}
+
+		$visited = [];
+		$to_visit = [$site_url];
+		$images = [];
+
+		while (!empty($to_visit) && count($visited) < $max_pages && count($images) < $max_images) {
+			$current_url = array_shift($to_visit);
+			if (isset($visited[$current_url])) continue;
+			$visited[$current_url] = true;
+
+			$html = @file_get_contents($current_url);
+			if (!$html) continue;
+
+			// 1. Extraire les images
+			$img_urls = $this->extract_image_urls($html, $current_url);
+			foreach ($img_urls as $img_url) {
+				if ($this->looks_like_logo_or_icon($img_url) || $this->is_data_uri($img_url)) continue;
+
+				$meta = $this->get_image_metadata($img_url);
+				if (!$meta) continue;
+
+				if (!$this->is_photo_mime($meta['mime'])) continue;
+				if ($meta['width'] < 150 || $meta['height'] < 150) continue;
+
+				$images[] = $img_url;
+				if (count($images) >= $max_images) break 2;
+			}
+
+			// 2. Extraire les liens internes pour crawler
+			$dom = new DOMDocument();
+			libxml_use_internal_errors(true);
+			$dom->loadHTML($html);
+			$xpath = new DOMXPath($dom);
+			$links = $xpath->query('//a[@href]');
+			foreach ($links as $link) {
+				$href = $link->getAttribute('href');
+				$url = $this->resolve_url($href, $current_url);
+				if (!$this->is_internal_link($url, $site_url)) continue;
+				if (!isset($visited[$url]) && !in_array($url, $to_visit)) {
+					$to_visit[] = $url;
+				}
+			}
+		}
+
+		return array_slice($images, 0, $max_images);
+	}
+
+	private function fetch_images_from_site($site_url, $max_images = 8)
+	{
+		$site_url = trim($site_url);
+		if (empty($site_url)) return [];
+
+		if (!preg_match('#^https?://#', $site_url)) {
+			$site_url = 'http://' . $site_url;
+		}
+
+		$html = @file_get_contents($site_url);
+		if (!$html) return [];
+
+		libxml_use_internal_errors(true);
+		$dom = new DOMDocument();
+		$dom->loadHTML($html);
+		$xpath = new DOMXPath($dom);
+
+		$imgs = $xpath->query('//img');
+		$images = [];
+
+		foreach ($imgs as $img) {
+			$src = $img->getAttribute('src');
+			if (!$src) continue;
+
+			// ignore logos/icônes
+			$src_lc = strtolower($src);
+			if (strpos($src_lc, 'logo') !== false || strpos($src_lc, 'icon') !== false || strpos($src_lc, 'svg') !== false) {
+				continue;
+			}
+
+			// construire l'URL absolue
+			$img_url = $this->resolve_url($src, $site_url);
+
+			// vérifie si l’image est valide
+			$img_info = @getimagesize($img_url);
+			if (!$img_info || $img_info[0] < 150 || $img_info[1] < 150) continue;
+
+			$images[] = $img_url;
+
+			if (count($images) >= $max_images) break;
+		}
+
+		return $images;
+	}
+
+	private function resolve_url($relative, $base)
+	{
+		if (empty($relative)) return '';
+
+		// ignore les data:uri
+		if (preg_match('#^data:#', $relative)) return '';
+		if (preg_match('#^https?://#', $relative)) return $relative;
+		if (strpos($relative, '//') === 0) {
+			$scheme = parse_url($base, PHP_URL_SCHEME) ?: 'http';
+			return $scheme . ':' . $relative;
+		}
+
+		// gestion des chemins relatifs
+		$parsed_base = parse_url($base);
+		$scheme = $parsed_base['scheme'] ?? 'http';
+		$host = $parsed_base['host'] ?? '';
+		$base_path = rtrim(dirname($parsed_base['path'] ?? '/'), '/');
+
+		$path = ($relative[0] === '/') ? $relative : $base_path . '/' . $relative;
+
+		return $scheme . '://' . $host . '/' . ltrim($path, '/');
+	}
+
+
+	private function extract_image_urls($html, $base_url)
+	{
+		$urls = [];
+		libxml_use_internal_errors(true);
+		$dom = new DOMDocument();
+		$dom->loadHTML($html);
+
+		// <img src>
+		$imgs = $dom->getElementsByTagName('img');
+		foreach ($imgs as $img) {
+			$src = $img->getAttribute('src');
+			if (!$src) continue;
+			$urls[] = $this->resolve_url($src, $base_url);
+			// srcset handling: prend la plus grande candidate si existe
+			$srcset = $img->getAttribute('srcset');
+			if ($srcset) {
+				$best = $this->pick_best_from_srcset($srcset, $base_url);
+				if ($best) $urls[] = $best;
+			}
+		}
+
+		// inline styles background-image: url(...)
+		$xpath = new DOMXPath($dom);
+		$nodes = $xpath->query('//*[@style]');
+		foreach ($nodes as $node) {
+			$style = $node->getAttribute('style');
+			if (preg_match_all('/background(?:-image)?:\s*url\((["\']?)(.*?)\1\)/i', $style, $m)) {
+				foreach ($m[2] as $bg) {
+					$urls[] = $this->resolve_url($bg, $base_url);
+				}
+			}
+		}
+
+		return array_values(array_unique($urls));
+	}
+
+	private function pick_best_from_srcset($srcset, $base_url)
+	{
+		// srcset format: url1 1x, url2 2x, or url w, ...
+		$parts = preg_split('/\s*,\s*/', trim($srcset));
+		$bestUrl = null;
+		$bestScore = 0;
+		foreach ($parts as $p) {
+			// "url 2x" or "url 300w" or just "url"
+			$sub = preg_split('/\s+/', trim($p));
+			$url = $sub[0];
+			$score = 1;
+			if (isset($sub[1])) {
+				if (strpos($sub[1], 'w') !== false) {
+					$score = intval($sub[1]);
+				} elseif (strpos($sub[1], 'x') !== false) {
+					$score = floatval($sub[1]) * 1000;
+				}
+			}
+			if ($score > $bestScore) {
+				$bestScore = $score;
+				$bestUrl = $url;
+			}
+		}
+		return $bestUrl ? $this->resolve_url($bestUrl, $base_url) : null;
+	}
+
+	private function is_internal_link($url, $base)
+	{
+		$uHost = parse_url($url, PHP_URL_HOST);
+		$bHost = parse_url($base, PHP_URL_HOST);
+		return $uHost && $bHost && (strcasecmp($uHost, $bHost) === 0);
+	}
+
+	private function looks_like_logo_or_icon($url)
+	{
+		$lower = strtolower($url);
+		// mots courants pour logos/icônes
+		$bad_words = ['logo', 'icon', 'sprite', 'favicon', 'badge', 'btn', 'spacer', 'pixel', 'placeholder', 'thumb', 'avatar'];
+		foreach ($bad_words as $w) {
+			if (strpos($lower, '/' . $w) !== false) return true;
+			if (strpos($lower, '-' . $w) !== false) return true;
+			if (strpos($lower, '_' . $w) !== false) return true;
+			if (strpos($lower, $w . '.') !== false) return true;
+		}
+		// svg files often logos/illustrations — on peut exclure si souhaité
+		if (preg_match('/\.svg(\?|$)/i', $lower)) return true;
+		return false;
+	}
+
+	private function is_data_uri($s)
+	{
+		return preg_match('#^data:#i', $s);
+	}
+
+	private function is_photo_mime($mime)
+	{
+		// accepter jpg/png/webp/gif (gif peut être animé)
+		$allowed = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp', 'image/gif'];
+		return in_array(strtolower($mime), $allowed);
+	}
+
+	private function get_image_metadata($img_url)
+	{
+		// tente HEAD pour obtenir content-type et content-length
+		$ch = curl_init();
+		curl_setopt($ch, CURLOPT_URL, $img_url);
+		curl_setopt($ch, CURLOPT_NOBODY, true);
+		curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+		curl_setopt($ch, CURLOPT_USERAGENT, 'Mozilla/5.0 (compatible; SiteImageBot/1.0)');
+		curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+		curl_exec($ch);
+		$http = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+		$ctype = curl_getinfo($ch, CURLINFO_CONTENT_TYPE);
+		$clen = curl_getinfo($ch, CURLINFO_CONTENT_LENGTH_DOWNLOAD);
+		curl_close($ch);
+		if ($http >= 400) return false;
+
+		// si content-type absent ou pas image, on essaie de télécharger les premiers octets
+		$mime = $ctype ?: '';
+		// pour récupérer width/height, on télécharge un bloc
+		$imgData = $this->fetch_partial($img_url, 0, 200000); // 200KB max
+		if ($imgData === false) return false;
+
+		// utilise getimagesizefromstring pour obtenir dims
+		$info = @getimagesizefromstring($imgData);
+		if ($info === false) return false;
+		$width = $info[0];
+		$height = $info[1];
+		$mime_from_info = $info['mime'] ?? null;
+		if (empty($mime) && $mime_from_info) $mime = $mime_from_info;
+
+		// taille en octets : si content-length dispo, sinon length du blob (estimation)
+		$filesize = ($clen > 0) ? $clen : strlen($imgData);
+
+		return [
+			'width' => intval($width),
+			'height' => intval($height),
+			'mime' => $mime ?: 'application/octet-stream',
+			'filesize' => intval($filesize)
+		];
+	}
+
+	private function fetch_partial($url, $start = 0, $maxBytes = 200000)
+	{
+		$ch = curl_init();
+		curl_setopt($ch, CURLOPT_URL, $url);
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+		curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
+		curl_setopt($ch, CURLOPT_RANGE, "$start-" . ($start + $maxBytes - 1));
+		curl_setopt($ch, CURLOPT_USERAGENT, 'Mozilla/5.0 (compatible; SiteImageBot/1.0)');
+		curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+		$data = curl_exec($ch);
+		$http = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+		curl_close($ch);
+		if ($http >= 400) return false;
+		return $data;
+	}
+	public function generer_mots_exclus()
+	{
+		$information_client = $this->input->post('information_client');
+		$site_client = $this->input->post('site_client');
+
+		$prompt = "À partir de ces informations : $information_client 
+        et en analysant le site : $site_client, génère une liste de 60 mots-clés à exclure pour une campagne Google Ads (type search). 
+        Ne donne que les mots, séparés par des virgules ou des retours à la ligne.";
+
+		$response = $this->call_openai($prompt);
+
+		echo $response ? nl2br(htmlspecialchars($response)) : "❌ Erreur lors de la génération.";
+	}
+
+	private function call_openai($prompt)
+	{
+		$url = "https://api.openai.com/v1/chat/completions";
+		$data = [
+			"model" => "gpt-4o-mini",
+			"messages" => [
+				["role" => "system", "content" => "Tu es un expert Google Ads."],
+				["role" => "user", "content" => $prompt]
+			],
+			"temperature" => 0.7
+		];
+
+		$headers = [
+			"Content-Type: application/json",
+			"Authorization: " . "Bearer " . $this->api_key
+		];
+
+		$ch = curl_init();
+		curl_setopt($ch, CURLOPT_URL, $url);
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+		curl_setopt($ch, CURLOPT_POST, true);
+		curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+		curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
+		$result = curl_exec($ch);
+
+		if (curl_errno($ch)) {
+			log_message('error', 'Erreur CURL OpenAI: ' . curl_error($ch));
+		}
+
+		curl_close($ch);
+
+		if ($result) {
+			$json = json_decode($result, true);
+			return $json['choices'][0]['message']['content'] ?? null;
+		}
+
+		return null;
+	}
 
 	public function creer_upsell()
 	{
@@ -1118,10 +1130,10 @@ private function resolve_url($relative, $base)
 			$idupsell = $this->visuels_model->create_upsell($type_upsell, $budget_finale, $budget_initiale, $demmande_upsell, $am, $tm, $date_upsell, $date_demande_upsell, $inforamtion_upsell, $statut_upsell, $idclients, $actif);
 			$type_tache = 5;
 			$title = "Upsell";
-			if($inforamtion_upsell == Null){
+			if ($inforamtion_upsell == Null) {
 				$tache = "Le client fait une upsell de "  . number_format($budget_upsell, 0, ',', ' ') . " €";
 			}
-			if($inforamtion_upsell != Null){
+			if ($inforamtion_upsell != Null) {
 				$tache = "Le client fait une upsell de " . number_format($budget_upsell, 0, ',', ' ') . " €" . " avec les informations suivantes :\n" . $inforamtion_upsell;
 			}
 			$Statuts_technique = 1;
@@ -1168,10 +1180,10 @@ private function resolve_url($relative, $base)
 			$idupsell = $this->visuels_model->create_upsell($type_upsell, $budget_finale, $budget_initiale, $demmande_upsell, $am, $tm, $date_upsell, $date_demande_upsell, $inforamtion_upsell, $statut_upsell, $idclients, $actif);
 			$type_tache = 6;
 			$title = "Baisse";
-			if($inforamtion_upsell == Null){
+			if ($inforamtion_upsell == Null) {
 				$tache = "Le client fait une baisse de "  . number_format($budget_upsell, 0, ',', ' ') . " €";
 			}
-			if($inforamtion_upsell != Null){
+			if ($inforamtion_upsell != Null) {
 				$tache = "Le client fait une baisse de " . number_format($budget_upsell, 0, ',', ' ') . " €" . " avec les informations suivantes :\n" . $inforamtion_upsell;
 			}
 			$Statuts_technique = 1;
@@ -1292,8 +1304,8 @@ private function resolve_url($relative, $base)
 		$dejaclient = 0;
 		$logo = $this->file_upload_field = 'logo';
 		$tm = $initiative;
-		
-		
+
+
 		$this->form_validation->set_rules('site_client', 'URL', 'required|trim');
 
 		if ($this->form_validation->run() == FALSE) {
@@ -1352,7 +1364,7 @@ private function resolve_url($relative, $base)
 
 		// ✅ Insérer le résumé à la place du paragraphe le plus long
 		$idclients = $this->visuels_model->insertclient($client, $site_client, $email_client, $numero_client, $favicon, $cms, $cms_logo, $summary);
-		$idclient_onboarding = $idclients; 
+		$idclient_onboarding = $idclients;
 		$idclient = $idclients;
 		$this->visuels_model->insertfiche($idclient, $budget, $secteur_activite, $product_choice, $initiative, $am, $date_mis_en_place, $date_brief, $date_annonce, $dejaclient, $gtm_code);
 		$title = "Création de Brief";
@@ -1386,18 +1398,18 @@ private function resolve_url($relative, $base)
 		$inforamtion_upsell = "Budget initial";
 		$idclient = $this->visuels_model->create_upsell($type_upsell, $budget_finale, $budget_initiale, $demmande_upsell, $am, $tm, $date_upsell, $date_demande_upsell, $inforamtion_upsell, $statut_upsell, $idclients, $actif);
 		$data_upsell = array(
-				'idclients' => $idclient_onboarding,
-				'dejaclient' => $dejaclient,
-				'budget' => $budget,
-				'account_manager' => $am,
-				'initiative' => $initiative,
-				'idproduit' => $product_choice,
-				'mis_en_place_paiement' => $date_mis_en_place,
-				'Brief' => $date_brief,
-				'annonce' => $date_annonce
+			'idclients' => $idclient_onboarding,
+			'dejaclient' => $dejaclient,
+			'budget' => $budget,
+			'account_manager' => $am,
+			'initiative' => $initiative,
+			'idproduit' => $product_choice,
+			'mis_en_place_paiement' => $date_mis_en_place,
+			'Brief' => $date_brief,
+			'annonce' => $date_annonce
 
-			);
-			$this->visuels_model->add_upsell_onboarding($data_upsell);
+		);
+		$this->visuels_model->add_upsell_onboarding($data_upsell);
 		redirect('Client');
 	}
 
@@ -1405,67 +1417,67 @@ private function resolve_url($relative, $base)
 	{
 		$model = 'gpt-4';
 
-		   $input_text = "Voici les titres et paragraphes d’un site web.\n\n";
-    $input_text .= "Ta tâche est de rédiger un résumé informatif en **deux paragraphes distincts**, séparés par une **ligne vide** (un simple saut de ligne).\n\n";
+		$input_text = "Voici les titres et paragraphes d’un site web.\n\n";
+		$input_text .= "Ta tâche est de rédiger un résumé informatif en **deux paragraphes distincts**, séparés par une **ligne vide** (un simple saut de ligne).\n\n";
 
-    $input_text .= "✍️ Le résumé total doit contenir **entre 175 et 190 mots maximum**, répartis de façon naturelle entre les deux paragraphes.\n";
-    $input_text .= "Le premier paragraphe doit présenter l'activité ou le secteur du site.\n";
-    $input_text .= "Le second paragraphe doit décrire l’objectif, les services ou la valeur ajoutée.\n\n";
+		$input_text .= "✍️ Le résumé total doit contenir **entre 175 et 190 mots maximum**, répartis de façon naturelle entre les deux paragraphes.\n";
+		$input_text .= "Le premier paragraphe doit présenter l'activité ou le secteur du site.\n";
+		$input_text .= "Le second paragraphe doit décrire l’objectif, les services ou la valeur ajoutée.\n\n";
 
-    $input_text .= "Titres :\n";
-    foreach ($headings as $h) {
-        $input_text .= "- ({$h['tag']}) {$h['text']}\n";
-    }
+		$input_text .= "Titres :\n";
+		foreach ($headings as $h) {
+			$input_text .= "- ({$h['tag']}) {$h['text']}\n";
+		}
 
-    $input_text .= "\nParagraphes :\n";
-    foreach (array_slice($paragraphs, 0, 10) as $p) {
-        $input_text .= "- $p\n";
-    }
+		$input_text .= "\nParagraphes :\n";
+		foreach (array_slice($paragraphs, 0, 10) as $p) {
+			$input_text .= "- $p\n";
+		}
 
-    // Requête à l'API OpenAI
-    $data = [
-        "model" => $model,
-        "messages" => [
-            ["role" => "user", "content" => $input_text]
-        ],
-        "temperature" => 0.7
-    ];
+		// Requête à l'API OpenAI
+		$data = [
+			"model" => $model,
+			"messages" => [
+				["role" => "user", "content" => $input_text]
+			],
+			"temperature" => 0.7
+		];
 
-    $ch = curl_init('https://api.openai.com/v1/chat/completions');
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-    curl_setopt($ch, CURLOPT_HTTPHEADER, [
-        'Content-Type: application/json',
-        'Authorization: Bearer ' . $api_key
-    ]);
-    curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
+		$ch = curl_init('https://api.openai.com/v1/chat/completions');
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+		curl_setopt($ch, CURLOPT_HTTPHEADER, [
+			'Content-Type: application/json',
+			'Authorization: Bearer ' . $api_key
+		]);
+		curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
 
-    $response = curl_exec($ch);
-    if (curl_errno($ch)) {
-        return 'Erreur OpenAI : ' . curl_error($ch);
-    }
+		$response = curl_exec($ch);
+		if (curl_errno($ch)) {
+			return 'Erreur OpenAI : ' . curl_error($ch);
+		}
 
-    curl_close($ch);
-    $result = json_decode($response, true);
-    $raw_output = $result['choices'][0]['message']['content'] ?? 'Résumé non disponible.';
+		curl_close($ch);
+		$result = json_decode($response, true);
+		$raw_output = $result['choices'][0]['message']['content'] ?? 'Résumé non disponible.';
 
-    // Séparation des deux paragraphes
-    $paragraphs_split = preg_split('/\n\s*\n/', trim($raw_output));
+		// Séparation des deux paragraphes
+		$paragraphs_split = preg_split('/\n\s*\n/', trim($raw_output));
 
-    if (count($paragraphs_split) >= 2) {
-        $para1 = trim($paragraphs_split[0]);
-        $para2 = trim($paragraphs_split[1]);
+		if (count($paragraphs_split) >= 2) {
+			$para1 = trim($paragraphs_split[0]);
+			$para2 = trim($paragraphs_split[1]);
 
-        // Comptage des mots (utile pour test ou journalisation)
-        $word_count1 = str_word_count(strip_tags($para1));
-        $word_count2 = str_word_count(strip_tags($para2));
-        $total_words = $word_count1 + $word_count2;
+			// Comptage des mots (utile pour test ou journalisation)
+			$word_count1 = str_word_count(strip_tags($para1));
+			$word_count2 = str_word_count(strip_tags($para2));
+			$total_words = $word_count1 + $word_count2;
 
-        // Retourne toujours le contenu, sans alerte
-        return $para1 . "\n\n" . $para2;
-    }
+			// Retourne toujours le contenu, sans alerte
+			return $para1 . "\n\n" . $para2;
+		}
 
-    // Fallback si le texte généré n'a pas deux paragraphes distincts
-    return $raw_output;
+		// Fallback si le texte généré n'a pas deux paragraphes distincts
+		return $raw_output;
 	}
 
 
@@ -1508,14 +1520,11 @@ private function resolve_url($relative, $base)
 			return 'Shopify';
 		} elseif (strpos($html, 'Magento') !== false || strpos($html, 'mage/') !== false) {
 			return 'Magento';
-		}
-		elseif (strpos($html, 'Magento') !== false || strpos($html, 'mage/') !== false) {
+		} elseif (strpos($html, 'Magento') !== false || strpos($html, 'mage/') !== false) {
 			return 'Magento';
-		}
-		elseif (strpos($html, 'PrestaShop') !== false || strpos($html, 'mage/') !== false) {
+		} elseif (strpos($html, 'PrestaShop') !== false || strpos($html, 'mage/') !== false) {
 			return 'PrestaShop';
-		}
-		elseif (strpos($html, 'Google') !== false || strpos($html, 'mage/') !== false) {
+		} elseif (strpos($html, 'Google') !== false || strpos($html, 'mage/') !== false) {
 			return 'Google';
 		}
 		$headers = @get_headers($url, 1);
