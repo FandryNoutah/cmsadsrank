@@ -8,6 +8,11 @@
 	<link rel="stylesheet" href="<?= base_url('assets/vendors/fontawesome/css/all.min.css') ?>" />
 
 	<style>
+
+		body {
+			overflow-y: hidden;
+		}
+
 		#sidebarMenu.collapsed {
 			width: 75px !important;
 			transition: width 0.3s ease;
@@ -63,7 +68,7 @@
 				<div class="wrapper">
 
 					<?php if (isset($content) && $content != ""): ?>
-						<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center mb-3 px-3 pt-1 border-bottom">
+						<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center px-3 pt-1 border-bottom">
 							<?= $page_title ?>
 							<?= $page_heading ?>
 						</div>

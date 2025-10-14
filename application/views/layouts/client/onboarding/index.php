@@ -118,7 +118,7 @@
 										<div class="dropdown no-arrow">
 											<img class="mr-2 eye-icon"
 												src="<?= base_url('assets/images/ico/Eye.png') ?>"
-												data-id="<?= $d['idclients'] ?>" 
+												data-id="<?= $d['idclients'] ?>"
 												alt="Voir les détails"
 												style="cursor: pointer;" />
 										</div>
@@ -192,98 +192,116 @@
 						Campagne
 					</h1>
 					<div class="table-responsive">
-						<table class="table table-hover table-wrapper">
+						<table class="table table-wrapper">
 							<thead class="bg-light text-muted">
 								<tr>
-									<th class="text-muted">ACTION</th>
-									<th class="text-muted">TYPE</th>
-									<th class="text-muted">CAMPAGNE</th>
-									<th class="text-muted">BUDGET</th>
-									<th class="text-muted">DEMANDE</th>
-									<th class="text-muted">STATUT</th>
-									<th class="text-muted">GROUPES D'ANNONCES</th>
-									<th class="text-muted">MOT CLE</th>
-									
+									<th>ACTION</th>
+									<th>TYPE</th>
+									<th>CAMPAGNE</th>
+									<th>BUDGET</th>
+									<th>DEMANDE</th>
+									<th>STATUT</th>
+									<th></th> <!-- expand icon -->
 								</tr>
 							</thead>
 							<tbody>
 								<?php if (!empty($donne_valider)): ?>
 									<?php foreach ($donne_valider as $campagne): ?>
+										<!-- parent row -->
 										<tr>
 											<td>
-												<div class="dropdown">
-													<a class="dropdown-toggle text-decoration-none" href="#" role="button" id="dropdownMenuLink<?= $campagne['idcampagne'] ?>" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+												<div class="dropdown no-arrow">
+													<a class="dropdown-toggle text-decoration-none" href="#" data-toggle="dropdown">
 														<i class="fa fa-ellipsis-v"></i>
 													</a>
-													<div class="dropdown-menu" aria-labelledby="dropdownMenuLink<?= $campagne['idcampagne'] ?>">
-														<a class="dropdown-item" href="<?= site_url("Googleads/editcampagne/".$campagne['idcampagne']) ?>">Modifier</a>
-														<a class="dropdown-item text-danger" href="<?= site_url("Googleads/deletecampagne/".$campagne['idcampagne']) ?>" onclick="return confirm('Êtes-vous sûr de vouloir supprimer cette campagne ?');">Supprimer</a>
+													<div class="dropdown-menu">
+														<a class="dropdown-item" href="<?= site_url("Googleads/editcampagne/" . $campagne['idcampagne']) ?>">Modifier</a>
+														<a class="dropdown-item text-danger" href="<?= site_url("Googleads/deletecampagne/" . $campagne['idcampagne']) ?>" onclick="return confirm('Supprimer cette campagne ?');">Supprimer</a>
 														<?php if ($campagne['type_campagne'] == 1): ?>
-															<a class="dropdown-item" href="<?= site_url("Googleads/ajout_groupeannonce/".$campagne['idcampagne']) ?>">Ajouter Groupe</a>
+															<a class="dropdown-item" href="<?= site_url("Googleads/ajout_groupeannonce/" . $campagne['idcampagne']) ?>">Ajouter Groupe</a>
 														<?php elseif ($campagne['type_campagne'] == 2): ?>
-															<a class="dropdown-item" href="<?= site_url("Googleads/ajout_groupeannonce_local/".$campagne['idcampagne']) ?>">Ajouter Groupe Local</a>
+															<a class="dropdown-item" href="<?= site_url("Googleads/ajout_groupeannonce_local/" . $campagne['idcampagne']) ?>">Ajouter Groupe Local</a>
 														<?php elseif ($campagne['type_campagne'] == 3): ?>
-															<a class="dropdown-item" href="<?= site_url("Googleads/ajout_groupeannonce_pmax/".$campagne['idcampagne']) ?>">Ajouter Groupe PMax</a>
+															<a class="dropdown-item" href="<?= site_url("Googleads/ajout_groupeannonce_pmax/" . $campagne['idcampagne']) ?>">Ajouter Groupe PMax</a>
 														<?php endif; ?>
 													</div>
 												</div>
 											</td>
 											<td>
-												<?php 
-													switch ($campagne['type_campagne']) {
-														case 1: echo "Search"; break;
-														case 2: echo "Local"; break;
-														case 3: echo "PMax"; break;
-														default: echo "Inconnu"; break;
-													}
+												<?php
+												switch ($campagne['type_campagne']) {
+													case 1:
+														echo "Search";
+														break;
+													case 2:
+														echo "Local";
+														break;
+													case 3:
+														echo "PMax";
+														break;
+													default:
+														echo "Inconnu";
+														break;
+												}
 												?>
 											</td>
 											<td><?= htmlspecialchars($campagne['nom_campagne']) ?></td>
 											<td><?= isset($campagne['repartition_budget']) ? (float)$campagne['repartition_budget'] : 0 ?> €</td>
 											<td><span class="badge alert-primary">GTM</span></td>
 											<td>
-												<?php if (isset($campagne['actif']) && $campagne['actif'] == 1): ?>
-													<span class="badge alert-primary">
-														<i class="fa fa-circle"></i> En cours
-													</span>
+												<?php if (!empty($campagne['actif'])): ?>
+													<span class="badge alert-primary"><i class="fa fa-circle"></i> En cours</span>
 												<?php else: ?>
-													<span class="badge alert-success">
-														<i class="fa fa-circle"></i> Terminée
-													</span>
+													<span class="badge alert-success"><i class="fa fa-circle"></i> Terminée</span>
 												<?php endif; ?>
 											</td>
-											<td>
-												<?php if (!empty($campagne['groupes_annonces'])): ?>
-													<?php foreach ($campagne['groupes_annonces'] as $groupe): ?>
-														<div style="margin-bottom: 10px;">
-															<a href="<?= base_url('Client/insertgroupeannonce/' . $groupe['idgroupe_annonce']) ?>"><strong><?= htmlspecialchars($groupe['nom_groupe']) ?></strong></a>
-															<?php if($groupe['statut'] == 1): ?>
-															<img class="mr-2" src="<?= base_url('assets/images/icons/figma/CheckCircle.png') ?>" />
-															<?php endif; ?>	
-															<br>
-														</div>
-														
-														<hr>
-													<?php endforeach; ?>
-												<?php else: ?>
-													<em>Aucun groupe</em>
-												<?php endif; ?>
+											<td class="text-center">
+												<a data-toggle="collapse" href="#child<?= $campagne['idcampagne'] ?>" role="button" aria-expanded="false" aria-controls="child<?= $campagne['idcampagne'] ?>">
+													<i class="fa fa-chevron-down text-muted"></i>
+												</a>
 											</td>
-											<td>
+										</tr>
+
+										<!-- child row -->
+										<tr id="child<?= $campagne['idcampagne'] ?>" class="collapse border-0">
+											<td colspan="7" class="border-0 p-0 pl-5">
 												<?php if (!empty($campagne['groupes_annonces'])): ?>
-													<?php foreach ($campagne['groupes_annonces'] as $groupe): ?>
-														<div style="margin-bottom: 10px;">
-															<?php 
-																$mots = explode("\n", $groupe['mot_cle']);
-																foreach ($mots as $mot) {
-																	if (trim($mot) !== '') {
-																		echo '<span class="badge badge-secondary">"' . htmlspecialchars(trim($mot)) . '"</span> ';
-																	}
-																}
-															?>
-														</div>
-														<hr>
-													<?php endforeach; ?>
+													<table class="table table-wrapper mb-0">
+														<tbody>
+															<?php foreach ($campagne['groupes_annonces'] as $groupe): ?>
+																<tr>
+																	<td>
+																		<strong><?= htmlspecialchars($groupe['nom_groupe']) ?></strong>
+																	</td>
+																	<td>
+																		<?= htmlspecialchars($groupe['contexte_groupes_annonces']) ?>
+																	</td>
+																	<td>
+																		<?php
+																		$mots = explode("\n", $groupe['mot_cle']);
+																		foreach ($mots as $mot) {
+																			if (trim($mot) !== '') {
+																				echo '<span class="badge badge-secondary mr-1">' . htmlspecialchars(trim($mot)) . '</span>';
+																			}
+																		}
+																		?>
+																	</td>
+																	<td>
+																		<?php if ($groupe['statut'] == 1): ?>
+																			<img src="<?= base_url('assets/images/icons/figma/CheckCircle.png') ?>" alt="Actif">
+																		<?php else: ?>
+																			<span class="text-muted">Inactif</span>
+																		<?php endif; ?>
+																	</td>
+																	<td>
+																		<a href="<?= base_url('Client/insertgroupeannonce/' . $groupe['idgroupe_annonce']) ?>" class="btn btn-dark btn-sm">
+																			Valider
+																		</a>
+																	</td>
+																</tr>
+															<?php endforeach; ?>
+														</tbody>
+													</table>
 												<?php else: ?>
 													<em>Aucun groupe</em>
 												<?php endif; ?>
@@ -292,11 +310,12 @@
 									<?php endforeach; ?>
 								<?php else: ?>
 									<tr>
-										<td colspan="9" class="text-center text-muted">Aucune campagne trouvée.</td>
+										<td colspan="7" class="text-center text-muted">Aucune campagne trouvée.</td>
 									</tr>
 								<?php endif; ?>
 							</tbody>
 						</table>
+
 					</div>
 
 					<button class="btn btn-dark" id="create_camp_button">
@@ -463,22 +482,22 @@
 			</div>
 		</div>
 	</div>
-</div>
-<div class="modal fade" id="clientModal" tabindex="-1" role="dialog" aria-labelledby="clientModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-lg" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="clientModalLabel">Détails du Client</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Fermer">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body" id="clientModalContent">
-        Chargement...
-      </div>
-    </div>
-  </div>
-</div>
+	</div>
+	<div class="modal fade" id="clientModal" tabindex="-1" role="dialog" aria-labelledby="clientModalLabel" aria-hidden="true">
+		<div class="modal-dialog modal-lg" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="clientModalLabel">Détails du Client</h5>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Fermer">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body" id="clientModalContent">
+					Chargement...
+				</div>
+			</div>
+		</div>
+	</div>
 
 <?php endforeach; ?>
 <?php $this->load->view('layouts/client/onboarding/brief-modal') ?>
@@ -486,28 +505,28 @@
 
 <?php start_section('script') ?>.
 <script>
-$(document).ready(function(){
-    $('.eye-icon').on('click', function(){
-        var clientId = $(this).data('id');
+	$(document).ready(function() {
+		$('.eye-icon').on('click', function() {
+			var clientId = $(this).data('id');
 
-        // Affiche la modal
-        $('#clientModal').modal('show');
+			// Affiche la modal
+			$('#clientModal').modal('show');
 
-        // Charge le contenu via AJAX
-        $('#clientModalContent').html('Chargement...');
+			// Charge le contenu via AJAX
+			$('#clientModalContent').html('Chargement...');
 
-        $.ajax({
-            url: '<?= site_url("Client/details_ajax") ?>/' + clientId,
-            type: 'GET',
-            success: function(response){
-                $('#clientModalContent').html(response);
-            },
-            error: function(){
-                $('#clientModalContent').html("Erreur lors du chargement.");
-            }
-        });
-    });
-});
+			$.ajax({
+				url: '<?= site_url("Client/details_ajax") ?>/' + clientId,
+				type: 'GET',
+				success: function(response) {
+					$('#clientModalContent').html(response);
+				},
+				error: function() {
+					$('#clientModalContent').html("Erreur lors du chargement.");
+				}
+			});
+		});
+	});
 </script>
 
 <script>
