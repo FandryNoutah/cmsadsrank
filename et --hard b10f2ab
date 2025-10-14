@@ -1,0 +1,469 @@
+[33m9bfd77c[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmaster[m[33m)[m Etape annonce
+[33md920288[m etape annonce
+[33mb10f2ab[m[33m ([m[1;31morigin/master[m[33m, [m[1;31morigin/HEAD[m[33m)[m Annonce
+[33m1cc262c[m Annonce
+[33me9e69b8[m Merge branch 'master' of https://github.com/FandryNoutah/cmsadsrank
+[33md9e4d7b[m Working on table
+[33ma9fcdff[m Modif 14
+[33md15576e[m Modif 14
+[33m7aa28e1[m Merge conflict
+[33m6fdd81c[m Removed large file
+[33m7889aa9[m Merge conflict
+[33m9091c7e[m Test push
+[33meec9e33[m Modif campagne
+[33m1e23466[m Modif campagne
+[33m5c51e40[m Campagne modif, push
+[33mf928023[m Use environment variable for OpenAI API key instead of hardcoding
+[33m61323f1[m Finished onboarding table
+[33m99b8a1f[m Campagne
+[33m53565ba[m Correction : onboarding, title, note, client detail, conge
+[33m7297b39[m Finished onboarding table
+[33m1deba1b[m Onboarding
+[33ma3546fe[m Correction : onboarding, title, note, client detail, conge
+[33m99f7d62[m Test push
+[33m3c2a900[m Restore
+[33m08fafa5[m[33m ([m[1;32mrecover-lost[m[33m)[m Gtm
+[33m8f70596[m Gtm
+[33m4902006[m Finished note in client detail
+[33m19761b1[m Finished note in client detail
+[33m54e874f[m Finished note in client detail
+[33mb164772[m Finished campagne creation and listing on search
+[33mc955900[m Finished campagne creation and listing on search
+[33mc64eb33[m Finished campagne creation and listing on search
+[33m68c5ba6[m Modif
+[33mdfacfe7[m Modif
+[33m2359d1b[m Modif
+[33m1aaaa81[m Merge branch 'master' of https://github.com/FandryNoutah/cmsadsrank
+[33m2c38a19[m Detail
+[33me45ecd3[m Corrected client detail task
+[33m4c58b9b[m Corrected client detail task
+[33m1968566[m Corrected client detail task
+[33m25fac96[m Client
+[33mad73b4e[m Client
+[33m11f2c28[m Gpt
+[33mc6c54fd[m Small correction in task description
+[33md529da3[m Small correction in task description
+[33m445547b[m Fixed all bugs before deploy
+[33m4ece2d3[m Fixed all bugs before deploy
+[33m31fccf9[m Dejaclient
+[33m0d78eac[m Client
+[33md52c231[m Some correction
+[33m99b68e3[m Some correction
+[33me96edb4[m Merge branch 'master' of https://github.com/FandryNoutah/cmsadsrank
+[33m5ad2e96[m Upsell
+[33mdb575af[m Working on campagne intersection
+[33mb682147[m Working on campagne intersection
+[33m57edb36[m Working on campagne intersection
+[33m5115a2a[m Clarify campagne code
+[33m86c818d[m Clarify campagne code
+[33m689b9bb[m Clarify campagne code
+[33m5b345f1[m Finished basic discussion correction
+[33me3252c2[m Finished basic discussion correction
+[33m112c6a1[m Upsell
+[33me117bfc[m Merge branch 'master' of https://github.com/FandryNoutah/cmsadsrank
+[33me0b26ba[m Merge branch 'master' of https://github.com/FandryNoutah/cmsadsrank
+[33me7c7b13[m Working on discussion
+[33m821219c[m Working on discussion
+[33m9380cb8[m Task modif
+[33mcdc3ef2[m Task modif
+[33m77f58d7[m Task modif
+[33mb7d7c5d[m Date color
+[33mc02224d[m Date color
+[33me90c28a[m Icone task
+[33m69bfaf9[m Icone task
+[33m6ba9be5[m Merge branch 'master' of https://github.com/FandryNoutah/cmsadsrank
+[33m81c02b0[m Merge branch 'master' of https://github.com/FandryNoutah/cmsadsrank
+[33mc7b8457[m Task filter
+[33m663030b[m Task filter
+[33m0160f4b[m Upsell
+[33mb60a84b[m Upsell
+[33m56b5ca7[m Resolved user filter error
+[33m93ab556[m Resolved user filter error
+[33m3e7dfde[m Merge branch 'master' of https://github.com/FandryNoutah/cmsadsrank
+[33m7eff21f[m Merge branch 'master' of https://github.com/FandryNoutah/cmsadsrank
+[33m48e503e[m Bug on event user filter
+[33mf85aeb8[m Bug on event user filter
+[33m216e726[m Upsell
+[33mbfc5b9a[m Upsell
+[33m1ca9627[m Upsell
+[33mcfdde38[m Users
+[33m9ce49b1[m Users
+[33m988c3ce[m Changed discussion into all users
+[33m6c7787f[m Changed discussion into all users
+[33m1d48f65[m Corrected note | Working on conge | Corrected calendar
+[33m649806f[m Corrected note | Working on conge | Corrected calendar
+[33m224d03e[m Merge branch 'master' of https://github.com/FandryNoutah/cmsadsrank
+[33m8d24a8a[m Merge branch 'master' of https://github.com/FandryNoutah/cmsadsrank
+[33maf21563[m Small correction
+[33m8271039[m Small correction
+[33m63d18bb[m Merge branch 'master' of https://github.com/FandryNoutah/cmsadsrank
+[33m42d85d2[m Merge branch 'master' of https://github.com/FandryNoutah/cmsadsrank
+[33mcf6f100[m Uspell
+[33m3f784f0[m Uspell
+[33maeb6596[m Uspell
+[33m55e2057[m Nothing changed
+[33m74a23ca[m Nothing changed
+[33me4a3931[m Woking on Salome Congé
+[33me49f133[m Woking on Salome Congé
+[33mb2813a6[m Edit users with color
+[33m071ad89[m Edit users with color
+[33mf96296d[m Merge branch 'master' of https://github.com/FandryNoutah/cmsadsrank
+[33mfec5e43[m Merge branch 'master' of https://github.com/FandryNoutah/cmsadsrank
+[33m8c9ed26[m Congé Salomé
+[33m20b9c61[m Congé Salomé
+[33m8d31658[m Finished basic correction
+[33mb48937b[m Finished basic correction
+[33m995ac8e[m Congé
+[33m449ea48[m Congé
+[33meb39282[m Congé
+[33m7485efd[m Congé
+[33m67b8a3c[m Merge branch 'master' of https://github.com/FandryNoutah/cmsadsrank
+[33m94386b1[m Merge branch 'master' of https://github.com/FandryNoutah/cmsadsrank
+[33me77c0fa[m Congé
+[33m736ad3f[m Congé
+[33m9c831d2[m Finished changing to select
+[33m1d8f0e6[m Finished changing to select
+[33m95ad87a[m Finalized calendar
+[33m35048aa[m Finalized calendar
+[33m2b4807a[m Calendar
+[33m76abf87[m Calendar
+[33m6e2eade[m Small correction
+[33mf39549b[m Small correction
+[33ma854dd5[m Basic google agenda styl
+[33m25ab7ee[m Basic google agenda styl
+[33m8bd6d04[m Resolved conflicts
+[33mc985468[m Resolved conflicts
+[33md8fcd44[m Working on calendar
+[33m76f9dce[m Working on calendar
+[33mbd41d47[m Calendar
+[33m69b27eb[m Calendar
+[33m5c3a7ac[m Resolved add modal
+[33m8466488[m Resolved add modal
+[33me6b8a6d[m Merge conflict
+[33m3b54a7d[m Merge conflict
+[33m58ea50d[m En cours calendar
+[33mcac3860[m En cours calendar
+[33m6b27118[m Merge branch 'master' of https://github.com/FandryNoutah/cmsadsrank
+[33ma3759d5[m Merge branch 'master' of https://github.com/FandryNoutah/cmsadsrank
+[33m427c72a[m Resolved discussion bug
+[33me262357[m Resolved discussion bug
+[33m6763ac5[m Merge branch 'master' of https://github.com/FandryNoutah/cmsadsrank
+[33m24dca1d[m Merge branch 'master' of https://github.com/FandryNoutah/cmsadsrank
+[33m9f03aad[m Calendrier
+[33m793d9f2[m Calendrier
+[33m649a680[m Finished messages count
+[33m4c61dd8[m Finished messages count
+[33me810691[m Calendrier
+[33mb3d6f3f[m Calendrier
+[33m09bc192[m Finished discussion
+[33m27dfd49[m Finished discussion
+[33mff1f6c3[m Merge branch 'master' of https://github.com/FandryNoutah/cmsadsrank
+[33mc65e1c7[m Merge branch 'master' of https://github.com/FandryNoutah/cmsadsrank
+[33mdc1341c[m Calendrier
+[33m6e99703[m Calendrier
+[33ma085070[m Merge branch 'master' of https://github.com/FandryNoutah/cmsadsrank
+[33m135c4e3[m Merge branch 'master' of https://github.com/FandryNoutah/cmsadsrank
+[33ma748444[m Finalized basic discussion, missing some backend
+[33ma5cde1d[m Finalized basic discussion, missing some backend
+[33m381acbc[m Merge branch 'master' of https://github.com/FandryNoutah/cmsadsrank
+[33m3e84d1c[m Merge branch 'master' of https://github.com/FandryNoutah/cmsadsrank
+[33m3b4881d[m Calendrier
+[33m1ee82ab[m Calendrier
+[33ma860c62[m Finished discussion front
+[33m47ca90f[m Finished discussion front
+[33mbcf605e[m Calendrier
+[33m95d9859[m Calendrier
+[33m0f33013[m Merge branch 'master' of https://github.com/FandryNoutah/cmsadsrank
+[33m88c385e[m Merge branch 'master' of https://github.com/FandryNoutah/cmsadsrank
+[33m04b3dc8[m Calendrier
+[33mce6cb7b[m Calendrier
+[33mb0d1ad9[m Calendrier
+[33m5c60910[m Finished task edit
+[33m5f63ae7[m Finished task edit
+[33mdba0426[m Merge branch 'master' of https://github.com/FandryNoutah/cmsadsrank
+[33m435efd1[m Merge branch 'master' of https://github.com/FandryNoutah/cmsadsrank
+[33mbdb5d8a[m Discussion
+[33m3b7d64f[m Discussion
+[33m38770b4[m Merge branch 'master' of https://github.com/FandryNoutah/cmsadsrank
+[33m73d702a[m Merge branch 'master' of https://github.com/FandryNoutah/cmsadsrank
+[33mc11b358[m Finished client detail
+[33mde77693[m Finished client detail
+[33m80032c2[m Dashboard
+[33m1ed7059[m Dashboard
+[33m447c468[m Dashboard
+[33me0cc8fa[m Merge branch 'master' of https://github.com/FandryNoutah/cmsadsrank
+[33m3700f7a[m Merge branch 'master' of https://github.com/FandryNoutah/cmsadsrank
+[33m15740d3[m Discussion
+[33m6c23199[m Discussion
+[33m0e3f8d3[m Finished basic dashboard
+[33m2b29584[m Finished basic dashboard
+[33mf8bdfe9[m Finished task & note
+[33m4451b43[m Finished task & note
+[33m97ef849[m Merge branch 'master' of https://github.com/FandryNoutah/cmsadsrank
+[33ma1d6f55[m Merge branch 'master' of https://github.com/FandryNoutah/cmsadsrank
+[33m3d95c33[m Finished note avatar
+[33m896c439[m Finished note avatar
+[33m9c50971[m Merge branch 'master' of https://github.com/FandryNoutah/cmsadsrank
+[33md7f100c[m Merge branch 'master' of https://github.com/FandryNoutah/cmsadsrank
+[33mcaac849[m Dashboard
+[33m490e4a9[m Dashboard
+[33ma892b0f[m Dashboard
+[33mcde34fd[m Finished client page and ntoe page
+[33m27163bc[m Finished client page and ntoe page
+[33m9a936b2[m Merge branch 'master' of https://github.com/FandryNoutah/cmsadsrank
+[33m50ff688[m Merge branch 'master' of https://github.com/FandryNoutah/cmsadsrank
+[33m1e2f730[m Added user as member in note
+[33m7baaf42[m Added user as member in note
+[33mefaef50[m Filter note by author username
+[33mbd4a600[m Filter note by author username
+[33mc90c6f9[m Dashboard
+[33me886cfd[m Dashboard
+[33ma17f820[m Dashboard
+[33mc3e589d[m Dashboard
+[33mf3569d9[m Corrected client table
+[33m891096f[m Corrected client table
+[33mcb3a0c5[m Finished all
+[33mfc0dc1b[m Finished all
+[33mac267e7[m Finished task edit
+[33m53833e4[m Finished task edit
+[33mce0b0d1[m Detail_client
+[33m80b47d4[m Detail_client
+[33me887710[m Detail_client
+[33m43dcfe9[m Backtask
+[33mcc878d9[m Backtask
+[33m73599d1[m Backtask
+[33m26b29bd[m Login
+[33m29bf1e4[m Login
+[33m95ad03d[m Merge branch 'master' of https://github.com/FandryNoutah/cmsadsrank
+[33m002d1d7[m Merge branch 'master' of https://github.com/FandryNoutah/cmsadsrank
+[33ma323392[m Ao
+[33m76952b2[m Ao
+[33mefe4435[m Ao
+[33m2bee665[m Finished
+[33m17d114d[m Finished
+[33m1789420[m Finished all, waiting for GTM back
+[33m4ac8eb4[m Finished all, waiting for GTM back
+[33md5b2e60[m Basic correction
+[33mcff03b8[m Basic correction
+[33mc299946[m Finished campagne first page
+[33m320c9f3[m Finished campagne first page
+[33m05313ed[m Finished campagne first page
+[33m137b9be[m Finished basic GTM with task back
+[33ma4a0c4f[m Finished basic GTM with task back
+[33mc2a32b1[m Merge branch 'master' of https://github.com/FandryNoutah/cmsadsrank
+[33mccd4f27[m Merge branch 'master' of https://github.com/FandryNoutah/cmsadsrank
+[33m19b529e[m Finished filter
+[33md395d10[m Finished filter
+[33ma0dac49[m Finished filter
+[33m8dac72b[m GTM
+[33m2e55e33[m GTM
+[33m6fd64c3[m Working on onboarding second page
+[33ma72e41f[m Working on onboarding second page
+[33mee8faa7[m Merge branch 'master' of https://github.com/FandryNoutah/cmsadsrank
+[33mdfd7e8f[m Merge branch 'master' of https://github.com/FandryNoutah/cmsadsrank
+[33m4b4db11[m Finished first onboarding page
+[33m4f2acba[m Finished first onboarding page
+[33m4d42add[m Merge branch 'master' of https://github.com/FandryNoutah/cmsadsrank
+[33m4ae01a0[m Merge branch 'master' of https://github.com/FandryNoutah/cmsadsrank
+[33mfab25bd[m Merge branch 'master' of https://github.com/FandryNoutah/cmsadsrank
+[33me921022[m users
+[33m9825af3[m users
+[33m56692c8[m Finished all appart filter and sort by
+[33m12fb12b[m Finished all appart filter and sort by
+[33m21b596c[m Finished all appart filter and sort by
+[33m976203e[m Merge branch 'master' of https://github.com/FandryNoutah/cmsadsrank
+[33m169762b[m Merge branch 'master' of https://github.com/FandryNoutah/cmsadsrank
+[33m868814c[m Merge branch 'master' of https://github.com/FandryNoutah/cmsadsrank
+[33mc802d6c[m Resiliation
+[33m50e418b[m Resiliation
+[33m83f47e7[m Resiliation
+[33m5d2c98b[m Finished client select
+[33m62f9171[m Finished client select
+[33m48194da[m Note discussion
+[33m80b3fed[m Note discussion
+[33md3aea22[m Note discussion
+[33m0a46903[m Ao
+[33m9132135[m Ao
+[33m75317e8[m More correction
+[33m67f6f82[m More correction
+[33m764c5fa[m More correction
+[33m0503717[m Note
+[33m67bc1fb[m Note
+[33m417c680[m Some correction
+[33mbdf6588[m Some correction
+[33m06a4b10[m Ao
+[33ma664d36[m Ao
+[33md66b924[m Finished note creation, modification and delete
+[33mb0a2973[m Finished note creation, modification and delete
+[33m7b0f4bb[m Merge conflict
+[33md448388[m Merge conflict
+[33md729a98[m Some correction
+[33m4c931b7[m Some correction
+[33m22ade51[m Back-Note
+[33m60aedcb[m Back-Note
+[33ma917960[m Ao
+[33m3013bdd[m Ao
+[33m02d5e1b[m Resolved fixed sidebar | working on note modal
+[33m0f97861[m Resolved fixed sidebar | working on note modal
+[33m97be383[m Ao
+[33me3ac3be[m Ao
+[33m6a2bc59[m Ao
+[33m43f7891[m Ao
+[33m4c68ac3[m Finished task filter
+[33md2ad63a[m Finished task filter
+[33meddb2b0[m Commented Note | resolved task | sidebar fixe
+[33m3c15541[m Commented Note | resolved task | sidebar fixe
+[33m9177744[m Ao
+[33mffcf7fe[m Ao
+[33mf2f9c67[m Merge branch 'master' of https://github.com/FandryNoutah/cmsadsrank
+[33mc1b239e[m Merge branch 'master' of https://github.com/FandryNoutah/cmsadsrank
+[33m345b1c2[m m
+[33m33d6432[m m
+[33m098f3e7[m Finished detail modal
+[33mf7f4125[m Finished detail modal
+[33m361c096[m  Added client and users in task form
+[33m2b597b5[m  Added client and users in task form
+[33m498f4c3[m Gtm
+[33m92177aa[m Gtm
+[33m2ef1125[m Gtm
+[33m30e7b5d[m Gtm
+[33me691113[m Gtm
+[33m50f0147[m Gtm
+[33m1b8b6e7[m Finished Notes | Working on onboarding steps
+[33m4c869d3[m Finished Notes | Working on onboarding steps
+[33ma7ada7f[m Merge branch 'master' of https://github.com/FandryNoutah/cmsadsrank
+[33m65b15f0[m Merge branch 'master' of https://github.com/FandryNoutah/cmsadsrank
+[33m4f3774c[m Added ajouter button
+[33ma1e727d[m Added ajouter button
+[33m95456de[m Finished basic onboarding page without stepper
+[33md9587bf[m Finished basic onboarding page without stepper
+[33m174397a[m Finished basic onboarding page without stepper
+[33mb3f551a[m Merge branch 'master' of https://github.com/FandryNoutah/cmsadsrank
+[33md68417c[m Merge branch 'master' of https://github.com/FandryNoutah/cmsadsrank
+[33mc31c77f[m task
+[33m5b2f8e1[m task
+[33m667b6b7[m Finished task detail modal
+[33ma2f097b[m Finished task detail modal
+[33mee07b77[m Working on task details
+[33m54c5f84[m Working on task details
+[33m90acf1b[m Finished task note modal
+[33m6dfa47e[m Finished task note modal
+[33m2c9f499[m note
+[33m8cb8931[m note
+[33m6bc5653[m Merge branch 'master' of https://github.com/FandryNoutah/cmsadsrank
+[33m21014b0[m Merge branch 'master' of https://github.com/FandryNoutah/cmsadsrank
+[33mdf5e23b[m note
+[33m04ff82e[m note
+[33mc96da3f[m Finished basic chat function
+[33m4a6ca16[m Finished basic chat function
+[33mc2082c5[m Merge branch 'master' of https://github.com/FandryNoutah/cmsadsrank
+[33md9e6f80[m Merge branch 'master' of https://github.com/FandryNoutah/cmsadsrank
+[33m8a3b6c5[m Corrected discussion modal
+[33m94f5aa9[m Corrected discussion modal
+[33maf028c1[m task
+[33mc005ab0[m task
+[33m6dc14f3[m acceuil modifier
+[33mc6fb9a4[m acceuil modifier
+[33m2347e7c[m Finished discussion modal with AJAX request
+[33m351ab9f[m Finished discussion modal with AJAX request
+[33ma718966[m Added data to task tableé
+[33md7cc297[m Added data to task tableé
+[33m4e40212[m Change task list into table
+[33m9d7a0ac[m Change task list into table
+[33m7b9fc27[m tache
+[33m0e0dcef[m tache
+[33m713e368[m Added menu button in task list
+[33m481f337[m Added menu button in task list
+[33mc0d7148[m Merge branch 'master' of https://github.com/FandryNoutah/cmsadsrank
+[33m9bd29c6[m Merge branch 'master' of https://github.com/FandryNoutah/cmsadsrank
+[33mc20a25f[m Finished Task formulaire
+[33me430009[m Finished Task formulaire
+[33m1c98062[m v3
+[33m2418d68[m v3
+[33m6d8d289[m v3
+[33m24c04b7[m Finished basic correction
+[33m1813a00[m Finished basic correction
+[33mddb80ec[m v3
+[33m142ea88[m v3
+[33m2c36b18[m v3
+[33m4858942[m Merge branch 'master' of https://github.com/FandryNoutah/cmsadsrank
+[33md72223d[m Merge branch 'master' of https://github.com/FandryNoutah/cmsadsrank
+[33m43b8076[m Merge branch 'master' of https://github.com/FandryNoutah/cmsadsrank
+[33m864a5a5[m ao
+[33mf93124d[m ao
+[33maa6c441[m ao
+[33m5346f1d[m Added current budget
+[33mb34d0f4[m Added current budget
+[33m8305855[m Rendered apexchart data (client detail)
+[33m29dcfcf[m Rendered apexchart data (client detail)
+[33m8d51af7[m Rendered apexchart data (client detail)
+[33m9a23526[m Small correction
+[33m48d0dc9[m Small correction
+[33m62208e2[m Small correction
+[33m5c8a0e3[m Ajout_modal
+[33m2636fc8[m Ajout_modal
+[33m0b1ab11[m Ajout_modal
+[33m75a6880[m Merge branch 'master' of https://github.com/FandryNoutah/cmsadsrank
+[33m859826d[m Merge branch 'master' of https://github.com/FandryNoutah/cmsadsrank
+[33me4ea54d[m Corrected modal forms
+[33m291e21d[m Corrected modal forms
+[33m4f40313[m ao
+[33me32f85a[m ao
+[33m1444424[m Merge branch 'master' of https://github.com/FandryNoutah/cmsadsrank
+[33m57e15ec[m Merge branch 'master' of https://github.com/FandryNoutah/cmsadsrank
+[33mbf81a10[m client
+[33md6262d3[m client
+[33macd0afe[m client
+[33m9144651[m Finished client detail modal
+[33m009ec4b[m Finished client detail modal
+[33m9a31887[m ao
+[33m902783b[m ao
+[33me8b3c65[m ajour
+[33mddb0dff[m ajour
+[33m71ae8b6[m ajour
+[33mcbfd0fd[m Finished client detail
+[33m7aa89c7[m Finished client detail
+[33m932e356[m Conflit
+[33m0c2ff10[m Conflit
+[33maab97af[m Conflit
+[33me518d01[m Ao
+[33me437640[m Ao
+[33m310dd4d[m Ao
+[33mbe1945d[m Finished basic client detail page without list tab content
+[33m7ee3ff5[m Finished basic client detail page without list tab content
+[33mb7f629c[m Client detail page
+[33m1d04f04[m Client detail page
+[33mbe76351[m Added session to gitignore
+[33mf7b96e1[m Added session to gitignore
+[33m04895c2[m Still working on client detail page
+[33m3b91407[m Still working on client detail page
+[33m422bb00[m Merged conflict
+[33m8bdd739[m Merged conflict
+[33m4a48e84[m Merged conflict
+[33md04bfb9[m Working on client detail
+[33m0bc2a7d[m Working on client detail
+[33m593a19c[m Working on client detail
+[33m2a1c7b6[m Update Visuels_model.php
+[33mb5efe04[m Update Visuels_model.php
+[33m37a504f[m Update Visuels_model.php
+[33m17aa68a[m Update Visuels_model.php
+[33m9c8fd23[m Update Client.php
+[33md06061d[m Update Client.php
+[33mbdfbd9c[m Update Client.php
+[33md58fa3e[m Add files via upload
+[33m03fb3bf[m Add files via upload
+[33m237d4b0[m Update index.php
+[33m15fdf99[m Update index.php
+[33m08852d3[m Update modal.php
+[33ma42ccb4[m Update modal.php
+[33m9f3cf4e[m Update Visuels_model.php
+[33ma6ebe4e[m Update Visuels_model.php
+[33m47ac0d4[m Update Client.php
+[33mb7d1693[m Update Client.php
+[33m4881bac[m Update Client.php
+[33m6b70e03[m First commit
+[33m8ef970c[m First commit
+[33m285ee4f[m First commit
+[33m45a80ac[m First commit
+[33m3a1e930[m First commit
+[33m8574ce8[m Initial commit

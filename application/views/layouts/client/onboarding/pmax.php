@@ -92,6 +92,18 @@
 							<input type="number" class="form-control" name="repartition_budget_pmax" id="repartition_budget_pmax">
 						</div>
 
+						
+						<div class="form-group">
+							<label>Groupe d'annonce</label>
+							<input type="text" class="form-control" name="groupe_annonce[]">
+							</div>
+
+						<div class="form-group">
+							<label>Saisir des mots-clés du groupe d'annonce</label>
+							<textarea name="Mot_cle[]" class="form-control" maxlength="50"></textarea>
+						</div>
+						
+
 						<div class="form-group">
 							<label for="">Quels produits ou services promouvez-vous dans cette campagne ?</label>
 							<textarea name="" class="form-control" maxlength="50"></textarea>
