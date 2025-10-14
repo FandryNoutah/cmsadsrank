@@ -106,6 +106,11 @@
 								</div>
 
 								<div class="form-group">
+									<label>Contexte du groupe d'annonce</label>
+									<textarea name="contexte_groupe_annonce[]" class="form-control" maxlength="50"></textarea>
+								</div>
+
+								<div class="form-group">
 									<label>Saisir des mots-clés du groupe d'annonce</label>
 									<textarea name="Mot_cle[]" class="form-control" maxlength="50"></textarea>
 								</div>
@@ -117,7 +122,6 @@
 								</button>
 							</div>
 						</div>
-
 
 						<h5>Paramètres de la campagne</h5>
 						<div class="form-group">

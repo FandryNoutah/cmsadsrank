@@ -236,6 +236,21 @@ switch (ENVIRONMENT)
 	// Path to the front controller (this file) directory
 	define('FCPATH', dirname(__FILE__).DIRECTORY_SEPARATOR);
 
+	// Load .env variables if the file exists
+	$envFile = __DIR__ . '/.env';
+	if (file_exists($envFile)) {
+		$lines = file($envFile, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+		foreach ($lines as $line) {
+			if (strpos(trim($line), '#') === 0) continue; // skip comments
+			list($name, $value) = array_map('trim', explode('=', $line, 2));
+			if (!isset($_ENV[$name]) && !isset($_SERVER[$name])) {
+				putenv("$name=$value");
+				$_ENV[$name] = $value;
+				$_SERVER[$name] = $value;
+			}
+		}
+	}
+
 	// Name of the "system" directory
 	define('SYSDIR', basename(BASEPATH));
 
