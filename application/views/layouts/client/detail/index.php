@@ -231,30 +231,30 @@
 								</div>
 								<br><br>
 								<div class="d-flex justify-content-start mb-3" style="font-size: 15px;">
-									<i class="fa fa-check-square mr-2" style="color: #f0f0f0ff; font-size: 18px;"></i>
+									<i class="fa fa-check-square mr-2" style="color: black; font-size: 18px;"></i>
 									<span class="mr-2">Date d'anniversaire : <?= $d['mis_en_place_paiement'] ?></span>
 								</div>
 								<div class="d-flex justify-content-start mb-3" style="font-size: 15px;">
-									<i class="fa fa-check-square mr-2" style="color: #f0f0f0ff; font-size: 18px;"></i>
+									<i class="fa fa-check-square mr-2" style="color: black; font-size: 18px;"></i>
 									<span class="mr-2">Date de mise en ligne : <?= $d['annonce'] ?></span>
 
 								</div>
 								<div class="d-flex justify-content-start mb-3" style="font-size: 15px;">
-									<i class="fa fa-check-square mr-2" style="color: #f0f0f0ff; font-size: 18px;"></i>
+									<i class="fa fa-check-square mr-2" style="color: black; font-size: 18px;"></i>
 									<span class="mr-2">Commerciale</span>
 									<span class="mr-2">
 										<img src="<?= base_url('assets/images/' . $d['tech_photo_user']) ?>" width="24" height="24">
 									</span>
 								</div>
 								<div class="d-flex justify-content-start mb-4" style="font-size: 15px;">
-									<i class="fa fa-check-square mr-2" style="color: #f0f0f0ff; font-size: 18px;"></i>
+									<i class="fa fa-check-square mr-2" style="color: black; font-size: 18px;"></i>
 									<span class="mr-2">Account Manager</span>
 									<span class="mr-2">
 										<img src="<?= base_url('assets/images/' . $d['am_photo_user']) ?>" width="24" height="24">
 									</span>
 								</div>
 								<div class="d-flex justify-content-start mb-4" style="font-size: 15px;">
-									<i class="fa fa-check-square mr-2" style="color: #f0f0f0ff; font-size: 18px;"></i>
+									<i class="fa fa-check-square mr-2" style="color: black; font-size: 18px;"></i>
 									<span class="mr-2">Client</span>
 									<div class="dropdown" style="display: inline-block;">
 										<?php if ($d['Couleur'] == 0): ?>
@@ -315,11 +315,9 @@
 											<a class="nav-link py-2 active" type="button">
 												Secteur Activité
 											</a>
+											<span class="badge alert-dark py-2 px-4" style="margin-top: 20px;">Artisan Plombier</span>
 										</li>
 									</ul>
-								</div>
-								<div class="col-auto">
-									<span class="badge alert-dark py-2 px-4">Artisan Plombier</span>
 								</div>
 							</div>
 							<div class="row">
@@ -331,8 +329,6 @@
 											</a>
 										</li>
 									</ul>
-								</div>
-								<div class="col-auto">
 									<?php if ($d['logo_client'] == NULL): ?>
 										<?php echo form_open_multipart('Client/upload_logo'); ?>
 
@@ -368,8 +364,6 @@
 											</a>
 										</li>
 									</ul>
-								</div>
-								<div class="col-auto">
 									<img src="<?= $d['favicon']; ?>" width="28" class="mr-2">
 								</div>
 							</div>
@@ -473,7 +467,7 @@
 														<?= $u->budgets ?> €
 													<?php endif; ?>
 													<?php if ($u->statut_actif == 1): ?>
-														Check
+														<img class="mr-2" src="<?= base_url('assets/images/icons/figma/CheckCircle.png') ?>" />
 													<?php endif; ?>
 												</td>
 											</tr>

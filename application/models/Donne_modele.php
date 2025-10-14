@@ -13,7 +13,30 @@ class Donne_modele extends CI_Model
 	{
 		parent::__construct();
 	}
-	
+	public function update_status_onboarding($idonboarding, $statut_upsell)
+	{
+		$sql = "UPDATE onboarding SET statut_upsell = $statut_upsell WHERE idonboarding = $idonboarding";
+		$this->db->query($sql);
+		$this->db->close();
+	}
+	public function update_budger_donnee($idclients, $budget)
+	{
+		$sql = "UPDATE donnee SET budget = $budget WHERE idclients = $idclients";
+		$this->db->query($sql);
+		$this->db->close();
+	}
+	public function update_budger_upsell($idupsell, $budget)
+	{
+		$sql = "UPDATE upsell SET budgets = $budget WHERE idupsell = $idupsell";
+		$this->db->query($sql);
+		$this->db->close();
+	}
+		public function update_budger_onboarding($idclient, $budget)
+	{
+		$sql = "UPDATE onboarding SET budget = $budget WHERE idclients = $idclient";
+		$this->db->query($sql);
+		$this->db->close();
+	}
 	public function update_information_resiliation(
 		$idonnee,
 		$information_resiliation,
