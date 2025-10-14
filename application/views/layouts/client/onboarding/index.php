@@ -116,8 +116,14 @@
 											<b><?= format_budget($d['budget']) ?> €</b>
 										</button>
 										<div class="dropdown no-arrow">
-											<img class="mr-2" src="<?= base_url('assets/images/ico/Eye.png') ?>" />
+											<img class="mr-2 eye-icon"
+												src="<?= base_url('assets/images/ico/Eye.png') ?>"
+												data-id="<?= $d['idclients'] ?>" 
+												alt="Voir les détails"
+												style="cursor: pointer;" />
 										</div>
+
+
 									</div>
 									<br><br>
 									<div class="d-flex justify-content-start mb-3" style="font-size: 15px;">
@@ -250,8 +256,13 @@
 												<?php if (!empty($campagne['groupes_annonces'])): ?>
 													<?php foreach ($campagne['groupes_annonces'] as $groupe): ?>
 														<div style="margin-bottom: 10px;">
-															<a href="<?= base_url('Client/insertgroupeannonce/' . $groupe['idgroupe_annonce']) ?>"><strong><?= htmlspecialchars($groupe['nom_groupe']) ?></strong></a><br>
+															<a href="<?= base_url('Client/insertgroupeannonce/' . $groupe['idgroupe_annonce']) ?>"><strong><?= htmlspecialchars($groupe['nom_groupe']) ?></strong></a>
+															<?php if($groupe['statut'] == 1): ?>
+															<img class="mr-2" src="<?= base_url('assets/images/icons/figma/CheckCircle.png') ?>" />
+															<?php endif; ?>	
+															<br>
 														</div>
+														
 														<hr>
 													<?php endforeach; ?>
 												<?php else: ?>
