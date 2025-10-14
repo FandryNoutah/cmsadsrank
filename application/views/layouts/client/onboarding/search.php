@@ -61,11 +61,11 @@
 
 						<div class="row align-items-center mb-4">
 							<div class="col-auto">
-								<img src="<?= base_url('assets/images/figma/discu_queue.png') ?>" class="img-thumbnail rounded-circle" width="64">
+								<img src="<?php echo base_url($d['logo_client']); ?>"  width="64">
 							</div>
 							<div class="col-auto">
 								<input type="hidden" name="file">
-								<button type="button" class="btn btn-light btn-sm">
+								<button type="button" class="btn btn-light btn-sm" onclick="document.getElementById('logo').click();">
 									<i class="fa fa-upload"></i>
 									Upload Company Logo
 								</button>
@@ -128,8 +128,8 @@
 						<div class="form-group">
 							<label for="">Langues</label>
 							<select name="" class="form-control">
-								<option value="">Lang 1</option>
-								<option value="">Lang 2</option>
+								<option value="">Français</option>
+								<option value="">Anglais</option>
 							</select>
 						</div>
 

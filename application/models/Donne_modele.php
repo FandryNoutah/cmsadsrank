@@ -199,58 +199,38 @@ class Donne_modele extends CI_Model
 		$this->db->close();
 	}
 	// Dans le modèle Donne_modele
-	public function insert_gp($groupes_annonces, $idcampagne, $idclients, $type_campagne, $contexte_groupes_annonces, $mot_cle, $url_site)
-	{
-		// Vérifie si les groupes d'annonces, les contextes et les mots-clés sont des tableaux non vides
-		if (is_array($groupes_annonces) && !empty($groupes_annonces) && is_array($contexte_groupes_annonces) && !empty($contexte_groupes_annonces) && is_array($mot_cle) && !empty($mot_cle)) {
+	public function insert_gp($groupes_annonces, $idcampagne, $idclients, $type_campagne)
+{
+    if (is_array($groupes_annonces) && !empty($groupes_annonces)) {
+        $this->load->database();
+        $insert_data = array();
 
-			// Charge la base de données
-			$this->load->database();
+        foreach ($groupes_annonces as $groupe) {
+            if (!empty($groupe['groupe_annonce']) && !empty($groupe['mot_cle'])) {
+                // Nettoyage des mots-clés (si tableau)
+                $mots = is_array($groupe['mot_cle']) ? implode(', ', $groupe['mot_cle']) : $groupe['mot_cle'];
 
-			// Vérifie si les trois tableaux ont le même nombre d'éléments
-			if (count($groupes_annonces) === count($contexte_groupes_annonces) && count($groupes_annonces) === count($mot_cle)) {
-				// Crée un tableau pour les données à insérer
-				$insert_data = array();
+                $insert_data[] = array(
+                    'nom_groupe' => $groupe['groupe_annonce'],
+                    'contexte_groupes_annonces' => $groupe['contexte_groupe_annonce'],
+                    'mot_cle' => $mots,
+                    'url_groupe_annonce' => $groupe['url_groupe_annonce'],
+                    'idclients' => $idclients,
+                    'type_campagnes' => $type_campagne,
+                    'idcampagne' => $idcampagne
+                );
+            }
+        }
 
-				// Parcourt les éléments des groupes d'annonces et leurs contextes et mots-clés
-				for ($i = 0; $i < count($groupes_annonces); $i++) {
-					// Vérifie si le groupe, le contexte et le mot-clé ne sont pas vides
-					if (!empty($groupes_annonces[$i]) && !empty($contexte_groupes_annonces[$i]) && !empty($mot_cle[$i])) {
-						// Vérifie si le mot-clé est bien une chaîne
-						if (is_array($mot_cle[$i])) {
-							// Si c'est un tableau, le convertir en une chaîne
-							$mot_cle[$i] = implode(", ", $mot_cle[$i]);
-						}
+        if (!empty($insert_data)) {
+            $this->db->insert_batch('groupe_annonce', $insert_data);
+            return true;
+        }
+    }
 
-						// Ajoute les données dans le tableau d'insertion
-						$insert_data[] = array(
-							'nom_groupe' => isset($groupes_annonces[$i]['groupe_annonce']) ? $groupes_annonces[$i]['groupe_annonce'] : '', // Accède directement à la valeur 'groupe_annonce'
-							'contexte_groupes_annonces' => $contexte_groupes_annonces[$i],
-							'mot_cle' => $mot_cle[$i], // Ajouter le mot-clé
-							'url_groupe_annonce' => $url_site,
-							'idclients' => $idclients,
-							'type_campagnes' => $type_campagne,
-							'idcampagne' => $idcampagne
-						);
-					}
-				}
+    return false;
+}
 
-				// Si le tableau des données à insérer n'est pas vide, insérer les données
-				if (!empty($insert_data)) {
-					$this->db->insert_batch('groupe_annonce', $insert_data); // Utilise insert_batch pour insérer plusieurs lignes
-					return true; // Retourne true en cas de succès
-				} else {
-					return false; // Retourne false si aucune donnée n'est insérée
-				}
-			} else {
-				// Retourne false si les tableaux ne sont pas de la même taille
-				return false;
-			}
-		}
-
-		// Retourne false si les tableaux sont vides ou incorrects
-		return false;
-	}
 
 	public function getpmaxnonvalider($id)
 	{

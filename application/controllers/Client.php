@@ -6,7 +6,6 @@ class Client extends MY_Controller
 	private $api_url = 'https://api.aircall.io/v1/calls';
 	private $api_auth = '';
 	protected $file_upload_field;
-	// private $api_key = getenv('OPENAI_API_KEY');
 
 	public function __construct()
 	{
@@ -47,6 +46,12 @@ class Client extends MY_Controller
 		$this->data['initiative'] = $this->Donne_modele->get_all_initiative();
 
 		$this->content = "layouts/client/index.php";
+		$this->layout();
+	}
+	public function insertgroupeannonce($id)
+	{
+		$this->data['donnees'] = $this->visuels_model->getDonneeById($id);
+		$this->content = "layouts/client/onboarding/annonce_search";
 		$this->layout();
 	}
 	public function details_ajax($id)
@@ -213,6 +218,22 @@ class Client extends MY_Controller
 
 		redirect('Client/detail_client/' . $idclients);
 	}
+		public function upload_logo_campagne()
+		{
+			$idclients = $this->input->post('idclients');
+
+			$logo = $this->file_upload_field = "logo";
+			$logo = "";
+			$this->upload->initialize($this->set_upload_options("", $_FILES["logo"]["name"]));
+			if ($this->upload->do_upload('logo') != null) {
+
+				$logo = $this->path . $this->upload->file_name;
+		}
+			$this->Donne_modele->updatelogo($idclients, $logo);
+
+			echo json_encode(['success' => true, 'logo_url' => base_url($logo)]);
+		}
+
 
 	public function enregistrer()
 	{
@@ -577,7 +598,7 @@ class Client extends MY_Controller
 			3	=>	"PERFORMANCE MAX"
 		];
 		$this->data['idclients'] = $idclients;
-		$this->data["donnees"] = $this->visuels_model->getDonneeById($idclients);
+		$d = $this->data["donnees"] = $this->visuels_model->getDonneeById($idclients);
 		$campagnes = $this->data["campagnes"] = $this->visuels_model->getCampagneByIdclient($idclients);
 		$campagnes = $this->visuels_model->getCampagneByIdclient($idclients);
 
@@ -586,7 +607,22 @@ class Client extends MY_Controller
 		}
 
 		$this->data['campagnes'] = $campagnes;
-
+		$donne_valider = $this->Donne_modele->getcclientvalidationbyidclients($idclients);
+		$groupe_valider = $this->Donne_modele->getcampagnegroupevalidationbyidclients($idclients);
+		$groupes_par_campagne = [];
+		foreach ($groupe_valider as $groupe) {
+			$idcampagne = $groupe['idcampagne'];
+			if (!isset($groupes_par_campagne[$idcampagne])) {
+				$groupes_par_campagne[$idcampagne] = [];
+			}
+			$groupes_par_campagne[$idcampagne][] = $groupe;
+		}
+		foreach ($donne_valider as &$campagne) {
+			$idcampagne = $campagne['idcampagne'];
+			$campagne['groupes_annonces'] = isset($groupes_par_campagne[$idcampagne]) ? $groupes_par_campagne[$idcampagne] : [];
+		}
+		unset($campagne);
+		$this->data['donne_valider'] = $donne_valider;
 		$this->content = "layouts/client/onboarding/index.php";
 		$this->layout();
 	}
@@ -686,8 +722,9 @@ class Client extends MY_Controller
 							'camp_type'          		=>	$camp_type
 						];
 					}
-					// Insert groupes
-					$this->Donne_modele->insert_gp($data_groups, $idcampagne, $idclients, $camp_type, $contexte_groupes, $mots_cle, $url_site);
+					//var_dump($data_groups);
+					$this->Donne_modele->insert_gp($data_groups, $idcampagne, $idclients, $camp_type);
+
 				} else {
 					echo 'Erreur : Le nombre de groupes d\'annonces, de contextes et de mots-clés ne correspond pas.';
 				}
@@ -1402,8 +1439,8 @@ class Client extends MY_Controller
 		}
 		$summary = $this->get_summary_from_chatgpt($headings, $paragraphs);
 		$naf_info = $this->get_naf_code_from_summary($summary);
-		var_dump($naf_info);
-		die();
+		//var_dump($naf_info);
+		//die();
 		preg_match('/GTM-[A-Z0-9]+/', $html, $matches);
 		$gtm_code = !empty($matches) ? $matches[0] : null;
 		$cms = $this->detect_cms($html, $site_client);
@@ -1505,7 +1542,8 @@ class Client extends MY_Controller
 
 	private function get_summary_from_chatgpt($headings, $paragraphs)
 	{
-	$model = 'gpt-4';
+		
+		$model = 'gpt-4';
 
 		$input_text = "Voici les titres et paragraphes d’un site web.\n\n";
 		$input_text .= "Ta tâche est de rédiger un résumé informatif en **deux paragraphes distincts**, séparés par une **ligne vide** (un simple saut de ligne).\n\n";
