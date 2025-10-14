@@ -29,7 +29,7 @@
 </style>
 
 <?php end_section(); ?>
-
+<?php //var_dump($donnees); die(); ?>
 <?php start_section('content'); ?>
 <?php foreach ($donnees as $d) : ?>
 <div class="container-fluid p-0 h-100">
@@ -64,7 +64,7 @@
 		</nav>
 
 		<div class="col">
-			<form action='<?= site_url('Client/ajout_campagne/' . $idclients) . "?conversion=$conversion&camp_type=$camp_type&gtm=$gtm" ?>' method="POST">
+			<form action="<?= base_url('Client/Ajoutgroupes/' . $groupe[0]['idclients']) ?>" method="POST">
 				<div class="container-fluid pt-4">
 
 					<h5>Campagne Search</h5>
@@ -72,31 +72,74 @@
 
 					<div class="form-group">
 						<label for="nom_entreprise">Nom de l'entreprise</label>
-						<input type="text" class="form-control" name="nom_entreprise" id="nom_entreprise">
+						<input type="hidden" class="form-control" name="idgroupe_annonce" id="idgroupe_annonce" value="<?php echo $groupe[0]['idgroupe_annonce']; ?>">
+						<input type="hidden" class="form-control" name="idcampagne" id="idcampagne" value="<?php echo $groupe[0]['idcampagne']; ?>">
+						<input type="hidden" class="form-control" name="idclients" id="idclients" value="<?php echo $groupe[0]['idclients']; ?>">
+						<input type="text" class="form-control" name="nom_entreprise" id="nom_entreprise" value="<?php echo $d['nom_client']; ?>">
+
 					</div>
 
 					<div class="form-group">
 						<label for="url_campagne">URL de la campagne</label>
-						<input type="url" class="form-control" name="url_campagne" id="url_campagne">
+						<input type="text" class="form-control" name="url_campagne" id="url_campagne" value="<?php echo $groupe[0]['url_site']; ?>">
 					</div>
 
-					<div class="form-section-title">Titres (max 15)</div>
+				<div class="form-section-title">Titres (max 15)</div>
 					<div id="titres-container">
-						<input type="text" class="form-control mb-2" name="titres[]">
+						<?php if (!empty($ads_titres)) : ?>
+							<?php foreach ($ads_titres as $titre) : ?>
+								<div class="form-group-wrapper mb-2">
+									<input type="text" class="form-control" name="titres[]" value="<?= htmlspecialchars($titre) ?>">
+									<span class="remove-btn">&times;</span>
+								</div>
+							<?php endforeach; ?>
+						<?php else : ?>
+							<div class="form-group-wrapper mb-2">
+								<input type="text" class="form-control" name="titres[]">
+								<span class="remove-btn">&times;</span>
+							</div>
+						<?php endif; ?>
 					</div>
 					<button type="button" class="btn btn-outline-dark btn-sm mb-3" id="add_titre">+ Ajouter un titre</button>
 
+
 					<div class="form-section-title">Titres longs (max 5)</div>
 					<div id="titres-longs-container">
-						<input type="text" class="form-control mb-2" name="titres_longs[]">
+						<?php if (!empty($ads_titres_longs)) : ?>
+							<?php foreach ($ads_titres_longs as $titre_long) : ?>
+								<div class="form-group-wrapper mb-2">
+									<input type="text" class="form-control" name="titres_longs[]" value="<?= htmlspecialchars($titre_long) ?>">
+									<span class="remove-btn">&times;</span>
+								</div>
+							<?php endforeach; ?>
+						<?php else : ?>
+							<div class="form-group-wrapper mb-2">
+								<input type="text" class="form-control" name="titres_longs[]">
+								<span class="remove-btn">&times;</span>
+							</div>
+						<?php endif; ?>
 					</div>
 					<button type="button" class="btn btn-outline-dark btn-sm mb-3" id="add_titre_long">+ Ajouter un titre long</button>
 
-					<div class="form-section-title">Descriptions (max 4)</div>
-					<div id="descriptions-container">
-						<input type="text" class="form-control mb-2" name="descriptions[]">
-					</div>
-					<button type="button" class="btn btn-outline-dark btn-sm mb-3" id="add_description">+ Ajouter une description</button>
+
+				<div class="form-section-title">Descriptions (max 4)</div>
+				<div id="descriptions-container">
+					<?php if (!empty($ads_descriptions)) : ?>
+						<?php foreach ($ads_descriptions as $desc) : ?>
+							<div class="form-group-wrapper mb-2">
+								<input type="text" class="form-control" name="descriptions[]" value="<?= htmlspecialchars($desc) ?>">
+								<span class="remove-btn">&times;</span>
+							</div>
+						<?php endforeach; ?>
+					<?php else : ?>
+						<div class="form-group-wrapper mb-2">
+							<input type="text" class="form-control" name="descriptions[]">
+							<span class="remove-btn">&times;</span>
+						</div>
+					<?php endif; ?>
+				</div>
+				<button type="button" class="btn btn-outline-dark btn-sm mb-3" id="add_description">+ Ajouter une description</button>
+
 
 					<div class="form-section-title">Chemin 1</div>
 					<div id="titres-longs-container">
@@ -138,7 +181,8 @@
 					<button type="button" class="btn btn-dark btn-sm btn-block mb-5">Suivant</button>
 					<div class="d-flex justify-content-between mb-5">
 						
-						<button type="submit" class="btn btn-dark">Terminer</button>
+						<input type="submit" class="btn btn-dark" value="Terminer">
+
 					</div>
 				</div>
 			</form>
@@ -199,7 +243,7 @@
 <div class="container-fluid mt-5 preview-card">
 	<h5 class="mb-3">Aperçu de l'annonce</h5>
 	<table class="table table-bordered">
-		<tr><th>Campagne</th><td><?= $d['nom_campagne'] ?></td></tr>
+		<tr><th>Campagne</th><td><?= $groupe[0]['nom_campagne'] ?></td></tr>
 		<tr><th>Titres</th><td id="preview-titres"></td></tr>
 		<tr><th>Descriptions</th><td id="preview-descriptions"></td></tr>
 		<tr><th>URL</th><td id="preview-url"></td></tr>
