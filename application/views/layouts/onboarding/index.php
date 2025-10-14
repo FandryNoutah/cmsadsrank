@@ -168,10 +168,19 @@
 											<a class="dropdown-item" href="#" 
 												data-toggle="modal" data-target="#editModal"
 												data-idclient="<?= $d->idclients; ?>"
+                        data-idupsell="<?= $d->idupsell; ?>"
 												data-idonboarding="<?= $d->idonboarding; ?>"
 												data-nom="<?= htmlspecialchars($d->nom_client); ?>"
 												data-site="<?= htmlspecialchars($d->site_client); ?>"
-												data-budget="<?= $d->budget; ?>"
+
+												
+                        <?php if($d->budgets == 0): ?>
+                         data-budget="<?= $d->budget; ?>"
+                        <?php endif; ?>
+                        <?php if($d->budgets != 0): ?>
+                        data-budget="<?= $d->budgets; ?>"
+                        <?php endif; ?>
+                    
 												data-secteur="<?= htmlspecialchars($d->secteur_activite); ?>"
 												data-produit="<?= $d->idproduit; ?>"
 												data-produit-label="<?= htmlspecialchars($d->label_produit); ?>"
@@ -184,6 +193,7 @@
 												data-email-onboarding="<?= $d->email_onboarding; ?>"
 												data-facturation="<?= $d->facturation; ?>"
 												data-datastudio="<?= $d->datastudio; ?>"
+                        data-statut_upsell="<?= $d->statut_upsell; ?>"
 											>Modifier</a>
 										</div>
 									</div>
@@ -218,7 +228,15 @@
 								</td>
 
 
-									<td><?= round(($d->budget / 2) / 30.6, 2) ?> €</td>
+									<td>
+                    <?php if($d->budgets == 0): ?>
+                    <?= round(($d->budget / 2) / 30.6, 2) ?> €
+                    <?php endif; ?>
+                    <?php if($d->budgets != 0): ?>
+                    <?= round(($d->budgets / 2) / 30.6, 2) ?> €
+                    <?php endif; ?>
+                    
+                  </td>
 								<?php //endif; ?>
 
 								<td>
@@ -275,6 +293,7 @@
         </div>
         <div class="modal-body">
           <input type="hidden" id="edit_idclient" name="idclient">
+          <input type="hidden" id="edit_idupsell" name="idupsell">
           <input type="hidden" id="edit_idonboarding" name="idonboarding">
           <div class="form-row">
             <div class="form-group col">
@@ -374,6 +393,13 @@
               <option value="0">Non</option>
             </select>
           </div>
+          <div class="form-group">
+            <label>Statut</label>
+            <select id="edit_statut_upsell" name="statut_upsell" class="form-control">
+              <option value="0">En attente</option>
+              <option value="1">En ligne</option>
+            </select>
+          </div>
         </div>
         <div class="modal-footer">
           <button type="submit" class="btn btn-dark px-3">Enregistrer</button>
@@ -433,6 +459,7 @@ $('#editModal').on('show.bs.modal', function (event) {
   var modal = $(this);
 
   modal.find('#edit_idclient').val(button.data('idclient'));
+  modal.find('#edit_idupsell').val(button.data('idupsell'));
   modal.find('#edit_idonboarding').val(button.data('idonboarding'));
   modal.find('#edit_Client').val(button.data('nom'));
   modal.find('#edit_Site_client').val(button.data('site'));
@@ -451,6 +478,7 @@ $('#editModal').on('show.bs.modal', function (event) {
   modal.find('#edit_email_onboarding').val(button.data('email-onboarding'));
   modal.find('#edit_facturation').val(button.data('facturation'));
   modal.find('#edit_datastudio').val(button.data('datastudio'));
+  modal.find('#edit_statut_upsell').val(button.data('statut_upsell'));
 });
 </script>
 <?php end_section(); ?>

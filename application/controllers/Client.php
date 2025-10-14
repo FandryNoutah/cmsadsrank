@@ -6,7 +6,7 @@ class Client extends MY_Controller
 	private $api_url = 'https://api.aircall.io/v1/calls';
 	private $api_auth = '';
 	protected $file_upload_field;
-	private $api_key = getenv('OPENAI_API_KEY');
+
 		public function __construct()
 	{
 		parent::__construct();
@@ -37,6 +37,7 @@ class Client extends MY_Controller
 
 	}
 
+
 	public function index()
 	{
 		$this->data['donnee'] = $this->visuels_model->getClientDataByDonnee();
@@ -48,6 +49,53 @@ class Client extends MY_Controller
 		$this->content = "layouts/client/index.php";
 		$this->layout();
 	}
+	public function details_ajax($id)
+	{
+	$idclients = $id;
+	$type_campagne = [
+			1	=> "SEARCH",
+			2	=>	"LOCAL",
+			3	=>	"PERFORMANCE MAX"
+		];
+	$campagnes = $this->data["campagnes"] = $this->visuels_model->getCampagneByIdclient($idclients);
+	$campagnes = $this->visuels_model->getCampagneByIdclient($idclients);
+		
+		foreach ($campagnes as $index => $campagne) {
+			$campagnes[$index]['type_campagne'] = $type_campagne[$campagne['type_campagne']];
+		}
+		
+	$data['campagnes'] = $campagnes;
+	$data['id'] = $id; 
+	$this->load->view('layouts/client/onboarding/detail_campagne', $data);
+	}
+
+	public function export_pdf($id)
+	{
+		$this->load->library('pdf'); 
+
+		$idclients = $id;
+		$type_campagne = [
+			1 => "SEARCH",
+			2 => "LOCAL",
+			3 => "PERFORMANCE MAX"
+		];
+
+		$campagnes = $this->visuels_model->getCampagneByIdclient($idclients);
+		foreach ($campagnes as $index => $campagne) {
+			$campagnes[$index]['type_campagne'] = $type_campagne[$campagne['type_campagne']];
+		}
+
+		$data['campagnes'] = $campagnes;
+
+		$html = $this->load->view('layouts/client/onboarding/detail_campagne_pdf', $data, true);
+
+		$this->pdf->loadHtml($html);
+		$this->pdf->setPaper('A4', 'portrait');
+		$this->pdf->render();
+		$this->pdf->stream("campagnes_client_$idclients.pdf", ['Attachment' => true]);
+	}
+
+
 	public function mis_a_jour_gtm($idclients)
 	{
 		$id = $idclients;
@@ -388,6 +436,7 @@ class Client extends MY_Controller
 	$numero_client = $this->input->post('Numero_client');
 	$site_client = $this->input->post('Site_client');
 	$budget = $this->input->post('budget');
+
 	$secteur_activite = $this->input->post('secteur_activite');
 	$Produit = $this->input->post('Produit');
 	$Initiative = $this->input->post('Initiative');
@@ -1317,7 +1366,6 @@ private function resolve_url($relative, $base)
 
 		$xpath = new DOMXPath($dom);
 
-		// ✅ Extraire les titres et paragraphes
 		$paragraphs = [];
 		$p_nodes = $xpath->query("//p");
 		foreach ($p_nodes as $p) {
@@ -1340,17 +1388,16 @@ private function resolve_url($relative, $base)
 				}
 			}
 		}
-
-		// ✅ Générer le résumé avec ChatGPT
 		$summary = $this->get_summary_from_chatgpt($headings, $paragraphs);
-
+		$naf_info = $this->get_naf_code_from_summary($summary);
+		var_dump($naf_info);
+		die();
 		preg_match('/GTM-[A-Z0-9]+/', $html, $matches);
 		$gtm_code = !empty($matches) ? $matches[0] : null;
 		$cms = $this->detect_cms($html, $site_client);
 		$cms_logo = $this->get_cms_logo($cms);
 		$favicon = $this->get_favicon($html, $site_client);
 
-		// ✅ Insérer le résumé à la place du paragraphe le plus long
 		$idclients = $this->visuels_model->insertclient($client, $site_client, $email_client, $numero_client, $favicon, $cms, $cms_logo, $summary);
 		$idclient_onboarding = $idclients; 
 		$idclient = $idclients;
@@ -1400,10 +1447,53 @@ private function resolve_url($relative, $base)
 			$this->visuels_model->add_upsell_onboarding($data_upsell);
 		redirect('Client');
 	}
+	private function get_naf_code_from_summary($summary)
+	{
+		$model = 'gpt-4';
+
+		$prompt = "Voici le résumé d’un site internet représentant une entreprise.\n\n" .
+				"Ta tâche est de déterminer le **code NAF (APE)** le plus approprié pour cette activité, basé sur la nomenclature française officielle (INSEE).\n" .
+				"Donne-moi le résultat au format JSON avec deux champs : `code` et `libelle`. Ne donne rien d'autre.\n\n" .
+				"Résumé :\n$summary";
+
+		$data = [
+			"model" => $model,
+			"messages" => [
+				["role" => "user", "content" => $prompt]
+			],
+			"temperature" => 0.2
+		];
+
+		$ch = curl_init('https://api.openai.com/v1/chat/completions');
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+		curl_setopt($ch, CURLOPT_HTTPHEADER, [
+			'Content-Type: application/json',
+			'Authorization: Bearer ' . $api_key
+		]);
+		curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
+
+		$response = curl_exec($ch);
+		if (curl_errno($ch)) {
+			return ['code' => '0000Z', 'libelle' => 'Secteur non identifié'];
+		}
+
+		curl_close($ch);
+		$result = json_decode($response, true);
+		$output = $result['choices'][0]['message']['content'] ?? '';
+
+		// Exemple attendu : {"code": "6201Z", "libelle": "Programmation informatique"}
+		$decoded = json_decode($output, true);
+		if (json_last_error() === JSON_ERROR_NONE && isset($decoded['code'], $decoded['libelle'])) {
+			return $decoded;
+		}
+
+		return ['code' => '0000Z', 'libelle' => 'Secteur non identifié'];
+	}
+
 
 	private function get_summary_from_chatgpt($headings, $paragraphs)
 	{
-		$model = 'gpt-4';
+	$model = 'gpt-4';
 
 		   $input_text = "Voici les titres et paragraphes d’un site web.\n\n";
     $input_text .= "Ta tâche est de rédiger un résumé informatif en **deux paragraphes distincts**, séparés par une **ligne vide** (un simple saut de ligne).\n\n";
@@ -1422,7 +1512,6 @@ private function resolve_url($relative, $base)
         $input_text .= "- $p\n";
     }
 
-    // Requête à l'API OpenAI
     $data = [
         "model" => $model,
         "messages" => [
@@ -1448,23 +1537,19 @@ private function resolve_url($relative, $base)
     $result = json_decode($response, true);
     $raw_output = $result['choices'][0]['message']['content'] ?? 'Résumé non disponible.';
 
-    // Séparation des deux paragraphes
     $paragraphs_split = preg_split('/\n\s*\n/', trim($raw_output));
 
     if (count($paragraphs_split) >= 2) {
         $para1 = trim($paragraphs_split[0]);
         $para2 = trim($paragraphs_split[1]);
 
-        // Comptage des mots (utile pour test ou journalisation)
         $word_count1 = str_word_count(strip_tags($para1));
         $word_count2 = str_word_count(strip_tags($para2));
         $total_words = $word_count1 + $word_count2;
 
-        // Retourne toujours le contenu, sans alerte
         return $para1 . "\n\n" . $para2;
     }
 
-    // Fallback si le texte généré n'a pas deux paragraphes distincts
     return $raw_output;
 	}
 
