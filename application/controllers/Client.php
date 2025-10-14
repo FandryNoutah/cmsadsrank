@@ -658,14 +658,14 @@ class Client extends MY_Controller
 				Donne UNIQUEMENT les mots, séparés par des virgules, sans introduction ni phrase explicative.";
 
 
-		$raw_keywords = $this->call_openai($prompt);
-		$raw_keywords = trim($raw_keywords);
-		if (preg_match('/([a-zA-ZÀ-ÿ0-9,\s]+)/', $raw_keywords, $matches)) {
-			$raw_keywords = $matches[1];
-		}
-		$clean_keywords = preg_replace('/,\s*/', "\n", $raw_keywords);
+		// $raw_keywords = $this->call_openai($prompt);
+		// $raw_keywords = trim($raw_keywords);
+		// if (preg_match('/([a-zA-ZÀ-ÿ0-9,\s]+)/', $raw_keywords, $matches)) {
+		// 	$raw_keywords = $matches[1];
+		// }
+		// $clean_keywords = preg_replace('/,\s*/', "\n", $raw_keywords);
 
-		$this->data["mots_exclus"] = $clean_keywords;
+		$this->data["mots_exclus"] = "test";
 
 		$this->content = "layouts/client/onboarding/" . $type_page[$camp_type] . ".php";
 		$this->layout();
