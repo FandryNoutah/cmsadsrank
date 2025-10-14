@@ -223,7 +223,18 @@ public function activer_processus_tache()
 			$mis_en_place_paiement, $Brief, $annonce, $commentaire_client,
 			$paiement_recu, $datastudio, $email_onboarding, $facturation, $idonboarding
 		);
-
+		$idupsell = (int) $this->input->post('idupsell');
+		$statut_upsell = (int) $this->input->post('statut_upsell');
+		$this->Donne_modele->update_status_onboarding($idonboarding, $statut_upsell);
+			if($statut_upsell == 1){
+				$this->Donne_modele->update_budger_onboarding($idclient, $budget);
+				$this->Donne_modele->update_budger_upsell($idupsell, $budget);
+				$this->Donne_modele->update_budger_donnee($idclient, $budget);
+			}
+			if($statut_upsell == 0){
+				$this->Donne_modele->update_budger_upsell($idupsell, $budget);
+				//$this->Donne_modele->update_budger_donnee($idclient, $budget);
+			}
 		$this->session->set_flashdata('message-succes', "Données mises à jour avec succès");
 		redirect('Onboarding', 'refresh');
 	}
@@ -278,10 +289,7 @@ public function activer_processus_tache()
 			);
 
 			$this->Task_model->add_task($data);
-<<<<<<< HEAD
-=======
 		
->>>>>>> 9091c7eca10d8d61e634280953442404f0c6a109
 		endif;
 		if ($type_upsell == 1):
 			$am = $this->input->post('am');
