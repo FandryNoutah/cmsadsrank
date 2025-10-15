@@ -527,6 +527,27 @@ class Donne_modele extends CI_Model
 		return $retour;
 	}
 
+	public function getcampagnegroupevalidationbyidclient($idclients)
+	{
+		// Assurez-vous que l'ID client est un nombre entier pour éviter les injections
+		$idclients = (int)$idclients;
+
+		// Requête SQL sécurisée avec des paramètres liés pour éviter l'injection SQL
+		$sql = "SELECT ga.*, c.* 
+            FROM groupe_annonce ga 
+            JOIN campagne c ON ga.idcampagne = c.idcampagne 
+            WHERE ga.idclients = ? AND statut = 1";
+
+		// Exécution de la requête avec un paramètre lié
+		$query = $this->db->query($sql, array($idclients));
+
+		// Récupération des résultats sous forme de tableau
+		$retour = $query->result_array();
+
+		// Retourner les résultats
+		return $retour;
+	}
+
 
 
 
@@ -604,7 +625,9 @@ class Donne_modele extends CI_Model
 		$date_campagne,
 		$appareil,
 		$objectif,
-		$url_site
+		$url_site,
+		$mots_cle,
+		$Mots_cle_exclus
 	) {
 
 		// Echappement des valeurs pour éviter les erreurs SQL
@@ -619,10 +642,11 @@ class Donne_modele extends CI_Model
 		$appareil = $this->db->escape($appareil);
 		$objectif = $this->db->escape($objectif);
 		$url_site = $this->db->escape($url_site);
+		$Mots_cle_exclus = $this->db->escape($Mots_cle_exclus);
 
 		// Construction de la requête SQL pour insérer une nouvelle campagne
-		$sql = "INSERT INTO campagne(idclients, type_campagne, nom_campagne, information_campagne, zones, repartition_budget, date_campagne, appareil, objectif, url_site) 
-    VALUES ($idclients, $type_campagne, $nom_campagne, $information_campagne, $zones, $repartition_budget, $date_campagne, $appareil, $objectif, $url_site)";
+		$sql = "INSERT INTO campagne(idclients, type_campagne, nom_campagne, information_campagne, zones, repartition_budget, date_campagne, appareil, objectif, url_site,Mots_cle_exclus) 
+    VALUES ($idclients, $type_campagne, $nom_campagne, $information_campagne, $zones, $repartition_budget, $date_campagne, $appareil, $objectif, $url_site,$Mots_cle_exclus)";
 
 		// Exécution de la requête
 		$this->db->query($sql);
