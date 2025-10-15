@@ -934,6 +934,7 @@ class Client extends MY_Controller
 				$groupes_annonces      = $this->input->post('groupe_annonce'); // OK
 				$contexte_groupes      = $this->input->post('contexte_groupe_annonce'); // not in view
 				$mots_cle              = $this->input->post('Mot_cle'); // OK
+				$Mots_cle_exclus       = $this->input->post('Mots_cle_exclus'); 
 
 				// Insert campagne
 				$idcampagne = $this->Donne_modele->insert_campagne_am(
@@ -1667,6 +1668,7 @@ class Client extends MY_Controller
 		$this->visuels_model->add_upsell_onboarding($data_upsell);
 		redirect('Client');
 	}
+
 	private function get_naf_code_from_summary($summary)
 	{
 		$model = 'gpt-4';
@@ -1688,7 +1690,7 @@ class Client extends MY_Controller
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 		curl_setopt($ch, CURLOPT_HTTPHEADER, [
 			'Content-Type: application/json',
-			'Authorization: Bearer ' . $api_key
+			'Authorization: Bearer ' . env('CHAT_GPT_API_KEY')
 		]);
 		curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
 
@@ -1746,7 +1748,7 @@ class Client extends MY_Controller
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 		curl_setopt($ch, CURLOPT_HTTPHEADER, [
 			'Content-Type: application/json',
-			'Authorization: Bearer ' . $api_key
+			'Authorization: Bearer ' . env('CHAT_GPT_API_KEY')
 		]);
 		curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
 
