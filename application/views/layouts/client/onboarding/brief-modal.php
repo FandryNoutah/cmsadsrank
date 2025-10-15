@@ -1,5 +1,5 @@
 <div class="modal fade" id="briefModal" tabindex="-1" aria-labelledby="briefModalLabel" aria-hidden="true">
-	<form  action="<?php echo base_url("Client/ajout_brief") ?>" enctype="multipart/form-data" method="post">
+	<form action="<?= empty($d['information_client']) ? base_url("Client/ajout_brief") : "" ?>" enctype="multipart/form-data" method="POST">
 		<div class="modal-dialog modal-dialog-scrollable">
 			<div class="modal-content">
 				<div class="modal-header">
@@ -12,11 +12,13 @@
 				<div class="modal-body">
 					<div class="form-group">
 						<label for="brief">Brief</label>
-						<textarea name="information_client" id="brief" rows="2" class="form-control"></textarea>
+						<textarea name="information_client" id="brief" class="form-control"><?php if (!empty($d['information_client'])) echo $d['information_client']; ?></textarea>
 					</div>
 				</div>
 				<div class="modal-footer">
-					<button type="submit" class="btn btn-dark px-3">Ajouter</button>
+					<button type="submit" class="btn btn-dark px-3">
+						<?= empty($d['information_client']) ? "Ajouter" : "Modifier" ?>
+					</button>
 				</div>
 			</div>
 		</div>

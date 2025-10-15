@@ -166,12 +166,11 @@
 						</ul>
 						<div class="d-inline">
 							<?php if (!empty($d['information_client'])): ?>
-								<button class="btn btn-dark">
+								<button class="btn btn-dark" data-toggle="modal" data-target="#briefModal">
 									<img src="<?= base_url('assets/images/icons/figma/icon-plus.svg') ?>" alt="">
 									Modifier Brief
 								</button>
-							<?php endif; ?>
-							<?php if (empty($d['information_client'])): ?>
+							<?php else: ?>
 								<button class="btn btn-dark" data-toggle="modal" data-target="#briefModal">
 									<img src="<?= base_url('assets/images/icons/figma/icon-plus.svg') ?>" alt="">
 									Ajouter Brief
@@ -499,8 +498,8 @@
 		</div>
 	</div>
 
+	<?php $this->load->view('layouts/client/onboarding/brief-modal', ['d' => $d]) ?>
 <?php endforeach; ?>
-<?php $this->load->view('layouts/client/onboarding/brief-modal') ?>
 <?php end_section(); ?>
 
 <?php start_section('script') ?>.
