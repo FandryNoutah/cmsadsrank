@@ -6,7 +6,6 @@ class Client extends MY_Controller
 	private $api_url = 'https://api.aircall.io/v1/calls';
 	private $api_auth = '';
 	protected $file_upload_field;
-
 	public function __construct()
 	{
 		parent::__construct();
@@ -36,6 +35,7 @@ class Client extends MY_Controller
 		$this->current_user = $this->ion_auth->user()->row();
 	}
 
+
 	public function index()
 	{
 		$this->data['donnee'] = $this->visuels_model->getClientDataByDonnee();
@@ -47,7 +47,6 @@ class Client extends MY_Controller
 		$this->content = "layouts/client/index.php";
 		$this->layout();
 	}
-
 	public function Ajoutgroupes()
 	{
 		$idgroupe_annonce = $this->input->post('idgroupe_annonce');
@@ -87,12 +86,13 @@ class Client extends MY_Controller
 		redirect('Client/onboarding/' . $idclients, 'refresh');
 	}
 
+
 	public function insertgroupeannonce($id)
 	{
 		$k = $this->data["groupe"] = $this->visuels_model->getgpid($id);
 		$id = $k[0]['idclients'];
 		$id = intval($id);
-		$d = $this->data['donnees'] = $this->visuels_model->getDonneeById($id);
+		$d =$this->data['donnees'] = $this->visuels_model->getDonneeById($id);
 		$information_base = $d[0]['info_base_client'];
 		$information_client = $d[0]['information_client'];
 		$site_client = $d[0]['site_client'];
@@ -101,35 +101,36 @@ class Client extends MY_Controller
 		$this->data['ads_titres'] = $adsContent['titres'];
 		$this->data['ads_titres_longs'] = $adsContent['titres_longs'];
 		$this->data['ads_descriptions'] = $adsContent['descriptions'];
-
-		if ($type_campagne == 1) {
-			$this->content = "layouts/client/onboarding/annonce_search";
+		
+		if($type_campagne == 1){
+		$this->content = "layouts/client/onboarding/annonce_search";
 		}
-		if ($type_campagne == 3) {
-			$this->content = "layouts/client/onboarding/annonce_pmax";
+		if($type_campagne == 3){
+		$this->content = "layouts/client/onboarding/annonce_pmax";
 		}
 		$this->layout();
 	}
 
+
 	private function generateGoogleAdsCopy($info_base, $info_client, $site)
 	{
-		$prompt = "Tu es un expert en Google Ads. 
-			À partir de ces informations :
-			- Informations de base : $info_base
-			- Brief client : $info_client
-			- Site web : $site
+	$prompt = "Tu es un expert en Google Ads. 
+	À partir de ces informations :
+	- Informations de base : $info_base
+	- Brief client : $info_client
+	- Site web : $site
 
-			Génère :
-			- 12 titres courts accrocheurs (max 30 caractères chacun),
-			- 4 titres longs (max 90 caractères chacun),
-			- 4 descriptions (max 90 caractères chacune).
+	Génère :
+	- 12 titres courts accrocheurs (max 30 caractères chacun),
+	- 4 titres longs (max 90 caractères chacun),
+	- 4 descriptions (max 90 caractères chacune).
 
-			Retourne uniquement une réponse JSON structurée comme ceci :
-			{
-				\"titres\": [\"titre1\", \"titre2\", ...],
-				\"titres_longs\": [\"titre_long1\", ...],
-				\"descriptions\": [\"description1\", ...]
-			}";
+	Retourne uniquement une réponse JSON structurée comme ceci :
+	{
+	\"titres\": [\"titre1\", \"titre2\", ...],
+	\"titres_longs\": [\"titre_long1\", ...],
+	\"descriptions\": [\"description1\", ...]
+	}";
 
 		$curl = curl_init();
 		curl_setopt_array($curl, [
@@ -137,7 +138,7 @@ class Client extends MY_Controller
 			CURLOPT_RETURNTRANSFER => true,
 			CURLOPT_HTTPHEADER => [
 				'Content-Type: application/json',
-				'Authorization: Bearer ' . env('CHAT_GPT_API_KEY')
+				'Authorization: Bearer ' . $this->api_key
 			],
 			CURLOPT_POST => true,
 			CURLOPT_POSTFIELDS => json_encode([
@@ -163,21 +164,21 @@ class Client extends MY_Controller
 
 	public function details_ajax($id)
 	{
-		$idclients = $id;
-		$type_campagne = [
+	$idclients = $id;
+	$type_campagne = [
 			1	=> "SEARCH",
 			2	=>	"LOCAL",
 			3	=>	"PERFORMANCE MAX"
 		];
-		$campagnes = $this->data["campagnes"] = $this->visuels_model->getCampagneByIdclient($idclients);
-		$campagnes = $this->visuels_model->getCampagneByIdclient($idclients);
-
+	$campagnes = $this->data["campagnes"] = $this->visuels_model->getCampagneByIdclient($idclients);
+	$campagnes = $this->visuels_model->getCampagneByIdclient($idclients);
+		
 		foreach ($campagnes as $index => $campagne) {
 			$campagnes[$index]['type_campagne'] = $type_campagne[$campagne['type_campagne']];
 		}
-
-		$data['campagnes'] = $campagnes;
-		$donne_valider = $this->Donne_modele->getcclientvalidationbyidclients($idclients);
+		
+	$data['campagnes'] = $campagnes;
+	$donne_valider = $this->Donne_modele->getcclientvalidationbyidclients($idclients);
 		$groupe_valider = $this->Donne_modele->getcampagnegroupevalidationbyidclients($idclients);
 		$groupes_par_campagne = [];
 		foreach ($groupe_valider as $groupe) {
@@ -191,15 +192,17 @@ class Client extends MY_Controller
 			$idcampagne = $campagne['idcampagne'];
 			$campagne['groupes_annonces'] = isset($groupes_par_campagne[$idcampagne]) ? $groupes_par_campagne[$idcampagne] : [];
 		}
-		unset($campagne);
-		$data['donne_valider'] = $donne_valider;
-		$data['id'] = $id;
-		$this->load->view('layouts/client/onboarding/detail_campagne', $data);
+	unset($campagne);
+	$data['donne_valider'] = $donne_valider;
+	$data['images'] = $this->Image_model->get_images_by_client($idclients);
+	$data['groupe_annonce'] = $this->Donne_modele->getcampagnegroupevalidationbyidclient($idclients);
+	$data['id'] = $id; 
+	$this->load->view('layouts/client/onboarding/detail_campagne', $data);
 	}
 
 	public function export_pdf($id)
 	{
-		$this->load->library('pdf');
+		$this->load->library('pdf'); 
 
 		$idclients = $id;
 		$type_campagne = [
@@ -229,7 +232,7 @@ class Client extends MY_Controller
 			$campagne['groupes_annonces'] = isset($groupes_par_campagne[$idcampagne]) ? $groupes_par_campagne[$idcampagne] : [];
 		}
 		unset($campagne);
-		$data['donne_valider'] = $donne_valider;
+	$data['donne_valider'] = $donne_valider;
 		$html = $this->load->view('layouts/client/onboarding/detail_campagne_pdf', $data, true);
 
 		$this->pdf->loadHtml($html);
@@ -237,6 +240,7 @@ class Client extends MY_Controller
 		$this->pdf->render();
 		$this->pdf->stream("campagnes_client_$idclients.pdf", ['Attachment' => true]);
 	}
+
 
 	public function mis_a_jour_gtm($idclients)
 	{
@@ -257,7 +261,6 @@ class Client extends MY_Controller
 		endif;
 		redirect('Client/application/' . $idclients);
 	}
-
 	public function mis_a_jour_cms($idclients)
 	{
 		$id = $idclients;
@@ -279,7 +282,6 @@ class Client extends MY_Controller
 
 		redirect('Client/application/' . $idclients);
 	}
-
 	public function ajout_brief()
 	{
 		$id = $this->input->post('idclients');
@@ -296,6 +298,7 @@ class Client extends MY_Controller
 		redirect('Client/detail_client/' . $id);
 	}
 
+
 	public function change_conversions()
 	{
 		$id = $this->input->post('idclients');
@@ -303,7 +306,6 @@ class Client extends MY_Controller
 		$this->visuels_model->change_rapport_conversion($id, $rapport_conversion);
 		redirect('Client/detail_client/' . $id);
 	}
-
 	public function change_bilan_annuelle()
 	{
 		$id = $this->input->post('idclients');
@@ -311,7 +313,6 @@ class Client extends MY_Controller
 		$this->visuels_model->change_bilan_annuele($id, $bilan_annuele);
 		redirect('Client/detail_client/' . $id);
 	}
-
 	public function relance()
 	{
 		$id = $this->input->post('idclients');
@@ -358,21 +359,21 @@ class Client extends MY_Controller
 
 		redirect('Client/detail_client/' . $idclients);
 	}
-	public function upload_logo_campagne()
-	{
-		$idclients = $this->input->post('idclients');
+		public function upload_logo_campagne()
+		{
+			$idclients = $this->input->post('idclients');
 
-		$logo = $this->file_upload_field = "logo";
-		$logo = "";
-		$this->upload->initialize($this->set_upload_options("", $_FILES["logo"]["name"]));
-		if ($this->upload->do_upload('logo') != null) {
+			$logo = $this->file_upload_field = "logo";
+			$logo = "";
+			$this->upload->initialize($this->set_upload_options("", $_FILES["logo"]["name"]));
+			if ($this->upload->do_upload('logo') != null) {
 
-			$logo = $this->path . $this->upload->file_name;
+				$logo = $this->path . $this->upload->file_name;
 		}
-		$this->Donne_modele->updatelogo($idclients, $logo);
+			$this->Donne_modele->updatelogo($idclients, $logo);
 
-		echo json_encode(['success' => true, 'logo_url' => base_url($logo)]);
-	}
+			echo json_encode(['success' => true, 'logo_url' => base_url($logo)]);
+		}
 
 
 	public function enregistrer()
@@ -586,28 +587,30 @@ class Client extends MY_Controller
 		redirect('Client/gtm/' . $idclients);
 	}
 
-	public function updateDonneeClient()
-	{
-		$idclient = $this->input->post('idclient');
-		$idonnee = $this->input->post('idonnee');
-		$client = $this->input->post('Client');
-		$email_client = $this->input->post('Email_client');
-		$numero_client = $this->input->post('Numero_client');
-		$site_client = $this->input->post('Site_client');
-		$budget = $this->input->post('budget');
 
-		$secteur_activite = $this->input->post('secteur_activite');
-		$Produit = $this->input->post('Produit');
-		$Initiative = $this->input->post('Initiative');
-		$Am = $this->input->post('Am');
-		$mis_en_place_paiement = $this->input->post('mis_en_place_paiement');
-		$Brief = $this->input->post('Brief');
-		$annonce = $this->input->post('annonce');
-		$commentaire_client = $this->input->post('commentaire_client') ?: NULL;
-		$paiement_recu = (int) $this->input->post('paiement_recu');
-		$datastudio = (int) $this->input->post('datastudio');
-		$email_onboarding = (int) $this->input->post('email_onboarding');
-		$facturation = (int) $this->input->post('facturation');
+
+	public function updateDonneeClient()
+{
+	$idclient = $this->input->post('idclient');
+	$idonnee = $this->input->post('idonnee');
+	$client = $this->input->post('Client');
+	$email_client = $this->input->post('Email_client');
+	$numero_client = $this->input->post('Numero_client');
+	$site_client = $this->input->post('Site_client');
+	$budget = $this->input->post('budget');
+
+	$secteur_activite = $this->input->post('secteur_activite');
+	$Produit = $this->input->post('Produit');
+	$Initiative = $this->input->post('Initiative');
+	$Am = $this->input->post('Am');
+	$mis_en_place_paiement = $this->input->post('mis_en_place_paiement');
+	$Brief = $this->input->post('Brief');
+	$annonce = $this->input->post('annonce');
+	$commentaire_client = $this->input->post('commentaire_client') ?: NULL;
+	$paiement_recu = (int) $this->input->post('paiement_recu');
+	$datastudio = (int) $this->input->post('datastudio');
+	$email_onboarding = (int) $this->input->post('email_onboarding');
+	$facturation = (int) $this->input->post('facturation');
 
 		$this->Donne_modele->update_client($idclient, $client, $email_client, $numero_client, $site_client);
 		$this->Donne_modele->update_donnee_client(
@@ -759,7 +762,6 @@ class Client extends MY_Controller
 			$idcampagne = $campagne['idcampagne'];
 			$campagne['groupes_annonces'] = isset($groupes_par_campagne[$idcampagne]) ? $groupes_par_campagne[$idcampagne] : [];
 		}
-
 		unset($campagne);
 		$this->data['donne_valider'] = $donne_valider;
 		$this->content = "layouts/client/onboarding/index.php";
@@ -829,9 +831,11 @@ class Client extends MY_Controller
 				$groupes_annonces      = $this->input->post('groupe_annonce'); // OK
 				$contexte_groupes      = $this->input->post('contexte_groupe_annonce'); // not in view
 				$mots_cle              = $this->input->post('Mot_cle'); // OK
-
+				$Mots_cle_exclus       = $this->input->post('Mots_cle_exclus'); 
+				$selected_images = $this->input->post('selected_images');
+	
 				// Vérification cohérence
-				if (count($groupes_annonces) == count($contexte_groupes) && count($groupes_annonces) == count($mots_cle)) {
+				if (/* count($groupes_annonces) == count($contexte_groupes) &&  */count($groupes_annonces) == count($mots_cle)) {
 
 					// Insert campagne
 					$idcampagne = $this->Donne_modele->insert_campagne_am(
@@ -845,8 +849,11 @@ class Client extends MY_Controller
 						$appareil,
 						$objectif,
 						$url_site,
-						$mots_cle
+						$mots_cle,
+						$Mots_cle_exclus
 					);
+					
+					
 
 					// Data groupes
 					$data_groups = [];
@@ -863,6 +870,14 @@ class Client extends MY_Controller
 					}
 					//var_dump($data_groups);
 					$this->Donne_modele->insert_gp($data_groups, $idcampagne, $idclients, $camp_type);
+					if ($selected_images) {
+						$selected_images_array = explode(',', $selected_images);
+						$idclients = $idclients;
+						$idcampagne = $idcampagne;
+						$idgroupe_annonce = 0;
+						$inserted_count = $this->Image_model->insert_images($selected_images_array, $idclients, $idcampagne, $idgroupe_annonce);
+					}
+
 				} else {
 					echo 'Erreur : Le nombre de groupes d\'annonces, de contextes et de mots-clés ne correspond pas.';
 				}
@@ -922,18 +937,19 @@ class Client extends MY_Controller
 
 				// Insert campagne
 				$idcampagne = $this->Donne_modele->insert_campagne_am(
-					$idclients,
-					$camp_type,
-					$nom_campagne,
-					$information_campagne,
-					$zones,
-					$repartition_budget,
-					$date_campagne,
-					$appareil,
-					$objectif,
-					$url_site,
-					$Mots_cle_potentiels
-				);
+						$idclients,
+						$camp_type,
+						$nom_campagne,
+						$information_campagne,
+						$zones,
+						$repartition_budget,
+						$date_campagne,
+						$appareil,
+						$objectif,
+						$url_site,
+						$mots_cle,
+						$Mots_cle_exclus
+					);
 
 				// Insert groupe pmax
 				$this->Donne_modele->insert_gppmax($idclients, $nom_groupe_pmax, $camp_type, $url_site, $Mots_cle_potentiels, $idcampagne, $contextes_client);
@@ -993,17 +1009,17 @@ class Client extends MY_Controller
 				$this->Donne_modele->update_type_clients($choix, $idclients);
 
 				$data_groups = [];
-				foreach ($groupes_annonces as $index => $groupe) {
-					$data_groups[] = [
-						'groupe_annonce'         	=>	$groupe,
-						'contexte_groupe_annonce' 	=>	$contexte_groupes[$index] ?? '',
-						'mot_cle'                	=>	$mots_cle[$index] ?? '',
-						'url_groupe_annonce'     	=>	$url_site,
-						'idcampagne'             	=>	$idcampagne,
-						'idclient'               	=>	$idclients,
-						'camp_type'          		=>	$camp_type
-					];
-				}
+					foreach ($groupes_annonces as $index => $groupe) {
+						$data_groups[] = [
+							'groupe_annonce'         	=>	$groupe,
+							'contexte_groupe_annonce' 	=>	$contexte_groupes[$index] ?? '',
+							'mot_cle'                	=>	$mots_cle[$index] ?? '',
+							'url_groupe_annonce'     	=>	$url_site,
+							'idcampagne'             	=>	$idcampagne,
+							'idclient'               	=>	$idclients,
+							'camp_type'          		=>	$camp_type
+						];
+					}
 				$this->Donne_modele->insert_gp($data_groups, $idcampagne, $idclients, $camp_type);
 				break;
 		}
@@ -1014,7 +1030,8 @@ class Client extends MY_Controller
 
 		$this->layout();
 	}
-
+	
+	
 	private function fetch_all_images_from_site($site_url, $max_images = 8, $max_pages = 20)
 	{
 		if (!preg_match('#^https?://#', $site_url)) {
@@ -1306,7 +1323,7 @@ class Client extends MY_Controller
 
 	private function call_openai($prompt)
 	{
-		$url = env('CHAT_GPT_API_URL');
+		$url = "https://api.openai.com/v1/chat/completions";
 		$data = [
 			"model" => "gpt-4o-mini",
 			"messages" => [
@@ -1318,7 +1335,7 @@ class Client extends MY_Controller
 
 		$headers = [
 			"Content-Type: application/json",
-			"Authorization: Bearer " . env('CHAT_GPT_API_KEY')
+			"Authorization: " . "Bearer " . $this->api_key
 		];
 
 		$ch = curl_init();
@@ -1655,9 +1672,9 @@ class Client extends MY_Controller
 		$model = 'gpt-4';
 
 		$prompt = "Voici le résumé d’un site internet représentant une entreprise.\n\n" .
-			"Ta tâche est de déterminer le **code NAF (APE)** le plus approprié pour cette activité, basé sur la nomenclature française officielle (INSEE).\n" .
-			"Donne-moi le résultat au format JSON avec deux champs : `code` et `libelle`. Ne donne rien d'autre.\n\n" .
-			"Résumé :\n$summary";
+				"Ta tâche est de déterminer le **code NAF (APE)** le plus approprié pour cette activité, basé sur la nomenclature française officielle (INSEE).\n" .
+				"Donne-moi le résultat au format JSON avec deux champs : `code` et `libelle`. Ne donne rien d'autre.\n\n" .
+				"Résumé :\n$summary";
 
 		$data = [
 			"model" => $model,
@@ -1671,7 +1688,7 @@ class Client extends MY_Controller
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 		curl_setopt($ch, CURLOPT_HTTPHEADER, [
 			'Content-Type: application/json',
-			'Authorization: Bearer ' . env('CHAT_GPT_API_KEY')
+			'Authorization: Bearer ' . $api_key
 		]);
 		curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
 
@@ -1696,7 +1713,7 @@ class Client extends MY_Controller
 
 	private function get_summary_from_chatgpt($headings, $paragraphs)
 	{
-
+		
 		$model = 'gpt-4';
 
 		$input_text = "Voici les titres et paragraphes d’un site web.\n\n";
@@ -1729,7 +1746,7 @@ class Client extends MY_Controller
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 		curl_setopt($ch, CURLOPT_HTTPHEADER, [
 			'Content-Type: application/json',
-			'Authorization: Bearer ' . env('CHAT_GPT_API_KEY')
+			'Authorization: Bearer ' . $api_key
 		]);
 		curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
 
