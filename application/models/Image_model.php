@@ -7,6 +7,26 @@ class Image_model extends CI_Model {
         parent::__construct();
         $this->load->database(); // Charger la base de données
     }
+        public function insert_images($images, $idclients, $idcampagne, $idgroupe_annonce)
+    {
+        $inserted = 0;
+
+        foreach ($images as $image_url) {
+            $data = array(
+                'idclients' => $idclients,
+                'idcampagne' => $idcampagne,
+                'idgroupe_annonce' => $idgroupe_annonce,
+                'image_url' => trim($image_url),
+                'rank' => 0
+            );
+
+            if ($this->db->insert('images', $data)) {
+                $inserted++;
+            }
+        }
+
+        return $inserted;
+    }
     public function get_all_images() {
         $query = $this->db->order_by('rank', 'ASC')->get('images');
         return $query->result();
@@ -15,6 +35,16 @@ class Image_model extends CI_Model {
         $query = $this->db->where('idgroupe_annonce', $id)
                           ->order_by('rank', 'ASC')
                           ->get('images');
+        return $query->result();
+    }
+    public function get_images_by_client($idclients){
+        $this->load->database();
+
+        $query = $this->db->select('*') 
+                          ->from('images')
+                          ->where('images.idclients', $idclients)
+                          ->order_by('images.rank', 'ASC') 
+                          ->get();
         return $query->result();
     }
     public function get_images_by_clients($id, $idgroupe_annonce){
