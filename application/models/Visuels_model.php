@@ -887,10 +887,10 @@ public function get_gtm($idclients) {
 				WHERE c.idcampagne = '" . $id . "'";
 		
 		// Exécution de la requête
-		$result = $this->db->query($sql);
+		$query = $this->db->query($sql);
 		
 		// Retour des résultats sous forme de tableau associatif
-		$retour = $result->result_array();
+		$retour = $query->row();
 		
 		// Fermeture de la connexion à la base de données
 		$this->db->close();
