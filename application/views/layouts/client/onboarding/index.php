@@ -67,6 +67,7 @@
 		border-top-right-radius: 4px;
 		border-bottom-right-radius: 4px;
 	}
+
 </style>
 <?php end_section() ?>
 
@@ -122,6 +123,9 @@
 												alt="Voir les détails"
 												style="cursor: pointer;" />
 										</div>
+										<a href="<?= base_url('Client/inventaire_pmax/' .  htmlspecialchars($d['idclients'])) ?>" style="display: flex; align-items: center; text-decoration: none; color: inherit;">
+												Inventaire
+												</a>
 
 
 									</div>
@@ -323,7 +327,7 @@
 					</button>
 
 					<div id="camp_creation_step" class="d-none">
-						<p style="display: none;"><?= nl2br($d['information_client']); ?> </p>
+						<p style="display: none;"><?= nl2br(htmlspecialchars($d['information_client'])); ?> </p>
 						<!-- CAMPAGNE -->
 						<div id="campagne_step" class="step active mb-4">
 							<h1 class="display-1 text-center mt-5" style="font-size: 42px;">

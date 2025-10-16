@@ -67,6 +67,9 @@
 	.table-wrapper td:nth-child(6) {
 		width: 15%;
 	}
+	.budget{
+		font-weight: 500;
+	}
 </style>
 <?php end_section(); ?>
 
@@ -190,12 +193,21 @@
 										<img src="<?= base_url(IMAGES_PATH . htmlspecialchars($d->tech_photo_user)); ?>" width="28" height="28" alt="Client Image"><img src="<?= base_url(IMAGES_PATH . htmlspecialchars($d->am_photo_user)); ?>" width="28" height="28" alt="Client Image">
 									</td>
 									<td><?= $d->mis_en_place_paiement ?></td>
-									<td><?php
+									<td>
+										<div class="budget">
+										<?php if($current_user->tech != 3): ?>
+										<?php
 										$budget = $d->budget;
 										$budget = ($budget / 2) / 30.6;
 										$budget = round($budget, 2);
 										?>
-										<?= $budget; ?> €</td>
+										<?= $budget; ?> €
+										<?php endif; ?>	
+										<?php if($current_user->tech == 3): ?>
+										<?= $d->budget; ?> €
+										<?php endif; ?>	
+										</div>
+									</td>
 									<td>
 										<?php if ($d->statut_demande_en_cours != 1):  ?>
 										<?php if ($d->resiliation == 1):  ?>
@@ -244,8 +256,7 @@
 									<i class="fa fa-circle mr-1" style="font-size: 10px;"></i>
 									Active
 								</span>
-								<span class="badge alert-light mx-1 text-dark" style="font-size: 14px;">4</span>
-								<a href="#" class="text-dark text-decoration-none ml-auto" style="font-size: 28px;">+</a>
+								<span class="badge alert-light mx-1 text-dark" style="font-size: 14px;"></span>
 							</div>
 
 							<?php foreach ($donnee as $d): ?>
@@ -265,6 +276,8 @@
 													<img src="<?= base_url('assets/images/icons/figma/calendar.svg') ?>" alt="">
 													<?= $d->mis_en_place_paiement ?>
 												</span>
+												<div class="budget">
+												<?php if($current_user->tech != 3): ?>
 												<?php
 												$budget = $d->budget;
 												$budget = ($budget / 2) / 30.6;
@@ -273,6 +286,15 @@
 												<span>
 													<?= $budget; ?> €</td>
 												</span>
+												
+												<?php endif; ?>	
+												<?php if($current_user->tech == 3): ?>
+												<span>
+													<?= $d->budget; ?> €</td>
+												</span>	
+											
+												<?php endif; ?>	
+												</div>
 											</div>
 										</div>
 									</div>
@@ -292,8 +314,7 @@
 									<i class="fa fa-circle mr-1" style="font-size: 10px;"></i>
 									Pause
 								</span>
-								<span class="badge alert-light mx-1 text-dark" style="font-size: 14px;">4</span>
-								<a href="#" class="text-dark text-decoration-none ml-auto" style="font-size: 28px;">+</a>
+								<span class="badge alert-light mx-1 text-dark" style="font-size: 14px;"></span>
 							</div>
 
 							<?php foreach ($donnee as $d): ?>
@@ -313,6 +334,8 @@
 													<img src="<?= base_url('assets/images/icons/figma/calendar.svg') ?>" alt="">
 													<?= $d->mis_en_place_paiement ?>
 												</span>
+												<div class="budget">
+												<?php if($current_user->tech != 3): ?>
 												<?php
 												$budget = $d->budget;
 												$budget = ($budget / 2) / 30.6;
@@ -321,6 +344,15 @@
 												<span>
 													<?= $budget; ?> €</td>
 												</span>
+												
+												<?php endif; ?>	
+												<?php if($current_user->tech == 3): ?>
+												<span>
+													<?= $d->budget; ?> €</td>
+												</span>	
+											
+												<?php endif; ?>	
+												</div>	
 											</div>
 										</div>
 									</div>
@@ -340,8 +372,7 @@
 									<i class="fa fa-circle mr-1" style="font-size: 10px;"></i>
 									Résilier
 								</span>
-								<span class="badge alert-light mx-1 text-dark" style="font-size: 14px;">4</span>
-								<a href="#" class="text-dark text-decoration-none ml-auto" style="font-size: 28px;">+</a>
+								<span class="badge alert-light mx-1 text-dark" style="font-size: 14px;"></span>
 							</div>
 
 							<?php foreach ($donnee as $d): ?>
@@ -361,6 +392,8 @@
 													<img src="<?= base_url('assets/images/icons/figma/calendar.svg') ?>" alt="">
 													<?= $d->mis_en_place_paiement ?>
 												</span>
+												<div class="budget">
+												<?php if($current_user->tech != 3): ?>
 												<?php
 												$budget = $d->budget;
 												$budget = ($budget / 2) / 30.6;
@@ -369,6 +402,15 @@
 												<span>
 													<?= $budget; ?> €</td>
 												</span>
+												
+												<?php endif; ?>	
+												<?php if($current_user->tech == 3): ?>
+												<span>
+													<?= $d->budget; ?> €</td>
+												</span>	
+											
+												<?php endif; ?>	
+												</div>
 											</div>
 										</div>
 									</div>

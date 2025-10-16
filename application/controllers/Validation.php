@@ -20,7 +20,7 @@ class Validation extends CI_Controller
 		$this->load->model('visuels_model'); // Ajout du modèle visuels_model si nécessaire
 		$this->load->helper(array('form', 'url'));
 		$this->load->library('curl');
-
+		$this->load->model("Image_model");
 		$this->path = "assets/images/formats/";
 		$this->file_upload_field = "visuel_path";
 		// require_once(APPPATH.'third_party/tcpdf/src/tcpdf.php');

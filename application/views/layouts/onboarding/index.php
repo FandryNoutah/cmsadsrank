@@ -46,7 +46,9 @@
   border-top: 1px solid #dee2e6;
   z-index: 10;
 }
-
+	.budget{
+		font-weight: 500;
+	}
 
 
 </style>
@@ -229,16 +231,25 @@
 
 
 									<td>
+                    <div class="budget">
+                    <?php if($current_user->tech == 3): ?>
+                    <?php if($d->budgets == 0): ?>
+                    <?= round($d->budget, 2) ?> €
+                    <?php endif; ?>
+                    <?php if($d->budgets != 0): ?>
+                    <?= round($d->budgets, 2) ?> €
+                    <?php endif; ?>
+                    <?php endif; ?>
+                    <?php if($current_user->tech != 3): ?>
                     <?php if($d->budgets == 0): ?>
                     <?= round(($d->budget / 2) / 30.6, 2) ?> €
                     <?php endif; ?>
                     <?php if($d->budgets != 0): ?>
                     <?= round(($d->budgets / 2) / 30.6, 2) ?> €
                     <?php endif; ?>
-                    
+                    <?php endif; ?>
+                    </div>  
                   </td>
-								<?php //endif; ?>
-
 								<td>
 									<img src="<?= base_url(IMAGES_PATH . htmlspecialchars($d->tech_photo_user)); ?>" width="28" height="28">
 									<img src="<?= base_url(IMAGES_PATH . htmlspecialchars($d->am_photo_user)); ?>" width="28" height="28">
