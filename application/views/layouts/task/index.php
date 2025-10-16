@@ -179,11 +179,27 @@
 				<table class="table table-wrapper table-synced w-100" id="planned_table">
 					<tbody>
 						<?php foreach ($tache as $t):  ?>
+
 							<?php if ($t->status == "planifié"): ?>
 								<tr class="taREMOVEDfilter" data-type="<?= $t->type_tache ?>" data-am="<?= $t->AM; ?>" data-assigned="<?= $t->assigned_to ?>" <?php if ($t->expired): ?> data-expired="true" style="background-color: rgba(255, 0, 0, 0.05);" <?php endif; ?> data-urgent="<?= $t->Statuts_technique == 3; ?>">
-								<td>
+								<td>	
 										<h6 class="mb-0 ml-3">
-											<?= $t->nom_client; ?>
+											<?php if($t->title == "Création de Brief") :  ?>  
+												<a href="<?= base_url('Client/onboarding/' .  htmlspecialchars($t->idclients)) ?>" style="display: flex; align-items: center; text-decoration: none; color: inherit;">
+												<?= htmlspecialchars($t->nom_client) ?>
+												</a>
+											<?php elseif($t->title == "Demande de procédure GTM") :  ?>  
+												<a href="<?= base_url('Client/application/' .  htmlspecialchars($t->idclients)) ?>" style="display: flex; align-items: center; text-decoration: none; color: inherit;">
+												<?= htmlspecialchars($t->nom_client) ?>
+												</a>
+											<?php elseif($t->title == "Upsell" || $t->title == "Mise en pause" || $t->title == "Résiliiation") :  ?>  
+												<a href="<?= base_url('Onboarding') ?>" style="display: flex; align-items: center; text-decoration: none; color: inherit;">
+												<?= htmlspecialchars($t->nom_client) ?>
+												</a>
+											<?php else :  ?>
+												<?= htmlspecialchars($t->nom_client) ?>
+											<?php endif; ?>
+
 										</h6>
 									</td>
 									<td>
@@ -329,7 +345,21 @@
 								<tr class="taREMOVEDfilter" data-type="<?= $t->type_tache ?>" data-am="<?= $t->AM; ?>" data-assigned="<?= $t->assigned_to ?>" <?php if ($t->expired): ?> data-expired="true" style="background-color: rgba(255, 0, 0, 0.05);" <?php endif; ?> data-urgent="<?= $t->Statuts_technique == 3; ?>">
 									<td>
 										<h6 class="mb-0 ml-3">
-											<?= $t->nom_client; ?>
+											<?php if($t->title == "Création de Brief") :  ?>  
+												<a href="<?= base_url('Client/onboarding/' .  htmlspecialchars($t->idclients)) ?>" style="display: flex; align-items: center; text-decoration: none; color: inherit;">
+												<?= htmlspecialchars($t->nom_client) ?>
+												</a>
+											<?php elseif($t->title == "Demande de procédure GTM") :  ?>  
+												<a href="<?= base_url('Client/application/' .  htmlspecialchars($t->idclients)) ?>" style="display: flex; align-items: center; text-decoration: none; color: inherit;">
+												<?= htmlspecialchars($t->nom_client) ?>
+												</a>
+											<?php elseif($t->title == "Upsell" || $t->title == "Mise en pause" || $t->title == "Résiliiation") :  ?>  
+												<a href="<?= base_url('Onboarding') ?>" style="display: flex; align-items: center; text-decoration: none; color: inherit;">
+												<?= htmlspecialchars($t->nom_client) ?>
+												</a>
+											<?php else :  ?>
+												<?= htmlspecialchars($t->nom_client) ?>
+											<?php endif; ?>
 										</h6>
 									</td>
 									<td>
@@ -473,7 +503,21 @@
 								<tr class="taREMOVEDfilter" data-type="<?= $t->type_tache ?>" data-am="<?= $t->AM; ?>" data-assigned="<?= $t->assigned_to ?>" <?php if ($t->expired): ?> data-expired="true" style="background-color: rgba(255, 0, 0, 0.05);" <?php endif; ?> data-urgent="<?= $t->Statuts_technique == 3; ?>">
 									<td>
 										<h6 class="mb-0 ml-3">
-											<?= $t->nom_client; ?>
+											<?php if($t->title == "Création de Brief") :  ?>  
+												<a href="<?= base_url('Client/onboarding/' .  htmlspecialchars($t->idclients)) ?>" style="display: flex; align-items: center; text-decoration: none; color: inherit;">
+												<?= htmlspecialchars($t->nom_client) ?>
+												</a>
+											<?php elseif($t->title == "Demande de procédure GTM") :  ?>  
+												<a href="<?= base_url('Client/application/' .  htmlspecialchars($t->idclients)) ?>" style="display: flex; align-items: center; text-decoration: none; color: inherit;">
+												<?= htmlspecialchars($t->nom_client) ?>
+												</a>
+											<?php elseif($t->title == "Upsell" || $t->title == "Mise en pause" || $t->title == "Résiliiation") :  ?>  
+												<a href="<?= base_url('Onboarding') ?>" style="display: flex; align-items: center; text-decoration: none; color: inherit;">
+												<?= htmlspecialchars($t->nom_client) ?>
+												</a>
+											<?php else :  ?>
+												<?= htmlspecialchars($t->nom_client) ?>
+											<?php endif; ?>
 										</h6>
 									</td>
 									<td>
@@ -683,7 +727,21 @@
 													</div>
 												</div>
 											</div>
-											<h6 class="my-3" style="font-size: 14px;"><?= $t->nom_client; ?></h6>
+											<h6 class="my-3" style="font-size: 14px;"><?php if($t->title == "Création de Brief") :  ?>  
+												<a href="<?= base_url('Client/onboarding/' .  htmlspecialchars($t->idclients)) ?>" style="display: flex; align-items: center; text-decoration: none; color: inherit;">
+												<?= htmlspecialchars($t->nom_client) ?>
+												</a>
+											<?php elseif($t->title == "Demande de procédure GTM") :  ?>  
+												<a href="<?= base_url('Client/application/' .  htmlspecialchars($t->idclients)) ?>" style="display: flex; align-items: center; text-decoration: none; color: inherit;">
+												<?= htmlspecialchars($t->nom_client) ?>
+												</a>
+											<?php elseif($t->title == "Upsell" || $t->title == "Mise en pause" || $t->title == "Résiliiation") :  ?>  
+												<a href="<?= base_url('Onboarding') ?>" style="display: flex; align-items: center; text-decoration: none; color: inherit;">
+												<?= htmlspecialchars($t->nom_client) ?>
+												</a>
+											<?php else :  ?>
+												<?= htmlspecialchars($t->nom_client) ?>
+											<?php endif; ?></h6>
 											<span class="text-muted d-block mb-3"><?= $t->title; ?> <?php if ($t->type_tache == 5 || $t->type_tache == 6): 
 												$Budget = $t->budgets - $t->budget_initiale;	
 											?>
@@ -804,7 +862,21 @@
 													</div>
 												</div>
 											</div>
-											<h6 class="my-3" style="font-size: 14px;"><?= $t->nom_client; ?></h6>
+											<h6 class="my-3" style="font-size: 14px;"><?php if($t->title == "Création de Brief") :  ?>  
+												<a href="<?= base_url('Client/onboarding/' .  htmlspecialchars($t->idclients)) ?>" style="display: flex; align-items: center; text-decoration: none; color: inherit;">
+												<?= htmlspecialchars($t->nom_client) ?>
+												</a>
+											<?php elseif($t->title == "Demande de procédure GTM") :  ?>  
+												<a href="<?= base_url('Client/application/' .  htmlspecialchars($t->idclients)) ?>" style="display: flex; align-items: center; text-decoration: none; color: inherit;">
+												<?= htmlspecialchars($t->nom_client) ?>
+												</a>
+											<?php elseif($t->title == "Upsell" || $t->title == "Mise en pause" || $t->title == "Résiliiation") :  ?>  
+												<a href="<?= base_url('Onboarding') ?>" style="display: flex; align-items: center; text-decoration: none; color: inherit;">
+												<?= htmlspecialchars($t->nom_client) ?>
+												</a>
+											<?php else :  ?>
+												<?= htmlspecialchars($t->nom_client) ?>
+											<?php endif; ?></h6>
 											<span class="text-muted d-block mb-3"><?= $t->title; ?> <?php if ($t->type_tache == 5 || $t->type_tache == 6): 
 												$Budget = $t->budgets - $t->budget_initiale;	
 											?>
@@ -923,7 +995,21 @@
 													</div>
 												</div>
 											</div>
-											<h6 class="my-3" style="font-size: 14px;"><?= $t->nom_client; ?></h6>
+											<h6 class="my-3" style="font-size: 14px;"><?php if($t->title == "Création de Brief") :  ?>  
+												<a href="<?= base_url('Client/onboarding/' .  htmlspecialchars($t->idclients)) ?>" style="display: flex; align-items: center; text-decoration: none; color: inherit;">
+												<?= htmlspecialchars($t->nom_client) ?>
+												</a>
+											<?php elseif($t->title == "Demande de procédure GTM") :  ?>  
+												<a href="<?= base_url('Client/application/' .  htmlspecialchars($t->idclients)) ?>" style="display: flex; align-items: center; text-decoration: none; color: inherit;">
+												<?= htmlspecialchars($t->nom_client) ?>
+												</a>
+											<?php elseif($t->title == "Upsell" || $t->title == "Mise en pause" || $t->title == "Résiliiation") :  ?>  
+												<a href="<?= base_url('Onboarding') ?>" style="display: flex; align-items: center; text-decoration: none; color: inherit;">
+												<?= htmlspecialchars($t->nom_client) ?>
+												</a>
+											<?php else :  ?>
+												<?= htmlspecialchars($t->nom_client) ?>
+											<?php endif; ?></h6>
 											<span class="text-muted d-block mb-3"><?= $t->title; ?> <?php if ($t->type_tache == 5 || $t->type_tache == 6): 
 												$Budget = $t->budgets - $t->budget_initiale;	
 											?>

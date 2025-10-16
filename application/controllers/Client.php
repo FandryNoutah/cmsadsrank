@@ -98,6 +98,8 @@ class Client extends MY_Controller
 		$site_client = $d[0]['site_client'];
 		$type_campagne = $k[0]['type_campagne'];
 		$adsContent = $this->generateGoogleAdsCopy($information_base, $information_client, $site_client);
+		var_dump($adsContent);
+		die();
 		$this->data['ads_titres'] = $adsContent['titres'];
 		$this->data['ads_titres_longs'] = $adsContent['titres_longs'];
 		$this->data['ads_descriptions'] = $adsContent['descriptions'];
@@ -113,54 +115,56 @@ class Client extends MY_Controller
 
 
 	private function generateGoogleAdsCopy($info_base, $info_client, $site)
-	{
-	$prompt = "Tu es un expert en Google Ads. 
-	À partir de ces informations :
-	- Informations de base : $info_base
-	- Brief client : $info_client
-	- Site web : $site
+{
+$prompt = "Tu es un expert en Google Ads.
+Voici les données :
+- Informations de base : $info_base
+- Brief client : $info_client
+- Site web : $site
 
-	Génère :
-	- 12 titres courts accrocheurs (max 30 caractères chacun),
-	- 4 titres longs (max 90 caractères chacun),
-	- 4 descriptions (max 90 caractères chacune).
+Génère uniquement la réponse JSON suivante, sans aucun texte avant ou après :
+{
+  \"titres\": [...],
+  \"titres_longs\": [...],
+  \"descriptions\": [...]
+}";
 
-	Retourne uniquement une réponse JSON structurée comme ceci :
-	{
-	\"titres\": [\"titre1\", \"titre2\", ...],
-	\"titres_longs\": [\"titre_long1\", ...],
-	\"descriptions\": [\"description1\", ...]
-	}";
+    $curl = curl_init();
+    curl_setopt_array($curl, [
+        CURLOPT_URL => 'https://api.openai.com/v1/chat/completions',
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_HTTPHEADER => [
+            'Content-Type: application/json',
+            'Authorization: ' . 'Bearer ' . $api_key
+        ],
+        CURLOPT_POST => true,
+        CURLOPT_TIMEOUT => 30,
+        CURLOPT_POSTFIELDS => json_encode([
+            'model' => 'gpt-4',
+            'messages' => [
+                ['role' => 'system', 'content' => 'Tu es un expert en publicité Google Ads.'],
+                ['role' => 'user', 'content' => $prompt]
+            ],
+            'temperature' => 0.7
+        ])
+    ]);
 
-		$curl = curl_init();
-		curl_setopt_array($curl, [
-			CURLOPT_URL => 'https://api.openai.com/v1/chat/completions',
-			CURLOPT_RETURNTRANSFER => true,
-			CURLOPT_HTTPHEADER => [
-				'Content-Type: application/json',
-				'Authorization: Bearer ' . $this->api_key
-			],
-			CURLOPT_POST => true,
-			CURLOPT_POSTFIELDS => json_encode([
-				'model' => 'gpt-4',
-				'messages' => [
-					['role' => 'system', 'content' => 'Tu es un expert en publicité Google Ads.'],
-					['role' => 'user', 'content' => $prompt]
-				],
-				'temperature' => 0.7
-			])
-		]);
+    $response = curl_exec($curl);
 
-		$response = curl_exec($curl);
-		curl_close($curl);
+    if ($response === false) {
+        throw new Exception('Erreur cURL : ' . curl_error($curl));
+    }
 
-		$decoded = json_decode($response, true);
-		$content = $decoded['choices'][0]['message']['content'] ?? '';
+    $decoded = json_decode($response, true);
+    $content = $decoded['choices'][0]['message']['content'] ?? '';
 
-		$result = json_decode($content, true);
+    // Extraction du JSON dans le contenu
+    preg_match('/\{(?:[^{}]|(?R))*\}/', $content, $matches);
+    $result = json_decode($matches[0] ?? '', true);
 
-		return $result ?: ['titres' => [], 'titres_longs' => [], 'descriptions' => []];
-	}
+    return $result ?: ['titres' => [], 'titres_longs' => [], 'descriptions' => []];
+}
+
 
 	public function details_ajax($id)
 	{
@@ -198,6 +202,14 @@ class Client extends MY_Controller
 	$data['groupe_annonce'] = $this->Donne_modele->getcampagnegroupevalidationbyidclient($idclients);
 	$data['id'] = $id; 
 	$this->load->view('layouts/client/onboarding/detail_campagne', $data);
+	}
+	public function inventaire_pmax($idclients)
+	{
+	$data['groupe_annonce'] = $this->Donne_modele->getpmaxvalider($idclients);
+	var_dump($data['groupe_annonce']);
+	die();
+	$data['images'] = $this->Image_model->get_images_by_client($idclients);
+	$this->load->view('layouts/client/onboarding/inventaire_pmax', $data);
 	}
 
 	public function export_pdf($id)

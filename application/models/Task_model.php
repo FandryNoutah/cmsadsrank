@@ -160,8 +160,8 @@ public function get_all_tâche($status = null)
 	$this->db->select('tasks.*, 
 		u1.first_name as assigned_to_name, u1.photo_users as assigned_to_photo, 
 		u2.first_name as AM_name, u2.photo_users as AM_photo, 
-		clients.*,
-		upsell.*'); // <-- Ajout des colonnes de upsell
+		clients.nom_client,
+		upsell.idupsell,upsell.budgets,upsell.budget_initiale'); // <-- Ajout des colonnes de upsell
 
 	$this->db->from('tasks');
 
