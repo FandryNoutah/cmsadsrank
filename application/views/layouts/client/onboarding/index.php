@@ -214,8 +214,8 @@
 														<i class="fa fa-ellipsis-v"></i>
 													</a>
 													<div class="dropdown-menu">
-														<a class="dropdown-item" href="<?= site_url("Googleads/editcampagne/" . $campagne['idcampagne']) ?>">Modifier</a>
-														<a class="dropdown-item text-danger" href="<?= site_url("Googleads/deletecampagne/" . $campagne['idcampagne']) ?>" onclick="return confirm('Supprimer cette campagne ?');">Supprimer</a>
+														<a class="dropdown-item" href="<?= site_url("Client/campagne/" . $idclients ."?id_camp=". $campagne['idcampagne']) ?>">Modifier</a>
+														<a class="dropdown-item text-danger" href="<?= site_url("Client/supprimer_campagne/" . $campagne['idcampagne']) ?>" onclick="return confirm('Supprimer cette campagne ?');">Supprimer</a>
 														<?php if ($campagne['type_campagne'] == 1): ?>
 															<a class="dropdown-item" href="<?= site_url("Googleads/ajout_groupeannonce/" . $campagne['idcampagne']) ?>">Ajouter Groupe</a>
 														<?php elseif ($campagne['type_campagne'] == 2): ?>

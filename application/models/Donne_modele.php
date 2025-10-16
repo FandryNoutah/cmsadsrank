@@ -31,7 +31,7 @@ class Donne_modele extends CI_Model
 		$this->db->query($sql);
 		$this->db->close();
 	}
-		public function update_budger_onboarding($idclient, $budget)
+	public function update_budger_onboarding($idclient, $budget)
 	{
 		$sql = "UPDATE onboarding SET budget = $budget WHERE idclients = $idclient";
 		$this->db->query($sql);
@@ -54,7 +54,7 @@ class Donne_modele extends CI_Model
 		$this->db->where('idonnee', $idonnee); // Utiliser 'idonnee' comme clé primaire
 		return $this->db->update('donnee', $data); // Remplacez 'compte' par le nom de votre table
 	}
-	
+
 	public function update_information_upsell($idonnee, $inforamtion_upsell, $budget_upsell, $statut_upsell)
 	{
 		// Préparer les données à mettre à jour
@@ -68,13 +68,13 @@ class Donne_modele extends CI_Model
 		$this->db->where('idonnee', $idonnee); // Utiliser 'idonnee' comme clé primaire
 		return $this->db->update('donnee', $data); // Remplacez 'compte' par le nom de votre table
 	}
-	
+
 	public function update_etat_upsell($id, $etat)
 	{
 		return $this->db->where('idupsell', $id)
 			->update('upsell', ['etat' => $etat]);
 	}
-	
+
 	public function update_etat_am($id, $etat_am)
 	{
 		return $this->db->where('idupsell', $id)
@@ -98,7 +98,7 @@ class Donne_modele extends CI_Model
 		$this->db->where('idonnee', $idonnee); // Utiliser 'idonnee' comme clé primaire
 		return $this->db->update('donnee', $data); // Remplacez 'compte' par le nom de votre table
 	}
-	
+
 	public function update_information_upsells($idupsell, $information_upsell)
 	{
 		// Préparer les données à mettre à jour
@@ -200,37 +200,54 @@ class Donne_modele extends CI_Model
 	}
 	// Dans le modèle Donne_modele
 	public function insert_gp($groupes_annonces, $idcampagne, $idclients, $type_campagne)
-{
-    if (is_array($groupes_annonces) && !empty($groupes_annonces)) {
-        $this->load->database();
-        $insert_data = array();
+	{
+		if (is_array($groupes_annonces) && !empty($groupes_annonces)) {
+			$this->load->database();
+			$insert_data = array();
 
-        foreach ($groupes_annonces as $groupe) {
-            if (!empty($groupe['groupe_annonce']) && !empty($groupe['mot_cle'])) {
-                // Nettoyage des mots-clés (si tableau)
-                $mots = is_array($groupe['mot_cle']) ? implode(', ', $groupe['mot_cle']) : $groupe['mot_cle'];
+			foreach ($groupes_annonces as $groupe) {
+				if (!empty($groupe['groupe_annonce']) && !empty($groupe['mot_cle'])) {
+					// Nettoyage des mots-clés (si tableau)
+					$mots = is_array($groupe['mot_cle']) ? implode(', ', $groupe['mot_cle']) : $groupe['mot_cle'];
 
-                $insert_data[] = array(
-                    'nom_groupe' => $groupe['groupe_annonce'],
-                    'contexte_groupes_annonces' => $groupe['contexte_groupe_annonce'],
-                    'mot_cle' => $mots,
-                    'url_groupe_annonce' => $groupe['url_groupe_annonce'],
-                    'idclients' => $idclients,
-                    'type_campagnes' => $type_campagne,
-                    'idcampagne' => $idcampagne
-                );
-            }
-        }
+					$insert_data[] = array(
+						'nom_groupe' => $groupe['groupe_annonce'],
+						'contexte_groupes_annonces' => $groupe['contexte_groupe_annonce'],
+						'mot_cle' => $mots,
+						'url_groupe_annonce' => $groupe['url_groupe_annonce'],
+						'idclients' => $idclients,
+						'type_campagnes' => $type_campagne,
+						'idcampagne' => $idcampagne
+					);
+				}
+			}
 
-        if (!empty($insert_data)) {
-            $this->db->insert_batch('groupe_annonce', $insert_data);
-            return true;
-        }
-    }
+			if (!empty($insert_data)) {
+				$this->db->insert_batch('groupe_annonce', $insert_data);
+				return true;
+			}
+		}
 
-    return false;
-}
+		return false;
+	}
 
+	public function get_gp_by_idcampagne($idcampagne)
+	{
+		$this->load->database();
+
+		$this->db->select('*');
+		$this->db->from('groupe_annonce');
+		$this->db->where('idcampagne', $idcampagne);
+		$this->db->order_by('idgroupe_annonce', 'ASC'); // optional: to keep a stable order
+
+		$query = $this->db->get();
+
+		if ($query->num_rows() > 0) {
+			return $query->result_array(); // or ->result() if you prefer objects
+		}
+
+		return [];
+	}
 
 	public function getpmaxnonvalider($id)
 	{
@@ -240,7 +257,7 @@ class Donne_modele extends CI_Model
 		$this->db->close();
 		return $retour;
 	}
-	
+
 	public function getcclientvalidation()
 	{
 		$sql = "select * from campagne";
@@ -249,7 +266,7 @@ class Donne_modele extends CI_Model
 		$this->db->close();
 		return $retour;
 	}
-	
+
 	public function getcclientvalidationbyidclients($idclients)
 	{
 		$sql = "select * from campagne where idclients = '" . $idclients . "'";
@@ -258,7 +275,7 @@ class Donne_modele extends CI_Model
 		$this->db->close();
 		return $retour;
 	}
-	
+
 	public function getidclients($id)
 	{
 		$sql = "select idclients from campagne where idcampagne = '" . $id . "'";
@@ -277,7 +294,7 @@ class Donne_modele extends CI_Model
 		$this->db->close();
 		return $retour;
 	}
-	
+
 	public function getidclientsg($id)
 	{
 		$sql = "select idclients from groupe_annonce where idgroupe_annonce = '" . $id . "'";
@@ -286,7 +303,7 @@ class Donne_modele extends CI_Model
 		$this->db->close();
 		return $retour;
 	}
-	
+
 	public function getclientvalidation($id)
 	{
 		$sql = "select * from campagne where idclients = '" . $id . "' AND publier_techinque = '1'";
@@ -295,7 +312,7 @@ class Donne_modele extends CI_Model
 		$this->db->close();
 		return $retour;
 	}
-	
+
 	public function getclientvalidations($id)
 	{
 		$sql = "select * from campagne where idclients = '" . $id . "'";
@@ -304,7 +321,7 @@ class Donne_modele extends CI_Model
 		$this->db->close();
 		return $retour;
 	}
-	
+
 	public function deletecampagne($id)
 	{
 		// Préparez la requête DELETE
@@ -323,7 +340,7 @@ class Donne_modele extends CI_Model
 		// Fermez la connexion
 		$this->db->close();
 	}
-	
+
 	public function deleteplandetaggage($id)
 	{
 		// Préparez la requête DELETE
@@ -342,7 +359,7 @@ class Donne_modele extends CI_Model
 		// Fermez la connexion
 		$this->db->close();
 	}
-	
+
 	public function deleteextensions($id)
 	{
 		// Préparez la requête DELETE
@@ -361,7 +378,7 @@ class Donne_modele extends CI_Model
 		// Fermez la connexion
 		$this->db->close();
 	}
-	
+
 	public function deletegroupe($id)
 	{
 		// Préparez la requête DELETE
@@ -380,7 +397,7 @@ class Donne_modele extends CI_Model
 		// Fermez la connexion
 		$this->db->close();
 	}
-	
+
 	public function deletegroupecampagne($id)
 	{
 		// Préparez la requête DELETE
@@ -399,7 +416,7 @@ class Donne_modele extends CI_Model
 		// Fermez la connexion
 		$this->db->close();
 	}
-	
+
 	public function deleteimage($id)
 	{
 		// Préparez la requête DELETE
@@ -440,7 +457,7 @@ class Donne_modele extends CI_Model
 		// Retour des résultats
 		return $retour;
 	}
-	
+
 	public function getgroupevalidations($id)
 	{
 		// Requête SQL avec JOIN pour inclure la table campagne
@@ -461,7 +478,7 @@ class Donne_modele extends CI_Model
 		// Retour des résultats
 		return $retour;
 	}
-	
+
 	public function getpmaxvalider($id)
 	{
 		// Requête SQL avec JOIN pour inclure la table campagne
@@ -483,7 +500,7 @@ class Donne_modele extends CI_Model
 		// Retour des résultats
 		return $retour;
 	}
-	
+
 	public function getlocalxvalider($id)
 	{
 		// Requête SQL avec JOIN pour inclure la table campagne
@@ -505,7 +522,7 @@ class Donne_modele extends CI_Model
 		// Retour des résultats
 		return $retour;
 	}
-	
+
 	public function getcampagnegroupevalidationbyidclients($idclients)
 	{
 		// Assurez-vous que l'ID client est un nombre entier pour éviter les injections
@@ -579,7 +596,7 @@ class Donne_modele extends CI_Model
 		// Fermer la connexion à la base de données
 		$this->db->close();
 	}
-	
+
 	public function insert_pmax_groupe(
 		$idclients,
 		$idcampagne,
@@ -614,21 +631,9 @@ class Donne_modele extends CI_Model
 		// Fermer la connexion à la base de données
 		$this->db->close();
 	}
-	
-	public function insert_campagne_am(
-		$idclients,
-		$type_campagne,
-		$nom_campagne,
-		$information_campagne,
-		$zones,
-		$repartition_budget,
-		$date_campagne,
-		$appareil,
-		$objectif,
-		$url_site,
-		$mots_cle,
-		$Mots_cle_exclus
-	) {
+
+	public function insert_campagne_am($idclients, $type_campagne, $nom_campagne, $information_campagne, $zones, $repartition_budget, $date_campagne, $appareil, $objectif, $url_site, $Mots_cle_exclus)
+	{
 
 		// Echappement des valeurs pour éviter les erreurs SQL
 		// Ici, pas besoin de refaire l'échappement si vous le faites déjà dans la requête
@@ -646,7 +651,7 @@ class Donne_modele extends CI_Model
 
 		// Construction de la requête SQL pour insérer une nouvelle campagne
 		$sql = "INSERT INTO campagne(idclients, type_campagne, nom_campagne, information_campagne, zones, repartition_budget, date_campagne, appareil, objectif, url_site,Mots_cle_exclus) 
-    VALUES ($idclients, $type_campagne, $nom_campagne, $information_campagne, $zones, $repartition_budget, $date_campagne, $appareil, $objectif, $url_site,$Mots_cle_exclus)";
+    	VALUES ($idclients, $type_campagne, $nom_campagne, $information_campagne, $zones, $repartition_budget, $date_campagne, $appareil, $objectif, $url_site,$Mots_cle_exclus)";
 
 		// Exécution de la requête
 		$this->db->query($sql);
@@ -661,18 +666,58 @@ class Donne_modele extends CI_Model
 		return $idcampagne;
 	}
 
+	public function update_campagne_am(
+		$idcampagne,
+		$idclients,
+		$type_campagne,
+		$nom_campagne,
+		$information_campagne,
+		$zones,
+		$repartition_budget,
+		$date_campagne,
+		$appareil,
+		$objectif,
+		$url_site,
+		$Mots_cle_exclus
+	) {
+		$this->load->database();
+
+		// Sécurisation automatique via Active Record
+		$data = [
+			'idclients'           => $idclients,
+			'type_campagne'       => $type_campagne,
+			'nom_campagne'        => $nom_campagne,
+			'information_campagne' => $information_campagne,
+			'zones'               => $zones,
+			'repartition_budget'  => $repartition_budget,
+			'date_campagne'       => $date_campagne,
+			'appareil'            => $appareil,
+			'objectif'            => $objectif,
+			'url_site'            => $url_site,
+			'Mots_cle_exclus'     => $Mots_cle_exclus
+		];
+
+		$this->db->where('idcampagne', $idcampagne);
+		$updated = $this->db->update('campagne', $data);
+
+		$this->db->close();
+
+		return $updated; // true si succès, false sinon
+	}
+
+
 	public function insert_groupe_search($data)
 	{
 		// Insérer les données dans la base de données
 		$this->db->insert('groupe_annonce', $data);
 	}
-	
+
 	public function creer_groupe_search($data)
 	{
 		// Insérer les données dans la base de données
 		$this->db->insert('groupe_annonce', $data);
 	}
-	
+
 	public function update_groupe_search($idgroupe_annonce, $data)
 	{
 		// Mise à jour des données dans la table des groupes d'annonces en fonction de l'ID
@@ -685,7 +730,7 @@ class Donne_modele extends CI_Model
 		$this->db->insert('campagne', $data);
 		return $this->db->insert_id();
 	}
-	
+
 	public function insert_gppmax($idclients, $nom_groupe_pmax, $type_campagne, $url_site, $Mots_cle_potentiels, $idcampagne, $contextes_client)
 	{
 
@@ -696,7 +741,7 @@ class Donne_modele extends CI_Model
 		$this->db->query($sql);
 		$this->db->close();
 	}
-	
+
 	public function insert_campagne_pmax($idclient, $zone, $type_de_campagne, $calendar, $appareil)
 	{
 
@@ -708,7 +753,7 @@ class Donne_modele extends CI_Model
 
 		return $insert_id; // Retourner l'ID de l'insertion
 	}
-	
+
 	public function insert_donne_information($idclients, $information_client, $contextes_client)
 	{
 		$sql = "update donnee set information_client='" . $information_client . "',contexte_client='" . $contextes_client . "' where idclients='" . $idclients . "'";
@@ -724,13 +769,13 @@ class Donne_modele extends CI_Model
 		$this->db->insert('groupe_annonce', $data);
 		return $this->db->insert_id();  // Retourne l'ID de la dernière insertion
 	}
-	
+
 	public function insert_groupe_pmax($data)
 	{
 		// Insérer les données dans la base de données
 		$this->db->insert('groupe_annonce', $data);
 	}
-	
+
 	public function update_groupe_pmax($data, $idgroupe_annonce)
 	{
 		// Mettre à jour les données dans la base de données en fonction de l'idgroupe_annonce
@@ -751,14 +796,14 @@ class Donne_modele extends CI_Model
 		$this->db->query($sql);
 		$this->db->close();
 	}
-	
+
 	public function save_campagne_clients($idclients, $decision)
 	{
 		$sql = "update donnee set lien_datastudio='" . $decision . "' where idclients='" . $idclients . "'";
 		$this->db->query($sql);
 		$this->db->close();
 	}
-	
+
 	public function bouillon_campagnes($idcampagne, $decision)
 	{
 		// Met à jour l'état de la campagne
@@ -780,21 +825,21 @@ class Donne_modele extends CI_Model
 		// Retourne les IDs des clients
 		return $idclients;
 	}
-	
+
 	public function save_campagnestech($idclients, $decision)
 	{
 		// Met à jour l'état de la campagne
 		$sql = "UPDATE campagne SET actif = '" . $decision . "',publier_techinque='" . $decision . "' WHERE idclients = '" . $idclients . "'";
 		$this->db->query($sql);
 	}
-	
+
 	public function save_annoncestech($idclients, $decision)
 	{
 		// Met à jour l'état de la campagne
 		$sql = "UPDATE groupe_annonce SET validation_technique = '" . $decision . "' WHERE idclients = '" . $idclients . "'";
 		$this->db->query($sql);
 	}
-	
+
 	public function save_campagnes($idcampagne, $decision)
 	{
 		// Met à jour l'état de la campagne
@@ -816,7 +861,7 @@ class Donne_modele extends CI_Model
 		// Retourne les IDs des clients
 		return $idclients;
 	}
-	
+
 	public function updateDonneesClientss($idgroupe_annonce, $data)
 	{
 		// Mise à jour des données dans la table en fonction de l'idgroupe_annonce
@@ -844,7 +889,7 @@ class Donne_modele extends CI_Model
 			return false;
 		}
 	}
-	
+
 	public function save_annonces($idcampagne, $decision)
 	{
 		// Met à jour l'état de la campagne
@@ -866,35 +911,35 @@ class Donne_modele extends CI_Model
 		// Retourne les IDs des clients
 		return $idclients;
 	}
-	
+
 	public function save_annonces_donnee($idclients, $structure)
 	{
 		// Met à jour l'état de la campagne
 		$sql = "UPDATE donnee SET validation_technique = '" . $structure . "' WHERE idclients = '" . $idclients . "'";
 		$this->db->query($sql);
 	}
-	
+
 	public function changelogo($logos, $idgroupe_annonce)
 	{
 		// Met à jour l'état de la campagne
 		$sql = "UPDATE groupe_annonce SET  	logo_client = '" . $logos . "' WHERE idgroupe_annonce = '" . $idgroupe_annonce . "'";
 		$this->db->query($sql);
 	}
-	
+
 	public function changelogoclients($logos, $idclients)
 	{
 		// Met à jour l'état de la campagne
 		$sql = "UPDATE clients SET  	logo_client = '" . $logos . "' WHERE idclients = '" . $idclients . "'";
 		$this->db->query($sql);
 	}
-	
+
 	public function changefavicons($favicon, $idgroupe_annonce)
 	{
 		// Met à jour l'état de la campagne
 		$sql = "UPDATE groupe_annonce SET  	favicon = '" . $favicon . "' WHERE idgroupe_annonce = '" . $idgroupe_annonce . "'";
 		$this->db->query($sql);
 	}
-	
+
 	public function changefavicon($favicon, $idgroupe_annonce)
 	{
 		// Met à jour l'état de la campagne
@@ -910,7 +955,7 @@ class Donne_modele extends CI_Model
 		$this->db->query($sql);
 		$this->db->close();
 	}
-	
+
 	public function save_annonce($idgroupe_annonce, $decision)
 	{
 		// Mettre à jour le statut du groupe d'annonces
@@ -944,21 +989,21 @@ class Donne_modele extends CI_Model
 		$this->db->query($sql);
 		$this->db->close();
 	}
-	
+
 	public function update_dejaclient($decision, $id_donnee)
 	{
 		$sql = "update donnee set dejaclient='" . $decision . "' where idonnee='" . $id_donnee . "'";
 		$this->db->query($sql);
 		$this->db->close();
 	}
-	
+
 	public function updatelogo($idclients, $logo)
 	{
 		$sql = "update clients set logo_client='" . $logo . "' where idclients='" . $idclients . "'";
 		$this->db->query($sql);
 		$this->db->close();
 	}
-	
+
 	public function updateinformation($idonnee, $secteur_activite, $information_client, $contexte_client, $tracking_gtm, $commentaire, $information_complementaire)
 	{
 		// Échapper les variables avant d'utiliser dans la requête SQL
@@ -1110,7 +1155,7 @@ class Donne_modele extends CI_Model
 		$this->db->query($sql);
 		$this->db->close();
 	}
-	
+
 	public function getProduitById($idproduit)
 	{
 		$sql = "select * from produit where idproduit = '" . $idproduit . "'";
@@ -1130,7 +1175,7 @@ class Donne_modele extends CI_Model
 		$this->db->close();
 		return $retour;
 	}
-	
+
 	public function getamById($idam)
 	{
 		$sql = "select * from users where id = '" . $idam . "'";
@@ -1139,19 +1184,19 @@ class Donne_modele extends CI_Model
 		$this->db->close();
 		return $retour;
 	}
-	
+
 	public function get_all_produit()
 	{
 		$query = $this->db->get('produit');
 		return $query->result(); // Renvoie un tableau d'objets
 	}
-	
+
 	public function get_all_am()
 	{
 		$query = $this->db->get('am');
 		return $query->result(); // Renvoie un tableau d'objets
 	}
-	
+
 	public function get_all_initiative()
 	{
 		$query = $this->db->get('initiative');
