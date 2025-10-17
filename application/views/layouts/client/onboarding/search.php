@@ -8,11 +8,23 @@
 	.multi-col>* {
 		break-inside: avoid;
 	}
+	.img-proposition {
+		cursor: pointer;
+		transition: transform .08s ease;
+	}
+
 </style>
 <?php end_section(); ?>
 
 <?php start_section('content'); ?>
-<?php foreach ($donnees as $d) : ?>
+
+<?php
+// ON SUPPOSE qu'il y a au moins un client dans $donnees.
+// Si $donnees peut être vide, tu peux ajouter un fallback.
+$d = isset($donnees[0]) ? $donnees[0] : (is_array($donnees) ? $donnees : []);
+$images_site = isset($images_site) && is_array($images_site) ? $images_site : [];
+?>
+
 <div class="container-fluid p-0 h-100">
 	<div class="row no-gutters h-100">
 
@@ -47,65 +59,103 @@
 		</nav>
 
 		<div class="col">
-			<form action='<?= site_url('Client/ajout_campagne/' . $idclients) . "?conversion=$conversion&camp_type=$camp_type&gtm=$gtm" ?>' method="POST">
+
+			<?php if (isset($campagne)): ?>
+				<form action="<?= site_url('Client/ajout_campagne/' . $idclients) . "?id_camp=" . urlencode($id_camp) ?>" method="POST">
+			<?php else: ?>
+				<form action="<?= site_url('Client/ajout_campagne/' . $idclients) . "?conversion=" . urlencode($conversion) . "&camp_type=" . urlencode($camp_type) . "&gtm=" . urlencode($gtm) ?>" method="POST">
+			<?php endif; ?>
+
 				<div class="container-fluid pt-4">
 					<h5>Campagne Reseau de Recherche</h5>
 					<hr class="my-4">
-					<input type="hidden" name="selected_images" id="selectedImagesInput" value="<?= implode(',', $images_site) ?>">
+
+					<!-- input caché unique pour les images sélectionnées -->
+					<input type="hidden" name="selectedImages" id="selectedImagesInput" value="<?= implode(',', $images_site) ?>">
+
 					<div class="row align-items-center mb-4">
 						<div class="col-auto">
-							<img src="<?php echo base_url($d['logo_client']); ?>" width="64">
+							<?php if (!empty($d['logo_client'])): ?>
+								<img src="<?= base_url($d['logo_client']) ?>" width="64" alt="logo client">
+							<?php endif; ?>
 						</div>
-						<div class="col-auto">
-							<input type="hidden" name="file">
-							<button type="button" class="btn btn-light btn-sm" onclick="document.getElementById('logo').click();">
-								<i class="fa fa-upload"></i>
-								Upload Company Logo
+						<!-- <div class="col-auto">
+							<input type="file" name="logo">
+							
+							<button type="button" class="btn btn-light btn-sm" onclick="document.getElementById('logoFileInput').click();">
+								<i class="fa fa-upload"></i> Upload Company Logo
 							</button>
-						</div>
+							<input type="file" id="logoFileInput" accept="image/*" class="d-none">
+							
+						</div> -->
+					
 					</div>
 
 					<div class="form-group">
 						<label for="nom_campagne_search">Nom de la campagne</label>
-						<input type="text" class="form-control" name="nom_campagne_search" id="nom_campagne_search">
+						<input type="text" class="form-control" name="nom_campagne_search" id="nom_campagne_search" value="<?= isset($campagne) ? htmlentities($campagne->nom_campagne) : '' ?>">
 					</div>
 
 					<div class="form-group">
 						<label for="information_campagne_search">Information de la campagne</label>
-						<textarea class="form-control" name="information_campagne_search" id="information_campagne_search"></textarea>
+						<textarea class="form-control" name="information_campagne_search" id="information_campagne_search"><?= isset($campagne) ? htmlentities($campagne->information_campagne) : '' ?></textarea>
 					</div>
 
 					<div class="form-group">
 						<label for="url_campagne">URL de la campagne</label>
-						<input type="url" class="form-control" name="url_campagne" id="url_campagne">
+						<input type="url" class="form-control" name="url_campagne" id="url_campagne"
+							value="<?= isset($campagne) ? $campagne->url_site : $site_client ?>">
 					</div>
+
 
 					<div class="form-group">
 						<label for="repartition_budget_search">Budget de la campagne</label>
-						<input type="number" class="form-control" name="repartition_budget_search" id="repartition_budget_search">
+						<input type="number" class="form-control" name="repartition_budget_search" id="repartition_budget_search" value="<?= isset($campagne) ? htmlentities($campagne->repartition_budget) : '' ?>">
 					</div>
 
-					<div class="custom-control custom-switch">
-						<input type="checkbox" class="custom-control-input" id="multiple_groupe_annonce">
+					<div class="custom-control custom-switch mb-3">
+						<input type="checkbox" class="custom-control-input" id="multiple_groupe_annonce" <?php if (isset($campagne) && !empty($groupes_annonces) && count($groupes_annonces) > 0): ?> checked <?php endif; ?>>
 						<label class="custom-control-label" for="multiple_groupe_annonce">Souhaitez-vous créer plusieurs groupes d'annonces dans la campagne?</label>
 					</div>
 
 					<div id="groupe_annonce_container" class="mb-4 pt-4">
-						<div class="group-annonce-content original">
-							<div class="form-group">
-								<label>Groupe d'annonce 1</label>
-								<input type="text" class="form-control" name="groupe_annonce[]">
+						<?php if (isset($campagne) && !empty($groupes_annonces)): ?>
+							<?php foreach ($groupes_annonces as $index => $groupe_annonce): ?>
+								<div class="group-annonce-content">
+									<div class="form-group">
+										<label>Groupe d'annonce <?= ($index + 1) ?></label>
+										<input type="text" class="form-control" name="groupe_annonce[]" value="<?= htmlentities($groupe_annonce['nom_groupe']) ?>">
+									</div>
+									<div class="form-group">
+										<label>Contexte du groupe d'annonce</label>
+										<textarea name="contexte_groupe_annonce[]" class="form-control" ><?= htmlentities($groupe_annonce['contexte_groupes_annonces']) ?></textarea>
+									</div>
+									<div class="form-group">
+										<label>Saisir des mots-clés du groupe d'annonce</label>
+										<textarea name="Mot_cle[]" class="form-control" ><?= htmlentities($groupe_annonce['mot_cle']) ?></textarea>
+									</div>
+									<button type="button" class="btn btn-sm btn-danger remove_groupe_annonce mt-2">Supprimer</button>
+									<hr>
+								</div>
+							<?php endforeach; ?>
+						<?php else: ?>
+							<div class="group-annonce-content original">
+								<div class="form-group">
+									<label>Groupe d'annonce 1</label>
+									<input type="text" class="form-control" name="groupe_annonce[]">
+								</div>
+								<div class="form-group">
+									<label>Contexte du groupe d'annonce</label>
+									<textarea name="contexte_groupe_annonce[]" class="form-control" ></textarea>
+								</div>
+								<div class="form-group">
+									<label>Saisir des mots-clés du groupe d'annonce</label>
+									<textarea name="Mot_cle[]" class="form-control" ></textarea>
+								</div>
 							</div>
-							<div class="form-group">
-								<label>Contexte du groupe d'annonce</label>
-								<textarea name="contexte_groupe_annonce[]" class="form-control" maxlength="50"></textarea>
-							</div>
-							<div class="form-group">
-								<label>Saisir des mots-clés du groupe d'annonce</label>
-								<textarea name="Mot_cle[]" class="form-control" maxlength="50"></textarea>
-							</div>
-						</div>
-						<div class="text-center d-none mb-4">
+						<?php endif; ?>
+
+						<div class="text-center mb-4 <?php if (!(isset($campagne) && !empty($groupes_annonces))) echo 'd-none'; ?>">
 							<button type="button" class="btn btn-outline-dark btn-sm" id="add_groupe_annonce">
 								<i class="fa fa-plus"></i> Nouveau groupe d'annonce
 							</button>
@@ -113,24 +163,25 @@
 					</div>
 
 					<h5>Paramètres de la campagne</h5>
+
 					<div class="form-group">
 						<label for="zone_search">Zone géographique</label>
-						<input type="text" class="form-control" name="zone_search" id="zone_search">
+						<input type="text" class="form-control" name="zone_search" id="zone_search" value="<?= isset($campagne) ? htmlentities($campagne->zones) : '' ?>">
 					</div>
 
 					<div class="form-group">
 						<label for="">Langues</label>
-						<select name="" class="form-control">
-							<option value="">Français</option>
-							<option value="">Anglais</option>
+						<select name="langue" class="form-control">
+							<option value="fr" <?= (isset($campagne) && ($campagne->langue ?? '') == 'fr') ? 'selected' : '' ?>>Français</option>
+							<option value="en" <?= (isset($campagne) && ($campagne->langue ?? '') == 'en') ? 'selected' : '' ?>>Anglais</option>
 						</select>
 					</div>
 
 					<div class="form-group">
 						<label for="">Cibles</label>
-						<select name="" class="form-control">
-							<option value="">Cible 1</option>
-							<option value="">Cible 2</option>
+						<select name="cible" class="form-control">
+							<option value="">B2B</option>
+							<option value="">B2C</option>
 						</select>
 					</div>
 
@@ -138,6 +189,7 @@
 						<label for="age-range">Tranche d'âges</label>
 						<select name="age-range" id="age-range" class="form-control">
 							<option value="">-- Sélectionnez une tranche d'âge --</option>
+							<option value="Tous âges">Tout âges</option>
 							<option value="18-24">18 - 24 ans</option>
 							<option value="25-34">25 - 34 ans</option>
 							<option value="35-44">35 - 44 ans</option>
@@ -148,14 +200,19 @@
 					</div>
 
 					<div class="form-group">
+                        <label>Diffusion</label>
+                        <input type="text" name="date_campagne" class="form-control" value="7J/7, 24h/24">
+                    </div>
+
+					<div class="form-group">
 						<label for="">Audiences</label>
-						<select name="" class="form-control">
+						<select name="audience" class="form-control">
 							<option value="">Audience 1</option>
 							<option value="">Audience 2</option>
 						</select>
 					</div>
 
-					<div class="container">
+					<div class="container mb-3">
 						<div class="multi-col" style="height: 200px;">
 							<div class="custom-control custom-checkbox">
 								<input type="checkbox" class="custom-control-input" id="customCheck1">
@@ -197,7 +254,7 @@
 
 					<div class="form-group">
 						<label>Propositions de mots-clés à exclure</label>
-						<textarea class="form-control" rows="15" name="Mots_cle_exclus"><?= $mots_exclus ?></textarea>
+						<textarea class="form-control" rows="15" name="Mots_cle_exclus"><?= isset($mots_exclus) ? htmlentities($mots_exclus) : '' ?></textarea>
 					</div>
 
 					<ul class="nav nav-tabs mb-3">
@@ -213,21 +270,22 @@
 						<div class="card-body">
 							<div class="row no-gutters" id="propositionImagesContainer">
 								<?php foreach ($images_site as $img): ?>
-								<div class="col-auto px-2 mb-3">
-									<img src="<?= $img ?>" alt="Image site client" width="120" style="object-fit: cover; border-radius: 4px;">
-								</div>
+									<div class="col-auto px-2 mb-3">
+										<img src="<?= $img ?>" alt="Image site client" width="120" style="object-fit: cover; border-radius: 4px; cursor:pointer;" class="img-proposition selected" data-url="<?= $img ?>">
+									</div>
 								<?php endforeach; ?>
 							</div>
 						</div>
 					</div>
 
-					<input type="hidden" name="selectedImages" id="selectedImagesInput" value="<?= implode(',', $images_site) ?>">
-
 					<div class="d-flex justify-content-between mb-5">
 						<button type="submit" class="btn btn-dark">Terminer</button>
 					</div>
+
+
 				</div>
 			</form>
+
 		</div>
 
 		<div class="col-auto px-3 pt-5">
@@ -235,27 +293,35 @@
 				<div class="card-body">
 					<div class="d-flex justify-content-between align-items-center">
 						<button class="btn btn-dark py-3 px-5" data-toggle="modal" data-target="#budgetModal">
-							<?= $d['budget'] ?> €
+							<?= isset($d['budget']) ? htmlentities($d['budget']) : '' ?> €
 						</button>
 					</div>
 					<br><br>
-					<div class="d-flex justify-content-start mb-3" style="font-size: 15px;">
-						<i class="fa fa-check-square mr-2" style="color: #f0f0f0ff; font-size: 18px;"></i>
-						<span class="mr-2">Date d'anniversaire : <?= $d['mis_en_place_paiement'] ?></span>
-					</div>
-					<div class="d-flex justify-content-start mb-3" style="font-size: 15px;">
-						<i class="fa fa-check-square mr-2" style="color: #f0f0f0ff; font-size: 18px;"></i>
-						<span class="mr-2">Date de mise en ligne : <?= $d['annonce'] ?></span>
-					</div>
+					<?php if (!empty($d['mis_en_place_paiement'])): ?>
+						<div class="d-flex justify-content-start mb-3" style="font-size: 15px;">
+							<i class="fa fa-check-square mr-2" style="color: #f0f0f0ff; font-size: 18px;"></i>
+							<span class="mr-2">Date d'anniversaire : <?= htmlentities($d['mis_en_place_paiement']) ?></span>
+						</div>
+					<?php endif; ?>
+					<?php if (!empty($d['annonce'])): ?>
+						<div class="d-flex justify-content-start mb-3" style="font-size: 15px;">
+							<i class="fa fa-check-square mr-2" style="color: #f0f0f0ff; font-size: 18px;"></i>
+							<span class="mr-2">Date de mise en ligne : <?= htmlentities($d['annonce']) ?></span>
+						</div>
+					<?php endif; ?>
 					<div class="d-flex justify-content-start mb-3" style="font-size: 15px;">
 						<i class="fa fa-check-square mr-2" style="color: #f0f0f0ff; font-size: 18px;"></i>
 						<span class="mr-2">Commerciale</span>
-						<img src="<?= base_url('assets/images/' . $d['am_photo_user']) ?>" width="24" height="24" class="ml-2">
+						<?php if (!empty($d['am_photo_user'])): ?>
+							<img src="<?= base_url('assets/images/' . $d['am_photo_user']) ?>" width="24" height="24" class="ml-2" alt="">
+						<?php endif; ?>
 					</div>
 					<div class="d-flex justify-content-start mb-4" style="font-size: 15px;">
 						<i class="fa fa-check-square mr-2" style="color: #f0f0f0ff; font-size: 18px;"></i>
 						<span class="mr-2">Account Manager</span>
-						<img src="<?= base_url('assets/images/' . $d['tech_photo_user']) ?>" width="24" height="24" class="ml-2">
+						<?php if (!empty($d['tech_photo_user'])): ?>
+							<img src="<?= base_url('assets/images/' . $d['tech_photo_user']) ?>" width="24" height="24" class="ml-2" alt="">
+						<?php endif; ?>
 					</div>
 				</div>
 			</div>
@@ -269,7 +335,7 @@
 			<div class="card mb-3" style="width: 23rem;">
 				<div class="card-body">
 					<p class="text-muted font-weight-normal" style="font-size: 15.5px;">
-						<?= nl2br($donnees[0]['info_base_client']); ?>
+						<?= isset($donnees[0]['info_base_client']) ? nl2br(htmlentities($donnees[0]['info_base_client'])) : '' ?>
 					</p>
 				</div>
 			</div>
@@ -283,14 +349,14 @@
 			<div class="card" style="width: 23rem;">
 				<div class="card-body">
 					<p class="text-muted font-weight-normal" style="font-size: 15.5px;">
-						<?= nl2br($donnees[0]['information_client']); ?>
+						<?= isset($donnees[0]['information_client']) ? nl2br(htmlentities($donnees[0]['information_client'])) : '' ?>
 					</p>
 				</div>
 			</div>
+
 		</div>
 	</div>
 </div>
-
 <div class="modal fade" id="modalGestionImages" tabindex="-1" role="dialog" aria-labelledby="modalGestionImagesLabel" aria-hidden="true">
 	<div class="modal-dialog modal-lg" role="document">
 		<div class="modal-content">
@@ -315,10 +381,10 @@
 				</div>
 				<div id="imagePreviewContainer" class="d-flex flex-wrap">
 					<?php foreach ($images_site as $img): ?>
-					<div class="position-relative m-2 image-item">
-						<img src="<?= $img ?>" width="120" height="120" class="rounded border" style="object-fit:cover;">
-						<button type="button" class="btn btn-sm btn-danger position-absolute" style="top: 2px; right: 2px;">&times;</button>
-					</div>
+						<div class="position-relative m-2 image-item">
+							<img src="<?= $img ?>" width="120" height="120" class="rounded border" style="object-fit:cover;">
+							<button type="button" class="btn btn-sm btn-danger position-absolute remove-image-btn" style="top: 2px; right: 2px;">&times;</button>
+						</div>
 					<?php endforeach; ?>
 				</div>
 			</div>
@@ -329,26 +395,117 @@
 		</div>
 	</div>
 </div>
-<?php end_section() ?>
 
+
+<?php end_section() ?>
 <?php start_section('script'); ?>
 <script>
-$(function() {
-	const imageContainer = $('#imagePreviewContainer');
-	const hiddenInput = $('#selectedImagesInput');
+const fetchImagesUrl = '<?= site_url("Client/fetch_images_campagne") ?>';
+<?php if (function_exists('csrf_token') || (isset($this->security) && method_exists($this->security, 'get_csrf_hash'))): ?>
+const csrfName = '<?= isset($this->security) ? $this->security->get_csrf_token_name() : '' ?>';
+const csrfHash = '<?= isset($this->security) ? $this->security->get_csrf_hash() : '' ?>';
+<?php else: ?>
+const csrfName = '';
+const csrfHash = '';
+<?php endif; ?>
+
+$(document).ready(function() {
+	function debounce(fn, delay) {
+		let timer = null;
+		return function() {
+			const context = this, args = arguments;
+			clearTimeout(timer);
+			timer = setTimeout(function() { fn.apply(context, args); }, delay);
+		};
+	}
+
 	const propositionCard = $('#propositionImagesCard');
 	const propositionContainer = $('#propositionImagesContainer');
+	const selectedImagesInput = $('#selectedImagesInput');
+	const imagePreviewContainer = $('#imagePreviewContainer');
 
-	imageContainer.on('click', '.btn-danger', function() {
+	function updateSelectedFromPropositions() {
+		let selected = [];
+		$('.img-proposition.selected').each(function() {
+			selected.push($(this).data('url'));
+		});
+		selectedImagesInput.val(selected.join(','));
+	}
+
+	$(document).on('click', '.img-proposition', function() {
+		$(this).toggleClass('selected');
+		updateSelectedFromPropositions();
+	});
+
+	const fetchImagesForUrl = debounce(function(url) {
+		if (!url) {
+			propositionContainer.empty();
+			propositionCard.hide();
+			selectedImagesInput.val('');
+			return;
+		}
+		let data = { url: url };
+		if (csrfName && csrfHash) data[csrfName] = csrfHash;
+
+		const loader = '<div class="col-12 text-center">Chargement...</div>';
+		propositionContainer.html(loader);
+		propositionCard.show();
+
+		$.ajax({
+			url: fetchImagesUrl,
+			type: 'POST',
+			data: data,
+			dataType: 'json',
+			success: function(resp) {
+				if (resp && resp.success && Array.isArray(resp.images) && resp.images.length > 0) {
+					let html = '';
+					resp.images.forEach(function(img) {
+						html += `
+							<div class="col-auto px-2 mb-3">
+								<img src="${img}" alt="Image site client"
+									width="120"
+									class="img-proposition selected"
+									data-url="${img}"
+									style="object-fit: cover; border-radius: 4px;">
+							</div>`;
+					});
+					propositionContainer.html(html);
+					selectedImagesInput.val(resp.images.join(','));
+					imagePreviewContainer.empty();
+					resp.images.forEach(function(src){
+						imagePreviewContainer.append(createImageItem(src));
+					});
+				} else {
+					propositionContainer.html('<div class="col-12 text-center text-muted">Aucune image trouvée</div>');
+					selectedImagesInput.val('');
+				}
+			},
+			error: function() {
+				propositionContainer.html('<div class="col-12 text-center text-danger">Erreur lors du chargement</div>');
+			}
+		});
+	}, 550);
+
+	$('#url_campagne').on('input paste change', function() {
+		const url = $(this).val().trim();
+		if (url.length === 0) {
+			propositionContainer.empty();
+			propositionCard.hide();
+			selectedImagesInput.val('');
+			return;
+		}
+		fetchImagesForUrl(url);
+	});
+
+	imagePreviewContainer.on('click', '.remove-image-btn', function() {
 		$(this).closest('.image-item').remove();
 	});
 
 	$('#addImageUrlBtn').on('click', function() {
 		const url = $('#imageUrlInput').val().trim();
-		if (url) {
-			imageContainer.append(createImageItem(url));
-			$('#imageUrlInput').val('');
-		}
+		if (!url) return;
+		imagePreviewContainer.append(createImageItem(url));
+		$('#imageUrlInput').val('');
 	});
 
 	$('#imageUpload').on('change', function(event) {
@@ -356,7 +513,7 @@ $(function() {
 		for (let file of files) {
 			const reader = new FileReader();
 			reader.onload = function(e) {
-				imageContainer.append(createImageItem(e.target.result));
+				imagePreviewContainer.append(createImageItem(e.target.result));
 			};
 			reader.readAsDataURL(file);
 		}
@@ -365,58 +522,43 @@ $(function() {
 
 	$('#saveImagesBtn').on('click', function() {
 		const images = [];
-		imageContainer.find('img').each(function() {
+		imagePreviewContainer.find('img').each(function() {
 			images.push($(this).attr('src'));
 		});
-		hiddenInput.val(images.join(','));
+		selectedImagesInput.val(images.join(','));
 		updatePropositionImages(images);
 		$('#modalGestionImages').modal('hide');
 	});
 
-	function updatePropositionImages(images) {
-		propositionContainer.empty();
-		if (images.length === 0) {
-			propositionCard.hide();
-		} else {
-			propositionCard.show();
-			images.forEach(src => {
-				propositionContainer.append(`
-					<div class="col-auto px-2 mb-3">
-						<img src="${src}" alt="Image site client" width="120" style="object-fit: cover; border-radius: 4px;">
-					</div>
-				`);
-			});
-		}
-	}
-
 	function createImageItem(src) {
 		return `
-		<div class="position-relative m-2 image-item">
-			<img src="${src}" width="120" height="120" class="rounded border" style="object-fit:cover;">
-			<button type="button" class="btn btn-sm btn-danger position-absolute" style="top: 2px; right: 2px;">&times;</button>
-		</div>`;
+			<div class="position-relative m-2 image-item">
+				<img src="${src}" width="120" height="120" class="rounded border" style="object-fit:cover;">
+				<button type="button" class="btn btn-sm btn-danger position-absolute remove-image-btn" style="top: 2px; right: 2px;">&times;</button>
+			</div>`;
+	}
+
+	function updatePropositionImages(images) {
+		propositionContainer.empty();
+		if (!Array.isArray(images) || images.length === 0) {
+			propositionCard.hide();
+			selectedImagesInput.val('');
+			return;
+		}
+		propositionCard.show();
+		let html = '';
+		images.forEach(function(src) {
+			html += `
+				<div class="col-auto px-2 mb-3">
+					<img src="${src}" alt="Image site client"
+						width="120"
+						class="img-proposition selected"
+						data-url="${src}"
+						style="object-fit: cover; border-radius: 4px;">
+				</div>`;
+		});
+		propositionContainer.html(html);
 	}
 });
-$(function() {
-	$('#add_groupe_annonce').on('click', function() {
-		let $original = $('#groupe_annonce_container .original').first();
-		let $newGroup = $original.clone();
-		$newGroup.find('input, textarea').val('');
-		let count = $('#groupe_annonce_container .group-annonce-content').length + 1;
-		$newGroup.find('label:first').text("Groupe d'annonce " + count);
-		$newGroup.append('<button type="button" class="btn btn-sm btn-danger remove_groupe_annonce mt-2">Supprimer</button>');
-		$newGroup.prepend('<hr>');
-		$newGroup.removeClass('original');
-		$newGroup.insertBefore($('#groupe_annonce_container .text-center'));
-	});
-	$(document).on('click', '.remove_groupe_annonce', function() {
-		$(this).closest('.group-annonce-content').remove();
-	});
-	$('#multiple_groupe_annonce').change(function() {
-		let checked = $(this).is(':checked');
-		$('#add_groupe_annonce').parent('.text-center').toggleClass('d-none', !checked);
-	});
-});
 </script>
-<?php end_section(); ?>
-<?php endforeach; ?>
+<?php end_section() ?>

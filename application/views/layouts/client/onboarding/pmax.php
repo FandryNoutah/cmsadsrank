@@ -123,8 +123,8 @@
 						<div class="form-group">
 							<label for="">Langues</label>
 							<select name="" class="form-control">
-								<option value="">Lang 1</option>
-								<option value="">Lang 2</option>
+								<option value="">Français</option>
+								<option value="">Anglais</option>
 							</select>
 						</div>
 
@@ -137,10 +137,15 @@
 						</div>
 
 						<div class="form-group">
-							<label for="">Tranche d'âges</label>
-							<select name="" class="form-control">
-								<option value="">1</option>
-								<option value="">2</option>
+							<label for="age-range">Tranche d'âges</label>
+							<select name="age-range" id="age-range" class="form-control">
+								<option value="">-- Sélectionnez une tranche d'âge --</option>
+								<option value="18-24">18 - 24 ans</option>
+								<option value="25-34">25 - 34 ans</option>
+								<option value="35-44">35 - 44 ans</option>
+								<option value="45-54">45 - 54 ans</option>
+								<option value="55-64">55 - 64 ans</option>
+								<option value="65+">65 ans et plus</option>
 							</select>
 						</div>
 
@@ -210,10 +215,15 @@
 						</div>
 
 						<div class="form-group">
-							<label for="appareil_pmax">Appareil</label>
-							<select name="appareil_pmax" id="appareil_pmax" class="form-control">
-								<option value="">Appareil 1</option>
-								<option value="">Appareil 2</option>
+							<label for="appareil_search">Appareil</label>
+							<select name="appareil_search" id="appareil_search" class="form-control">
+								<option value="Ordinateur / Mobile / Tablette">Ordinateur / Mobile / Tablette</option>
+								<option value="Ordinateur">Ordinateur</option>
+								<option value="Mobile">Mobile</option>
+								<option value="Tablette">Tablette</option>
+								<option value="Ordinateur / Mobile">Ordinateur / Mobile</option>
+								<option value="Ordinateur / Tablette">Ordinateur / Tablette</option>
+								<option value="Mobile / Tablette">Mobile / Tablette</option>
 							</select>
 						</div>
 
@@ -227,75 +237,33 @@
 							</li>
 						</ul>
 
-						<div class="card bg-light">
-							<div class="card-body">
-								<div class="multi-col" style="height: 550px;">
-									<p class="mb-1">micro entreprise</p>
-									<p class="mb-1">auto entrepreneur</p>
-									<p class="mb-1">microentreprise</p>
-									<p class="mb-1">création entreprise</p>
-									<p class="mb-1">freelance</p>
-									<p class="mb-1">business plan</p>
-									<p class="mb-1">statut juridique</p>
-									<p class="mb-1">financement pôle emploi</p>
-									<p class="mb-1">prime création</p>
-									<p class="mb-1">auto-entrepreneur</p>
-									<p class="mb-1">boutique en ligne</p>
-									<p class="mb-1">dropshipping</p>
-									<p class="mb-1">vinted</p>
-									<p class="mb-1">définition</p>
-									<p class="mb-1">comment faire</p>
-									<p class="mb-1">pdf</p>
-									<p class="mb-1">gratuit</p>
-									<p class="mb-1">exemple</p>
-									<p class="mb-1">livre blanc</p>
-									<p class="mb-1">template</p>
-									<p class="mb-1">coursseed</p>
-									<p class="mb-1">pre seed</p>
-									<p class="mb-1">early stage</p>
-									<p class="mb-1">incubateur</p>
-									<p class="mb-1">accélérateur</p>
-									<p class="mb-1">business angel</p>
-									<p class="mb-1">levée de fonds seed</p>
-								</div>
-							</div>
+						<div class="form-group">
+							<label>Propositions de mots-clés à exclure</label>
+							<textarea class="form-control" rows="15" name="Mots_cle_exclus"><?= $mots_exclus ?></textarea>
 						</div>
 
 						<ul class="nav nav-tabs mb-3">
 							<li class="nav-item">
-								<a class="nav-link py-3 active" type="button">
-									Proposition d'images
-								</a>
+								<a class="nav-link py-3 active">Proposition d'images</a>
 							</li>
+							<button type="button" class="btn btn-outline-dark mb-3" data-toggle="modal" data-target="#modalGestionImages">
+								<i class="fa fa-images"></i> Gérer les images
+							</button>
 						</ul>
 
-						<div class="card mb-4">
+						<div class="card mb-4" id="propositionImagesCard" style="<?= empty($images_site) ? 'display:none;' : '' ?>">
 							<div class="card-body">
-								<div class="row no-gutters">
-									<div class="col-auto px-2 mb-3">
-										<img src="<?= base_url('assets/images/formats/betewq5osgluxdan7v5blfsgba.jpg') ?>" alt="" width="120">
-									</div>
-									<div class="col-auto px-2 mb-3">
-										<img src="<?= base_url('assets/images/formats/betewq5osgluxdan7v5blfsgba.jpg') ?>" alt="" width="120">
-									</div>
-									<div class="col-auto px-2 mb-3">
-										<img src="<?= base_url('assets/images/formats/betewq5osgluxdan7v5blfsgba.jpg') ?>" alt="" width="120">
-									</div>
-									<div class="col-auto px-2 mb-3">
-										<img src="<?= base_url('assets/images/formats/betewq5osgluxdan7v5blfsgba.jpg') ?>" alt="" width="120">
-									</div>
-									<div class="col-auto px-2 mb-3">
-										<img src="<?= base_url('assets/images/formats/betewq5osgluxdan7v5blfsgba.jpg') ?>" alt="" width="120">
-									</div>
-									<div class="col-auto px-2 mb-3">
-										<img src="<?= base_url('assets/images/formats/betewq5osgluxdan7v5blfsgba.jpg') ?>" alt="" width="120">
-									</div>
+								<div class="row no-gutters" id="propositionImagesContainer">
+									<?php foreach ($images_site as $img): ?>
+										<div class="col-auto px-2 mb-3">
+											<img src="<?= $img ?>" alt="Image site client" width="120" style="object-fit: cover; border-radius: 4px;">
+										</div>
+									<?php endforeach; ?>
 								</div>
 							</div>
 						</div>
 
 						<div class="d-flex justify-content-between mb-5">
-							<button class="btn btn-outline-dark" type="reset">Ajouter une nouvelle campagne</button>
 							<button class="btn btn-dark" type="submit">Terminer</button>
 						</div>
 					</div>
@@ -309,14 +277,6 @@
 							<button class="btn btn-dark py-3 px-5" data-toggle="modal" data-target="#budgetModal">
 								<?= $d['budget'] ?> €
 							</button>
-							<div class="dropdown no-arrow">
-								<a href="javascript:void(0);" class="btn btn-light rounded-pill px-3 nav-link dropdown-toggle" id="clientDetailDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-									<i class="fa fa-ellipsis-v" style="font-size: 16px;"></i>
-								</a>
-								<div class="dropdown-menu dropdown-menu-right animated--grow-in" aria-labelledby="clientDetailDropdown">
-									<a class="dropdown-item" href="javscript:void(0);" data-toggle="modal" data-target="#editModal">Modifier</a>
-								</div>
-							</div>
 						</div>
 						<br><br>
 						<div class="d-flex justify-content-start mb-3" style="font-size: 15px;">
@@ -326,61 +286,177 @@
 						<div class="d-flex justify-content-start mb-3" style="font-size: 15px;">
 							<i class="fa fa-check-square mr-2" style="color: #f0f0f0ff; font-size: 18px;"></i>
 							<span class="mr-2">Date de mise en ligne : <?= $d['annonce'] ?></span>
-
 						</div>
 						<div class="d-flex justify-content-start mb-3" style="font-size: 15px;">
 							<i class="fa fa-check-square mr-2" style="color: #f0f0f0ff; font-size: 18px;"></i>
 							<span class="mr-2">Commerciale</span>
-							<span class="mr-2">
-								<img src="<?= base_url('assets/images/' . $d['am_photo_user']) ?>" width="24" height="24">
-							</span>
+							<img src="<?= base_url('assets/images/' . $d['am_photo_user']) ?>" width="24" height="24" class="ml-2">
 						</div>
 						<div class="d-flex justify-content-start mb-4" style="font-size: 15px;">
 							<i class="fa fa-check-square mr-2" style="color: #f0f0f0ff; font-size: 18px;"></i>
 							<span class="mr-2">Account Manager</span>
-							<span class="mr-2">
-								<img src="<?= base_url('assets/images/' . $d['tech_photo_user']) ?>" width="24" height="24">
-							</span>
+							<img src="<?= base_url('assets/images/' . $d['tech_photo_user']) ?>" width="24" height="24" class="ml-2">
 						</div>
-						<a href="<?= base_url('Client/onboarding/' . $d['idclients']) ?>" class="btn btn-outline-dark btn-block">Onboarding</a>
 					</div>
 				</div>
 
 				<ul class="nav nav-tabs mb-3">
 					<li class="nav-item">
-						<a class="nav-link py-3 active" type="button">
-							Société
-						</a>
+						<a class="nav-link py-3 active">Société</a>
 					</li>
 				</ul>
 
 				<div class="card mb-3" style="width: 23rem;">
 					<div class="card-body">
 						<p class="text-muted font-weight-normal" style="font-size: 15.5px;">
-							Meta Platforms, Inc., doing business as Meta and formerly named Facebook, Inc., and TheFacebook, Inc., is an American multinational technology conglomerate based in Menlo Park, California.
-							The company owns Facebook, Instagram, and WhatsApp, among other products and services. The company owns Facebook, Instagram, and WhatsApp, among other products and services.The company owns Facebook, Instagram, and WhatsApp, among other products and
+							<?= nl2br($donnees[0]['info_base_client']); ?>
 						</p>
 					</div>
 				</div>
 
 				<ul class="nav nav-tabs mb-3">
 					<li class="nav-item">
-						<a class="nav-link py-3 active" type="button">
-							Brief de la campagne
-						</a>
+						<a class="nav-link py-3 active">Brief de la campagne</a>
 					</li>
 				</ul>
 
 				<div class="card" style="width: 23rem;">
 					<div class="card-body">
 						<p class="text-muted font-weight-normal" style="font-size: 15.5px;">
-							Meta Platforms, Inc., doing business as Meta and formerly named Facebook, Inc., and TheFacebook, Inc., is an American multinational technology conglomerate based in Menlo Park, California.
-							The company owns Facebook, Instagram, and WhatsApp, among other products and services. The company owns Facebook, Instagram, and WhatsApp, among other products and services.The company owns Facebook, Instagram, and WhatsApp, among other products and
+							<?= nl2br($donnees[0]['information_client']); ?>
 						</p>
 					</div>
 				</div>
 			</div>
 		</div>
 	</div>
+
+	<div class="modal fade" id="modalGestionImages" tabindex="-1" role="dialog" aria-labelledby="modalGestionImagesLabel" aria-hidden="true">
+		<div class="modal-dialog modal-lg" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="modalGestionImagesLabel">Gérer les images de la campagne</h5>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Fermer">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body">
+					<div class="mb-3">
+						<input type="file" id="imageUpload" accept="image/*" multiple class="d-none">
+						<button type="button" class="btn btn-sm btn-dark" onclick="document.getElementById('imageUpload').click();">
+							<i class="fa fa-upload"></i> Ajouter depuis l’ordinateur
+						</button>
+						<div class="input-group mt-2">
+							<input type="text" class="form-control" id="imageUrlInput" placeholder="https://exemple.com/image.jpg">
+							<div class="input-group-append">
+								<button class="btn btn-outline-dark" type="button" id="addImageUrlBtn">Ajouter URL</button>
+							</div>
+						</div>
+					</div>
+					<div id="imagePreviewContainer" class="d-flex flex-wrap">
+						<?php foreach ($images_site as $img): ?>
+							<div class="position-relative m-2 image-item">
+								<img src="<?= $img ?>" width="120" height="120" class="rounded border" style="object-fit:cover;">
+								<button type="button" class="btn btn-sm btn-danger position-absolute" style="top: 2px; right: 2px;">&times;</button>
+							</div>
+						<?php endforeach; ?>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Annuler</button>
+					<button type="button" class="btn btn-dark" id="saveImagesBtn">Enregistrer</button>
+				</div>
+			</div>
+		</div>
+	</div>
 <?php endforeach; ?>
 <?php end_section() ?>
+<?php start_section('script'); ?>
+	<script>
+		$(function() {
+			const imageContainer = $('#imagePreviewContainer');
+			const hiddenInput = $('#selectedImagesInput');
+			const propositionCard = $('#propositionImagesCard');
+			const propositionContainer = $('#propositionImagesContainer');
+
+			imageContainer.on('click', '.btn-danger', function() {
+				$(this).closest('.image-item').remove();
+			});
+
+			$('#addImageUrlBtn').on('click', function() {
+				const url = $('#imageUrlInput').val().trim();
+				if (url) {
+					imageContainer.append(createImageItem(url));
+					$('#imageUrlInput').val('');
+				}
+			});
+
+			$('#imageUpload').on('change', function(event) {
+				const files = event.target.files;
+				for (let file of files) {
+					const reader = new FileReader();
+					reader.onload = function(e) {
+						imageContainer.append(createImageItem(e.target.result));
+					};
+					reader.readAsDataURL(file);
+				}
+				$(this).val('');
+			});
+
+			$('#saveImagesBtn').on('click', function() {
+				const images = [];
+				imageContainer.find('img').each(function() {
+					images.push($(this).attr('src'));
+				});
+				hiddenInput.val(images.join(','));
+				updatePropositionImages(images);
+				$('#modalGestionImages').modal('hide');
+			});
+
+			function updatePropositionImages(images) {
+				propositionContainer.empty();
+				if (images.length === 0) {
+					propositionCard.hide();
+				} else {
+					propositionCard.show();
+					images.forEach(src => {
+						propositionContainer.append(`
+					<div class="col-auto px-2 mb-3">
+						<img src="${src}" alt="Image site client" width="120" style="object-fit: cover; border-radius: 4px;">
+					</div>
+				`);
+					});
+				}
+			}
+
+			function createImageItem(src) {
+				return `
+				<div class="position-relative m-2 image-item">
+					<img src="${src}" width="120" height="120" class="rounded border" style="object-fit:cover;">
+					<button type="button" class="btn btn-sm btn-danger position-absolute" style="top: 2px; right: 2px;">&times;</button>
+				</div>`;
+			}
+
+			$('#add_groupe_annonce').on('click', function() {
+				let $original = $('#groupe_annonce_container .original').first();
+				let $newGroup = $original.clone();
+				$newGroup.find('input, textarea').val('');
+				let count = $('#groupe_annonce_container .group-annonce-content').length + 1;
+				$newGroup.find('label:first').text("Groupe d'annonce " + count);
+				$newGroup.append('<button type="button" class="btn btn-sm btn-danger remove_groupe_annonce mt-2">Supprimer</button>');
+				$newGroup.prepend('<hr>');
+				$newGroup.removeClass('original');
+				$newGroup.insertBefore($('#groupe_annonce_container .text-center'));
+			});
+
+			$(document).on('click', '.remove_groupe_annonce', function() {
+				$(this).closest('.group-annonce-content').remove();
+			});
+
+			$('#multiple_groupe_annonce').change(function() {
+				let checked = $(this).is(':checked');
+				$('#add_groupe_annonce').parent('.text-center').toggleClass('d-none', !checked);
+			});
+		});
+	</script>
+	<?php end_section(); ?>

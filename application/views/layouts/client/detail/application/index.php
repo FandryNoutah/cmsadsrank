@@ -76,7 +76,7 @@ if (stripos($cms_full, 'Inconnu') !== false || stripos($cms_full, 'non détectab
     $cms_name = explode(' ', $cms_full)[0];
 }
 
-echo $cms_name;
+//  echo $cms_name;
 ?>
 
 

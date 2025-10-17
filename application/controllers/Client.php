@@ -5,7 +5,7 @@ class Client extends MY_Controller
 {
 	private $api_url = 'https://api.aircall.io/v1/calls';
 	private $api_auth = '';
-	protected $file_upload_field;
+	protected $file_upload_field;	
 	public function __construct()
 	{
 		parent::__construct();
@@ -31,7 +31,6 @@ class Client extends MY_Controller
 		$this->load->library('upload');
 		$this->load->library('form_validation');
 		$this->form_validation->set_error_delimiters('<span class="error">', '</span>');
-
 		$this->current_user = $this->ion_auth->user()->row();
 	}
 
@@ -47,6 +46,7 @@ class Client extends MY_Controller
 		$this->content = "layouts/client/index.php";
 		$this->layout();
 	}
+	
 	public function Ajoutgroupes()
 	{
 		$idgroupe_annonce = $this->input->post('idgroupe_annonce');
@@ -92,23 +92,21 @@ class Client extends MY_Controller
 		$k = $this->data["groupe"] = $this->visuels_model->getgpid($id);
 		$id = $k[0]['idclients'];
 		$id = intval($id);
-		$d =$this->data['donnees'] = $this->visuels_model->getDonneeById($id);
+		$d = $this->data['donnees'] = $this->visuels_model->getDonneeById($id);
 		$information_base = $d[0]['info_base_client'];
 		$information_client = $d[0]['information_client'];
 		$site_client = $d[0]['site_client'];
 		$type_campagne = $k[0]['type_campagne'];
 		$adsContent = $this->generateGoogleAdsCopy($information_base, $information_client, $site_client);
-		var_dump($adsContent);
-		die();
 		$this->data['ads_titres'] = $adsContent['titres'];
 		$this->data['ads_titres_longs'] = $adsContent['titres_longs'];
 		$this->data['ads_descriptions'] = $adsContent['descriptions'];
-		
-		if($type_campagne == 1){
-		$this->content = "layouts/client/onboarding/annonce_search";
+
+		if ($type_campagne == 1) {
+			$this->content = "layouts/client/onboarding/annonce_search";
 		}
-		if($type_campagne == 3){
-		$this->content = "layouts/client/onboarding/annonce_pmax";
+		if ($type_campagne == 3) {
+			$this->content = "layouts/client/onboarding/annonce_pmax";
 		}
 		$this->layout();
 	}
@@ -116,18 +114,23 @@ class Client extends MY_Controller
 
 	private function generateGoogleAdsCopy($info_base, $info_client, $site)
 {
-$prompt = "Tu es un expert en Google Ads.
-Voici les données :
-- Informations de base : $info_base
-- Brief client : $info_client
-- Site web : $site
+ $prompt = "Tu es un expert en Google Ads. 
+    À partir de ces informations :
+    - Informations de base : $info_base
+    - Brief client : $info_client
+    - Site web : $site
 
-Génère uniquement la réponse JSON suivante, sans aucun texte avant ou après :
-{
-  \"titres\": [...],
-  \"titres_longs\": [...],
-  \"descriptions\": [...]
-}";
+    Génère :
+    - 12 titres courts accrocheurs (max 30 caractères chacun),
+    - 4 titres longs (max 90 caractères chacun),
+    - 4 descriptions (max 90 caractères chacune).
+
+    Retourne uniquement une réponse JSON structurée comme ceci :
+    {
+    \"titres\": [\"titre1\", \"titre2\", ...],
+    \"titres_longs\": [\"titre_long1\", ...],
+    \"descriptions\": [\"description1\", ...]
+    }";
 
     $curl = curl_init();
     curl_setopt_array($curl, [
@@ -135,10 +138,9 @@ Génère uniquement la réponse JSON suivante, sans aucun texte avant ou après 
         CURLOPT_RETURNTRANSFER => true,
         CURLOPT_HTTPHEADER => [
             'Content-Type: application/json',
-            'Authorization: ' . 'Bearer ' . $api_key
+            'Authorization: Bearer ' . $api_key
         ],
         CURLOPT_POST => true,
-        CURLOPT_TIMEOUT => 30,
         CURLOPT_POSTFIELDS => json_encode([
             'model' => 'gpt-4',
             'messages' => [
@@ -149,6 +151,7 @@ Génère uniquement la réponse JSON suivante, sans aucun texte avant ou après 
         ])
     ]);
 
+    // 💡 Manquait cette ligne :
     $response = curl_exec($curl);
 
     if ($response === false) {
@@ -166,23 +169,24 @@ Génère uniquement la réponse JSON suivante, sans aucun texte avant ou après 
 }
 
 
+
 	public function details_ajax($id)
 	{
-	$idclients = $id;
-	$type_campagne = [
+		$idclients = $id;
+		$type_campagne = [
 			1	=> "SEARCH",
 			2	=>	"LOCAL",
 			3	=>	"PERFORMANCE MAX"
 		];
-	$campagnes = $this->data["campagnes"] = $this->visuels_model->getCampagneByIdclient($idclients);
-	$campagnes = $this->visuels_model->getCampagneByIdclient($idclients);
-		
+		$campagnes = $this->data["campagnes"] = $this->visuels_model->getCampagneByIdclient($idclients);
+		$campagnes = $this->visuels_model->getCampagneByIdclient($idclients);
+
 		foreach ($campagnes as $index => $campagne) {
 			$campagnes[$index]['type_campagne'] = $type_campagne[$campagne['type_campagne']];
 		}
-		
-	$data['campagnes'] = $campagnes;
-	$donne_valider = $this->Donne_modele->getcclientvalidationbyidclients($idclients);
+
+		$data['campagnes'] = $campagnes;
+		$donne_valider = $this->Donne_modele->getcclientvalidationbyidclients($idclients);
 		$groupe_valider = $this->Donne_modele->getcampagnegroupevalidationbyidclients($idclients);
 		$groupes_par_campagne = [];
 		foreach ($groupe_valider as $groupe) {
@@ -196,12 +200,12 @@ Génère uniquement la réponse JSON suivante, sans aucun texte avant ou après 
 			$idcampagne = $campagne['idcampagne'];
 			$campagne['groupes_annonces'] = isset($groupes_par_campagne[$idcampagne]) ? $groupes_par_campagne[$idcampagne] : [];
 		}
-	unset($campagne);
-	$data['donne_valider'] = $donne_valider;
-	$data['images'] = $this->Image_model->get_images_by_client($idclients);
-	$data['groupe_annonce'] = $this->Donne_modele->getcampagnegroupevalidationbyidclient($idclients);
-	$data['id'] = $id; 
-	$this->load->view('layouts/client/onboarding/detail_campagne', $data);
+		unset($campagne);
+		$data['donne_valider'] = $donne_valider;
+		$data['images'] = $this->Image_model->get_images_by_client($idclients);
+		$data['groupe_annonce'] = $this->Donne_modele->getcampagnegroupevalidationbyidclient($idclients);
+		$data['id'] = $id;
+		$this->load->view('layouts/client/onboarding/detail_campagne', $data);
 	}
 	public function inventaire_pmax($idclients)
 	{
@@ -214,7 +218,7 @@ Génère uniquement la réponse JSON suivante, sans aucun texte avant ou après 
 
 	public function export_pdf($id)
 	{
-		$this->load->library('pdf'); 
+		$this->load->library('pdf');
 
 		$idclients = $id;
 		$type_campagne = [
@@ -244,7 +248,7 @@ Génère uniquement la réponse JSON suivante, sans aucun texte avant ou après 
 			$campagne['groupes_annonces'] = isset($groupes_par_campagne[$idcampagne]) ? $groupes_par_campagne[$idcampagne] : [];
 		}
 		unset($campagne);
-	$data['donne_valider'] = $donne_valider;
+		$data['donne_valider'] = $donne_valider;
 		$html = $this->load->view('layouts/client/onboarding/detail_campagne_pdf', $data, true);
 
 		$this->pdf->loadHtml($html);
@@ -371,21 +375,21 @@ Génère uniquement la réponse JSON suivante, sans aucun texte avant ou après 
 
 		redirect('Client/detail_client/' . $idclients);
 	}
-		public function upload_logo_campagne()
-		{
-			$idclients = $this->input->post('idclients');
+	public function upload_logo_campagne()
+	{
+		$idclients = $this->input->post('idclients');
 
-			$logo = $this->file_upload_field = "logo";
-			$logo = "";
-			$this->upload->initialize($this->set_upload_options("", $_FILES["logo"]["name"]));
-			if ($this->upload->do_upload('logo') != null) {
+		$logo = $this->file_upload_field = "logo";
+		$logo = "";
+		$this->upload->initialize($this->set_upload_options("", $_FILES["logo"]["name"]));
+		if ($this->upload->do_upload('logo') != null) {
 
-				$logo = $this->path . $this->upload->file_name;
+			$logo = $this->path . $this->upload->file_name;
 		}
-			$this->Donne_modele->updatelogo($idclients, $logo);
+		$this->Donne_modele->updatelogo($idclients, $logo);
 
-			echo json_encode(['success' => true, 'logo_url' => base_url($logo)]);
-		}
+		echo json_encode(['success' => true, 'logo_url' => base_url($logo)]);
+	}
 
 
 	public function enregistrer()
@@ -602,27 +606,27 @@ Génère uniquement la réponse JSON suivante, sans aucun texte avant ou après 
 
 
 	public function updateDonneeClient()
-{
-	$idclient = $this->input->post('idclient');
-	$idonnee = $this->input->post('idonnee');
-	$client = $this->input->post('Client');
-	$email_client = $this->input->post('Email_client');
-	$numero_client = $this->input->post('Numero_client');
-	$site_client = $this->input->post('Site_client');
-	$budget = $this->input->post('budget');
+	{
+		$idclient = $this->input->post('idclient');
+		$idonnee = $this->input->post('idonnee');
+		$client = $this->input->post('Client');
+		$email_client = $this->input->post('Email_client');
+		$numero_client = $this->input->post('Numero_client');
+		$site_client = $this->input->post('Site_client');
+		$budget = $this->input->post('budget');
 
-	$secteur_activite = $this->input->post('secteur_activite');
-	$Produit = $this->input->post('Produit');
-	$Initiative = $this->input->post('Initiative');
-	$Am = $this->input->post('Am');
-	$mis_en_place_paiement = $this->input->post('mis_en_place_paiement');
-	$Brief = $this->input->post('Brief');
-	$annonce = $this->input->post('annonce');
-	$commentaire_client = $this->input->post('commentaire_client') ?: NULL;
-	$paiement_recu = (int) $this->input->post('paiement_recu');
-	$datastudio = (int) $this->input->post('datastudio');
-	$email_onboarding = (int) $this->input->post('email_onboarding');
-	$facturation = (int) $this->input->post('facturation');
+		$secteur_activite = $this->input->post('secteur_activite');
+		$Produit = $this->input->post('Produit');
+		$Initiative = $this->input->post('Initiative');
+		$Am = $this->input->post('Am');
+		$mis_en_place_paiement = $this->input->post('mis_en_place_paiement');
+		$Brief = $this->input->post('Brief');
+		$annonce = $this->input->post('annonce');
+		$commentaire_client = $this->input->post('commentaire_client') ?: NULL;
+		$paiement_recu = (int) $this->input->post('paiement_recu');
+		$datastudio = (int) $this->input->post('datastudio');
+		$email_onboarding = (int) $this->input->post('email_onboarding');
+		$facturation = (int) $this->input->post('facturation');
 
 		$this->Donne_modele->update_client($idclient, $client, $email_client, $numero_client, $site_client);
 		$this->Donne_modele->update_donnee_client(
@@ -789,105 +793,161 @@ Génère uniquement la réponse JSON suivante, sans aucun texte avant ou après 
 		];
 
 		$this->data['idclients'] = $idclients;
-		$this->data['conversion'] = $this->input->get('conversion');
-		$this->data['camp_type'] = $camp_type = $this->input->get('camp_type');
-		$this->data['gtm'] = $this->input->get('gtm');
-		$d = $this->data["donnees"] = $this->visuels_model->getDonneeById($idclients);
-
-		$information_client = $this->data["donnees"]->information ?? '';
+		$d = $this->visuels_model->getDonneeById($idclients);
+		$id_campagne = $this->input->get('id_camp');
+		$information_client = $d->information ?? '';
 		$site_client = $d[0]['site_client'];
 		$images_site = $this->fetch_all_images_from_site($site_client, 8);
 
+		if ($id_campagne) {
+			$campagne = $this->data['campagne'] = $this->visuels_model->getCampagneById($id_campagne);
+			$camp_type = $campagne->type_campagne;
+
+			$this->data['id_camp'] = $id_campagne;
+			$this->data['mots_exclus'] = "Test";
+			$groupes_annonces = $this->data['groupes_annonces'] = $this->Donne_modele->get_gp_by_idcampagne($id_campagne);
+
+		} else {
+			
+			$this->data['conversion'] = $this->input->get('conversion');
+			$this->data['camp_type'] = $camp_type = $this->input->get('camp_type');
+			$this->data['gtm'] = $this->input->get('gtm');
+	
+			$prompt = "Tu es un expert Google Ads. 
+					Génère une liste de 60 mots-clés à exclure pour une campagne Google Ads sur le réseau de recherche. 
+					Voici les informations disponibles : 
+					- Informations sur le client : $information_client
+					- Site web du client : $site_client
+	
+					⚠️ Tu ne peux pas visiter de site web.
+					Même si les informations sont partielles, propose une liste pertinente et standard de mots-clés à exclure en français pour éviter les recherches non qualifiées.
+					Donne UNIQUEMENT les mots, séparés par des virgules, sans introduction ni phrase explicative.";
+	
+	
+			$raw_keywords = $this->call_openai($prompt);
+			$raw_keywords = trim($raw_keywords);
+			if (preg_match('/([a-zA-ZÀ-ÿ0-9,\s]+)/', $raw_keywords, $matches)) {
+			 $raw_keywords = $matches[1];
+			}
+			$clean_keywords = preg_replace('/,\s*/', "\n", $raw_keywords);
+	
+			$this->data["mots_exclus"] = $clean_keywords;
+		}
+
+		$this->data["donnees"] = $d;
+		
+		$site_client = $d[0]['site_client'] ?? '';
+		$images_site = $this->fetch_all_images_from_site($site_client, 8);
 		$this->data["images_site"] = $images_site;
-
-		$prompt = "Tu es un expert Google Ads. 
-				Génère une liste de 60 mots-clés à exclure pour une campagne Google Ads sur le réseau de recherche. 
-				Voici les informations disponibles : 
-				- Informations sur le client : $information_client
-				- Site web du client : $site_client
-
-				⚠️ Tu ne peux pas visiter de site web.
-				Même si les informations sont partielles, propose une liste pertinente et standard de mots-clés à exclure en français pour éviter les recherches non qualifiées.
-				Donne UNIQUEMENT les mots, séparés par des virgules, sans introduction ni phrase explicative.";
-
-
-		// $raw_keywords = $this->call_openai($prompt);
-		// $raw_keywords = trim($raw_keywords);
-		// if (preg_match('/([a-zA-ZÀ-ÿ0-9,\s]+)/', $raw_keywords, $matches)) {
-		// 	$raw_keywords = $matches[1];
-		// }
-		// $clean_keywords = preg_replace('/,\s*/', "\n", $raw_keywords);
-
-		$this->data["mots_exclus"] = "test";
+		$this->data["site_client"] = $site_client;
+		$this->data['procedure_gtm'] = $this->Task_model->get_procedure_gtm($idclients);
 
 		$this->content = "layouts/client/onboarding/" . $type_page[$camp_type] . ".php";
 		$this->layout();
 	}
+	public function fetch_images_campagne()
+{
+    $url = $this->input->post('url');
+    $images = [];
+
+    if (!empty($url)) {
+        // Utilise ta fonction existante pour récupérer les images
+        $images = $this->fetch_all_images_from_site($url, 8);
+    }
+
+    echo json_encode([
+        'success' => !empty($images),
+        'images'  => $images
+    ]);
+}
 
 	public function ajout_campagne($idclients)
 	{
 
-		$camp_type = $this->input->get('camp_type');
+		$id_campagne = $this->input->get('id_camp');
+		if ($id_campagne) {
+				$campagne = $this->data['campagne'] = $this->visuels_model->getCampagneById($id_campagne);
+				$camp_type = $campagne->type_campagne;
+			} else {
+				$camp_type = $this->input->get('camp_type');
+			}
+		
 		switch ($camp_type) {
 
 			case 1:
 				// Inputs spécifiques
-				$nom_campagne          = $this->input->post('nom_campagne_search'); // not in view
-				$information_campagne  = $this->input->post('information_campagne_search'); // not in view
-				$zones                 = $this->input->post('zone_search'); // OK
-				$repartition_budget    = $this->input->post('repartition_budget_search'); // OK
-				$date_campagne         = $this->input->post('date_campagne'); // not in view
-				$appareil              = $this->input->post('appareil_search'); // OK
-				$objectif              = $this->input->post('objectif'); // not in view
-				$url_site              = $this->input->post('url_campagne'); // OK
-				$groupes_annonces      = $this->input->post('groupe_annonce'); // OK
-				$contexte_groupes      = $this->input->post('contexte_groupe_annonce'); // not in view
-				$mots_cle              = $this->input->post('Mot_cle'); // OK
-				$Mots_cle_exclus       = $this->input->post('Mots_cle_exclus'); 
-				$selected_images = $this->input->post('selected_images');
-	
+				$nom_campagne          	= $this->input->post('nom_campagne_search'); // not in view
+				$information_campagne  	= $this->input->post('information_campagne_search'); // not in view
+				$zones                 	= $this->input->post('zone_search'); // OK
+				$repartition_budget    	= $this->input->post('repartition_budget_search'); // OK
+				$date_campagne         	= $this->input->post('date_campagne'); // not in view
+				$appareil              	= $this->input->post('appareil_search'); // OK
+				$objectif              	= $this->input->post('objectif'); // not in view
+				$url_site              	= $this->input->post('url_campagne'); // OK
+				$groupes_annonces      	= $this->input->post('groupe_annonce'); // OK
+				$contexte_groupes      	= $this->input->post('contexte_groupe_annonce'); // not in view
+				$mots_cle              	= $this->input->post('Mot_cle'); // OK
+				$Mots_cle_exclus       	= $this->input->post('Mots_cle_exclus');
+				$selected_images		= $this->input->post('selected_images');
+
+			
+
 				// Vérification cohérence
-				if (/* count($groupes_annonces) == count($contexte_groupes) &&  */count($groupes_annonces) == count($mots_cle)) {
+				if (count($groupes_annonces) == count($contexte_groupes) && count($groupes_annonces) == count($mots_cle)) {
 
-					// Insert campagne
-					$idcampagne = $this->Donne_modele->insert_campagne_am(
-						$idclients,
-						$camp_type,
-						$nom_campagne,
-						$information_campagne,
-						$zones,
-						$repartition_budget,
-						$date_campagne,
-						$appareil,
-						$objectif,
-						$url_site,
-						$mots_cle,
-						$Mots_cle_exclus
-					);
-					
-					
+					if ($id_campagne) {
+						
+						$this->Donne_modele->update_campagne_am(
+							$id_campagne,
+							$idclients,
+							$camp_type,
+							$nom_campagne,
+							$information_campagne,
+							$zones,
+							$repartition_budget,
+							$date_campagne,
+							$appareil,
+							$objectif,
+							$url_site,
+							$Mots_cle_exclus
+						);
+					} else {
+						
+						// Insert campagne
+						$id_campagne = $this->Donne_modele->insert_campagne_am(
+							$idclients,
+							$camp_type,
+							$nom_campagne,
+							$information_campagne,
+							$zones,
+							$repartition_budget,
+							$date_campagne,
+							$appareil,
+							$objectif,
+							$url_site,
+							$Mots_cle_exclus
+						);
 
-					// Data groupes
-					$data_groups = [];
-					foreach ($groupes_annonces as $index => $groupe) {
-						$data_groups[] = [
-							'groupe_annonce'         	=>	$groupe,
-							'contexte_groupe_annonce' 	=>	$contexte_groupes[$index] ?? '',
-							'mot_cle'                	=>	$mots_cle[$index] ?? '',
-							'url_groupe_annonce'     	=>	$url_site,
-							'idcampagne'             	=>	$idcampagne,
-							'idclient'               	=>	$idclients,
-							'camp_type'          		=>	$camp_type
-						];
-					}
-					//var_dump($data_groups);
-					$this->Donne_modele->insert_gp($data_groups, $idcampagne, $idclients, $camp_type);
-					if ($selected_images) {
-						$selected_images_array = explode(',', $selected_images);
-						$idclients = $idclients;
-						$idcampagne = $idcampagne;
-						$idgroupe_annonce = 0;
-						$inserted_count = $this->Image_model->insert_images($selected_images_array, $idclients, $idcampagne, $idgroupe_annonce);
+						// Data groupes
+						$data_groups = [];
+						foreach ($groupes_annonces as $index => $groupe) {
+							$data_groups[] = [
+								'groupe_annonce'         	=>	$groupe,
+								'contexte_groupe_annonce' 	=>	$contexte_groupes[$index] ?? '',
+								'mot_cle'                	=>	$mots_cle[$index] ?? '',
+								'url_groupe_annonce'     	=>	$url_site,
+								'idcampagne'             	=>	$id_campagne,
+								'idclient'               	=>	$idclients,
+								'camp_type'          		=>	$camp_type
+							];
+						}
+						//var_dump($data_groups);
+						$this->Donne_modele->insert_gp($data_groups, $id_campagne, $idclients, $camp_type);
+						if ($selected_images) {
+							$selected_images_array = explode(',', $selected_images);
+							$idgroupe_annonce = 0;
+							$inserted_count = $this->Image_model->insert_images($selected_images_array, $idclients, $id_campagne, $idgroupe_annonce);
+						}
 					}
 
 				} else {
@@ -946,23 +1006,23 @@ Génère uniquement la réponse JSON suivante, sans aucun texte avant ou après 
 				$groupes_annonces      = $this->input->post('groupe_annonce'); // OK
 				$contexte_groupes      = $this->input->post('contexte_groupe_annonce'); // not in view
 				$mots_cle              = $this->input->post('Mot_cle'); // OK
-				$Mots_cle_exclus       = $this->input->post('Mots_cle_exclus'); 
-
+				$Mots_cle_exclus       = $this->input->post('Mots_cle_exclus');
+			
 				// Insert campagne
 				$idcampagne = $this->Donne_modele->insert_campagne_am(
-						$idclients,
-						$camp_type,
-						$nom_campagne,
-						$information_campagne,
-						$zones,
-						$repartition_budget,
-						$date_campagne,
-						$appareil,
-						$objectif,
-						$url_site,
-						$mots_cle,
-						$Mots_cle_exclus
-					);
+					$idclients,
+					$camp_type,
+					$nom_campagne,
+					$information_campagne,
+					$zones,
+					$repartition_budget,
+					$date_campagne,
+					$appareil,
+					$objectif,
+					$url_site,
+					$mots_cle,
+					$Mots_cle_exclus
+				);
 
 				// Insert groupe pmax
 				$this->Donne_modele->insert_gppmax($idclients, $nom_groupe_pmax, $camp_type, $url_site, $Mots_cle_potentiels, $idcampagne, $contextes_client);
@@ -1022,17 +1082,17 @@ Génère uniquement la réponse JSON suivante, sans aucun texte avant ou après 
 				$this->Donne_modele->update_type_clients($choix, $idclients);
 
 				$data_groups = [];
-					foreach ($groupes_annonces as $index => $groupe) {
-						$data_groups[] = [
-							'groupe_annonce'         	=>	$groupe,
-							'contexte_groupe_annonce' 	=>	$contexte_groupes[$index] ?? '',
-							'mot_cle'                	=>	$mots_cle[$index] ?? '',
-							'url_groupe_annonce'     	=>	$url_site,
-							'idcampagne'             	=>	$idcampagne,
-							'idclient'               	=>	$idclients,
-							'camp_type'          		=>	$camp_type
-						];
-					}
+				foreach ($groupes_annonces as $index => $groupe) {
+					$data_groups[] = [
+						'groupe_annonce'         	=>	$groupe,
+						'contexte_groupe_annonce' 	=>	$contexte_groupes[$index] ?? '',
+						'mot_cle'                	=>	$mots_cle[$index] ?? '',
+						'url_groupe_annonce'     	=>	$url_site,
+						'idcampagne'             	=>	$idcampagne,
+						'idclient'               	=>	$idclients,
+						'camp_type'          		=>	$camp_type
+					];
+				}
 				$this->Donne_modele->insert_gp($data_groups, $idcampagne, $idclients, $camp_type);
 				break;
 		}
@@ -1041,10 +1101,24 @@ Génère uniquement la réponse JSON suivante, sans aucun texte avant ou après 
 		$this->session->set_flashdata('success', 'Campagne ajouter avec succès.');
 		redirect('Client/onboarding/' . $idclients, 'refresh');
 
-		$this->layout();
+		// $this->layout();
 	}
-	
-	
+
+	public function supprimer_campagne($id_campagne) {
+
+		$campagne = $this->data['campagne'] = $this->visuels_model->getCampagneById($id_campagne);
+		$groupes_annonces = $this->Donne_modele->get_gp_by_idcampagne($id_campagne);
+
+		foreach ($groupes_annonces as $groupe_annonce) {
+			$this->Donne_modele->deletegroupe($groupe_annonce['idgroupe_annonce']);
+		}
+
+		$this->Donne_modele->deletecampagne($id_campagne);
+
+		$this->session->set_flashdata('success', 'Campagne ajouter avec succès.');
+		redirect('Client/onboarding/' . $campagne->idclients, 'refresh');
+	}
+
 	private function fetch_all_images_from_site($site_url, $max_images = 8, $max_pages = 20)
 	{
 		if (!preg_match('#^https?://#', $site_url)) {
@@ -1348,7 +1422,7 @@ Génère uniquement la réponse JSON suivante, sans aucun texte avant ou après 
 
 		$headers = [
 			"Content-Type: application/json",
-			"Authorization: " . "Bearer " . $this->api_key
+			"Authorization: Bearer " . $api_key
 		];
 
 		$ch = curl_init();
@@ -1686,9 +1760,9 @@ Génère uniquement la réponse JSON suivante, sans aucun texte avant ou après 
 		$model = 'gpt-4';
 
 		$prompt = "Voici le résumé d’un site internet représentant une entreprise.\n\n" .
-				"Ta tâche est de déterminer le **code NAF (APE)** le plus approprié pour cette activité, basé sur la nomenclature française officielle (INSEE).\n" .
-				"Donne-moi le résultat au format JSON avec deux champs : `code` et `libelle`. Ne donne rien d'autre.\n\n" .
-				"Résumé :\n$summary";
+			"Ta tâche est de déterminer le **code NAF (APE)** le plus approprié pour cette activité, basé sur la nomenclature française officielle (INSEE).\n" .
+			"Donne-moi le résultat au format JSON avec deux champs : `code` et `libelle`. Ne donne rien d'autre.\n\n" .
+			"Résumé :\n$summary";
 
 		$data = [
 			"model" => $model,
@@ -1727,6 +1801,7 @@ Génère uniquement la réponse JSON suivante, sans aucun texte avant ou après 
 
 	private function get_summary_from_chatgpt($headings, $paragraphs)
 	{
+		$api_key = 'REMOVEDproj-cIpia-DhvTfYY1Cj4YHYx4UFIn2bvrIeevzCZZXDzFJNhijUzRHDOUtxt_K135GGvxCi2b__s6T3BlbkFJVKAK1VQL1BgxHdbYvnR35FWjioALos41nFLMA6B0fzN3IwMg8lH57SqB0aU7PVtQtuAwBDF98A'; 
 		
 		$model = 'gpt-4';
 
@@ -1760,7 +1835,7 @@ Génère uniquement la réponse JSON suivante, sans aucun texte avant ou après 
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 		curl_setopt($ch, CURLOPT_HTTPHEADER, [
 			'Content-Type: application/json',
-			'Authorization: Bearer ' . env('CHAT_GPT_API_KEY')
+			'Authorization: Bearer ' . $api_key
 		]);
 		curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
 
@@ -1792,6 +1867,7 @@ Génère uniquement la réponse JSON suivante, sans aucun texte avant ou après 
 		// Fallback si le texte généré n'a pas deux paragraphes distincts
 		return $raw_output;
 	}
+
 
 
 	// Fonction cURL pour récupérer le contenu HTML
