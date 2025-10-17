@@ -98,7 +98,7 @@
 						</div>
 
 						<div id="groupe_annonce_container" class="mb-4 pt-4">
-							<?php if (isset($campagne) && isset($groupes_annonces)): ?>
+							<?php if (isset($groupes_annonces) && count($groupes_annonces) > 0): ?>
 
 								<?php foreach ($groupes_annonces as $groupe_annonce): ?>
 									<div class="group-annonce-content">
