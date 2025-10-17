@@ -184,9 +184,10 @@
 					</div>
 					<?php if (!empty($d['information_client'])): ?>
 						<div class="card">
-							<div class="card-body">
-								<?= nl2br($d['information_client']); ?>
-							</div>
+							<div class="card-body" style="height: 300px; overflow-y: auto;">
+							<?= nl2br($d['information_client']); ?>
+						</div>
+
 						</div>
 					<?php endif; ?>
 
@@ -218,15 +219,16 @@
 														<i class="fa fa-ellipsis-v"></i>
 													</a>
 													<div class="dropdown-menu">
-														<a class="dropdown-item" href="<?= site_url("Googleads/editcampagne/" . $campagne['idcampagne']) ?>">Modifier</a>
-														<a class="dropdown-item text-danger" href="<?= site_url("Googleads/deletecampagne/" . $campagne['idcampagne']) ?>" onclick="return confirm('Supprimer cette campagne ?');">Supprimer</a>
-														<?php if ($campagne['type_campagne'] == 1): ?>
+														<a class="dropdown-item" href="<?= site_url("Client/campagne/" . $idclients ."?id_camp=". $campagne['idcampagne']) ?>">Modifier</a>
+														<a class="dropdown-item text-danger" href="<?= site_url("Client/supprimer_campagne/" . $campagne['idcampagne']) ?>" onclick="return confirm('Supprimer cette campagne ?');">Supprimer</a>
+														<!-- <php if ($campagne['type_campagne'] == 1): ?>
 															<a class="dropdown-item" href="<?= site_url("Googleads/ajout_groupeannonce/" . $campagne['idcampagne']) ?>">Ajouter Groupe</a>
-														<?php elseif ($campagne['type_campagne'] == 2): ?>
+														<php elseif ($campagne['type_campagne'] == 2): ?>
 															<a class="dropdown-item" href="<?= site_url("Googleads/ajout_groupeannonce_local/" . $campagne['idcampagne']) ?>">Ajouter Groupe Local</a>
-														<?php elseif ($campagne['type_campagne'] == 3): ?>
+														<php elseif ($campagne['type_campagne'] == 3): ?>
 															<a class="dropdown-item" href="<?= site_url("Googleads/ajout_groupeannonce_pmax/" . $campagne['idcampagne']) ?>">Ajouter Groupe PMax</a>
-														<?php endif; ?>
+														<php endif; ?>
+														-->
 													</div>
 												</div>
 											</td>
@@ -279,16 +281,22 @@
 																	<td>
 																		<?= htmlspecialchars($groupe['contexte_groupes_annonces']) ?>
 																	</td>
-																	<td>
-																		<?php
-																		$mots = explode("\n", $groupe['mot_cle']);
-																		foreach ($mots as $mot) {
-																			if (trim($mot) !== '') {
-																				echo '<span class="badge badge-secondary mr-1">' . htmlspecialchars(trim($mot)) . '</span>';
-																			}
-																		}
-																		?>
-																	</td>
+																<td>
+																	<?php
+																	$mots = array_filter(array_map('trim', explode("\n", $groupe['mot_cle'])));
+																	$totalMots = count($mots);
+																	$motsAffiches = array_slice($mots, 0, 3);
+
+																	foreach ($motsAffiches as $mot) {
+																		echo '<span class="badge badge-secondary mr-1">' . htmlspecialchars($mot) . '</span>';
+																	}
+
+																	if ($totalMots > 3) {
+																		echo '<span class="badge badge-secondary mr-1">...</span>';
+																	}
+																	?>
+																</td>
+
 																	<td>
 																		<?php if ($groupe['statut'] == 1): ?>
 																			<img src="<?= base_url('assets/images/icons/figma/CheckCircle.png') ?>" alt="Actif">
@@ -360,7 +368,7 @@
 												<i class="fa fa-link" style="font-size: 22px;"></i>
 											</div>
 											<h3>Lead</h3>
-											<p class="text-muted">Setting tasks, follow-ups, or reminders associated with specific contacts.</p>
+											<p class="text-muted">Setting tasks, follow-ups, or reminders.</p>
 											<a href="javascript:void(0);" class="stretched-link text-dark font-weight-bold select-conversion" data-target="#conversion_lead">
 												Discover More
 												<i class="fa fa-arrow-right"></i>
