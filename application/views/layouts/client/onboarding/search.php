@@ -113,10 +113,15 @@ $images_site = isset($images_site) && is_array($images_site) ? $images_site : []
 						<input type="number" class="form-control" name="repartition_budget_search" id="repartition_budget_search" value="<?= isset($campagne) ? htmlentities($campagne->repartition_budget) : '' ?>">
 					</div>
 
+<<<<<<< HEAD
 					<div class="custom-control custom-switch mb-3">
 						<input type="checkbox" class="custom-control-input" id="multiple_groupe_annonce" <?php if (isset($campagne) && !empty($groupes_annonces) && count($groupes_annonces) > 0): ?> checked <?php endif; ?>>
 						<label class="custom-control-label" for="multiple_groupe_annonce">Souhaitez-vous créer plusieurs groupes d'annonces dans la campagne?</label>
 					</div>
+=======
+						<div id="groupe_annonce_container" class="mb-4 pt-4">
+							<?php if (isset($groupes_annonces) && count($groupes_annonces) > 0): ?>
+>>>>>>> eebade4e449ee8deaffb0362d08f057dbfb447c4
 
 					<div id="groupe_annonce_container" class="mb-4 pt-4">
 						<?php if (isset($campagne) && !empty($groupes_annonces)): ?>
