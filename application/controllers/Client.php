@@ -790,13 +790,12 @@ class Client extends MY_Controller
 			$this->data['id_camp'] = $id_campagne;
 			$this->data['mots_exclus'] = "Test";
 			$groupes_annonces = $this->data['groupes_annonces'] = $this->Donne_modele->get_gp_by_idcampagne($id_campagne);
-
 		} else {
-			
+
 			$this->data['conversion'] = $this->input->get('conversion');
 			$this->data['camp_type'] = $camp_type = $this->input->get('camp_type');
 			$this->data['gtm'] = $this->input->get('gtm');
-	
+
 			$prompt = "Tu es un expert Google Ads. 
 					Génère une liste de 60 mots-clés à exclure pour une campagne Google Ads sur le réseau de recherche. 
 					Voici les informations disponibles : 
@@ -806,15 +805,15 @@ class Client extends MY_Controller
 					⚠️ Tu ne peux pas visiter de site web.
 					Même si les informations sont partielles, propose une liste pertinente et standard de mots-clés à exclure en français pour éviter les recherches non qualifiées.
 					Donne UNIQUEMENT les mots, séparés par des virgules, sans introduction ni phrase explicative.";
-	
-	
+
+
 			// $raw_keywords = $this->call_openai($prompt);
 			// $raw_keywords = trim($raw_keywords);
 			// if (preg_match('/([a-zA-ZÀ-ÿ0-9,\s]+)/', $raw_keywords, $matches)) {
 			// 	$raw_keywords = $matches[1];
 			// }
 			// $clean_keywords = preg_replace('/,\s*/', "\n", $raw_keywords);
-	
+
 			$this->data["mots_exclus"] = "Test";
 		}
 
@@ -835,7 +834,7 @@ class Client extends MY_Controller
 		} else {
 			$camp_type = $this->input->get('camp_type');
 		}
-		
+
 		switch ($camp_type) {
 
 			case 1:
@@ -858,7 +857,7 @@ class Client extends MY_Controller
 				if (count($groupes_annonces) == count($contexte_groupes) && count($groupes_annonces) == count($mots_cle)) {
 
 					if ($id_campagne) {
-						
+
 						$this->Donne_modele->update_campagne_am(
 							$id_campagne,
 							$idclients,
@@ -873,8 +872,14 @@ class Client extends MY_Controller
 							$url_site,
 							$Mots_cle_exclus
 						);
+
+						/** Supprimer d'abord tous les groupes */
+						$groupes_campagnes = $this->Donne_modele->get_gp_by_idcampagne($id_campagne);
+						foreach ($groupes_campagnes as $groupe_campagne) {
+							$this->Donne_modele->deletegroupecampagne($groupe_campagne['idgroupe_annonce']);
+						}
 					} else {
-						
+
 						// Insert campagne
 						$id_campagne = $this->Donne_modele->insert_campagne_am(
 							$idclients,
@@ -889,29 +894,28 @@ class Client extends MY_Controller
 							$url_site,
 							$Mots_cle_exclus
 						);
-
-						// Data groupes
-						$data_groups = [];
-						foreach ($groupes_annonces as $index => $groupe) {
-							$data_groups[] = [
-								'groupe_annonce'         	=>	$groupe,
-								'contexte_groupe_annonce' 	=>	$contexte_groupes[$index] ?? '',
-								'mot_cle'                	=>	$mots_cle[$index] ?? '',
-								'url_groupe_annonce'     	=>	$url_site,
-								'idcampagne'             	=>	$id_campagne,
-								'idclient'               	=>	$idclients,
-								'camp_type'          		=>	$camp_type
-							];
-						}
-						//var_dump($data_groups);
-						$this->Donne_modele->insert_gp($data_groups, $id_campagne, $idclients, $camp_type);
-						if ($selected_images) {
-							$selected_images_array = explode(',', $selected_images);
-							$idgroupe_annonce = 0;
-							$inserted_count = $this->Image_model->insert_images($selected_images_array, $idclients, $id_campagne, $idgroupe_annonce);
-						}
 					}
-
+					
+					// Data groupes
+					$data_groups = [];
+					foreach ($groupes_annonces as $index => $groupe) {
+						$data_groups[] = [
+							'groupe_annonce'         	=>	$groupe,
+							'contexte_groupe_annonce' 	=>	$contexte_groupes[$index] ?? '',
+							'mot_cle'                	=>	$mots_cle[$index] ?? '',
+							'url_groupe_annonce'     	=>	$url_site,
+							'idcampagne'             	=>	$id_campagne,
+							'idclient'               	=>	$idclients,
+							'camp_type'          		=>	$camp_type
+						];
+					}
+					//var_dump($data_groups);
+					$this->Donne_modele->insert_gp($data_groups, $id_campagne, $idclients, $camp_type);
+					if ($selected_images) {
+						$selected_images_array = explode(',', $selected_images);
+						$idgroupe_annonce = 0;
+						$inserted_count = $this->Image_model->insert_images($selected_images_array, $idclients, $id_campagne, $idgroupe_annonce);
+					}
 				} else {
 					echo 'Erreur : Le nombre de groupes d\'annonces, de contextes et de mots-clés ne correspond pas.';
 				}
@@ -1066,7 +1070,8 @@ class Client extends MY_Controller
 		// $this->layout();
 	}
 
-	public function supprimer_campagne($id_campagne) {
+	public function supprimer_campagne($id_campagne)
+	{
 
 		$campagne = $this->data['campagne'] = $this->visuels_model->getCampagneById($id_campagne);
 		$groupes_annonces = $this->Donne_modele->get_gp_by_idcampagne($id_campagne);
@@ -1080,6 +1085,8 @@ class Client extends MY_Controller
 		$this->session->set_flashdata('success', 'Campagne ajouter avec succès.');
 		redirect('Client/onboarding/' . $campagne->idclients, 'refresh');
 	}
+
+	public function groupe_annonce($id_campagne, $id_groupe) {}
 
 	private function fetch_all_images_from_site($site_url, $max_images = 8, $max_pages = 20)
 	{
@@ -1200,7 +1207,6 @@ class Client extends MY_Controller
 
 		return $scheme . '://' . $host . '/' . ltrim($path, '/');
 	}
-
 
 	private function extract_image_urls($html, $base_url)
 	{
