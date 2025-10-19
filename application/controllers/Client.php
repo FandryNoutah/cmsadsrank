@@ -1820,8 +1820,7 @@ class Client extends MY_Controller
 
 	private function get_summary_from_chatgpt($headings, $paragraphs)
 	{
-		$api_key = 'REMOVEDproj-cIpia-DhvTfYY1Cj4YHYx4UFIn2bvrIeevzCZZXDzFJNhijUzRHDOUtxt_K135GGvxCi2b__s6T3BlbkFJVKAK1VQL1BgxHdbYvnR35FWjioALos41nFLMA6B0fzN3IwMg8lH57SqB0aU7PVtQtuAwBDF98A'; 
-		
+
 		$model = 'gpt-4';
 
 		$input_text = "Voici les titres et paragraphes d’un site web.\n\n";
