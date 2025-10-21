@@ -12,6 +12,21 @@
 		cursor: pointer;
 		transition: transform .08s ease;
 	}
+	.loading-spinner {
+	display: inline-block;
+	width: 48px;
+	height: 48px;
+	border: 4px solid rgba(0, 0, 0, 0.1);
+	border-left-color: #000;
+	border-radius: 50%;
+	animation: spin 1s linear infinite;
+	margin: 30px auto;
+}
+
+@keyframes spin {
+	to { transform: rotate(360deg); }
+}
+
 
 </style>
 <?php end_section(); ?>
@@ -97,15 +112,27 @@ $images_site = isset($images_site) && is_array($images_site) ? $images_site : []
 					</div>
 
 					<div class="form-group">
-						<label for="information_campagne_search">Information de la campagne</label>
-						<textarea class="form-control" name="information_campagne_search" id="information_campagne_search"><?= isset($campagne) ? htmlentities($campagne->information_campagne) : '' ?></textarea>
+						<label for="url_campagne">URL de la campagne</label>
+						<input type="url" class="form-control" name="url_campagne" id="url_campagne">
 					</div>
 
 					<div class="form-group">
-						<label for="url_campagne">URL de la campagne</label>
-						<input type="url" class="form-control" name="url_campagne" id="url_campagne"
-							value="<?= isset($campagne) ? $campagne->url_site : $site_client ?>">
+						<label for="information_campagne_search">Information de la campagne</label>
+						
+						<button 
+							type="button" 
+							class="btn btn-outline-dark mb-3" 
+							id="generate-info-campagne"
+							data-idclient="<?= $idclients ?>"
+						>
+							<i class="fa fa-images"></i> Générer avec ChatGPT
+						</button>
+						
+						<textarea class="form-control" name="information_campagne_search" id="information_campagne_search"><?= isset($campagne) ? htmlentities($campagne->information_campagne) : '' ?></textarea>
 					</div>
+
+
+					
 
 
 					<div class="form-group">
@@ -113,59 +140,55 @@ $images_site = isset($images_site) && is_array($images_site) ? $images_site : []
 						<input type="number" class="form-control" name="repartition_budget_search" id="repartition_budget_search" value="<?= isset($campagne) ? htmlentities($campagne->repartition_budget) : '' ?>">
 					</div>
 
-<<<<<<< HEAD
 					<div class="custom-control custom-switch mb-3">
 						<input type="checkbox" class="custom-control-input" id="multiple_groupe_annonce" <?php if (isset($campagne) && !empty($groupes_annonces) && count($groupes_annonces) > 0): ?> checked <?php endif; ?>>
 						<label class="custom-control-label" for="multiple_groupe_annonce">Souhaitez-vous créer plusieurs groupes d'annonces dans la campagne?</label>
 					</div>
-=======
+
 						<div id="groupe_annonce_container" class="mb-4 pt-4">
 							<?php if (isset($groupes_annonces) && count($groupes_annonces) > 0): ?>
->>>>>>> eebade4e449ee8deaffb0362d08f057dbfb447c4
 
-					<div id="groupe_annonce_container" class="mb-4 pt-4">
-						<?php if (isset($campagne) && !empty($groupes_annonces)): ?>
-							<?php foreach ($groupes_annonces as $index => $groupe_annonce): ?>
-								<div class="group-annonce-content">
+								<?php foreach ($groupes_annonces as $groupe_annonce): ?>
+									<div class="group-annonce-content">
+										<div class="form-group">
+											<label>Groupe d'annonce 1</label>
+											<input type="text" class="form-control" name="groupe_annonce[]" value="<?= $groupe_annonce['nom_groupe'] ?>">
+										</div>
+										<div class="form-group">
+											<label>Contexte du groupe d'annonce</label>
+											<textarea name="contexte_groupe_annonce[]" class="form-control" ><?= $groupe_annonce['contexte_groupes_annonces'] ?></textarea>
+										</div>
+										<div class="form-group">
+											<label>Saisir des mots-clés du groupe d'annonce</label>
+											<textarea name="Mot_cle[]" class="form-control" ><?= $groupe_annonce['mot_cle'] ?></textarea>
+										</div>
+										<button type="button" class="btn btn-sm btn-danger remove_groupe_annonce mt-2">Supprimer</button>
+										<hr>
+									</div>
+								<?php endforeach; ?>
+							<?php else: ?>
+								<div class="group-annonce-content original">
 									<div class="form-group">
-										<label>Groupe d'annonce <?= ($index + 1) ?></label>
-										<input type="text" class="form-control" name="groupe_annonce[]" value="<?= htmlentities($groupe_annonce['nom_groupe']) ?>">
+										<label>Groupe d'annonce 1</label>
+										<input type="text" class="form-control" name="groupe_annonce[]">
 									</div>
 									<div class="form-group">
 										<label>Contexte du groupe d'annonce</label>
-										<textarea name="contexte_groupe_annonce[]" class="form-control" ><?= htmlentities($groupe_annonce['contexte_groupes_annonces']) ?></textarea>
+										<textarea name="contexte_groupe_annonce[]" class="form-control" ></textarea>
 									</div>
 									<div class="form-group">
 										<label>Saisir des mots-clés du groupe d'annonce</label>
-										<textarea name="Mot_cle[]" class="form-control" ><?= htmlentities($groupe_annonce['mot_cle']) ?></textarea>
+										<textarea name="Mot_cle[]" class="form-control" ></textarea>
 									</div>
-									<button type="button" class="btn btn-sm btn-danger remove_groupe_annonce mt-2">Supprimer</button>
-									<hr>
 								</div>
-							<?php endforeach; ?>
-						<?php else: ?>
-							<div class="group-annonce-content original">
-								<div class="form-group">
-									<label>Groupe d'annonce 1</label>
-									<input type="text" class="form-control" name="groupe_annonce[]">
-								</div>
-								<div class="form-group">
-									<label>Contexte du groupe d'annonce</label>
-									<textarea name="contexte_groupe_annonce[]" class="form-control" ></textarea>
-								</div>
-								<div class="form-group">
-									<label>Saisir des mots-clés du groupe d'annonce</label>
-									<textarea name="Mot_cle[]" class="form-control" ></textarea>
-								</div>
-							</div>
-						<?php endif; ?>
+							<?php endif; ?>
 
-						<div class="text-center mb-4 <?php if (!(isset($campagne) && !empty($groupes_annonces))) echo 'd-none'; ?>">
-							<button type="button" class="btn btn-outline-dark btn-sm" id="add_groupe_annonce">
-								<i class="fa fa-plus"></i> Nouveau groupe d'annonce
-							</button>
+							<div class="text-center d-none mb-4">
+								<button type="button" class="btn btn-outline-dark btn-sm" id="add_groupe_annonce">
+									<i class="fa fa-plus"></i> Nouveau groupe d'annonce
+								</button>
+							</div>
 						</div>
-					</div>
 
 					<h5>Paramètres de la campagne</h5>
 
@@ -192,7 +215,7 @@ $images_site = isset($images_site) && is_array($images_site) ? $images_site : []
 
 					<div class="form-group">
 						<label for="age-range">Tranche d'âges</label>
-						<select name="age-range" id="age-range" class="form-control">
+						<select name="age" id="age-range" class="form-control">
 							<option value="">-- Sélectionnez une tranche d'âge --</option>
 							<option value="Tous âges">Tout âges</option>
 							<option value="18-24">18 - 24 ans</option>
@@ -240,7 +263,7 @@ $images_site = isset($images_site) && is_array($images_site) ? $images_site : []
 
 					<div class="form-group">
 						<label for="appareil_search">Appareil</label>
-						<select name="appareil_search" id="appareil_search" class="form-control">
+						<select name="appareil" id="appareil_search" class="form-control">
 							<option value="Ordinateur / Mobile / Tablette">Ordinateur / Mobile / Tablette</option>
 							<option value="Ordinateur">Ordinateur</option>
 							<option value="Mobile">Mobile</option>
@@ -254,6 +277,13 @@ $images_site = isset($images_site) && is_array($images_site) ? $images_site : []
 					<ul class="nav nav-tabs mb-3">
 						<li class="nav-item">
 							<a class="nav-link py-3 active">Propositions de mots-clés à exclure</a>
+							<button 
+								type="button" 
+								class="btn btn-outline-dark mb-3 generate-keywords-btn" 
+								data-idclient="<?= $idclients ?>" >
+								<i class="fa fa-images"></i> Générer avec chatgpt
+							</button>
+
 						</li>
 					</ul>
 
@@ -401,9 +431,105 @@ $images_site = isset($images_site) && is_array($images_site) ? $images_site : []
 	</div>
 </div>
 
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
 <?php end_section() ?>
 <?php start_section('script'); ?>
+<script>
+$(document).ready(function() {
+    $('#generate-info-campagne').on('click', function() {
+        const idClient = $(this).data('idclient');
+        const urlCampagne = $('#url_campagne').val();
+
+        if (!urlCampagne) {
+            alert("Veuillez entrer une URL de campagne.");
+            return;
+        }
+
+        $.ajax({
+            url: '<?= base_url("Client/information_campagne") ?>/' + idClient,
+            method: 'POST',
+            data: { url: urlCampagne },
+            dataType: 'json',
+            success: function(response) {
+                if (response.status === 'success') {
+                    $('#information_campagne_search').val(response.data);
+                } else {
+                    alert("Une erreur est survenue.");
+                }
+            },
+            error: function() {
+                alert("Erreur lors de la communication avec le serveur.");
+            }
+        });
+    });
+});
+</script>
+
+<script>
+
+$(document).ready(function() {
+	const $checkbox = $('#multiple_groupe_annonce');
+	const $container = $('#groupe_annonce_container');
+	const $addButton = $('#add_groupe_annonce');
+
+	// Activation/désactivation du bloc quand on coche la switch
+	$checkbox.on('change', function() {
+		if (this.checked) {
+			$addButton.parent().removeClass('d-none');
+		} else {
+			$addButton.parent().addClass('d-none');
+			// facultatif : vider les groupes sauf l'original
+			$container.find('.group-annonce-content:not(.original)').remove();
+		}
+	});
+
+	// Ajout d'un nouveau groupe
+	$addButton.on('click', function() {
+		const count = $container.find('.group-annonce-content').length + 1;
+		const $clone = $container.find('.group-annonce-content.original').first().clone();
+		$clone.removeClass('original');
+		$clone.find('input, textarea').val('');
+		$clone.find('label:first').text('Groupe d\'annonce ' + count);
+		$clone.append('<button type="button" class="btn btn-sm btn-danger remove_groupe_annonce mt-2">Supprimer</button><hr>');
+		$container.append($clone);
+	});
+
+	// Suppression d'un groupe
+	$container.on('click', '.remove_groupe_annonce', function() {
+		$(this).closest('.group-annonce-content').remove();
+	});
+});
+$(document).ready(function() {
+    $('.generate-keywords-btn').on('click', function() {
+        const idClient = $(this).data('idclient');
+        const infoCampagne = $('#information_campagne_search').val();
+
+        if (!infoCampagne) {
+            alert("Veuillez remplir les informations de la campagne avant de générer les mots-clés à exclure.");
+            return;
+        }
+
+        $.ajax({
+            url: '<?= base_url("Client/get_mot_cle_a_exclure") ?>/' + idClient,
+            method: 'POST',
+            data: { information_campagne_search: infoCampagne },
+            dataType: 'json',
+            success: function(response) {
+                if (response.status === 'success') {
+                    $('textarea[name="Mots_cle_exclus"]').val(response.data);
+                } else {
+                    alert(response.message || "Erreur lors de la génération des mots-clés.");
+                }
+            },
+            error: function() {
+                alert("Erreur serveur lors de la génération.");
+            }
+        });
+    });
+});
+</script>
+
 <script>
 const fetchImagesUrl = '<?= site_url("Client/fetch_images_campagne") ?>';
 <?php if (function_exists('csrf_token') || (isset($this->security) && method_exists($this->security, 'get_csrf_hash'))): ?>
@@ -452,7 +578,8 @@ $(document).ready(function() {
 		let data = { url: url };
 		if (csrfName && csrfHash) data[csrfName] = csrfHash;
 
-		const loader = '<div class="col-12 text-center">Chargement...</div>';
+		const loader = '<div class="col-12 text-center"><div class="loading-spinner"></div><p class="mt-2">Chargement des images...</p></div>';
+;
 		propositionContainer.html(loader);
 		propositionCard.show();
 

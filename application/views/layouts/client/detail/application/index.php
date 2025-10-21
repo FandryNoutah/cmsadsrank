@@ -105,9 +105,14 @@ if (stripos($cms_full, 'Inconnu') !== false || stripos($cms_full, 'non détectab
 								<div class="card-body text-center">
 									<h3 class="mb-4">Google Tag Manager</h3>
 									<p class="text-muted mx-5 mb-5" style="font-size: 18px;">
+                    <?php if( !empty($d['tracking_gtm'])): ?>		
 										Google Tag Manager installé 
 										Action : Demander l’accès administrateur au conteneur GTM (gtm@adsrank.fr) et vérifier la configuration.</p>
-									
+									 <?php endif; ?>
+                   <?php if( empty($d['tracking_gtm'])): ?>	
+                    Google Tag Manager Non installé 
+										Action : Vous pouvez activer la procédure GTM.
+                  <?php endif; ?>
                   <?php if( !empty($d['tracking_gtm'])): ?>		
                    <span class="badge alert-success rounded-pill px-4 py-3" style="font-size: 14px; font-weight: 500;">
 										<i class="fa fa-circle mr-1" style="font-size: 10px;"></i>

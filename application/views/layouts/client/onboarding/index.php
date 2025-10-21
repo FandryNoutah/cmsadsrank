@@ -67,6 +67,85 @@
 		border-top-right-radius: 4px;
 		border-bottom-right-radius: 4px;
 	}
+	/* Style de la checkbox personnalisée */
+.toggle {
+  position: relative;
+  display: inline-block;
+  width: 60px;
+  height: 34px;
+}
+
+.toggle input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.switch {
+  position: absolute;
+  cursor: pointer;
+  background-color: #ccc;
+  border-radius: 34px;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  transition: 0.4s;
+}
+
+.knob {
+  position: absolute;
+  content: "";
+  height: 26px;
+  width: 26px;
+  left: 4px;
+  bottom: 4px;
+  background-color: white;
+  transition: 0.4s;
+  border-radius: 50%;
+}
+
+/* Quand la checkbox est cochée */
+.toggle input:checked + .switch {
+  background-color: Black;
+}
+
+/* Position de la "knob" quand c'est coché */
+.toggle input:checked + .switch .knob {
+  transform: translateX(26px);
+}
+
+/* Style désactivé */
+.toggle input:disabled + .switch {
+  background-color: #aaa;
+  cursor: not-allowed;
+}
+
+.toggle input:disabled + .switch .knob {
+  background-color: #e0e0e0;
+}
+.conversion-container {
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+.conversion-container:hover {
+  transform: scale(1.03);
+}
+.border-primary {
+  box-shadow: 0 0 10px rgba(0, 123, 255, 0.4);
+}
+.camp-type-container {
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+.camp-type-container:hover {
+  transform: scale(1.03);
+}
+.camp-type-container.border-dark {
+  box-shadow: 0 0 10px rgba(0,0,0,0.25);
+}
+
+
 
 </style>
 <?php end_section() ?>
@@ -153,6 +232,10 @@
 											<img src="<?= base_url('assets/images/' . $d['am_photo_user']) ?>" width="24" height="24">
 										</span>
 									</div>
+									<a href="<?= base_url('Client/onboarding/' . $d['idclients']) ?>" class="btn btn-outline-dark btn-block">Voir annonce</a>
+									<a href="<?= base_url('Client/onboarding/' . $d['idclients']) ?>" class="btn btn-outline-dark btn-block">Validation client</a>
+									<a href="<?= base_url('Client/onboarding/' . $d['idclients']) ?>" class="btn btn-outline-dark btn-block">Inventaire</a>
+									
 								</div>
 							</div>
 						</div>
@@ -190,6 +273,131 @@
 
 						</div>
 					<?php endif; ?>
+					<!-- GTM -->
+					<h1 class="display-1 text-center my-5" style="font-size: 42px;">
+						Mise en place Google Tag manager
+					</h1>
+
+					<div class="card mb-3">
+						<div class="card-body py-5 px-4">
+							<div class="row align-items-center">
+								
+								<div class="col-6 text-center">
+									<h3 class="mb-3" style="font-size: 32px; font-weight: 500;">Google Tag Manager</h3>
+									
+									<?php if (!empty($d['tracking_gtm'])): ?>		
+										<p class="text-muted" style="font-size: 18px; line-height: 150%;">
+											Action : Demander l’accès administrateur au conteneur GTM (gtm@adsrank.fr) et vérifier la configuration.
+										</p>
+									<?php endif; ?>
+									
+									<?php if (empty($d['tracking_gtm'])): ?>	
+										<p class="text-muted" style="font-size: 18px; line-height: 150%;">
+											Action : Vous pouvez activer la procédure GTM.
+										</p>					
+									<?php endif; ?>
+								</div>
+
+								<div class="col-3">
+									<?php if (!empty($d['tracking_gtm'])): ?>		
+										<span class="badge alert-success rounded-pill px-4 py-3" style="font-size: 14px; font-weight: 500;">
+											<i class="fa fa-circle mr-1" style="font-size: 10px;"></i>
+											<?php echo $d['tracking_gtm']; ?>
+										</span>
+									<?php endif; ?>	
+									
+									<?php if (empty($d['tracking_gtm'])): ?>
+										<span class="badge alert-danger rounded-pill px-4 py-3" style="font-size: 14px; font-weight: 500;">
+											<i class="fa fa-circle mr-1" style="font-size: 10px;"></i>
+											GTM non installé
+										</span>
+									<?php endif; ?>	
+								</div>	
+								<div class="col-3 text-center">
+									<?php if (empty($procedure_gtm)): ?>
+										<label class="toggle" aria-label="Activer procédure">
+											<input type="checkbox" class="activer-procedure"
+												data-idclient="<?php echo $d['idclients']; ?>"
+												data-am="<?php echo $d['initiative']; ?>"
+												data-assigned="<?php echo $d['account_manager']; ?>" />
+											<span class="switch">
+												<span class="knob"></span>
+											</span>
+										</label>
+									<?php else: ?>
+										<h2> Déja en place </h2>
+										<label class="toggle" aria-label="Activer procédure">
+											<input type="checkbox" class="activer-procedure"
+												data-idclient="<?php echo $d['idclients']; ?>"
+												data-am="<?php echo $d['initiative']; ?>"
+												data-assigned="<?php echo $d['account_manager']; ?>"
+												checked disabled />
+											<span class="switch">
+												<span class="knob"></span>
+											</span>
+										</label>
+									<?php endif; ?>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<!-- === MODAL POUR PARAMÈTRES DE CAMPAGNE === -->
+					<div class="modal fade" id="parametresCampagneModal" tabindex="-1" aria-labelledby="parametresCampagneLabel" aria-hidden="true">
+					<div class="modal-dialog modal-xl modal-dialog-centered">
+						<div class="modal-content">
+						<div class="modal-header">
+							<h1 class="modal-title fs-4" id="parametresCampagneLabel">Paramètres de la campagne</h1>
+							<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fermer"></button>
+						</div>
+						<div class="modal-body">
+							<p class="text-center text-muted" style="font-size: 18px;">
+							Pour atteindre les bonnes personnes, commencez par définir les paramètres clés de votre campagne
+							</p>
+
+							<div class="row row-cols-3 mt-4 mb-3">
+							<div class="col">
+								<div class="card conversion-container" data-value="ecommerce">
+								<div class="card-body text-center">
+									<div class="d-block mb-3">
+									<i class="fa fa-database" style="font-size: 22px;"></i>
+									</div>
+									<h3>Site de vente</h3>
+									<p class="text-muted">A centralized repository storing all contact.</p>
+								</div>
+								</div>
+							</div>
+							<div class="col">
+								<div class="card conversion-container" data-value="lead">
+								<div class="card-body text-center">
+									<div class="d-block mb-3">
+									<i class="fa fa-link" style="font-size: 22px;"></i>
+									</div>
+									<h3>Site formulaire</h3>
+									<p class="text-muted">Setting tasks, follow-ups, or reminders.</p>
+								</div>
+								</div>
+							</div>
+							<div class="col">
+								<div class="card conversion-container" data-value="reservation">
+								<div class="card-body text-center">
+									<div class="d-block mb-3">
+									<i class="fa fa-cloud" style="font-size: 22px;"></i>
+									</div>
+									<h3>Site Réservation</h3>
+									<p class="text-muted">Automatically updating and enriching contact.</p>
+								</div>
+								</div>
+							</div>
+							</div>
+						</div>
+						<div class="modal-footer d-flex justify-content-between">
+							<button type="button" class="btn btn-primary" id="btnActiverCampagne" disabled>Activer</button>
+						</div>
+						</div>
+					</div>
+					</div>
+
 
 					<!-- BRIEF -->
 					<h1 class="display-1 text-center mt-4" style="font-size: 42px;">
@@ -339,70 +547,6 @@
 						<!-- CAMPAGNE -->
 						<div id="campagne_step" class="step active mb-4">
 							<h1 class="display-1 text-center mt-5" style="font-size: 42px;">
-								Paramètres de la campagne
-							</h1>
-							<p class="text-center text-muted" style="font-size: 18px;">
-								Pour atteindre les bonnes personnes, commencez par définir les paramètres clés de votre campagne
-							</p>
-							<div class="row row-cols-3 mt-4 mb-3">
-								<div class="col">
-									<div class="card conversion-container">
-										<div class="card-body">
-											<div class="d-block mb-3">
-												<i class="fa fa-database" style="font-size: 22px;"></i>
-											</div>
-											<h3>Sales</h3>
-											<p class="text-muted">A centralized repository storing all contact information.</p>
-											<a href="javascript:void(0);" class="stretched-link text-dark font-weight-bold select-conversion" data-target="#conversion_ecommerce">
-												Discover More
-												<i class="fa fa-arrow-right"></i>
-											</a>
-											<input type="radio" name="conversion" id="conversion_ecommerce" value="ecommerce" class="d-none">
-										</div>
-									</div>
-								</div>
-								<div class="col">
-									<div class="card conversion-container">
-										<div class="card-body">
-											<div class="d-block mb-3">
-												<i class="fa fa-link" style="font-size: 22px;"></i>
-											</div>
-											<h3>Lead</h3>
-											<p class="text-muted">Setting tasks, follow-ups, or reminders.</p>
-											<a href="javascript:void(0);" class="stretched-link text-dark font-weight-bold select-conversion" data-target="#conversion_lead">
-												Discover More
-												<i class="fa fa-arrow-right"></i>
-											</a>
-											<input type="radio" name="conversion" id="conversion_lead" value="lead" class="d-none">
-										</div>
-									</div>
-								</div>
-								<div class="col">
-									<div class="card conversion-container">
-										<div class="card-body">
-											<div class="d-block mb-3">
-												<i class="fa fa-cloud" style="font-size: 22px;"></i>
-											</div>
-											<h3>Réservation</h3>
-											<p class="text-muted">Automatically updating and enriching contact data.</p>
-											<a href="javascript:void(0);" class="stretched-link text-dark font-weight-bold select-conversion" data-target="#conversion_reservation">
-												Discover More
-												<i class="fa fa-arrow-right"></i>
-											</a>
-											<input type="radio" name="conversion" id="conversion_reservation" value="reservation" class="d-none">
-										</div>
-									</div>
-								</div>
-							</div>
-
-							<div class="d-flex justify-content-end align-items-center">
-								<button class="btn btn-dark px-4 float-right next-button" data-input="conversion">Suivant</button>
-							</div>
-						</div>
-
-						<!-- OBJECTIF -->
-						<div id="camp_type_step" class="step mb-4">
-							<h1 class="display-1 text-center mt-5" style="font-size: 42px;">
 								Choisissez votre objectif
 							</h1>
 							<p class="text-center text-muted" style="font-size: 18px;">
@@ -448,38 +592,6 @@
 												<i class="fa fa-arrow-right"></i>
 											</a>
 											<input type="radio" name="camp_type" id="camp_2" value="2" class="d-none">
-										</div>
-									</div>
-								</div>
-							</div>
-							<div class="d-flex justify-content-end align-items-center">
-								<button class="btn btn-dark px-4 float-right next-button" data-input="camp_type">Suivant</button>
-							</div>
-						</div>
-
-						<!-- GOOGLE TAG -->
-						<div id="gtm_step" class="step mb-4">
-							<h1 class="display-1 text-center my-5" style="font-size: 42px;">
-								Mise en place Google Tag manager
-							</h1>
-							<div class="card mb-3">
-								<div class="card-body py-5 px-4">
-									<div class="row align-items-center">
-										<div class="col-6 text-center">
-											<h3 class="mb-3" style="font-size: 32px; font-weight: 500;">Google Tag Manager</h3>
-											<p class="text-muted" style="font-size: 18px; line-height: 150%;">Venture is audited and certified by few industry that have been leading in Security Third Party standards.</p>
-										</div>
-										<div class="col-3">
-											<span class="badge alert-success rounded-pill py-3 px-5">
-												<i class="fa fa-circle"></i>
-												GTM 30000HGY
-											</span>
-										</div>
-										<div class="col-3 text-center">
-											<div class="custom-control custom-switch custom-switch-xl">
-												<input type="checkbox" class="custom-control-input" id="gtm" name="gtm">
-												<label class="custom-control-label" for="gtm"></label>
-											</div>
 										</div>
 									</div>
 								</div>
@@ -539,73 +651,107 @@
 		});
 	});
 </script>
-
 <script>
-	$(function() {
+$(document).ready(function () {
+  let selectedConversion = null;
+  let idclients = null;
+  let am = null;
+  let assigned_to = null;
 
-		$('#create_camp_button').click(function() {
+  // Quand on clique sur le toggle
+  $('.activer-procedure').change(function () {
+    if (this.checked) {
+      // On récupère les infos du data-
+      idclients = $(this).data('idclient');
+      am = $(this).data('am');
+      assigned_to = $(this).data('assigned');
 
-			$('#camp_creation_step').removeClass('d-none');
+      // On ouvre la modale
+      $('#parametresCampagneModal').modal('show');
 
-			$('.scroll-container').animate({
-				scrollTop: $('.scroll-container')[0].scrollHeight
-			}, 1000);
+      // On empêche l'envoi direct (au cas où)
+      this.checked = false;
+    }
+  });
 
-		});
+  // Quand on clique sur une carte de conversion
+  $(document).on('click', '.conversion-container', function () {
+    $('.conversion-container').removeClass('border-primary');
+    $(this).addClass('border border-3 border-primary');
+    selectedConversion = $(this).data('value');
+    $('#btnActiverCampagne').prop('disabled', false);
+  });
 
-		$('.select-conversion').click(function() {
+  // Quand on clique sur "Activer" dans la modale
+  $('#btnActiverCampagne').click(function () {
+    if (!selectedConversion) {
+      alert('Veuillez sélectionner un type de conversion avant de continuer.');
+      return;
+    }
 
-			let target = $(this).data('target');
+    let date_today = new Date().toISOString().split('T')[0];
 
-			$(target).prop('checked', true);
-			$('.conversion-container').removeClass('border-dark border-danger shadow');
-			$(this).parents('.conversion-container').addClass('border-dark shadow');
-		});
-
-		$('.select-conversion-type').click(function() {
-
-			let target = $(this).data('target');
-
-			$(target).prop('checked', true);
-			$('.camp-type-container').removeClass('border-dark border-danger shadow');
-			$(this).parents('.camp-type-container').addClass('border-dark shadow');
-		});
-
-		// STEP CODE
-		$('.next-button').click(function() {
-
-			let input = $(this).data('input');
-			let value = $('input[name="' + input + '"]:checked').val();
-
-			if (!value) {
-				$('input[name="' + input + '"]').parents('.card').removeClass('border-dark');
-				$('input[name="' + input + '"]').parents('.card').addClass('border-danger shadow');
-			} else {
-				$('input[name="' + input + '"]').parents('.card').removeClass('border-danger');
-				// $(this).parents('.step').removeClass('active');
-				$(this).parents('.step').next('.step').addClass('active');
-
-				$('.scroll-container').animate({
-					scrollTop: $('.scroll-container')[0].scrollHeight
-				}, 1000);
-			}
-
-		});
-
-		$('#final_button').click(function() {
-
-			let conversion = $('input[name="conversion"]:checked').val();
-			let camp_type = $('input[name="camp_type"]:checked').val();
-			let gtm = $('input[name="gtm"]').is(':checked');
-
-			if (!conversion || !camp_type) {
-				alert("Veuillez d'abord choisir les options précédentes!");
-			} else {
-
-				let url = "<?= site_url('Client/campagne/' . $idclients); ?>?conversion=" + conversion + "&camp_type=" + camp_type + "&gtm=" + gtm;
-				window.location.href = url;
-			}
-		});
-	});
+    $.ajax({
+      url: "<?php echo base_url('Client/activer_processus_tache'); ?>",
+      method: "POST",
+      data: {
+        idclients: idclients,
+        am: am,
+        assigned_to: assigned_to,
+        date: date_today,
+        conversion: selectedConversion
+      },
+      success: function (response) {
+        $('#parametresCampagneModal').modal('hide');
+        alert("Processus activé avec succès !");
+        location.reload(); // optionnel : rafraîchit la page
+      },
+      error: function () {
+        alert("Erreur lors de l'activation du processus.");
+      }
+    });
+  });
+});
 </script>
+<script>
+$(function () {
+
+  // --- Bouton "Créer nouvelle campagne" ---
+  $('#create_camp_button').click(function () {
+    $('#camp_creation_step').removeClass('d-none');
+    $('.scroll-container').animate({
+      scrollTop: $('.scroll-container')[0].scrollHeight
+    }, 800);
+  });
+
+  // --- Sélection du type de campagne (un seul choix) ---
+  $('.select-conversion-type').click(function () {
+    let target = $(this).data('target');
+    $(target).prop('checked', true);
+
+    // On retire le style de sélection sur les autres cartes
+    $('.camp-type-container').removeClass('border-dark shadow');
+    // On ajoute le style sur la carte sélectionnée
+    $(this).closest('.camp-type-container').addClass('border-dark shadow');
+  });
+
+  // --- Validation / passage à la suite ---
+  $('#final_button').click(function () {
+    let camp_type = $('input[name="camp_type"]:checked').val();
+
+    if (!camp_type) {
+      alert("Veuillez sélectionner un type de campagne avant de continuer !");
+      return;
+    }
+
+    // On récupère d'autres infos si besoin
+    let gtm = $('input[name="gtm"]').is(':checked');
+    let url = "<?= site_url('Client/campagne/' . $idclients); ?>?camp_type=" + camp_type + "&gtm=" + gtm;
+
+    window.location.href = url;
+  });
+
+});
+</script>
+
 <?php end_section() ?>
