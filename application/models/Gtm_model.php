@@ -36,9 +36,41 @@ class Gtm_model extends CI_Model
 		return $this->db->where('id_gtm', $id)
 						->update('gtm', $data);
 	}
+<<<<<<< HEAD
+	public function update_implementation($id, $data)
+	{
+		$this->load->database();
+		return $this->db->where('idclients', $id)
+						->update('gtm', $data);
+	}
+	public function update_invitation($id, $data)
+	{
+		return $this->db->where('idclients', $id)
+						->update('gtm', $data);
+	}
 	public function insert_optimisation($data_optimisation) {
         return $this->db->insert('optimisation_gtm', $data_optimisation); 
     }
+	public function update_row($id, $data) {
+		unset($data['idplan_de_taggage']);
+		$this->db->where('idplan_de_taggage', $id);
+		return $this->db->update('plan_de_taggage', $data);
+	}
+
+	public function insert_row($data) {
+		return $this->db->insert('plan_de_taggage', $data);
+	}
+	public function delete_row($id) {
+	$this->db->where('idplan_de_taggage', $id);
+	return $this->db->delete('plan_de_taggage');
+}
+
+
+=======
+	public function insert_optimisation($data_optimisation) {
+        return $this->db->insert('optimisation_gtm', $data_optimisation); 
+    }
+>>>>>>> d1feff0b43b53a9f63f0888aba0a47f632ead216
 
 
 }

@@ -5,7 +5,7 @@ class Validation extends CI_Controller
 	function __construct() {
 		parent::__construct();
 
-		require_once FCPATH . 'vendor/autoload.php';
+		//require_once FCPATH . 'vendor/autoload.php';
 
 		// Suppression de la bibliothèque ion_auth et de tout code lié à l'authentification
 		$this->load->library(array('form_validation')); // Conserver les bibliothèques nécessaires pour la validation des formulaires
@@ -20,7 +20,7 @@ class Validation extends CI_Controller
 		$this->load->model('visuels_model'); // Ajout du modèle visuels_model si nécessaire
 		$this->load->helper(array('form', 'url'));
 		$this->load->library('curl');
-
+		$this->load->model("Image_model");
 		$this->path = "assets/images/formats/";
 		$this->file_upload_field = "visuel_path";
 		// require_once(APPPATH.'third_party/tcpdf/src/tcpdf.php');
@@ -251,13 +251,13 @@ endif;
 	}
 
 	public function validation_structure(int $id) {
-		// Récupérer les données des campagnes
+		
 
 		$donnees_valider = $this->Donne_modele->getclientvalidation($id);
 		$this->data["clients"] = $this->visuels_model->getClientById($id);
-
+		$idclients = $id;
 		// Récupérer les groupes d'annonces
-		$groupes_valider = $this->Donne_modele->getgroupevalidation($id);
+		$groupes_valider = $this->Donne_modele->getcampagnegroupevalidationbyidclient($id);
 		if (!is_array($groupes_valider) || !count($groupes_valider)) {
 			redirect('Googleads');
 		}
