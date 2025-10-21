@@ -632,37 +632,80 @@ class Donne_modele extends CI_Model
 		$this->db->close();
 	}
 
-	public function insert_campagne_am($idclients, $type_campagne, $nom_campagne, $information_campagne, $zones, $repartition_budget, $date_campagne, $appareil, $objectif, $url_site, $Mots_cle_exclus)
-	{
-		// Echappement des valeurs pour éviter les erreurs SQL
-		// Ici, pas besoin de refaire l'échappement si vous le faites déjà dans la requête
-		$idclients = $this->db->escape($idclients);
-		$type_campagne = $this->db->escape($type_campagne);
-		$nom_campagne = $this->db->escape($nom_campagne);
-		$information_campagne = $this->db->escape($information_campagne);
-		$zones = $this->db->escape($zones);
-		$repartition_budget = $this->db->escape($repartition_budget);
-		$date_campagne = $this->db->escape($date_campagne);
-		$appareil = $this->db->escape($appareil);
-		$objectif = $this->db->escape($objectif);
-		$url_site = $this->db->escape($url_site);
-		$Mots_cle_exclus = $this->db->escape($Mots_cle_exclus);
-		// Construction de la requête SQL pour insérer une nouvelle campagne
-		$sql = "INSERT INTO campagne(idclients, type_campagne, nom_campagne, information_campagne, zones, repartition_budget, date_campagne, appareil, objectif, url_site,Mots_cle_exclus) 
-    	VALUES ($idclients, $type_campagne, $nom_campagne, $information_campagne, $zones, $repartition_budget, $date_campagne, $appareil, $objectif, $url_site,$Mots_cle_exclus)";
+public function insert_campagne_am(
+					$idclients,
+					$camp_type,
+					$nom_campagne,
+					$information_campagne,
+					$cible,
+					$age,
+					$zones,
+					$repartition_budget,
+					$date_campagne,
+					$appareil,
+					$objectif,
+					$url_site,
+					$mots_cle,
+					$Mots_cle_exclus
+				){
+    // Échappement des variables
+    $idclients = $this->db->escape($idclients);
+    $camp_type = $this->db->escape($camp_type);
+    $nom_campagne = $this->db->escape($nom_campagne);
+    $information_campagne = $this->db->escape($information_campagne);
+    $age = $this->db->escape($age);
+    $cible = $this->db->escape($cible);
+    $zones = $this->db->escape($zones);
+    $repartition_budget = $this->db->escape($repartition_budget);
+    $date_campagne = $this->db->escape($date_campagne);
+    $appareil = $this->db->escape($appareil);
+    $objectif = $this->db->escape($objectif);
+    $url_site = $this->db->escape($url_site);
+    $Mots_cle_exclus = $this->db->escape($Mots_cle_exclus);
 
-		// Exécution de la requête
-		$this->db->query($sql);
+    // Construction de la requête SQL
+    $sql = "
+        INSERT INTO campagne (
+            idclients,
+            type_campagne,
+            nom_campagne,
+            information_campagne,
+            age,
+            cible,
+            zones,
+            repartition_budget,
+            date_campagne,
+            appareil,
+            objectif,
+            url_site,
+            Mots_cle_exclus
+        ) VALUES (
+            $idclients,
+            $camp_type,
+            $nom_campagne,
+            $information_campagne,
+            $age,
+            $cible,
+            $zones,
+            $repartition_budget,
+            $date_campagne,
+            $appareil,
+            $objectif,
+            $url_site,
+            $Mots_cle_exclus
+        )
+    ";
 
-		// Récupération de l'ID de la campagne nouvellement insérée
-		$idcampagne = $this->db->insert_id();
 
-		// Fermeture de la connexion
-		$this->db->close();
+    $this->db->query($sql);
 
-		// Retourner l'ID de la campagne insérée
-		return $idcampagne;
-	}
+    $idcampagne = $this->db->insert_id();
+
+    $this->db->close();
+
+    return $idcampagne;
+}
+
 
 	public function update_campagne_am(
 		$idcampagne,

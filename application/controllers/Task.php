@@ -12,6 +12,7 @@ class Task extends MY_Controller
 		parent::__construct();
 
 		$this->load->model('Tasks_model');
+		$this->load->model('Gtm_model');
 		$this->load->model('Task_message_model');
 		$this->current_user = $this->ion_auth->user()->row();
 
@@ -122,6 +123,53 @@ class Task extends MY_Controller
 				$this->visuels_model->change_statut_en_demande($id, $statut_demande);
 				$statut_upsell = 1;
 				$this->visuels_model->update_status_upsell($statut_upsell, $idupsell);
+			}
+			if ($taREMOVED>title == "Demande invitation GTM") {
+				$statut_demande = 3;
+				$id = intval($taREMOVED>idclients);
+				$am = intval($taREMOVED>AM);
+				$this->visuels_model->change_statut_en_demande($id, $statut_demande);
+				$type_tache = 3;
+				$title = "Implémentation Plan de taggage";
+				$description = "Veuiller mettre en place et implémenté le Plan de taggage du client";
+				$Statuts_technique = 1;
+				$procedure_gtm = 4;
+				$tm = 23;
+				$date_debut = date('Y-m-d');
+				$date_fin = date('Y-m-d', strtotime($date_debut . ' +2 days'));
+
+				$data = array(
+					'type_tache' => $type_tache,
+					'date_demande' => $date_debut,
+					'date_due' => $date_fin,
+					'idclients' => $id,
+					'AM' => $am,
+					'assigned_to' => $tm,
+					'title' => $title,
+					'Statuts_technique' => $Statuts_technique,
+					'procedure_gtm' => $procedure_gtm,
+					'description' => $description
+				);
+
+				$this->Task_model->add_task($data);
+				$date_invitation = $date_debut;
+				$gtm = "Installé";
+				$data = [
+					'gtm'    		    => $gtm,
+					'invitation_reçu'   =>$date_invitation,
+				];
+				$this->Gtm_model->update_invitation($id,$data);
+			}
+			if ($taREMOVED>title == "Implémentation Plan de taggage") {
+				$statut_demande = 3;
+				$id = intval($taREMOVED>idclients);
+				$am = intval($taREMOVED>AM);
+				$this->visuels_model->change_statut_en_demande($id, $statut_demande);
+				$statut = "Implémenté";
+				$data = [
+					'statut'   =>$statut,
+				];
+				$this->Gtm_model->update_implementation($id,$data);
 			}
 		}
 		if ($this->input->post('status') == "effectuée") {

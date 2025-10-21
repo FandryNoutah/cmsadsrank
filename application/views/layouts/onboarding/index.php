@@ -206,7 +206,8 @@
                   <?php //var_dump($d->type_upsell); ?>
 									<a href="<?= base_url('Client/detail_client/' . $d->idclients) ?>"  class="d-flex align-items-center text-decoration-none text-dark">
 										<img src="<?= $d->favicon ?>" class="img-thumbnail" width="28" height="28" alt="Favicon" style="margin-right:8px;">
-										<?= htmlspecialchars($d->nom_client) ?>
+									<?= htmlspecialchars(mb_strimwidth($d->nom_client, 0, 10, '...')) ?>
+
 									</a>
 								</td>
 
