@@ -46,7 +46,6 @@ class Client extends MY_Controller
 		$this->content = "layouts/client/index.php";
 		$this->layout();
 	}
-	
 	public function Ajoutgroupes()
 	{
 		$idgroupe_annonce = $this->input->post('idgroupe_annonce');
@@ -113,62 +112,54 @@ class Client extends MY_Controller
 
 
 	private function generateGoogleAdsCopy($info_base, $info_client, $site)
-{
-	$prompt = "Tu es un expert en Google Ads. 
-    À partir de ces informations :
-    - Informations de base : $info_base
-    - Brief client : $info_client
-    - Site web : $site
+	{
+		$prompt = "Tu es un expert en Google Ads. 
+		À partir de ces informations :
+		- Informations de base : $info_base
+		- Brief client : $info_client
+		- Site web : $site
 
-    Génère :
-    - 12 titres courts accrocheurs (max 30 caractères chacun),
-    - 4 titres longs (max 90 caractères chacun),
-    - 4 descriptions (max 90 caractères chacune).
+		Génère :
+		- 12 titres courts accrocheurs (max 30 caractères chacun),
+		- 4 titres longs (max 90 caractères chacun),
+		- 4 descriptions (max 90 caractères chacune).
 
-    Retourne uniquement une réponse JSON structurée comme ceci :
-    {
-    \"titres\": [\"titre1\", \"titre2\", ...],
-    \"titres_longs\": [\"titre_long1\", ...],
-    \"descriptions\": [\"description1\", ...]
-    }";
+		Retourne uniquement une réponse JSON structurée comme ceci :
+		{
+		\"titres\": [\"titre1\", \"titre2\", ...],
+		\"titres_longs\": [\"titre_long1\", ...],
+		\"descriptions\": [\"description1\", ...]
+		}";
 
-    $curl = curl_init();
-    curl_setopt_array($curl, [
-        CURLOPT_URL => 'https://api.openai.com/v1/chat/completions',
-        CURLOPT_RETURNTRANSFER => true,
-        CURLOPT_HTTPHEADER => [
-            'Content-Type: application/json',
-            'Authorization: Bearer ' . $api_key
-        ],
-        CURLOPT_POST => true,
-        CURLOPT_POSTFIELDS => json_encode([
-            'model' => 'gpt-4',
-            'messages' => [
-                ['role' => 'system', 'content' => 'Tu es un expert en publicité Google Ads.'],
-                ['role' => 'user', 'content' => $prompt]
-            ],
-            'temperature' => 0.7
-        ])
-    ]);
+		$curl = curl_init();
+		curl_setopt_array($curl, [
+			CURLOPT_URL => 'https://api.openai.com/v1/chat/completions',
+			CURLOPT_RETURNTRANSFER => true,
+			CURLOPT_HTTPHEADER => [
+				'Content-Type: application/json',
+				'Authorization: Bearer ' . env('CHAT_GPT_API_KEY')
+			],
+			CURLOPT_POST => true,
+			CURLOPT_POSTFIELDS => json_encode([
+				'model' => 'gpt-4',
+				'messages' => [
+					['role' => 'system', 'content' => 'Tu es un expert en publicité Google Ads.'],
+					['role' => 'user', 'content' => $prompt]
+				],
+				'temperature' => 0.7
+			])
+		]);
 
-    // 💡 Manquait cette ligne :
-    $response = curl_exec($curl);
+		$response = curl_exec($curl);
+		curl_close($curl);
 
-    if ($response === false) {
-        throw new Exception('Erreur cURL : ' . curl_error($curl));
-    }
+		$decoded = json_decode($response, true);
+		$content = $decoded['choices'][0]['message']['content'] ?? '';
 
-    $decoded = json_decode($response, true);
-    $content = $decoded['choices'][0]['message']['content'] ?? '';
+		$result = json_decode($content, true);
 
-    // Extraction du JSON dans le contenu
-    preg_match('/\{(?:[^{}]|(?R))*\}/', $content, $matches);
-    $result = json_decode($matches[0] ?? '', true);
-
-    return $result ?: ['titres' => [], 'titres_longs' => [], 'descriptions' => []];
-}
-
-
+		return $result ?: ['titres' => [], 'titres_longs' => [], 'descriptions' => []];
+	}
 
 	public function details_ajax($id)
 	{
@@ -1597,7 +1588,7 @@ Donne UNIQUEMENT les mots, séparés par des virgules, sans introduction ni phra
 
 		$headers = [
 			"Content-Type: application/json",
-			"Authorization: Bearer " . $api_key
+			"Authorization: Bearer " . env('CHAT_GPT_API_KEY')
 		];
 
 		$ch = curl_init();
@@ -1951,7 +1942,7 @@ Donne UNIQUEMENT les mots, séparés par des virgules, sans introduction ni phra
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 		curl_setopt($ch, CURLOPT_HTTPHEADER, [
 			'Content-Type: application/json',
-			'Authorization: Bearer ' . $api_key
+			'Authorization: Bearer ' . env('CHAT_GPT_API_KEY')
 		]);
 		curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
 
@@ -1976,7 +1967,7 @@ Donne UNIQUEMENT les mots, séparés par des virgules, sans introduction ni phra
 
 	private function get_summary_from_chatgpt($headings, $paragraphs)
 	{
-	
+
 		$model = 'gpt-4';
 
 		$input_text = "Voici les titres et paragraphes d’un site web.\n\n";
@@ -2009,7 +2000,7 @@ Donne UNIQUEMENT les mots, séparés par des virgules, sans introduction ni phra
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 		curl_setopt($ch, CURLOPT_HTTPHEADER, [
 			'Content-Type: application/json',
-			'Authorization: Bearer ' . $api_key
+			'Authorization: Bearer ' . env('CHAT_GPT_API_KEY')
 		]);
 		curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
 
@@ -2041,7 +2032,6 @@ Donne UNIQUEMENT les mots, séparés par des virgules, sans introduction ni phra
 		// Fallback si le texte généré n'a pas deux paragraphes distincts
 		return $raw_output;
 	}
-
 
 
 	// Fonction cURL pour récupérer le contenu HTML
