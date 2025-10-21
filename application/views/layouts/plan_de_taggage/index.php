@@ -46,250 +46,167 @@
 <?php end_section(); ?>
 
 <?php start_section('page_title'); ?>
-Plan de taggage
+<h1 class="h4 py-2">Plan de taggage</h1>
+<div class="col-auto px-1">
+		<button class="btn btn-dark" onclick="toggleEditMode()">Modifier</button>
+	</div>
 <?php end_section(); ?>
 
 <?php start_section('page_heading'); ?>
-<div class="row mx-lg-2 my-2">
-	<div class="col-auto px-1">
-		<button class="btn btn-outline-dark">
-			<img src="<?= base_url('assets/images/icons/figma/icon-funnelsimple.svg') ?>" alt="">
-			Sort By
-		</button>
-	</div>
-	<div class="col-auto px-1">
-		<button class="btn btn-outline-dark">
-			<img src="<?= base_url('assets/images/icons/figma/icon-funnel.svg') ?>" alt="">
-			Filter
-		</button>
-	</div>
-</div>
 <?php end_section(); ?>
 
 <?php start_section('content'); ?>
-
 <div class="container-fluid">
-		<div class="tab-pane fade show active mb-5" id="list" role="tabpanel" aria-labelledby="list_tab">
+	<!-- Mode lecture -->
+	<div id="readOnlyView">
 		<div class="table-responsive">
-
-			<table class="table table-wrapper">
+			<table class="table table-bordered">
 				<thead class="bg-light text-muted">
 					<tr>
-						<th>
-							AM
-							<img src="<?= base_url('assets/images/icons/figma/icon-caretdoublevertical-5.svg') ?>" class="ml-2">
-						</th>
-						<th>
-							Client
-							<img src="<?= base_url('assets/images/icons/figma/icon-caretdoublevertical-5.svg') ?>" class="ml-2">
-						</th>
-						<th>
-							Plan de taggage
-							<img src="<?= base_url('assets/images/icons/figma/icon-caretdoublevertical-5.svg') ?>" class="ml-2">
-						</th>
-						<th>
-							Etat
-							<img src="<?= base_url('assets/images/icons/figma/icon-caretdoublevertical-5.svg') ?>" class="ml-2">
-						</th>
+						<th>Conversion</th>
+						<th>Actions</th>
+						<th>Types</th>
+						<th>Remarque</th>
+						<th>Etat</th>
+						<th>Conditions</th>
+						<th>Conversion ID</th>
+						<th>Conversion Label</th>
 					</tr>
 				</thead>
 				<tbody>
-					<?php foreach($donnee as $C): ?>
+					<?php foreach($plan_taggage as $P): ?>
 					<tr>
-						
-						<td style="text-align: center">
-							<img src="<?php echo base_url(IMAGES_PATH . htmlspecialchars($C->photo_users)); ?>" alt="avatar" style="width: 40px;" class="avatar-image">
-							<a style="display: none"><?php echo htmlspecialchars($C->nomam); ?></a>
-						</td>
-						<td style="text-align: center"><?php echo htmlspecialchars($C->nom_client); ?></td>  
-						<td style="text-align: center"><?php echo anchor('Plan_de_taggage/plandetaggage/' . $C->idclients, 'Voir plan', ['style' => 'color: black', 'data-edit' => $C->idclients]); ?></td>
-						<td style="text-align: center"></td>  
-						<td style="text-align: center"></td>  
+						<td><?= htmlspecialchars($P['conversion']) ?></td>
+						<td><?= htmlspecialchars($P['actions']) ?></td>
+						<td><?= htmlspecialchars($P['types']) ?></td>
+						<td><?= htmlspecialchars($P['remarque']) ?></td>
+						<td><?= htmlspecialchars($P['etat']) ?></td>
+						<td><?= htmlspecialchars($P['conditions']) ?></td>
+						<td><?= htmlspecialchars($P['conversion_id']) ?></td>
+						<td><?= htmlspecialchars($P['extensions_appel']) ?></td>
 					</tr>
 					<?php endforeach; ?>
 				</tbody>
 			</table>
 		</div>
 	</div>
+
+	<!-- Mode édition (masqué par défaut) -->
+	<div id="editModeView" style="display: none;">
+		<form method="post" action="<?= base_url('Gtm/update_table') ?>">
+			<div class="table-responsive mb-3">
+				<table class="table table-bordered" id="editableTable">
+					<thead class="bg-light text-muted">
+						<tr>
+							<th>Conversion</th>
+							<th>Actions</th>
+							<th>Types</th>
+							<th>Remarque</th>
+							<th>Etat</th>
+							<th>Conditions</th>
+							<th>Conversion ID</th>
+							<th>Conversion Label</th>
+							<th>Supprimer</th>
+						</tr>
+					</thead>
+					<tbody>
+						<?php foreach($plan_taggage as $index => $P): ?>
+							<tr>
+								<td><textarea name="rows[<?= $index ?>][conversion]" class="form-control auto-resize"><?= htmlspecialchars($P['conversion']) ?></textarea></td>
+								<td><textarea name="rows[<?= $index ?>][actions]" class="form-control auto-resize"><?= htmlspecialchars($P['actions']) ?></textarea></td>
+								<td><textarea name="rows[<?= $index ?>][types]" class="form-control auto-resize"><?= htmlspecialchars($P['types']) ?></textarea></td>
+								<td><textarea name="rows[<?= $index ?>][remarque]" class="form-control auto-resize"><?= htmlspecialchars($P['remarque']) ?></textarea></td>
+								<td><textarea name="rows[<?= $index ?>][etat]" class="form-control auto-resize"><?= htmlspecialchars($P['etat']) ?></textarea></td>
+								<td><textarea name="rows[<?= $index ?>][conditions]" class="form-control auto-resize"><?= htmlspecialchars($P['conditions']) ?></textarea></td>
+								<td><textarea name="rows[<?= $index ?>][conversion_id]" class="form-control auto-resize"><?= htmlspecialchars($P['conversion_id']) ?></textarea></td>
+								<td><textarea name="rows[<?= $index ?>][conversion_label]" class="form-control auto-resize"><?= htmlspecialchars($P['extensions_appel']) ?></textarea></td>
+								<td><button type="button" class="btn btn-danger btn-sm" onclick="removeRow(this)">X</button></td>
+								<input type="hidden" name="rows[<?= $index ?>][idplan_de_taggage]" value="<?= $P['idplan_de_taggage'] ?>">
+							</tr>
+						<?php endforeach; ?>
+					</tbody>
+				</table>
+			</div>
+
+			<button type="button" class="btn btn-secondary" onclick="addRow()">Ajouter ligne</button>
+			<button type="submit" class="btn btn-success">Enregistrer</button>
+			<button type="button" class="btn btn-outline-dark" onclick="cancelEditMode()">Annuler</button>
+		</form>
+	</div>
 </div>
-
-<?php $this->load->view('layouts/note/modal/form'); ?>
-<?php $this->load->view('layouts/note/modal/detail'); ?>
-
 <?php end_section(); ?>
 
 <?php start_section('script'); ?>
-
 <script>
-	$(function() {
+function toggleEditMode() {
+	document.getElementById('readOnlyView').style.display = 'none';
+	document.getElementById('editModeView').style.display = 'block';
+}
 
-		function resetDetail() {
-			$('#detail_discussion').html("");
-			$('#detailModalLabel').text("");
-			$('#detail_due_date').removeAttr('value');
-			$('#detail_description').text("");
-			$('#detail_discussion_form').removeAttr('id');
-		}
+function cancelEditMode() {
+	document.getElementById('readOnlyView').style.display = 'block';
+	document.getElementById('editModeView').style.display = 'none';
+}
 
-		function resetForm() {
-			$('#formModalLabel').text("Nouveau note")
-			$('#note_form').attr('action', "<?= site_url('notes/create'); ?>");
-			$('#note_type').val("");
-			$('#note_status').val("");
-			$('#note_title').val("");
-			$('#note').val("");
-			$('#due_date').val("");
-			$('#note_submit').html("Ajouter");
-		}
+function removeRow(button) {
+	const row = button.closest('tr');
+	const idInput = row.querySelector('input[name*="[idplan_de_taggage]"]');
 
-		function fetchDetail(id_note) {
-			$.ajax({
-				type: "GET",
-				url: "Notes/detail_note/" + id_note,
-				dataType: "json",
-				beforeSend: function() {
-					resetDetail();
-				},
-				success: function(response) {
+	if (idInput && idInput.value) {
+		// Ligne existante => marquer comme supprimée
+		const hiddenInput = document.createElement('input');
+		hiddenInput.type = 'hidden';
+		hiddenInput.name = idInput.name.replace('[idplan_de_taggage]', '[deleted]');
+		hiddenInput.value = '1';
+		row.appendChild(hiddenInput);
 
-					let note = response.note;
-					let messages = response.messages;
+		// Cacher visuellement
+		row.style.display = 'none';
+	} else {
+		// Ligne ajoutée (pas encore dans la base) => supprimer complètement
+		row.remove();
+	}
+}
 
-					$('#detailModalLabel').text("Note: " + note.title);
-					$('#detail_due_date').val(note.date_due);
-					$('#detail_description').text(note.content);
-					$('#detail_type').text(note.type);
-					$('#detail_status').text(note.status);
 
-					$.each(messages, function(index, data) {
+function addRow() {
+	const table = document.querySelector('#editableTable tbody');
+	const rowCount = table.rows.length;
+	const row = table.insertRow();
 
-						let html = `
-							<div class="d-block activity-container mt-3">
-								<div class="d-flex">
-									<div class="mx-1">
-										<img src="${data.photo_users}" alt="" width="32">
-									</div>
-									<div class="flex-fill mx-1">
-										<div class="d-block mb-2">
-											<span class="font-weight-bold">${data.username}</span>
-											${data.message}
-										</div>
-										<div class="d-block mb-2">
-											<span class="text-muted small">${data.created_at}</span>
-										</div>
-									</div>
-									<div class="mx-1">
-										<a href="javascript:void(0);" class="text-decoration-none text-muted">
-											<i class="fa fa-ellipsis-h"></i>
-										</a>
-									</div>
-								</div>
-							</div>
-						`;
+	const fields = ['conversion', 'actions', 'types', 'remarque', 'etat', 'conditions', 'conversion_id', 'conversion_label'];
 
-						$('#detail_discussion').prepend(html);
-					});
-				}
-			});
-		}
-
-		$('#detailModal').on('show.bs.modal', function(event) {
-
-			let button = $(event.relatedTarget);
-			let id_note = $(button).attr('data-id');
-			$('#detail_discussion_form').data('id', id_note);
-
-			fetchDetail(id_note);
-		});
-
-		$('#detailModal').on('hide.bs.modal', function(event) {
-			resetDetail();
-		});
-
-		$('#formModal').on('show.bs.modal', function(event) {
-
-			let button = $(event.relatedTarget);
-			let id_note = $(button).attr('data-id');
-
-			if (id_note) {
-
-				$('#note_form button[type="submit"]').text("Modifier");
-
-				$.ajax({
-					type: "GET",
-					url: "Notes/detail_note/" + id_note,
-					dataType: "json",
-					beforeSend: function() {
-						resetForm();
-					},
-					success: function(response) {
-
-						let note = response.note;
-						$('#formModalLabel').text("Modification note: " + note.title)
-						$('#note_form').attr('action', "<?= site_url('notes/edit/'); ?>" + note.id);
-						$('#note_type').val(note.type);
-						$('#note_status').val(note.status);
-						$('#note_title').val(note.title);
-						$('#note').val(note.content);
-						$('#due_date').val(note.date_due);
-					}
-				});
-			} else {
-				$('#note_form button[type="submit"]').text("Ajouter");
-				$('#formModalLabel').text("Nouveau note")
-				$('#note_form').attr('action', "<?= site_url('notes/create') ?>");
-			}
-
-		});
-
-		$('#formModal').on('hide.bs.modal', function(event) {
-			resetForm();
-		});
+	fields.forEach(field => {
+		const cell = row.insertCell();
+		const textarea = document.createElement('textarea');
+		textarea.name = `rows[${rowCount}][${field}]`;
+		textarea.className = 'form-control auto-resize';
+		textarea.oninput = autoResize;
+		cell.appendChild(textarea);
 	});
+
+	const cell = row.insertCell();
+	const btn = document.createElement('button');
+	btn.type = 'button';
+	btn.className = 'btn btn-danger btn-sm';
+	btn.innerText = 'X';
+	btn.onclick = function () { removeRow(btn); };
+	cell.appendChild(btn);
+}
+
+// Auto-resize des textarea
+function autoResize() {
+	this.style.height = 'auto';
+	this.style.height = this.scrollHeight + 'px';
+}
+
+// Initialiser resize sur tous les textarea existants
+document.addEventListener('DOMContentLoaded', function () {
+	document.querySelectorAll('textarea.auto-resize').forEach(textarea => {
+		textarea.addEventListener('input', autoResize);
+		textarea.dispatchEvent(new Event('input')); // initialiser
+	});
+});
 </script>
 
-<!-- Attachment script -->
-<script>
-	$(function() {
-		const dropArea = $("#fileDrop");
-		const input = $("#fileInput");
-		const fileName = $("#fileName");
-
-		// Click to trigger input
-		dropArea.click(function() {
-			console.log("here");
-
-			input.click();
-		});
-
-		// Drag & drop events
-		dropArea.on("dragover", function(e) {
-			e.preventDefault();
-			e.stopPropagation();
-			dropArea.addClass("dragover");
-		});
-
-		dropArea.on("dragleave drop", function(e) {
-			e.preventDefault();
-			e.stopPropagation();
-			dropArea.removeClass("dragover");
-		});
-
-		dropArea.on("drop", function(e) {
-			let file = e.originalEvent.dataTransfer.files[0]; // just one file
-			input[0].files = e.originalEvent.dataTransfer.files;
-			showFile(file);
-		});
-
-		input.on("change", function() {
-			if (this.files[0]) {
-				showFile(this.files[0]);
-			}
-		});
-
-		function showFile(file) {
-			fileName.text(file.name);
-		}
-	});
-</script>
 <?php end_section(); ?>

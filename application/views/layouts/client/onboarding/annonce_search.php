@@ -133,18 +133,6 @@
 					<div class="form-section-title">Chemin 2</div>
 					<input type="text" class="form-control mb-2" name="chemin2">
 
-					<div class="form-section-title">Images</div>
-					<input type="file" name="images[]" multiple class="form-control mb-3">
-
-					<div class="form-section-title">Logo</div>
-					<div class="row align-items-center mb-4">
-						<div class="col-auto"><img src="<?= base_url($d['logo_client']); ?>" width="64"></div>
-						<div class="col-auto">
-							<button type="button" class="btn btn-light btn-sm" onclick="document.getElementById('logo').click();"><i class="fa fa-upload"></i> Upload Company Logo</button>
-							<input type="file" id="logo" name="logo" hidden>
-						</div>
-					</div>
-
 					<div class="form-section-title">Liens annexes</div>
 					<div id="liens-annexes-container">
 						<div class="form-group">

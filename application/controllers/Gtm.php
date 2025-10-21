@@ -42,6 +42,14 @@ class Gtm extends MY_Controller
 		$this->content = "layouts/gtm/index.php";
 		$this->layout();
 	}
+
+	public function Plan_de_taggage($id)
+	{
+
+		$this->data["plan_taggage"] = $this->visuels_model->getplantaggage($id); 
+		$this->content = "layouts/plan_de_taggage/index.php";
+		$this->layout();
+	}
 	public function get_gtm_by_id($id)
 	{
 		$data = $this->Gtm_model->get_by_id($id);
@@ -70,6 +78,30 @@ class Gtm extends MY_Controller
 
 		redirect('Gtm'); 
 	}
+
+		public function update_table() {
+	$this->load->model('Gtm_model');
+
+	$rows = $this->input->post('rows');
+	$idclients = 1; // ou depuis la session/utilisateur
+
+	foreach ($rows as $row) {
+		if (!empty($row['deleted']) && !empty($row['idplan_de_taggage'])) {
+			// Supprimer de la base
+			$this->Gtm_model->delete_row($row['idplan_de_taggage']);
+		} elseif (!empty($row['idplan_de_taggage'])) {
+			// Mise à jour
+			$this->Gtm_model->update_row($row['idplan_de_taggage'], $row);
+		} else {
+			// Insertion
+			$row['idclients'] = $idclients;
+			$this->Gtm_model->insert_row($row);
+		}
+	}
+
+	// ✅ Correction de la redirection
+	redirect('Gtm/Plan_de_taggage/' . $idclients);
+}
 
 
 	public function fetch_discussion($id_task)

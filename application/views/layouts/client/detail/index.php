@@ -413,6 +413,9 @@
 											<th>
 												Nouveau montant
 											</th>
+											<th>
+												Statut
+											</th>
 										</tr>
 									</thead>
 									<tbody>
@@ -466,9 +469,14 @@
 													<?php if ($u->type_upsell == 1 || $u->type_upsell == 2): ?>
 														<?= $u->budgets ?> €
 													<?php endif; ?>
-													<?php if ($u->statut_actif == 1): ?>
-														<img class="mr-2" src="<?= base_url('assets/images/icons/figma/CheckCircle.png') ?>" />
-													<?php endif; ?>
+												</td>
+												<td>
+													<?php if($u->statut_actif == 0): ?>
+														<span class="badge alert-warning px-2 py-1">En attente</span>
+													<?php endif; ?> 
+													<?php if($u->statut_actif == 1): ?>
+														<span class="badge alert-success px-2 py-1">En ligne</span>
+													<?php endif; ?>  		
 												</td>
 											</tr>
 										<?php endforeach; ?>

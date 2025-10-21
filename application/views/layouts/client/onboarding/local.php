@@ -71,7 +71,7 @@
 				<form action='<?= site_url('Client/ajout_campagne/' . $idclients) . "?conversion=$conversion&camp_type=$camp_type&gtm=$gtm" ?>' method="POST">
 					<div class="container-fluid pt-4">
 
-						<h5>Campagne Performance Maximum</h5>
+						<h5>Campagne Local</h5>
 						<hr class="my-4">
 
 						<!-- <div class="row align-items-center mb-4">

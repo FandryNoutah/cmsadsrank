@@ -74,7 +74,7 @@
                                 <?php foreach ($gtm as $d): ?>
                                 <tr>
                                     <td>
-                                        <a href="<?= base_url('Client/detail_client/' . $d['idclients']) ?>" style="display: flex; align-items: center; text-decoration: none; color: inherit;">
+                                        <a href="<?= base_url('GTM/Plan_de_taggage/' . $d['idclients']) ?>" style="display: flex; align-items: center; text-decoration: none; color: inherit;">
                                             <img src="<?= $d['favicon'] ?>" class="img-thumbnail" width="28" height="28" alt="Client Image" style="margin-right: 8px;">
                                             <?= htmlspecialchars($d['nom_client']) ?>
                                         </a>
@@ -93,7 +93,7 @@
                                         </span>
                                         <?php else: ?>
                                         <span class="badge alert-success rounded-pill px-2 py-1" style="font-size: 12px; font-weight: 500;">
-                                            <i class="fa fa-circle mr-1" style="font-size: 10px;"></i> Invitation reçu
+                                            <i class="fa fa-circle mr-1" style="font-size: 10px;"></i> <?= $d['invitation_reçu']; ?>
                                         </span>
                                         <?php endif; ?>
                                     </td>
