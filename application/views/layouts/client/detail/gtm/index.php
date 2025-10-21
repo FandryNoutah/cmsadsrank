@@ -121,7 +121,7 @@
                                     </td>
                                     <!-- <td>
                                         <div class="dropdown no-arrow">
-                                            <a href="javascript:void(0);" class="text-decoration-none text-muted taREMOVEDmenu dropdown-toggle" role="button" data-toggle="dropdown" aria-expanded="false">
+                                            <a href="javascript:void(0);" class="text-decoration-none text-muted task-menu dropdown-toggle" role="button" data-toggle="dropdown" aria-expanded="false">
                                                 <i class="fa fa-ellipsis-v"></i>
                                             </a>
                                             <div class="dropdown-menu">
@@ -226,7 +226,7 @@
                                     </td>
                                     <!-- <td>
                                         <div class="dropdown no-arrow">
-                                            <a href="javascript:void(0);" class="text-decoration-none text-muted taREMOVEDmenu dropdown-toggle" role="button" data-toggle="dropdown" aria-expanded="false">
+                                            <a href="javascript:void(0);" class="text-decoration-none text-muted task-menu dropdown-toggle" role="button" data-toggle="dropdown" aria-expanded="false">
                                                 <i class="fa fa-ellipsis-v"></i>
                                             </a>
                                             <div class="dropdown-menu">

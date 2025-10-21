@@ -12,33 +12,33 @@
 		<div class="container-fluid">
 			<h5 class="mb-4">📥 Message Brief <small>(<?= count($tasks); ?>)</small></h5>
 			<?php foreach ($tasks as $task): ?>
-				<?php if ($taREMOVED>count_messages > 0): ?>
+				<?php if ($task->count_messages > 0): ?>
 					<div class="card mb-3">
 						<div class="card-body">
 							<div class="d-flex justify-content-between mb-2">
-								<span class="font-weight-bold"><?= nl2br(htmlspecialchars($taREMOVED>nom_client)); ?></span>
-								<span class="text-muted small"><?= nl2br(htmlspecialchars($taREMOVED>date_due)); ?></span>
+								<span class="font-weight-bold"><?= nl2br(htmlspecialchars($task->nom_client)); ?></span>
+								<span class="text-muted small"><?= nl2br(htmlspecialchars($task->date_due)); ?></span>
 							</div>
 
-							<div class="font-weight-bold mb-1"><?= htmlspecialchars($taREMOVED>title); ?></div>
-							<div class="text-muted small mb-2"><?= nl2br(htmlspecialchars($taREMOVED>description)); ?></div>
+							<div class="font-weight-bold mb-1"><?= htmlspecialchars($task->title); ?></div>
+							<div class="text-muted small mb-2"><?= nl2br(htmlspecialchars($task->description)); ?></div>
 
 							<div class="d-flex justify-content-between">
 								<div>
-									<button type="button" class="btn btn-light btn-sm mt-1" data-toggle="modal" data-target="#discussionModal" data-type="task" data-id="<?= $taREMOVED>idtask; ?>">
+									<button type="button" class="btn btn-light btn-sm mt-1" data-toggle="modal" data-target="#discussionModal" data-type="task" data-id="<?= $task->idtask; ?>">
 										💬
-										<?= $taREMOVED>count_messages; ?>
+										<?= $task->count_messages; ?>
 									</button>
-									<button type="button" class="btn btn-light btn-sm mt-1" data-toggle="modal" data-target="#detailModal" data-id="<?= $taREMOVED>idtask; ?>">
+									<button type="button" class="btn btn-light btn-sm mt-1" data-toggle="modal" data-target="#detailModal" data-id="<?= $task->idtask; ?>">
 										<i class="fa fa-eye"></i>
-										<?php if ($taREMOVED>count_messages > 0): ?>
-											<span class="badge badge-danger position-absolute rounded-circle" style="top: -10px; right: -10px;"><?= $taREMOVED>count_messages; ?></span>
+										<?php if ($task->count_messages > 0): ?>
+											<span class="badge badge-danger position-absolute rounded-circle" style="top: -10px; right: -10px;"><?= $task->count_messages; ?></span>
 										<?php endif; ?>
 									</button>
 								</div>
 								<div class="d-flex align-items-center avatar-group">
-									<img src="<?= base_url(IMAGES_PATH . htmlspecialchars($taREMOVED>AM_photo)); ?>" class="avatar rounded-circle bg-white" width="28" height="28" alt="Client Image">
-									<img src="<?= base_url(IMAGES_PATH . htmlspecialchars($taREMOVED>assigned_to_photo)); ?>" class="avatar rounded-circle bg-white" width="28" height="28" alt="Client Image">
+									<img src="<?= base_url(IMAGES_PATH . htmlspecialchars($task->AM_photo)); ?>" class="avatar rounded-circle bg-white" width="28" height="28" alt="Client Image">
+									<img src="<?= base_url(IMAGES_PATH . htmlspecialchars($task->assigned_to_photo)); ?>" class="avatar rounded-circle bg-white" width="28" height="28" alt="Client Image">
 								</div>
 							</div>
 						</div>

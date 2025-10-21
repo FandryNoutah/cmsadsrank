@@ -120,7 +120,7 @@
           
           <div class="illustration">
             <img src="<?php echo base_url("assets/css/figma/login_page/img/capture.jpg"); ?>" style="width: 450px; border-radius: 10px;" />
-            <div class="taREMOVEDmodal">
+            <div class="task-modal">
               <div class="div-7">
                 <div class="text-wrapper-13">Enter Task Name</div>
                 <img class="icon-x" src="img/icon-x.svg" />

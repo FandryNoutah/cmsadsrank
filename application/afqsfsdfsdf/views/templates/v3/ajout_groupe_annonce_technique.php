@@ -3,7 +3,7 @@
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'remplir') {
     header('Content-Type: application/json');
     // Configuration de l'API OpenAI
-    $apiKey = 'REMOVEDproj-Il3DFS-ATHmSKydbqWGNqIZtuCsC2bD67DR5YhlXtsMAoe_tdMtjg_glXcnIhSb_qPVFz-z7y2T3BlbkFJUvVzia2NBnS5TagyZylJRG36YatVpkw27ZfVfhPB06yEiBeYLQDDfIFv3_oG2LClCuw8eNtTEA';
+    $apiKey = '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';
 
     $prompt = "Donne-moi 12 titre court et efficace pour une annonce Google Ads, maximum 30 caractères à partir de ce mot clé " . $campagnes[0]['mot_cle'];
 

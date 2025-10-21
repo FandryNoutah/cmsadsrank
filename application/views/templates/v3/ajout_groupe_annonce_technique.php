@@ -3,7 +3,7 @@
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'remplir') {
     header('Content-Type: application/json');
     // Configuration de l'API OpenAI
-    $apiKey = 'REMOVEDproj-Il3DFS-ATHmSKydbqWGNqIZtuCsC2bD67DR5YhlXtsMAoe_tdMtjg_glXcnIhSb_qPVFz-z7y2T3BlbkFJUvVzia2NBnS5TagyZylJRG36YatVpkw27ZfVfhPB06yEiBeYLQDDfIFv3_oG2LClCuw8eNtTEA';
+    $apiKey = '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';
 $prompt = "Génère-moi STRICTEMENT un objet JSON avec les clés e'titres' (tableau de 12 titres) et 'descriptions' (tableau de 4 descriptions), en français, basé sur les mots clés : " . $campagnes[0]['mot_cle'] . " et le contexte client : " . $campagnes[0]['contexte_groupes_annonces'] . ". Les titres doivent impérativement faire **au maximum 30 caractères** chacun (espaces compris), sinon raccourcis-les sans couper les mots, et les descriptions doivent faire au maximum 90 caractères. Répond uniquement par ce JSON, sans texte supplémentaire.";
 
 
