@@ -29,8 +29,8 @@ class Discussion extends MY_Controller
 		$notes = $this->Note_model->get_for_user();
 
 		foreach ($tasks as $index => $task) {
-			$taREMOVED>count_messages = $this->Task_message_model->count_messages_by_task($taREMOVED>idtask);
-			if ($taREMOVED>count_messages <= 0 || $taREMOVED>status !== "planifié") {
+			$task->count_messages = $this->Task_message_model->count_messages_by_task($task->idtask);
+			if ($task->count_messages <= 0 || $task->status !== "planifié") {
 				unset($tasks[$index]);
 			}
 		}
@@ -80,8 +80,8 @@ class Discussion extends MY_Controller
 		$idusers = $this->current_user->id;
 		$tasks = $this->Task_model->get_task_for_users_by_type(null, 1);
 		foreach ($tasks as $index => $task) {
-			$taREMOVED>count_messages = $this->Task_message_model->count_messages_by_task($taREMOVED>idtask);
-			if ($taREMOVED>count_messages <= 0 || $taREMOVED>status !== "planifié") {
+			$task->count_messages = $this->Task_message_model->count_messages_by_task($task->idtask);
+			if ($task->count_messages <= 0 || $task->status !== "planifié") {
 				unset($tasks[$index]);
 			}
 		}
@@ -96,8 +96,8 @@ class Discussion extends MY_Controller
 		$idusers = $this->current_user->id;
 		$tasks = $this->Task_model->get_task_for_users_by_type(null, 5);
 		foreach ($tasks as $index => $task) {
-			$taREMOVED>count_messages = $this->Task_message_model->count_messages_by_task($taREMOVED>idtask);
-			if ($taREMOVED>count_messages <= 0 || $taREMOVED>status !== "planifié") {
+			$task->count_messages = $this->Task_message_model->count_messages_by_task($task->idtask);
+			if ($task->count_messages <= 0 || $task->status !== "planifié") {
 				unset($tasks[$index]);
 			}
 		}
@@ -112,8 +112,8 @@ class Discussion extends MY_Controller
 		$idusers = $this->current_user->id;
 		$tasks = $this->Task_model->get_task_for_users_by_type(null, 2);
 		foreach ($tasks as $index => $task) {
-			$taREMOVED>count_messages = $this->Task_message_model->count_messages_by_task($taREMOVED>idtask);
-			if ($taREMOVED>count_messages <= 0 || $taREMOVED>status !== "planifié") {
+			$task->count_messages = $this->Task_message_model->count_messages_by_task($task->idtask);
+			if ($task->count_messages <= 0 || $task->status !== "planifié") {
 				unset($tasks[$index]);
 			}
 		}
@@ -128,8 +128,8 @@ class Discussion extends MY_Controller
 		$idusers = $this->current_user->id;
 		$tasks = $this->Task_model->get_all_procedure_gtm();
 		foreach ($tasks as $index => $task) {
-			$taREMOVED>count_messages = $this->Task_message_model->count_messages_by_task($taREMOVED>idtask);
-			if ($taREMOVED>count_messages <= 0 || $taREMOVED>status !== "planifié") {
+			$task->count_messages = $this->Task_message_model->count_messages_by_task($task->idtask);
+			if ($task->count_messages <= 0 || $task->status !== "planifié") {
 				unset($tasks[$index]);
 			}
 		}

@@ -66,16 +66,16 @@ class Strategie extends MY_Controller
 		if ($task) {
 			// Assurez-vous que les données sont sous forme d'objet ou de tableau associatif
 			$task_data = [
-				'idtask' => $taREMOVED>idtask,
-				'date_demande' => $taREMOVED>date_demande,
-				'date_due' => $taREMOVED>date_due,
-				'nom_client' => $taREMOVED>nom_client,
-				'title' => $taREMOVED>title,
-				'assigned_to' => $taREMOVED>assigned_to,
-				'AM' => $taREMOVED>AM,
-				'description' => $taREMOVED>description,
-				'Statuts_technique' => $taREMOVED>Statuts_technique,
-				'note_technique' => $taREMOVED>note_technique,
+				'idtask' => $task->idtask,
+				'date_demande' => $task->date_demande,
+				'date_due' => $task->date_due,
+				'nom_client' => $task->nom_client,
+				'title' => $task->title,
+				'assigned_to' => $task->assigned_to,
+				'AM' => $task->AM,
+				'description' => $task->description,
+				'Statuts_technique' => $task->Statuts_technique,
+				'note_technique' => $task->note_technique,
 				// Assurez-vous que d'autres champs nécessaires soient inclus ici
 			];
 

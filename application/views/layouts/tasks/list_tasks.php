@@ -22,12 +22,12 @@
         <tbody>
         <?php foreach ($tasks as $task): ?>
             <tr>
-                <td><?= htmlspecialchars($taREMOVED>reference) ?></td>
-                <td><?= htmlspecialchars($taREMOVED>title) ?></td>
-                <td><?= htmlspecialchars($taREMOVED>status) ?></td>
-                <td><?= htmlspecialchars($taREMOVED>date_demande) ?></td>
+                <td><?= htmlspecialchars($task->reference) ?></td>
+                <td><?= htmlspecialchars($task->title) ?></td>
+                <td><?= htmlspecialchars($task->status) ?></td>
+                <td><?= htmlspecialchars($task->date_demande) ?></td>
                 <td>
-                    <a href="<?= site_url('tasks/view/' . $taREMOVED>idtask) ?>" class="btn btn-sm btn-primary">
+                    <a href="<?= site_url('tasks/view/' . $task->idtask) ?>" class="btn btn-sm btn-primary">
                         Ouvrir le chat
                     </a>
                 </td>

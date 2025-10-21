@@ -1192,7 +1192,7 @@
 .icon-erlenmeyer-flask:before {
   content: "\e9db";
 }
-.icon-erlenmeyer-flaREMOVEDbubbles:before {
+.icon-erlenmeyer-flask-bubbles:before {
   content: "\e9dc";
 }
 .icon-eye:before {
@@ -1615,7 +1615,7 @@
 .icon-ios-flask:before {
   content: "\ea68";
 }
-.icon-ios-flaREMOVEDoutline:before {
+.icon-ios-flask-outline:before {
   content: "\ea69";
 }
 .icon-ios-flower:before {

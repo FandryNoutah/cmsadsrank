@@ -59,10 +59,10 @@ class Task extends MY_Controller
 
 		foreach ($tasks as $task) {
 			
-			$taREMOVED>expired = (new DateTime($taREMOVED>date_due)) <= (new DateTime('now'));
+			$task->expired = (new DateTime($task->date_due)) <= (new DateTime('now'));
 			
-			$taREMOVED>count_messages = $this->Task_message_model->count_messages_by_task($taREMOVED>idtask);
-			switch ($taREMOVED>status) {
+			$task->count_messages = $this->Task_message_model->count_messages_by_task($task->idtask);
+			switch ($task->status) {
 				case "planifié":
 					$this->data['count_planned']++;
 					break;
@@ -112,26 +112,26 @@ class Task extends MY_Controller
 		$id_task = $taskId = $this->input->post('taskId');
 		$task = $this->Task_model->get_task_by_id($id_task);
 		if ($this->input->post('status') == "effectuée") {
-			if ($taREMOVED>title == "Mise en pause" || $taREMOVED>title == "Résiliation") {
+			if ($task->title == "Mise en pause" || $task->title == "Résiliation") {
 				$statut_demande = 0;
-				$id = intval($taREMOVED>idclients);
-				$idupsell = $taREMOVED>idupsell;
+				$id = intval($task->idclients);
+				$idupsell = $task->idupsell;
 				$this->visuels_model->change_statut_en_demande($id, $statut_demande);
 				$statut_upsell = 1;
 				$this->visuels_model->update_status_upsell($statut_upsell, $idupsell);
 			}
-			if ($taREMOVED>title == "Relance client") {
+			if ($task->title == "Relance client") {
 				$statut_demande = 3;
-				$id = intval($taREMOVED>idclients);
-				$idupsell = $taREMOVED>idupsell;
+				$id = intval($task->idclients);
+				$idupsell = $task->idupsell;
 				$this->visuels_model->change_statut_en_demande($id, $statut_demande);
 				$statut_upsell = 1;
 				$this->visuels_model->update_status_upsell($statut_upsell, $idupsell);
 			}
-			if ($taREMOVED>title == "Demande invitation GTM") {
+			if ($task->title == "Demande invitation GTM") {
 				$statut_demande = 3;
-				$id = intval($taREMOVED>idclients);
-				$am = intval($taREMOVED>AM);
+				$id = intval($task->idclients);
+				$am = intval($task->AM);
 				$this->visuels_model->change_statut_en_demande($id, $statut_demande);
 				$type_tache = 3;
 				$title = "Implémentation Plan de taggage";
@@ -164,10 +164,10 @@ class Task extends MY_Controller
 				];
 				$this->Gtm_model->update_invitation($id,$data);
 			}
-			if ($taREMOVED>title == "Implémentation Plan de taggage") {
+			if ($task->title == "Implémentation Plan de taggage") {
 				$statut_demande = 3;
-				$id = intval($taREMOVED>idclients);
-				$am = intval($taREMOVED>AM);
+				$id = intval($task->idclients);
+				$am = intval($task->AM);
 				$this->visuels_model->change_statut_en_demande($id, $statut_demande);
 				$statut = "Implémenté";
 				$data = [
@@ -177,11 +177,11 @@ class Task extends MY_Controller
 			}
 		}
 		if ($this->input->post('status') == "effectuée") {
-			if ($taREMOVED>title == "Upsell") {
+			if ($task->title == "Upsell") {
 				$statut_demande = 0;
 				$statut_actif = 1;
-				$id = intval($taREMOVED>idclients);
-				$idupsell = $taREMOVED>idupsell;
+				$id = intval($task->idclients);
+				$idupsell = $task->idupsell;
 				$this->visuels_model->activer_upsell($statut_actif, $idupsell);
 				$upsell = $this->visuels_model->get_upsell_by_id($idupsell);
 				$budget_finale = $upsell[0]['budgets'];
@@ -191,11 +191,11 @@ class Task extends MY_Controller
 				$statut_upsell = 1;
 				$this->visuels_model->update_status_upsell($statut_upsell, $idupsell);
 			}
-			if ($taREMOVED>title == "Baisse") {
+			if ($task->title == "Baisse") {
 				$statut_demande = 0;
 				$statut_actif = 1;
-				$id = intval($taREMOVED>idclients);
-				$idupsell = $taREMOVED>idupsell;
+				$id = intval($task->idclients);
+				$idupsell = $task->idupsell;
 				$this->visuels_model->activer_upsell($statut_actif, $idupsell);
 				$upsell = $this->visuels_model->get_upsell_by_id($idupsell);
 				$budget_finale = $upsell[0]['budgets'];
