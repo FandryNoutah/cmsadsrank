@@ -136,7 +136,7 @@
 		<?php $this->load->view('layouts/client/detail/sidebar'); ?>
 
 		<div class="col" style="height: calc(100vh - 101px); overflow-y:auto;">
-			<div class="container-fluid position-relative pb-5">
+			<div class="container-fluid position-relative pb-5 pt-3">
 
 				<div class="dropdown position-absolute" style="right: 15px;">
 					<?php if ($d['statut_demande_en_cours'] == 0):  ?>

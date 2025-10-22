@@ -5,7 +5,7 @@ class Client extends MY_Controller
 {
 	private $api_url = 'https://api.aircall.io/v1/calls';
 	private $api_auth = '';
-	protected $file_upload_field;	
+	protected $file_upload_field;
 	public function __construct()
 	{
 		parent::__construct();
@@ -198,13 +198,12 @@ class Client extends MY_Controller
 		$data['id'] = $id;
 		$this->load->view('layouts/client/onboarding/detail_campagne', $data);
 	}
+
 	public function inventaire_pmax($idclients)
 	{
-	$data['groupe_annonce'] = $this->Donne_modele->getpmaxvalider($idclients);
-	var_dump($data['groupe_annonce']);
-	die();
-	$data['images'] = $this->Image_model->get_images_by_client($idclients);
-	$this->load->view('layouts/client/onboarding/inventaire_pmax', $data);
+		$data['groupe_annonce'] = $this->Donne_modele->getpmaxvalider($idclients);
+		$data['images'] = $this->Image_model->get_images_by_client($idclients);
+		$this->load->view('layouts/client/onboarding/inventaire_pmax', $data);
 	}
 
 	public function export_pdf($id)
@@ -651,63 +650,63 @@ class Client extends MY_Controller
 		$choix = $this->input->post('conversion');
 		$conversion = [
 
-					"lead" => [
-						['idclients' => $idclients, 'conversion' => 'Lead - Formulaire Page contact', 'actions' => 'Principale', 'types' => 'Formulaire', 'remarque' => '', 'etat' => '', 'conditions' => 'Quand une personne a rempli le formulaire de contact ', 'conversion_id' => '', 'conversion_label' => '', 'extensions_appel' => ''],
-						['idclients' => $idclients, 'conversion' => 'Lead - Demande de devis', 'actions' => 'Principale', 'types' => 'Formulaire', 'remarque' => '', 'etat' => '', 'conditions' => 'Quand une personne a soumis une demande de devis ', 'conversion_id' => '', 'conversion_label' => '', 'extensions_appel' => ''],
-						['idclients' => $idclients, 'conversion' => 'Lead - Téléphone', 'actions' => 'Principale', 'types' => 'Contact', 'remarque' => '', 'etat' => '', 'conditions' => 'Quand une personne a cliqué sur le bouton d’appel téléphonique', 'conversion_id' => '', 'conversion_label' => '', 'extensions_appel' => ''],
-						['idclients' => $idclients, 'conversion' => 'Lead - Email', 'actions' => 'Principale', 'types' => 'Contact', 'remarque' => '', 'etat' => '', 'conditions' => 'Quand une personne a cliqué sur le bouton d’envoi d’email ', 'conversion_id' => '', 'conversion_label' => '', 'extensions_appel' => ''],
-						['idclients' => $idclients, 'conversion' => 'Contact - Chat', 'actions' => 'Principale', 'types' => 'Contact', 'remarque' => '', 'etat' => '', 'conditions' => 'Quand une personne a cliqué sur le bouton chat', 'conversion_id' => '', 'conversion_label' => '', 'extensions_appel' => ''],
-						['idclients' => $idclients, 'conversion' => 'Page vue |', 'actions' => 'Secondaire', 'types' => 'Page_view', 'remarque' => '', 'etat' => '', 'conditions' => 'Quand une personne a visité une page du site ', 'conversion_id' => '', 'conversion_label' => '', 'extensions_appel' => ''],
-						['idclients' => $idclients, 'conversion' => 'Page vue', 'actions' => 'Secondaire', 'types' => 'Page_view', 'remarque' => '', 'etat' => '', 'conditions' => 'Quand une personne a visité une page du site ', 'conversion_id' => '', 'conversion_label' => '', 'extensions_appel' => ''],
-						['idclients' => $idclients, 'conversion' => 'Bouton |', 'actions' => 'Secondaire', 'types' => 'Click', 'remarque' => '', 'etat' => '', 'conditions' => 'Quand une personne a cliqué sur un bouton du site', 'conversion_id' => '', 'conversion_label' => '', 'extensions_appel' => ''],
-						['idclients' => $idclients, 'conversion' => 'Bouton | Télécharger notre catalogue', 'actions' => 'Secondaire', 'types' => 'Click', 'remarque' => '', 'etat' => '', 'conditions' => 'Quand une personne a cliqué sur le bouton "Télécharger notre catalogue"', 'conversion_id' => '', 'conversion_label' => '', 'extensions_appel' => ''],
-					],
+			"lead" => [
+				['idclients' => $idclients, 'conversion' => 'Lead - Formulaire Page contact', 'actions' => 'Principale', 'types' => 'Formulaire', 'remarque' => '', 'etat' => '', 'conditions' => 'Quand une personne a rempli le formulaire de contact ', 'conversion_id' => '', 'conversion_label' => '', 'extensions_appel' => ''],
+				['idclients' => $idclients, 'conversion' => 'Lead - Demande de devis', 'actions' => 'Principale', 'types' => 'Formulaire', 'remarque' => '', 'etat' => '', 'conditions' => 'Quand une personne a soumis une demande de devis ', 'conversion_id' => '', 'conversion_label' => '', 'extensions_appel' => ''],
+				['idclients' => $idclients, 'conversion' => 'Lead - Téléphone', 'actions' => 'Principale', 'types' => 'Contact', 'remarque' => '', 'etat' => '', 'conditions' => 'Quand une personne a cliqué sur le bouton d’appel téléphonique', 'conversion_id' => '', 'conversion_label' => '', 'extensions_appel' => ''],
+				['idclients' => $idclients, 'conversion' => 'Lead - Email', 'actions' => 'Principale', 'types' => 'Contact', 'remarque' => '', 'etat' => '', 'conditions' => 'Quand une personne a cliqué sur le bouton d’envoi d’email ', 'conversion_id' => '', 'conversion_label' => '', 'extensions_appel' => ''],
+				['idclients' => $idclients, 'conversion' => 'Contact - Chat', 'actions' => 'Principale', 'types' => 'Contact', 'remarque' => '', 'etat' => '', 'conditions' => 'Quand une personne a cliqué sur le bouton chat', 'conversion_id' => '', 'conversion_label' => '', 'extensions_appel' => ''],
+				['idclients' => $idclients, 'conversion' => 'Page vue |', 'actions' => 'Secondaire', 'types' => 'Page_view', 'remarque' => '', 'etat' => '', 'conditions' => 'Quand une personne a visité une page du site ', 'conversion_id' => '', 'conversion_label' => '', 'extensions_appel' => ''],
+				['idclients' => $idclients, 'conversion' => 'Page vue', 'actions' => 'Secondaire', 'types' => 'Page_view', 'remarque' => '', 'etat' => '', 'conditions' => 'Quand une personne a visité une page du site ', 'conversion_id' => '', 'conversion_label' => '', 'extensions_appel' => ''],
+				['idclients' => $idclients, 'conversion' => 'Bouton |', 'actions' => 'Secondaire', 'types' => 'Click', 'remarque' => '', 'etat' => '', 'conditions' => 'Quand une personne a cliqué sur un bouton du site', 'conversion_id' => '', 'conversion_label' => '', 'extensions_appel' => ''],
+				['idclients' => $idclients, 'conversion' => 'Bouton | Télécharger notre catalogue', 'actions' => 'Secondaire', 'types' => 'Click', 'remarque' => '', 'etat' => '', 'conditions' => 'Quand une personne a cliqué sur le bouton "Télécharger notre catalogue"', 'conversion_id' => '', 'conversion_label' => '', 'extensions_appel' => ''],
+			],
 
-					"ecommerce" => [
-						['idclients' => $idclients, 'conversion' => 'Lead | Achat', 'actions' => 'Principale', 'types' => 'Purchase', 'remarque' => '', 'etat' => '', 'conditions' => 'Quand une personne a réalisé un achat', 'conversion_id' => '', 'conversion_label' => '', 'extensions_appel' => ''],
-						['idclients' => $idclients, 'conversion' => 'Lead | Formulaire Page contact', 'actions' => 'Principale', 'types' => 'Formulaire', 'remarque' => '', 'etat' => '', 'conditions' => 'Quand une personne a atteint le begin checkout', 'conversion_id' => '', 'conversion_label' => '', 'extensions_appel' => ''],
-						['idclients' => $idclients, 'conversion' => 'Lead | Demande de devis', 'actions' => 'Principale', 'types' => 'Formulaire', 'remarque' => '', 'etat' => '', 'conditions' => 'Quand une personne a cliqué sur le bouton d appel téléphonique ', 'conversion_id' => '', 'conversion_label' => '', 'extensions_appel' => ''],
-						['idclients' => $idclients, 'conversion' => 'Lead | Téléphone', 'actions' => 'Principale', 'types' => 'Contact', 'remarque' => '', 'etat' => '', 'conditions' => 'Quand une personne a cliqué sur le téléphone', 'conversion_id' => '', 'conversion_label' => '', 'extensions_appel' => ''],
-						['idclients' => $idclients, 'conversion' => 'Lead | Email', 'actions' => 'Principale', 'types' => 'Contact', 'remarque' => '', 'etat' => '', 'conditions' => 'Quand une personne a cliqué sur l email', 'conversion_id' => '', 'conversion_label' => '', 'extensions_appel' => ''],
-						['idclients' => $idclients, 'conversion' => 'Contact - Chat', 'actions' => 'Principale', 'types' => 'Contact', 'remarque' => '', 'etat' => '', 'conditions' => 'Quand une personne a utilisé le chat pour entrer en contact', 'conversion_id' => '', 'conversion_label' => '', 'extensions_appel' => ''],
-						['idclients' => $idclients, 'conversion' => 'Checkout', 'actions' => 'Secondaire', 'types' => 'begin_checkout', 'remarque' => '', 'etat' => '', 'conditions' => 'Quand une personne a atteint le début du processus de commande', 'conversion_id' => '', 'conversion_label' => '', 'extensions_appel' => ''],
-						['idclients' => $idclients, 'conversion' => 'Ajout au panier', 'actions' => 'Secondaire', 'types' => 'Add to cart', 'remarque' => '', 'etat' => '', 'conditions' => 'Quand une personne a ajouté un article au panier', 'conversion_id' => '', 'conversion_label' => '', 'extensions_appel' => ''],
-						['idclients' => $idclients, 'conversion' => 'Page vue | Vue d\'un article', 'actions' => 'Secondaire', 'types' => 'View item', 'remarque' => '', 'etat' => '', 'conditions' => 'Quand une personne a visité un article', 'conversion_id' => '', 'conversion_label' => '', 'extensions_appel' => ''],
-						['idclients' => $idclients, 'conversion' => 'Page vue |', 'actions' => 'Secondaire', 'types' => 'Page_view', 'remarque' => '', 'etat' => '', 'conditions' => 'Quand une personne a visité une page du site ', 'conversion_id' => '', 'conversion_label' => '', 'extensions_appel' => ''],
-						['idclients' => $idclients, 'conversion' => 'Bouton | Télécharger notre catalogue', 'actions' => 'Secondaire', 'types' => 'Click', 'remarque' => '', 'etat' => '', 'conditions' => 'Quand une personne a cliqué sur "Télécharger notre catalogue"', 'conversion_id' => '', 'conversion_label' => '', 'extensions_appel' => ''],
-						['idclients' => $idclients, 'conversion' => 'Bouton |', 'actions' => 'Secondaire', 'types' => 'Click', 'remarque' => '', 'etat' => '', 'conditions' => 'Quand une personne a cliqué sur un bouton du site', 'conversion_id' => '', 'conversion_label' => '', 'extensions_appel' => ''],
-						['idclients' => $idclients, 'conversion' => 'Newsletter', 'actions' => 'Secondaire', 'types' => 'inscription', 'remarque' => '', 'etat' => '', 'conditions' => 'Quand une personne s est inscrite à la newsletter', 'conversion_id' => '', 'conversion_label' => '', 'extensions_appel' => ''],
-						['idclients' => $idclients, 'conversion' => 'Création de compte Client', 'actions' => 'Secondaire', 'types' => 'inscription', 'remarque' => '', 'etat' => '', 'conditions' => 'Quand une personne a créé un compte client', 'conversion_id' => '', 'conversion_label' => '', 'extensions_appel' => ''],
-					],
+			"ecommerce" => [
+				['idclients' => $idclients, 'conversion' => 'Lead | Achat', 'actions' => 'Principale', 'types' => 'Purchase', 'remarque' => '', 'etat' => '', 'conditions' => 'Quand une personne a réalisé un achat', 'conversion_id' => '', 'conversion_label' => '', 'extensions_appel' => ''],
+				['idclients' => $idclients, 'conversion' => 'Lead | Formulaire Page contact', 'actions' => 'Principale', 'types' => 'Formulaire', 'remarque' => '', 'etat' => '', 'conditions' => 'Quand une personne a atteint le begin checkout', 'conversion_id' => '', 'conversion_label' => '', 'extensions_appel' => ''],
+				['idclients' => $idclients, 'conversion' => 'Lead | Demande de devis', 'actions' => 'Principale', 'types' => 'Formulaire', 'remarque' => '', 'etat' => '', 'conditions' => 'Quand une personne a cliqué sur le bouton d appel téléphonique ', 'conversion_id' => '', 'conversion_label' => '', 'extensions_appel' => ''],
+				['idclients' => $idclients, 'conversion' => 'Lead | Téléphone', 'actions' => 'Principale', 'types' => 'Contact', 'remarque' => '', 'etat' => '', 'conditions' => 'Quand une personne a cliqué sur le téléphone', 'conversion_id' => '', 'conversion_label' => '', 'extensions_appel' => ''],
+				['idclients' => $idclients, 'conversion' => 'Lead | Email', 'actions' => 'Principale', 'types' => 'Contact', 'remarque' => '', 'etat' => '', 'conditions' => 'Quand une personne a cliqué sur l email', 'conversion_id' => '', 'conversion_label' => '', 'extensions_appel' => ''],
+				['idclients' => $idclients, 'conversion' => 'Contact - Chat', 'actions' => 'Principale', 'types' => 'Contact', 'remarque' => '', 'etat' => '', 'conditions' => 'Quand une personne a utilisé le chat pour entrer en contact', 'conversion_id' => '', 'conversion_label' => '', 'extensions_appel' => ''],
+				['idclients' => $idclients, 'conversion' => 'Checkout', 'actions' => 'Secondaire', 'types' => 'begin_checkout', 'remarque' => '', 'etat' => '', 'conditions' => 'Quand une personne a atteint le début du processus de commande', 'conversion_id' => '', 'conversion_label' => '', 'extensions_appel' => ''],
+				['idclients' => $idclients, 'conversion' => 'Ajout au panier', 'actions' => 'Secondaire', 'types' => 'Add to cart', 'remarque' => '', 'etat' => '', 'conditions' => 'Quand une personne a ajouté un article au panier', 'conversion_id' => '', 'conversion_label' => '', 'extensions_appel' => ''],
+				['idclients' => $idclients, 'conversion' => 'Page vue | Vue d\'un article', 'actions' => 'Secondaire', 'types' => 'View item', 'remarque' => '', 'etat' => '', 'conditions' => 'Quand une personne a visité un article', 'conversion_id' => '', 'conversion_label' => '', 'extensions_appel' => ''],
+				['idclients' => $idclients, 'conversion' => 'Page vue |', 'actions' => 'Secondaire', 'types' => 'Page_view', 'remarque' => '', 'etat' => '', 'conditions' => 'Quand une personne a visité une page du site ', 'conversion_id' => '', 'conversion_label' => '', 'extensions_appel' => ''],
+				['idclients' => $idclients, 'conversion' => 'Bouton | Télécharger notre catalogue', 'actions' => 'Secondaire', 'types' => 'Click', 'remarque' => '', 'etat' => '', 'conditions' => 'Quand une personne a cliqué sur "Télécharger notre catalogue"', 'conversion_id' => '', 'conversion_label' => '', 'extensions_appel' => ''],
+				['idclients' => $idclients, 'conversion' => 'Bouton |', 'actions' => 'Secondaire', 'types' => 'Click', 'remarque' => '', 'etat' => '', 'conditions' => 'Quand une personne a cliqué sur un bouton du site', 'conversion_id' => '', 'conversion_label' => '', 'extensions_appel' => ''],
+				['idclients' => $idclients, 'conversion' => 'Newsletter', 'actions' => 'Secondaire', 'types' => 'inscription', 'remarque' => '', 'etat' => '', 'conditions' => 'Quand une personne s est inscrite à la newsletter', 'conversion_id' => '', 'conversion_label' => '', 'extensions_appel' => ''],
+				['idclients' => $idclients, 'conversion' => 'Création de compte Client', 'actions' => 'Secondaire', 'types' => 'inscription', 'remarque' => '', 'etat' => '', 'conditions' => 'Quand une personne a créé un compte client', 'conversion_id' => '', 'conversion_label' => '', 'extensions_appel' => ''],
+			],
 
-					"reservation" => [
-						['idclients' => $idclients, 'conversion' => 'Lead | Réservation', 'actions' => 'Principale', 'types' => 'Purchase', 'remarque' => '', 'etat' => '', 'conditions' => 'Quand une personne a effectué une réservation', 'conversion_id' => '', 'conversion_label' => '', 'extensions_appel' => ''],
-						['idclients' => $idclients, 'conversion' => 'Lead | Formulaire Page contact', 'actions' => 'Principale', 'types' => 'Formulaire', 'remarque' => '', 'etat' => '', 'conditions' => 'Quand une personne a rempli le formulaire de contact', 'conversion_id' => '', 'conversion_label' => '', 'extensions_appel' => ''],
-						['idclients' => $idclients, 'conversion' => 'Lead | Demande de devis', 'actions' => 'Principale', 'types' => 'Formulaire', 'remarque' => '', 'etat' => '', 'conditions' => 'Quand une personne a soumis une demande de devis ', 'conversion_id' => '', 'conversion_label' => '', 'extensions_appel' => ''],
-						['idclients' => $idclients, 'conversion' => 'Lead | Téléphone', 'actions' => 'Principale', 'types' => 'Contact', 'remarque' => '', 'etat' => '', 'conditions' => 'Quand une personne a cliqué sur le bouton d’appel téléphonique', 'conversion_id' => '', 'conversion_label' => '', 'extensions_appel' => ''],
-						['idclients' => $idclients, 'conversion' => 'Lead | Email', 'actions' => 'Principale', 'types' => 'Contact', 'remarque' => '', 'etat' => '', 'conditions' => 'Quand une personne a cliqué sur le bouton d’email ', 'conversion_id' => '', 'conversion_label' => '', 'extensions_appel' => ''],
-						['idclients' => $idclients, 'conversion' => 'Checkout', 'actions' => 'Secondaire', 'types' => 'begin_checkout', 'remarque' => '', 'etat' => '', 'conditions' => 'Quand une personne a atteint le début du checkout', 'conversion_id' => '', 'conversion_label' => '', 'extensions_appel' => ''],
-						['idclients' => $idclients, 'conversion' => 'Ajout au panier', 'actions' => 'Secondaire', 'types' => 'Add to cart', 'remarque' => '', 'etat' => '', 'conditions' => 'Quand une personne a ajouté un article au panier', 'conversion_id' => '', 'conversion_label' => '', 'extensions_appel' => ''],
-						['idclients' => $idclients, 'conversion' => 'Page vue | Vue d\'un article', 'actions' => 'Secondaire', 'types' => 'View item', 'remarque' => '', 'etat' => '', 'conditions' => 'Quand une personne a visité une page produit', 'conversion_id' => '', 'conversion_label' => '', 'extensions_appel' => ''],
-						['idclients' => $idclients, 'conversion' => 'Page vue |', 'actions' => 'Secondaire', 'types' => 'Page_view', 'remarque' => '', 'etat' => '', 'conditions' => 'Quand une personne a visité une page du site', 'conversion_id' => '', 'conversion_label' => '', 'extensions_appel' => ''],
-						['idclients' => $idclients, 'conversion' => 'Bouton | Télécharger notre catalogue', 'actions' => 'Secondaire', 'types' => 'Click', 'remarque' => '', 'etat' => '', 'conditions' => 'Quand une personne a cliqué sur "Télécharger notre catalogue"', 'conversion_id' => '', 'conversion_label' => '', 'extensions_appel' => ''],
-						['idclients' => $idclients, 'conversion' => 'Bouton |', 'actions' => 'Secondaire', 'types' => 'Click', 'remarque' => '', 'etat' => '', 'conditions' => 'Quand une personne a cliqué sur un autre bouton du site', 'conversion_id' => '', 'conversion_label' => '', 'extensions_appel' => ''],
-						['idclients' => $idclients, 'conversion' => 'Newsletter', 'actions' => 'Secondaire', 'types' => 'inscription', 'remarque' => '', 'etat' => '', 'conditions' => 'Quand une personne s est inscrite à la newsletter', 'conversion_id' => '', 'conversion_label' => '', 'extensions_appel' => ''],
-						['idclients' => $idclients, 'conversion' => 'Création de compte Client', 'actions' => 'Secondaire', 'types' => 'inscription', 'remarque' => '', 'etat' => '', 'conditions' => 'Quand une personne a créé un compte client', 'conversion_id' => '', 'conversion_label' => '', 'extensions_appel' => ''],
-					]
-				];
+			"reservation" => [
+				['idclients' => $idclients, 'conversion' => 'Lead | Réservation', 'actions' => 'Principale', 'types' => 'Purchase', 'remarque' => '', 'etat' => '', 'conditions' => 'Quand une personne a effectué une réservation', 'conversion_id' => '', 'conversion_label' => '', 'extensions_appel' => ''],
+				['idclients' => $idclients, 'conversion' => 'Lead | Formulaire Page contact', 'actions' => 'Principale', 'types' => 'Formulaire', 'remarque' => '', 'etat' => '', 'conditions' => 'Quand une personne a rempli le formulaire de contact', 'conversion_id' => '', 'conversion_label' => '', 'extensions_appel' => ''],
+				['idclients' => $idclients, 'conversion' => 'Lead | Demande de devis', 'actions' => 'Principale', 'types' => 'Formulaire', 'remarque' => '', 'etat' => '', 'conditions' => 'Quand une personne a soumis une demande de devis ', 'conversion_id' => '', 'conversion_label' => '', 'extensions_appel' => ''],
+				['idclients' => $idclients, 'conversion' => 'Lead | Téléphone', 'actions' => 'Principale', 'types' => 'Contact', 'remarque' => '', 'etat' => '', 'conditions' => 'Quand une personne a cliqué sur le bouton d’appel téléphonique', 'conversion_id' => '', 'conversion_label' => '', 'extensions_appel' => ''],
+				['idclients' => $idclients, 'conversion' => 'Lead | Email', 'actions' => 'Principale', 'types' => 'Contact', 'remarque' => '', 'etat' => '', 'conditions' => 'Quand une personne a cliqué sur le bouton d’email ', 'conversion_id' => '', 'conversion_label' => '', 'extensions_appel' => ''],
+				['idclients' => $idclients, 'conversion' => 'Checkout', 'actions' => 'Secondaire', 'types' => 'begin_checkout', 'remarque' => '', 'etat' => '', 'conditions' => 'Quand une personne a atteint le début du checkout', 'conversion_id' => '', 'conversion_label' => '', 'extensions_appel' => ''],
+				['idclients' => $idclients, 'conversion' => 'Ajout au panier', 'actions' => 'Secondaire', 'types' => 'Add to cart', 'remarque' => '', 'etat' => '', 'conditions' => 'Quand une personne a ajouté un article au panier', 'conversion_id' => '', 'conversion_label' => '', 'extensions_appel' => ''],
+				['idclients' => $idclients, 'conversion' => 'Page vue | Vue d\'un article', 'actions' => 'Secondaire', 'types' => 'View item', 'remarque' => '', 'etat' => '', 'conditions' => 'Quand une personne a visité une page produit', 'conversion_id' => '', 'conversion_label' => '', 'extensions_appel' => ''],
+				['idclients' => $idclients, 'conversion' => 'Page vue |', 'actions' => 'Secondaire', 'types' => 'Page_view', 'remarque' => '', 'etat' => '', 'conditions' => 'Quand une personne a visité une page du site', 'conversion_id' => '', 'conversion_label' => '', 'extensions_appel' => ''],
+				['idclients' => $idclients, 'conversion' => 'Bouton | Télécharger notre catalogue', 'actions' => 'Secondaire', 'types' => 'Click', 'remarque' => '', 'etat' => '', 'conditions' => 'Quand une personne a cliqué sur "Télécharger notre catalogue"', 'conversion_id' => '', 'conversion_label' => '', 'extensions_appel' => ''],
+				['idclients' => $idclients, 'conversion' => 'Bouton |', 'actions' => 'Secondaire', 'types' => 'Click', 'remarque' => '', 'etat' => '', 'conditions' => 'Quand une personne a cliqué sur un autre bouton du site', 'conversion_id' => '', 'conversion_label' => '', 'extensions_appel' => ''],
+				['idclients' => $idclients, 'conversion' => 'Newsletter', 'actions' => 'Secondaire', 'types' => 'inscription', 'remarque' => '', 'etat' => '', 'conditions' => 'Quand une personne s est inscrite à la newsletter', 'conversion_id' => '', 'conversion_label' => '', 'extensions_appel' => ''],
+				['idclients' => $idclients, 'conversion' => 'Création de compte Client', 'actions' => 'Secondaire', 'types' => 'inscription', 'remarque' => '', 'etat' => '', 'conditions' => 'Quand une personne a créé un compte client', 'conversion_id' => '', 'conversion_label' => '', 'extensions_appel' => ''],
+			]
+		];
 
-				$conversions = $conversion[$choix] ?? [];
+		$conversions = $conversion[$choix] ?? [];
 
-				$this->Donne_modele->insert_conversions($conversions);
-				$this->Donne_modele->update_type_clients($choix, $idclients);	
-				$data = [
-					'idclients' => $idclients,
-					'account_manager' => $assigned_to,
-					'initiative' => $assigned_to,
-					'conversion_type' => $conversion,
-					'date_activation' => $date,
-				];
+		$this->Donne_modele->insert_conversions($conversions);
+		$this->Donne_modele->update_type_clients($choix, $idclients);
+		$data = [
+			'idclients' => $idclients,
+			'account_manager' => $assigned_to,
+			'initiative' => $assigned_to,
+			'conversion_type' => $conversion,
+			'date_activation' => $date,
+		];
 		header('Content-Type: application/json');
 
 		// DEBUG temporaire
@@ -822,6 +821,7 @@ class Client extends MY_Controller
 		$donne_valider = $this->Donne_modele->getcclientvalidationbyidclients($idclients);
 		$groupe_valider = $this->Donne_modele->getcampagnegroupevalidationbyidclients($idclients);
 		$groupes_par_campagne = [];
+
 		foreach ($groupe_valider as $groupe) {
 			$idcampagne = $groupe['idcampagne'];
 			if (!isset($groupes_par_campagne[$idcampagne])) {
@@ -829,11 +829,13 @@ class Client extends MY_Controller
 			}
 			$groupes_par_campagne[$idcampagne][] = $groupe;
 		}
+
 		foreach ($donne_valider as &$campagne) {
 			$idcampagne = $campagne['idcampagne'];
 			$campagne['groupes_annonces'] = isset($groupes_par_campagne[$idcampagne]) ? $groupes_par_campagne[$idcampagne] : [];
 		}
 		unset($campagne);
+		// dd($donne_valider);
 		$this->data['donne_valider'] = $donne_valider;
 		$this->data['procedure_gtm'] = $this->Task_model->get_procedure_gtm($idclients);
 		$this->content = "layouts/client/onboarding/index.php";
@@ -868,20 +870,20 @@ class Client extends MY_Controller
 			$this->data['camp_type'] = $camp_type = $this->input->get('camp_type');
 			$this->data['gtm'] = $this->input->get('gtm');
 
-			
-	
+
+
 			//$raw_keywords = $this->call_openai($prompt);
 			//$raw_keywords = trim($raw_keywords);
 			//if (preg_match('/([a-zA-ZÀ-ÿ0-9,\s]+)/', $raw_keywords, $matches)) {
 			// $raw_keywords = $matches[1];
 			//}
 			//$clean_keywords = preg_replace('/,\s*/', "\n", $raw_keywords);
-	
+
 			//$this->data["mots_exclus"] = "test";
 		}
 
 		$this->data["donnees"] = $d;
-		
+
 		$site_client = $d[0]['site_client'] ?? '';
 		//$images_site = $this->fetch_all_images_from_site($site_client, 8);
 		//$this->data["images_site"] = $images_site;
@@ -891,117 +893,113 @@ class Client extends MY_Controller
 		$this->layout();
 	}
 	public function fetch_images_campagne()
-{
-    $url = $this->input->post('url');
-    $images = [];
+	{
+		$url = $this->input->post('url');
+		$images = [];
 
-    if (!empty($url)) {
-        // Utilise ta fonction existante pour récupérer les images
-        $images = $this->fetch_all_images_from_site($url, 8);
-    }
+		if (!empty($url)) {
+			// Utilise ta fonction existante pour récupérer les images
+			$images = $this->fetch_all_images_from_site($url, 8);
+		}
 
-    echo json_encode([
-        'success' => !empty($images),
-        'images'  => $images
-    ]);
-}
-public function information_campagne($idclients)
-{
-    $url = $this->input->post('url');
+		echo json_encode([
+			'success' => !empty($images),
+			'images'  => $images
+		]);
+	}
 
-    if (!$url) {
-        return $this->output
-            ->set_content_type('application/json')
-            ->set_output(json_encode(['status' => 'error', 'message' => 'URL manquante.']));
-    }
+	public function information_campagne($idclients)
+	{
+		$url = $this->input->post('url');
 
-    // 1. Récupération du HTML
-    $html = @file_get_contents($url);
-    if ($html === false) {
-        return $this->output
-            ->set_content_type('application/json')
-            ->set_output(json_encode(['status' => 'error', 'message' => 'Impossible de charger le contenu de la page.']));
-    }
+		if (!$url) {
+			return $this->output
+				->set_content_type('application/json')
+				->set_output(json_encode(['status' => 'error', 'message' => 'URL manquante.']));
+		}
 
-    // 2. Charger dans DOMDocument pour extraire uniquement le contenu texte
-    libxml_use_internal_errors(true);
-    $dom = new DOMDocument();
-    $dom->loadHTML($html);
-    libxml_clear_errors();
+		// 1. Récupération du HTML
+		$html = @file_get_contents($url);
+		if ($html === false) {
+			return $this->output
+				->set_content_type('application/json')
+				->set_output(json_encode(['status' => 'error', 'message' => 'Impossible de charger le contenu de la page.']));
+		}
 
-    $xpath = new DOMXPath($dom);
+		// 2. Charger dans DOMDocument pour extraire uniquement le contenu texte
+		libxml_use_internal_errors(true);
+		$dom = new DOMDocument();
+		$dom->loadHTML($html);
+		libxml_clear_errors();
 
-    // 3. Récupérer uniquement les balises visibles
-    $nodes = $xpath->query('//h1 | //h2 | //h3 | //p | //article | //section | //div');
+		$xpath = new DOMXPath($dom);
 
-    $textContent = '';
-    foreach ($nodes as $node) {
-        $text = trim($node->textContent);
-        if (strlen($text) > 30) { // on ignore les tout petits morceaux de texte
-            $textContent .= $text . "\n";
-        }
-    }
+		// 3. Récupérer uniquement les balises visibles
+		$nodes = $xpath->query('//h1 | //h2 | //h3 | //p | //article | //section | //div');
 
-    $textContent = substr($textContent, 0, 3500); // limite la taille pour OpenAI
+		$textContent = '';
+		foreach ($nodes as $node) {
+			$text = trim($node->textContent);
+			if (strlen($text) > 30) { // on ignore les tout petits morceaux de texte
+				$textContent .= $text . "\n";
+			}
+		}
 
-    // 4. Construire un prompt pour générer un résumé **sans explication technique**
-    $prompt = <<<EOT
-Voici le contenu textuel extrait d'une page web : 
+		$textContent = substr($textContent, 0, 3500); // limite la taille pour OpenAI
 
-$textContent
+		// 4. Construire un prompt pour générer un résumé **sans explication technique**
+		$prompt = "EOT
+			Voici le contenu textuel extrait d'une page web : 
+			$textContent
+			Donne un résumé court et objectif de ce que propose le site ou la page, sans détails techniques ni structure HTML. Ne parle pas de scripts ou de performances. Ne commence pas par 'Voici le résumé', écris directement le contenu comme un humain qui explique à un autre humain de quoi parle le site.
+			EOT";
 
-Donne un résumé court et objectif de ce que propose le site ou la page, sans détails techniques ni structure HTML. Ne parle pas de scripts ou de performances. Ne commence pas par "Voici le résumé", écris directement le contenu comme un humain qui explique à un autre humain de quoi parle le site.
-EOT;
+		// 5. Appel à l'API OpenAI
+		$response = $this->call_openai($prompt);
+		$response = trim($response);
 
-    // 5. Appel à l'API OpenAI
-    $response = $this->call_openai($prompt);
-    $response = trim($response);
-
-    return $this->output
-        ->set_content_type('application/json')
-        ->set_output(json_encode(['status' => 'success', 'data' => $response]));
-}
-
-
-public function get_mot_cle_a_exclure($idclients)
-{
-    $campagne_info = $this->input->post('information_campagne_search');
-
-    if (!$campagne_info) {
-        return $this->output
-            ->set_content_type('application/json')
-            ->set_output(json_encode(['status' => 'error', 'message' => 'Aucune information de campagne reçue.']));
-    }
-
-    $prompt = "Tu es un expert Google Ads.
-Génère une liste de 60 mots-clés à exclure pour une campagne Google Ads sur le réseau de recherche.
-Voici les informations de la campagne :
-
-$campagne_info
-
-⚠️ Tu ne peux pas visiter de site web.
-Même si les informations sont partielles, propose une liste pertinente et standard de mots-clés à exclure en français pour éviter les recherches non qualifiées.
-Donne UNIQUEMENT les mots, séparés par des virgules, sans introduction ni phrase explicative.";
-
-    $raw_keywords = $this->call_openai($prompt);
-    $raw_keywords = trim($raw_keywords);
-
-    if (preg_match('/([a-zA-ZÀ-ÿ0-9,\s]+)/', $raw_keywords, $matches)) {
-        $raw_keywords = $matches[1];
-    }
-
-    $clean_keywords = preg_replace('/,\s*/', "\n", $raw_keywords);
-
-    return $this->output
-        ->set_content_type('application/json')
-        ->set_output(json_encode([
-            'status' => 'success',
-            'data' => $clean_keywords
-        ]));
-}
+		return $this->output
+			->set_content_type('application/json')
+			->set_output(json_encode(['status' => 'success', 'data' => $response]));
+	}
 
 
+	public function get_mot_cle_a_exclure($idclients)
+	{
+		$campagne_info = $this->input->post('information_campagne_search');
 
+		if (!$campagne_info) {
+			return $this->output
+				->set_content_type('application/json')
+				->set_output(json_encode(['status' => 'error', 'message' => 'Aucune information de campagne reçue.']));
+		}
+
+		$prompt = "Tu es un expert Google Ads.
+		Génère une liste de 60 mots-clés à exclure pour une campagne Google Ads sur le réseau de recherche.
+		Voici les informations de la campagne :
+
+		$campagne_info
+
+		⚠️ Tu ne peux pas visiter de site web.
+		Même si les informations sont partielles, propose une liste pertinente et standard de mots-clés à exclure en français pour éviter les recherches non qualifiées.
+		Donne UNIQUEMENT les mots, séparés par des virgules, sans introduction ni phrase explicative.";
+
+		$raw_keywords = $this->call_openai($prompt);
+		$raw_keywords = trim($raw_keywords);
+
+		if (preg_match('/([a-zA-ZÀ-ÿ0-9,\s]+)/', $raw_keywords, $matches)) {
+			$raw_keywords = $matches[1];
+		}
+
+		$clean_keywords = preg_replace('/,\s*/', "\n", $raw_keywords);
+
+		return $this->output
+			->set_content_type('application/json')
+			->set_output(json_encode([
+				'status' => 'success',
+				'data' => $clean_keywords
+			]));
+	}
 
 	public function ajout_campagne($idclients)
 	{
@@ -1033,30 +1031,30 @@ Donne UNIQUEMENT les mots, séparés par des virgules, sans introduction ni phra
 				$mots_cle              	= $this->input->post('Mot_cle'); // OK
 				$Mots_cle_exclus       	= $this->input->post('Mots_cle_exclus');
 				$selected_images		= $this->input->post('selected_images');
-			
+
 
 				// Vérification cohérence
 				if (count($groupes_annonces) == count($contexte_groupes) && count($groupes_annonces) == count($mots_cle)) {
 
 					if ($id_campagne) {
 
-					
-					$id_campagne = $this->Donne_modele->insert_campagne_am = $this->Donne_modele->insert_campagne_am(
-					$idclients,
-					$camp_type,
-					$nom_campagne,
-					$information_campagne,
-					$cible,
-					$ages,
-					$zones,
-					$repartition_budget,
-					$date_campagne,
-					$appareil,
-					$objectif,
-					$url_site,
-					$mots_cle,
-					$Mots_cle_exclus
-				);
+
+						$id_campagne = $this->Donne_modele->insert_campagne_am = $this->Donne_modele->insert_campagne_am(
+							$idclients,
+							$camp_type,
+							$nom_campagne,
+							$information_campagne,
+							$cible,
+							$ages,
+							$zones,
+							$repartition_budget,
+							$date_campagne,
+							$appareil,
+							$objectif,
+							$url_site,
+							$mots_cle,
+							$Mots_cle_exclus
+						);
 
 
 						/** Supprimer d'abord tous les groupes */
@@ -1066,24 +1064,24 @@ Donne UNIQUEMENT les mots, séparés par des virgules, sans introduction ni phra
 						}
 					} else {
 
-					$id_campagne = $this->Donne_modele->insert_campagne_am = $this->Donne_modele->insert_campagne_am(
-					$idclients,
-					$camp_type,
-					$nom_campagne,
-					$information_campagne,
-					$cible,
-					$age,
-					$zones,
-					$repartition_budget,
-					$date_campagne,
-					$appareil,
-					$objectif,
-					$url_site,
-					$mots_cle,
-					$Mots_cle_exclus
-				);
+						$id_campagne = $this->Donne_modele->insert_campagne_am = $this->Donne_modele->insert_campagne_am(
+							$idclients,
+							$camp_type,
+							$nom_campagne,
+							$information_campagne,
+							$cible,
+							$age,
+							$zones,
+							$repartition_budget,
+							$date_campagne,
+							$appareil,
+							$objectif,
+							$url_site,
+							$mots_cle,
+							$Mots_cle_exclus
+						);
 					}
-					
+
 					// Data groupes
 					$data_groups = [];
 					foreach ($groupes_annonces as $index => $groupe) {
