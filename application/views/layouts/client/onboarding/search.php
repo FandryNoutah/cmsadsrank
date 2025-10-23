@@ -228,6 +228,16 @@ $images_site = isset($images_site) && is_array($images_site) ? $images_site : []
 					</div>
 
 					<div class="form-group">
+						<label for="age-range">Sexe</label>
+						<select name="sexe" id="age-range" class="form-control">
+							<option value="">-- Sélectionnez sexe --</option>
+							<option value="Homme">Homme</option>
+							<option value="Femme">Femme</option>
+							<option value="Inconnu">Inconnu</option>
+						</select>
+					</div>
+
+					<div class="form-group">
                         <label>Diffusion</label>
                         <input type="text" name="date_campagne" class="form-control" value="7J/7, 24h/24">
                     </div>
@@ -273,7 +283,18 @@ $images_site = isset($images_site) && is_array($images_site) ? $images_site : []
 							<option value="Mobile / Tablette">Mobile / Tablette</option>
 						</select>
 					</div>
-
+					<div class="form-group">
+                        <label>Promotions</label>
+                        <input type="text" name="promotions" class="form-control" placeholder="Ajouter des promotions">
+                    </div>
+					<div class="form-group">
+                        <label>Prix</label>
+                        <input type="text" name="prix" class="form-control" placeholder="Ajouter des prix">
+                    </div>
+					<div class="form-group">
+                        <label>Appels</label>
+                        <input type="text" name="téléphone" class="form-control" placeholder="Ajouter un numéro de téléphone">
+                    </div>			
 					<ul class="nav nav-tabs mb-3">
 						<li class="nav-item">
 							<a class="nav-link py-3 active">Propositions de mots-clés à exclure</a>
@@ -404,9 +425,9 @@ $images_site = isset($images_site) && is_array($images_site) ? $images_site : []
 			<div class="modal-body">
 				<div class="mb-3">
 					<input type="file" id="imageUpload" accept="image/*" multiple class="d-none">
-					<button type="button" class="btn btn-sm btn-dark" onclick="document.getElementById('imageUpload').click();">
+					<!-- <button type="button" class="btn btn-sm btn-dark" onclick="document.getElementById('imageUpload').click();">
 						<i class="fa fa-upload"></i> Ajouter depuis l’ordinateur
-					</button>
+					</button> -->
 					<div class="input-group mt-2">
 						<input type="text" class="form-control" id="imageUrlInput" placeholder="https://exemple.com/image.jpg">
 						<div class="input-group-append">

@@ -49,10 +49,6 @@ class Task extends MY_Controller
 		$this->data['donnee'] = $this->visuels_model->getClientDataByDonnee();
 		$this->data['users'] = $this->visuels_model->getusersall();
 		$tasks = $this->data['tache'] = $this->Task_model->get_all_tâche();
-<<<<<<< HEAD
-=======
-
->>>>>>> d1feff0b43b53a9f63f0888aba0a47f632ead216
 		$this->data['count_planned'] = 0;
 		$this->data['count_upcoming'] = 0;
 		$this->data['count_completed'] = 0;

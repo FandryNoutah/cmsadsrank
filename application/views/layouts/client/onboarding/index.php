@@ -144,6 +144,14 @@
 .camp-type-container.border-dark {
   box-shadow: 0 0 10px rgba(0,0,0,0.25);
 }
+.google_btn{
+	background-color: #1A73E8;
+	color: white;
+}
+.google_btn:hover {
+	background-color: #3162a3ff;
+	color: white;
+}
 
 
 
@@ -233,9 +241,9 @@
 										</span>
 									</div>
 									<a href="<?= base_url('Client/onboarding/' . $d['idclients']) ?>" class="btn btn-outline-dark btn-block">Voir annonce</a>
-									<a href="<?= base_url('Client/onboarding/' . $d['idclients']) ?>" class="btn btn-outline-dark btn-block">Validation client</a>
+									<a href="<?= base_url('Validation/validation_structure/' . $d['idclients']) ?>" class="btn btn-outline-dark btn-block" target="_blank" >Validation client</a>
 									<a href="<?= base_url('Client/onboarding/' . $d['idclients']) ?>" class="btn btn-outline-dark btn-block">Inventaire</a>
-									
+									<?php //echo anchor('Validation/validation_structure/' . $C->idclients, $C->validation_technique, ['style' => 'color: white', 'data-edit' => $C->idclients, 'target' => '_blank']); ?>		
 								</div>
 							</div>
 						</div>
@@ -486,7 +494,7 @@
 																	<td>
 																		<strong><?= htmlspecialchars($groupe['nom_groupe']) ?></strong>
 																	</td>
-																	<td>
+																	<td style="width: 500px;">
 																		<?= htmlspecialchars($groupe['contexte_groupes_annonces']) ?>
 																	</td>
 																<td>
@@ -509,12 +517,12 @@
 																		<?php if ($groupe['statut'] == 1): ?>
 																			<img src="<?= base_url('assets/images/icons/figma/CheckCircle.png') ?>" alt="Actif">
 																		<?php else: ?>
-																			<span class="text-muted">Inactif</span>
+																			<span class="text-muted">En cours</span>
 																		<?php endif; ?>
 																	</td>
 																	<td>
-																		<a href="<?= base_url('Client/insertgroupeannonce/' . $groupe['idgroupe_annonce']) ?>" class="btn btn-dark btn-sm">
-																			Valider
+																		<a href="<?= base_url('Client/insertgroupeannonce/' . $groupe['idgroupe_annonce']) ?>" class="btn btn-sm google_btn">
+																			Créer annonce
 																		</a>
 																	</td>
 																</tr>

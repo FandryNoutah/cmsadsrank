@@ -87,6 +87,8 @@
 							</div>
 						</div>
 						-->
+						<input type="hidden" name="selectedImages" id="selectedImagesInput" value="<?= implode(',', $images_site) ?>">
+
 						<div class="form-group">
 							<label for="nom_campagne_pmax">Nom de la campagne</label>
 							<input type="text" class="form-control" name="nom_campagne_pmax" id="nom_campagne_pmax">
@@ -370,9 +372,9 @@
 				<div class="modal-body">
 					<div class="mb-3">
 						<input type="file" id="imageUpload" accept="image/*" multiple class="d-none">
-						<button type="button" class="btn btn-sm btn-dark" onclick="document.getElementById('imageUpload').click();">
+						<!-- <button type="button" class="btn btn-sm btn-dark" onclick="document.getElementById('imageUpload').click();">
 							<i class="fa fa-upload"></i> Ajouter depuis l’ordinateur
-						</button>
+						</button> -->
 						<div class="input-group mt-2">
 							<input type="text" class="form-control" id="imageUrlInput" placeholder="https://exemple.com/image.jpg">
 							<div class="input-group-append">

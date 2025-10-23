@@ -51,6 +51,7 @@
                     </tr>
                 </thead>
                 <tbody>
+                  
                     <?php if (empty($donne_valider)): ?>
                         <tr><td colspan="8" style="padding: 12px; border: 1px solid #dee2e6; text-align: center;">Aucune donnée disponible</td></tr>
                     <?php else: ?>
