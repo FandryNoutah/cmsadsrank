@@ -10,7 +10,7 @@
 	.multi-col>* {
 		break-inside: avoid;
 	}
-	<style>
+	
 	.remove-btn {
 		cursor: pointer;
 		color: red;

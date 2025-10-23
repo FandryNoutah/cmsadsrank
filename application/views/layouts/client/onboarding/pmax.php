@@ -10,21 +10,23 @@
 	.multi-col>* {
 		break-inside: avoid;
 	}
+
 	.loading-spinner {
-	display: inline-block;
-	width: 48px;
-	height: 48px;
-	border: 4px solid rgba(0, 0, 0, 0.1);
-	border-left-color: #000;
-	border-radius: 50%;
-	animation: spin 1s linear infinite;
-	margin: 30px auto;
-}
+		display: inline-block;
+		width: 48px;
+		height: 48px;
+		border: 4px solid rgba(0, 0, 0, 0.1);
+		border-left-color: #000;
+		border-radius: 50%;
+		animation: spin 1s linear infinite;
+		margin: 30px auto;
+	}
 
-@keyframes spin {
-	to { transform: rotate(360deg); }
-}
-
+	@keyframes spin {
+		to {
+			transform: rotate(360deg);
+		}
+	}
 </style>
 
 <?php end_section(); ?>
@@ -94,42 +96,41 @@
 							<input type="text" class="form-control" name="nom_campagne_pmax" id="nom_campagne_pmax">
 						</div>
 						<div class="form-group">
-						<label for="url_campagne">URL de la campagne</label>
-						<input type="url" class="form-control" name="url_campagne" id="url_campagne">
-					</div>
+							<label for="url_campagne">URL de la campagne</label>
+							<input type="url" class="form-control" name="url_campagne" id="url_campagne">
+						</div>
 
-					<div class="form-group">
-						<label for="information_campagne_search">Information de la campagne</label>
-						
-						<button 
-							type="button" 
-							class="btn btn-outline-dark mb-3" 
-							id="generate-info-campagne"
-							data-idclient="<?= $idclients ?>"
-						>
-							<i class="fa fa-images"></i> Générer avec ChatGPT
-						</button>
-						
-						<textarea class="form-control" name="information_campagne_search" id="information_campagne_search"><?= isset($campagne) ? htmlentities($campagne->information_campagne) : '' ?></textarea>
-					</div>
+						<div class="form-group">
+							<label for="information_campagne_search">Information de la campagne</label>
 
-						
+							<button
+								type="button"
+								class="btn btn-outline-dark mb-3"
+								id="generate-info-campagne"
+								data-idclient="<?= $idclients ?>">
+								<i class="fa fa-images"></i> Générer avec ChatGPT
+							</button>
+
+							<textarea class="form-control" name="information_campagne_search" id="information_campagne_search"><?= isset($campagne) ? htmlentities($campagne->information_campagne) : '' ?></textarea>
+						</div>
+
+
 						<div class="form-group">
 							<label for="repartition_budget_pmax">Budget de la campagne</label>
 							<input type="number" class="form-control" name="repartition_budget_pmax" id="repartition_budget_pmax">
 						</div>
 
-						
+
 						<div class="form-group">
 							<label>Groupe d'annonce</label>
 							<input type="text" class="form-control" name="groupe_annonce[]">
-							</div>
+						</div>
 
 						<div class="form-group">
 							<label>Saisir des mots-clés du groupe d'annonce</label>
 							<textarea name="Mot_cle[]" class="form-control" maxlength="50"></textarea>
 						</div>
-						
+
 
 						<div class="form-group">
 							<label for="">Quels produits ou services promouvez-vous dans cette campagne ?</label>
@@ -156,11 +157,11 @@
 						</div>
 
 						<div class="form-group">
-						<label for="">Cibles</label>
-						<select name="cible" class="form-control">
-							<option value="">B2B</option>
-							<option value="">B2C</option>
-						</select>
+							<label for="">Cibles</label>
+							<select name="cible" class="form-control">
+								<option value="">B2B</option>
+								<option value="">B2C</option>
+							</select>
 						</div>
 
 						<div class="form-group">
@@ -254,43 +255,43 @@
 							</select>
 						</div>
 						<ul class="nav nav-tabs mb-3">
-						<li class="nav-item">
-							<a class="nav-link py-3 active">Propositions de mots-clés à exclure</a>
-							<button 
-								type="button" 
-								class="btn btn-outline-dark mb-3 generate-keywords-btn" 
-								data-idclient="<?= $idclients ?>" >
-								<i class="fa fa-images"></i> Générer avec chatgpt
+							<li class="nav-item">
+								<a class="nav-link py-3 active">Propositions de mots-clés à exclure</a>
+								<button
+									type="button"
+									class="btn btn-outline-dark mb-3 generate-keywords-btn"
+									data-idclient="<?= $idclients ?>">
+									<i class="fa fa-images"></i> Générer avec chatgpt
+								</button>
+
+							</li>
+						</ul>
+
+						<div class="form-group">
+							<label>Propositions de mots-clés à exclure</label>
+							<textarea class="form-control" rows="15" name="Mots_cle_exclus"><?= isset($mots_exclus) ? htmlentities($mots_exclus) : '' ?></textarea>
+						</div>
+
+						<ul class="nav nav-tabs mb-3">
+							<li class="nav-item">
+								<a class="nav-link py-3 active">Proposition d'images</a>
+							</li>
+							<button type="button" class="btn btn-outline-dark mb-3" data-toggle="modal" data-target="#modalGestionImages">
+								<i class="fa fa-images"></i> Gérer les images
 							</button>
+						</ul>
 
-						</li>
-					</ul>
-
-					<div class="form-group">
-						<label>Propositions de mots-clés à exclure</label>
-						<textarea class="form-control" rows="15" name="Mots_cle_exclus"><?= isset($mots_exclus) ? htmlentities($mots_exclus) : '' ?></textarea>
-					</div>
-
-					<ul class="nav nav-tabs mb-3">
-						<li class="nav-item">
-							<a class="nav-link py-3 active">Proposition d'images</a>
-						</li>
-						<button type="button" class="btn btn-outline-dark mb-3" data-toggle="modal" data-target="#modalGestionImages">
-							<i class="fa fa-images"></i> Gérer les images
-						</button>
-					</ul>
-
-					<div class="card mb-4" id="propositionImagesCard" style="<?= empty($images_site) ? 'display:none;' : '' ?>">
-						<div class="card-body">
-							<div class="row no-gutters" id="propositionImagesContainer">
-								<?php foreach ($images_site as $img): ?>
-									<div class="col-auto px-2 mb-3">
-										<img src="<?= $img ?>" alt="Image site client" width="120" style="object-fit: cover; border-radius: 4px; cursor:pointer;" class="img-proposition selected" data-url="<?= $img ?>">
-									</div>
-								<?php endforeach; ?>
+						<div class="card mb-4" id="propositionImagesCard" style="<?= empty($images_site) ? 'display:none;' : '' ?>">
+							<div class="card-body">
+								<div class="row no-gutters" id="propositionImagesContainer">
+									<?php foreach ($images_site as $img): ?>
+										<div class="col-auto px-2 mb-3">
+											<img src="<?= $img ?>" alt="Image site client" width="120" style="object-fit: cover; border-radius: 4px; cursor:pointer;" class="img-proposition selected" data-url="<?= $img ?>">
+										</div>
+									<?php endforeach; ?>
+								</div>
 							</div>
 						</div>
-					</div>
 
 						<div class="d-flex justify-content-between mb-5">
 							<button class="btn btn-dark" type="submit">Terminer</button>
@@ -402,210 +403,219 @@
 <?php end_section() ?>
 <?php start_section('script'); ?>
 <script>
-$(document).ready(function() {
-    $('#generate-info-campagne').on('click', function() {
-        const idClient = $(this).data('idclient');
-        const urlCampagne = $('#url_campagne').val();
+	$(document).ready(function() {
+		$('#generate-info-campagne').on('click', function() {
+			const idClient = $(this).data('idclient');
+			const urlCampagne = $('#url_campagne').val();
 
-        if (!urlCampagne) {
-            alert("Veuillez entrer une URL de campagne.");
-            return;
-        }
+			if (!urlCampagne) {
+				alert("Veuillez entrer une URL de campagne.");
+				return;
+			}
 
-        $.ajax({
-            url: '<?= base_url("Client/information_campagne") ?>/' + idClient,
-            method: 'POST',
-            data: { url: urlCampagne },
-            dataType: 'json',
-            success: function(response) {
-                if (response.status === 'success') {
-                    $('#information_campagne_search').val(response.data);
-                } else {
-                    alert("Une erreur est survenue.");
-                }
-            },
-            error: function() {
-                alert("Erreur lors de la communication avec le serveur.");
-            }
-        });
-    });
-});
-$(document).ready(function() {
-    $('.generate-keywords-btn').on('click', function() {
-        const idClient = $(this).data('idclient');
-        const infoCampagne = $('#information_campagne_search').val();
+			$.ajax({
+				url: '<?= base_url("Client/information_campagne") ?>/' + idClient,
+				method: 'POST',
+				data: {
+					url: urlCampagne
+				},
+				dataType: 'json',
+				success: function(response) {
+					if (response.status === 'success') {
+						$('#information_campagne_search').val(response.data);
+					} else {
+						alert("Une erreur est survenue.");
+					}
+				},
+				error: function() {
+					alert("Erreur lors de la communication avec le serveur.");
+				}
+			});
+		});
+	});
+	$(document).ready(function() {
+		$('.generate-keywords-btn').on('click', function() {
+			const idClient = $(this).data('idclient');
+			const infoCampagne = $('#information_campagne_search').val();
 
-        if (!infoCampagne) {
-            alert("Veuillez remplir les informations de la campagne avant de générer les mots-clés à exclure.");
-            return;
-        }
+			if (!infoCampagne) {
+				alert("Veuillez remplir les informations de la campagne avant de générer les mots-clés à exclure.");
+				return;
+			}
 
-        $.ajax({
-            url: '<?= base_url("Client/get_mot_cle_a_exclure") ?>/' + idClient,
-            method: 'POST',
-            data: { information_campagne_search: infoCampagne },
-            dataType: 'json',
-            success: function(response) {
-                if (response.status === 'success') {
-                    $('textarea[name="Mots_cle_exclus"]').val(response.data);
-                } else {
-                    alert(response.message || "Erreur lors de la génération des mots-clés.");
-                }
-            },
-            error: function() {
-                alert("Erreur serveur lors de la génération.");
-            }
-        });
-    });
-});
+			$.ajax({
+				url: '<?= base_url("Client/get_mot_cle_a_exclure") ?>/' + idClient,
+				method: 'POST',
+				data: {
+					information_campagne_search: infoCampagne
+				},
+				dataType: 'json',
+				success: function(response) {
+					if (response.status === 'success') {
+						$('textarea[name="Mots_cle_exclus"]').val(response.data);
+					} else {
+						alert(response.message || "Erreur lors de la génération des mots-clés.");
+					}
+				},
+				error: function() {
+					alert("Erreur serveur lors de la génération.");
+				}
+			});
+		});
+	});
 </script>
-	<script>
-		$(function() {
-			const imageContainer = $('#imagePreviewContainer');
-			const hiddenInput = $('#selectedImagesInput');
-			const propositionCard = $('#propositionImagesCard');
-			const propositionContainer = $('#propositionImagesContainer');
+<script>
+	$(function() {
+		const imageContainer = $('#imagePreviewContainer');
+		const hiddenInput = $('#selectedImagesInput');
+		const propositionCard = $('#propositionImagesCard');
+		const propositionContainer = $('#propositionImagesContainer');
 
-			imageContainer.on('click', '.btn-danger', function() {
-				$(this).closest('.image-item').remove();
+		imageContainer.on('click', '.btn-danger', function() {
+			$(this).closest('.image-item').remove();
+		});
+
+		$('#addImageUrlBtn').on('click', function() {
+			const url = $('#imageUrlInput').val().trim();
+			if (url) {
+				imageContainer.append(createImageItem(url));
+				$('#imageUrlInput').val('');
+			}
+		});
+
+		$('#imageUpload').on('change', function(event) {
+			const files = event.target.files;
+			for (let file of files) {
+				const reader = new FileReader();
+				reader.onload = function(e) {
+					imageContainer.append(createImageItem(e.target.result));
+				};
+				reader.readAsDataURL(file);
+			}
+			$(this).val('');
+		});
+
+		$('#saveImagesBtn').on('click', function() {
+			const images = [];
+			imageContainer.find('img').each(function() {
+				images.push($(this).attr('src'));
 			});
+			hiddenInput.val(images.join(','));
+			updatePropositionImages(images);
+			$('#modalGestionImages').modal('hide');
+		});
 
-			$('#addImageUrlBtn').on('click', function() {
-				const url = $('#imageUrlInput').val().trim();
-				if (url) {
-					imageContainer.append(createImageItem(url));
-					$('#imageUrlInput').val('');
-				}
-			});
-
-			$('#imageUpload').on('change', function(event) {
-				const files = event.target.files;
-				for (let file of files) {
-					const reader = new FileReader();
-					reader.onload = function(e) {
-						imageContainer.append(createImageItem(e.target.result));
-					};
-					reader.readAsDataURL(file);
-				}
-				$(this).val('');
-			});
-
-			$('#saveImagesBtn').on('click', function() {
-				const images = [];
-				imageContainer.find('img').each(function() {
-					images.push($(this).attr('src'));
-				});
-				hiddenInput.val(images.join(','));
-				updatePropositionImages(images);
-				$('#modalGestionImages').modal('hide');
-			});
-
-			function updatePropositionImages(images) {
-				propositionContainer.empty();
-				if (images.length === 0) {
-					propositionCard.hide();
-				} else {
-					propositionCard.show();
-					images.forEach(src => {
-						propositionContainer.append(`
+		function updatePropositionImages(images) {
+			propositionContainer.empty();
+			if (images.length === 0) {
+				propositionCard.hide();
+			} else {
+				propositionCard.show();
+				images.forEach(src => {
+					propositionContainer.append(`
 					<div class="col-auto px-2 mb-3">
 						<img src="${src}" alt="Image site client" width="120" style="object-fit: cover; border-radius: 4px;">
 					</div>
 				`);
-					});
-				}
+				});
 			}
+		}
 
-			function createImageItem(src) {
-				return `
+		function createImageItem(src) {
+			return `
 				<div class="position-relative m-2 image-item">
 					<img src="${src}" width="120" height="120" class="rounded border" style="object-fit:cover;">
 					<button type="button" class="btn btn-sm btn-danger position-absolute" style="top: 2px; right: 2px;">&times;</button>
 				</div>`;
-			}
-
-			$('#add_groupe_annonce').on('click', function() {
-				let $original = $('#groupe_annonce_container .original').first();
-				let $newGroup = $original.clone();
-				$newGroup.find('input, textarea').val('');
-				let count = $('#groupe_annonce_container .group-annonce-content').length + 1;
-				$newGroup.find('label:first').text("Groupe d'annonce " + count);
-				$newGroup.append('<button type="button" class="btn btn-sm btn-danger remove_groupe_annonce mt-2">Supprimer</button>');
-				$newGroup.prepend('<hr>');
-				$newGroup.removeClass('original');
-				$newGroup.insertBefore($('#groupe_annonce_container .text-center'));
-			});
-
-			$(document).on('click', '.remove_groupe_annonce', function() {
-				$(this).closest('.group-annonce-content').remove();
-			});
-
-			$('#multiple_groupe_annonce').change(function() {
-				let checked = $(this).is(':checked');
-				$('#add_groupe_annonce').parent('.text-center').toggleClass('d-none', !checked);
-			});
-		});
-		const fetchImagesUrl = '<?= site_url("Client/fetch_images_campagne") ?>';
-<?php if (function_exists('csrf_token') || (isset($this->security) && method_exists($this->security, 'get_csrf_hash'))): ?>
-const csrfName = '<?= isset($this->security) ? $this->security->get_csrf_token_name() : '' ?>';
-const csrfHash = '<?= isset($this->security) ? $this->security->get_csrf_hash() : '' ?>';
-<?php else: ?>
-const csrfName = '';
-const csrfHash = '';
-<?php endif; ?>
-
-$(document).ready(function() {
-	function debounce(fn, delay) {
-		let timer = null;
-		return function() {
-			const context = this, args = arguments;
-			clearTimeout(timer);
-			timer = setTimeout(function() { fn.apply(context, args); }, delay);
-		};
-	}
-
-	const propositionCard = $('#propositionImagesCard');
-	const propositionContainer = $('#propositionImagesContainer');
-	const selectedImagesInput = $('#selectedImagesInput');
-	const imagePreviewContainer = $('#imagePreviewContainer');
-
-	function updateSelectedFromPropositions() {
-		let selected = [];
-		$('.img-proposition.selected').each(function() {
-			selected.push($(this).data('url'));
-		});
-		selectedImagesInput.val(selected.join(','));
-	}
-
-	$(document).on('click', '.img-proposition', function() {
-		$(this).toggleClass('selected');
-		updateSelectedFromPropositions();
-	});
-
-	const fetchImagesForUrl = debounce(function(url) {
-		if (!url) {
-			propositionContainer.empty();
-			propositionCard.hide();
-			selectedImagesInput.val('');
-			return;
 		}
-		let data = { url: url };
-		if (csrfName && csrfHash) data[csrfName] = csrfHash;
 
-		const loader = '<div class="col-12 text-center">Chargement...</div>';
-		propositionContainer.html(loader);
-		propositionCard.show();
+		$('#add_groupe_annonce').on('click', function() {
+			let $original = $('#groupe_annonce_container .original').first();
+			let $newGroup = $original.clone();
+			$newGroup.find('input, textarea').val('');
+			let count = $('#groupe_annonce_container .group-annonce-content').length + 1;
+			$newGroup.find('label:first').text("Groupe d'annonce " + count);
+			$newGroup.append('<button type="button" class="btn btn-sm btn-danger remove_groupe_annonce mt-2">Supprimer</button>');
+			$newGroup.prepend('<hr>');
+			$newGroup.removeClass('original');
+			$newGroup.insertBefore($('#groupe_annonce_container .text-center'));
+		});
 
-		$.ajax({
-			url: fetchImagesUrl,
-			type: 'POST',
-			data: data,
-			dataType: 'json',
-			success: function(resp) {
-				if (resp && resp.success && Array.isArray(resp.images) && resp.images.length > 0) {
-					let html = '';
-					resp.images.forEach(function(img) {
-						html += `
+		$(document).on('click', '.remove_groupe_annonce', function() {
+			$(this).closest('.group-annonce-content').remove();
+		});
+
+		$('#multiple_groupe_annonce').change(function() {
+			let checked = $(this).is(':checked');
+			$('#add_groupe_annonce').parent('.text-center').toggleClass('d-none', !checked);
+		});
+	});
+	const fetchImagesUrl = '<?= site_url("Client/fetch_images_campagne") ?>';
+	<?php if (function_exists('csrf_token') || (isset($this->security) && method_exists($this->security, 'get_csrf_hash'))): ?>
+		const csrfName = '<?= isset($this->security) ? $this->security->get_csrf_token_name() : '' ?>';
+		const csrfHash = '<?= isset($this->security) ? $this->security->get_csrf_hash() : '' ?>';
+	<?php else: ?>
+		const csrfName = '';
+		const csrfHash = '';
+	<?php endif; ?>
+
+	$(document).ready(function() {
+		function debounce(fn, delay) {
+			let timer = null;
+			return function() {
+				const context = this,
+					args = arguments;
+				clearTimeout(timer);
+				timer = setTimeout(function() {
+					fn.apply(context, args);
+				}, delay);
+			};
+		}
+
+		const propositionCard = $('#propositionImagesCard');
+		const propositionContainer = $('#propositionImagesContainer');
+		const selectedImagesInput = $('#selectedImagesInput');
+		const imagePreviewContainer = $('#imagePreviewContainer');
+
+		function updateSelectedFromPropositions() {
+			let selected = [];
+			$('.img-proposition.selected').each(function() {
+				selected.push($(this).data('url'));
+			});
+			selectedImagesInput.val(selected.join(','));
+		}
+
+		$(document).on('click', '.img-proposition', function() {
+			$(this).toggleClass('selected');
+			updateSelectedFromPropositions();
+		});
+
+		const fetchImagesForUrl = debounce(function(url) {
+			if (!url) {
+				propositionContainer.empty();
+				propositionCard.hide();
+				selectedImagesInput.val('');
+				return;
+			}
+			let data = {
+				url: url
+			};
+			if (csrfName && csrfHash) data[csrfName] = csrfHash;
+
+			const loader = '<div class="col-12 text-center">Chargement...</div>';
+			propositionContainer.html(loader);
+			propositionCard.show();
+
+			$.ajax({
+				url: fetchImagesUrl,
+				type: 'POST',
+				data: data,
+				dataType: 'json',
+				success: function(resp) {
+					if (resp && resp.success && Array.isArray(resp.images) && resp.images.length > 0) {
+						let html = '';
+						resp.images.forEach(function(img) {
+							html += `
 							<div class="col-auto px-2 mb-3">
 								<img src="${img}" alt="Image site client"
 									width="120"
@@ -613,87 +623,87 @@ $(document).ready(function() {
 									data-url="${img}"
 									style="object-fit: cover; border-radius: 4px;">
 							</div>`;
-					});
-					propositionContainer.html(html);
-					selectedImagesInput.val(resp.images.join(','));
-					imagePreviewContainer.empty();
-					resp.images.forEach(function(src){
-						imagePreviewContainer.append(createImageItem(src));
-					});
-				} else {
-					propositionContainer.html('<div class="col-12 text-center text-muted">Aucune image trouvée</div>');
-					selectedImagesInput.val('');
+						});
+						propositionContainer.html(html);
+						selectedImagesInput.val(resp.images.join(','));
+						imagePreviewContainer.empty();
+						resp.images.forEach(function(src) {
+							imagePreviewContainer.append(createImageItem(src));
+						});
+					} else {
+						propositionContainer.html('<div class="col-12 text-center text-muted">Aucune image trouvée</div>');
+						selectedImagesInput.val('');
+					}
+				},
+				error: function() {
+					propositionContainer.html('<div class="col-12 text-center text-danger">Erreur lors du chargement</div>');
 				}
-			},
-			error: function() {
-				propositionContainer.html('<div class="col-12 text-center text-danger">Erreur lors du chargement</div>');
+			});
+		}, 550);
+
+		$('#url_campagne').on('input paste change', function() {
+			const url = $(this).val().trim();
+			if (url.length === 0) {
+				propositionContainer.empty();
+				propositionCard.hide();
+				selectedImagesInput.val('');
+				return;
 			}
+			fetchImagesForUrl(url);
 		});
-	}, 550);
 
-	$('#url_campagne').on('input paste change', function() {
-		const url = $(this).val().trim();
-		if (url.length === 0) {
-			propositionContainer.empty();
-			propositionCard.hide();
-			selectedImagesInput.val('');
-			return;
-		}
-		fetchImagesForUrl(url);
-	});
-
-	imagePreviewContainer.on('click', '.remove-image-btn', function() {
-		$(this).closest('.image-item').remove();
-	});
-
-	$('#addImageUrlBtn').on('click', function() {
-		const url = $('#imageUrlInput').val().trim();
-		if (!url) return;
-		imagePreviewContainer.append(createImageItem(url));
-		$('#imageUrlInput').val('');
-	});
-
-	$('#imageUpload').on('change', function(event) {
-		const files = event.target.files;
-		for (let file of files) {
-			const reader = new FileReader();
-			reader.onload = function(e) {
-				imagePreviewContainer.append(createImageItem(e.target.result));
-			};
-			reader.readAsDataURL(file);
-		}
-		$(this).val('');
-	});
-
-	$('#saveImagesBtn').on('click', function() {
-		const images = [];
-		imagePreviewContainer.find('img').each(function() {
-			images.push($(this).attr('src'));
+		imagePreviewContainer.on('click', '.remove-image-btn', function() {
+			$(this).closest('.image-item').remove();
 		});
-		selectedImagesInput.val(images.join(','));
-		updatePropositionImages(images);
-		$('#modalGestionImages').modal('hide');
-	});
 
-	function createImageItem(src) {
-		return `
+		$('#addImageUrlBtn').on('click', function() {
+			const url = $('#imageUrlInput').val().trim();
+			if (!url) return;
+			imagePreviewContainer.append(createImageItem(url));
+			$('#imageUrlInput').val('');
+		});
+
+		$('#imageUpload').on('change', function(event) {
+			const files = event.target.files;
+			for (let file of files) {
+				const reader = new FileReader();
+				reader.onload = function(e) {
+					imagePreviewContainer.append(createImageItem(e.target.result));
+				};
+				reader.readAsDataURL(file);
+			}
+			$(this).val('');
+		});
+
+		$('#saveImagesBtn').on('click', function() {
+			const images = [];
+			imagePreviewContainer.find('img').each(function() {
+				images.push($(this).attr('src'));
+			});
+			selectedImagesInput.val(images.join(','));
+			updatePropositionImages(images);
+			$('#modalGestionImages').modal('hide');
+		});
+
+		function createImageItem(src) {
+			return `
 			<div class="position-relative m-2 image-item">
 				<img src="${src}" width="120" height="120" class="rounded border" style="object-fit:cover;">
 				<button type="button" class="btn btn-sm btn-danger position-absolute remove-image-btn" style="top: 2px; right: 2px;">&times;</button>
 			</div>`;
-	}
-
-	function updatePropositionImages(images) {
-		propositionContainer.empty();
-		if (!Array.isArray(images) || images.length === 0) {
-			propositionCard.hide();
-			selectedImagesInput.val('');
-			return;
 		}
-		propositionCard.show();
-		let html = '';
-		images.forEach(function(src) {
-			html += `
+
+		function updatePropositionImages(images) {
+			propositionContainer.empty();
+			if (!Array.isArray(images) || images.length === 0) {
+				propositionCard.hide();
+				selectedImagesInput.val('');
+				return;
+			}
+			propositionCard.show();
+			let html = '';
+			images.forEach(function(src) {
+				html += `
 				<div class="col-auto px-2 mb-3">
 					<img src="${src}" alt="Image site client"
 						width="120"
@@ -701,9 +711,9 @@ $(document).ready(function() {
 						data-url="${src}"
 						style="object-fit: cover; border-radius: 4px;">
 				</div>`;
-		});
-		propositionContainer.html(html);
-	}
-});
-	</script>
-	<?php end_section(); ?>
+			});
+			propositionContainer.html(html);
+		}
+	});
+</script>
+<?php end_section(); ?>

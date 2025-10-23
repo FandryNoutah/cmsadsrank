@@ -5,29 +5,32 @@
 		column-fill: auto;
 		overflow-x: auto;
 	}
+
 	.multi-col>* {
 		break-inside: avoid;
 	}
+
 	.img-proposition {
 		cursor: pointer;
 		transition: transform .08s ease;
 	}
+
 	.loading-spinner {
-	display: inline-block;
-	width: 48px;
-	height: 48px;
-	border: 4px solid rgba(0, 0, 0, 0.1);
-	border-left-color: #000;
-	border-radius: 50%;
-	animation: spin 1s linear infinite;
-	margin: 30px auto;
-}
+		display: inline-block;
+		width: 48px;
+		height: 48px;
+		border: 4px solid rgba(0, 0, 0, 0.1);
+		border-left-color: #000;
+		border-radius: 50%;
+		animation: spin 1s linear infinite;
+		margin: 30px auto;
+	}
 
-@keyframes spin {
-	to { transform: rotate(360deg); }
-}
-
-
+	@keyframes spin {
+		to {
+			transform: rotate(360deg);
+		}
+	}
 </style>
 <?php end_section(); ?>
 
@@ -77,24 +80,24 @@ $images_site = isset($images_site) && is_array($images_site) ? $images_site : []
 
 			<?php if (isset($campagne)): ?>
 				<form action="<?= site_url('Client/ajout_campagne/' . $idclients) . "?id_camp=" . urlencode($id_camp) ?>" method="POST">
-			<?php else: ?>
-				<form action="<?= site_url('Client/ajout_campagne/' . $idclients) . "?conversion=" . urlencode($conversion) . "&camp_type=" . urlencode($camp_type) . "&gtm=" . urlencode($gtm) ?>" method="POST">
-			<?php endif; ?>
+				<?php else: ?>
+					<form action="<?= site_url('Client/ajout_campagne/' . $idclients) . "?conversion=" . urlencode($conversion) . "&camp_type=" . urlencode($camp_type) . "&gtm=" . urlencode($gtm) ?>" method="POST">
+					<?php endif; ?>
 
-				<div class="container-fluid pt-4">
-					<h5>Campagne Reseau de Recherche</h5>
-					<hr class="my-4">
+					<div class="container-fluid pt-4">
+						<h5>Campagne Reseau de Recherche</h5>
+						<hr class="my-4">
 
-					<!-- input caché unique pour les images sélectionnées -->
-					<input type="hidden" name="selectedImages" id="selectedImagesInput" value="<?= implode(',', $images_site) ?>">
+						<!-- input caché unique pour les images sélectionnées -->
+						<input type="hidden" name="selectedImages" id="selectedImagesInput" value="<?= implode(',', $images_site) ?>">
 
-					<div class="row align-items-center mb-4">
-						<div class="col-auto">
-							<?php if (!empty($d['logo_client'])): ?>
-								<img src="<?= base_url($d['logo_client']) ?>" width="64" alt="logo client">
-							<?php endif; ?>
-						</div>
-						<!-- <div class="col-auto">
+						<div class="row align-items-center mb-4">
+							<div class="col-auto">
+								<?php if (!empty($d['logo_client'])): ?>
+									<img src="<?= base_url($d['logo_client']) ?>" width="64" alt="logo client">
+								<?php endif; ?>
+							</div>
+							<!-- <div class="col-auto">
 							<input type="file" name="logo">
 							
 							<button type="button" class="btn btn-light btn-sm" onclick="document.getElementById('logoFileInput').click();">
@@ -103,47 +106,46 @@ $images_site = isset($images_site) && is_array($images_site) ? $images_site : []
 							<input type="file" id="logoFileInput" accept="image/*" class="d-none">
 							
 						</div> -->
-					
-					</div>
 
-					<div class="form-group">
-						<label for="nom_campagne_search">Nom de la campagne</label>
-						<input type="text" class="form-control" name="nom_campagne_search" id="nom_campagne_search" value="<?= isset($campagne) ? htmlentities($campagne->nom_campagne) : '' ?>">
-					</div>
+						</div>
 
-					<div class="form-group">
-						<label for="url_campagne">URL de la campagne</label>
-						<input type="url" class="form-control" name="url_campagne" id="url_campagne">
-					</div>
+						<div class="form-group">
+							<label for="nom_campagne_search">Nom de la campagne</label>
+							<input type="text" class="form-control" name="nom_campagne_search" id="nom_campagne_search" value="<?= isset($campagne) ? htmlentities($campagne->nom_campagne) : '' ?>">
+						</div>
 
-					<div class="form-group">
-						<label for="information_campagne_search">Information de la campagne</label>
-						
-						<button 
-							type="button" 
-							class="btn btn-outline-dark mb-3" 
-							id="generate-info-campagne"
-							data-idclient="<?= $idclients ?>"
-						>
-							<i class="fa fa-images"></i> Générer avec ChatGPT
-						</button>
-						
-						<textarea class="form-control" name="information_campagne_search" id="information_campagne_search"><?= isset($campagne) ? htmlentities($campagne->information_campagne) : '' ?></textarea>
-					</div>
+						<div class="form-group">
+							<label for="url_campagne">URL de la campagne</label>
+							<input type="url" class="form-control" name="url_campagne" id="url_campagne">
+						</div>
 
+						<div class="form-group">
+							<label for="information_campagne_search">Information de la campagne</label>
 
-					
+							<button
+								type="button"
+								class="btn btn-outline-dark mb-3"
+								id="generate-info-campagne"
+								data-idclient="<?= $idclients ?>">
+								<i class="fa fa-images"></i> Générer avec ChatGPT
+							</button>
+
+							<textarea class="form-control" name="information_campagne_search" id="information_campagne_search"><?= isset($campagne) ? htmlentities($campagne->information_campagne) : '' ?></textarea>
+						</div>
 
 
-					<div class="form-group">
-						<label for="repartition_budget_search">Budget de la campagne</label>
-						<input type="number" class="form-control" name="repartition_budget_search" id="repartition_budget_search" value="<?= isset($campagne) ? htmlentities($campagne->repartition_budget) : '' ?>">
-					</div>
 
-					<div class="custom-control custom-switch mb-3">
-						<input type="checkbox" class="custom-control-input" id="multiple_groupe_annonce" <?php if (isset($campagne) && !empty($groupes_annonces) && count($groupes_annonces) > 0): ?> checked <?php endif; ?>>
-						<label class="custom-control-label" for="multiple_groupe_annonce">Souhaitez-vous créer plusieurs groupes d'annonces dans la campagne?</label>
-					</div>
+
+
+						<div class="form-group">
+							<label for="repartition_budget_search">Budget de la campagne</label>
+							<input type="number" class="form-control" name="repartition_budget_search" id="repartition_budget_search" value="<?= isset($campagne) ? htmlentities($campagne->repartition_budget) : '' ?>">
+						</div>
+
+						<div class="custom-control custom-switch mb-3">
+							<input type="checkbox" class="custom-control-input" id="multiple_groupe_annonce" <?php if (isset($campagne) && !empty($groupes_annonces) && count($groupes_annonces) > 0): ?> checked <?php endif; ?>>
+							<label class="custom-control-label" for="multiple_groupe_annonce">Souhaitez-vous créer plusieurs groupes d'annonces dans la campagne?</label>
+						</div>
 
 						<div id="groupe_annonce_container" class="mb-4 pt-4">
 							<?php if (isset($groupes_annonces) && count($groupes_annonces) > 0): ?>
@@ -156,11 +158,11 @@ $images_site = isset($images_site) && is_array($images_site) ? $images_site : []
 										</div>
 										<div class="form-group">
 											<label>Contexte du groupe d'annonce</label>
-											<textarea name="contexte_groupe_annonce[]" class="form-control" ><?= $groupe_annonce['contexte_groupes_annonces'] ?></textarea>
+											<textarea name="contexte_groupe_annonce[]" class="form-control"><?= $groupe_annonce['contexte_groupes_annonces'] ?></textarea>
 										</div>
 										<div class="form-group">
 											<label>Saisir des mots-clés du groupe d'annonce</label>
-											<textarea name="Mot_cle[]" class="form-control" ><?= $groupe_annonce['mot_cle'] ?></textarea>
+											<textarea name="Mot_cle[]" class="form-control"><?= $groupe_annonce['mot_cle'] ?></textarea>
 										</div>
 										<button type="button" class="btn btn-sm btn-danger remove_groupe_annonce mt-2">Supprimer</button>
 										<hr>
@@ -174,11 +176,11 @@ $images_site = isset($images_site) && is_array($images_site) ? $images_site : []
 									</div>
 									<div class="form-group">
 										<label>Contexte du groupe d'annonce</label>
-										<textarea name="contexte_groupe_annonce[]" class="form-control" ></textarea>
+										<textarea name="contexte_groupe_annonce[]" class="form-control"></textarea>
 									</div>
 									<div class="form-group">
 										<label>Saisir des mots-clés du groupe d'annonce</label>
-										<textarea name="Mot_cle[]" class="form-control" ></textarea>
+										<textarea name="Mot_cle[]" class="form-control"></textarea>
 									</div>
 								</div>
 							<?php endif; ?>
@@ -190,43 +192,44 @@ $images_site = isset($images_site) && is_array($images_site) ? $images_site : []
 							</div>
 						</div>
 
-					<h5>Paramètres de la campagne</h5>
+						<h5>Paramètres de la campagne</h5>
 
-					<div class="form-group">
-						<label for="zone_search">Zone géographique</label>
-						<input type="text" class="form-control" name="zone_search" id="zone_search" value="<?= isset($campagne) ? htmlentities($campagne->zones) : '' ?>">
-					</div>
+						<div class="form-group">
+							<label for="zone_search">Zone géographique</label>
+							<input type="text" class="form-control" name="zone_search" id="zone_search" value="<?= isset($campagne) ? htmlentities($campagne->zones) : '' ?>">
+						</div>
 
-					<div class="form-group">
-						<label for="">Langues</label>
-						<select name="langue" class="form-control">
-							<option value="fr" <?= (isset($campagne) && ($campagne->langue ?? '') == 'fr') ? 'selected' : '' ?>>Français</option>
-							<option value="en" <?= (isset($campagne) && ($campagne->langue ?? '') == 'en') ? 'selected' : '' ?>>Anglais</option>
-						</select>
-					</div>
+						<div class="form-group">
+							<label for="">Langues</label>
+							<select name="langue" class="form-control">
+								<option value="fr" <?= (isset($campagne) && ($campagne->langue ?? '') == 'fr') ? 'selected' : '' ?>>Français</option>
+								<option value="en" <?= (isset($campagne) && ($campagne->langue ?? '') == 'en') ? 'selected' : '' ?>>Anglais</option>
+							</select>
+						</div>
 
-					<div class="form-group">
-						<label for="">Cibles</label>
-						<select name="cible" class="form-control">
-							<option value="">B2B</option>
-							<option value="">B2C</option>
-						</select>
-					</div>
+						<div class="form-group">
+							<label for="">Cibles</label>
+							<select name="cible" class="form-control">
+								<option value="">B2B</option>
+								<option value="">B2C</option>
+							</select>
+						</div>
 
-					<div class="form-group">
-						<label for="age-range">Tranche d'âges</label>
-						<select name="age" id="age-range" class="form-control">
-							<option value="">-- Sélectionnez une tranche d'âge --</option>
-							<option value="Tous âges">Tout âges</option>
-							<option value="18-24">18 - 24 ans</option>
-							<option value="25-34">25 - 34 ans</option>
-							<option value="35-44">35 - 44 ans</option>
-							<option value="45-54">45 - 54 ans</option>
-							<option value="55-64">55 - 64 ans</option>
-							<option value="65+">65 ans et plus</option>
-						</select>
-					</div>
+						<div class="form-group">
+							<label for="age-range">Tranche d'âges</label>
+							<select name="age" id="age-range" class="form-control">
+								<option value="">-- Sélectionnez une tranche d'âge --</option>
+								<option value="Tous âges">Tout âges</option>
+								<option value="18-24">18 - 24 ans</option>
+								<option value="25-34">25 - 34 ans</option>
+								<option value="35-44">35 - 44 ans</option>
+								<option value="45-54">45 - 54 ans</option>
+								<option value="55-64">55 - 64 ans</option>
+								<option value="65+">65 ans et plus</option>
+							</select>
+						</div>
 
+<<<<<<< HEAD
 					<div class="form-group">
 						<label for="age-range">Sexe</label>
 						<select name="sexe" id="age-range" class="form-control">
@@ -241,36 +244,43 @@ $images_site = isset($images_site) && is_array($images_site) ? $images_site : []
                         <label>Diffusion</label>
                         <input type="text" name="date_campagne" class="form-control" value="7J/7, 24h/24">
                     </div>
+=======
+						<div class="form-group">
+							<label>Diffusion</label>
+							<input type="text" name="date_campagne" class="form-control" value="7J/7, 24h/24">
+						</div>
+>>>>>>> 5a1533e203c229b811106e20f2d8b1625abbf05e
 
-					<div class="form-group">
-						<label for="">Audiences</label>
-						<select name="audience" class="form-control">
-							<option value="">Audience 1</option>
-							<option value="">Audience 2</option>
-						</select>
-					</div>
+						<div class="form-group">
+							<label for="">Audiences</label>
+							<select name="audience" class="form-control">
+								<option value="">Audience 1</option>
+								<option value="">Audience 2</option>
+							</select>
+						</div>
 
-					<div class="container mb-3">
-						<div class="multi-col" style="height: 200px;">
-							<div class="custom-control custom-checkbox">
-								<input type="checkbox" class="custom-control-input" id="customCheck1">
-								<label class="custom-control-label" for="customCheck1">Affinité</label>
-							</div>
-							<div class="custom-control custom-checkbox">
-								<input type="checkbox" class="custom-control-input" id="customCheck2">
-								<label class="custom-control-label" for="customCheck2">Acheteur</label>
-							</div>
-							<div class="custom-control custom-checkbox">
-								<input type="checkbox" class="custom-control-input" id="customCheck3">
-								<label class="custom-control-label" for="customCheck3">Actualité et politique</label>
-							</div>
-							<div class="custom-control custom-checkbox">
-								<input type="checkbox" class="custom-control-input" id="customCheck4">
-								<label class="custom-control-label" for="customCheck4">Alimentation et restauration</label>
+						<div class="container mb-3">
+							<div class="multi-col" style="height: 200px;">
+								<div class="custom-control custom-checkbox">
+									<input type="checkbox" class="custom-control-input" id="customCheck1">
+									<label class="custom-control-label" for="customCheck1">Affinité</label>
+								</div>
+								<div class="custom-control custom-checkbox">
+									<input type="checkbox" class="custom-control-input" id="customCheck2">
+									<label class="custom-control-label" for="customCheck2">Acheteur</label>
+								</div>
+								<div class="custom-control custom-checkbox">
+									<input type="checkbox" class="custom-control-input" id="customCheck3">
+									<label class="custom-control-label" for="customCheck3">Actualité et politique</label>
+								</div>
+								<div class="custom-control custom-checkbox">
+									<input type="checkbox" class="custom-control-input" id="customCheck4">
+									<label class="custom-control-label" for="customCheck4">Alimentation et restauration</label>
+								</div>
 							</div>
 						</div>
-					</div>
 
+<<<<<<< HEAD
 					<div class="form-group">
 						<label for="appareil_search">Appareil</label>
 						<select name="appareil" id="appareil_search" class="form-control">
@@ -303,44 +313,67 @@ $images_site = isset($images_site) && is_array($images_site) ? $images_site : []
 								class="btn btn-outline-dark mb-3 generate-keywords-btn" 
 								data-idclient="<?= $idclients ?>" >
 								<i class="fa fa-images"></i> Générer avec chatgpt
+=======
+						<div class="form-group">
+							<label for="appareil_search">Appareil</label>
+							<select name="appareil" id="appareil_search" class="form-control">
+								<option value="Ordinateur / Mobile / Tablette">Ordinateur / Mobile / Tablette</option>
+								<option value="Ordinateur">Ordinateur</option>
+								<option value="Mobile">Mobile</option>
+								<option value="Tablette">Tablette</option>
+								<option value="Ordinateur / Mobile">Ordinateur / Mobile</option>
+								<option value="Ordinateur / Tablette">Ordinateur / Tablette</option>
+								<option value="Mobile / Tablette">Mobile / Tablette</option>
+							</select>
+						</div>
+
+						<ul class="nav nav-tabs mb-3">
+							<li class="nav-item">
+								<a class="nav-link py-3 active">Propositions de mots-clés à exclure</a>
+								<button
+									type="button"
+									class="btn btn-outline-dark mb-3 generate-keywords-btn"
+									data-idclient="<?= $idclients ?>">
+									<i class="fa fa-images"></i> Générer avec chatgpt
+								</button>
+
+							</li>
+						</ul>
+
+						<div class="form-group">
+							<label>Propositions de mots-clés à exclure</label>
+							<textarea class="form-control" rows="15" name="Mots_cle_exclus"><?= isset($mots_exclus) ? htmlentities($mots_exclus) : '' ?></textarea>
+						</div>
+
+						<ul class="nav nav-tabs mb-3">
+							<li class="nav-item">
+								<a class="nav-link py-3 active">Proposition d'images</a>
+							</li>
+							<button type="button" class="btn btn-outline-dark mb-3" data-toggle="modal" data-target="#modalGestionImages">
+								<i class="fa fa-images"></i> Gérer les images
+>>>>>>> 5a1533e203c229b811106e20f2d8b1625abbf05e
 							</button>
+						</ul>
 
-						</li>
-					</ul>
-
-					<div class="form-group">
-						<label>Propositions de mots-clés à exclure</label>
-						<textarea class="form-control" rows="15" name="Mots_cle_exclus"><?= isset($mots_exclus) ? htmlentities($mots_exclus) : '' ?></textarea>
-					</div>
-
-					<ul class="nav nav-tabs mb-3">
-						<li class="nav-item">
-							<a class="nav-link py-3 active">Proposition d'images</a>
-						</li>
-						<button type="button" class="btn btn-outline-dark mb-3" data-toggle="modal" data-target="#modalGestionImages">
-							<i class="fa fa-images"></i> Gérer les images
-						</button>
-					</ul>
-
-					<div class="card mb-4" id="propositionImagesCard" style="<?= empty($images_site) ? 'display:none;' : '' ?>">
-						<div class="card-body">
-							<div class="row no-gutters" id="propositionImagesContainer">
-								<?php foreach ($images_site as $img): ?>
-									<div class="col-auto px-2 mb-3">
-										<img src="<?= $img ?>" alt="Image site client" width="120" style="object-fit: cover; border-radius: 4px; cursor:pointer;" class="img-proposition selected" data-url="<?= $img ?>">
-									</div>
-								<?php endforeach; ?>
+						<div class="card mb-4" id="propositionImagesCard" style="<?= empty($images_site) ? 'display:none;' : '' ?>">
+							<div class="card-body">
+								<div class="row no-gutters" id="propositionImagesContainer">
+									<?php foreach ($images_site as $img): ?>
+										<div class="col-auto px-2 mb-3">
+											<img src="<?= $img ?>" alt="Image site client" width="120" style="object-fit: cover; border-radius: 4px; cursor:pointer;" class="img-proposition selected" data-url="<?= $img ?>">
+										</div>
+									<?php endforeach; ?>
+								</div>
 							</div>
 						</div>
+
+						<div class="d-flex justify-content-between mb-5">
+							<button type="submit" class="btn btn-dark">Terminer</button>
+						</div>
+
+
 					</div>
-
-					<div class="d-flex justify-content-between mb-5">
-						<button type="submit" class="btn btn-dark">Terminer</button>
-					</div>
-
-
-				</div>
-			</form>
+					</form>
 
 		</div>
 
@@ -457,163 +490,170 @@ $images_site = isset($images_site) && is_array($images_site) ? $images_site : []
 <?php end_section() ?>
 <?php start_section('script'); ?>
 <script>
-$(document).ready(function() {
-    $('#generate-info-campagne').on('click', function() {
-        const idClient = $(this).data('idclient');
-        const urlCampagne = $('#url_campagne').val();
+	$(document).ready(function() {
+		$('#generate-info-campagne').on('click', function() {
+			const idClient = $(this).data('idclient');
+			const urlCampagne = $('#url_campagne').val();
 
-        if (!urlCampagne) {
-            alert("Veuillez entrer une URL de campagne.");
-            return;
-        }
+			if (!urlCampagne) {
+				alert("Veuillez entrer une URL de campagne.");
+				return;
+			}
 
-        $.ajax({
-            url: '<?= base_url("Client/information_campagne") ?>/' + idClient,
-            method: 'POST',
-            data: { url: urlCampagne },
-            dataType: 'json',
-            success: function(response) {
-                if (response.status === 'success') {
-                    $('#information_campagne_search').val(response.data);
-                } else {
-                    alert("Une erreur est survenue.");
-                }
-            },
-            error: function() {
-                alert("Erreur lors de la communication avec le serveur.");
-            }
-        });
-    });
-});
-</script>
-
-<script>
-
-$(document).ready(function() {
-	const $checkbox = $('#multiple_groupe_annonce');
-	const $container = $('#groupe_annonce_container');
-	const $addButton = $('#add_groupe_annonce');
-
-	// Activation/désactivation du bloc quand on coche la switch
-	$checkbox.on('change', function() {
-		if (this.checked) {
-			$addButton.parent().removeClass('d-none');
-		} else {
-			$addButton.parent().addClass('d-none');
-			// facultatif : vider les groupes sauf l'original
-			$container.find('.group-annonce-content:not(.original)').remove();
-		}
-	});
-
-	// Ajout d'un nouveau groupe
-	$addButton.on('click', function() {
-		const count = $container.find('.group-annonce-content').length + 1;
-		const $clone = $container.find('.group-annonce-content.original').first().clone();
-		$clone.removeClass('original');
-		$clone.find('input, textarea').val('');
-		$clone.find('label:first').text('Groupe d\'annonce ' + count);
-		$clone.append('<button type="button" class="btn btn-sm btn-danger remove_groupe_annonce mt-2">Supprimer</button><hr>');
-		$container.append($clone);
-	});
-
-	// Suppression d'un groupe
-	$container.on('click', '.remove_groupe_annonce', function() {
-		$(this).closest('.group-annonce-content').remove();
-	});
-});
-$(document).ready(function() {
-    $('.generate-keywords-btn').on('click', function() {
-        const idClient = $(this).data('idclient');
-        const infoCampagne = $('#information_campagne_search').val();
-
-        if (!infoCampagne) {
-            alert("Veuillez remplir les informations de la campagne avant de générer les mots-clés à exclure.");
-            return;
-        }
-
-        $.ajax({
-            url: '<?= base_url("Client/get_mot_cle_a_exclure") ?>/' + idClient,
-            method: 'POST',
-            data: { information_campagne_search: infoCampagne },
-            dataType: 'json',
-            success: function(response) {
-                if (response.status === 'success') {
-                    $('textarea[name="Mots_cle_exclus"]').val(response.data);
-                } else {
-                    alert(response.message || "Erreur lors de la génération des mots-clés.");
-                }
-            },
-            error: function() {
-                alert("Erreur serveur lors de la génération.");
-            }
-        });
-    });
-});
-</script>
-
-<script>
-const fetchImagesUrl = '<?= site_url("Client/fetch_images_campagne") ?>';
-<?php if (function_exists('csrf_token') || (isset($this->security) && method_exists($this->security, 'get_csrf_hash'))): ?>
-const csrfName = '<?= isset($this->security) ? $this->security->get_csrf_token_name() : '' ?>';
-const csrfHash = '<?= isset($this->security) ? $this->security->get_csrf_hash() : '' ?>';
-<?php else: ?>
-const csrfName = '';
-const csrfHash = '';
-<?php endif; ?>
-
-$(document).ready(function() {
-	function debounce(fn, delay) {
-		let timer = null;
-		return function() {
-			const context = this, args = arguments;
-			clearTimeout(timer);
-			timer = setTimeout(function() { fn.apply(context, args); }, delay);
-		};
-	}
-
-	const propositionCard = $('#propositionImagesCard');
-	const propositionContainer = $('#propositionImagesContainer');
-	const selectedImagesInput = $('#selectedImagesInput');
-	const imagePreviewContainer = $('#imagePreviewContainer');
-
-	function updateSelectedFromPropositions() {
-		let selected = [];
-		$('.img-proposition.selected').each(function() {
-			selected.push($(this).data('url'));
+			$.ajax({
+				url: '<?= base_url("Client/information_campagne") ?>/' + idClient,
+				method: 'POST',
+				data: {
+					url: urlCampagne
+				},
+				dataType: 'json',
+				success: function(response) {
+					if (response.status === 'success') {
+						$('#information_campagne_search').val(response.data);
+					} else {
+						alert("Une erreur est survenue.");
+					}
+				},
+				error: function() {
+					alert("Erreur lors de la communication avec le serveur.");
+				}
+			});
 		});
-		selectedImagesInput.val(selected.join(','));
-	}
-
-	$(document).on('click', '.img-proposition', function() {
-		$(this).toggleClass('selected');
-		updateSelectedFromPropositions();
 	});
+</script>
 
-	const fetchImagesForUrl = debounce(function(url) {
-		if (!url) {
-			propositionContainer.empty();
-			propositionCard.hide();
-			selectedImagesInput.val('');
-			return;
+<script>
+	$(document).ready(function() {
+		const $checkbox = $('#multiple_groupe_annonce');
+		const $container = $('#groupe_annonce_container');
+		const $addButton = $('#add_groupe_annonce');
+
+		// Activation/désactivation du bloc quand on coche la switch
+		$checkbox.on('change', function() {
+			if (this.checked) {
+				$addButton.parent().removeClass('d-none');
+			} else {
+				$addButton.parent().addClass('d-none');
+				// facultatif : vider les groupes sauf l'original
+				$container.find('.group-annonce-content:not(.original)').remove();
+			}
+		});
+
+		// Ajout d'un nouveau groupe
+		$addButton.on('click', function() {
+			const count = $container.find('.group-annonce-content').length + 1;
+			const $clone = $container.find('.group-annonce-content.original').first().clone();
+			$clone.removeClass('original');
+			$clone.find('input, textarea').val('');
+			$clone.find('label:first').text('Groupe d\'annonce ' + count);
+			$clone.append('<button type="button" class="btn btn-sm btn-danger remove_groupe_annonce mt-2">Supprimer</button><hr>');
+			$container.append($clone);
+		});
+
+		// Suppression d'un groupe
+		$container.on('click', '.remove_groupe_annonce', function() {
+			$(this).closest('.group-annonce-content').remove();
+		});
+	});
+	$(document).ready(function() {
+		$('.generate-keywords-btn').on('click', function() {
+			const idClient = $(this).data('idclient');
+			const infoCampagne = $('#information_campagne_search').val();
+
+			if (!infoCampagne) {
+				alert("Veuillez remplir les informations de la campagne avant de générer les mots-clés à exclure.");
+				return;
+			}
+
+			$.ajax({
+				url: '<?= base_url("Client/get_mot_cle_a_exclure") ?>/' + idClient,
+				method: 'POST',
+				data: {
+					information_campagne_search: infoCampagne
+				},
+				dataType: 'json',
+				success: function(response) {
+					if (response.status === 'success') {
+						$('textarea[name="Mots_cle_exclus"]').val(response.data);
+					} else {
+						alert(response.message || "Erreur lors de la génération des mots-clés.");
+					}
+				},
+				error: function() {
+					alert("Erreur serveur lors de la génération.");
+				}
+			});
+		});
+	});
+</script>
+
+<script>
+	const fetchImagesUrl = '<?= site_url("Client/fetch_images_campagne") ?>';
+	<?php if (function_exists('csrf_token') || (isset($this->security) && method_exists($this->security, 'get_csrf_hash'))): ?>
+		const csrfName = '<?= isset($this->security) ? $this->security->get_csrf_token_name() : '' ?>';
+		const csrfHash = '<?= isset($this->security) ? $this->security->get_csrf_hash() : '' ?>';
+	<?php else: ?>
+		const csrfName = '';
+		const csrfHash = '';
+	<?php endif; ?>
+
+	$(document).ready(function() {
+		function debounce(fn, delay) {
+			let timer = null;
+			return function() {
+				const context = this,
+					args = arguments;
+				clearTimeout(timer);
+				timer = setTimeout(function() {
+					fn.apply(context, args);
+				}, delay);
+			};
 		}
-		let data = { url: url };
-		if (csrfName && csrfHash) data[csrfName] = csrfHash;
 
-		const loader = '<div class="col-12 text-center"><div class="loading-spinner"></div><p class="mt-2">Chargement des images...</p></div>';
-;
-		propositionContainer.html(loader);
-		propositionCard.show();
+		const propositionCard = $('#propositionImagesCard');
+		const propositionContainer = $('#propositionImagesContainer');
+		const selectedImagesInput = $('#selectedImagesInput');
+		const imagePreviewContainer = $('#imagePreviewContainer');
 
-		$.ajax({
-			url: fetchImagesUrl,
-			type: 'POST',
-			data: data,
-			dataType: 'json',
-			success: function(resp) {
-				if (resp && resp.success && Array.isArray(resp.images) && resp.images.length > 0) {
-					let html = '';
-					resp.images.forEach(function(img) {
-						html += `
+		function updateSelectedFromPropositions() {
+			let selected = [];
+			$('.img-proposition.selected').each(function() {
+				selected.push($(this).data('url'));
+			});
+			selectedImagesInput.val(selected.join(','));
+		}
+
+		$(document).on('click', '.img-proposition', function() {
+			$(this).toggleClass('selected');
+			updateSelectedFromPropositions();
+		});
+
+		const fetchImagesForUrl = debounce(function(url) {
+			if (!url) {
+				propositionContainer.empty();
+				propositionCard.hide();
+				selectedImagesInput.val('');
+				return;
+			}
+			let data = {
+				url: url
+			};
+			if (csrfName && csrfHash) data[csrfName] = csrfHash;
+
+			const loader = '<div class="col-12 text-center"><div class="loading-spinner"></div><p class="mt-2">Chargement des images...</p></div>';;
+			propositionContainer.html(loader);
+			propositionCard.show();
+
+			$.ajax({
+				url: fetchImagesUrl,
+				type: 'POST',
+				data: data,
+				dataType: 'json',
+				success: function(resp) {
+					if (resp && resp.success && Array.isArray(resp.images) && resp.images.length > 0) {
+						let html = '';
+						resp.images.forEach(function(img) {
+							html += `
 							<div class="col-auto px-2 mb-3">
 								<img src="${img}" alt="Image site client"
 									width="120"
@@ -621,87 +661,87 @@ $(document).ready(function() {
 									data-url="${img}"
 									style="object-fit: cover; border-radius: 4px;">
 							</div>`;
-					});
-					propositionContainer.html(html);
-					selectedImagesInput.val(resp.images.join(','));
-					imagePreviewContainer.empty();
-					resp.images.forEach(function(src){
-						imagePreviewContainer.append(createImageItem(src));
-					});
-				} else {
-					propositionContainer.html('<div class="col-12 text-center text-muted">Aucune image trouvée</div>');
-					selectedImagesInput.val('');
+						});
+						propositionContainer.html(html);
+						selectedImagesInput.val(resp.images.join(','));
+						imagePreviewContainer.empty();
+						resp.images.forEach(function(src) {
+							imagePreviewContainer.append(createImageItem(src));
+						});
+					} else {
+						propositionContainer.html('<div class="col-12 text-center text-muted">Aucune image trouvée</div>');
+						selectedImagesInput.val('');
+					}
+				},
+				error: function() {
+					propositionContainer.html('<div class="col-12 text-center text-danger">Erreur lors du chargement</div>');
 				}
-			},
-			error: function() {
-				propositionContainer.html('<div class="col-12 text-center text-danger">Erreur lors du chargement</div>');
+			});
+		}, 550);
+
+		$('#url_campagne').on('input paste change', function() {
+			const url = $(this).val().trim();
+			if (url.length === 0) {
+				propositionContainer.empty();
+				propositionCard.hide();
+				selectedImagesInput.val('');
+				return;
 			}
+			fetchImagesForUrl(url);
 		});
-	}, 550);
 
-	$('#url_campagne').on('input paste change', function() {
-		const url = $(this).val().trim();
-		if (url.length === 0) {
-			propositionContainer.empty();
-			propositionCard.hide();
-			selectedImagesInput.val('');
-			return;
-		}
-		fetchImagesForUrl(url);
-	});
-
-	imagePreviewContainer.on('click', '.remove-image-btn', function() {
-		$(this).closest('.image-item').remove();
-	});
-
-	$('#addImageUrlBtn').on('click', function() {
-		const url = $('#imageUrlInput').val().trim();
-		if (!url) return;
-		imagePreviewContainer.append(createImageItem(url));
-		$('#imageUrlInput').val('');
-	});
-
-	$('#imageUpload').on('change', function(event) {
-		const files = event.target.files;
-		for (let file of files) {
-			const reader = new FileReader();
-			reader.onload = function(e) {
-				imagePreviewContainer.append(createImageItem(e.target.result));
-			};
-			reader.readAsDataURL(file);
-		}
-		$(this).val('');
-	});
-
-	$('#saveImagesBtn').on('click', function() {
-		const images = [];
-		imagePreviewContainer.find('img').each(function() {
-			images.push($(this).attr('src'));
+		imagePreviewContainer.on('click', '.remove-image-btn', function() {
+			$(this).closest('.image-item').remove();
 		});
-		selectedImagesInput.val(images.join(','));
-		updatePropositionImages(images);
-		$('#modalGestionImages').modal('hide');
-	});
 
-	function createImageItem(src) {
-		return `
+		$('#addImageUrlBtn').on('click', function() {
+			const url = $('#imageUrlInput').val().trim();
+			if (!url) return;
+			imagePreviewContainer.append(createImageItem(url));
+			$('#imageUrlInput').val('');
+		});
+
+		$('#imageUpload').on('change', function(event) {
+			const files = event.target.files;
+			for (let file of files) {
+				const reader = new FileReader();
+				reader.onload = function(e) {
+					imagePreviewContainer.append(createImageItem(e.target.result));
+				};
+				reader.readAsDataURL(file);
+			}
+			$(this).val('');
+		});
+
+		$('#saveImagesBtn').on('click', function() {
+			const images = [];
+			imagePreviewContainer.find('img').each(function() {
+				images.push($(this).attr('src'));
+			});
+			selectedImagesInput.val(images.join(','));
+			updatePropositionImages(images);
+			$('#modalGestionImages').modal('hide');
+		});
+
+		function createImageItem(src) {
+			return `
 			<div class="position-relative m-2 image-item">
 				<img src="${src}" width="120" height="120" class="rounded border" style="object-fit:cover;">
 				<button type="button" class="btn btn-sm btn-danger position-absolute remove-image-btn" style="top: 2px; right: 2px;">&times;</button>
 			</div>`;
-	}
-
-	function updatePropositionImages(images) {
-		propositionContainer.empty();
-		if (!Array.isArray(images) || images.length === 0) {
-			propositionCard.hide();
-			selectedImagesInput.val('');
-			return;
 		}
-		propositionCard.show();
-		let html = '';
-		images.forEach(function(src) {
-			html += `
+
+		function updatePropositionImages(images) {
+			propositionContainer.empty();
+			if (!Array.isArray(images) || images.length === 0) {
+				propositionCard.hide();
+				selectedImagesInput.val('');
+				return;
+			}
+			propositionCard.show();
+			let html = '';
+			images.forEach(function(src) {
+				html += `
 				<div class="col-auto px-2 mb-3">
 					<img src="${src}" alt="Image site client"
 						width="120"
@@ -709,9 +749,9 @@ $(document).ready(function() {
 						data-url="${src}"
 						style="object-fit: cover; border-radius: 4px;">
 				</div>`;
-		});
-		propositionContainer.html(html);
-	}
-});
+			});
+			propositionContainer.html(html);
+		}
+	});
 </script>
 <?php end_section() ?>
