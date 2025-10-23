@@ -229,7 +229,6 @@ $images_site = isset($images_site) && is_array($images_site) ? $images_site : []
 							</select>
 						</div>
 
-<<<<<<< HEAD
 					<div class="form-group">
 						<label for="age-range">Sexe</label>
 						<select name="sexe" id="age-range" class="form-control">
@@ -244,12 +243,6 @@ $images_site = isset($images_site) && is_array($images_site) ? $images_site : []
                         <label>Diffusion</label>
                         <input type="text" name="date_campagne" class="form-control" value="7J/7, 24h/24">
                     </div>
-=======
-						<div class="form-group">
-							<label>Diffusion</label>
-							<input type="text" name="date_campagne" class="form-control" value="7J/7, 24h/24">
-						</div>
->>>>>>> 5a1533e203c229b811106e20f2d8b1625abbf05e
 
 						<div class="form-group">
 							<label for="">Audiences</label>
@@ -280,40 +273,6 @@ $images_site = isset($images_site) && is_array($images_site) ? $images_site : []
 							</div>
 						</div>
 
-<<<<<<< HEAD
-					<div class="form-group">
-						<label for="appareil_search">Appareil</label>
-						<select name="appareil" id="appareil_search" class="form-control">
-							<option value="Ordinateur / Mobile / Tablette">Ordinateur / Mobile / Tablette</option>
-							<option value="Ordinateur">Ordinateur</option>
-							<option value="Mobile">Mobile</option>
-							<option value="Tablette">Tablette</option>
-							<option value="Ordinateur / Mobile">Ordinateur / Mobile</option>
-							<option value="Ordinateur / Tablette">Ordinateur / Tablette</option>
-							<option value="Mobile / Tablette">Mobile / Tablette</option>
-						</select>
-					</div>
-					<div class="form-group">
-                        <label>Promotions</label>
-                        <input type="text" name="promotions" class="form-control" placeholder="Ajouter des promotions">
-                    </div>
-					<div class="form-group">
-                        <label>Prix</label>
-                        <input type="text" name="prix" class="form-control" placeholder="Ajouter des prix">
-                    </div>
-					<div class="form-group">
-                        <label>Appels</label>
-                        <input type="text" name="téléphone" class="form-control" placeholder="Ajouter un numéro de téléphone">
-                    </div>			
-					<ul class="nav nav-tabs mb-3">
-						<li class="nav-item">
-							<a class="nav-link py-3 active">Propositions de mots-clés à exclure</a>
-							<button 
-								type="button" 
-								class="btn btn-outline-dark mb-3 generate-keywords-btn" 
-								data-idclient="<?= $idclients ?>" >
-								<i class="fa fa-images"></i> Générer avec chatgpt
-=======
 						<div class="form-group">
 							<label for="appareil_search">Appareil</label>
 							<select name="appareil" id="appareil_search" class="form-control">
@@ -344,6 +303,12 @@ $images_site = isset($images_site) && is_array($images_site) ? $images_site : []
 							<label>Propositions de mots-clés à exclure</label>
 							<textarea class="form-control" rows="15" name="Mots_cle_exclus"><?= isset($mots_exclus) ? htmlentities($mots_exclus) : '' ?></textarea>
 						</div>
+						
+						<div class="form-group">
+							<label>Média : </label>
+							Lien Youtube
+							<input type="text" name="Youtube" class="form-control" placeholder="Entrer lien youtube">
+                    	</div>
 
 						<ul class="nav nav-tabs mb-3">
 							<li class="nav-item">
@@ -351,7 +316,6 @@ $images_site = isset($images_site) && is_array($images_site) ? $images_site : []
 							</li>
 							<button type="button" class="btn btn-outline-dark mb-3" data-toggle="modal" data-target="#modalGestionImages">
 								<i class="fa fa-images"></i> Gérer les images
->>>>>>> 5a1533e203c229b811106e20f2d8b1625abbf05e
 							</button>
 						</ul>
 

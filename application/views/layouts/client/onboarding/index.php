@@ -122,7 +122,6 @@
 		cursor: not-allowed;
 	}
 
-<<<<<<< HEAD
 .toggle input:disabled + .switch .knob {
   background-color: #e0e0e0;
 }
@@ -154,11 +153,6 @@
 	background-color: #3162a3ff;
 	color: white;
 }
-=======
-	.toggle input:disabled+.switch .knob {
-		background-color: #e0e0e0;
-	}
->>>>>>> 5a1533e203c229b811106e20f2d8b1625abbf05e
 
 	.conversion-container {
 		cursor: pointer;
@@ -370,7 +364,6 @@
 					<?= $d['nom_client'] ?>
 				</h1>
 
-<<<<<<< HEAD
 					<div class="row mb-3">
 						<div class="col">
 							<div class="card">
@@ -438,109 +431,17 @@
 											<img src="<?= base_url('assets/images/' . $d['am_photo_user']) ?>" width="24" height="24">
 										</span>
 									</div>
-									<a href="<?= base_url('Client/onboarding/' . $d['idclients']) ?>" class="btn btn-outline-dark btn-block">Voir annonce</a>
+									<a href="<?= base_url('Client/annonces/' . $d['idclients']) ?>" class="btn btn-outline-dark btn-block">Voir annonce</a>
 									<a href="<?= base_url('Validation/validation_structure/' . $d['idclients']) ?>" class="btn btn-outline-dark btn-block" target="_blank" >Validation client</a>
-									<a href="<?= base_url('Client/onboarding/' . $d['idclients']) ?>" class="btn btn-outline-dark btn-block">Inventaire</a>
-									<?php //echo anchor('Validation/validation_structure/' . $C->idclients, $C->validation_technique, ['style' => 'color: white', 'data-edit' => $C->idclients, 'target' => '_blank']); ?>		
-								</div>
-							</div>
-						</div>
-					</div>
-					<h1 class="display-1 text-center mt-4" style="font-size: 42px;">
-						Brief
-					</h1>
-					<div class="d-flex justify-content-between">
-						<ul class="nav nav-tabs mb-3" style="margin-top: -15px;">
-							<li class="nav-item">
-								<a class="nav-link py-3 active" type="button">
-									Brief client
-								</a>
-							</li>
-						</ul>
-						<div class="d-inline">
-							<?php if (!empty($d['information_client'])): ?>
-								<button class="btn btn-dark" data-toggle="modal" data-target="#briefModal">
-									<img src="<?= base_url('assets/images/icons/figma/icon-plus.svg') ?>" alt="">
-									Modifier Brief
-								</button>
-							<?php else: ?>
-								<button class="btn btn-dark" data-toggle="modal" data-target="#briefModal">
-									<img src="<?= base_url('assets/images/icons/figma/icon-plus.svg') ?>" alt="">
-									Ajouter Brief
-								</button>
-							<?php endif; ?>
-						</div>
-					</div>
-					<?php if (!empty($d['information_client'])): ?>
-=======
-				<div class="row mb-3">
-					<div class="col">
->>>>>>> 5a1533e203c229b811106e20f2d8b1625abbf05e
-						<div class="card">
-							<div class="card-body">
-								<ul class="nav nav-tabs mb-3" style="margin-top: -15px;">
-									<li class="nav-item">
-										<a class="nav-link py-3 active" type="button">
-											Société
-										</a>
-									</li>
-								</ul>
-
-								<h6 class="text-muted font-weight-normal" style="font-size: 14px;">
-									<?= nl2br($d['info_base_client']) ?></br>
-								</h6>
-							</div>
-						</div>
-					</div>
-
-					<div class="col-auto">
-						<div class="card" style="width: 23rem;">
-							<div class="card-body">
-								<div class="d-flex justify-content-between align-items-center">
-									<button class="btn btn-dark py-3 px-5" data-toggle="modal" data-target="#budgetModal">
-										<b><?= number_format($d['budget'], 0, '', ' ') ?> €</b>
-									</button>
-									<button type="button" class="btn" data-toggle="modal" data-target="#clientModal" data-id="<?= $d['idclients'] ?>">
-										<img src="<?= base_url('assets/images/ico/Eye.png') ?>" alt="Voir les détails">
-									</button>
-									<a href="<?= base_url('Client/inventaire_pmax/' .  htmlspecialchars($d['idclients'])) ?>" style="display: flex; align-items: center; text-decoration: none; color: inherit;">
-										Inventaire
-									</a>
-								</div>
-
-								<br><br>
-								<div class="d-flex justify-content-start mb-3" style="font-size: 15px;">
-									<i class="fa fa-check-square mr-2" style="color: Black; font-size: 18px;"></i>
-									<span class="mr-2">Date d'anniversaire : <?= $d['mis_en_place_paiement'] ?></span>
-								</div>
-								<div class="d-flex justify-content-start mb-3" style="font-size: 15px;">
-									<i class="fa fa-check-square mr-2" style="color: Black; font-size: 18px;"></i>
-									<span class="mr-2">Date de mise en ligne : <?= $d['annonce'] ?></span>
-
-								</div>
-								<div class="d-flex justify-content-start mb-3" style="font-size: 15px;">
-									<i class="fa fa-check-square mr-2" style="color: Black; font-size: 18px;"></i>
-									<span class="mr-2">Commerciale</span>
-									<span class="mr-2">
-										<img src="<?= base_url('assets/images/' . $d['tech_photo_user']) ?>" width="24" height="24">
-									</span>
-								</div>
-								<div class="d-flex justify-content-start mb-4" style="font-size: 15px;">
-									<i class="fa fa-check-square mr-2" style="color: Black; font-size: 18px;"></i>
-									<span class="mr-2">Account Manager</span>
-									<span class="mr-2">
-										<img src="<?= base_url('assets/images/' . $d['am_photo_user']) ?>" width="24" height="24">
-									</span>
-								</div>
-								<a href="<?= base_url('Client/onboarding/' . $d['idclients']) ?>" class="btn btn-outline-dark btn-block">Voir annonce</a>
-								<a href="<?= base_url('Client/onboarding/' . $d['idclients']) ?>" class="btn btn-outline-dark btn-block">Validation client</a>
-								<button type="button" class="btn btn-outline-dark btn-block" data-toggle="modal" data-target="#inventaireModal">
+									<button type="button" class="btn btn-outline-dark btn-block" data-toggle="modal" data-target="#inventaireModal">
 									Inventaire
-								</button>
+									</button>
+								<?php //echo anchor('Validation/validation_structure/' . $C->idclients, $C->validation_technique, ['style' => 'color: white', 'data-edit' => $C->idclients, 'target' => '_blank']); ?>		
+								</div>
 							</div>
 						</div>
 					</div>
-				</div>
+					
 				<h1 class="display-1 text-center mt-4" style="font-size: 42px;">
 					Brief
 				</h1>
@@ -776,22 +677,6 @@
 										</td>
 									</tr>
 
-<<<<<<< HEAD
-										<!-- child row -->
-										<tr id="child<?= $campagne['idcampagne'] ?>" class="collapse border-0">
-											<td colspan="7" class="border-0 p-0 pl-5">
-												<?php if (!empty($campagne['groupes_annonces'])): ?>
-													<table class="table table-wrapper mb-0">
-														<tbody>
-															<?php foreach ($campagne['groupes_annonces'] as $groupe): ?>
-																<tr>
-																	<td>
-																		<strong><?= htmlspecialchars($groupe['nom_groupe']) ?></strong>
-																	</td>
-																	<td style="width: 500px;">
-																		<?= htmlspecialchars($groupe['contexte_groupes_annonces']) ?>
-																	</td>
-=======
 									<!-- child row -->
 									<tr id="child<?= $campagne['idcampagne'] ?>" class="collapse border-0">
 										<td colspan="7" class="border-0 p-0 pl-5">
@@ -806,7 +691,6 @@
 																<td>
 																	<?= htmlspecialchars($groupe['contexte_groupes_annonces']) ?>
 																</td>
->>>>>>> 5a1533e203c229b811106e20f2d8b1625abbf05e
 																<td>
 																	<?php
 																	$mots = array_filter(array_map('trim', explode("\n", $groupe['mot_cle'])));
@@ -823,7 +707,6 @@
 																	?>
 																</td>
 
-<<<<<<< HEAD
 																	<td>
 																		<?php if ($groupe['statut'] == 1): ?>
 																			<img src="<?= base_url('assets/images/icons/figma/CheckCircle.png') ?>" alt="Actif">
@@ -849,34 +732,7 @@
 								<?php else: ?>
 									<tr>
 										<td colspan="7" class="text-center text-muted">Aucune campagne trouvée.</td>
-=======
-																<td>
-																	<?php if ($groupe['statut'] == 1): ?>
-																		<img src="<?= base_url('assets/images/icons/figma/CheckCircle.png') ?>" alt="Actif">
-																	<?php else: ?>
-																		<span class="text-muted">Inactif</span>
-																	<?php endif; ?>
-																</td>
-																<td>
-																	<a href="<?= base_url('Client/insertgroupeannonce/' . $groupe['idgroupe_annonce']) ?>" class="btn btn-dark btn-sm">
-																		Valider
-																	</a>
-																</td>
-															</tr>
-														<?php endforeach; ?>
-													</tbody>
-												</table>
-											<?php else: ?>
-												<em>Aucun groupe</em>
-											<?php endif; ?>
-										</td>
->>>>>>> 5a1533e203c229b811106e20f2d8b1625abbf05e
 									</tr>
-								<?php endforeach; ?>
-							<?php else: ?>
-								<tr>
-									<td colspan="7" class="text-center text-muted">Aucune campagne trouvée.</td>
-								</tr>
 							<?php endif; ?>
 						</tbody>
 					</table>
@@ -955,8 +811,10 @@
 	<?php $this->load->view('layouts/client/onboarding/modal/client') ?>
 	<?php $this->load->view('layouts/client/onboarding/modal/inventaire_pmax') ?>
 
+
 <?php endforeach; ?>
 <?php end_section(); ?>
+
 
 <?php start_section('script') ?>
 <script>

@@ -782,6 +782,12 @@ public function insert_campagne_am(
 		return $this->db->update('groupe_annonce', $data);
 	}
 
+	public function insert_gp_pmax($data_groups)
+	{
+		$this->load->database();
+		$this->db->insert('groupe_annonce', $data_groups);
+		return $this->db->insert_id();
+	}
 	public function insert_campagne($data)
 	{
 		$this->db->insert('campagne', $data);

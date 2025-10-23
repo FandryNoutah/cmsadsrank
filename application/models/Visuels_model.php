@@ -13,6 +13,22 @@ class Visuels_model extends CI_Model {
 	protected $visuels_formats_images = "hm_visuels_formats_images";
     protected $_database;
     public $table_fields = array();
+// Récupérer toutes les campagnes d’un client
+public function get_campagnes_by_client($idclient)
+{
+    $this->db->where('idclients', $idclient);
+    $this->db->order_by('date_campagne', 'DESC');
+    return $this->db->get('campagne')->result_array(); // <-- result_array() ici
+}
+
+public function get_groupes_by_campagne($idcampagne)
+{
+    $this->db->where('idcampagne', $idcampagne);
+    $this->db->order_by('idgroupe_annonce', 'ASC');
+    return $this->db->get('groupe_annonce')->result_array(); // <-- result_array()
+}
+
+
 
 	public function ajout_brief($id, $information_client)
 		{
@@ -511,6 +527,15 @@ public function get_gtm($idclients) {
 				FROM groupe_annonce ga 
 				JOIN campagne c ON ga.idcampagne = c.idcampagne 
 				WHERE ga.idclients = '". $idclients ."'";
+		$result = $this->db->query($sql);
+		$retour = $result->result_array();
+		$this->db->close();
+		return $retour;	
+	}
+	public function get_mot_clé($idclients) {
+		$sql = "SELECT *
+				FROM campagne
+				WHERE idclients = '". $idclients ."'";
 		$result = $this->db->query($sql);
 		$retour = $result->result_array();
 		$this->db->close();

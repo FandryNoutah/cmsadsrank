@@ -36,7 +36,6 @@ class Gtm_model extends CI_Model
 		return $this->db->where('id_gtm', $id)
 						->update('gtm', $data);
 	}
-<<<<<<< HEAD
 	public function update_implementation($id, $data)
 	{
 		$this->load->database();
@@ -66,11 +65,6 @@ class Gtm_model extends CI_Model
 }
 
 
-=======
-	public function insert_optimisation($data_optimisation) {
-        return $this->db->insert('optimisation_gtm', $data_optimisation); 
-    }
->>>>>>> 5a1533e203c229b811106e20f2d8b1625abbf05e
 
 
 }
