@@ -81,13 +81,13 @@
 
 <ul class="nav nav-tabs mr-auto ml-5" role="tablist">
 	<li class="nav-item">
-		<a class="nav-link py-3 active" type="button" id="list_tab" data-toggle="tab" data-target="#list" type="button" role="tab" aria-controls="list" aria-selected="true">
+		<a class="nav-link py-3 active" type="button" id="list_tab" data-toggle="tab" data-target="#list" role="tab" aria-controls="list" aria-selected="true">
 			<img src="<?= base_url('assets/images/icons/figma/icon-list.svg') ?>" alt="">
 			List
 		</a>
 	</li>
 	<li class="nav-item">
-		<a class="nav-link py-3" type="button" id="kanban_tab" data-toggle="tab" data-target="#kanban" type="button" role="tab" aria-controls="kanban" aria-selected="false">
+		<a class="nav-link py-3" type="button" id="kanban_tab" data-toggle="tab" data-target="#kanban" role="tab" aria-controls="kanban" aria-selected="false">
 			<img src="<?= base_url('assets/images/icons/figma/icon-kanban.svg') ?>" alt="">
 			Kanban
 		</a>
