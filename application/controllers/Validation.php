@@ -656,6 +656,7 @@ endif;
 	}
 
 	public function editgroupelocal($id) {
+		$id = intval($id);
 		$this->data["campagne"] = $this->visuels_model->getCampagneById($id);
 		$this->data["campagnes"] = $this->visuels_model->getcampagne_Groupe_annonce_briefById($id);
 		$ko = $this->visuels_model->getClientById($id);
@@ -667,6 +668,8 @@ endif;
 	}
 
 	public function editgroupepmax($id) {
+		$id = intval($id);
+		
 		$this->data["campagne"] = $this->visuels_model->getCampagneById($id);
 		$this->data["campagnes"] = $this->visuels_model->getcampagne_Groupe_annonce_briefById($id);
 		$ko = $this->visuels_model->getClientById($id);

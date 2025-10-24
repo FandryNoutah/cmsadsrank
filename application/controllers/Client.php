@@ -214,7 +214,7 @@ public function save_images_campagnes()
 			CURLOPT_RETURNTRANSFER => true,
 			CURLOPT_HTTPHEADER => [
 				'Content-Type: application/json',
-				'Authorization: Bearer ' . $api_key
+				'Authorization: Bearer ' . getenv('CHAT_GPT_API_KEY')
 			],
 			CURLOPT_POST => true,
 			CURLOPT_POSTFIELDS => json_encode([
@@ -1660,7 +1660,7 @@ public function save_images_campagnes()
 
 		$headers = [
 			"Content-Type: application/json",
-			"Authorization: Bearer " . $api_key
+			"Authorization: Bearer " . getenv('CHAT_GPT_API_KEY')
 		];
 
 		$ch = curl_init();
@@ -2014,7 +2014,7 @@ public function save_images_campagnes()
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 		curl_setopt($ch, CURLOPT_HTTPHEADER, [
 			'Content-Type: application/json',
-			'Authorization: Bearer ' . $api_key
+			'Authorization: Bearer ' . getenv('CHAT_GPT_API_KEY')
 		]);
 		curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
 
@@ -2071,7 +2071,7 @@ public function save_images_campagnes()
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 		curl_setopt($ch, CURLOPT_HTTPHEADER, [
 			'Content-Type: application/json',
-			'Authorization: Bearer ' . $api_key
+			'Authorization: Bearer ' . getenv('CHAT_GPT_API_KEY')
 		]);
 		curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
 
