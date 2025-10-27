@@ -129,7 +129,7 @@ class Client extends MY_Controller
 		$this->data['ads_titres'] = $adsContent['titres'];
 		$this->data['ads_titres_longs'] = $adsContent['titres_longs'];
 		$this->data['ads_descriptions'] = $adsContent['descriptions'];
-		$this->data['images_site'] = $this->Image_model->get_images_by_campagne($idcampagne);	
+		$this->data['images_site'] = $this->Image_model->get_images_by_campagne($idcampagne);
 		if ($type_campagne == 1) {
 			$this->content = "layouts/client/onboarding/annonce_search";
 		}
@@ -137,55 +137,55 @@ class Client extends MY_Controller
 			$this->content = "layouts/client/onboarding/annonce_pmax";
 		}
 		if ($type_campagne == 2) {
-			 
+
 			$this->content = "layouts/client/onboarding/annonce_local";
 		}
 		$this->layout();
 	}
 	public function fetch_images_campagnes()
-{
-    $idcampagne = $this->input->post('idcampagne');
-    if (empty($idcampagne)) {
-        echo json_encode(['success' => false, 'message' => 'ID campagne manquant']);
-        return;
-    }
+	{
+		$idcampagne = $this->input->post('idcampagne');
+		if (empty($idcampagne)) {
+			echo json_encode(['success' => false, 'message' => 'ID campagne manquant']);
+			return;
+		}
 
-    $this->load->model('Image_model');
-    $images = $this->Image_model->get_images_by_campagnes($idcampagne);
+		$this->load->model('Image_model');
+		$images = $this->Image_model->get_images_by_campagnes($idcampagne);
 
-    $urls = [];
-    foreach ($images as $img) {
-        $urls[] = $img->image_url;
-    }
+		$urls = [];
+		foreach ($images as $img) {
+			$urls[] = $img->image_url;
+		}
 
-    echo json_encode(['success' => true, 'images' => $urls]);
-}
+		echo json_encode(['success' => true, 'images' => $urls]);
+	}
 
-public function save_images_campagnes()
-{
-    $idcampagne = $this->input->post('idcampagne');
-    $images = $this->input->post('images'); // array d'URLs
-    $idclient = $this->input->post('idclient'); // optionnel
+	public function save_images_campagnes()
+	{
+		$idcampagne = $this->input->post('idcampagne');
+		$images = $this->input->post('images'); // array d'URLs
+		$idclient = $this->input->post('idclient'); // optionnel
 
-    if (empty($idcampagne)) {
-        echo json_encode(['success' => false, 'message' => 'ID campagne manquant']);
-        return;
-    }
-	
-    $this->load->model('Image_model');
+		if (empty($idcampagne)) {
+			echo json_encode(['success' => false, 'message' => 'ID campagne manquant']);
+			return;
+		}
 
-    // Nettoie les anciennes images qui ne sont plus dans la liste
-    $this->Image_model->delete_images_not_in($idcampagne, $images);
+		$this->load->model('Image_model');
 
-    // Ajoute les nouvelles
-    if (!empty($images)) {
-        foreach ($images as $url) {
-            $this->Image_model->insert_or_ignore($idcampagne, $url, $idclient);
-        }
-    }
+		// Nettoie les anciennes images qui ne sont plus dans la liste
+		$this->Image_model->delete_images_not_in($idcampagne, $images);
 
-    echo json_encode(['success' => true]);
-}
+		// Ajoute les nouvelles
+		if (!empty($images)) {
+			foreach ($images as $url) {
+				$this->Image_model->insert_or_ignore($idcampagne, $url, $idclient);
+			}
+		}
+
+		echo json_encode(['success' => true]);
+	}
 
 
 	private function generateGoogleAdsCopy($info_base, $info_client, $site)
@@ -886,7 +886,7 @@ public function save_images_campagnes()
 			3	=>	"PERFORMANCE MAX"
 		];
 		$this->data['idclients'] = $idclients;
-		$d = $this->data["donnees"] = $this->visuels_model->getDonneeById($idclients);
+		$this->data["donnees"] = $this->visuels_model->getDonneeById($idclients);
 		$campagnes = $this->data["campagnes"] = $this->visuels_model->getCampagneByIdclient($idclients);
 		$campagnes = $this->visuels_model->getCampagneByIdclient($idclients);
 
@@ -912,10 +912,12 @@ public function save_images_campagnes()
 			$campagne['groupes_annonces'] = isset($groupes_par_campagne[$idcampagne]) ? $groupes_par_campagne[$idcampagne] : [];
 		}
 		unset($campagne);
-		// dd($donne_valider);
+
+		// dd($groupe_valider);
 		$this->data['donne_valider'] = $donne_valider;
+		$this->data['groupe_valider'] = $groupe_valider;
 		$this->data['procedure_gtm'] = $this->Task_model->get_procedure_gtm($idclients);
-		
+
 		$this->content = "layouts/client/onboarding/index.php";
 		$this->layout();
 	}
@@ -980,10 +982,10 @@ public function save_images_campagnes()
 		$url = $this->input->post('url');
 		$images = [];
 
-    if (!empty($url)) {
-        // Utilise ta fonction existante pour récupérer les images
-        $images = $this->fetch_all_images_from_site($url, 15);
-    }
+		if (!empty($url)) {
+			// Utilise ta fonction existante pour récupérer les images
+			$images = $this->fetch_all_images_from_site($url, 15);
+		}
 
 		echo json_encode([
 			'success' => !empty($images),
@@ -1113,38 +1115,38 @@ public function save_images_campagnes()
 				$mots_cle              	= $this->input->post('Mot_cle'); // OK
 				$Mots_cle_exclus       	= $this->input->post('Mots_cle_exclus');
 				$selected_images		= $this->input->post('selected_images');
-				$sexe			      	= $this->input->post('sexe'); 
-				$promotions            	= $this->input->post('promotions'); 
+				$sexe			      	= $this->input->post('sexe');
+				$promotions            	= $this->input->post('promotions');
 				$prix			       	= $this->input->post('prix');
 				$téléphone				= $this->input->post('téléphone');
-			
+
 
 				// Vérification cohérence
 				if (count($groupes_annonces) == count($contexte_groupes) && count($groupes_annonces) == count($mots_cle)) {
 
 					if ($id_campagne) {
 
-					
-					$id_campagne = $this->Donne_modele->insert_campagne_am(
-					$idclients,
-					$camp_type,
-					$nom_campagne,
-					$information_campagne,
-					$cible,
-					$ages,
-					$zones,
-					$repartition_budget,
-					$date_campagne,
-					$appareil,
-					$objectif,
-					$url_site,
-					$mots_cle,
-					$Mots_cle_exclus,
-					$sexe,
-					$promotions,
-					$prix,
-					$téléphone
-				);
+
+						$id_campagne = $this->Donne_modele->insert_campagne_am(
+							$idclients,
+							$camp_type,
+							$nom_campagne,
+							$information_campagne,
+							$cible,
+							$ages,
+							$zones,
+							$repartition_budget,
+							$date_campagne,
+							$appareil,
+							$objectif,
+							$url_site,
+							$mots_cle,
+							$Mots_cle_exclus,
+							$sexe,
+							$promotions,
+							$prix,
+							$téléphone
+						);
 
 
 						/** Supprimer d'abord tous les groupes */
@@ -1154,26 +1156,26 @@ public function save_images_campagnes()
 						}
 					} else {
 
-					$id_campagne = $this->Donne_modele->insert_campagne_am(
-					$idclients,
-					$camp_type,
-					$nom_campagne,
-					$information_campagne,
-					$cible,
-					$ages,
-					$zones,
-					$repartition_budget,
-					$date_campagne,
-					$appareil,
-					$objectif,
-					$url_site,
-					$mots_cle,
-					$Mots_cle_exclus,
-					$sexe,
-					$promotions,
-					$prix,
-					$téléphone
-				);
+						$id_campagne = $this->Donne_modele->insert_campagne_am(
+							$idclients,
+							$camp_type,
+							$nom_campagne,
+							$information_campagne,
+							$cible,
+							$ages,
+							$zones,
+							$repartition_budget,
+							$date_campagne,
+							$appareil,
+							$objectif,
+							$url_site,
+							$mots_cle,
+							$Mots_cle_exclus,
+							$sexe,
+							$promotions,
+							$prix,
+							$téléphone
+						);
 					}
 
 					// Data groupes
@@ -1222,11 +1224,11 @@ public function save_images_campagnes()
 				$contexte_groupes      = $this->input->post('contexte_groupe_annonce'); // not in view
 				$mots_cle              = $this->input->post('Mot_cle'); // OK
 				$Mots_cle_exclus       = $this->input->post('Mots_cle_exclus');
-				$sexe			      	= $this->input->post('sexe'); 
-				$promotions            	= $this->input->post('promotions'); 
+				$sexe			      	= $this->input->post('sexe');
+				$promotions            	= $this->input->post('promotions');
 				$prix			       	= $this->input->post('prix');
 				$téléphone				= $this->input->post('téléphone');
-				$magasin            	= $this->input->post('magasin'); 
+				$magasin            	= $this->input->post('magasin');
 				$services			       	= $this->input->post('services');
 				$produit				= $this->input->post('produit');
 				$youtube				= $this->input->post('Youtube');
@@ -1253,17 +1255,17 @@ public function save_images_campagnes()
 
 				// Insert groupe pmax
 				$this->Donne_modele->insert_gppmax($idclients, $nom_groupe_pmax, $camp_type, $url_site, $Mots_cle_potentiels, $idcampagne, $contextes_client);
-				
-						$data_groups = [
-						'nom_groupe'         	=>	$groupes_annonces,
-						'contexte_groupes_annonces' 	=>	$contexte_groupes,
-						'mot_cle'                	=>	$mots_cle,
-						'url_groupe_annonce'     	=>	$url_site,
-						'idcampagne'             	=>	$idcampagne,
-						'idclients'               	=>	$idclients,
-						'type_campagnes'          	=>	$camp_type
-					];
-				$this->Donne_modele->insert_gp_pmax($data_groups);	
+
+				$data_groups = [
+					'nom_groupe'         	=>	$groupes_annonces,
+					'contexte_groupes_annonces' 	=>	$contexte_groupes,
+					'mot_cle'                	=>	$mots_cle,
+					'url_groupe_annonce'     	=>	$url_site,
+					'idcampagne'             	=>	$idcampagne,
+					'idclients'               	=>	$idclients,
+					'type_campagnes'          	=>	$camp_type
+				];
+				$this->Donne_modele->insert_gp_pmax($data_groups);
 				break;
 
 			case 3:
@@ -1287,8 +1289,8 @@ public function save_images_campagnes()
 				$contexte_groupes      = $this->input->post('contexte_groupe_annonce'); // not in view
 				$mots_cle              = $this->input->post('Mot_cle'); // OK
 				$Mots_cle_exclus       = $this->input->post('Mots_cle_exclus');
-				$sexe			      	= $this->input->post('sexe'); 
-				$promotions            	= $this->input->post('promotions'); 
+				$sexe			      	= $this->input->post('sexe');
+				$promotions            	= $this->input->post('promotions');
 				$prix			       	= $this->input->post('prix');
 				$téléphone				= $this->input->post('téléphone');
 				$idcampagne = $this->Donne_modele->insert_campagne_am(
@@ -1315,15 +1317,15 @@ public function save_images_campagnes()
 				// Insert groupe pmax
 				$this->Donne_modele->insert_gppmax($idclients, $nom_groupe_pmax, $camp_type, $url_site, $Mots_cle_potentiels, $idcampagne, $contextes_client);
 				$this->Donne_modele->update_type_clients($choix, $idclients);
-					$data_groups = [
-						'nom_groupe'         	=>	$groupes_annonces,
-						'contexte_groupes_annonces' 	=>	$contexte_groupes,
-						'mot_cle'                	=>	$mots_cle,
-						'url_groupe_annonce'     	=>	$url_site,
-						'idcampagne'             	=>	$idcampagne,
-						'idclients'               	=>	$idclients,
-						'type_campagnes'          	=>	$camp_type
-					];
+				$data_groups = [
+					'nom_groupe'         	=>	$groupes_annonces,
+					'contexte_groupes_annonces' 	=>	$contexte_groupes,
+					'mot_cle'                	=>	$mots_cle,
+					'url_groupe_annonce'     	=>	$url_site,
+					'idcampagne'             	=>	$idcampagne,
+					'idclients'               	=>	$idclients,
+					'type_campagnes'          	=>	$camp_type
+				];
 				$this->Donne_modele->insert_gp_pmax($data_groups);
 				break;
 		}

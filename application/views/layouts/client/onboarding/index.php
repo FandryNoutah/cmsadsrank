@@ -122,37 +122,9 @@
 		cursor: not-allowed;
 	}
 
-.toggle input:disabled + .switch .knob {
-  background-color: #e0e0e0;
-}
-.conversion-container {
-  cursor: pointer;
-  transition: transform 0.2s;
-}
-.conversion-container:hover {
-  transform: scale(1.03);
-}
-.border-primary {
-  box-shadow: 0 0 10px rgba(0, 123, 255, 0.4);
-}
-.camp-type-container {
-  cursor: pointer;
-  transition: all 0.25s ease;
-}
-.camp-type-container:hover {
-  transform: scale(1.03);
-}
-.camp-type-container.border-dark {
-  box-shadow: 0 0 10px rgba(0,0,0,0.25);
-}
-.google_btn{
-	background-color: #1A73E8;
-	color: white;
-}
-.google_btn:hover {
-	background-color: #3162a3ff;
-	color: white;
-}
+	.toggle input:disabled+.switch .knob {
+		background-color: #e0e0e0;
+	}
 
 	.conversion-container {
 		cursor: pointer;
@@ -180,13 +152,56 @@
 		box-shadow: 0 0 10px rgba(0, 0, 0, 0.25);
 	}
 
-	/** INVENTORY MOCKUP STYLESHEET */
-	/* Container */
-	.pmax-mockups .mockup {
-		display: flex;
-		flex-direction: column;
-		align-items: center;
+	.google_btn {
+		background-color: #1A73E8;
+		color: white;
 	}
+
+	.google_btn:hover {
+		background-color: #3162a3ff;
+		color: white;
+	}
+
+	.conversion-container {
+		cursor: pointer;
+		transition: transform 0.2s;
+	}
+
+	.conversion-container:hover {
+		transform: scale(1.03);
+	}
+
+	.border-primary {
+		box-shadow: 0 0 10px rgba(0, 123, 255, 0.4);
+	}
+
+	.camp-type-container {
+		cursor: pointer;
+		transition: all 0.25s ease;
+	}
+
+	.camp-type-container:hover {
+		transform: scale(1.03);
+	}
+
+	.camp-type-container.border-dark {
+		box-shadow: 0 0 10px rgba(0, 0, 0, 0.25);
+	}
+
+	.thumb-box {
+		overflow: hidden;
+		position: relative;
+	}
+
+	.thumb-box img {
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+		object-position: center;
+		display: block;
+	}
+
+	/** INVENTORY MOCKUP STYLESHEET */
 
 	/* Icons & Labels */
 	.mockup-icon img {
@@ -204,146 +219,40 @@
 	/* Phone frame */
 	.phone-frame {
 		width: 250px;
-		height: 450px;
-		background: #fff;
+		height: 480px;
+		background: #f8f9fa;
 		border: 2px solid #ddd;
 		border-radius: 30px;
 		box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 		position: relative;
 		overflow: hidden;
+		display: flex;
+		flex-direction: column;
+		justify-content: flex-start;
 	}
 
+	/* Top notch (like a speaker line) */
 	.phone-frame::before {
 		content: "";
 		position: absolute;
-		top: 6px;
+		top: 8px;
 		left: 50%;
+		transform: translateX(-50%);
 		width: 40px;
 		height: 4px;
 		background: #ccc;
 		border-radius: 10px;
-		transform: translateX(-50%);
 	}
 
-	/* Screen area */
+	/* Inner screen area */
 	.screen {
+		flex: 1;
 		width: 100%;
 		height: 100%;
-		background: #f8f9fa;
-		padding: 25px 8px 8px 8px;
-	}
-
-	/* YouTube preview */
-	.youtube-preview .thumbnail {
-		width: 100%;
-		height: 160px;
-		background: #ddd url('https://placehold.co/300x160?text=Video+Thumbnail') center/cover;
-		border-radius: 8px;
-	}
-
-	.youtube-preview .video-info {
-		margin-top: 8px;
-	}
-
-	.youtube-preview .video-title {
-		font-weight: 600;
-		font-size: 13px;
-		color: #111;
-	}
-
-	.youtube-preview .video-desc {
-		font-size: 11px;
-		color: #666;
-	}
-
-	/* Gmail preview */
-	.gmail-preview .mail-header {
-		display: flex;
-		align-items: center;
-		margin-bottom: 8px;
-	}
-
-	.gmail-preview .avatar {
-		width: 30px;
-		height: 30px;
-		background: #ccc;
-		border-radius: 50%;
-		margin-right: 8px;
-	}
-
-	.gmail-preview .mail-title {
-		font-size: 13px;
-		font-weight: 600;
-	}
-
-	.gmail-preview .mail-desc {
-		font-size: 11px;
-		color: #666;
-	}
-
-	.gmail-preview .mail-image {
-		width: 100%;
-		height: 160px;
-		background: #ddd url('https://placehold.co/300x160?text=Ad+Image') center/cover;
-		border-radius: 8px;
-	}
-
-	/* Maps preview */
-	.maps-preview {
-		position: relative;
-		background: #e6f0ff;
-		border-radius: 8px;
-		height: 100%;
-	}
-
-	.maps-preview .map {
-		background: url('https://placehold.co/300x200?text=Map') center/cover;
-		height: 160px;
-		border-radius: 8px;
-	}
-
-	.maps-preview .pin {
-		position: absolute;
-		top: 70px;
-		left: 50%;
-		width: 20px;
-		height: 20px;
-		background: red;
-		border-radius: 50% 50% 50% 0;
-		transform: rotate(-45deg) translateX(-50%);
-		border: 2px solid white;
-	}
-
-	.maps-preview .maps-desc {
-		margin-top: 12px;
-		font-size: 12px;
-		color: #333;
-		text-align: center;
-	}
-
-	/* Search preview */
-	.search-preview .search-bar {
 		background: #fff;
-		border: 1px solid #ccc;
-		height: 24px;
-		border-radius: 20px;
-		margin-bottom: 8px;
-	}
-
-	.search-preview .result-link {
-		color: #006621;
-		font-size: 11px;
-	}
-
-	.search-preview .result-title {
-		font-weight: 600;
-		color: #1a0dab;
-		font-size: 13px;
-	}
-
-	.search-preview .result-desc {
-		color: #545454;
-		font-size: 11px;
+		padding: 20px 10px;
+		border-radius: 28px;
+		overflow-y: auto;
 	}
 
 	/** INVENTORY MOCKUP STYLESHEET */
@@ -364,84 +273,85 @@
 					<?= $d['nom_client'] ?>
 				</h1>
 
-					<div class="row mb-3">
-						<div class="col">
-							<div class="card">
-								<div class="card-body">
-									<ul class="nav nav-tabs mb-3" style="margin-top: -15px;">
-										<li class="nav-item">
-											<a class="nav-link py-3 active" type="button">
-												Société
-											</a>
-										</li>
-									</ul>
+				<div class="row mb-3">
+					<div class="col">
+						<div class="card">
+							<div class="card-body">
+								<ul class="nav nav-tabs mb-3" style="margin-top: -15px;">
+									<li class="nav-item">
+										<a class="nav-link py-3 active" type="button">
+											Société
+										</a>
+									</li>
+								</ul>
 
-									<h6 class="text-muted font-weight-normal" style="font-size: 14px;">
-										<?= nl2br($d['info_base_client']) ?></br>
-									</h6>
-								</div>
-							</div>
-						</div>
-
-						<div class="col-auto">
-							<div class="card" style="width: 23rem;">
-								<div class="card-body">
-									<div class="d-flex justify-content-between align-items-center">
-										<button class="btn btn-dark py-3 px-5" data-toggle="modal" data-target="#budgetModal">
-											<?php function format_budget($nombre)
-											{
-												return number_format($nombre, 0, '', ' ');
-											} ?>
-											<b><?= format_budget($d['budget']) ?> €</b>
-										</button>
-										<div class="dropdown no-arrow">
-											<img class="mr-2 eye-icon"
-												src="<?= base_url('assets/images/ico/Eye.png') ?>"
-												data-id="<?= $d['idclients'] ?>"
-												alt="Voir les détails"
-												style="cursor: pointer;" />
-										</div>
-										<a href="<?= base_url('Client/inventaire_pmax/' .  htmlspecialchars($d['idclients'])) ?>" style="display: flex; align-items: center; text-decoration: none; color: inherit;">
-												Inventaire
-												</a>
-
-
-									</div>
-									<br><br>
-									<div class="d-flex justify-content-start mb-3" style="font-size: 15px;">
-										<i class="fa fa-check-square mr-2" style="color: Black; font-size: 18px;"></i>
-										<span class="mr-2">Date d'anniversaire : <?= $d['mis_en_place_paiement'] ?></span>
-									</div>
-									<div class="d-flex justify-content-start mb-3" style="font-size: 15px;">
-										<i class="fa fa-check-square mr-2" style="color: Black; font-size: 18px;"></i>
-										<span class="mr-2">Date de mise en ligne : <?= $d['annonce'] ?></span>
-
-									</div>
-									<div class="d-flex justify-content-start mb-3" style="font-size: 15px;">
-										<i class="fa fa-check-square mr-2" style="color: Black; font-size: 18px;"></i>
-										<span class="mr-2">Commerciale</span>
-										<span class="mr-2">
-											<img src="<?= base_url('assets/images/' . $d['tech_photo_user']) ?>" width="24" height="24">
-										</span>
-									</div>
-									<div class="d-flex justify-content-start mb-4" style="font-size: 15px;">
-										<i class="fa fa-check-square mr-2" style="color: Black; font-size: 18px;"></i>
-										<span class="mr-2">Account Manager</span>
-										<span class="mr-2">
-											<img src="<?= base_url('assets/images/' . $d['am_photo_user']) ?>" width="24" height="24">
-										</span>
-									</div>
-									<a href="<?= base_url('Client/annonces/' . $d['idclients']) ?>" class="btn btn-outline-dark btn-block">Voir annonce</a>
-									<a href="<?= base_url('Validation/validation_structure/' . $d['idclients']) ?>" class="btn btn-outline-dark btn-block" target="_blank" >Annonce</a>
-									<button type="button" class="btn btn-outline-dark btn-block" data-toggle="modal" data-target="#inventaireModal">
-									Inventaire
-									</button>
-								<?php //echo anchor('Validation/validation_structure/' . $C->idclients, $C->validation_technique, ['style' => 'color: white', 'data-edit' => $C->idclients, 'target' => '_blank']); ?>		
-								</div>
+								<h6 class="text-muted font-weight-normal" style="font-size: 14px;">
+									<?= nl2br($d['info_base_client']) ?></br>
+								</h6>
 							</div>
 						</div>
 					</div>
-					
+
+					<div class="col-auto">
+						<div class="card" style="width: 23rem;">
+							<div class="card-body">
+								<div class="d-flex justify-content-between align-items-center">
+									<button class="btn btn-dark py-3 px-5" data-toggle="modal" data-target="#budgetModal">
+										<?php function format_budget($nombre)
+										{
+											return number_format($nombre, 0, '', ' ');
+										} ?>
+										<b><?= format_budget($d['budget']) ?> €</b>
+									</button>
+									<div class="dropdown no-arrow">
+										<img class="mr-2 eye-icon"
+											src="<?= base_url('assets/images/ico/Eye.png') ?>"
+											data-id="<?= $d['idclients'] ?>"
+											alt="Voir les détails"
+											style="cursor: pointer;" />
+									</div>
+									<a href="<?= base_url('Client/inventaire_pmax/' .  htmlspecialchars($d['idclients'])) ?>" style="display: flex; align-items: center; text-decoration: none; color: inherit;">
+										Inventaire
+									</a>
+
+
+								</div>
+								<br><br>
+								<div class="d-flex justify-content-start mb-3" style="font-size: 15px;">
+									<i class="fa fa-check-square mr-2" style="color: Black; font-size: 18px;"></i>
+									<span class="mr-2">Date d'anniversaire : <?= $d['mis_en_place_paiement'] ?></span>
+								</div>
+								<div class="d-flex justify-content-start mb-3" style="font-size: 15px;">
+									<i class="fa fa-check-square mr-2" style="color: Black; font-size: 18px;"></i>
+									<span class="mr-2">Date de mise en ligne : <?= $d['annonce'] ?></span>
+
+								</div>
+								<div class="d-flex justify-content-start mb-3" style="font-size: 15px;">
+									<i class="fa fa-check-square mr-2" style="color: Black; font-size: 18px;"></i>
+									<span class="mr-2">Commerciale</span>
+									<span class="mr-2">
+										<img src="<?= base_url('assets/images/' . $d['tech_photo_user']) ?>" width="24" height="24">
+									</span>
+								</div>
+								<div class="d-flex justify-content-start mb-4" style="font-size: 15px;">
+									<i class="fa fa-check-square mr-2" style="color: Black; font-size: 18px;"></i>
+									<span class="mr-2">Account Manager</span>
+									<span class="mr-2">
+										<img src="<?= base_url('assets/images/' . $d['am_photo_user']) ?>" width="24" height="24">
+									</span>
+								</div>
+								<a href="<?= base_url('Client/annonces/' . $d['idclients']) ?>" class="btn btn-outline-dark btn-block">Voir annonce</a>
+								<a href="<?= base_url('Validation/validation_structure/' . $d['idclients']) ?>" class="btn btn-outline-dark btn-block" target="_blank">Annonce</a>
+								<button type="button" class="btn btn-outline-dark btn-block" data-toggle="modal" data-target="#inventaireModal">
+									Inventaire
+								</button>
+								<?php //echo anchor('Validation/validation_structure/' . $C->idclients, $C->validation_technique, ['style' => 'color: white', 'data-edit' => $C->idclients, 'target' => '_blank']); 
+								?>
+							</div>
+						</div>
+					</div>
+				</div>
+
 				<h1 class="display-1 text-center mt-4" style="font-size: 42px;">
 					Brief
 				</h1>
@@ -707,32 +617,32 @@
 																	?>
 																</td>
 
-																	<td>
-																		<?php if ($groupe['statut'] == 1): ?>
-																			<img src="<?= base_url('assets/images/icons/figma/CheckCircle.png') ?>" alt="Actif">
-																		<?php else: ?>
-																			<span class="text-muted">En cours</span>
-																		<?php endif; ?>
-																	</td>
-																	<td>
-																		<a href="<?= base_url('Client/insertgroupeannonce/' . $groupe['idgroupe_annonce']) ?>" class="btn btn-sm google_btn">
-																			Créer annonce
-																		</a>
-																	</td>
-																</tr>
-															<?php endforeach; ?>
-														</tbody>
-													</table>
-												<?php else: ?>
-													<em>Aucun groupe</em>
-												<?php endif; ?>
-											</td>
-										</tr>
-									<?php endforeach; ?>
-								<?php else: ?>
-									<tr>
-										<td colspan="7" class="text-center text-muted">Aucune campagne trouvée.</td>
+																<td>
+																	<?php if ($groupe['statut'] == 1): ?>
+																		<img src="<?= base_url('assets/images/icons/figma/CheckCircle.png') ?>" alt="Actif">
+																	<?php else: ?>
+																		<span class="text-muted">En cours</span>
+																	<?php endif; ?>
+																</td>
+																<td>
+																	<a href="<?= base_url('Client/insertgroupeannonce/' . $groupe['idgroupe_annonce']) ?>" class="btn btn-sm google_btn">
+																		Créer annonce
+																	</a>
+																</td>
+															</tr>
+														<?php endforeach; ?>
+													</tbody>
+												</table>
+											<?php else: ?>
+												<em>Aucun groupe</em>
+											<?php endif; ?>
+										</td>
 									</tr>
+								<?php endforeach; ?>
+							<?php else: ?>
+								<tr>
+									<td colspan="7" class="text-center text-muted">Aucune campagne trouvée.</td>
+								</tr>
 							<?php endif; ?>
 						</tbody>
 					</table>
@@ -809,7 +719,7 @@
 
 	<?php $this->load->view('layouts/client/onboarding/modal/brief', ['d' => $d]) ?>
 	<?php $this->load->view('layouts/client/onboarding/modal/client') ?>
-	<?php $this->load->view('layouts/client/onboarding/modal/inventaire_pmax') ?>
+	<?php $this->load->view('layouts/client/onboarding/modal/inventaire_pmax', ['groupe_valider' => $groupe_valider]) ?>
 
 
 <?php endforeach; ?>

@@ -135,7 +135,7 @@
 
 		<?php $this->load->view('layouts/client/detail/sidebar'); ?>
 
-		<div class="col" style="height: calc(100vh - 101px); overflow-y:auto;">
+		<div class="col" style="height: calc(100vh - 78px); overflow-y:auto;">
 			<div class="container-fluid position-relative pb-5 pt-3">
 
 				<div class="dropdown position-absolute" style="right: 15px;">
@@ -185,7 +185,7 @@
 					<input type="hidden" id="idclients" value="<?= $donnees[0]['idclients'] ?>">
 				</div>
 
-				<h1 class="mb-2" style="font-size: 48px; font-weight: 500;">
+				<h1 class="mb-2 text-truncate" style="font-size: 48px; font-weight: 500;">
 					<?= $d['nom_client'] ?>
 				</h1>
 				<h5 class="mb-3"><a href="<?= $d['site_client'] ?>" target="_blank" style="color: black"><?= $d['site_client'] ?></a></h5>
