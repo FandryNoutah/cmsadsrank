@@ -88,7 +88,7 @@
 					<i class="fa fa-circle mr-2" style="font-size: 10px; color: #589E67;"></i>
 					Upsell
 				</label>
-
+				<!-- 
 				<label class="btn btn-white rounded-pill mx-2 text-muted" style="font-size: 14px;">
 					<input type="radio" class="status-select" name="status_filter" value="pause">
 					<i class="fa fa-circle mr-2" style="font-size: 10px; color: #B1AD1B;"></i>
@@ -100,7 +100,7 @@
 					<i class="fa fa-circle mr-2" style="font-size: 10px; color: #589E67;"></i>
 					Relance
 				</label>
-
+				-->
 			</div>
 		</div>
 		<div class="col-auto align-self-center">
@@ -148,6 +148,7 @@
 								$d->budget != 0 &&
 								!in_array($d->type_upsell, [10, 5])
 							):
+							if ($d->type_upsell != 1):
 						?>
 
 								<?php
@@ -301,10 +302,14 @@
 											</span>
 										<?php endif; ?>
 										<?php if ($d->statut_envoye == 0):  ?>
+											<?php if($d->Envoie_structure == '0000-00-00'): ?>
 											<span class="badge alert-danger rounded-pill px-2 py-1" style="font-size: 12px; font-weight: 500;">
 												<i class="fa fa-circle mr-1" style="font-size: 10px;"></i>
 												<?= (!empty($d->Envoie_structure) && $d->Envoie_structure != '0000-00-00') ? htmlspecialchars($d->Envoie_structure) : '-' ?>
 											</span>
+											<?php else:  ?>
+												-
+											<?php endif; ?>	
 										<?php endif; ?>					
               						  <td><?= (!empty($d->validation_technique) && $d->validation_technique != '0000-00-00') ? anchor('Validation/validation_structure/' . $d->idclients, $d->validation_technique, ['target' => '_blank']) : '-' ?></td>
 									<td><?= $d->paiement_recu ? 'Oui' : 'Non' ?></td>
@@ -328,6 +333,7 @@
 										<?php endif; ?>
 									</td>
 								</tr>
+									<?php endif; ?>	
 						<?php endif;
 						endforeach; ?>
 					</tbody>

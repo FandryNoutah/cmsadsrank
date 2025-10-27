@@ -1338,7 +1338,7 @@ public function save_images_campagnes()
 				);
 
 				// Insert groupe pmax
-				$this->Donne_modele->insert_gppmax($idclients, $nom_groupe_pmax, $camp_type, $url_site, $Mots_cle_potentiels, $idcampagne, $contextes_client);
+				//$this->Donne_modele->insert_gppmax($idclients, $nom_groupe_pmax, $camp_type, $url_site, $Mots_cle_potentiels, $idcampagne, $contextes_client);
 				
 						$data_groups = [
 						'nom_groupe'         	=>	$groupes_annonces,
@@ -1399,7 +1399,7 @@ public function save_images_campagnes()
 				);
 
 				// Insert groupe pmax
-				$this->Donne_modele->insert_gppmax($idclients, $nom_groupe_pmax, $camp_type, $url_site, $Mots_cle_potentiels, $idcampagne, $contextes_client);
+				//$this->Donne_modele->insert_gppmax($idclients, $nom_groupe_pmax, $camp_type, $url_site, $Mots_cle_potentiels, $idcampagne, $contextes_client);
 				$this->Donne_modele->update_type_clients($choix, $idclients);
 					$data_groups = [
 						'nom_groupe'         	=>	$groupes_annonces,
@@ -1781,6 +1781,7 @@ public function save_images_campagnes()
 		$date_upsell = $this->input->post('date_upsell');
 		$date_demande_upsell = $this->input->post('date_demande_upsell');
 		$inforamtion_upsell = $this->input->post('information_upsell');
+		$date_brief = $this->input->post('date_brief');
 
 		$statut_upsell = $this->input->post('statut_upsell');
 		$id = $idclients;
@@ -1811,8 +1812,8 @@ public function save_images_campagnes()
 				'date_demande' => $date_demande_upsell,
 				'date_due' => $date_demande_upsell,
 				'idclients' => $idclients,
-				'AM' => $am,
-				'assigned_to' => $tm,
+				'AM' => $tm,
+				'assigned_to' => $am,
 				'title' => $title,
 				'Statuts_technique' => $Statuts_technique,
 				'description' => $tache,
@@ -1833,9 +1834,13 @@ public function save_images_campagnes()
 				'account_manager' => $am,
 				'initiative' => $initiative,
 				'type_upsell' => $type_upsell,
+				'mis_en_place_paiement' => $date_demande_upsell,
+				'Brief' => $date_brief,
+				'annonce' => $date_upsell,
 				'budget_upsell' => $budget_upsell
 
 			);
+			
 			$this->visuels_model->add_upsell_onboarding($data_upsell);
 		endif;
 		if ($type_upsell == 1):

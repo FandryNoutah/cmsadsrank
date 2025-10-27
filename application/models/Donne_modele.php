@@ -843,6 +843,7 @@ public function insert_campagne_am(
 
 	public function insert_gp_pmax($data_groups)
 	{
+		
 		$this->load->database();
 		$this->db->insert('groupe_annonce', $data_groups);
 		return $this->db->insert_id();

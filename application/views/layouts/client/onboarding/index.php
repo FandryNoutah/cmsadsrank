@@ -775,10 +775,10 @@
 													<tbody>
 														<?php foreach ($campagne['groupes_annonces'] as $groupe): ?>
 															<tr>
-																<td>
+																<td style="width: 200px;">
 																	<strong><?= htmlspecialchars($groupe['nom_groupe']) ?></strong>
 																</td>
-																<td>
+																<td style="width:500px;">
 																	<?= htmlspecialchars($groupe['contexte_groupes_annonces']) ?>
 																</td>
 																<td>
@@ -804,7 +804,7 @@
 																			<span class="text-muted">En cours</span>
 																		<?php endif; ?>
 																	</td>
-																	<td>
+																	<td style="width: 100px;">
 																		<a href="<?= base_url('Client/insertgroupeannonce/' . $groupe['idgroupe_annonce']) ?>" class="btn btn-sm google_btn">
 																			Créer annonce
 																		</a>

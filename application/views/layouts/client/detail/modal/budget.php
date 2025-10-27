@@ -45,24 +45,23 @@
 							<input type="number" name="budget_upsell" id="budget" class="form-control">
 						</div>
 
-						<div class="form-group">
+						<div class="form-group" style="display: none">
 							<label for="am_select">AM</label>
 							<select name="am" id="budget_type" class="form-control">
-								<option value="<?= $current_user->id; ?>"><?= $current_user->first_name; ?> <?= $current_user->last_name; ?></option>
-								<?php foreach ($users as $u): ?>
-									<option value="<?= $u->id; ?>">
-										<?= $u->first_name; ?> <?= $u->last_name; ?>
-									</option>
-								<?php endforeach; ?>
+								<option value="<?= $d['account_manager'] ?>">AM></option>
 							</select>
 						</div>
 
-						<div class="form-group">
+						<div class="form-group" style="display: none">
 							<label for="am_select">TM</label>
 							<select name="tm" id="budget_type" class="form-control">
+								<option value="<?= $d['initiative'] ?>">TM></option>
 								<?php foreach ($users as $u): ?>
+									<option value="<?= $d->tm; ?>">
+										<?= $u->first_name; ?> <?= $u->last_name; ?>
+									</option>
 									<?php if($u->tech == 1): ?>
-									<option value="<?= $u->id; ?>">
+									<option value="<?= $d->account_manager; ?>">
 										<?= $u->first_name; ?> <?= $u->last_name; ?>
 									</option>
 									<?php endif; ?>
@@ -71,7 +70,7 @@
 						</div>
 
 						<div class="form-group">
-							<label for="budget_date_demand">Date Gocardless</label>
+							<label for="budget_date_demand">Date de mise en place du paiement</label>
 							<input type="date" name="date_demande_upsell" id="budget_date_demand" class="form-control">
 						</div>
 						<script>
@@ -79,9 +78,13 @@
 								const today = new Date().toISOString().split('T')[0];
 								document.getElementById("budget_date_demand").value = today;
 							});
-						</script>			
+						</script>
 						<div class="form-group">
-							<label for="budget_date_upsell">Date Upsell / Baisse</label>
+							<label for="budget_date_demand">Date Brief</label>
+							<input type="date" name="date_brief" id="budget_date_demand" class="form-control">
+						</div>			
+						<div class="form-group">
+							<label for="budget_date_upsell">Date annonce en ligne</label>
 							<input type="date" name="date_upsell" id="budget_date_upsell" class="form-control">
 						</div>
 
