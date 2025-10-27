@@ -122,9 +122,37 @@
 		cursor: not-allowed;
 	}
 
-	.toggle input:disabled+.switch .knob {
-		background-color: #e0e0e0;
-	}
+.toggle input:disabled + .switch .knob {
+  background-color: #e0e0e0;
+}
+.conversion-container {
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+.conversion-container:hover {
+  transform: scale(1.03);
+}
+.border-primary {
+  box-shadow: 0 0 10px rgba(0, 123, 255, 0.4);
+}
+.camp-type-container {
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+.camp-type-container:hover {
+  transform: scale(1.03);
+}
+.camp-type-container.border-dark {
+  box-shadow: 0 0 10px rgba(0,0,0,0.25);
+}
+.google_btn{
+	background-color: #1A73E8;
+	color: white;
+}
+.google_btn:hover {
+	background-color: #3162a3ff;
+	color: white;
+}
 
 	.conversion-container {
 		cursor: pointer;
@@ -336,73 +364,84 @@
 					<?= $d['nom_client'] ?>
 				</h1>
 
-				<div class="row mb-3">
-					<div class="col">
-						<div class="card">
-							<div class="card-body">
-								<ul class="nav nav-tabs mb-3" style="margin-top: -15px;">
-									<li class="nav-item">
-										<a class="nav-link py-3 active" type="button">
-											Société
-										</a>
-									</li>
-								</ul>
+					<div class="row mb-3">
+						<div class="col">
+							<div class="card">
+								<div class="card-body">
+									<ul class="nav nav-tabs mb-3" style="margin-top: -15px;">
+										<li class="nav-item">
+											<a class="nav-link py-3 active" type="button">
+												Société
+											</a>
+										</li>
+									</ul>
 
-								<h6 class="text-muted font-weight-normal" style="font-size: 14px;">
-									<?= nl2br($d['info_base_client']) ?></br>
-								</h6>
+									<h6 class="text-muted font-weight-normal" style="font-size: 14px;">
+										<?= nl2br($d['info_base_client']) ?></br>
+									</h6>
+								</div>
 							</div>
 						</div>
-					</div>
 
-					<div class="col-auto">
-						<div class="card" style="width: 23rem;">
-							<div class="card-body">
-								<div class="d-flex justify-content-between align-items-center">
-									<button class="btn btn-dark py-3 px-5" data-toggle="modal" data-target="#budgetModal">
-										<b><?= number_format($d['budget'], 0, '', ' ') ?> €</b>
-									</button>
-									<button type="button" class="btn" data-toggle="modal" data-target="#clientModal" data-id="<?= $d['idclients'] ?>">
-										<img src="<?= base_url('assets/images/ico/Eye.png') ?>" alt="Voir les détails">
-									</button>
-									<a href="<?= base_url('Client/inventaire_pmax/' .  htmlspecialchars($d['idclients'])) ?>" style="display: flex; align-items: center; text-decoration: none; color: inherit;">
-										Inventaire
-									</a>
-								</div>
+						<div class="col-auto">
+							<div class="card" style="width: 23rem;">
+								<div class="card-body">
+									<div class="d-flex justify-content-between align-items-center">
+										<button class="btn btn-dark py-3 px-5" data-toggle="modal" data-target="#budgetModal">
+											<?php function format_budget($nombre)
+											{
+												return number_format($nombre, 0, '', ' ');
+											} ?>
+											<b><?= format_budget($d['budget']) ?> €</b>
+										</button>
+										<div class="dropdown no-arrow">
+											<img class="mr-2 eye-icon"
+												src="<?= base_url('assets/images/ico/Eye.png') ?>"
+												data-id="<?= $d['idclients'] ?>"
+												alt="Voir les détails"
+												style="cursor: pointer;" />
+										</div>
+										<a href="<?= base_url('Client/inventaire_pmax/' .  htmlspecialchars($d['idclients'])) ?>" style="display: flex; align-items: center; text-decoration: none; color: inherit;">
+												Inventaire
+												</a>
 
-								<br><br>
-								<div class="d-flex justify-content-start mb-3" style="font-size: 15px;">
-									<i class="fa fa-check-square mr-2" style="color: Black; font-size: 18px;"></i>
-									<span class="mr-2">Date d'anniversaire : <?= $d['mis_en_place_paiement'] ?></span>
-								</div>
-								<div class="d-flex justify-content-start mb-3" style="font-size: 15px;">
-									<i class="fa fa-check-square mr-2" style="color: Black; font-size: 18px;"></i>
-									<span class="mr-2">Date de mise en ligne : <?= $d['annonce'] ?></span>
 
-								</div>
-								<div class="d-flex justify-content-start mb-3" style="font-size: 15px;">
-									<i class="fa fa-check-square mr-2" style="color: Black; font-size: 18px;"></i>
-									<span class="mr-2">Commerciale</span>
-									<span class="mr-2">
-										<img src="<?= base_url('assets/images/' . $d['tech_photo_user']) ?>" width="24" height="24">
-									</span>
-								</div>
-								<div class="d-flex justify-content-start mb-4" style="font-size: 15px;">
-									<i class="fa fa-check-square mr-2" style="color: Black; font-size: 18px;"></i>
-									<span class="mr-2">Account Manager</span>
-									<span class="mr-2">
-										<img src="<?= base_url('assets/images/' . $d['am_photo_user']) ?>" width="24" height="24">
-									</span>
-								</div>
-								<a href="<?= base_url('Client/onboarding/' . $d['idclients']) ?>" class="btn btn-outline-dark btn-block">Voir annonce</a>
-								<a href="<?= base_url('Client/onboarding/' . $d['idclients']) ?>" class="btn btn-outline-dark btn-block">Validation client</a>
-								<button type="button" class="btn btn-outline-dark btn-block" data-toggle="modal" data-target="#inventaireModal">
+									</div>
+									<br><br>
+									<div class="d-flex justify-content-start mb-3" style="font-size: 15px;">
+										<i class="fa fa-check-square mr-2" style="color: Black; font-size: 18px;"></i>
+										<span class="mr-2">Date d'anniversaire : <?= $d['mis_en_place_paiement'] ?></span>
+									</div>
+									<div class="d-flex justify-content-start mb-3" style="font-size: 15px;">
+										<i class="fa fa-check-square mr-2" style="color: Black; font-size: 18px;"></i>
+										<span class="mr-2">Date de mise en ligne : <?= $d['annonce'] ?></span>
+
+									</div>
+									<div class="d-flex justify-content-start mb-3" style="font-size: 15px;">
+										<i class="fa fa-check-square mr-2" style="color: Black; font-size: 18px;"></i>
+										<span class="mr-2">Commerciale</span>
+										<span class="mr-2">
+											<img src="<?= base_url('assets/images/' . $d['tech_photo_user']) ?>" width="24" height="24">
+										</span>
+									</div>
+									<div class="d-flex justify-content-start mb-4" style="font-size: 15px;">
+										<i class="fa fa-check-square mr-2" style="color: Black; font-size: 18px;"></i>
+										<span class="mr-2">Account Manager</span>
+										<span class="mr-2">
+											<img src="<?= base_url('assets/images/' . $d['am_photo_user']) ?>" width="24" height="24">
+										</span>
+									</div>
+									<a href="<?= base_url('Client/annonces/' . $d['idclients']) ?>" class="btn btn-outline-dark btn-block">Voir annonce</a>
+									<a href="<?= base_url('Validation/validation_structure/' . $d['idclients']) ?>" class="btn btn-outline-dark btn-block" target="_blank" >Annonce</a>
+									<button type="button" class="btn btn-outline-dark btn-block" data-toggle="modal" data-target="#inventaireModal">
 									Inventaire
-								</button>
+									</button>
+								<?php //echo anchor('Validation/validation_structure/' . $C->idclients, $C->validation_technique, ['style' => 'color: white', 'data-edit' => $C->idclients, 'target' => '_blank']); ?>		
+								</div>
 							</div>
 						</div>
 					</div>
-				</div>
+					
 				<h1 class="display-1 text-center mt-4" style="font-size: 42px;">
 					Brief
 				</h1>
@@ -668,32 +707,32 @@
 																	?>
 																</td>
 
-																<td>
-																	<?php if ($groupe['statut'] == 1): ?>
-																		<img src="<?= base_url('assets/images/icons/figma/CheckCircle.png') ?>" alt="Actif">
-																	<?php else: ?>
-																		<span class="text-muted">Inactif</span>
-																	<?php endif; ?>
-																</td>
-																<td>
-																	<a href="<?= base_url('Client/insertgroupeannonce/' . $groupe['idgroupe_annonce']) ?>" class="btn btn-dark btn-sm">
-																		Valider
-																	</a>
-																</td>
-															</tr>
-														<?php endforeach; ?>
-													</tbody>
-												</table>
-											<?php else: ?>
-												<em>Aucun groupe</em>
-											<?php endif; ?>
-										</td>
+																	<td>
+																		<?php if ($groupe['statut'] == 1): ?>
+																			<img src="<?= base_url('assets/images/icons/figma/CheckCircle.png') ?>" alt="Actif">
+																		<?php else: ?>
+																			<span class="text-muted">En cours</span>
+																		<?php endif; ?>
+																	</td>
+																	<td>
+																		<a href="<?= base_url('Client/insertgroupeannonce/' . $groupe['idgroupe_annonce']) ?>" class="btn btn-sm google_btn">
+																			Créer annonce
+																		</a>
+																	</td>
+																</tr>
+															<?php endforeach; ?>
+														</tbody>
+													</table>
+												<?php else: ?>
+													<em>Aucun groupe</em>
+												<?php endif; ?>
+											</td>
+										</tr>
+									<?php endforeach; ?>
+								<?php else: ?>
+									<tr>
+										<td colspan="7" class="text-center text-muted">Aucune campagne trouvée.</td>
 									</tr>
-								<?php endforeach; ?>
-							<?php else: ?>
-								<tr>
-									<td colspan="7" class="text-center text-muted">Aucune campagne trouvée.</td>
-								</tr>
 							<?php endif; ?>
 						</tbody>
 					</table>
@@ -772,8 +811,10 @@
 	<?php $this->load->view('layouts/client/onboarding/modal/client') ?>
 	<?php $this->load->view('layouts/client/onboarding/modal/inventaire_pmax') ?>
 
+
 <?php endforeach; ?>
 <?php end_section(); ?>
+
 
 <?php start_section('script') ?>
 <script>

@@ -46,6 +46,28 @@ class Client extends MY_Controller
 		$this->content = "layouts/client/index.php";
 		$this->layout();
 	}
+	public function annonces($idclient)
+	{
+		// Récupérer les informations du client
+		$this->data['client'] = $this->visuels_model->getDonneeById($idclient);
+
+		// Récupérer toutes les campagnes du client
+		$campagnes = $this->visuels_model->get_campagnes_by_client($idclient);
+
+		// Pour chaque campagne, récupérer ses groupes et images
+		foreach ($campagnes as &$campagne) {
+			$campagne['groupes_annonces'] = $this->visuels_model->get_groupes_by_campagne($campagne['idcampagne']);
+			$campagne['images'] = $this->Image_model->get_images_by_campagne($campagne['idcampagne']);
+		}
+		$this->data['campagnes'] = $campagnes;
+
+		// Charger la vue
+		$this->content = "layouts/client/onboarding/annonces_liste";
+		$this->layout();
+	}
+
+
+
 	public function Ajoutgroupes()
 	{
 		$idgroupe_annonce = $this->input->post('idgroupe_annonce');
@@ -56,6 +78,9 @@ class Client extends MY_Controller
 		$titres = is_array($this->input->post('titres')) ? $this->input->post('titres') : [];
 		$titres_longs = is_array($this->input->post('titres_longs')) ? $this->input->post('titres_longs') : [];
 		$descriptions = is_array($this->input->post('descriptions')) ? $this->input->post('descriptions') : [];
+		$fiche_etablissement = $this->input->post('fiche_etablissement');
+		$email_campagne = $this->input->post('email_campagne');
+		$adresse_campagne = $this->input->post('adresse_campagne');
 
 		$statut = 1;
 
@@ -65,7 +90,10 @@ class Client extends MY_Controller
 			'idclients'        => $idclients,
 			'chemin1'          => $chemin1,
 			'chemin2'          => $chemin2,
-			'statut'           => $statut
+			'statut'           => $statut,
+			'fiche_etablissement' => $fiche_etablissement,
+			'email_campagne'   => $email_campagne,
+			'adresse_campagne' => $adresse_campagne
 		);
 
 		for ($i = 0; $i < 12; $i++) {
@@ -96,19 +124,68 @@ class Client extends MY_Controller
 		$information_client = $d[0]['information_client'];
 		$site_client = $d[0]['site_client'];
 		$type_campagne = $k[0]['type_campagne'];
+		$idcampagne = $k[0]['idcampagne'];
 		$adsContent = $this->generateGoogleAdsCopy($information_base, $information_client, $site_client);
 		$this->data['ads_titres'] = $adsContent['titres'];
 		$this->data['ads_titres_longs'] = $adsContent['titres_longs'];
 		$this->data['ads_descriptions'] = $adsContent['descriptions'];
-
+		$this->data['images_site'] = $this->Image_model->get_images_by_campagne($idcampagne);	
 		if ($type_campagne == 1) {
 			$this->content = "layouts/client/onboarding/annonce_search";
 		}
 		if ($type_campagne == 3) {
 			$this->content = "layouts/client/onboarding/annonce_pmax";
 		}
+		if ($type_campagne == 2) {
+			 
+			$this->content = "layouts/client/onboarding/annonce_local";
+		}
 		$this->layout();
 	}
+	public function fetch_images_campagnes()
+{
+    $idcampagne = $this->input->post('idcampagne');
+    if (empty($idcampagne)) {
+        echo json_encode(['success' => false, 'message' => 'ID campagne manquant']);
+        return;
+    }
+
+    $this->load->model('Image_model');
+    $images = $this->Image_model->get_images_by_campagnes($idcampagne);
+
+    $urls = [];
+    foreach ($images as $img) {
+        $urls[] = $img->image_url;
+    }
+
+    echo json_encode(['success' => true, 'images' => $urls]);
+}
+
+public function save_images_campagnes()
+{
+    $idcampagne = $this->input->post('idcampagne');
+    $images = $this->input->post('images'); // array d'URLs
+    $idclient = $this->input->post('idclient'); // optionnel
+
+    if (empty($idcampagne)) {
+        echo json_encode(['success' => false, 'message' => 'ID campagne manquant']);
+        return;
+    }
+	
+    $this->load->model('Image_model');
+
+    // Nettoie les anciennes images qui ne sont plus dans la liste
+    $this->Image_model->delete_images_not_in($idcampagne, $images);
+
+    // Ajoute les nouvelles
+    if (!empty($images)) {
+        foreach ($images as $url) {
+            $this->Image_model->insert_or_ignore($idcampagne, $url, $idclient);
+        }
+    }
+
+    echo json_encode(['success' => true]);
+}
 
 
 	private function generateGoogleAdsCopy($info_base, $info_client, $site)
@@ -137,7 +214,7 @@ class Client extends MY_Controller
 			CURLOPT_RETURNTRANSFER => true,
 			CURLOPT_HTTPHEADER => [
 				'Content-Type: application/json',
-				'Authorization: Bearer ' . env('CHAT_GPT_API_KEY')
+				'Authorization: Bearer ' . getenv('CHAT_GPT_API_KEY')
 			],
 			CURLOPT_POST => true,
 			CURLOPT_POSTFIELDS => json_encode([
@@ -838,6 +915,7 @@ class Client extends MY_Controller
 		// dd($donne_valider);
 		$this->data['donne_valider'] = $donne_valider;
 		$this->data['procedure_gtm'] = $this->Task_model->get_procedure_gtm($idclients);
+		
 		$this->content = "layouts/client/onboarding/index.php";
 		$this->layout();
 	}
@@ -889,6 +967,11 @@ class Client extends MY_Controller
 		//$this->data["images_site"] = $images_site;
 		$this->data["site_client"] = $site_client;
 		$this->data['procedure_gtm'] = $this->Task_model->get_procedure_gtm($idclients);
+		$this->data['images_site'] = [];
+		//$campagne = $this->visuels_model->get_mot_clé($idclients);
+		//$mots_exclus = $campagne[]
+		//$this->data["mots_exclus"]
+
 		$this->content = "layouts/client/onboarding/" . $type_page[$camp_type] . ".php";
 		$this->layout();
 	}
@@ -897,10 +980,10 @@ class Client extends MY_Controller
 		$url = $this->input->post('url');
 		$images = [];
 
-		if (!empty($url)) {
-			// Utilise ta fonction existante pour récupérer les images
-			$images = $this->fetch_all_images_from_site($url, 8);
-		}
+    if (!empty($url)) {
+        // Utilise ta fonction existante pour récupérer les images
+        $images = $this->fetch_all_images_from_site($url, 15);
+    }
 
 		echo json_encode([
 			'success' => !empty($images),
@@ -1003,7 +1086,6 @@ class Client extends MY_Controller
 
 	public function ajout_campagne($idclients)
 	{
-
 		$id_campagne = $this->input->get('id_camp');
 		if ($id_campagne) {
 			$campagne = $this->data['campagne'] = $this->visuels_model->getCampagneById($id_campagne);
@@ -1018,7 +1100,7 @@ class Client extends MY_Controller
 				// Inputs spécifiques
 				$nom_campagne          	= $this->input->post('nom_campagne_search'); // not in view
 				$information_campagne  	= $this->input->post('information_campagne_search'); // not in view
-				$age				   = $this->input->post('age');
+				$ages				   = $this->input->post('age');
 				$cible				   = $this->input->post('cible');
 				$zones                 	= $this->input->post('zone_search'); // OK
 				$repartition_budget    	= $this->input->post('repartition_budget_search'); // OK
@@ -1031,30 +1113,38 @@ class Client extends MY_Controller
 				$mots_cle              	= $this->input->post('Mot_cle'); // OK
 				$Mots_cle_exclus       	= $this->input->post('Mots_cle_exclus');
 				$selected_images		= $this->input->post('selected_images');
-
+				$sexe			      	= $this->input->post('sexe'); 
+				$promotions            	= $this->input->post('promotions'); 
+				$prix			       	= $this->input->post('prix');
+				$téléphone				= $this->input->post('téléphone');
+			
 
 				// Vérification cohérence
 				if (count($groupes_annonces) == count($contexte_groupes) && count($groupes_annonces) == count($mots_cle)) {
 
 					if ($id_campagne) {
 
-
-						$id_campagne = $this->Donne_modele->insert_campagne_am = $this->Donne_modele->insert_campagne_am(
-							$idclients,
-							$camp_type,
-							$nom_campagne,
-							$information_campagne,
-							$cible,
-							$ages,
-							$zones,
-							$repartition_budget,
-							$date_campagne,
-							$appareil,
-							$objectif,
-							$url_site,
-							$mots_cle,
-							$Mots_cle_exclus
-						);
+					
+					$id_campagne = $this->Donne_modele->insert_campagne_am(
+					$idclients,
+					$camp_type,
+					$nom_campagne,
+					$information_campagne,
+					$cible,
+					$ages,
+					$zones,
+					$repartition_budget,
+					$date_campagne,
+					$appareil,
+					$objectif,
+					$url_site,
+					$mots_cle,
+					$Mots_cle_exclus,
+					$sexe,
+					$promotions,
+					$prix,
+					$téléphone
+				);
 
 
 						/** Supprimer d'abord tous les groupes */
@@ -1064,22 +1154,26 @@ class Client extends MY_Controller
 						}
 					} else {
 
-						$id_campagne = $this->Donne_modele->insert_campagne_am = $this->Donne_modele->insert_campagne_am(
-							$idclients,
-							$camp_type,
-							$nom_campagne,
-							$information_campagne,
-							$cible,
-							$age,
-							$zones,
-							$repartition_budget,
-							$date_campagne,
-							$appareil,
-							$objectif,
-							$url_site,
-							$mots_cle,
-							$Mots_cle_exclus
-						);
+					$id_campagne = $this->Donne_modele->insert_campagne_am(
+					$idclients,
+					$camp_type,
+					$nom_campagne,
+					$information_campagne,
+					$cible,
+					$ages,
+					$zones,
+					$repartition_budget,
+					$date_campagne,
+					$appareil,
+					$objectif,
+					$url_site,
+					$mots_cle,
+					$Mots_cle_exclus,
+					$sexe,
+					$promotions,
+					$prix,
+					$téléphone
+				);
 					}
 
 					// Data groupes
@@ -1110,10 +1204,10 @@ class Client extends MY_Controller
 			case 2: //local
 				// Inputs spécifiques
 				$nom_campagne          = $this->input->post('nom_campagne_pmax');
-				$information_campagne  = $this->input->post('information_campagne_search');
-				$age				   = $this->input->post('age');
+				$information_campagne  = $this->input->post('information_campagne_pmax');
+				$ages				   = $this->input->post('age');
 				$cible				   = $this->input->post('cible');
-				$url_site              = $this->input->post('url_campagne_pmax');
+				$url_site              = $this->input->post('url_campagne');
 				$repartition_budget    = $this->input->post('repartition_budget_pmax');
 				$zones                 = $this->input->post('zone_pmax');
 				$nom_groupe_pmax       = $this->input->post('nom_groupe_pmax');
@@ -1128,13 +1222,21 @@ class Client extends MY_Controller
 				$contexte_groupes      = $this->input->post('contexte_groupe_annonce'); // not in view
 				$mots_cle              = $this->input->post('Mot_cle'); // OK
 				$Mots_cle_exclus       = $this->input->post('Mots_cle_exclus');
+				$sexe			      	= $this->input->post('sexe'); 
+				$promotions            	= $this->input->post('promotions'); 
+				$prix			       	= $this->input->post('prix');
+				$téléphone				= $this->input->post('téléphone');
+				$magasin            	= $this->input->post('magasin'); 
+				$services			       	= $this->input->post('services');
+				$produit				= $this->input->post('produit');
+				$youtube				= $this->input->post('Youtube');
 				$idcampagne = $this->Donne_modele->insert_campagne_am(
 					$idclients,
 					$camp_type,
 					$nom_campagne,
 					$information_campagne,
 					$cible,
-					$age,
+					$ages,
 					$zones,
 					$repartition_budget,
 					$date_campagne,
@@ -1142,20 +1244,35 @@ class Client extends MY_Controller
 					$objectif,
 					$url_site,
 					$mots_cle,
-					$Mots_cle_exclus
+					$Mots_cle_exclus,
+					$sexe,
+					$promotions,
+					$prix,
+					$téléphone
 				);
 
 				// Insert groupe pmax
 				$this->Donne_modele->insert_gppmax($idclients, $nom_groupe_pmax, $camp_type, $url_site, $Mots_cle_potentiels, $idcampagne, $contextes_client);
+				
+						$data_groups = [
+						'nom_groupe'         	=>	$groupes_annonces,
+						'contexte_groupes_annonces' 	=>	$contexte_groupes,
+						'mot_cle'                	=>	$mots_cle,
+						'url_groupe_annonce'     	=>	$url_site,
+						'idcampagne'             	=>	$idcampagne,
+						'idclients'               	=>	$idclients,
+						'type_campagnes'          	=>	$camp_type
+					];
+				$this->Donne_modele->insert_gp_pmax($data_groups);	
 				break;
 
 			case 3:
 				// Inputs spécifiques
 				$nom_campagne          = $this->input->post('nom_campagne_pmax');
-				$information_campagne  = $this->input->post('information_campagne_search');
-				$age				   = $this->input->post('age');
+				$information_campagne  = $this->input->post('information_campagne_pmax');
+				$ages				   = $this->input->post('age');
 				$cible				   = $this->input->post('cible');
-				$url_site              = $this->input->post('url_campagne_pmax');
+				$url_site              = $this->input->post('url_campagne');
 				$repartition_budget    = $this->input->post('repartition_budget_pmax');
 				$zones                 = $this->input->post('zone_pmax');
 				$nom_groupe_pmax       = $this->input->post('nom_groupe_pmax');
@@ -1170,13 +1287,17 @@ class Client extends MY_Controller
 				$contexte_groupes      = $this->input->post('contexte_groupe_annonce'); // not in view
 				$mots_cle              = $this->input->post('Mot_cle'); // OK
 				$Mots_cle_exclus       = $this->input->post('Mots_cle_exclus');
+				$sexe			      	= $this->input->post('sexe'); 
+				$promotions            	= $this->input->post('promotions'); 
+				$prix			       	= $this->input->post('prix');
+				$téléphone				= $this->input->post('téléphone');
 				$idcampagne = $this->Donne_modele->insert_campagne_am(
 					$idclients,
 					$camp_type,
 					$nom_campagne,
 					$information_campagne,
 					$cible,
-					$age,
+					$ages,
 					$zones,
 					$repartition_budget,
 					$date_campagne,
@@ -1184,82 +1305,35 @@ class Client extends MY_Controller
 					$objectif,
 					$url_site,
 					$mots_cle,
-					$Mots_cle_exclus
+					$Mots_cle_exclus,
+					$sexe,
+					$promotions,
+					$prix,
+					$téléphone
 				);
 
 				// Insert groupe pmax
 				$this->Donne_modele->insert_gppmax($idclients, $nom_groupe_pmax, $camp_type, $url_site, $Mots_cle_potentiels, $idcampagne, $contextes_client);
-
-				// Définir toutes les conversions possibles
-				$conversionSets = [
-
-					"lead" => [
-						['idclients' => $idclients, 'conversion' => 'Lead - Formulaire Page contact', 'actions' => 'Principale', 'types' => 'Formulaire', 'remarque' => '', 'etat' => '', 'conditions' => 'Quand une personne a rempli le formulaire de contact ', 'conversion_id' => '', 'conversion_label' => '', 'extensions_appel' => ''],
-						['idclients' => $idclients, 'conversion' => 'Lead - Demande de devis', 'actions' => 'Principale', 'types' => 'Formulaire', 'remarque' => '', 'etat' => '', 'conditions' => 'Quand une personne a soumis une demande de devis ', 'conversion_id' => '', 'conversion_label' => '', 'extensions_appel' => ''],
-						['idclients' => $idclients, 'conversion' => 'Lead - Téléphone', 'actions' => 'Principale', 'types' => 'Contact', 'remarque' => '', 'etat' => '', 'conditions' => 'Quand une personne a cliqué sur le bouton d’appel téléphonique', 'conversion_id' => '', 'conversion_label' => '', 'extensions_appel' => ''],
-						['idclients' => $idclients, 'conversion' => 'Lead - Email', 'actions' => 'Principale', 'types' => 'Contact', 'remarque' => '', 'etat' => '', 'conditions' => 'Quand une personne a cliqué sur le bouton d’envoi d’email ', 'conversion_id' => '', 'conversion_label' => '', 'extensions_appel' => ''],
-						['idclients' => $idclients, 'conversion' => 'Contact - Chat', 'actions' => 'Principale', 'types' => 'Contact', 'remarque' => '', 'etat' => '', 'conditions' => 'Quand une personne a cliqué sur le bouton chat', 'conversion_id' => '', 'conversion_label' => '', 'extensions_appel' => ''],
-						['idclients' => $idclients, 'conversion' => 'Page vue |', 'actions' => 'Secondaire', 'types' => 'Page_view', 'remarque' => '', 'etat' => '', 'conditions' => 'Quand une personne a visité une page du site ', 'conversion_id' => '', 'conversion_label' => '', 'extensions_appel' => ''],
-						['idclients' => $idclients, 'conversion' => 'Page vue', 'actions' => 'Secondaire', 'types' => 'Page_view', 'remarque' => '', 'etat' => '', 'conditions' => 'Quand une personne a visité une page du site ', 'conversion_id' => '', 'conversion_label' => '', 'extensions_appel' => ''],
-						['idclients' => $idclients, 'conversion' => 'Bouton |', 'actions' => 'Secondaire', 'types' => 'Click', 'remarque' => '', 'etat' => '', 'conditions' => 'Quand une personne a cliqué sur un bouton du site', 'conversion_id' => '', 'conversion_label' => '', 'extensions_appel' => ''],
-						['idclients' => $idclients, 'conversion' => 'Bouton | Télécharger notre catalogue', 'actions' => 'Secondaire', 'types' => 'Click', 'remarque' => '', 'etat' => '', 'conditions' => 'Quand une personne a cliqué sur le bouton "Télécharger notre catalogue"', 'conversion_id' => '', 'conversion_label' => '', 'extensions_appel' => ''],
-					],
-
-					"ecommerce" => [
-						['idclients' => $idclients, 'conversion' => 'Lead | Achat', 'actions' => 'Principale', 'types' => 'Purchase', 'remarque' => '', 'etat' => '', 'conditions' => 'Quand une personne a réalisé un achat', 'conversion_id' => '', 'conversion_label' => '', 'extensions_appel' => ''],
-						['idclients' => $idclients, 'conversion' => 'Lead | Formulaire Page contact', 'actions' => 'Principale', 'types' => 'Formulaire', 'remarque' => '', 'etat' => '', 'conditions' => 'Quand une personne a atteint le begin checkout', 'conversion_id' => '', 'conversion_label' => '', 'extensions_appel' => ''],
-						['idclients' => $idclients, 'conversion' => 'Lead | Demande de devis', 'actions' => 'Principale', 'types' => 'Formulaire', 'remarque' => '', 'etat' => '', 'conditions' => 'Quand une personne a cliqué sur le bouton d appel téléphonique ', 'conversion_id' => '', 'conversion_label' => '', 'extensions_appel' => ''],
-						['idclients' => $idclients, 'conversion' => 'Lead | Téléphone', 'actions' => 'Principale', 'types' => 'Contact', 'remarque' => '', 'etat' => '', 'conditions' => 'Quand une personne a cliqué sur le téléphone', 'conversion_id' => '', 'conversion_label' => '', 'extensions_appel' => ''],
-						['idclients' => $idclients, 'conversion' => 'Lead | Email', 'actions' => 'Principale', 'types' => 'Contact', 'remarque' => '', 'etat' => '', 'conditions' => 'Quand une personne a cliqué sur l email', 'conversion_id' => '', 'conversion_label' => '', 'extensions_appel' => ''],
-						['idclients' => $idclients, 'conversion' => 'Contact - Chat', 'actions' => 'Principale', 'types' => 'Contact', 'remarque' => '', 'etat' => '', 'conditions' => 'Quand une personne a utilisé le chat pour entrer en contact', 'conversion_id' => '', 'conversion_label' => '', 'extensions_appel' => ''],
-						['idclients' => $idclients, 'conversion' => 'Checkout', 'actions' => 'Secondaire', 'types' => 'begin_checkout', 'remarque' => '', 'etat' => '', 'conditions' => 'Quand une personne a atteint le début du processus de commande', 'conversion_id' => '', 'conversion_label' => '', 'extensions_appel' => ''],
-						['idclients' => $idclients, 'conversion' => 'Ajout au panier', 'actions' => 'Secondaire', 'types' => 'Add to cart', 'remarque' => '', 'etat' => '', 'conditions' => 'Quand une personne a ajouté un article au panier', 'conversion_id' => '', 'conversion_label' => '', 'extensions_appel' => ''],
-						['idclients' => $idclients, 'conversion' => 'Page vue | Vue d\'un article', 'actions' => 'Secondaire', 'types' => 'View item', 'remarque' => '', 'etat' => '', 'conditions' => 'Quand une personne a visité un article', 'conversion_id' => '', 'conversion_label' => '', 'extensions_appel' => ''],
-						['idclients' => $idclients, 'conversion' => 'Page vue |', 'actions' => 'Secondaire', 'types' => 'Page_view', 'remarque' => '', 'etat' => '', 'conditions' => 'Quand une personne a visité une page du site ', 'conversion_id' => '', 'conversion_label' => '', 'extensions_appel' => ''],
-						['idclients' => $idclients, 'conversion' => 'Bouton | Télécharger notre catalogue', 'actions' => 'Secondaire', 'types' => 'Click', 'remarque' => '', 'etat' => '', 'conditions' => 'Quand une personne a cliqué sur "Télécharger notre catalogue"', 'conversion_id' => '', 'conversion_label' => '', 'extensions_appel' => ''],
-						['idclients' => $idclients, 'conversion' => 'Bouton |', 'actions' => 'Secondaire', 'types' => 'Click', 'remarque' => '', 'etat' => '', 'conditions' => 'Quand une personne a cliqué sur un bouton du site', 'conversion_id' => '', 'conversion_label' => '', 'extensions_appel' => ''],
-						['idclients' => $idclients, 'conversion' => 'Newsletter', 'actions' => 'Secondaire', 'types' => 'inscription', 'remarque' => '', 'etat' => '', 'conditions' => 'Quand une personne s est inscrite à la newsletter', 'conversion_id' => '', 'conversion_label' => '', 'extensions_appel' => ''],
-						['idclients' => $idclients, 'conversion' => 'Création de compte Client', 'actions' => 'Secondaire', 'types' => 'inscription', 'remarque' => '', 'etat' => '', 'conditions' => 'Quand une personne a créé un compte client', 'conversion_id' => '', 'conversion_label' => '', 'extensions_appel' => ''],
-					],
-
-					"reservation" => [
-						['idclients' => $idclients, 'conversion' => 'Lead | Réservation', 'actions' => 'Principale', 'types' => 'Purchase', 'remarque' => '', 'etat' => '', 'conditions' => 'Quand une personne a effectué une réservation', 'conversion_id' => '', 'conversion_label' => '', 'extensions_appel' => ''],
-						['idclients' => $idclients, 'conversion' => 'Lead | Formulaire Page contact', 'actions' => 'Principale', 'types' => 'Formulaire', 'remarque' => '', 'etat' => '', 'conditions' => 'Quand une personne a rempli le formulaire de contact', 'conversion_id' => '', 'conversion_label' => '', 'extensions_appel' => ''],
-						['idclients' => $idclients, 'conversion' => 'Lead | Demande de devis', 'actions' => 'Principale', 'types' => 'Formulaire', 'remarque' => '', 'etat' => '', 'conditions' => 'Quand une personne a soumis une demande de devis ', 'conversion_id' => '', 'conversion_label' => '', 'extensions_appel' => ''],
-						['idclients' => $idclients, 'conversion' => 'Lead | Téléphone', 'actions' => 'Principale', 'types' => 'Contact', 'remarque' => '', 'etat' => '', 'conditions' => 'Quand une personne a cliqué sur le bouton d’appel téléphonique', 'conversion_id' => '', 'conversion_label' => '', 'extensions_appel' => ''],
-						['idclients' => $idclients, 'conversion' => 'Lead | Email', 'actions' => 'Principale', 'types' => 'Contact', 'remarque' => '', 'etat' => '', 'conditions' => 'Quand une personne a cliqué sur le bouton d’email ', 'conversion_id' => '', 'conversion_label' => '', 'extensions_appel' => ''],
-						['idclients' => $idclients, 'conversion' => 'Checkout', 'actions' => 'Secondaire', 'types' => 'begin_checkout', 'remarque' => '', 'etat' => '', 'conditions' => 'Quand une personne a atteint le début du checkout', 'conversion_id' => '', 'conversion_label' => '', 'extensions_appel' => ''],
-						['idclients' => $idclients, 'conversion' => 'Ajout au panier', 'actions' => 'Secondaire', 'types' => 'Add to cart', 'remarque' => '', 'etat' => '', 'conditions' => 'Quand une personne a ajouté un article au panier', 'conversion_id' => '', 'conversion_label' => '', 'extensions_appel' => ''],
-						['idclients' => $idclients, 'conversion' => 'Page vue | Vue d\'un article', 'actions' => 'Secondaire', 'types' => 'View item', 'remarque' => '', 'etat' => '', 'conditions' => 'Quand une personne a visité une page produit', 'conversion_id' => '', 'conversion_label' => '', 'extensions_appel' => ''],
-						['idclients' => $idclients, 'conversion' => 'Page vue |', 'actions' => 'Secondaire', 'types' => 'Page_view', 'remarque' => '', 'etat' => '', 'conditions' => 'Quand une personne a visité une page du site', 'conversion_id' => '', 'conversion_label' => '', 'extensions_appel' => ''],
-						['idclients' => $idclients, 'conversion' => 'Bouton | Télécharger notre catalogue', 'actions' => 'Secondaire', 'types' => 'Click', 'remarque' => '', 'etat' => '', 'conditions' => 'Quand une personne a cliqué sur "Télécharger notre catalogue"', 'conversion_id' => '', 'conversion_label' => '', 'extensions_appel' => ''],
-						['idclients' => $idclients, 'conversion' => 'Bouton |', 'actions' => 'Secondaire', 'types' => 'Click', 'remarque' => '', 'etat' => '', 'conditions' => 'Quand une personne a cliqué sur un autre bouton du site', 'conversion_id' => '', 'conversion_label' => '', 'extensions_appel' => ''],
-						['idclients' => $idclients, 'conversion' => 'Newsletter', 'actions' => 'Secondaire', 'types' => 'inscription', 'remarque' => '', 'etat' => '', 'conditions' => 'Quand une personne s est inscrite à la newsletter', 'conversion_id' => '', 'conversion_label' => '', 'extensions_appel' => ''],
-						['idclients' => $idclients, 'conversion' => 'Création de compte Client', 'actions' => 'Secondaire', 'types' => 'inscription', 'remarque' => '', 'etat' => '', 'conditions' => 'Quand une personne a créé un compte client', 'conversion_id' => '', 'conversion_label' => '', 'extensions_appel' => ''],
-					]
-				];
-
-				$conversions = $conversionSets[$choix] ?? [];
-
-				$this->Donne_modele->insert_conversions($conversions);
 				$this->Donne_modele->update_type_clients($choix, $idclients);
-
-				$data_groups = [];
-				foreach ($groupes_annonces as $index => $groupe) {
-					$data_groups[] = [
-						'groupe_annonce'         	=>	$groupe,
-						'contexte_groupe_annonce' 	=>	$contexte_groupes[$index] ?? '',
-						'mot_cle'                	=>	$mots_cle[$index] ?? '',
+					$data_groups = [
+						'nom_groupe'         	=>	$groupes_annonces,
+						'contexte_groupes_annonces' 	=>	$contexte_groupes,
+						'mot_cle'                	=>	$mots_cle,
 						'url_groupe_annonce'     	=>	$url_site,
 						'idcampagne'             	=>	$idcampagne,
-						'idclient'               	=>	$idclients,
-						'camp_type'          		=>	$camp_type
+						'idclients'               	=>	$idclients,
+						'type_campagnes'          	=>	$camp_type
 					];
-				}
-				$this->Donne_modele->insert_gp($data_groups, $idcampagne, $idclients, $camp_type);
+				$this->Donne_modele->insert_gp_pmax($data_groups);
 				break;
 		}
-		// Bloc final commun
+		$selectedImages = $this->input->post('selectedImages');
+		$imagesArray = array_filter(array_map('trim', explode(',', $selectedImages)));
+		$idcampagne = $camp_type;
+		$idgroupe_annonce = 0;
+		$this->Image_model->insert_images($imagesArray, $idclients, $idcampagne, $idgroupe_annonce);
+
+
 		$this->session->set_flashdata('success', 'Campagne ajouter avec succès.');
 		redirect('Client/onboarding/' . $idclients, 'refresh');
 
@@ -1586,7 +1660,7 @@ class Client extends MY_Controller
 
 		$headers = [
 			"Content-Type: application/json",
-			"Authorization: Bearer " . env('CHAT_GPT_API_KEY')
+			"Authorization: Bearer " . getenv('CHAT_GPT_API_KEY')
 		];
 
 		$ch = curl_init();
@@ -1940,7 +2014,7 @@ class Client extends MY_Controller
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 		curl_setopt($ch, CURLOPT_HTTPHEADER, [
 			'Content-Type: application/json',
-			'Authorization: Bearer ' . env('CHAT_GPT_API_KEY')
+			'Authorization: Bearer ' . getenv('CHAT_GPT_API_KEY')
 		]);
 		curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
 
@@ -1965,7 +2039,6 @@ class Client extends MY_Controller
 
 	private function get_summary_from_chatgpt($headings, $paragraphs)
 	{
-
 		$model = 'gpt-4';
 
 		$input_text = "Voici les titres et paragraphes d’un site web.\n\n";
@@ -1998,7 +2071,7 @@ class Client extends MY_Controller
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 		curl_setopt($ch, CURLOPT_HTTPHEADER, [
 			'Content-Type: application/json',
-			'Authorization: Bearer ' . env('CHAT_GPT_API_KEY')
+			'Authorization: Bearer ' . getenv('CHAT_GPT_API_KEY')
 		]);
 		curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
 

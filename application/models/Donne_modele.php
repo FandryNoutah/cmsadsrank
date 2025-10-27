@@ -306,7 +306,7 @@ class Donne_modele extends CI_Model
 
 	public function getclientvalidation($id)
 	{
-		$sql = "select * from campagne where idclients = '" . $id . "' AND publier_techinque = '1'";
+		$sql = "select * from campagne where idclients = '" . $id . "'";
 		$result = $this->db->query($sql);
 		$retour = $result->result_array();
 		$this->db->close();
@@ -553,7 +553,7 @@ class Donne_modele extends CI_Model
 		$sql = "SELECT ga.*, c.* 
             FROM groupe_annonce ga 
             JOIN campagne c ON ga.idcampagne = c.idcampagne 
-            WHERE ga.idclients = ? AND statut = 1";
+            WHERE ga.idclients = ?"	;
 
 		// Exécution de la requête avec un paramètre lié
 		$query = $this->db->query($sql, array($idclients));
@@ -638,7 +638,7 @@ public function insert_campagne_am(
 					$nom_campagne,
 					$information_campagne,
 					$cible,
-					$age,
+					$ages,
 					$zones,
 					$repartition_budget,
 					$date_campagne,
@@ -646,14 +646,18 @@ public function insert_campagne_am(
 					$objectif,
 					$url_site,
 					$mots_cle,
-					$Mots_cle_exclus
+					$Mots_cle_exclus,
+					$sexe,
+					$promotions,
+					$prix,
+					$téléphone
 				){
     // Échappement des variables
     $idclients = $this->db->escape($idclients);
     $camp_type = $this->db->escape($camp_type);
     $nom_campagne = $this->db->escape($nom_campagne);
     $information_campagne = $this->db->escape($information_campagne);
-    $age = $this->db->escape($age);
+    $ages = $this->db->escape($ages);
     $cible = $this->db->escape($cible);
     $zones = $this->db->escape($zones);
     $repartition_budget = $this->db->escape($repartition_budget);
@@ -662,6 +666,10 @@ public function insert_campagne_am(
     $objectif = $this->db->escape($objectif);
     $url_site = $this->db->escape($url_site);
     $Mots_cle_exclus = $this->db->escape($Mots_cle_exclus);
+	$sexe = $this->db->escape($sexe);
+    $promotions = $this->db->escape($promotions);
+    $prix = $this->db->escape($prix);
+    $téléphone = $this->db->escape($téléphone);
 
     // Construction de la requête SQL
     $sql = "
@@ -678,13 +686,17 @@ public function insert_campagne_am(
             appareil,
             objectif,
             url_site,
-            Mots_cle_exclus
+            Mots_cle_exclus,
+			sexe,
+			promotions,
+			prix,
+			téléphone
         ) VALUES (
             $idclients,
             $camp_type,
             $nom_campagne,
             $information_campagne,
-            $age,
+            $ages,
             $cible,
             $zones,
             $repartition_budget,
@@ -692,7 +704,11 @@ public function insert_campagne_am(
             $appareil,
             $objectif,
             $url_site,
-            $Mots_cle_exclus
+            $Mots_cle_exclus,
+			$sexe,
+			$promotions,
+			$prix,
+			$téléphone
         )
     ";
 
@@ -766,6 +782,12 @@ public function insert_campagne_am(
 		return $this->db->update('groupe_annonce', $data);
 	}
 
+	public function insert_gp_pmax($data_groups)
+	{
+		$this->load->database();
+		$this->db->insert('groupe_annonce', $data_groups);
+		return $this->db->insert_id();
+	}
 	public function insert_campagne($data)
 	{
 		$this->db->insert('campagne', $data);

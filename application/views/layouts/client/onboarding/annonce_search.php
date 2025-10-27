@@ -133,6 +133,40 @@
 					<div class="form-section-title">Chemin 2</div>
 					<input type="text" class="form-control mb-2" name="chemin2">
 
+					<div class="form-section-title">Proposition d'images</div>
+					<button type="button" class="btn btn-outline-dark mb-3" data-toggle="modal" data-target="#modalGestionImages">
+						<i class="fa fa-images"></i> Gérer les images
+					</button>
+					<div class="card mb-4 d-none" id="propositionImagesCard">
+						<div class="card-body">
+							<div class="row no-gutters" id="propositionImagesContainer"></div>
+						</div>
+					</div>
+					<div class="modal fade" id="modalGestionImages" tabindex="-1" role="dialog" aria-hidden="true">
+						<div class="modal-dialog modal-lg" role="document">
+							<div class="modal-content">
+								<div class="modal-header">
+									<h5 class="modal-title">Gérer les images de la campagne</h5>
+									<button type="button" class="close" data-dismiss="modal">&times;</button>
+								</div>
+								<div class="modal-body">
+									<div class="mb-3 input-group">
+										<input type="text" class="form-control" id="imageUrlInput" placeholder="https://exemple.com/image.jpg">
+										<div class="input-group-append">
+											<button class="btn btn-outline-dark" type="button" id="addImageUrlBtn">Ajouter URL</button>
+										</div>
+									</div>
+									<div id="imagePreviewContainer" class="d-flex flex-wrap"></div>
+								</div>
+								<div class="modal-footer">
+									<button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Annuler</button>
+									<button type="button" class="btn btn-dark" id="saveImagesBtn">Enregistrer</button>
+								</div>
+							</div>
+						</div>
+					</div>
+
+
 					<div class="form-section-title">Liens annexes</div>
 					<div id="liens-annexes-container">
 						<div class="form-group">
@@ -249,5 +283,108 @@
 		const chemin2 = $('input[name="chemin2"]').val().trim();
 		$('#preview-chemin2').text(chemin2 || 'Aucun Chemin 2');
 	}
+
+
+	const propositionCard = $('#propositionImagesCard');
+const propositionContainer = $('#propositionImagesContainer');
+const imagePreviewContainer = $('#imagePreviewContainer');
+
+const fetchImagesUrl = '<?= site_url("Client/fetch_images_campagnes") ?>';
+const saveImagesUrl  = '<?= site_url("Client/save_images_campagnes") ?>';
+const idcampagne = <?= isset($groupe[0]['idcampagne']) ? (int)$groupe[0]['idcampagne'] : 0 ?>;
+const idclient   = <?= isset($groupe[0]['idclients']) ? (int)$groupe[0]['idclients'] : 0 ?>;
+const csrfName = '<?= isset($this->security) ? $this->security->get_csrf_token_name() : '' ?>';
+const csrfHash = '<?= isset($this->security) ? $this->security->get_csrf_hash() : '' ?>';
+
+function createImageItem(src) {
+    return `<div class="position-relative m-2 image-item">
+                <img src="${src}" width="120" height="120" class="rounded border" style="object-fit:cover;">
+                <button type="button" class="btn btn-sm btn-danger position-absolute remove-image-btn" style="top:2px; right:2px;">&times;</button>
+            </div>`;
+}
+
+function updatePropositionImages(images) {
+    propositionContainer.empty();
+    if (!images || images.length === 0) {
+        propositionCard.addClass('d-none');
+        return;
+    }
+    propositionCard.removeClass('d-none');
+    images.forEach(src => {
+        propositionContainer.append(`<div class="col-auto px-2 mb-3"><img src="${src}" alt="Image" width="120" class="img-proposition selected" data-url="${src}" style="object-fit: cover; border-radius: 4px;"></div>`);
+    });
+}
+
+function loadImages() {
+    if (!idcampagne) return;
+    let data = { idcampagne };
+    if (csrfName && csrfHash) data[csrfName] = csrfHash;
+    $.post(fetchImagesUrl, data, function(resp) {
+        if (resp.success) {
+            updatePropositionImages(resp.images);
+            imagePreviewContainer.empty();
+            resp.images.forEach(src => imagePreviewContainer.append(createImageItem(src)));
+        }
+    }, 'json');
+}
+
+imagePreviewContainer.on('click', '.remove-image-btn', function() {
+    $(this).closest('.image-item').remove();
+});
+
+$('#addImageUrlBtn').click(function() {
+    const url = $('#imageUrlInput').val().trim();
+    if (!/^https?:\/\//i.test(url)) { alert('URL invalide'); return; }
+    imagePreviewContainer.append(createImageItem(url));
+    $('#imageUrlInput').val('');
+});
+
+$('#saveImagesBtn').click(function() {
+    let images = [];
+    imagePreviewContainer.find('img').each(function() { images.push($(this).attr('src')); });
+    let data = { idcampagne, idclient, images };
+    if (csrfName && csrfHash) data[csrfName] = csrfHash;
+
+    $.post(saveImagesUrl, data, function(resp) {
+        if (resp.success) {
+            updatePropositionImages(images);
+            $('#modalGestionImages').modal('hide');
+        } else {
+            alert(resp.message || 'Erreur lors de l’enregistrement');
+        }
+    }, 'json');
+});
+
+function updatePreview() {
+    // Titres
+    let titres = $('input[name="titres[]"]').map(function(){ return $(this).val().trim(); }).get().filter(v=>v!=='');
+    $('#preview-titres').html(titres.length ? titres.join('<br>') : 'Aucun titre');
+
+    // Titres longs
+    let titresLongs = $('input[name="titres_longs[]"]').map(function(){ return $(this).val().trim(); }).get().filter(v=>v!=='');
+    $('#preview-titres-longs').html(titresLongs.length ? titresLongs.join('<br>') : 'Aucun titre long');
+
+    // Descriptions
+    let descriptions = $('input[name="descriptions[]"]').map(function(){ return $(this).val().trim(); }).get().filter(v=>v!=='');
+    $('#preview-descriptions').html(descriptions.length ? descriptions.join('<br>') : 'Aucune description');
+
+    // URL et chemins
+    $('#preview-url').text($('#url_campagne').val().trim() || 'Aucune URL');
+    $('#preview-chemin1').text($('input[name="chemin1"]').val().trim() || 'Aucun Chemin 1');
+    $('#preview-chemin2').text($('input[name="chemin2"]').val().trim() || 'Aucun Chemin 2');
+
+    // Images
+    let imgs = propositionContainer.find('img').map(function(){ return $(this).attr('src'); }).get();
+    if ($('#preview-section #preview-image').length === 0) {
+        $('#preview-section table').append('<tr><th>Images</th><td id="preview-image"></td></tr>');
+    }
+    if (imgs.length) {
+        let html = imgs.map(src => `<img src="${src}" width="120" style="object-fit: cover; margin:2px;">`).join('');
+        $('#preview-image').html(html);
+    } else {
+        $('#preview-image').html('Aucune image');
+    }
+}
+
 </script>
 <?php end_section(); ?>

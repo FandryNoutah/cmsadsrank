@@ -27,6 +27,42 @@ class Image_model extends CI_Model {
 
         return $inserted;
     }
+    public function get_images_by_campagnes($idcampagne)
+    {
+        $this->db->where('idcampagne', $idcampagne);
+        $query = $this->db->get('images');
+        return $query->result();
+    }
+
+    public function insert_or_ignore($idcampagne, $url, $idclient = null)
+    {
+        $exists = $this->db->where('idcampagne', $idcampagne)
+                           ->where('image_url', $url)
+                           ->get('images')
+                           ->row();
+
+        if (!$exists) {
+            $this->db->insert('images', [
+                'idcampagne' => $idcampagne,
+                'idclients'  => $idclient,
+                'image_url'  => $url,
+                'created_at' => date('Y-m-d H:i:s')
+            ]);
+        }
+    }
+
+    public function delete_images_not_in($idcampagne, $urls)
+    {
+        if (!empty($urls)) {
+            $this->db->where('idcampagne', $idcampagne);
+            $this->db->where_not_in('image_url', $urls);
+            $this->db->delete('images');
+        } else {
+            // Si aucun URL n'est passé, on supprime tout
+            $this->db->where('idcampagne', $idcampagne)->delete('images');
+        }
+    }
+
     public function get_all_images() {
         $query = $this->db->order_by('rank', 'ASC')->get('images');
         return $query->result();
@@ -35,6 +71,16 @@ class Image_model extends CI_Model {
         $query = $this->db->where('idgroupe_annonce', $id)
                           ->order_by('rank', 'ASC')
                           ->get('images');
+        return $query->result();
+    }
+       public function get_images_by_campagne($idcampagne){
+        $this->load->database();
+
+        $query = $this->db->select('*') 
+                          ->from('images')
+                          ->where('images.idcampagne', $idcampagne)
+                          ->order_by('images.rank', 'ASC') 
+                          ->get();
         return $query->result();
     }
     public function get_images_by_client($idclients){
