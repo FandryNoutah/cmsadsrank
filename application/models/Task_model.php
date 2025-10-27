@@ -6,6 +6,18 @@ class Task_model extends CI_Model
 	{
 		parent::__construct();
 	}
+	public function get_task_brief($idclients, $titre_task)
+	{
+		$this->db->select('*');
+		$this->db->from('tasks');
+		$this->db->where('idclients', $idclients);
+		$this->db->where('title', $titre_task);
+		$this->db->where('status', 'planifié');
+
+		$query = $this->db->get();
+
+		return $query->row(); 
+	}
 
 	public function get_task_for_users_by_type($user_id = null, $type = 0)
 	{
@@ -376,6 +388,7 @@ public function get_all_tâche($status = null)
 	}
 	public function update_task_statuts($taskId, $data)
 	{
+		
 		$this->load->database();
 		$this->db->where('idtask', $taskId);
 		$this->db->update('tasks', $data);
@@ -425,6 +438,11 @@ public function get_all_tâche($status = null)
 	}
 
 	// Fonction pour ajouter une nouvelle tâche
+	public function add_tasks($datas)
+	{
+		$this->db->insert('tasks', $datas);
+		return $this->db->insert_id();
+	}
 	public function add_task($data)
 	{
 		// Récupérer le dernier idtask inséré

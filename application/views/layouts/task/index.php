@@ -196,6 +196,10 @@
 												<a href="<?= base_url('Onboarding') ?>" style="display: flex; align-items: center; text-decoration: none; color: inherit;">
 												<?= htmlspecialchars($t->nom_client) ?>
 												</a>
+												<?php elseif($t->title == "Création annonce" ):  ?>  
+												<a href="<?= base_url('Client/onboarding/' .  htmlspecialchars($t->idclients)) ?>" style="display: flex; align-items: center; text-decoration: none; color: inherit;">
+												<?= htmlspecialchars($t->nom_client) ?>
+												</a>
 											<?php else :  ?>
 												<?= htmlspecialchars($t->nom_client) ?>
 											<?php endif; ?>
@@ -264,6 +268,11 @@
 												<?php if ($t->type_tache == 9): ?>
 													<div class="mr-2">
 														<span class="badge alert-success">Relance</span>
+													</div>
+												<?php endif; ?>
+												<?php if ($t->type_tache == 10): ?>
+													<div class="mr-2">
+														<span class="badge alert-success">Annonce</span>
 													</div>
 												<?php endif; ?>
 											<?php if ($t->Statuts_technique == 3): ?>
@@ -426,6 +435,11 @@
 														<span class="badge alert-success">Relance</span>
 													</div>
 												<?php endif; ?>
+												<?php if ($t->type_tache == 10): ?>
+													<div class="mr-2">
+														<span class="badge alert-success">Annonce</span>
+													</div>
+												<?php endif; ?>
 											<?php if ($t->Statuts_technique == 3): ?>
 												<span class="col-auto mx-1 badge alert-danger">Urgent</span>
 											<?php endif; ?>
@@ -583,6 +597,11 @@
 														<span class="badge alert-success">Relance</span>
 													</div>
 												<?php endif; ?>
+												<?php if ($t->type_tache == 10): ?>
+													<div class="mr-2">
+														<span class="badge alert-success">Annonce</span>
+													</div>
+												<?php endif; ?>
 											<?php if ($t->Statuts_technique == 3): ?>
 												<span class="col-auto mx-1 badge alert-danger">Urgent</span>
 											<?php endif; ?>
@@ -700,6 +719,11 @@
 												<?php if ($t->type_tache == 9): ?>
 													<div class="mr-2">
 														<span class="badge alert-success">Relance</span>
+													</div>
+												<?php endif; ?>
+												<?php if ($t->type_tache == 10): ?>
+													<div class="mr-2">
+														<span class="badge alert-success">Annonce</span>
 													</div>
 												<?php endif; ?>
 												<?php if ($t->Statuts_technique == 3): ?>
@@ -837,6 +861,11 @@
 														<span class="badge alert-success">Relance</span>
 													</div>
 												<?php endif; ?>
+												<?php if ($t->type_tache == 10): ?>
+													<div class="mr-2">
+														<span class="badge alert-success">Annonce</span>
+													</div>
+												<?php endif; ?>
 												<?php if ($t->Statuts_technique == 3): ?>
 													<div class="mr-2">
 														<span class="badge alert-danger">Urgent</span>
@@ -968,6 +997,11 @@
 												<?php if ($t->type_tache == 9): ?>
 													<div class="mr-2">
 														<span class="badge alert-success">Relance</span>
+													</div>
+												<?php endif; ?>
+												<?php if ($t->type_tache == 10): ?>
+													<div class="mr-2">
+														<span class="badge alert-success">Annonce</span>
 													</div>
 												<?php endif; ?>
 												<?php if ($t->Statuts_technique == 3): ?>

@@ -127,8 +127,8 @@
 							<th>Member</th>
 							<th>Gocardless</th>
 							<th>Brief</th>
-							<!-- <th>Envoi Str</th>
-							<th>Validation Str</th> -->
+							<th>Envoi Str</th>
+							<th>Validation Str</th>
 							<th>Paiement</th>
 							<!-- <th>Compte Ads</th> -->
 							<th>DataStudio</th>
@@ -278,12 +278,35 @@
 
 									<td><?= (!empty($d->mis_en_place_paiement) && $d->mis_en_place_paiement != '0000-00-00') ? htmlspecialchars($d->mis_en_place_paiement) : '-' ?></td>
 
-									<td><?= (!empty($d->Brief) && $d->Brief != '0000-00-00') ? htmlspecialchars($d->Brief) : '-' ?></td>
+									<td>
+										<?php if ($d->statut_brief == 1):  ?>
+											<span class="badge alert-success rounded-pill px-2 py-1" style="font-size: 12px; font-weight: 500;">
+												<i class="fa fa-circle mr-1" style="font-size: 10px;"></i>
+												<?= (!empty($d->Brief) && $d->Brief != '0000-00-00') ? htmlspecialchars($d->Brief) : '-' ?>
+											</span>
+										<?php endif; ?>
+										<?php if ($d->statut_brief == 0):  ?>
+											<span class="badge alert-danger rounded-pill px-2 py-1" style="font-size: 12px; font-weight: 500;">
+												<i class="fa fa-circle mr-1" style="font-size: 10px;"></i>
+												<?= (!empty($d->Brief) && $d->Brief != '0000-00-00') ? htmlspecialchars($d->Brief) : '-' ?>
+											</span>
+										<?php endif; ?>	
+									</td>
 
-									<!-- <td>(!empty($d->date_validation_structure) && $d->date_validation_structure != '0000-00-00') ? htmlspecialchars($d->date_validation_structure) : '-' ?></td>
-
-                <td> (!empty($d->validation_technique) && $d->validation_technique != '0000-00-00') ? anchor('Validation/validation_structure/' . $d->idclients, $d->validation_technique, ['target' => '_blank']) : '-' ?></td>
-                -->
+									<td>
+											<?php if ($d->statut_envoye == 1):  ?>
+											<span class="badge alert-success rounded-pill px-2 py-1" style="font-size: 12px; font-weight: 500;">
+												<i class="fa fa-circle mr-1" style="font-size: 10px;"></i>
+												<?= (!empty($d->Envoie_structure) && $d->Envoie_structure != '0000-00-00') ? htmlspecialchars($d->Envoie_structure) : '-' ?>
+											</span>
+										<?php endif; ?>
+										<?php if ($d->statut_envoye == 0):  ?>
+											<span class="badge alert-danger rounded-pill px-2 py-1" style="font-size: 12px; font-weight: 500;">
+												<i class="fa fa-circle mr-1" style="font-size: 10px;"></i>
+												<?= (!empty($d->Envoie_structure) && $d->Envoie_structure != '0000-00-00') ? htmlspecialchars($d->Envoie_structure) : '-' ?>
+											</span>
+										<?php endif; ?>					
+              						  <td><?= (!empty($d->validation_technique) && $d->validation_technique != '0000-00-00') ? anchor('Validation/validation_structure/' . $d->idclients, $d->validation_technique, ['target' => '_blank']) : '-' ?></td>
 									<td><?= $d->paiement_recu ? 'Oui' : 'Non' ?></td>
 
 									<!-- <td> (!empty($d->Céation_compte_ads) && $d->Céation_compte_ads != '0000-00-00') ? htmlspecialchars($d->Céation_compte_ads) : 'Ajouter date' ?></td>

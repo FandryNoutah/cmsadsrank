@@ -13,6 +13,65 @@ class Donne_modele extends CI_Model
 	{
 		parent::__construct();
 	}
+	public function update_send_annonce($idonnee, $statut) {
+			$this->db->select('idclients');
+			$this->db->from('donnee');
+			$this->db->where('idonnee', $idonnee);
+			$query = $this->db->get();
+			$row = $query->row_array();
+
+			if (!$row) {
+				return false; 
+			}
+
+			$idclients = $row['idclients'];
+			$data = [
+				'statut_envoye'     => $statut
+			];
+			$this->db->where('idonnee', $idonnee);
+			$this->db->update('donnee', $data);
+
+			return $idclients;
+		}
+		public function update_status_brief($idonnee, $date_envoye, $statut) {
+			$this->db->select('idclients');
+			$this->db->from('donnee');
+			$this->db->where('idonnee', $idonnee);
+			$query = $this->db->get();
+			$row = $query->row_array();
+
+			if (!$row) {
+				return false; 
+			}
+
+			$idclients = $row['idclients'];
+			$data = [
+				'statut_brief'     => $statut,
+				'Envoie_structure' => $date_envoye
+			];
+			$this->db->where('idonnee', $idonnee);
+			$this->db->update('donnee', $data);
+
+			return $idclients;
+		}
+	public function update_send_annonce_onboarding($idonnee, $statut) {
+    $data = [
+        'statut_envoye'   => $statut
+    ];
+
+    $this->db->where('idonnee', $idonnee);
+    $this->db->update('onboarding', $data);
+}	
+	public function update_status_brief_onboarding($idonnee, $date_envoye, $statut) {
+    $data = [
+        'statut_brief'   => $statut,
+        'Envoie_structure' => $date_envoye
+    ];
+
+    $this->db->where('idonnee', $idonnee);
+    $this->db->update('onboarding', $data);
+}
+
 	public function update_status_onboarding($idonboarding, $statut_upsell)
 	{
 		$sql = "UPDATE onboarding SET statut_upsell = $statut_upsell WHERE idonboarding = $idonboarding";

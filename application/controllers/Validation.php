@@ -255,9 +255,13 @@ endif;
 
 		$donnees_valider = $this->Donne_modele->getclientvalidation($id);
 		$this->data["clients"] = $this->visuels_model->getClientById($id);
-		$idclients = $id;
+		$idclient = $idclients = $id;
 		// Récupérer les groupes d'annonces
 		$groupes_valider = $this->Donne_modele->getcampagnegroupevalidationbyidclient($id);
+		//var_dump($groupes_valider);
+		//die();
+	
+	
 		if (!is_array($groupes_valider) || !count($groupes_valider)) {
 			redirect('Googleads');
 		}
@@ -376,6 +380,12 @@ endif;
 			$dompdf->stream($filename, array("Attachment" => 0)); // Remplacez "0" par "1" si vous souhaitez forcer le téléchargement
 		}
 		else {
+				$campagnes = $this->visuels_model->get_campagnes_by_client($idclient);
+		foreach ($campagnes as &$campagne) {
+			$campagne['groupes_annonces'] = $this->visuels_model->get_groupes_by_campagne($campagne['idcampagne']);
+			$campagne['images'] = $this->Image_model->get_images_by_campagne($campagne['idcampagne']);
+				$this->data['campagnes'] = $campagnes;
+		}
 			$this->load->view("templates/v3/Validation_structure", $this->data);
 		}
 		

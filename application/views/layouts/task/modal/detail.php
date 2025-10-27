@@ -27,9 +27,9 @@
 						<input type="date" name="date_due" id="detail_date_due" class="form-control">
 					</div>
 				</div>
-
+				
 				<label>Description</label>
-				<p class="text-muted" id="detail_description"></p>
+				<p class="text-muted" id="detail_description"></p> 
 
 				<div class="form-group" id="attachment_container">
 					<p>Attachment</p>

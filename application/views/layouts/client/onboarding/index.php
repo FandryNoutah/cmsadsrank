@@ -358,11 +358,113 @@
 		<div class="col" style="height: calc(100vh - 101px); overflow-y:auto;">
 			<div class="container-fluid pb-5 pt-3">
 
-				<!-- DETAIL -->
-				<h1 class="text-truncate" style="font-size: 42px;">
-					Onboarding :
-					<?= $d['nom_client'] ?>
+
+				<div class="dropdown position-absolute" style="right: 15px;">
+						<?php if($current_user->tech == 3): ?>
+						<?php if ($d['statut_brief'] == 1):  ?>
+							<a type="button" class="badge alert-success rounded-pill px-4 py-3 mb-3 " style="font-size: 14px; font-weight: 500;" id="clientStatusDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+								<i class="fa fa-circle mr-1" style="font-size: 14px;"></i>
+								Brief complété
+							</a>
+						<?php endif; ?>
+						<?php if ($d['statut_brief'] == 0): ?>
+							<div class="dropdown mb-3">
+								<a class="badge alert-warning rounded-pill px-4 py-3 dropdown-toggle"
+								href="#" id="clientStatusDropdown_<?= $d['idonnee'] ?>"
+								data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
+								style="font-size: 14px; font-weight: 500;">
+									<i class="fa fa-circle mr-1" style="font-size: 14px;"></i>
+									Brouillon
+								</a>
+
+								<div class="dropdown-menu" aria-labelledby="clientStatusDropdown_<?= $d['idonnee'] ?>">
+									<a href="#" class="dropdown-item text-primary sendToStructure"
+									data-id="<?= $d['idonnee'] ?>">
+										Envoyer à la structure
+									</a>
+								</div>
+							</div>
+
+							<!-- Modal de confirmation -->
+							<div class="modal fade" id="confirmSendModal_<?= $d['idonnee'] ?>" tabindex="-1" role="dialog">
+								<div class="modal-dialog" role="document">
+									<div class="modal-content">
+										<div class="modal-header">
+											<h5 class="modal-title">Confirmation</h5>
+											<button type="button" class="close" data-dismiss="modal">&times;</button>
+										</div>
+										<div class="modal-body">
+											Voulez-vous envoyer à la technique ?
+										</div>
+										<div class="modal-footer">
+											<button type="button" class="btn btn-secondary" data-dismiss="modal">Annuler</button>
+											<form action="<?= site_url('Client/send_to_technique/' . $d['idonnee']) ?>" method="post" style="display:inline;">
+												<button type="submit" class="btn btn-primary">Oui, envoyer</button>
+											</form>
+										</div>
+									</div>
+								</div>
+							</div>
+						<?php endif; ?>
+
+
+
+						<?php endif; ?>
+						<?php if($current_user->tech == 1): ?>
+						<?php if ($d['statut_envoye'] == 1):  ?>
+							<a type="button" class="badge alert-success rounded-pill px-4 py-3 mb-3 dropdown-toggle" style="font-size: 14px; font-weight: 500;" id="clientStatusDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+								<i class="fa fa-circle mr-1" style="font-size: 14px;"></i>
+								Annonce complété
+							</a>
+							<?php endif; ?>
+							<?php if ($d['statut_envoye'] == 0): ?>
+								<div class="dropdown mb-3">
+									<!-- Badge Annonce brouillon -->
+									<a class="badge alert-warning rounded-pill px-4 py-3 dropdown-toggle"
+									href="#" id="annonceStatusDropdown_<?= $d['idonnee'] ?>"
+									data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
+									style="font-size: 14px; font-weight: 500;">
+										<i class="fa fa-circle mr-1" style="font-size: 14px;"></i>
+										Annonce brouillon
+									</a>
+
+									<div class="dropdown-menu" aria-labelledby="annonceStatusDropdown_<?= $d['idonnee'] ?>">
+										<a href="#" class="dropdown-item text-primary sendAnnonce"
+										data-id="<?= $d['idonnee'] ?>">
+											Envoyer l’annonce
+										</a>
+									</div>
+								</div>
+
+								<!-- Modal de confirmation -->
+								<div class="modal fade" id="confirmSendAnnonceModal_<?= $d['idonnee'] ?>" tabindex="-1" role="dialog">
+									<div class="modal-dialog" role="document">
+										<div class="modal-content">
+											<div class="modal-header">
+												<h5 class="modal-title">Confirmation</h5>
+												<button type="button" class="close" data-dismiss="modal">&times;</button>
+											</div>
+											<div class="modal-body">
+												Voulez-vous vraiment envoyer cette annonce ?
+											</div>
+											<div class="modal-footer">
+												<button type="button" class="btn btn-secondary" data-dismiss="modal">Annuler</button>
+												<form action="<?= site_url('Client/send_annonce/' . $d['idonnee']) ?>" method="post" style="display:inline;">
+													<input type="hidden" value="<?= $d['account_manager'] ?>" name="am">
+													<button type="submit" class="btn btn-primary">Oui, envoyer</button>
+												</form>
+											</div>
+										</div>
+									</div>
+								</div>
+							<?php endif; ?>
+
+						<?php endif; ?>
+				</div>
+				<h1 class="mb-2" style="font-size: 48px; font-weight: 500;">
+					Onboarding : <?= $d['nom_client'] ?>
 				</h1>
+
 
 					<div class="row mb-3">
 						<div class="col">
@@ -394,18 +496,6 @@
 											} ?>
 											<b><?= format_budget($d['budget']) ?> €</b>
 										</button>
-										<div class="dropdown no-arrow">
-											<img class="mr-2 eye-icon"
-												src="<?= base_url('assets/images/ico/Eye.png') ?>"
-												data-id="<?= $d['idclients'] ?>"
-												alt="Voir les détails"
-												style="cursor: pointer;" />
-										</div>
-										<a href="<?= base_url('Client/inventaire_pmax/' .  htmlspecialchars($d['idclients'])) ?>" style="display: flex; align-items: center; text-decoration: none; color: inherit;">
-												Inventaire
-												</a>
-
-
 									</div>
 									<br><br>
 									<div class="d-flex justify-content-start mb-3" style="font-size: 15px;">
@@ -431,7 +521,7 @@
 											<img src="<?= base_url('assets/images/' . $d['am_photo_user']) ?>" width="24" height="24">
 										</span>
 									</div>
-									<a href="<?= base_url('Client/annonces/' . $d['idclients']) ?>" class="btn btn-outline-dark btn-block">Voir annonce</a>
+									<!-- <a href="< base_url('Client/annonces/' . $d['idclients']) ?>" class="btn btn-outline-dark btn-block">Voir annonce</a> -->
 									<a href="<?= base_url('Validation/validation_structure/' . $d['idclients']) ?>" class="btn btn-outline-dark btn-block" target="_blank" >Annonce</a>
 									<button type="button" class="btn btn-outline-dark btn-block" data-toggle="modal" data-target="#inventaireModal">
 									Inventaire
@@ -818,6 +908,45 @@
 
 <?php start_section('script') ?>
 <script>
+	$(document).ready(function() {
+    // Clic sur "Envoyer l’annonce"
+    $(document).on('click', '.sendAnnonce', function(e) {
+        e.preventDefault();
+        const id = $(this).data('id');
+        $('#confirmSendAnnonceModal_' + id).modal('show');
+    });
+});
+
+	$(document).ready(function() {
+
+    // Clic sur "Envoyer à la structure"
+    $(document).on('click', '.sendToStructure', function(e) {
+        e.preventDefault();
+        const id = $(this).data('id');
+        $('#confirmSendModal_' + id).modal('show');
+    });
+
+    // Clic sur "Oui, envoyer" dans la modale
+    $(document).on('click', '.confirmSend', function() {
+        const id = $(this).data('id');
+        const modal = $('#confirmSendModal_' + id);
+        modal.modal('hide');
+
+        $.ajax({
+            url: '<?= site_url("Client/send_to_technique") ?>/' + id,
+            type: 'POST',
+            success: function() {
+                alert('Brief envoyé avec succès !');
+                location.reload(); // rafraîchit la page
+            },
+            error: function() {
+                alert('Erreur lors de l\'envoi.');
+            }
+        });
+    });
+
+});
+
 	$(document).ready(function() {
 
 		$('#clientModal').on('show.bs.modal', function(event) {

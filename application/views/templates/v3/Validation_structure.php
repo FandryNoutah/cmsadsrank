@@ -1,517 +1,270 @@
-
-
-
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <meta charset="utf-8">
-    <title>Validation client</title>
-    <!-- Font Awesome for icons (local) -->
-    <link href="<?php echo base_url('assets/css/font-awesome.all.min.css'); ?>" rel="stylesheet">
-    <style>
-        /* Only page-break CSS */
-        .section { 
-            page-break-before: always; 
-            margin-top: 50px;
-        }
-        .section:first-child { page-break-before: auto; }
-        td{
-            background-color: white! important;
-        }
-    </style>
-
-</head>
-<body style="font-family: Arial, sans-serif; margin: 0; padding: 0;">
-
-    <div style="width: 90%; max-width: 1140px; margin: 0 auto; padding: 15px;">
-        <!-- Campagne Google ADS Section -->
-        <div class="section">
-            <h1 style="text-align: center; margin-bottom: 15px; font-size: 2em;">Campagne Google ADS</h1>
-            <div style="display: flex; margin-bottom: 15px;">
-                <div style="width: 50%; padding: 15px;">
-                    <img src="<?php echo $logo_base64; ?>" alt="Logo" style="max-width: 150px; width: 100%; height: auto;">
-                </div>
-                <div style="width: 50%; padding: 15px; text-align: right;">
-                    <h1 style="margin: 0; font-size: 2em;">Campagne</h1>
-                </div>
-            </div>
-            <table style="width: 100%; border-collapse: collapse; border: 1px solid #dee2e6; background-color: #fff;">
-                <thead style="background-color: #4EA5FE; color: #fff;">
-                    <tr>
-                        <th style="padding: 12px; border: 1px solid #dee2e6;">Zone</th>
-                        <th style="padding: 12px; border: 1px solid #dee2e6;">Calendrier</th>
-                        <th style="padding: 12px; border: 1px solid #dee2e6;">Appareils</th>
-                        <th style="padding: 12px; border: 1px solid #dee2e6;">Budget</th>
-                        <th style="padding: 12px; border: 1px solid #dee2e6;">Campagne</th>
-                        <th style="padding: 12px; border: 1px solid #dee2e6;">Groupe d'annonces</th>
-                        <th style="padding: 12px; border: 1px solid #dee2e6; width: 250px">Mots-clés</th>
-						<?php if ($action !== "export"): ?>
-                        	<th style="padding: 12px; border: 1px solid #dee2e6;">Action</th>
-						<?php endif; ?>
-                    </tr>
-                </thead>
-                <tbody>
-                  
-                    <?php if (empty($donne_valider)): ?>
-                        <tr><td colspan="8" style="padding: 12px; border: 1px solid #dee2e6; text-align: center;">Aucune donnée disponible</td></tr>
-                    <?php else: ?>
-                        <?php foreach ($donne_valider as $D): ?>
-                            <?php $countG = count($D['groupes_annonces']); ?>
-                            <?php if ($countG == 0): ?>
-                                <tr><td colspan="8" style="padding: 12px; border: 1px solid #dee2e6; text-align: center;">Aucun groupe d'annonces</td></tr>
-                            <?php else: ?>
-                                <?php for ($i = 0; $i < $countG; $i++): ?>
-                                    <tr style="background-color: <?php echo ($i % 2 == 0) ? '#f8f9fa' : '#fff'; ?>;">
-                                        <?php if ($i == 0): ?>
-                                            <td rowspan="<?php echo $countG; ?>" style="padding: 12px; border: 1px solid #dee2e6;"><?php echo $D['zones']; ?></td>
-                                            <td rowspan="<?php echo $countG; ?>" style="padding: 12px; border: 1px solid #dee2e6;"><?php echo $D['date_campagne']; ?></td>
-                                            <td rowspan="<?php echo $countG; ?>" style="padding: 12px; border: 1px solid #dee2e6;"><?php echo $D['appareil']; ?></td>
-                                            <td rowspan="<?php echo $countG; ?>" style="padding: 12px; border: 1px solid #dee2e6;"><?php echo $D['repartition_budget']; ?> €</td>
-                                            <td rowspan="<?php echo $countG; ?>" style="padding: 12px; border: 1px solid #dee2e6;"><?php echo $D['nom_campagne']; ?></td>
-                                        <?php endif; ?>
-                                        <td style="padding: 12px; border: 1px solid #dee2e6;"><?php echo $D['groupes_annonces'][$i]['nom_groupe']; ?></td>
-                                        <td style="padding: 12px; border: 1px solid #dee2e6; text-align: center;">
-                                            <?php
-												$motCles = explode("\n", $D['groupes_annonces'][$i]['mot_cle']);
-												echo implode('<br>', array_map('trim', $motCles));
-                                            ?>
-                                        </td>
-
-										<?php if ($action !== "export"): ?>
-											<td style="padding: 12px; border: 1px solid #dee2e6;">
-												<?php echo anchor("Validation/editcampagne/" . $D['idcampagne'], '<i class="fas fa-edit"></i>', ['style' => 'display: inline-block; padding: 5px 10px; font-size: 14px; color: #fff; background-color: #4EA5FE; border: 1px solid #4EA5FE; border-radius: 4px; text-decoration: none;', 'data-edit' => $D['idcampagne']]); ?>
-											</td>
-										<?php endif; ?>
-                                    </tr>
-                                <?php endfor; ?>
-                            <?php endif; ?>
-                        <?php endforeach; ?>
-                    <?php endif; ?>
-                </tbody>
-            </table>
-        </div>
-
-		<div class="section">
-			<h1 style="text-align: center; margin-bottom: 15px; font-size: 2em;">Groupe Annonce</h1>
-			<div style="display: flex; margin-bottom: 15px;">
-				<div style="width: 50%; padding: 15px;">
-					<img src="<?php echo $logo_base64; ?>" alt="Logo" style="max-width: 150px; width: 100%; height: auto;">
-				</div>
-				<div style="width: 50%; padding: 15px; text-align: right;">
-					<h1 style="margin: 0; font-size: 2em;">Annonce</h1>
-				</div>
-			</div>
-				<!-- Groupe Annonce Section -->
-				<?php if (!empty($groupe_valider)): ?>
-					<?php foreach ($groupe_valider as $G): ?>
-                    <table style="width: 100%; border-collapse: collapse; border: 1px solid #dee2e6; background-color: #fff; margin-bottom: 30px;">
-                        <tbody>
-                            <tr>
-                                <th style="padding: 12px; border: 1px solid #dee2e6; background-color: #4EA5FE; color: #fff; width: 20%;"><?php if ($action !== "export"): ?>
-										<?php if ($G['type_campagnes'] == 1): ?>
-											<b><?php echo anchor("Validation/editgroupesearch/" . $G['idgroupe_annonce'], '<i class="fas fa-edit"></i>', ['style' => 'display: inline-block; padding: 5px 10px; font-size: 14px; color: #fff; background-color: #4EA5FE; border: 1px solid #4EA5FE; border-radius: 4px; text-decoration: none; float: right;', 'data-edit' => $G['idgroupe_annonce']]); ?></b>
-										<?php elseif ($G['type_campagnes'] == 2): ?>
-											<b><?php echo anchor("Validation/editgroupelocal/" . $G['idgroupe_annonce'], '<i class="fas fa-edit"></i>', ['style' => 'display: inline-block; padding: 5px 10px; font-size: 14px; color: #fff; background-color: #4EA5FE; border: 1px solid #4EA5FE; border-radius: 4px; text-decoration: none; float: right;', 'data-edit' => $G['idgroupe_annonce']]); ?></b>
-										<?php elseif ($G['type_campagnes'] == 3): ?>
-											<b><?php echo anchor("Validation/editgroupepmax/" . $G['idgroupe_annonce'], '<i class="fas fa-edit"></i>', ['style' => 'display: inline-block; padding: 5px 10px; font-size: 14px; color: #fff; background-color: #4EA5FE; border: 1px solid #4EA5FE; border-radius: 4px; text-decoration: none; float: right;', 'data-edit' => $G['idgroupe_annonce']]); ?></b>
-										<?php endif; ?>
-									<?php endif; ?>Campagne</th>
-                                <td style="padding: 12px; border: 1px solid #dee2e6; text-align: center;">
-                                    <b><?php echo $G['nom_campagne']; ?></b>
-
-									
-                                </td>
-                            </tr>
-                            <tr>
-                                <th style="padding: 12px; border: 1px solid #dee2e6; background-color: #4EA5FE; color: #fff; width: 20%;">Groupe d'annonces</th>
-                                <td style="padding: 12px; border: 1px solid #dee2e6; text-align: center;"><b><?php echo $G['nom_groupe']; ?></b></td>
-                            </tr>
-                            <tr>
-                                <th style="padding: 12px; border: 1px solid #dee2e6; background-color: #4EA5FE; color: #fff; width: 20%;">Titres</th>
-                                <td style="padding: 12px; border: 1px solid #dee2e6; text-align: center;"><?php echo implode('<br>', array_filter([$G['titre1'], $G['titre2'], $G['titre3'], $G['titre4'], $G['titre5'], $G['titre6'], $G['titre7'], $G['titre8'], $G['titre9'], $G['titre10'], $G['titre11'], $G['titre12']])); ?></td>
-                            </tr>
-                            <tr>
-                                <th style="padding: 12px; border: 1px solid #dee2e6; background-color: #4EA5FE; color: #fff; width: 20%;">Descriptions</th>
-                                <td style="padding: 12px; border: 1px solid #dee2e6; text-align: center;"><?php echo implode('<br>', array_filter([$G['descriptions1'], $G['descriptions2'], $G['descriptions3'], $G['descriptions4']])); ?></td>
-                            </tr>
-                            <?php if ($G['type_campagnes'] == 3 || $G['type_campagnes'] == 2): ?>
-                                <tr>
-                                    <th style="padding: 12px; border: 1px solid #dee2e6; background-color: #4EA5FE; color: #fff; width: 20%;">Description brève</th>
-                                    <td style="padding: 12px; border: 1px solid #dee2e6; text-align: center;"><?php echo $G['description_breve']; ?></td>
-                                </tr>
-                            <?php endif; ?>
-                            <?php if ($G['type_campagnes'] == 1): ?>
-                                <tr>
-                                    <th style="padding: 12px; border: 1px solid #dee2e6; background-color: #4EA5FE; color: #fff; width: 20%;">Chemin 1</th>
-                                    <td style="padding: 12px; border: 1px solid #dee2e6; text-align: center;"><?php echo $G['chemin1']; ?></td>
-                                </tr>
-                                <tr>
-                                    <th style="padding: 12px; border: 1px solid #dee2e6; background-color: #4EA5FE; color: #fff; width: 20%;">Chemin 2</th>
-                                    <td style="padding: 12px; border: 1px solid #dee2e6; text-align: center;"><?php echo $G['chemin2']; ?></td>
-                                </tr>
-                            <?php endif; ?>
-                            <tr>
-                                <th style="padding: 12px; border: 1px solid #dee2e6; background-color: #4EA5FE; color: #fff; width: 20%;">URL</th>
-                                <td style="padding: 12px; border: 1px solid #dee2e6; text-align: center;"><a href="<?php echo $G['url_groupe_annonce']; ?>" target="_blank" style="color: #4EA5FE; text-decoration: none;"><?php echo $G['url_groupe_annonce']; ?></a></td>
-                            </tr>
-                            <?php if ($G['type_campagnes'] == 5): ?>
-                                <tr>
-                                    <th style="padding: 12px; border: 1px solid #dee2e6; background-color: #4EA5FE; color: #fff; width: 20%;">Logo</th>
-                                    <td style="padding: 12px; border: 1px solid #dee2e6; text-align: center;">
-                                        <img src="<?php echo $G['logo_client']; ?>" alt="Logo" style="max-width: 100px; width: 100%; height: auto;">
-                                    </td>
-                                </tr>
-                            <?php endif; ?>
-                            <?php if ($G['type_campagnes'] == 3): ?>
-                                <tr>
-                                    <th style="padding: 12px; border: 1px solid #dee2e6; background-color: #4EA5FE; color: #fff; width: 20%;">Logo</th>
-                                    <td style="padding: 12px; border: 1px solid #dee2e6; text-align: center">
-                                                            <img src="<?= base_url($clients[0]['logo_client']) ?>" alt="Image" style="width: 160px; height: auto; object-fit: cover; margin-bottom: 15px;">
-                                    </td>
-
-                                </tr>
-                                <tr>
-                                    <th style="padding: 12px; border: 1px solid #dee2e6; background-color: #4EA5FE; color: #fff; width: 20%;">Images</th>
-                                    <td style="padding: 12px; border: 1px solid #dee2e6;">
-                                        <div style="display: flex; flex-direction: column; gap: 15px;">
-                                            <?php if (empty($images)): ?>
-                                                <div style="width: 100%; padding: 15px; text-align: center;">Aucune image disponible</div>
-                                            <?php else: ?>
-                                                <?php $counter = 0; ?>
-                                                <div class="row" style="display: flex; flex-wrap: wrap; gap: 15px;"> <!-- Première ligne -->
-                                                <?php foreach ($images as $image): ?>
-                                                    <div id="image-<?= $image->id ?>" data-id="<?= $image->id ?>">
-                                                        <?php if (strpos($image->image_url, 'http') === 0): ?>
-                                                            <img src="<?= $image->image_url ?>" alt="Image" style="width: 160px; height: 120px; object-fit: cover; margin-bottom: 15px;">
-                                                        <?php else: ?>
-                                                            <img src="<?= base_url($image->image_url) ?>" alt="Image" style="width: 160px; height: 120px; object-fit: cover; margin-bottom: 15px;">
-                                                        <?php endif; ?>
-                                                    </div>
-
-                                                    <?php $counter++; ?>
-
-                                                    <?php if ($counter % 5 == 0 && $counter !== count($images)): ?>
-                                                        </div> <!-- Fin de la ligne actuelle -->
-                                                        <div class="row" style="display: flex; flex-wrap: wrap; gap: 15px;"> <!-- Nouvelle ligne -->
-                                                    <?php endif; ?>
-                                                <?php endforeach; ?>
-                                                </div> <!-- Fermeture de la dernière ligne -->
-                                            <?php endif; ?>
-                                        </div>
-
-                                        <?php if ($action !== "export"): ?>
-                                            <?php echo anchor("Validation/gestion_image/" . $G['idgroupe_annonce'], '<i class="fas fa-edit"></i>', [
-                                                'style' => 'display: inline-block; padding: 5px 10px; font-size: 14px; color: #fff; background-color: #4EA5FE; border: 1px solid #4EA5FE; border-radius: 4px; text-decoration: none; float: right;',
-                                                'data-edit' => $G['idgroupe_annonce']
-                                            ]); ?>
-                                        <?php endif; ?>
-                                    </td>
-
-                                </tr>
-                            <?php endif; ?>
-                            <?php if ($G['type_campagnes'] == 2): ?>
-                                <tr>
-                                    <th style="padding: 12px; border: 1px solid #dee2e6; background-color: #4EA5FE; color: #fff; width: 20%;">Logo</th>
-                                    <td style="padding: 12px; border: 1px solid #dee2e6; text-align: center">
-                                                            <img src="<?= base_url($clients[0]['logo_client']) ?>" alt="Image" style="width: 160px; height: auto; object-fit: cover; margin-bottom: 15px;">
-                                    </td>
-
-                                </tr>
-                                <tr>
-                                    <th style="padding: 12px; border: 1px solid #dee2e6; background-color: #4EA5FE; color: #fff; width: 20%;">Images</th>
-                                    <td style="padding: 12px; border: 1px solid #dee2e6;">
-                                        <?php if (empty($images_local)): ?>
-                                            <div style="width: 100%; padding: 15px; text-align: center;">Aucune image disponible</div>
-                                        <?php else: ?>
-                                            <?php $counter = 0; ?>
-                                            <div class="row" style="display: flex; flex-wrap: wrap; gap: 15px;">
-                                            <?php foreach ($images_local as $image): ?>
-                                                <div class="col-md-2" id="image-<?= $image->id ?>" data-id="<?= $image->id ?>" style="padding: 0;">
-                                                    <div class="image-card" style="display: flex; justify-content: center;">
-                                                        <?php if (strpos($image->image_url, 'http') === 0): ?>
-                                                            <img src="<?= $image->image_url ?>" alt="Image" style="width: 160px; height: 120px; object-fit: cover; margin-bottom: 15px;">
-                                                        <?php else: ?>
-                                                            <img src="<?= base_url($image->image_url) ?>" alt="Image" style="width: 160px; height: 120px; object-fit: cover; margin-bottom: 15px;">
-                                                        <?php endif; ?>
-                                                    </div>
-                                                </div>
-
-                                                <?php $counter++; ?>
-                                                <?php if ($counter % 5 == 0 && $counter !== count($images_local)): ?>
-                                                    </div><div class="row" style="display: flex; flex-wrap: wrap; gap: 15px;">
-                                                <?php endif; ?>
-                                            <?php endforeach; ?>
-                                            </div>
-                                        <?php endif; ?>
-
-                                        <?php if ($action !== "export"): ?>
-                                            <?php echo anchor("Validation/gestion_image/" . $G['idgroupe_annonce'], '<i class="fas fa-edit"></i>', [
-                                                'style' => 'display: inline-block; padding: 5px 10px; font-size: 14px; color: #fff; background-color: #4EA5FE; border: 1px solid #4EA5FE; border-radius: 4px; text-decoration: none; float: right;',
-                                                'data-edit' => $G['idgroupe_annonce']
-                                            ]); ?>
-                                        <?php endif; ?>
-                                    </td>
-
-                                </tr>
-                            <?php endif; ?>
-                            <?php if ($G['type_campagnes'] == 3 && $action !== "export"): ?>
-                                <tr>
-                                    <th style="padding: 12px; border: 1px solid #dee2e6; background-color: #4EA5FE; color: #fff; width: 20%;">Inventaire</th>
-                                    <td style="padding: 12px; border: 1px solid #dee2e6; text-align: center;">
-										<?php if ($action !== "export"): ?>
-                                        	<?php echo anchor("Googleads/visualiser/" . $G['idclients'], '<i class="fas fa-plus"></i> Inventaire', ['style' => 'display: inline-block; padding: 5px 10px; font-size: 14px; color: #fff; background-color: #4EA5FE; border: 1px solid #4EA5FE; border-radius: 4px; text-decoration: none;', 'data-edit' => $G['idclients']]); ?>
-										<?php endif ?>
-                                    </td>
-                                </tr>
-                            <?php endif; ?>
-                            <?php if ($G['type_campagnes'] == 2 && $action !== "export"): ?>
-                                <tr>
-                                    <th style="padding: 12px; border: 1px solid #dee2e6; background-color: #4EA5FE; color: #fff; width: 20%;">Inventaire</th>
-                                    <td style="padding: 12px; border: 1px solid #dee2e6; text-align: center;">
-										<?php if ($action !== "export"): ?>
-                                        	<?php echo anchor("Googleads/inventaire_local/" . $G['idclients'], '<i class="fas fa-plus"></i> Inventaire', ['style' => 'display: inline-block; padding: 5px 10px; font-size: 14px; color: #fff; background-color: #4EA5FE; border: 1px solid #4EA5FE; border-radius: 4px; text-decoration: none;', 'data-edit' => $G['idclients']]); ?>
-										<?php endif ?>
-                                    </td>
-                                </tr>
-                            <?php endif; ?>
-                        </tbody>
-                    </table>
-				<?php endforeach; ?>
-			<?php endif; ?>
-		</div>
-					
-        <!-- Extensions Section -->
-        <?php if (!empty($extensions) && is_array($extensions)): ?>
-            <div class="section">
-                <div style="display: flex; margin-bottom: 15px;">
-                    <div style="width: 50%; padding: 15px;">
-                        <img src="<?php echo $logo_base64; ?>" alt="Logo" style="max-width: 150px; width: 100%; height: auto;">
-                    </div>
-                    <div style="width: 50%; padding: 15px; text-align: right;">
-                        <h1 style="margin: 0; font-size: 2em;">Extensions</h1>
-                    </div>
-                </div>
-                <table style="width: 100%; border-collapse: collapse; border: 1px solid #dee2e6; background-color: #fff;">
-                    <thead style="background-color: #4EA5FE; color: #fff;">
-                        <tr>
-                            <th style="padding: 12px; border: 1px solid #dee2e6; width:40px;"></th>
-                            <th style="padding: 12px; border: 1px solid #dee2e6;">Liens annexes</th>
-                            <th style="padding: 12px; border: 1px solid #dee2e6;">Accroche</th>
-                            <th style="padding: 12px; border: 1px solid #dee2e6;">Extraits de site</th>
-                            <th style="padding: 12px; border: 1px solid #dee2e6;">Lieu</th>
-                            <th style="padding: 12px; border: 1px solid #dee2e6;">Appel</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php $i = 0; ?>
-                        <?php foreach ($extensions as $E): ?>
-                            <tr style="background-color: <?php echo ($i % 2 == 0) ? '#f8f9fa' : '#fff'; ?>;">
-                                <td> <?php echo anchor("Validation/editextensions/".$E['idextensions'], '<i class="fas fa-edit" style="margin-left: 10px;display: inline-block; padding: 5px 10px; font-size: 14px; color: #fff; background-color: #4EA5FE; border: 1px solid #4EA5FE; border-radius: 4px; text-decoration: none;"></i>','data-edit="'.$E['idextensions'].'"'); ?>
-                               </td>
-                                <td style="padding: 12px; border: 1px solid #dee2e6;">
-                               
-                                    <strong><?php echo $E['titre_extensions']; ?></strong><br>
-                                    <?php echo nl2br(wordwrap($E['description_extensions'], 35, "\n", true)); ?>
-                                    <br>
-                                    <?php
-                                    $url = $E['url_extensions'];
-
-                                    // Coupe à ".com" ou ".fr"
-                                    $cut_pos = false;
-
-                                    if (strpos($url, '.com/') !== false) {
-                                        $cut_pos = strpos($url, '.com/') + 4;
-                                    } elseif (strpos($url, '.fr/') !== false) {
-                                        $cut_pos = strpos($url, '.fr/') + 3;
-                                    } elseif (strpos($url, '.com') !== false) {
-                                        $cut_pos = strpos($url, '.com') + 4;
-                                    } elseif (strpos($url, '.fr') !== false) {
-                                        $cut_pos = strpos($url, '.fr') + 3;
-                                    }
-
-                                    // Récupération de l'URL à afficher
-                                    $display_url = $cut_pos ? substr($url, 0, $cut_pos) : $url;
-
-                                    // Ajout de "/(...)" si l'URL est plus longue
-                                    if ($cut_pos && strlen($url) > $cut_pos) {
-                                        $display_url .= '/(...)';
-                                    }
-                                    ?>
-
-                                    <a href="<?php echo $E['url_extensions']; ?>" style="color: #4EA5FE; text-decoration: none;">
-                                        <?php echo htmlspecialchars($display_url); ?>
-                                    </a>
-
-
-                                </td>
-                                <?php if ($i === 0): ?>
-                                    <td rowspan="<?php echo count($extensions); ?>" style="padding: 12px; border: 1px solid #dee2e6; text-align: center">
-                                        <?php echo nl2br($E['extensions_accroche']); ?>
-                                    </td>
-                                    <td rowspan="<?php echo count($extensions); ?>" style="padding: 12px; border: 1px solid #dee2e6; text-align: center">
-                                    <?php echo nl2br($E['extensions_extrait_site']); ?>
-                                    </td>
-
-                                    <td rowspan="<?php echo count($extensions); ?>" style="padding: 12px; border: 1px solid #dee2e6; width: 150px;"><?php echo $E['extensions_lieu']; ?></td>
-                                    <td rowspan="<?php echo count($extensions); ?>" style="padding: 12px; border: 1px solid #dee2e6;width: 130px; text-align: center"><?php echo $E['extensions_appel']; ?></td>
-                                <?php endif; ?>
-                            </tr>
-                            <?php $i++; ?>
-                        <?php endforeach; ?>
-                    </tbody>
-                </table>
-            </div>
-        <?php endif; ?>
-
-
-        <!-- Mots Clés à exclure Section -->
-        <div class="section">
-            <div style="display: flex; margin-bottom: 15px;">
-                <div style="width: 50%; padding: 15px;">
-                    <img src="<?php echo $logo_base64; ?>" alt="Logo" style="max-width: 150px; width: 100%; height: auto;">
-                </div>
-                <div style="width: 50%; padding: 15px; text-align: right;">
-                    <h1 style="margin: 0; font-size: 2em;">Mots Clés à exclure</h1>
-                </div>
-            </div>
-            <table style="width: 100%; border-collapse: collapse; border: 1px solid #dee2e6; background-color: #fff;">
-                <thead style="background-color: #4EA5FE; color: #fff;">
-                    <tr>
-                        <th colspan="2" style="padding: 12px; border: 1px solid #dee2e6; text-align: center;">Liste 
-                        <?php echo anchor("Validation/exclusion/".$D['idclients'], '<i class="fas fa-edit" style="display: inline-block; padding: 5px 10px; font-size: 14px; color: #fff; background-color: #4EA5FE; border: 1px solid #4EA5FE; border-radius: 4px; text-decoration: none;"></i>','data-edit="'.$D['idclients'].'" class="open-popup"'); ?>
- </th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php $hasContent = false; ?>
-                    <?php foreach ($exlusions as $D): ?>
-                        <?php if ($D['exclusion'] != NULL): ?>
-                            <?php $hasContent = true; ?>
-                            <?php
-                            $exclusion = htmlspecialchars($D['exclusion']);
-                            $lines = explode("\n", $exclusion);
-                            $lineCount = count($lines);
-                            if ($lineCount > 21) {
-                                $firstPart = implode("\n", array_slice($lines, 0, 21));
-                                $secondPart = implode("\n", array_slice($lines, 21));
-                            } else {
-                                $firstPart = $exclusion;
-                                $secondPart = '';
-                            }
-                            ?>
-                            <tr style="background-color: <?php echo ($i % 2 == 0) ? '#f8f9fa' : '#fff'; ?>;">
-                                <td style="padding: 12px; border: 1px solid #dee2e6; text-align: center;"><?php echo nl2br($firstPart); ?></td>
-                                <?php if (!empty($secondPart)): ?>
-                                    <td style="padding: 12px; border: 1px solid #dee2e6; text-align: center;"><?php echo nl2br($secondPart); ?></td>
-                                <?php endif; ?>
-                            </tr>
-                        <?php endif; ?>
-                    <?php endforeach; ?>
-                    <?php if (!$hasContent): ?>
-                        <tr><td colspan="2" style="padding: 12px; border: 1px solid #dee2e6; text-align: center;">Aucune exclusion</td></tr>
-                    <?php endif; ?>
-                </tbody>
-            </table>
-        </div>
-
-
-            <!-- Popup (initialement masqué) -->
-            <div id="popupForm" style="display:none;">
-                <div class="popup-content">
-                <form action="<?php echo site_url('Validation/exclusion'); ?>" method="post">
-               
-                <h4 style="font-weight: 600">Mot clé à exclure</h4>
-                
-                <!-- Champ caché pour l'ID du client -->
-                <input type="hidden" name="idclients" value="<?php echo htmlspecialchars($D['idclients'], ENT_QUOTES, 'UTF-8'); ?>" /> 
-                
-                <!-- Zone de texte pré-remplie avec la valeur de l'exclusion -->
-                <textarea id="comment" name="exclusion" class="large-textarea"><?php echo htmlspecialchars($D['exclusion'], ENT_QUOTES, 'UTF-8'); ?></textarea><br>
-                
-                <button type="submit"  style="display: inline-block; text-align: center; line-height: 41px; font-size: 16px; font-weight: 500; margin-top: 20px; margin-left: 0px; width: 180px; height: 41px; background-color: #4EA5FE; color: white; border-radius: 20px; text-decoration: none;">Valider</button>
-            </form>
-
-    </div>
-    
-</div>
-<?php if ($action !== "export"): ?>
-			<?php $F = intval($donne_valider[0]['idclients']); ?>
-			<div style="display: flex; justify-content: center; margin-top: 30px; margin-bottom: 30px; gap: 15px;">
-				<div style="padding: 15px;">
-					<?php echo anchor(
-						"Googleads/save_campagne_clients/" . $F,
-						'<i class="fa fa-check"></i> Valider la campagne',
-						['style' => 'display: inline-block; padding: 10px 20px; font-size: 16px; color: #fff; background-color: #28a745; border: 1px solid #28a745; border-radius: 4px; text-decoration: none;']
-					); ?>
-				</div>
-				<div style="padding: 15px;">
-					<a href="<?php echo base_url('Validation/export_rendu/' . $id ); ?>" style="display: inline-block; padding: 10px 20px; font-size: 16px; color: #fff; background-color: #4EA5FE; border: 1px solid #4EA5FE; border-radius: 4px; text-decoration: none;" target="_blank">
-						Exporter en PDF
-					</a>
-				</div>
-			</div>
-		<?php endif; ?>
-<!-- Style du Popup -->
+<meta charset="utf-8">
+<title>Validation client – Campagne Google Ads</title>
+<link href="<?php echo base_url('assets/css/font-awesome.all.min.css'); ?>" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" rel="stylesheet">
 <style>
-    #popupForm {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: rgba(0, 0, 0, 0.5); /* Fond semi-transparent */
-        display: none;
-        align-items: center;
-        justify-content: center;
-        z-index: 9999; /* S'assurer qu'il soit au-dessus des autres éléments */
-    }
-    .popup-content {
-        background: #fff;
-        padding: 20px;
-        border-radius: 10px;
-        width: 400px;
-        text-align: center;
-        height: 900px; 
-        margin-left: 39%;
-    }
-
-    textarea {
-        width: 100%;
-        height: 100px;
-    }
-    .large-textarea {
-        width: 100%; /* Occupe toute la largeur du parent */
-        height: 750px; /* Définit une hauteur de 500px */
-        font-size: 16px; /* Vous pouvez ajuster la taille du texte ici si nécessaire */
-    }
+:root {
+    --primary: #4EA5FE;
+    --primary-dark: #358de6;
+    --bg-light: #f9fbfc;
+    --bg-card: #ffffff;
+    --text-dark: #333;
+    --border: #e0e0e0;
+}
+body { font-family: "Segoe UI", Arial, sans-serif; background-color: var(--bg-light); color: var(--text-dark); margin:0; padding:0;}
+.container { width:95%; max-width:1200px; margin:0 auto; padding:25px 0 60px;}
+h1,h2 { color: var(--primary); font-weight:600; text-align:center; }
+.section { background: var(--bg-card); border-radius:14px; box-shadow:0 2px 12px rgba(0,0,0,0.05); margin:40px 0; padding:25px; page-break-before:always; }
+.header-row { display:flex; justify-content:space-between; align-items:center; margin-bottom:25px; }
+.header-row img { max-width:140px; height:auto; }
+table { width:100%; border-collapse:collapse; font-size:15px; }
+thead { background-color: var(--primary); color:#fff; }
+th, td { padding:12px 14px; border-bottom:1px solid var(--border); vertical-align:top; text-align:left; }
+tbody tr:nth-child(even) { background-color:#f6f9fc; }
+a { color: var(--primary); text-decoration:none; }
+.btn { display:inline-block; padding:8px 16px; font-size:14px; border-radius:8px; color:#fff; background-color:var(--primary); text-decoration:none; transition:0.2s; }
+.btn:hover { background-color: var(--primary-dark); }
+.images-row { display:flex; flex-wrap:wrap; gap:10px; align-items:flex-start; justify-content:flex-start; margin-left:10px; }
+.images-row img { width:160px; height:120px; border-radius:10px; object-fit:cover; box-shadow:0 1px 5px rgba(0,0,0,0.1); transition: transform 0.2s; }
+.images-row img:hover { transform:scale(1.05); }
+.groupe-card { background:#fdfdfd; border:1px solid var(--border); border-radius:12px; padding:20px; margin-bottom:25px; box-shadow:0 1px 8px rgba(0,0,0,0.03); position:relative; }
+.groupe-card table { border-collapse:collapse; width:100%; }
+.groupe-card th { background-color: var(--primary); color:#fff; width:200px; font-weight:600; text-align:left; vertical-align:top; padding:10px 12px; border:1px solid #fff; }
+.groupe-card td { background-color:#fff; color:var(--text-dark); padding:10px 12px; border:1px solid var(--border); }
+.edit-btn { position:absolute; bottom:15px; right:20px; background-color:var(--primary); color:#fff; border:none; border-radius:6px; padding:8px 14px; font-size:13px; cursor:pointer; transition: background-color 0.2s; }
+.edit-btn:hover { background-color: var(--primary-dark); }
+.action-btns { text-align:center; margin-top:40px; display:flex; justify-content:center; gap:20px; }
+.btn-validate { background-color:#28a745; }
+.btn-export { background-color: var(--primary); }
+@media print { .edit-btn, .btn, .action-btns { display:none; } }
 </style>
+</head>
 
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<body>
+<div class="container">
+
+<!-- HEADER -->
+<div class="section">
+    <div class="header-row">
+        <img src="<?= $logo_base64; ?>" alt="Logo">
+        <h1>Campagne Google Ads</h1>
+    </div>
+
+    <!-- TABLEAU PRINCIPAL -->
+    <table class="table table-bordered table-hover">
+        <thead>
+            <tr>
+                <th>Zone</th>
+                <th>Calendrier</th>
+                <th>Appareils</th>
+                <th>Budget</th>
+                <th>Campagne</th>
+                <th>Groupe</th>
+                <th>Mots-Clés</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        <?php foreach($campagnes as $C): ?>
+            <?php foreach($C['groupes_annonces'] as $G): ?>
+            <tr>
+                <td><?= htmlspecialchars($C['zones'] ?? '—'); ?></td>
+                <td><?= htmlspecialchars($C['date_campagne'] ?? '—'); ?></td>
+                <td><?= htmlspecialchars($C['appareil'] ?? '—'); ?></td>
+                <td><?= htmlspecialchars($C['repartition_budget'] ?? '—'); ?> €</td>
+                <td><b><?= htmlspecialchars($C['nom_campagne']); ?></b></td>
+                <td><?= htmlspecialchars($G['nom_groupe']); ?></td>
+                <td><?= nl2br(htmlspecialchars($G['mot_cle'] ?? '—')); ?></td>
+                <td>
+                    <button class="btn btn-sm btn-primary" onclick="openEditCampaign('<?= $C['idcampagne'] ?>')">
+                        <i class="fa fa-edit"></i> Modifier
+                    </button>
+                </td>
+            </tr>
+            <?php endforeach; ?>
+        <?php endforeach; ?>
+        </tbody>
+    </table>
+</div>
+
+<!-- MODAL CAMPAGNE -->
+<div class="modal fade" id="modalEditCampaign" tabindex="-1" role="dialog" aria-hidden="true">
+<div class="modal-dialog modal-lg" role="document">
+<form id="formEditCampaign" method="POST" action="<?= site_url('Validation/updateCampagne'); ?>">
+<div class="modal-content">
+<div class="modal-header bg-primary text-white">
+<h5 class="modal-title">Modifier la campagne</h5>
+<button type="button" class="close text-white" data-dismiss="modal">&times;</button>
+</div>
+<div class="modal-body">
+<input type="hidden" name="idcampagne" id="edit_idcampagne">
+<div class="form-group"><label>Zone</label><input type="text" name="zones" id="edit_zones" class="form-control"></div>
+<div class="form-group"><label>Calendrier</label><input type="text" name="date_campagne" id="edit_date_campagne" class="form-control"></div>
+<div class="form-group"><label>Appareils</label><input type="text" name="appareil" id="edit_appareil" class="form-control"></div>
+<div class="form-group"><label>Budget</label><input type="number" name="repartition_budget" id="edit_budget" class="form-control"></div>
+<div class="form-group"><label>Campagne</label><input type="text" name="nom_campagne" id="edit_nom_campagne" class="form-control"></div>
+<div class="form-group"><label>Mots-Clés</label><textarea name="mot_cle" id="edit_mot_cle_campaign" class="form-control" rows="3"></textarea></div>
+
+<div class="text-right mt-3">
+<button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Annuler</button>
+<button type="submit" class="btn btn-success">Enregistrer</button>
+</div>
+</div>
+</div>
+</form>
+</div>
+</div>
+
+<!-- SECTION GROUPES D'ANNONCE -->
+<div class="section">
+<h2>Aperçu des Groupes d'Annonces</h2>
+<?php foreach ($campagnes as $C): ?>
+    <?php foreach ($C['groupes_annonces'] as $G): ?>
+    <div class="groupe-card">
+        <table>
+            <tr><th>Campagne</th><td><?= htmlspecialchars($C['nom_campagne']); ?></td></tr>
+            <tr><th>Groupe</th><td><?= htmlspecialchars($G['nom_groupe']); ?></td></tr>
+            <tr><th>Titres</th><td>
+            <?php
+                $titres = [];
+                for ($i = 1; $i <= 12; $i++) {
+                    if (!empty($G['titre'.$i])) $titres[] = htmlspecialchars($G['titre'.$i]);
+                }
+                echo !empty($titres) ? implode('<br>', $titres) : 'Aucun titre';
+                ?>
+                </td></tr>
+            <tr><th>Descriptions</th><td>
+            <?php
+            $desc = [];
+            for ($i = 1; $i <= 4; $i++) {
+                if (!empty($G['descriptions'.$i])) $desc[] = htmlspecialchars($G['descriptions'.$i]);
+            }
+            echo !empty($desc) ? implode('<br>', $desc) : 'Aucune description';
+            ?>
+    
+            </td></tr>
+            <tr><th>Images</th><td><div class="images-row"><?php foreach($C['images'] as $img){ $url=is_object($img)?$img->image_url:$img['image_url']; ?><img src="<?= htmlspecialchars($url); ?>" alt="Image annonce"><?php } ?></div></td></tr>
+            <tr><th>URL</th><td><a href="<?= htmlspecialchars($G['url_groupe_annonce']??'#'); ?>" target="_blank"><?= htmlspecialchars($G['url_groupe_annonce']??''); ?></a></td></tr>
+        </table>
+
+        <button class="edit-btn" onclick="openEditGroupe('<?= $G['idgroupe_annonce']; ?>')">
+            <i class="fa fa-edit"></i> Modifier ce groupe
+        </button>
+    </div>
+    <?php endforeach; ?>
+<?php endforeach; ?>
+</div>
+
+<!-- BOUTONS FINAUX -->
+<div class="action-btns">
+    <a href="<?= base_url('Googleads/save_campagne_clients/'.($campagnes[0]['idcampagne'] ?? '')); ?>" class="btn btn-validate"><i class="fa fa-check"></i> Valider la campagne</a>
+    <a href="<?= base_url('Validation/export_rendu/'.($id ?? '')); ?>" class="btn btn-export" target="_blank"><i class="fa fa-file-pdf"></i> Exporter en PDF</a>
+</div>
+
+<!-- MODAL GROUPE -->
+<div class="modal fade" id="modalEditGroupe" tabindex="-1" role="dialog" aria-hidden="true">
+<div class="modal-dialog modal-xl" role="document">
+<div class="modal-content">
+<div class="modal-header bg-primary text-white">
+<h5 class="modal-title">Modifier le groupe d’annonce</h5>
+<button type="button" class="close text-white" data-dismiss="modal">&times;</button>
+</div>
+<div class="modal-body">
+<form id="formEditGroupe" method="POST" action="<?= site_url('Validation/updateDonneeClient'); ?>">
+<input type="hidden" name="idgroupe_annonce" id="edit_idgroupe_annonce">
+<input type="hidden" name="idcampagne" id="edit_idcampagne">
+<input type="hidden" name="idclients" id="edit_idclients">
+
+<div class="form-group"><label>Nom du groupe</label><input type="text" name="nom_groupe" id="edit_nom_groupe" class="form-control"></div>
+<div class="form-group"><label>Mots-Clés</label><textarea name="mot_cle" id="edit_mot_cle" class="form-control" rows="3"></textarea></div>
+<div class="row">
+<div class="col-md-6"><label>Titres (12 max)</label><textarea name="titres" id="edit_titres" class="form-control" rows="5"></textarea></div>
+<div class="col-md-6"><label>Descriptions (4 max)</label><textarea name="descriptions" id="edit_descriptions" class="form-control" rows="5"></textarea></div>
+</div>
+<div class="form-group mt-3"><label>URL</label><input type="text" name="url_groupe_annonce" id="edit_url_groupe_annonce" class="form-control"></div>
+
+<div class="d-flex justify-content-between align-items-center mt-4">
+<button type="button" class="btn btn-outline-dark" data-toggle="modal" data-target="#modalGestionImages"><i class="fa fa-image"></i> Gérer les images</button>
+<button type="submit" class="btn btn-primary"><i class="fa fa-save"></i> Enregistrer</button>
+</div>
+</form>
+</div>
+</div>
+</div>
+</div>
+
+<!-- MODAL GESTION IMAGES -->
+<div class="modal fade" id="modalGestionImages" tabindex="-1" role="dialog" aria-hidden="true">
+<div class="modal-dialog modal-lg" role="document">
+<div class="modal-content">
+<div class="modal-header"><h5 class="modal-title">Gérer les images</h5><button type="button" class="close" data-dismiss="modal">&times;</button></div>
+<div class="modal-body">
+<div class="mb-3 input-group">
+<input type="text" class="form-control" id="imageUrlInput" placeholder="https://exemple.com/image.jpg">
+<div class="input-group-append">
+<button class="btn btn-outline-dark" type="button" id="addImageUrlBtn">Ajouter URL</button>
+</div>
+</div>
+<div id="imagePreviewContainer" class="d-flex flex-wrap"></div>
+</div>
+<div class="modal-footer">
+<button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Annuler</button>
+<button type="button" class="btn btn-dark" id="saveImagesBtn">Enregistrer</button>
+</div>
+</div>
+</div>
+</div>
+
+<!-- JS -->
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
 
 <script>
-$(document).ready(function() {
-    // Lorsque le lien avec la classe "open-popup" est cliqué
-    $('.open-popup').on('click', function(event) {
-        event.preventDefault(); // Empêche le comportement par défaut du lien
+// Données groupes
+const groupesData = [
+<?php foreach ($campagnes as $C): ?>
+<?php foreach ($C['groupes_annonces'] as $G): ?>
+{ idgroupe_annonce:"<?= $G['idgroupe_annonce'] ?>", idcampagne:"<?= $C['idcampagne'] ?>", idclients:"<?= $C['idclients'] ?>",
+nom_groupe:<?= json_encode($G['nom_groupe']) ?>, mot_cle:<?= json_encode($G['mot_cle']) ?>,
+titres:[<?php for($i=1;$i<=12;$i++){ if(!empty($G['titre'.$i])) echo json_encode($G['titre'.$i]).','; } ?>],
+descriptions:[<?php for($i=1;$i<=4;$i++){ if(!empty($G['descriptions'.$i])) echo json_encode($G['descriptions'.$i]).','; } ?>],
+url_groupe_annonce:<?= json_encode($G['url_groupe_annonce']) ?>},
+<?php endforeach; ?>
+<?php endforeach; ?>
+];
 
-        // Affiche le popup
-        $('#popupForm').fadeIn();
-    });
+// Modal campagne
+function openEditCampaign(id) {
+    const campagne = <?= json_encode($campagnes); ?>.find(c => c.idcampagne == id);
+    if(!campagne) return;
+    document.getElementById('edit_idcampagne').value = campagne.idcampagne;
+    document.getElementById('edit_zones').value = campagne.zones ?? '';
+    document.getElementById('edit_date_campagne').value = campagne.date_campagne ?? '';
+    document.getElementById('edit_appareil').value = campagne.appareil ?? '';
+    document.getElementById('edit_budget').value = campagne.repartition_budget ?? '';
+    document.getElementById('edit_nom_campagne').value = campagne.nom_campagne ?? '';
+    let motsCles = campagne.groupes_annonces.map(g => g.mot_cle).join("\n");
+    document.getElementById('edit_mot_cle_campaign').value = motsCles;
+    $('#modalEditCampaign').modal('show');
+}
 
-    // Lorsque le bouton "Fermer" est cliqué
-    $('#closePopup').on('click', function() {
-        // Masque le popup
-        $('#popupForm').fadeOut();
-    });
-
-    // Lorsque l'utilisateur clique en dehors du popup, il se ferme
-    $(document).on('click', function(event) {
-        if (!$(event.target).closest('.popup-content').length && !$(event.target).closest('.open-popup').length) {
-            $('#popupForm').fadeOut();
-        }
-    });
-});
+// Modal groupe
+function openEditGroupe(id) {
+    const groupe = groupesData.find(g => g.idgroupe_annonce==id);
+    if(!groupe) return;
+    document.getElementById('edit_idgroupe_annonce').value=groupe.idgroupe_annonce;
+    document.getElementById('edit_idcampagne').value=groupe.idcampagne;
+    document.getElementById('edit_idclients').value=groupe.idclients;
+    document.getElementById('edit_nom_groupe').value=groupe.nom_groupe;
+    document.getElementById('edit_mot_cle').value=groupe.mot_cle;
+    document.getElementById('edit_titres').value=groupe.titres.join("\n");
+    document.getElementById('edit_descriptions').value=groupe.descriptions.join("\n");
+    document.getElementById('edit_url_groupe_annonce').value=groupe.url_groupe_annonce;
+    $('#modalEditGroupe').modal('show');
+}
 </script>
-
 </body>
 </html>

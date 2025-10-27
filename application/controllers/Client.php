@@ -42,26 +42,112 @@ class Client extends MY_Controller
 		$this->data['produit'] = $this->Donne_modele->get_all_produit();
 		$this->data['am'] = $this->Donne_modele->get_all_am();
 		$this->data['initiative'] = $this->Donne_modele->get_all_initiative();
-
+		
 		$this->content = "layouts/client/index.php";
 		$this->layout();
 	}
+	public function send_annonce($idonnee = null)
+		{
+
+			if (!$idonnee) {
+				show_error('Aucune donnée spécifiée', 400);
+				return;
+			}
+			$am = intval($this->input->post('am'));
+			$date_envoye = date('Y-m-d');
+			$idclients = $this->Donne_modele->update_send_annonce($idonnee, 1);
+			$this->Donne_modele->update_send_annonce_onboarding($idonnee, 1);
+
+			if (!$idclients) {
+				$this->session->set_flashdata('error', 'Brief introuvable.');
+				redirect($_SERVER['HTTP_REFERER']); 
+			}
+
+			$date_demande = date('Y-m-d');
+			$date_due = date('Y-m-d', strtotime('+3 days'));
+			$title = "Validation client";
+			$tache = "Annonce prêt pour validation client";
+			$current_user = $this->ion_auth->user()->row();
+			$tm = intval($current_user->id);
+
+			$datas = [
+				'date_demande'      => $date_demande,
+				'date_due'          => $date_due,
+				'idclients'         => $idclients,
+				'AM'                => $tm,
+				'assigned_to'       => $am, 
+				'title'             => $title,
+				'type_tache'	    => 10,
+				'description'       => $tache
+			];
+			$title = "Création annonce";
+			$this->Task_model->add_tasks($datas);
+			$task = $this->Task_model->get_task_brief($idclients, $title);
+				$taskId = intval($task->idtask);
+				$data = [
+					'status'	=>	"effectuée",
+				];
+			$this->Task_model->update_task_statuts($taskId, $data);
+			$this->session->set_flashdata('success', 'Brief envoyé à la technique et tâche créée.');
+			redirect($_SERVER['HTTP_REFERER']); 
+		}
+
+	public function send_to_technique($idonnee = null)
+		{;
+
+			if (!$idonnee) {
+				show_error('Aucune donnée spécifiée', 400);
+				return;
+			}
+			$date_envoye = date('Y-m-d');
+			$idclients = $this->Donne_modele->update_status_brief($idonnee,$date_envoye, 1);
+			$this->Donne_modele->update_status_brief_onboarding($idonnee,$date_envoye, 1);
+
+			if (!$idclients) {
+				$this->session->set_flashdata('error', 'Brief introuvable.');
+				redirect($_SERVER['HTTP_REFERER']); 
+			}
+
+			$date_demande = date('Y-m-d');
+			$date_due = date('Y-m-d', strtotime('+3 days'));
+			$title = "Création annonce";
+			$tache = "Le brief de ce client est fait, veuillez procéder à la création des annonces";
+			$current_user = $this->ion_auth->user()->row();
+			$am = intval($current_user->id);
+
+			$datas = [
+				'date_demande'      => $date_demande,
+				'date_due'          => $date_due,
+				'idclients'         => $idclients,
+				'AM'                => $am,
+				'assigned_to'       => 23, 
+				'title'             => $title,
+				'type_tache'	    => 10,
+				'description'       => $tache
+			];
+			$title = "Création de Brief";
+			$this->Task_model->add_tasks($datas);
+			$task = $this->Task_model->get_task_brief($idclients, $title);
+				$taskId = intval($task->idtask);
+				$data = [
+					'status'	=>	"effectuée",
+				];
+			$this->Task_model->update_task_statuts($taskId, $data);
+			$this->session->set_flashdata('success', 'Brief envoyé à la technique et tâche créée.');
+			redirect($_SERVER['HTTP_REFERER']); 
+		}
+
+
+
 	public function annonces($idclient)
 	{
-		// Récupérer les informations du client
 		$this->data['client'] = $this->visuels_model->getDonneeById($idclient);
-
-		// Récupérer toutes les campagnes du client
 		$campagnes = $this->visuels_model->get_campagnes_by_client($idclient);
-
-		// Pour chaque campagne, récupérer ses groupes et images
 		foreach ($campagnes as &$campagne) {
 			$campagne['groupes_annonces'] = $this->visuels_model->get_groupes_by_campagne($campagne['idcampagne']);
 			$campagne['images'] = $this->Image_model->get_images_by_campagne($campagne['idcampagne']);
 		}
 		$this->data['campagnes'] = $campagnes;
-
-		// Charger la vue
 		$this->content = "layouts/client/onboarding/annonces_liste";
 		$this->layout();
 	}
@@ -1946,7 +2032,7 @@ public function save_images_campagnes()
 		$idclients = $this->visuels_model->insertclient($client, $site_client, $email_client, $numero_client, $favicon, $cms, $cms_logo, $summary);
 		$idclient_onboarding = $idclients;
 		$idclient = $idclients;
-		$this->visuels_model->insertfiche($idclient, $budget, $secteur_activite, $product_choice, $initiative, $am, $date_mis_en_place, $date_brief, $date_annonce, $dejaclient, $gtm_code);
+		$idonnee = $this->visuels_model->insertfiche($idclient, $budget, $secteur_activite, $product_choice, $initiative, $am, $date_mis_en_place, $date_brief, $date_annonce, $dejaclient, $gtm_code);
 		$title = "Création de Brief";
 		$tache = "En attente de brief";
 		$Statuts_technique = 1;
@@ -1978,6 +2064,7 @@ public function save_images_campagnes()
 		$inforamtion_upsell = "Budget initial";
 		$idclient = $this->visuels_model->create_upsell($type_upsell, $budget_finale, $budget_initiale, $demmande_upsell, $am, $tm, $date_upsell, $date_demande_upsell, $inforamtion_upsell, $statut_upsell, $idclients, $actif);
 		$data_upsell = array(
+			'idonnee' => $idonnee,
 			'idclients' => $idclient_onboarding,
 			'dejaclient' => $dejaclient,
 			'budget' => $budget,
