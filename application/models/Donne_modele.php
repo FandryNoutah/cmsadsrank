@@ -523,26 +523,51 @@ class Donne_modele extends CI_Model
 		return $retour;
 	}
 
-	public function getcampagnegroupevalidationbyidclients($idclients)
-	{
-		// Assurez-vous que l'ID client est un nombre entier pour éviter les injections
+	public function getcampagnegroupevalidationbyidclients($idclients) {
 		$idclients = (int)$idclients;
 
-		// Requête SQL sécurisée avec des paramètres liés pour éviter l'injection SQL
-		$sql = "SELECT ga.*, c.* 
+		// 1️⃣ Get all groupe_annonce + campagne
+		$sql = "SELECT ga.*, c.*
             FROM groupe_annonce ga 
-            JOIN campagne c ON ga.idcampagne = c.idcampagne 
+            JOIN campagne c ON ga.idcampagne = c.idcampagne
             WHERE ga.idclients = ?";
+		$query = $this->db->query($sql, [$idclients]);
+		$groupes = $query->result_array();
 
-		// Exécution de la requête avec un paramètre lié
-		$query = $this->db->query($sql, array($idclients));
+		if (empty($groupes)) {
+			return [];
+		}
 
-		// Récupération des résultats sous forme de tableau
-		$retour = $query->result_array();
+		// 2️⃣ Get all images for those groupes, ordered by rank
+		$ids = array_column($groupes, 'idgroupe_annonce');
+		$placeholders = implode(',', array_fill(0, count($ids), '?'));
 
-		// Retourner les résultats
-		return $retour;
+		$imgQuery = $this->db->query(
+			"SELECT idgroupe_annonce, image_url
+         FROM images
+         WHERE idgroupe_annonce IN ($placeholders)
+         ORDER BY rank ASC",
+			$ids
+		);
+
+		$images = $imgQuery->result_array();
+
+		// 3️⃣ Group only image_url values by idgroupe_annonce
+		$imagesByGroupe = [];
+		foreach ($images as $img) {
+			$imagesByGroupe[$img['idgroupe_annonce']][] = $img['image_url'];
+		}
+
+		// 4️⃣ Attach array of URLs to each groupe
+		foreach ($groupes as &$groupe) {
+			$gid = $groupe['idgroupe_annonce'];
+			$groupe['images'] = $imagesByGroupe[$gid] ?? [];
+		}
+		unset($groupe);
+
+		return $groupes;
 	}
+
 
 	public function getcampagnegroupevalidationbyidclient($idclients)
 	{
@@ -553,7 +578,7 @@ class Donne_modele extends CI_Model
 		$sql = "SELECT ga.*, c.* 
             FROM groupe_annonce ga 
             JOIN campagne c ON ga.idcampagne = c.idcampagne 
-            WHERE ga.idclients = ?"	;
+            WHERE ga.idclients = ?";
 
 		// Exécution de la requête avec un paramètre lié
 		$query = $this->db->query($sql, array($idclients));
@@ -632,47 +657,47 @@ class Donne_modele extends CI_Model
 		$this->db->close();
 	}
 
-public function insert_campagne_am(
-					$idclients,
-					$camp_type,
-					$nom_campagne,
-					$information_campagne,
-					$cible,
-					$ages,
-					$zones,
-					$repartition_budget,
-					$date_campagne,
-					$appareil,
-					$objectif,
-					$url_site,
-					$mots_cle,
-					$Mots_cle_exclus,
-					$sexe,
-					$promotions,
-					$prix,
-					$téléphone
-				){
-    // Échappement des variables
-    $idclients = $this->db->escape($idclients);
-    $camp_type = $this->db->escape($camp_type);
-    $nom_campagne = $this->db->escape($nom_campagne);
-    $information_campagne = $this->db->escape($information_campagne);
-    $ages = $this->db->escape($ages);
-    $cible = $this->db->escape($cible);
-    $zones = $this->db->escape($zones);
-    $repartition_budget = $this->db->escape($repartition_budget);
-    $date_campagne = $this->db->escape($date_campagne);
-    $appareil = $this->db->escape($appareil);
-    $objectif = $this->db->escape($objectif);
-    $url_site = $this->db->escape($url_site);
-    $Mots_cle_exclus = $this->db->escape($Mots_cle_exclus);
-	$sexe = $this->db->escape($sexe);
-    $promotions = $this->db->escape($promotions);
-    $prix = $this->db->escape($prix);
-    $téléphone = $this->db->escape($téléphone);
+	public function insert_campagne_am(
+		$idclients,
+		$camp_type,
+		$nom_campagne,
+		$information_campagne,
+		$cible,
+		$ages,
+		$zones,
+		$repartition_budget,
+		$date_campagne,
+		$appareil,
+		$objectif,
+		$url_site,
+		$mots_cle,
+		$Mots_cle_exclus,
+		$sexe,
+		$promotions,
+		$prix,
+		$téléphone
+	) {
+		// Échappement des variables
+		$idclients = $this->db->escape($idclients);
+		$camp_type = $this->db->escape($camp_type);
+		$nom_campagne = $this->db->escape($nom_campagne);
+		$information_campagne = $this->db->escape($information_campagne);
+		$ages = $this->db->escape($ages);
+		$cible = $this->db->escape($cible);
+		$zones = $this->db->escape($zones);
+		$repartition_budget = $this->db->escape($repartition_budget);
+		$date_campagne = $this->db->escape($date_campagne);
+		$appareil = $this->db->escape($appareil);
+		$objectif = $this->db->escape($objectif);
+		$url_site = $this->db->escape($url_site);
+		$Mots_cle_exclus = $this->db->escape($Mots_cle_exclus);
+		$sexe = $this->db->escape($sexe);
+		$promotions = $this->db->escape($promotions);
+		$prix = $this->db->escape($prix);
+		$téléphone = $this->db->escape($téléphone);
 
-    // Construction de la requête SQL
-    $sql = "
+		// Construction de la requête SQL
+		$sql = "
         INSERT INTO campagne (
             idclients,
             type_campagne,
@@ -713,14 +738,14 @@ public function insert_campagne_am(
     ";
 
 
-    $this->db->query($sql);
+		$this->db->query($sql);
 
-    $idcampagne = $this->db->insert_id();
+		$idcampagne = $this->db->insert_id();
 
-    $this->db->close();
+		$this->db->close();
 
-    return $idcampagne;
-}
+		return $idcampagne;
+	}
 
 
 	public function update_campagne_am(

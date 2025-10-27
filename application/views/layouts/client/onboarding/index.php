@@ -219,7 +219,7 @@
 	/* Phone frame */
 	.phone-frame {
 		width: 250px;
-		height: 480px;
+		height: 450px;
 		background: #f8f9fa;
 		border: 2px solid #ddd;
 		border-radius: 30px;

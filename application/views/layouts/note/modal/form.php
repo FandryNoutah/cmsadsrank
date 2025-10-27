@@ -37,7 +37,14 @@
 					</div>
 
 					<div class="form-group">
-						<label for="task_title">Client</label>
+						<div class="custom-control custom-checkbox">
+							<input type="checkbox" class="custom-control-input" name="assign_client" id="assign_client">
+							<label class="custom-control-label" for="assign_client">Assigner à un client</label>
+						</div>
+					</div>
+
+					<div class="form-group" id="clients_container">
+						<label for="idclients">Client</label>
 						<select name="idclients" id="idclients" class="select2" style="width: 100%; padding: 12px 16px;">
 							<?php foreach ($donnee as $d): ?>
 								<option value="<?php echo $d->idclients; ?>" data-budget="<?php echo $d->budget; ?>">

@@ -73,7 +73,7 @@
 											<i class="fa fa-search"></i>
 										</div>
 										<div class="thumb-box" style="height: 140px;">
-											<img src="https://placehold.co/600x400" alt="placeholder">
+											<img src=<?= $groupe['images'][0] ?? "https://placehold.co/120x120?text=Youtube+Ads" ?> alt="placeholder">
 										</div>
 										<div class="alert alert-primary border-0 py-0 px-2 d-flex justify-content-between align-items-center">
 											<span class="small font-weight-bold">Book now</span>
