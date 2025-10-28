@@ -104,9 +104,9 @@
 					</div>
 					<div class="card-footer d-flex bg-transparent">
 
-						<div class="d-flex align-items-center avatar-group">
-							<img src="<?= base_url(IMAGES_PATH . $this->ion_auth->user()->row()->photo_users); ?>" class="avatar rounded-circle" width="28" height="28" alt="Client Image">
-						</div>
+						<!-- <div class="d-flex align-items-center avatar-group">
+							<img src="<-?= base_url(IMAGES_PATH . $this->ion_auth->user()->row()->photo_users); ?>" class="avatar rounded-circle" width="28" height="28" alt="Client Image">
+						</div> -->
 																					
 						<div class="d-flex align-items-center avatar-group">
 							<?php foreach ($note->assigned_users as $assigned_user): ?>
@@ -133,6 +133,16 @@
 <script src="<?= base_url('assets/vendors/select2/js/select2.min.js'); ?>"></script>
 <script>
 	$(function() {
+
+		let clients_content = $('#clients_container').html();
+		$('#clients_container').html('');
+
+		$('#assign_client').change(function() {
+
+			let checked = $(this).is(':checked');
+			$('#clients_container').html(checked ? clients_content : '');
+			$('.select2').select2();
+		});
 
 		$('.select2').select2();
 
