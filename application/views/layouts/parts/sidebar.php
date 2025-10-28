@@ -5,10 +5,16 @@
 	</a>
 	<div class="sidebar-sticky">
 		<ul class="nav flex-column pt-4 pb-3 px-2 border-bottom">
-			<li class="nav-item rounded">
-				<a class="nav-link text-secondary" href="<?= base_url('Dashboard'); ?>">
-					<img class="mr-2" src="<?= base_url('assets/images/icons/figma/icon-chartpie.svg') ?>" />
+			<!-- <li class="nav-item rounded">
+				<a class="nav-link text-secondary" href="< base_url('Dashboard'); ?>">
+					<img class="mr-2" src="< base_url('assets/images/icons/figma/icon-chartpie.svg') ?>" />
 					<span class="nav-label">Dashboard</span>
+				</a>
+			</li> -->
+			<li class="nav-item rounded <?= ($this->uri->segment(1) == "Client") ? 'bg-white' : ''; ?>">
+				<a class="nav-link text-secondary" href="<?= base_url('Client') ?>">
+					<img class="mr-2" src="<?= base_url('assets/images/icons/figma/UserList.png') ?>" />
+					<span class="nav-label">Clients</span>
 				</a>
 			</li>
 			<li class="nav-item rounded">
@@ -17,12 +23,7 @@
 					<span class="nav-label">Onboarding</span>
 				</a>
 			</li>
-			<li class="nav-item rounded <?= ($this->uri->segment(1) == "Client") ? 'bg-white' : ''; ?>">
-				<a class="nav-link text-secondary" href="<?= base_url('Client') ?>">
-					<img class="mr-2" src="<?= base_url('assets/images/icons/figma/UserList.png') ?>" />
-					<span class="nav-label">Clients</span>
-				</a>
-			</li>
+			
 			<li class="nav-item rounded <?= ($this->uri->segment(1) == "Task") ? 'bg-white' : ''; ?>">
 				<a class="nav-link text-secondary" href="<?= base_url('Task') ?>">
 					<img class="mr-2" src="<?= base_url('assets/images/icons/figma/ClipboardText.png') ?>" />
