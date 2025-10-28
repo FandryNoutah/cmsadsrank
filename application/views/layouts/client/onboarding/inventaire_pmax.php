@@ -218,7 +218,6 @@
 		</div>
 		<div class="container">
 
-
 			<!-- Bloc YouTube -->
 			<div class="block">
 				<h3 style="color: white; background-color: #4a86e8; padding: 10px; margin-top: 9px; margin-bottom: 20px; text-align: center; border-radius : 12px">Youtube</h3>
