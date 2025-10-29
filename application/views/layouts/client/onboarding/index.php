@@ -218,7 +218,7 @@
 
 	/* Phone frame */
 	.phone-frame {
-		width: 250px;
+		width: 245px;
 		height: 450px;
 		background: #f8f9fa;
 		border: 2px solid #ddd;
