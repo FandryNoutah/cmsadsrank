@@ -1,22 +1,5 @@
 <?php start_section('stylesheet'); ?>
 <style>
-	/* .table-wrapper {
-		border-collapse: separate !important;
-		border-spacing: 0 10px;
-	}
-
-	.table-wrapper tr {
-		background: #fff;
-		box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
-		border-radius: 8px;
-	}
-
-	.table-wrapper td,
-	.table-wrapper th {
-		vertical-align: middle;
-		padding: 1rem;
-	} */
-
 	.table-wrapper {
 		border-spacing: 0 15px !important;
 		border-collapse: separate !important;
@@ -25,7 +8,6 @@
 	.table-wrapper td,
 	.table-wrapper th {
 		vertical-align: middle;
-		border: border;
 		border-bottom: 1px solid #dee2e6 !important;
 	}
 
@@ -67,7 +49,8 @@
 	.table-wrapper td:nth-child(6) {
 		width: 15%;
 	}
-	.budget{
+
+	.budget {
 		font-weight: 500;
 	}
 </style>
@@ -147,39 +130,20 @@
 
 		<div class="tab-pane fade show active mb-5" id="list" role="tabpanel" aria-labelledby="list_tab">
 			<div class="table-responsive">
-
 				<table class="table table-wrapper">
 					<thead class="bg-light text-muted">
 						<tr>
-							<th>
-								Client
-								<img src="<?= base_url('assets/images/icons/figma/icon-caretdoublevertical-5.svg') ?>" class="ml-2">
-							</th>
-							<th>
-								Produit
-								<img src="<?= base_url('assets/images/icons/figma/icon-caretdoublevertical-5.svg') ?>" class="ml-2">
-							</th>
-							<th>
-								AM
-								<img src="<?= base_url('assets/images/icons/figma/icon-caretdoublevertical-5.svg') ?>" class="ml-2">
-							</th>
-							<th>
-								Client depuis le
-								<img src="<?= base_url('assets/images/icons/figma/icon-caretdoublevertical-5.svg') ?>" class="ml-2">
-							</th>
-							<th>
-								Budget
-								<img src="<?= base_url('assets/images/icons/figma/icon-caretdoublevertical-5.svg') ?>" class="ml-2">
-							</th>
-							<th>
-								Statut
-								<img src="<?= base_url('assets/images/icons/figma/icon-caretdoublevertical-5.svg') ?>" class="ml-2">
-							</th>
+							<th>Client</th>
+							<th>Produit</th>
+							<th>AM</th>
+							<th>Client depuis le</th>
+							<th>Budget</th>
+							<th>Statut</th>
 						</tr>
 					</thead>
 					<tbody>
 						<?php foreach ($donnee as $d): ?>
-							<?php if ($d->budget != 0) : ?>
+							<?php if ($d->budget != 0): ?>
 								<tr class="client-filter" data-status="<?= $d->resiliation; ?>">
 									<td>
 										<a href="<?= base_url('Client/detail_client/' . $d->idclients) ?>" style="display: flex; align-items: center; text-decoration: none; color: inherit;">
@@ -190,50 +154,34 @@
 
 									<td class="text-muted"><?= $d->label_produit ?></td>
 									<td>
-										<img src="<?= base_url(IMAGES_PATH . htmlspecialchars($d->tech_photo_user)); ?>" width="28" height="28" alt="Client Image"><img src="<?= base_url(IMAGES_PATH . htmlspecialchars($d->am_photo_user)); ?>" width="28" height="28" alt="Client Image">
+										<img src="<?= base_url(IMAGES_PATH . htmlspecialchars($d->tech_photo_user)); ?>" width="28" height="28">
+										<img src="<?= base_url(IMAGES_PATH . htmlspecialchars($d->am_photo_user)); ?>" width="28" height="28">
 									</td>
-									<td><?= $d->mis_en_place_paiement ?></td>
+									<td><?= date('d-m-Y', strtotime($d->mis_en_place_paiement)); ?></td>
 									<td>
 										<div class="budget">
-										<?php if($current_user->tech != 3): ?>
-										<?php
-										$budget = $d->budget;
-										$budget = ($budget / 2) / 30.6;
-										$budget = round($budget, 2);
-										?>
-										<?= $budget; ?> €
-										<?php endif; ?>	
-										<?php if($current_user->tech == 3): ?>
-										<?= $d->budget; ?> €
-										<?php endif; ?>	
+											<?php if ($current_user->tech != 3): ?>
+												<?php
+												$budget = ($d->budget / 2) / 30.6;
+												$budget = round($budget, 2);
+												?>
+												<?= $budget; ?> €
+											<?php else: ?>
+												<?= $d->budget; ?> €
+											<?php endif; ?>
 										</div>
 									</td>
 									<td>
-										<?php if ($d->statut_demande_en_cours != 1):  ?>
-										<?php if ($d->resiliation == 1):  ?>
-											<span class="badge alert-success rounded-pill px-2 py-1" style="font-size: 12px; font-weight: 500;">
-												<i class="fa fa-circle mr-1" style="font-size: 10px;"></i>
-												Active
-											</span>
-										<?php endif; ?>
-										<?php if ($d->resiliation == 2):  ?>
-											<span class="badge alert-warning rounded-pill px-2 py-1" style="font-size: 12px; font-weight: 500;">
-												<i class="fa fa-circle mr-1" style="font-size: 10px;"></i>
-												Mis en pause
-											</span>
-										<?php endif; ?>
-										<?php if ($d->resiliation == 3):  ?>
-											<span class="badge alert-danger rounded-pill px-2 py-1" style="font-size: 12px; font-weight: 500;">
-												<i class="fa fa-circle mr-1" style="font-size: 10px;"></i>
-												Résilié
-											</span>
-										<?php endif; ?>
-										<?php endif; ?>
-										<?php if ($d->statut_demande_en_cours == 1):  ?>
-											<span class="badge alert-second rounded-pill px-2 py-1" style="font-size: 12px; font-weight: 500; color: grey;">
-												<i class="fa fa-circle mr-1" style="font-size: 10px;"></i>
-												En cours de changement
-											</span>
+										<?php if ($d->statut_demande_en_cours != 1): ?>
+											<?php if ($d->resiliation == 1): ?>
+												<span class="badge alert-success rounded-pill px-2 py-1">Active</span>
+											<?php elseif ($d->resiliation == 2): ?>
+												<span class="badge alert-warning rounded-pill px-2 py-1">Mis en pause</span>
+											<?php elseif ($d->resiliation == 3): ?>
+												<span class="badge alert-danger rounded-pill px-2 py-1">Résilié</span>
+											<?php endif; ?>
+										<?php else: ?>
+											<span class="badge alert-second rounded-pill px-2 py-1" style="color: grey;">En cours de changement</span>
 										<?php endif; ?>
 									</td>
 								</tr>
@@ -244,184 +192,115 @@
 			</div>
 		</div>
 
+		<!-- Kanban Section -->
 		<div class="tab-pane fade" id="kanban" role="tabpanel" aria-labelledby="kanban_tab">
 			<div class="row row-cols-3">
 
-				<!-- ACTIVE COLUMN -->
+				<!-- ACTIVE -->
 				<div class="col mb-3">
-					<div class="card h-100" style="border-radius: 8px;">
+					<div class="card h-100">
 						<div class="card-body">
-							<div class="d-flex align-items-center">
-								<span class="mx-1 badge alert-success rounded-pill p-2" style="font-size: 14px; font-weight: 500;">
-									<i class="fa fa-circle mr-1" style="font-size: 10px;"></i>
-									Active
-								</span>
-								<span class="badge alert-light mx-1 text-dark" style="font-size: 14px;"></span>
-							</div>
-
+							<span class="mx-1 badge alert-success rounded-pill p-2">Active</span>
 							<?php foreach ($donnee as $d): ?>
-								<?php if ($d->budget != 0) : ?>
-									<?php if ($d->resiliation == 1):  ?>
+								<?php if ($d->budget != 0 && $d->resiliation == 1): ?>
 									<div class="card mt-3">
 										<div class="card-body">
 											<a href="<?= base_url('Client/detail_client/' . $d->idclients) ?>" class="stretched-link"></a>
-											<div class="d-block mb-3">
-												<img src="<?= $d->favicon ?>" alt="" width="48">
-											</div>
-											<p style="font-size: 18px; font-weight: 400;" class="mb-3">
-												<?= htmlspecialchars($d->nom_client) ?>
-											</p>
+											<div class="mb-3"><img src="<?= $d->favicon ?>" width="48"></div>
+											<p class="mb-3"><?= htmlspecialchars($d->nom_client) ?></p>
 											<div class="d-flex justify-content-between">
 												<span class="text-muted">
-													<img src="<?= base_url('assets/images/icons/figma/calendar.svg') ?>" alt="">
-													<?= $d->mis_en_place_paiement ?>
+													<img src="<?= base_url('assets/images/icons/figma/calendar.svg') ?>">
+													<?= date('d-m-Y', strtotime($d->mis_en_place_paiement)); ?>
 												</span>
 												<div class="budget">
-												<?php if($current_user->tech != 3): ?>
-												<?php
-												$budget = $d->budget;
-												$budget = ($budget / 2) / 30.6;
-												$budget = round($budget, 2);
-												?>
-												<span>
-													<?= $budget; ?> €</td>
-												</span>
-												
-												<?php endif; ?>	
-												<?php if($current_user->tech == 3): ?>
-												<span>
-													<?= $d->budget; ?> €</td>
-												</span>	
-											
-												<?php endif; ?>	
+													<?php if ($current_user->tech != 3): ?>
+														<?php $budget = round(($d->budget / 2) / 30.6, 2); ?>
+														<?= $budget; ?> €
+													<?php else: ?>
+														<?= $d->budget; ?> €
+													<?php endif; ?>
 												</div>
 											</div>
 										</div>
 									</div>
-									<?php endif; ?>
 								<?php endif; ?>
 							<?php endforeach; ?>
 						</div>
 					</div>
 				</div>
 
-				<!-- PAUSE COLUMN -->
+				<!-- PAUSE -->
 				<div class="col mb-3">
-					<div class="card h-100" style="border-radius: 8px;">
+					<div class="card h-100">
 						<div class="card-body">
-							<div class="d-flex align-items-center">
-								<span class="mx-1 badge alert-warning rounded-pill p-2" style="font-size: 14px; font-weight: 500;">
-									<i class="fa fa-circle mr-1" style="font-size: 10px;"></i>
-									Pause
-								</span>
-								<span class="badge alert-light mx-1 text-dark" style="font-size: 14px;"></span>
-							</div>
-
+							<span class="mx-1 badge alert-warning rounded-pill p-2">Pause</span>
 							<?php foreach ($donnee as $d): ?>
-								<?php if ($d->budget != 0) : ?>
-									<?php if ($d->resiliation == 2):  ?>
+								<?php if ($d->budget != 0 && $d->resiliation == 2): ?>
 									<div class="card mt-3">
 										<div class="card-body">
 											<a href="<?= base_url('Client/detail_client/' . $d->idclients) ?>" class="stretched-link"></a>
-											<div class="d-block mb-3">
-												<img src="<?= $d->favicon ?>" alt="" width="48">
-											</div>
-											<p style="font-size: 18px; font-weight: 400;" class="mb-3">
-												<?= htmlspecialchars($d->nom_client) ?>
-											</p>
+											<div class="mb-3"><img src="<?= $d->favicon ?>" width="48"></div>
+											<p class="mb-3"><?= htmlspecialchars($d->nom_client) ?></p>
 											<div class="d-flex justify-content-between">
 												<span class="text-muted">
-													<img src="<?= base_url('assets/images/icons/figma/calendar.svg') ?>" alt="">
-													<?= $d->mis_en_place_paiement ?>
+													<img src="<?= base_url('assets/images/icons/figma/calendar.svg') ?>">
+													<?= date('d-m-Y', strtotime($d->mis_en_place_paiement)); ?>
 												</span>
 												<div class="budget">
-												<?php if($current_user->tech != 3): ?>
-												<?php
-												$budget = $d->budget;
-												$budget = ($budget / 2) / 30.6;
-												$budget = round($budget, 2);
-												?>
-												<span>
-													<?= $budget; ?> €</td>
-												</span>
-												
-												<?php endif; ?>	
-												<?php if($current_user->tech == 3): ?>
-												<span>
-													<?= $d->budget; ?> €</td>
-												</span>	
-											
-												<?php endif; ?>	
-												</div>	
-											</div>
-										</div>
-									</div>
-									<?php endif; ?>
-								<?php endif; ?>
-							<?php endforeach; ?>
-						</div>
-					</div>
-				</div>
-
-				<!-- RESILIER COLUMN -->
-				<div class="col mb-3">
-					<div class="card h-100" style="border-radius: 8px;">
-						<div class="card-body">
-							<div class="d-flex align-items-center">
-								<span class="mx-1 badge alert-danger rounded-pill p-2" style="font-size: 14px; font-weight: 500;">
-									<i class="fa fa-circle mr-1" style="font-size: 10px;"></i>
-									Résilier
-								</span>
-								<span class="badge alert-light mx-1 text-dark" style="font-size: 14px;"></span>
-							</div>
-
-							<?php foreach ($donnee as $d): ?>
-								<?php if ($d->budget != 0) : ?>
-									<?php if ($d->resiliation == 3):  ?>
-									<div class="card mt-3">
-										<div class="card-body">
-											<a href="<?= base_url('Client/detail_client/' . $d->idclients) ?>" class="stretched-link"></a>
-											<div class="d-block mb-3">
-												<img src="<?= $d->favicon ?>" alt="" width="48">
-											</div>
-											<p style="font-size: 18px; font-weight: 400;" class="mb-3">
-												<?= htmlspecialchars($d->nom_client) ?>
-											</p>
-											<div class="d-flex justify-content-between">
-												<span class="text-muted">
-													<img src="<?= base_url('assets/images/icons/figma/calendar.svg') ?>" alt="">
-													<?= $d->mis_en_place_paiement ?>
-												</span>
-												<div class="budget">
-												<?php if($current_user->tech != 3): ?>
-												<?php
-												$budget = $d->budget;
-												$budget = ($budget / 2) / 30.6;
-												$budget = round($budget, 2);
-												?>
-												<span>
-													<?= $budget; ?> €</td>
-												</span>
-												
-												<?php endif; ?>	
-												<?php if($current_user->tech == 3): ?>
-												<span>
-													<?= $d->budget; ?> €</td>
-												</span>	
-											
-												<?php endif; ?>	
+													<?php if ($current_user->tech != 3): ?>
+														<?php $budget = round(($d->budget / 2) / 30.6, 2); ?>
+														<?= $budget; ?> €
+													<?php else: ?>
+														<?= $d->budget; ?> €
+													<?php endif; ?>
 												</div>
 											</div>
 										</div>
 									</div>
-									<?php endif; ?>
 								<?php endif; ?>
 							<?php endforeach; ?>
 						</div>
 					</div>
 				</div>
+
+				<!-- RÉSILIÉ -->
+				<div class="col mb-3">
+					<div class="card h-100">
+						<div class="card-body">
+							<span class="mx-1 badge alert-danger rounded-pill p-2">Résilié</span>
+							<?php foreach ($donnee as $d): ?>
+								<?php if ($d->budget != 0 && $d->resiliation == 3): ?>
+									<div class="card mt-3">
+										<div class="card-body">
+											<a href="<?= base_url('Client/detail_client/' . $d->idclients) ?>" class="stretched-link"></a>
+											<div class="mb-3"><img src="<?= $d->favicon ?>" width="48"></div>
+											<p class="mb-3"><?= htmlspecialchars($d->nom_client) ?></p>
+											<div class="d-flex justify-content-between">
+												<span class="text-muted">
+													<img src="<?= base_url('assets/images/icons/figma/calendar.svg') ?>">
+													<?= date('d-m-Y', strtotime($d->mis_en_place_paiement)); ?>
+												</span>
+												<div class="budget">
+													<?php if ($current_user->tech != 3): ?>
+														<?php $budget = round(($d->budget / 2) / 30.6, 2); ?>
+														<?= $budget; ?> €
+													<?php else: ?>
+														<?= $d->budget; ?> €
+													<?php endif; ?>
+												</div>
+											</div>
+										</div>
+									</div>
+								<?php endif; ?>
+							<?php endforeach; ?>
+						</div>
+					</div>
+				</div>
+
 			</div>
 		</div>
+
 	</div>
 </div>
 
@@ -430,13 +309,10 @@
 <?php end_section(); ?>
 
 <?php start_section('script'); ?>
-
 <script>
 	$(function() {
 		$('.status-select').change(function() {
-
 			let status = $(this).val();
-
 			let $labels = $('.status-select').parent('label');
 
 			$labels.removeClass('btn-light').addClass('btn-white text-muted');

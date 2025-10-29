@@ -409,14 +409,20 @@
 
 								</div>
 								<br><br>
-								<div class="d-flex justify-content-start mb-3" style="font-size: 15px;">
-									<i class="fa fa-check-square mr-2" style="color: Black; font-size: 18px;"></i>
-									<span class="mr-2">Date d'anniversaire : <?= $d['mis_en_place_paiement'] ?></span>
+									<div class="d-flex justify-content-start mb-3" style="font-size: 15px;">
+									<i class="fa fa-check-square mr-2" style="color: black; font-size: 18px;"></i>
+									<span class="mr-2">
+										Date d'anniversaire :
+										<?= (!empty($d['mis_en_place_paiement']) && $d['mis_en_place_paiement'] != '0000-00-00') ? date('d-m-Y', strtotime($d['mis_en_place_paiement'])) : '-' ?>
+									</span>
 								</div>
-								<div class="d-flex justify-content-start mb-3" style="font-size: 15px;">
-									<i class="fa fa-check-square mr-2" style="color: Black; font-size: 18px;"></i>
-									<span class="mr-2">Date de mise en ligne : <?= $d['annonce'] ?></span>
 
+								<div class="d-flex justify-content-start mb-3" style="font-size: 15px;">
+									<i class="fa fa-check-square mr-2" style="color: black; font-size: 18px;"></i>
+									<span class="mr-2">
+										Date de mise en ligne :
+										<?= (!empty($d['annonce']) && $d['annonce'] != '0000-00-00') ? date('d-m-Y', strtotime($d['annonce'])) : '-' ?>
+									</span>
 								</div>
 								<div class="d-flex justify-content-start mb-3" style="font-size: 15px;">
 									<i class="fa fa-check-square mr-2" style="color: Black; font-size: 18px;"></i>

@@ -7,13 +7,13 @@
 			<li class="nav-item rounded">
 				<a class="nav-link text-secondary" href="#">
 					<img class="mr-2" src="<?= base_url('assets/images/icons/figma/icon-chartpie.svg') ?>" />
-					<span>Brief</span>
+					<span>Brief - Ancre Titre </span>
 				</a>
 			</li>
 			<li class="nav-item rounded">
 				<a class="nav-link text-secondary" href="#">
 					<img class="mr-2" src="<?= base_url('assets/images/icons/figma/icon-bell.svg') ?>" />
-					<span>Paramétrer la campagne</span>
+					<span>Mise en place GTM</span>
 				</a>
 			</li>
 		</ul>
@@ -25,7 +25,7 @@
 			<li class="nav-item rounded">
 				<a class="nav-link text-secondary" href="#">
 					<img class="mr-2" src="<?= base_url('assets/images/icons/figma/chartlineup.svg') ?>" />
-					<span>Exemple Menu</span>
+					<span>Création de campagne</span>
 				</a>
 			</li>
 		</ul>

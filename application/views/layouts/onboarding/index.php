@@ -69,8 +69,9 @@
 <?php //var_dump($onboarding); die(); 
 ?>
 <div class="container-fluid">
-	<div class="row row-cols-2" style="position: sticky;">
+	<div class="row row-cols" style="position: sticky;">
 		<div class="col">
+			<input type="text" class="form-control" id="searchInput" placeholder="Rechercher un client..." style="margin-top: 25px;">
 			<div class="btn-group btn-group-toggle my-4" data-toggle="buttons">
 				<label class="btn btn-light rounded-pill mx-2" style="font-size: 14px;">
 					<input type="radio" class="status-select" name="status_filter" value="all" checked>
@@ -103,8 +104,8 @@
 				-->
 			</div>
 		</div>
-		<div class="col-auto align-self-center">
-			<input type="text" class="form-control" id="searchInput" placeholder="Rechercher un client...">
+		<div class="col-auto" >
+			
 		</div>
 	</div>
 
@@ -126,16 +127,23 @@
 							?>
 							<th>Member</th>
 							<th>Gocardless</th>
-							<th>Brief</th>
-							<th>Envoi Str</th>
-							<th>Validation Str</th>
 							<th>Paiement</th>
-							<!-- <th>Compte Ads</th> -->
-							<th>DataStudio</th>
+							<?php if ($current_users != 2): ?>
+							<th>Brief</th>
+							<th>Structure</th>
+							<th>Validation Client</th>
+							<?php endif; ?>
 							<th>Annonce</th>
-							<?php if ($current_users != 1): ?>
-								<th>Email</th>
-								<th>Facturation</th>
+							<?php if ($current_users == 1): ?>
+							<th>Compte Ads</th>
+							<?php endif; ?>
+							
+							<?php if ($current_users != 1 && $current_users != 3  && $current_users != 2): ?>
+							<th>DataStudio</th>					
+							<?php endif; ?>
+							<th>Email</th>
+							<?php if ($current_users == 2): ?>
+							<th>Facturation</th>
 							<?php endif; ?>
 							<th>Status</th>
 						</tr>
@@ -215,6 +223,7 @@
 													data-email-onboarding="<?= $d->email_onboarding; ?>"
 													data-facturation="<?= $d->facturation; ?>"
 													data-datastudio="<?= $d->datastudio; ?>"
+													data-validation_structure="<?= $d->date_validation_structure; ?>"
 													data-statut_upsell="<?= $d->statut_upsell; ?>">Modifier</a>
 											</div>
 										</div>
@@ -277,19 +286,22 @@
 										<img src="<?= base_url(IMAGES_PATH . htmlspecialchars($d->am_photo_user)); ?>" width="28" height="28">
 									</td>
 
-									<td><?= (!empty($d->mis_en_place_paiement) && $d->mis_en_place_paiement != '0000-00-00') ? htmlspecialchars($d->mis_en_place_paiement) : '-' ?></td>
-
+									<td>
+										<?= (!empty($d->mis_en_place_paiement) && $d->mis_en_place_paiement != '0000-00-00') ? date('d-m-Y', strtotime($d->mis_en_place_paiement)) : '-' ?>
+									</td>
+									<td><?= $d->paiement_recu ? 'Oui' : 'Non' ?></td>	
+									<?php if ($current_users != 2): ?>			
 									<td>
 										<?php if ($d->statut_brief == 1):  ?>
 											<span class="badge alert-success rounded-pill px-2 py-1" style="font-size: 12px; font-weight: 500;">
 												<i class="fa fa-circle mr-1" style="font-size: 10px;"></i>
-												<?= (!empty($d->Brief) && $d->Brief != '0000-00-00') ? htmlspecialchars($d->Brief) : '-' ?>
+												<?= (!empty($d->Brief) && $d->Brief != '0000-00-00') ? date('d-m-Y', strtotime($d->Brief)) : '-' ?>
 											</span>
 										<?php endif; ?>
 										<?php if ($d->statut_brief == 0):  ?>
 											<span class="badge alert-danger rounded-pill px-2 py-1" style="font-size: 12px; font-weight: 500;">
 												<i class="fa fa-circle mr-1" style="font-size: 10px;"></i>
-												<?= (!empty($d->Brief) && $d->Brief != '0000-00-00') ? htmlspecialchars($d->Brief) : '-' ?>
+												<?= (!empty($d->Brief) && $d->Brief != '0000-00-00') ? date('d-m-Y', strtotime($d->Brief)) : '-' ?>
 											</span>
 										<?php endif; ?>	
 									</td>
@@ -298,38 +310,51 @@
 											<?php if ($d->statut_envoye == 1):  ?>
 											<span class="badge alert-success rounded-pill px-2 py-1" style="font-size: 12px; font-weight: 500;">
 												<i class="fa fa-circle mr-1" style="font-size: 10px;"></i>
-												<?= (!empty($d->Envoie_structure) && $d->Envoie_structure != '0000-00-00') ? htmlspecialchars($d->Envoie_structure) : '-' ?>
+												<?= (!empty($d->Envoie_structure) && $d->Envoie_structure != '0000-00-00') ? date('d-m-Y', strtotime($d->Envoie_structure)) : '-' ?>
 											</span>
 										<?php endif; ?>
 										<?php if ($d->statut_envoye == 0):  ?>
 											<?php if($d->Envoie_structure == '0000-00-00'): ?>
 											<span class="badge alert-danger rounded-pill px-2 py-1" style="font-size: 12px; font-weight: 500;">
 												<i class="fa fa-circle mr-1" style="font-size: 10px;"></i>
-												<?= (!empty($d->Envoie_structure) && $d->Envoie_structure != '0000-00-00') ? htmlspecialchars($d->Envoie_structure) : '-' ?>
+												<?= (!empty($d->Envoie_structure) && $d->Envoie_structure != '0000-00-00') ? date('d-m-Y', strtotime($d->Envoie_structure)) : '-' ?>
 											</span>
 											<?php else:  ?>
 												-
 											<?php endif; ?>	
 										<?php endif; ?>					
-              						  <td><?= (!empty($d->validation_technique) && $d->validation_technique != '0000-00-00') ? anchor('Validation/validation_structure/' . $d->idclients, $d->validation_technique, ['target' => '_blank']) : '-' ?></td>
-									<td><?= $d->paiement_recu ? 'Oui' : 'Non' ?></td>
-
-									<!-- <td> (!empty($d->Céation_compte_ads) && $d->Céation_compte_ads != '0000-00-00') ? htmlspecialchars($d->Céation_compte_ads) : 'Ajouter date' ?></td>
-                -->
+              						  <td>
+										<?= (!empty($d->date_validation_structure) && $d->date_validation_structure != '0000-00-00') ? anchor('Validation/validation_structure/' . $d->idclients, date('d-m-Y', strtotime($d->date_validation_structure)), ['target' => '_blank']) : '-' ?>
+              						  </td>
+									<?php endif; ?>		
+									  <td>
+										<?= (!empty($d->annonce) && $d->annonce != '0000-00-00') ? date('d-m-Y', strtotime($d->annonce)) : '-' ?>
+									  </td>
+										<?php if ($current_users != 2): ?>			
+										<?php if ($current_users == 1): ?>		
+									 <td>
+									 	<?= (!empty($d->Céation_compte_ads) && $d->Céation_compte_ads != '0000-00-00') ? date('d-m-Y', strtotime($d->Céation_compte_ads)) : '-' ?>
+									 </td>
+         							<?php endif; ?>	
+									<?php if ($current_users!= 1 && $current_users != 3): ?>
 									<td><?= $d->datastudio ? 'Oui' : 'Non' ?></td>
-
-									<td><?= (!empty($d->annonce) && $d->annonce != '0000-00-00') ? htmlspecialchars($d->annonce) : '-' ?></td>
-
-									<?php if ($current_users != 1): ?>
-										<td><?= $d->email_onboarding ? 'Oui' : 'Non' ?></td>
+											<?php endif; ?>	
+										
+									
+									<?php endif; ?>	
+									<td><?= $d->email_onboarding ? 'Oui' : 'Non' ?></td>
+									<?php if ($current_users == 2): ?>
 										<td><?= $d->facturation ? 'Oui' : 'Non' ?></td>
-									<?php endif; ?>
+										<?php endif; ?>	
 									<td>
 										<?php if ($d->statut_upsell == 0): ?>
 											<span class="badge alert-warning px-2 py-1">En attente</span>
 										<?php endif; ?>
-										<?php if ($d->statut_upsell == 1): ?>
+										<?php if ($d->statut_upsell == 2): ?>
 											<span class="badge alert-success px-2 py-1">En ligne</span>
+										<?php endif; ?>
+										<?php if ($d->statut_upsell == 1): ?>
+											<span class="badge alert-success px-2 py-1">En cours</span>
 										<?php endif; ?>
 									</td>
 								</tr>
@@ -419,6 +444,10 @@
 							<input type="date" id="edit_annonce" name="annonce" class="form-control">
 						</div>
 					</div>
+					<div class="form-group col">
+							<label>Validation client</label>
+							<input type="date" id="edit_validation_structure" name="Validation_structure" class="form-control">
+						</div>
 					<!--
           <div class="form-group">
             <label>Commentaire client</label>
@@ -459,7 +488,7 @@
 						<label>Statut</label>
 						<select id="edit_statut_upsell" name="statut_upsell" class="form-control">
 							<option value="0">En attente</option>
-							<option value="1">En ligne</option>
+							<option value="2">En cours</option>
 						</select>
 					</div>
 				</div>
@@ -540,6 +569,7 @@
 		modal.find('#edit_email_onboarding').val(button.data('email-onboarding'));
 		modal.find('#edit_facturation').val(button.data('facturation'));
 		modal.find('#edit_datastudio').val(button.data('datastudio'));
+		modal.find('#edit_validation_structure').val(button.data('Validation_structure'));
 		modal.find('#edit_statut_upsell').val(button.data('statut_upsell'));
 	});
 </script>

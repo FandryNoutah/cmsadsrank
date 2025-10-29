@@ -55,13 +55,13 @@ $images_site = isset($images_site) && is_array($images_site) ? $images_site : []
 					<li class="nav-item rounded">
 						<a class="nav-link text-secondary" href="#">
 							<img class="mr-2" src="<?= base_url('assets/images/icons/figma/icon-chartpie.svg') ?>" />
-							<span>Menu 1</span>
+							<span>Paramètre</span>
 						</a>
 					</li>
 					<li class="nav-item rounded">
 						<a class="nav-link text-secondary" href="#">
 							<img class="mr-2" src="<?= base_url('assets/images/icons/figma/icon-bell.svg') ?>" />
-							<span>Menu 2</span>
+							<span>Groupe d'annonce</span>
 						</a>
 					</li>
 				</ul>
@@ -69,7 +69,7 @@ $images_site = isset($images_site) && is_array($images_site) ? $images_site : []
 					<li class="nav-item rounded">
 						<a class="nav-link text-secondary" href="#">
 							<img class="mr-2" src="<?= base_url('assets/images/icons/figma/chartlineup.svg') ?>" />
-							<span>Exemple Menu</span>
+							<span>Asset média</span>
 						</a>
 					</li>
 				</ul>

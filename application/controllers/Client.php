@@ -2028,15 +2028,14 @@ class Client extends MY_Controller
 		}
 		$summary = $this->get_summary_from_chatgpt($headings, $paragraphs);
 		$naf_info = $this->get_naf_code_from_summary($summary);
-		//var_dump($naf_info);
-		//die();
+		$secteur_activite =	$naf_info['libelle'];
 		preg_match('/GTM-[A-Z0-9]+/', $html, $matches);
 		$gtm_code = !empty($matches) ? $matches[0] : null;
 		$cms = $this->detect_cms($html, $site_client);
 		$cms_logo = $this->get_cms_logo($cms);
 		$favicon = $this->get_favicon($html, $site_client);
 
-		$idclients = $this->visuels_model->insertclient($client, $site_client, $email_client, $numero_client, $favicon, $cms, $cms_logo, $summary);
+		$idclients = $this->visuels_model->insertclient($client, $site_client, $email_client, $numero_client, $favicon, $cms, $cms_logo, $summary,$naf_info);
 		$idclient_onboarding = $idclients;
 		$idclient = $idclients;
 		$idonnee = $this->visuels_model->insertfiche($idclient, $budget, $secteur_activite, $product_choice, $initiative, $am, $date_mis_en_place, $date_brief, $date_annonce, $dejaclient, $gtm_code);
@@ -2084,7 +2083,7 @@ class Client extends MY_Controller
 
 		);
 		$this->visuels_model->add_upsell_onboarding($data_upsell);
-		redirect('Client');
+		redirect('Onboarding');
 	}
 
 	private function get_naf_code_from_summary($summary)

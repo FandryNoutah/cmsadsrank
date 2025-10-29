@@ -1253,7 +1253,7 @@ class Donne_modele extends CI_Model
 		// Fermer la connexion à la base de données
 		$this->db->close();
 	}
-	public function update_onboarding_client($budget, $secteur_activite, $Produit, $Initiative, $Am, $mis_en_place_paiement, $Brief, $annonce, $commentaire_client, $paiement_recu, $datastudio, $email_onboarding, $facturation, $idonboarding)
+	public function update_onboarding_client($budget, $secteur_activite, $Produit, $Initiative, $Am, $mis_en_place_paiement, $Brief, $annonce, $commentaire_client, $paiement_recu, $datastudio, $email_onboarding, $facturation,$Validation_structure, $idonboarding)
 	{
 		// Charger la base de données
 		$this->load->database();
@@ -1272,8 +1272,8 @@ class Donne_modele extends CI_Model
 		$datastudio = $this->db->escape($datastudio);
 		$email_onboarding = $this->db->escape($email_onboarding);
 		$facturation = $this->db->escape($facturation);
+		$Validation_structure = $this->db->escape($Validation_structure);
 		$idonboarding = $this->db->escape($idonboarding);
-
 		// Construire la requête avec les valeurs échappées
 		$sql = "UPDATE onboarding SET 
 					budget = $budget, 
@@ -1287,7 +1287,8 @@ class Donne_modele extends CI_Model
 					paiement_recu = $paiement_recu, 
 					datastudio = $datastudio, 
 					email_onboarding = $email_onboarding, 
-					facturation = $facturation 
+					facturation = $facturation, 
+					date_validation_structure = $Validation_structure
 				WHERE idonboarding = $idonboarding";
 
 		// Exécuter la requête
