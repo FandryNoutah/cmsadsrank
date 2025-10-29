@@ -62,39 +62,97 @@
 
 					<?php foreach ($groupe_valider as $groupe): ?>
 						<?php if ($groupe['type_campagne'] == 3): ?>
-						
-						<div class="row row-cols-5 mb-4">
-							<!-- YouTube -->
-							<div class="col-auto">
-								<div class="phone-frame">
-									<div class="screen">
-										<div class="d-flex justify-content-between align-items-center">
-											<img src="https://cdn2.iconfinder.com/data/icons/social-media-2285/512/1_Youtube2_colored_svg-256.png" alt="Youtube" width="64">
-											<i class="fa fa-search"></i>
-										</div>
-										<div class="thumb-box" style="height: 140px;">
-											<img src=<?= $groupe['images'][0] ?? "https://placehold.co/120x120?text=Youtube+Ads" ?> alt="placeholder">
-										</div>
-										<div class="alert alert-primary border-0 py-0 px-2 d-flex justify-content-between align-items-center">
-											<span class="small font-weight-bold">Book now</span>
-											<i class="fa fa-external-link-alt"></i>
-										</div>
-										<div class="row no-gutters justify-content-between">
-											<div class="col-auto">
-												<img src="https://placehold.co/38x38" alt="" class="rounded-circle" width="38">
+
+							<div class="row row-cols-5 mb-4">
+								<!-- YouTube -->
+								<div class="col-auto">
+									<div class="phone-frame">
+										<div class="screen">
+											<div class="d-flex justify-content-between align-items-center">
+												<img src="https://cdn2.iconfinder.com/data/icons/social-media-2285/512/1_Youtube2_colored_svg-256.png" alt="Youtube" width="64">
+												<i class="fa fa-search"></i>
 											</div>
-											<div class="col px-2">
-												<p class="font-weight-bold m-0"><?= $groupe['nom_groupe'] ?></p>
-												<p class="small text-muted m-0"><?= $groupe['descriptions1'] ?></p>
+											<div class="thumb-box" style="height: 140px;">
+												<img src=<?= $groupe['images'][0] ?? "https://placehold.co/120x120?text=Youtube+Ads" ?> alt="placeholder">
 											</div>
-											<div class="col-auto">
-												<i class="fa fa-ellipsis-v"></i>
+											<div class="alert alert-primary border-0 py-0 px-2 d-flex justify-content-between align-items-center">
+												<span class="small font-weight-bold">Book now</span>
+												<i class="fa fa-external-link-alt"></i>
+											</div>
+											<div class="row no-gutters justify-content-between">
+												<div class="col-auto">
+													<img src="https://placehold.co/38x38?text=Favicon" alt="" class="rounded-circle" width="38">
+												</div>
+												<div class="col px-2">
+													<p class="font-weight-bold m-0"><?= $groupe['nom_groupe'] ?></p>
+													<p class="small text-muted m-0"><?= $groupe['descriptions1'] ?></p>
+												</div>
+												<div class="col-auto">
+													<i class="fa fa-ellipsis-v"></i>
+												</div>
 											</div>
 										</div>
 									</div>
 								</div>
+
+								<!-- Gmail -->
+								<div class="col-auto">
+									<div class="phone-frame">
+										<div class="screen">
+											<div class="d-flex justify-content-between align-items-center mb-3">
+												<i class="fa fa-chevron-left mr-auto"></i>
+												<i class="mr-4 far fa-star"></i>
+												<i class="mr-4 fa fa-trash"></i>
+												<i class="fa fa-ellipsis-h"></i>
+											</div>
+											<div class="row no-gutters justify-content-start mb-3">
+												<div class="col-auto">
+													<img src="https://placehold.co/38x38?text=Favicon" alt="" class="rounded-circle" width="38">
+												</div>
+												<div class="pl-2 col">
+													<p class="small m-0 font-weight-bold">Résidence-Luxe</p>
+													<p class="small m-0 text-muted">à Moi</p>
+												</div>
+											</div>
+											<div class="thumb-box mb-3" style="height: 140px;">
+												<img src=<?= $groupe['images'][0] ?? "https://placehold.co/120x120?text=Youtube+Ads" ?> alt="placeholder">
+											</div>
+
+											<p class="font-weight-bold mb-2"><?= $groupe['nom_groupe'] ?></p>
+											<p class="small text-muted"><?= $groupe['descriptions1'] ?></p>
+
+											<span class="badge badge-primary py-2 w-100 rounded-pill">Book now</span>
+										</div>
+									</div>
+								</div>
+
+								<!-- Search -->
+								<div class="col-auto">
+									<div class="phone-frame">
+										<div class="screen">
+											<p class="small font-weight-bold mb-2">Sponsorisé</p>
+											<div class="row no-gutters justify-content-start mb-3">
+												<div class="col-auto">
+													<img src="https://placehold.co/38x38?text=Favicon" alt="" class="rounded-circle" width="38">
+												</div>
+												<div class="pl-2 col">
+													<p class="m-0">Résidence-Luxe</p>
+													<p class="small m-0 text-muted"><?= $groupe['url_site'] ?></p>
+												</div>
+											</div>
+
+											<p class="text-primary font-weight-bold mb-2"><?= $groupe['nom_groupe'] ?></p>
+											<p class="small text-muted mb-2"><?= $groupe['descriptions1'] ?></p>
+
+											<span class="border rounded-pill text-primary py-1 px-2 small">Chalets de Luxe</span>
+											<span class="border rounded-pill text-primary py-1 px-2 small">Promotions</span>
+											<hr>
+											<i class="fa fa-phone"></i>
+											Appeler le <?= $groupe['téléphone'] ?>
+										</div>
+									</div>
+								</div>
 							</div>
-						</div>
 						<?php endif; ?>
 					<?php endforeach; ?>
 				</div>
