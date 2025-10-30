@@ -251,8 +251,6 @@ endif;
 	}
 
 	public function validation_structure(int $id) {
-		
-
 		$donnees_valider = $this->Donne_modele->getclientvalidation($id);
 		$this->data["clients"] = $this->visuels_model->getClientById($id);
 		$idclient = $idclients = $id;
@@ -325,6 +323,7 @@ endif;
 			}
 
 			$this->data["images"] = $images;
+		
 		}
 		$a = $this->Donne_modele->getlocalxvalider($id);
 

@@ -254,6 +254,20 @@
 		border-radius: 28px;
 		overflow-y: auto;
 	}
+	html {
+	scroll-behavior: smooth;
+	}
+	  section {
+      height: 100vh;
+      padding: 50px;
+    }
+    nav {
+      position: fixed;
+      top: 10px;
+      background: white;
+      padding: 10px;
+    }
+
 
 	/** INVENTORY MOCKUP STYLESHEET */
 </style>
@@ -264,7 +278,7 @@
 	<div class="row no-gutters h-100">
 		<?php $this->load->view('layouts/client/onboarding/sidebar'); ?>
 
-		<div class="col" style="height: calc(100vh - 101px); overflow-y:auto;">
+		<div class="col" style="height: calc(100vh - 101px); overflow-y:auto;" >
 			<div class="container-fluid pb-5 pt-3">
 
 
@@ -370,7 +384,7 @@
 
 						<?php endif; ?>
 				</div>
-				<h1 class="mb-2" style="font-size: 48px; font-weight: 500;">
+				<h1 class="mb-2" style="font-size: 48px; font-weight: 500;" id="information">
 					Onboarding : <?= $d['nom_client'] ?>
 				</h1>
 
@@ -449,7 +463,7 @@
 					</div>
 				</div>
 
-				<h1 class="display-1 text-center mt-4" style="font-size: 42px;">
+				<h1 class="display-1 text-center mt-4" style="font-size: 42px;" id="brief">
 					Brief
 				</h1>
 				<div class="d-flex justify-content-between">
@@ -492,7 +506,7 @@
 						<div class="row align-items-center">
 
 							<div class="col-6 text-center">
-								<h3 class="mb-3" style="font-size: 32px; font-weight: 500;">Google Tag Manager</h3>
+								<h3 class="mb-3" style="font-size: 32px; font-weight: 500;" id="gtm">Google Tag Manager</h3>
 
 								<?php if (!empty($d['tracking_gtm'])): ?>
 									<p class="text-muted" style="font-size: 18px; line-height: 150%;">
@@ -609,7 +623,7 @@
 
 
 				<!-- BRIEF -->
-				<h1 class="display-1 text-center mt-4" style="font-size: 42px;">
+				<h1 class="display-1 text-center mt-4" style="font-size: 42px;" id="campagne">
 					Campagne
 				</h1>
 				<div class="table-responsive">

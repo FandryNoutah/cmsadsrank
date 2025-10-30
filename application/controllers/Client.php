@@ -229,23 +229,60 @@ class Client extends MY_Controller
 		$this->layout();
 	}
 	public function fetch_images_campagnes()
-	{
-		$idcampagne = $this->input->post('idcampagne');
-		if (empty($idcampagne)) {
-			echo json_encode(['success' => false, 'message' => 'ID campagne manquant']);
-			return;
-		}
+{
+    $idcampagne = $this->input->post('idcampagne');
+    $url = $this->input->post('url');
 
-		$this->load->model('Image_model');
-		$images = $this->Image_model->get_images_by_campagnes($idcampagne);
+    if (!empty($idcampagne)) {
+        $this->load->model('Image_model');
+        $images = $this->Image_model->get_images_by_campagnes($idcampagne);
 
-		$urls = [];
-		foreach ($images as $img) {
-			$urls[] = $img->image_url;
-		}
+       $urls = array_map(function($img) {
+    return $img->image_url;
+}, $images);
 
-		echo json_encode(['success' => true, 'images' => $urls]);
-	}
+        echo json_encode(['success' => true, 'images' => $urls]);
+        return;
+    }
+
+    if (!empty($url)) {
+        // Exemple : aller chercher les images du site
+        $this->load->helper('url');
+        $images = $this->_scrape_images_from_site($url);
+        echo json_encode(['success' => true, 'images' => $images]);
+        return;
+    }
+
+    echo json_encode(['success' => false, 'message' => 'Paramètre manquant']);
+}
+
+private function _scrape_images_from_site($url)
+{
+    $html = @file_get_contents($url);
+    if (!$html) return [];
+
+    preg_match_all('/<img[^>]+src=["\']([^"\']+)["\']/i', $html, $matches);
+    $images = array_unique($matches[1]);
+    $absolute_images = [];
+
+    $parsedUrl = parse_url($url);
+    $baseUrl = $parsedUrl['scheme'] . '://' . $parsedUrl['host'];
+
+    foreach ($images as $img) {
+        if (strpos($img, 'http') === 0) {
+            $absolute_images[] = $img;
+        } elseif (strpos($img, '/') === 0) {
+            $absolute_images[] = $baseUrl . $img;
+        } else {
+            $absolute_images[] = $baseUrl . '/' . $img;
+        }
+    }
+
+    return $absolute_images;
+}
+
+
+
 
 	public function save_images_campagnes()
 	{
@@ -1082,53 +1119,17 @@ class Client extends MY_Controller
 	public function information_campagne($idclients)
 	{
 		$url = $this->input->post('url');
-
+		//$url ="https://www.florenthamon.com/hypnose/";
 		if (!$url) {
 			return $this->output
 				->set_content_type('application/json')
 				->set_output(json_encode(['status' => 'error', 'message' => 'URL manquante.']));
 		}
-
-		// 1. Récupération du HTML
-		$html = @file_get_contents($url);
-		if ($html === false) {
-			return $this->output
-				->set_content_type('application/json')
-				->set_output(json_encode(['status' => 'error', 'message' => 'Impossible de charger le contenu de la page.']));
-		}
-
-		// 2. Charger dans DOMDocument pour extraire uniquement le contenu texte
-		libxml_use_internal_errors(true);
-		$dom = new DOMDocument();
-		$dom->loadHTML($html);
-		libxml_clear_errors();
-
-		$xpath = new DOMXPath($dom);
-
-		// 3. Récupérer uniquement les balises visibles
-		$nodes = $xpath->query('//h1 | //h2 | //h3 | //p | //article | //section | //div');
-
-		$textContent = '';
-		foreach ($nodes as $node) {
-			$text = trim($node->textContent);
-			if (strlen($text) > 30) { // on ignore les tout petits morceaux de texte
-				$textContent .= $text . "\n";
-			}
-		}
-
-		$textContent = substr($textContent, 0, 3500); // limite la taille pour OpenAI
-
-		// 4. Construire un prompt pour générer un résumé **sans explication technique**
-		$prompt = "EOT
-			Voici le contenu textuel extrait d'une page web : 
-			$textContent
-			Donne un résumé court et objectif de ce que propose le site ou la page, sans détails techniques ni structure HTML. Ne parle pas de scripts ou de performances. Ne commence pas par 'Voici le résumé', écris directement le contenu comme un humain qui explique à un autre humain de quoi parle le site.
-			EOT";
-
-		// 5. Appel à l'API OpenAI
-		$response = $this->call_openai($prompt);
-		$response = trim($response);
-
+		$summary = $this->get_information_campagne_from_chatgpt($url);
+		
+		$response = trim($summary);
+		//var_dump($response);
+		//die();
 		return $this->output
 			->set_content_type('application/json')
 			->set_output(json_encode(['status' => 'success', 'data' => $response]));
@@ -1150,8 +1151,6 @@ class Client extends MY_Controller
 		Voici les informations de la campagne :
 
 		$campagne_info
-
-		⚠️ Tu ne peux pas visiter de site web.
 		Même si les informations sont partielles, propose une liste pertinente et standard de mots-clés à exclure en français pour éviter les recherches non qualifiées.
 		Donne UNIQUEMENT les mots, séparés par des virgules, sans introduction ni phrase explicative.";
 
@@ -1417,7 +1416,6 @@ class Client extends MY_Controller
 		}
 		$selectedImages = $this->input->post('selectedImages');
 		$imagesArray = array_filter(array_map('trim', explode(',', $selectedImages)));
-		$idcampagne = $camp_type;
 		$idgroupe_annonce = 0;
 		$this->Image_model->insert_images($imagesArray, $idclients, $idcampagne, $idgroupe_annonce);
 
@@ -2127,6 +2125,55 @@ class Client extends MY_Controller
 		}
 
 		return ['code' => '0000Z', 'libelle' => 'Secteur non identifié'];
+	}
+	private function get_information_campagne_from_chatgpt($url)
+	{
+		$model = 'gpt-4';
+
+		$input_text = "Regarde le contenu du site: $url et dit moi ce que le site fait";
+		$data = [
+			"model" => $model,
+			"messages" => [
+				["role" => "user", "content" => $input_text]
+			],
+			"temperature" => 0.7
+		];
+
+		$ch = curl_init('https://api.openai.com/v1/chat/completions');
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+		curl_setopt($ch, CURLOPT_HTTPHEADER, [
+			'Content-Type: application/json',
+			'Authorization: Bearer ' . getenv('CHAT_GPT_API_KEY')
+		]);
+		curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
+
+		$response = curl_exec($ch);
+		if (curl_errno($ch)) {
+			return 'Erreur OpenAI : ' . curl_error($ch);
+		}
+
+		curl_close($ch);
+		$result = json_decode($response, true);
+		$raw_output = $result['choices'][0]['message']['content'] ?? 'Résumé non disponible.';
+
+		// Séparation des deux paragraphes
+		$paragraphs_split = preg_split('/\n\s*\n/', trim($raw_output));
+
+		if (count($paragraphs_split) >= 2) {
+			$para1 = trim($paragraphs_split[0]);
+			$para2 = trim($paragraphs_split[1]);
+
+			// Comptage des mots (utile pour test ou journalisation)
+			$word_count1 = str_word_count(strip_tags($para1));
+			$word_count2 = str_word_count(strip_tags($para2));
+			$total_words = $word_count1 + $word_count2;
+
+			// Retourne toujours le contenu, sans alerte
+			return $para1 . "\n\n" . $para2;
+		}
+
+		// Fallback si le texte généré n'a pas deux paragraphes distincts
+		return $raw_output;
 	}
 
 
