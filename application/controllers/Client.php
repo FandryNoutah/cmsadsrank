@@ -1317,7 +1317,7 @@ private function _scrape_images_from_site($url)
 				$services			       	= $this->input->post('services');
 				$produit				= $this->input->post('produit');
 				$youtube				= $this->input->post('Youtube');
-				$idcampagne = $this->Donne_modele->insert_campagne_am(
+				$id_campagne = $this->Donne_modele->insert_campagne_am(
 					$idclients,
 					$camp_type,
 					$nom_campagne,
@@ -1346,7 +1346,7 @@ private function _scrape_images_from_site($url)
 						'contexte_groupes_annonces' 	=>	$contexte_groupes,
 						'mot_cle'                	=>	$mots_cle,
 						'url_groupe_annonce'     	=>	$url_site,
-						'idcampagne'             	=>	$idcampagne,
+						'idcampagne'             	=>	$id_campagne,
 						'idclients'               	=>	$idclients,
 						'type_campagnes'          	=>	$camp_type
 					];
@@ -1378,7 +1378,7 @@ private function _scrape_images_from_site($url)
 				$promotions            	= $this->input->post('promotions');
 				$prix			       	= $this->input->post('prix');
 				$téléphone				= $this->input->post('téléphone');
-				$idcampagne = $this->Donne_modele->insert_campagne_am(
+				$id_campagne = $this->Donne_modele->insert_campagne_am(
 					$idclients,
 					$camp_type,
 					$nom_campagne,
@@ -1407,7 +1407,7 @@ private function _scrape_images_from_site($url)
 					'contexte_groupes_annonces' 	=>	$contexte_groupes,
 					'mot_cle'                	=>	$mots_cle,
 					'url_groupe_annonce'     	=>	$url_site,
-					'idcampagne'             	=>	$idcampagne,
+					'idcampagne'             	=>	$id_campagne,
 					'idclients'               	=>	$idclients,
 					'type_campagnes'          	=>	$camp_type
 				];
@@ -1416,6 +1416,7 @@ private function _scrape_images_from_site($url)
 		}
 		$selectedImages = $this->input->post('selectedImages');
 		$imagesArray = array_filter(array_map('trim', explode(',', $selectedImages)));
+		$idcampagne = $id_campagne;
 		$idgroupe_annonce = 0;
 		$this->Image_model->insert_images($imagesArray, $idclients, $idcampagne, $idgroupe_annonce);
 
