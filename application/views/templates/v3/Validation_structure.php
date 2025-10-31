@@ -38,6 +38,10 @@ a{color:var(--primary);text-decoration:none;}
   .edit-btn,.btn,.action-btns{display:none;}
   .section{page-break-before:always;} /* ← seulement à l'impression */
 }
+.table1 td{
+  text-align: center; 
+  text-transform: capitalize;
+}
 </style>
 </head>
 
@@ -141,9 +145,9 @@ a{color:var(--primary);text-decoration:none;}
         <?php $groupes = $C['groupes_annonces'] ?? []; $campImages = $C['images'] ?? []; ?>
         <?php foreach ($groupes as $G): ?>
           <div class="groupe-card">
-            <table>
-              <tr><th>Campagne</th><td><?= htmlspecialchars($C['nom_campagne'] ?? ''); ?></td></tr>
-              <tr><th>Groupe</th><td><?= htmlspecialchars($G['nom_groupe'] ?? ''); ?></td></tr>
+            <table class="table1">
+              <tr><th>Campagne</th><td><b><?= htmlspecialchars($C['nom_campagne'] ?? ''); ?></b></td></tr>
+              <tr><th>Groupe</th><td><b><?= htmlspecialchars($G['nom_groupe'] ?? ''); ?></b></td></tr>
               <tr><th>Titres</th><td>
                 <?php
                   $titres = [];
