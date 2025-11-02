@@ -252,7 +252,6 @@ endif;
 
 	public function validation_structure(int $id) {
 		
-
 		$donnees_valider = $this->Donne_modele->getclientvalidation($id);
 		$this->data["clients"] = $this->visuels_model->getClientById($id);
 		$idclients = $id;
@@ -435,9 +434,9 @@ endif;
         $donnees_valider = $this->Donne_modele->getclientvalidation($id);
         $groupes_valider = $this->Donne_modele->getgroupevalidation($id);
 
-        if (!is_array($groupes_valider) || !count($groupes_valider)) {
+        /* if (!is_array($groupes_valider) || !count($groupes_valider)) {
             redirect('Googleads');
-        }
+        } */
 
         // Regrouper les groupes d'annonces par campagne
         foreach ($donnees_valider as &$campagne) {
@@ -450,9 +449,9 @@ endif;
 				$c = $c[0]['logo_client'];
 				
 			
+				$logo_client = $c;
 
                 if ($groupe['type_campagnes'] == 3) {
-                    $logo_client = $c;
                     if (file_exists($c)) {
                         $logo_type = mime_content_type($c);
                         $logo_data = base64_encode(file_get_contents($c));
