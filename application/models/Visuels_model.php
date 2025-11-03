@@ -1193,10 +1193,20 @@ public function insertclient($client, $site_client, $email_client, $numero_clien
 		return $affectedRows; // Retourne le nombre de lignes affectées
 	}
 	
-    public function insertfiche($idclient,$budget,$secteur_activite,$product_choice,$initiative,$am,$date_mis_en_place,$date_brief,$date_annonce,$dejaclient,$gtm_code) {
-        $query = "INSERT INTO donnee (idclients,idproduit,budget,secteur_activite,initiative,account_manager,mis_en_place_paiement,Brief,annonce,modifier_par,dejaclient,tracking_gtm) VALUES ('$idclient','$product_choice','$budget','$secteur_activite','$initiative','$am','$date_mis_en_place','$date_brief','$date_annonce','$am','$dejaclient','$gtm_code')";
-        $this->db->query($query);
-    }
+   public function insertfiche($idclient, $budget, $secteur_activite, $product_choice, $initiative, $am, $date_mis_en_place, $date_brief, $date_annonce, $dejaclient, $gtm_code) {
+    $query = "INSERT INTO donnee 
+        (idclients, idproduit, budget, secteur_activite, initiative, account_manager, mis_en_place_paiement, Brief, annonce, modifier_par, dejaclient, tracking_gtm) 
+        VALUES 
+        ('$idclient', '$product_choice', '$budget', '$secteur_activite', '$initiative', '$am', '$date_mis_en_place', '$date_brief', '$date_annonce', '$am', '$dejaclient', '$gtm_code')";
+    
+    $this->db->query($query);
+
+    // Récupère l'ID de la dernière insertion
+    $idonnee = $this->db->insert_id();
+
+    return $idonnee;
+}
+
 
 
     	public function getClientDataByDonneeWithPmax() {

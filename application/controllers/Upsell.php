@@ -10,6 +10,7 @@ class Upsell extends MY_Controller
 	{
 		parent::__construct();
 		$this->load->model('Upsell_model');
+		$this->load->model('Task_model');
 		$this->load->library('ion_auth');
 
 		// Utilisateur connecté
@@ -19,7 +20,8 @@ class Upsell extends MY_Controller
 	public function index()
 	{
 
-		$this->data['upsell_active'] = $this->Upsell_model->get_upsell_active();	
+		$this->data['upsell_active'] = $this->Upsell_model->get_all_upsell();	
+		$this->data['users'] = $this->Task_model->get_all_users();
 		$this->content = "layouts/upsell/index.php";
 		$this->layout();
 	}

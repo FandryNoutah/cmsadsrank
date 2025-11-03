@@ -216,12 +216,12 @@ public function activer_processus_tache()
 		$datastudio = (int) $this->input->post('datastudio');
 		$email_onboarding = (int) $this->input->post('email_onboarding');
 		$facturation = (int) $this->input->post('facturation');
-
+		$Validation_structure =  $this->input->post('Validation_structure');
 		$this->Donne_modele->update_client($idclient, $client, $email_client, $numero_client, $site_client);
 		$this->Donne_modele->update_onboarding_client(
 			$budget, $secteur_activite, $Produit, $Initiative, $Am,
 			$mis_en_place_paiement, $Brief, $annonce, $commentaire_client,
-			$paiement_recu, $datastudio, $email_onboarding, $facturation, $idonboarding
+			$paiement_recu, $datastudio, $email_onboarding, $facturation,$Validation_structure, $idonboarding
 		);
 		$idupsell = (int) $this->input->post('idupsell');
 		$statut_upsell = (int) $this->input->post('statut_upsell');

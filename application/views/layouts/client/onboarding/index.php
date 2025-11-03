@@ -216,44 +216,111 @@
 		color: #333;
 	}
 
-	/* Phone frame */
-	.phone-frame {
-		width: 245px;
-		height: 450px;
-		background: #f8f9fa;
+	.device-frame {
+		background: #fff;
 		border: 2px solid #ddd;
 		border-radius: 30px;
 		box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 		position: relative;
 		overflow: hidden;
-		display: flex;
-		flex-direction: column;
-		justify-content: flex-start;
+		display: inline-block;
 	}
 
-	/* Top notch (like a speaker line) */
+	/* Phone */
+	.phone-frame {
+		width: 245px;
+		height: 430px;
+		border-radius: 30px;
+	}
+
 	.phone-frame::before {
 		content: "";
 		position: absolute;
 		top: 8px;
 		left: 50%;
-		transform: translateX(-50%);
 		width: 40px;
 		height: 4px;
 		background: #ccc;
 		border-radius: 10px;
+		transform: translateX(-50%);
 	}
 
-	/* Inner screen area */
+	/* Tablet */
+	.tablet-frame {
+		width: 400px;
+		height: 430px;
+		border-radius: 24px;
+	}
+
+	.tablet-frame::before {
+		content: "";
+		position: absolute;
+		top: 10px;
+		left: 50%;
+		width: 60px;
+		height: 5px;
+		background: #ccc;
+		border-radius: 10px;
+		transform: translateX(-50%);
+	}
+
+	/* Desktop */
+	.desktop-frame {
+		width: 600px;
+		height: 430px;
+		border-radius: 10px;
+		border: 4px solid #ccc;
+	}
+
+	.desktop-frame::before {
+		content: "";
+		position: absolute;
+		top: -18px;
+		left: 50%;
+		width: 120px;
+		height: 12px;
+		background: #ccc;
+		border-radius: 6px;
+		transform: translateX(-50%);
+	}
+
+	.desktop-frame::after {
+		content: "";
+		position: absolute;
+		bottom: -30px;
+		left: 50%;
+		width: 80px;
+		height: 6px;
+		background: #ccc;
+		border-radius: 3px;
+		transform: translateX(-50%);
+	}
+
+	/* Screen area */
 	.screen {
-		flex: 1;
 		width: 100%;
 		height: 100%;
-		background: #fff;
-		padding: 20px 10px;
-		border-radius: 28px;
-		overflow-y: auto;
+		background: #f8f9f9ff;
+		overflow: hidden;
+		padding: 25px 15px 15px 15px;
 	}
+
+	html {
+		scroll-behavior: smooth;
+	}
+
+	section {
+		height: 100vh;
+		padding: 50px;
+	}
+
+	nav {
+		position: fixed;
+		top: 10px;
+		background: white;
+		padding: 10px;
+	}
+
 
 	/** INVENTORY MOCKUP STYLESHEET */
 </style>
@@ -267,10 +334,111 @@
 		<div class="col" style="height: calc(100vh - 101px); overflow-y:auto;">
 			<div class="container-fluid pb-5 pt-3">
 
-				<!-- DETAIL -->
-				<h1 class="text-truncate" style="font-size: 42px;">
-					Onboarding :
-					<?= $d['nom_client'] ?>
+
+				<div class="dropdown position-absolute" style="right: 15px;">
+					<?php if ($current_user->tech == 3): ?>
+						<?php if ($d['statut_brief'] == 1):  ?>
+							<a type="button" class="badge alert-success rounded-pill px-4 py-3 mb-3 " style="font-size: 14px; font-weight: 500;" id="clientStatusDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+								<i class="fa fa-circle mr-1" style="font-size: 14px;"></i>
+								Brief complété
+							</a>
+						<?php endif; ?>
+						<?php if ($d['statut_brief'] == 0): ?>
+							<div class="dropdown mb-3">
+								<a class="badge alert-warning rounded-pill px-4 py-3 dropdown-toggle"
+									href="#" id="clientStatusDropdown_<?= $d['idonnee'] ?>"
+									data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
+									style="font-size: 14px; font-weight: 500;">
+									<i class="fa fa-circle mr-1" style="font-size: 14px;"></i>
+									Brouillon
+								</a>
+
+								<div class="dropdown-menu" aria-labelledby="clientStatusDropdown_<?= $d['idonnee'] ?>">
+									<a href="#" class="dropdown-item text-primary sendToStructure"
+										data-id="<?= $d['idonnee'] ?>">
+										Envoyer à la structure
+									</a>
+								</div>
+							</div>
+
+							<!-- Modal de confirmation -->
+							<div class="modal fade" id="confirmSendModal_<?= $d['idonnee'] ?>" tabindex="-1" role="dialog">
+								<div class="modal-dialog" role="document">
+									<div class="modal-content">
+										<div class="modal-header">
+											<h5 class="modal-title">Confirmation</h5>
+											<button type="button" class="close" data-dismiss="modal">&times;</button>
+										</div>
+										<div class="modal-body">
+											Voulez-vous envoyer à la technique ?
+										</div>
+										<div class="modal-footer">
+											<button type="button" class="btn btn-secondary" data-dismiss="modal">Annuler</button>
+											<form action="<?= site_url('Client/send_to_technique/' . $d['idonnee']) ?>" method="post" style="display:inline;">
+												<button type="submit" class="btn btn-primary">Oui, envoyer</button>
+											</form>
+										</div>
+									</div>
+								</div>
+							</div>
+						<?php endif; ?>
+
+
+
+					<?php endif; ?>
+					<?php if ($current_user->tech == 1): ?>
+						<?php if ($d['statut_envoye'] == 1):  ?>
+							<a type="button" class="badge alert-success rounded-pill px-4 py-3 mb-3 dropdown-toggle" style="font-size: 14px; font-weight: 500;" id="clientStatusDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+								<i class="fa fa-circle mr-1" style="font-size: 14px;"></i>
+								Annonce complété
+							</a>
+						<?php endif; ?>
+						<?php if ($d['statut_envoye'] == 0): ?>
+							<div class="dropdown mb-3">
+								<!-- Badge Annonce brouillon -->
+								<a class="badge alert-warning rounded-pill px-4 py-3 dropdown-toggle"
+									href="#" id="annonceStatusDropdown_<?= $d['idonnee'] ?>"
+									data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
+									style="font-size: 14px; font-weight: 500;">
+									<i class="fa fa-circle mr-1" style="font-size: 14px;"></i>
+									Annonce brouillon
+								</a>
+
+								<div class="dropdown-menu" aria-labelledby="annonceStatusDropdown_<?= $d['idonnee'] ?>">
+									<a href="#" class="dropdown-item text-primary sendAnnonce"
+										data-id="<?= $d['idonnee'] ?>">
+										Envoyer l’annonce
+									</a>
+								</div>
+							</div>
+
+							<!-- Modal de confirmation -->
+							<div class="modal fade" id="confirmSendAnnonceModal_<?= $d['idonnee'] ?>" tabindex="-1" role="dialog">
+								<div class="modal-dialog" role="document">
+									<div class="modal-content">
+										<div class="modal-header">
+											<h5 class="modal-title">Confirmation</h5>
+											<button type="button" class="close" data-dismiss="modal">&times;</button>
+										</div>
+										<div class="modal-body">
+											Voulez-vous vraiment envoyer cette annonce ?
+										</div>
+										<div class="modal-footer">
+											<button type="button" class="btn btn-secondary" data-dismiss="modal">Annuler</button>
+											<form action="<?= site_url('Client/send_annonce/' . $d['idonnee']) ?>" method="post" style="display:inline;">
+												<input type="hidden" value="<?= $d['account_manager'] ?>" name="am">
+												<button type="submit" class="btn btn-primary">Oui, envoyer</button>
+											</form>
+										</div>
+									</div>
+								</div>
+							</div>
+						<?php endif; ?>
+
+					<?php endif; ?>
+				</div>
+				<h1 class="mb-2" style="font-size: 48px; font-weight: 500;" id="information">
+					Onboarding : <?= $d['nom_client'] ?>
 				</h1>
 
 				<div class="row mb-3">
@@ -303,28 +471,25 @@
 										} ?>
 										<b><?= format_budget($d['budget']) ?> €</b>
 									</button>
-									<div class="dropdown no-arrow">
-										<img class="mr-2 eye-icon"
-											src="<?= base_url('assets/images/ico/Eye.png') ?>"
-											data-id="<?= $d['idclients'] ?>"
-											alt="Voir les détails"
-											style="cursor: pointer;" />
-									</div>
-									<a href="<?= base_url('Client/inventaire_pmax/' .  htmlspecialchars($d['idclients'])) ?>" style="display: flex; align-items: center; text-decoration: none; color: inherit;">
-										Inventaire
-									</a>
+
 
 
 								</div>
 								<br><br>
 								<div class="d-flex justify-content-start mb-3" style="font-size: 15px;">
-									<i class="fa fa-check-square mr-2" style="color: Black; font-size: 18px;"></i>
-									<span class="mr-2">Date d'anniversaire : <?= $d['mis_en_place_paiement'] ?></span>
+									<i class="fa fa-check-square mr-2" style="color: black; font-size: 18px;"></i>
+									<span class="mr-2">
+										Date d'anniversaire :
+										<?= (!empty($d['mis_en_place_paiement']) && $d['mis_en_place_paiement'] != '0000-00-00') ? date('d-m-Y', strtotime($d['mis_en_place_paiement'])) : '-' ?>
+									</span>
 								</div>
-								<div class="d-flex justify-content-start mb-3" style="font-size: 15px;">
-									<i class="fa fa-check-square mr-2" style="color: Black; font-size: 18px;"></i>
-									<span class="mr-2">Date de mise en ligne : <?= $d['annonce'] ?></span>
 
+								<div class="d-flex justify-content-start mb-3" style="font-size: 15px;">
+									<i class="fa fa-check-square mr-2" style="color: black; font-size: 18px;"></i>
+									<span class="mr-2">
+										Date de mise en ligne :
+										<?= (!empty($d['annonce']) && $d['annonce'] != '0000-00-00') ? date('d-m-Y', strtotime($d['annonce'])) : '-' ?>
+									</span>
 								</div>
 								<div class="d-flex justify-content-start mb-3" style="font-size: 15px;">
 									<i class="fa fa-check-square mr-2" style="color: Black; font-size: 18px;"></i>
@@ -340,7 +505,6 @@
 										<img src="<?= base_url('assets/images/' . $d['am_photo_user']) ?>" width="24" height="24">
 									</span>
 								</div>
-								<a href="<?= base_url('Client/annonces/' . $d['idclients']) ?>" class="btn btn-outline-dark btn-block">Voir annonce</a>
 								<a href="<?= base_url('Validation/validation_structure/' . $d['idclients']) ?>" class="btn btn-outline-dark btn-block" target="_blank">Annonce</a>
 								<button type="button" class="btn btn-outline-dark btn-block" data-toggle="modal" data-target="#inventaireModal">
 									Inventaire
@@ -352,7 +516,7 @@
 					</div>
 				</div>
 
-				<h1 class="display-1 text-center mt-4" style="font-size: 42px;">
+				<h1 class="display-1 text-center mt-4" style="font-size: 42px;" id="brief">
 					Brief
 				</h1>
 				<div class="d-flex justify-content-between">
@@ -395,7 +559,7 @@
 						<div class="row align-items-center">
 
 							<div class="col-6 text-center">
-								<h3 class="mb-3" style="font-size: 32px; font-weight: 500;">Google Tag Manager</h3>
+								<h3 class="mb-3" style="font-size: 32px; font-weight: 500;" id="gtm">Google Tag Manager</h3>
 
 								<?php if (!empty($d['tracking_gtm'])): ?>
 									<p class="text-muted" style="font-size: 18px; line-height: 150%;">
@@ -512,7 +676,7 @@
 
 
 				<!-- BRIEF -->
-				<h1 class="display-1 text-center mt-4" style="font-size: 42px;">
+				<h1 class="display-1 text-center mt-4" style="font-size: 42px;" id="campagne">
 					Campagne
 				</h1>
 				<div class="table-responsive">
@@ -595,10 +759,10 @@
 													<tbody>
 														<?php foreach ($campagne['groupes_annonces'] as $groupe): ?>
 															<tr>
-																<td>
+																<td style="width: 200px;">
 																	<strong><?= htmlspecialchars($groupe['nom_groupe']) ?></strong>
 																</td>
-																<td>
+																<td style="width:500px;">
 																	<?= htmlspecialchars($groupe['contexte_groupes_annonces']) ?>
 																</td>
 																<td>
@@ -728,6 +892,45 @@
 
 <?php start_section('script') ?>
 <script>
+	$(document).ready(function() {
+		// Clic sur "Envoyer l’annonce"
+		$(document).on('click', '.sendAnnonce', function(e) {
+			e.preventDefault();
+			const id = $(this).data('id');
+			$('#confirmSendAnnonceModal_' + id).modal('show');
+		});
+	});
+
+	$(document).ready(function() {
+
+		// Clic sur "Envoyer à la structure"
+		$(document).on('click', '.sendToStructure', function(e) {
+			e.preventDefault();
+			const id = $(this).data('id');
+			$('#confirmSendModal_' + id).modal('show');
+		});
+
+		// Clic sur "Oui, envoyer" dans la modale
+		$(document).on('click', '.confirmSend', function() {
+			const id = $(this).data('id');
+			const modal = $('#confirmSendModal_' + id);
+			modal.modal('hide');
+
+			$.ajax({
+				url: '<?= site_url("Client/send_to_technique") ?>/' + id,
+				type: 'POST',
+				success: function() {
+					alert('Brief envoyé avec succès !');
+					location.reload(); // rafraîchit la page
+				},
+				error: function() {
+					alert('Erreur lors de l\'envoi.');
+				}
+			});
+		});
+
+	});
+
 	$(document).ready(function() {
 
 		$('#clientModal').on('show.bs.modal', function(event) {

@@ -13,6 +13,65 @@ class Donne_modele extends CI_Model
 	{
 		parent::__construct();
 	}
+	public function update_send_annonce($idonnee, $statut) {
+			$this->db->select('idclients');
+			$this->db->from('donnee');
+			$this->db->where('idonnee', $idonnee);
+			$query = $this->db->get();
+			$row = $query->row_array();
+
+			if (!$row) {
+				return false; 
+			}
+
+			$idclients = $row['idclients'];
+			$data = [
+				'statut_envoye'     => $statut
+			];
+			$this->db->where('idonnee', $idonnee);
+			$this->db->update('donnee', $data);
+
+			return $idclients;
+		}
+		public function update_status_brief($idonnee, $date_envoye, $statut) {
+			$this->db->select('idclients');
+			$this->db->from('donnee');
+			$this->db->where('idonnee', $idonnee);
+			$query = $this->db->get();
+			$row = $query->row_array();
+
+			if (!$row) {
+				return false; 
+			}
+
+			$idclients = $row['idclients'];
+			$data = [
+				'statut_brief'     => $statut,
+				'Envoie_structure' => $date_envoye
+			];
+			$this->db->where('idonnee', $idonnee);
+			$this->db->update('donnee', $data);
+
+			return $idclients;
+		}
+	public function update_send_annonce_onboarding($idonnee, $statut) {
+    $data = [
+        'statut_envoye'   => $statut
+    ];
+
+    $this->db->where('idonnee', $idonnee);
+    $this->db->update('onboarding', $data);
+}	
+	public function update_status_brief_onboarding($idonnee, $date_envoye, $statut) {
+    $data = [
+        'statut_brief'   => $statut,
+        'Envoie_structure' => $date_envoye
+    ];
+
+    $this->db->where('idonnee', $idonnee);
+    $this->db->update('onboarding', $data);
+}
+
 	public function update_status_onboarding($idonboarding, $statut_upsell)
 	{
 		$sql = "UPDATE onboarding SET statut_upsell = $statut_upsell WHERE idonboarding = $idonboarding";
@@ -809,6 +868,7 @@ class Donne_modele extends CI_Model
 
 	public function insert_gp_pmax($data_groups)
 	{
+		
 		$this->load->database();
 		$this->db->insert('groupe_annonce', $data_groups);
 		return $this->db->insert_id();
@@ -1193,7 +1253,7 @@ class Donne_modele extends CI_Model
 		// Fermer la connexion à la base de données
 		$this->db->close();
 	}
-	public function update_onboarding_client($budget, $secteur_activite, $Produit, $Initiative, $Am, $mis_en_place_paiement, $Brief, $annonce, $commentaire_client, $paiement_recu, $datastudio, $email_onboarding, $facturation, $idonboarding)
+	public function update_onboarding_client($budget, $secteur_activite, $Produit, $Initiative, $Am, $mis_en_place_paiement, $Brief, $annonce, $commentaire_client, $paiement_recu, $datastudio, $email_onboarding, $facturation,$Validation_structure, $idonboarding)
 	{
 		// Charger la base de données
 		$this->load->database();
@@ -1212,8 +1272,8 @@ class Donne_modele extends CI_Model
 		$datastudio = $this->db->escape($datastudio);
 		$email_onboarding = $this->db->escape($email_onboarding);
 		$facturation = $this->db->escape($facturation);
+		$Validation_structure = $this->db->escape($Validation_structure);
 		$idonboarding = $this->db->escape($idonboarding);
-
 		// Construire la requête avec les valeurs échappées
 		$sql = "UPDATE onboarding SET 
 					budget = $budget, 
@@ -1227,7 +1287,8 @@ class Donne_modele extends CI_Model
 					paiement_recu = $paiement_recu, 
 					datastudio = $datastudio, 
 					email_onboarding = $email_onboarding, 
-					facturation = $facturation 
+					facturation = $facturation, 
+					date_validation_structure = $Validation_structure
 				WHERE idonboarding = $idonboarding";
 
 		// Exécuter la requête

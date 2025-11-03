@@ -42,26 +42,112 @@ class Client extends MY_Controller
 		$this->data['produit'] = $this->Donne_modele->get_all_produit();
 		$this->data['am'] = $this->Donne_modele->get_all_am();
 		$this->data['initiative'] = $this->Donne_modele->get_all_initiative();
-
+		
 		$this->content = "layouts/client/index.php";
 		$this->layout();
 	}
+	public function send_annonce($idonnee = null)
+		{
+
+			if (!$idonnee) {
+				show_error('Aucune donnée spécifiée', 400);
+				return;
+			}
+			$am = intval($this->input->post('am'));
+			$date_envoye = date('Y-m-d');
+			$idclients = $this->Donne_modele->update_send_annonce($idonnee, 1);
+			$this->Donne_modele->update_send_annonce_onboarding($idonnee, 1);
+
+			if (!$idclients) {
+				$this->session->set_flashdata('error', 'Brief introuvable.');
+				redirect($_SERVER['HTTP_REFERER']); 
+			}
+
+			$date_demande = date('Y-m-d');
+			$date_due = date('Y-m-d', strtotime('+3 days'));
+			$title = "Validation client";
+			$tache = "Annonce prêt pour validation client";
+			$current_user = $this->ion_auth->user()->row();
+			$tm = intval($current_user->id);
+
+			$datas = [
+				'date_demande'      => $date_demande,
+				'date_due'          => $date_due,
+				'idclients'         => $idclients,
+				'AM'                => $tm,
+				'assigned_to'       => $am, 
+				'title'             => $title,
+				'type_tache'	    => 10,
+				'description'       => $tache
+			];
+			$title = "Création annonce";
+			$this->Task_model->add_tasks($datas);
+			$task = $this->Task_model->get_task_brief($idclients, $title);
+				$taskId = intval($task->idtask);
+				$data = [
+					'status'	=>	"effectuée",
+				];
+			$this->Task_model->update_task_statuts($taskId, $data);
+			$this->session->set_flashdata('success', 'Brief envoyé à la technique et tâche créée.');
+			redirect($_SERVER['HTTP_REFERER']); 
+		}
+
+	public function send_to_technique($idonnee = null)
+		{;
+
+			if (!$idonnee) {
+				show_error('Aucune donnée spécifiée', 400);
+				return;
+			}
+			$date_envoye = date('Y-m-d');
+			$idclients = $this->Donne_modele->update_status_brief($idonnee,$date_envoye, 1);
+			$this->Donne_modele->update_status_brief_onboarding($idonnee,$date_envoye, 1);
+
+			if (!$idclients) {
+				$this->session->set_flashdata('error', 'Brief introuvable.');
+				redirect($_SERVER['HTTP_REFERER']); 
+			}
+
+			$date_demande = date('Y-m-d');
+			$date_due = date('Y-m-d', strtotime('+3 days'));
+			$title = "Création annonce";
+			$tache = "Le brief de ce client est fait, veuillez procéder à la création des annonces";
+			$current_user = $this->ion_auth->user()->row();
+			$am = intval($current_user->id);
+
+			$datas = [
+				'date_demande'      => $date_demande,
+				'date_due'          => $date_due,
+				'idclients'         => $idclients,
+				'AM'                => $am,
+				'assigned_to'       => 23, 
+				'title'             => $title,
+				'type_tache'	    => 10,
+				'description'       => $tache
+			];
+			$title = "Création de Brief";
+			$this->Task_model->add_tasks($datas);
+			$task = $this->Task_model->get_task_brief($idclients, $title);
+				$taskId = intval($task->idtask);
+				$data = [
+					'status'	=>	"effectuée",
+				];
+			$this->Task_model->update_task_statuts($taskId, $data);
+			$this->session->set_flashdata('success', 'Brief envoyé à la technique et tâche créée.');
+			redirect($_SERVER['HTTP_REFERER']); 
+		}
+
+
+
 	public function annonces($idclient)
 	{
-		// Récupérer les informations du client
 		$this->data['client'] = $this->visuels_model->getDonneeById($idclient);
-
-		// Récupérer toutes les campagnes du client
 		$campagnes = $this->visuels_model->get_campagnes_by_client($idclient);
-
-		// Pour chaque campagne, récupérer ses groupes et images
 		foreach ($campagnes as &$campagne) {
 			$campagne['groupes_annonces'] = $this->visuels_model->get_groupes_by_campagne($campagne['idcampagne']);
 			$campagne['images'] = $this->Image_model->get_images_by_campagne($campagne['idcampagne']);
 		}
 		$this->data['campagnes'] = $campagnes;
-
-		// Charger la vue
 		$this->content = "layouts/client/onboarding/annonces_liste";
 		$this->layout();
 	}
@@ -143,23 +229,60 @@ class Client extends MY_Controller
 		$this->layout();
 	}
 	public function fetch_images_campagnes()
-	{
-		$idcampagne = $this->input->post('idcampagne');
-		if (empty($idcampagne)) {
-			echo json_encode(['success' => false, 'message' => 'ID campagne manquant']);
-			return;
-		}
+{
+    $idcampagne = $this->input->post('idcampagne');
+    $url = $this->input->post('url');
 
-		$this->load->model('Image_model');
-		$images = $this->Image_model->get_images_by_campagnes($idcampagne);
+    if (!empty($idcampagne)) {
+        $this->load->model('Image_model');
+        $images = $this->Image_model->get_images_by_campagnes($idcampagne);
 
-		$urls = [];
-		foreach ($images as $img) {
-			$urls[] = $img->image_url;
-		}
+       $urls = array_map(function($img) {
+    return $img->image_url;
+}, $images);
 
-		echo json_encode(['success' => true, 'images' => $urls]);
-	}
+        echo json_encode(['success' => true, 'images' => $urls]);
+        return;
+    }
+
+    if (!empty($url)) {
+        // Exemple : aller chercher les images du site
+        $this->load->helper('url');
+        $images = $this->_scrape_images_from_site($url);
+        echo json_encode(['success' => true, 'images' => $images]);
+        return;
+    }
+
+    echo json_encode(['success' => false, 'message' => 'Paramètre manquant']);
+}
+
+private function _scrape_images_from_site($url)
+{
+    $html = @file_get_contents($url);
+    if (!$html) return [];
+
+    preg_match_all('/<img[^>]+src=["\']([^"\']+)["\']/i', $html, $matches);
+    $images = array_unique($matches[1]);
+    $absolute_images = [];
+
+    $parsedUrl = parse_url($url);
+    $baseUrl = $parsedUrl['scheme'] . '://' . $parsedUrl['host'];
+
+    foreach ($images as $img) {
+        if (strpos($img, 'http') === 0) {
+            $absolute_images[] = $img;
+        } elseif (strpos($img, '/') === 0) {
+            $absolute_images[] = $baseUrl . $img;
+        } else {
+            $absolute_images[] = $baseUrl . '/' . $img;
+        }
+    }
+
+    return $absolute_images;
+}
+
+
+
 
 	public function save_images_campagnes()
 	{
@@ -996,53 +1119,17 @@ class Client extends MY_Controller
 	public function information_campagne($idclients)
 	{
 		$url = $this->input->post('url');
-
+		//$url ="https://www.florenthamon.com/hypnose/";
 		if (!$url) {
 			return $this->output
 				->set_content_type('application/json')
 				->set_output(json_encode(['status' => 'error', 'message' => 'URL manquante.']));
 		}
-
-		// 1. Récupération du HTML
-		$html = @file_get_contents($url);
-		if ($html === false) {
-			return $this->output
-				->set_content_type('application/json')
-				->set_output(json_encode(['status' => 'error', 'message' => 'Impossible de charger le contenu de la page.']));
-		}
-
-		// 2. Charger dans DOMDocument pour extraire uniquement le contenu texte
-		libxml_use_internal_errors(true);
-		$dom = new DOMDocument();
-		$dom->loadHTML($html);
-		libxml_clear_errors();
-
-		$xpath = new DOMXPath($dom);
-
-		// 3. Récupérer uniquement les balises visibles
-		$nodes = $xpath->query('//h1 | //h2 | //h3 | //p | //article | //section | //div');
-
-		$textContent = '';
-		foreach ($nodes as $node) {
-			$text = trim($node->textContent);
-			if (strlen($text) > 30) { // on ignore les tout petits morceaux de texte
-				$textContent .= $text . "\n";
-			}
-		}
-
-		$textContent = substr($textContent, 0, 3500); // limite la taille pour OpenAI
-
-		// 4. Construire un prompt pour générer un résumé **sans explication technique**
-		$prompt = "EOT
-			Voici le contenu textuel extrait d'une page web : 
-			$textContent
-			Donne un résumé court et objectif de ce que propose le site ou la page, sans détails techniques ni structure HTML. Ne parle pas de scripts ou de performances. Ne commence pas par 'Voici le résumé', écris directement le contenu comme un humain qui explique à un autre humain de quoi parle le site.
-			EOT";
-
-		// 5. Appel à l'API OpenAI
-		$response = $this->call_openai($prompt);
-		$response = trim($response);
-
+		$summary = $this->get_information_campagne_from_chatgpt($url);
+		
+		$response = trim($summary);
+		//var_dump($response);
+		//die();
 		return $this->output
 			->set_content_type('application/json')
 			->set_output(json_encode(['status' => 'success', 'data' => $response]));
@@ -1064,8 +1151,6 @@ class Client extends MY_Controller
 		Voici les informations de la campagne :
 
 		$campagne_info
-
-		⚠️ Tu ne peux pas visiter de site web.
 		Même si les informations sont partielles, propose une liste pertinente et standard de mots-clés à exclure en français pour éviter les recherches non qualifiées.
 		Donne UNIQUEMENT les mots, séparés par des virgules, sans introduction ni phrase explicative.";
 
@@ -1232,7 +1317,7 @@ class Client extends MY_Controller
 				$services			       	= $this->input->post('services');
 				$produit				= $this->input->post('produit');
 				$youtube				= $this->input->post('Youtube');
-				$idcampagne = $this->Donne_modele->insert_campagne_am(
+				$id_campagne = $this->Donne_modele->insert_campagne_am(
 					$idclients,
 					$camp_type,
 					$nom_campagne,
@@ -1254,18 +1339,18 @@ class Client extends MY_Controller
 				);
 
 				// Insert groupe pmax
-				$this->Donne_modele->insert_gppmax($idclients, $nom_groupe_pmax, $camp_type, $url_site, $Mots_cle_potentiels, $idcampagne, $contextes_client);
-
-				$data_groups = [
-					'nom_groupe'         	=>	$groupes_annonces,
-					'contexte_groupes_annonces' 	=>	$contexte_groupes,
-					'mot_cle'                	=>	$mots_cle,
-					'url_groupe_annonce'     	=>	$url_site,
-					'idcampagne'             	=>	$idcampagne,
-					'idclients'               	=>	$idclients,
-					'type_campagnes'          	=>	$camp_type
-				];
-				$this->Donne_modele->insert_gp_pmax($data_groups);
+				//$this->Donne_modele->insert_gppmax($idclients, $nom_groupe_pmax, $camp_type, $url_site, $Mots_cle_potentiels, $idcampagne, $contextes_client);
+				
+						$data_groups = [
+						'nom_groupe'         	=>	$groupes_annonces,
+						'contexte_groupes_annonces' 	=>	$contexte_groupes,
+						'mot_cle'                	=>	$mots_cle,
+						'url_groupe_annonce'     	=>	$url_site,
+						'idcampagne'             	=>	$id_campagne,
+						'idclients'               	=>	$idclients,
+						'type_campagnes'          	=>	$camp_type
+					];
+				$this->Donne_modele->insert_gp_pmax($data_groups);	
 				break;
 
 			case 3:
@@ -1293,7 +1378,7 @@ class Client extends MY_Controller
 				$promotions            	= $this->input->post('promotions');
 				$prix			       	= $this->input->post('prix');
 				$téléphone				= $this->input->post('téléphone');
-				$idcampagne = $this->Donne_modele->insert_campagne_am(
+				$id_campagne = $this->Donne_modele->insert_campagne_am(
 					$idclients,
 					$camp_type,
 					$nom_campagne,
@@ -1315,14 +1400,14 @@ class Client extends MY_Controller
 				);
 
 				// Insert groupe pmax
-				$this->Donne_modele->insert_gppmax($idclients, $nom_groupe_pmax, $camp_type, $url_site, $Mots_cle_potentiels, $idcampagne, $contextes_client);
+				//$this->Donne_modele->insert_gppmax($idclients, $nom_groupe_pmax, $camp_type, $url_site, $Mots_cle_potentiels, $idcampagne, $contextes_client);
 				$this->Donne_modele->update_type_clients($choix, $idclients);
 				$data_groups = [
 					'nom_groupe'         	=>	$groupes_annonces,
 					'contexte_groupes_annonces' 	=>	$contexte_groupes,
 					'mot_cle'                	=>	$mots_cle,
 					'url_groupe_annonce'     	=>	$url_site,
-					'idcampagne'             	=>	$idcampagne,
+					'idcampagne'             	=>	$id_campagne,
 					'idclients'               	=>	$idclients,
 					'type_campagnes'          	=>	$camp_type
 				];
@@ -1331,7 +1416,7 @@ class Client extends MY_Controller
 		}
 		$selectedImages = $this->input->post('selectedImages');
 		$imagesArray = array_filter(array_map('trim', explode(',', $selectedImages)));
-		$idcampagne = $camp_type;
+		$idcampagne = $id_campagne;
 		$idgroupe_annonce = 0;
 		$this->Image_model->insert_images($imagesArray, $idclients, $idcampagne, $idgroupe_annonce);
 
@@ -1697,6 +1782,7 @@ class Client extends MY_Controller
 		$date_upsell = $this->input->post('date_upsell');
 		$date_demande_upsell = $this->input->post('date_demande_upsell');
 		$inforamtion_upsell = $this->input->post('information_upsell');
+		$date_brief = $this->input->post('date_brief');
 
 		$statut_upsell = $this->input->post('statut_upsell');
 		$id = $idclients;
@@ -1727,8 +1813,8 @@ class Client extends MY_Controller
 				'date_demande' => $date_demande_upsell,
 				'date_due' => $date_demande_upsell,
 				'idclients' => $idclients,
-				'AM' => $am,
-				'assigned_to' => $tm,
+				'AM' => $tm,
+				'assigned_to' => $am,
 				'title' => $title,
 				'Statuts_technique' => $Statuts_technique,
 				'description' => $tache,
@@ -1749,9 +1835,13 @@ class Client extends MY_Controller
 				'account_manager' => $am,
 				'initiative' => $initiative,
 				'type_upsell' => $type_upsell,
+				'mis_en_place_paiement' => $date_demande_upsell,
+				'Brief' => $date_brief,
+				'annonce' => $date_upsell,
 				'budget_upsell' => $budget_upsell
 
 			);
+			
 			$this->visuels_model->add_upsell_onboarding($data_upsell);
 		endif;
 		if ($type_upsell == 1):
@@ -1937,18 +2027,17 @@ class Client extends MY_Controller
 		}
 		$summary = $this->get_summary_from_chatgpt($headings, $paragraphs);
 		$naf_info = $this->get_naf_code_from_summary($summary);
-		//var_dump($naf_info);
-		//die();
+		$secteur_activite =	$naf_info['libelle'];
 		preg_match('/GTM-[A-Z0-9]+/', $html, $matches);
 		$gtm_code = !empty($matches) ? $matches[0] : null;
 		$cms = $this->detect_cms($html, $site_client);
 		$cms_logo = $this->get_cms_logo($cms);
 		$favicon = $this->get_favicon($html, $site_client);
 
-		$idclients = $this->visuels_model->insertclient($client, $site_client, $email_client, $numero_client, $favicon, $cms, $cms_logo, $summary);
+		$idclients = $this->visuels_model->insertclient($client, $site_client, $email_client, $numero_client, $favicon, $cms, $cms_logo, $summary,$naf_info);
 		$idclient_onboarding = $idclients;
 		$idclient = $idclients;
-		$this->visuels_model->insertfiche($idclient, $budget, $secteur_activite, $product_choice, $initiative, $am, $date_mis_en_place, $date_brief, $date_annonce, $dejaclient, $gtm_code);
+		$idonnee = $this->visuels_model->insertfiche($idclient, $budget, $secteur_activite, $product_choice, $initiative, $am, $date_mis_en_place, $date_brief, $date_annonce, $dejaclient, $gtm_code);
 		$title = "Création de Brief";
 		$tache = "En attente de brief";
 		$Statuts_technique = 1;
@@ -1980,6 +2069,7 @@ class Client extends MY_Controller
 		$inforamtion_upsell = "Budget initial";
 		$idclient = $this->visuels_model->create_upsell($type_upsell, $budget_finale, $budget_initiale, $demmande_upsell, $am, $tm, $date_upsell, $date_demande_upsell, $inforamtion_upsell, $statut_upsell, $idclients, $actif);
 		$data_upsell = array(
+			'idonnee' => $idonnee,
 			'idclients' => $idclient_onboarding,
 			'dejaclient' => $dejaclient,
 			'budget' => $budget,
@@ -1992,7 +2082,7 @@ class Client extends MY_Controller
 
 		);
 		$this->visuels_model->add_upsell_onboarding($data_upsell);
-		redirect('Client');
+		redirect('Onboarding');
 	}
 
 	private function get_naf_code_from_summary($summary)
@@ -2036,6 +2126,55 @@ class Client extends MY_Controller
 		}
 
 		return ['code' => '0000Z', 'libelle' => 'Secteur non identifié'];
+	}
+	private function get_information_campagne_from_chatgpt($url)
+	{
+		$model = 'gpt-4';
+
+		$input_text = "Regarde le contenu du site: $url et dit moi ce que le site fait";
+		$data = [
+			"model" => $model,
+			"messages" => [
+				["role" => "user", "content" => $input_text]
+			],
+			"temperature" => 0.7
+		];
+
+		$ch = curl_init('https://api.openai.com/v1/chat/completions');
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+		curl_setopt($ch, CURLOPT_HTTPHEADER, [
+			'Content-Type: application/json',
+			'Authorization: Bearer ' . getenv('CHAT_GPT_API_KEY')
+		]);
+		curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
+
+		$response = curl_exec($ch);
+		if (curl_errno($ch)) {
+			return 'Erreur OpenAI : ' . curl_error($ch);
+		}
+
+		curl_close($ch);
+		$result = json_decode($response, true);
+		$raw_output = $result['choices'][0]['message']['content'] ?? 'Résumé non disponible.';
+
+		// Séparation des deux paragraphes
+		$paragraphs_split = preg_split('/\n\s*\n/', trim($raw_output));
+
+		if (count($paragraphs_split) >= 2) {
+			$para1 = trim($paragraphs_split[0]);
+			$para2 = trim($paragraphs_split[1]);
+
+			// Comptage des mots (utile pour test ou journalisation)
+			$word_count1 = str_word_count(strip_tags($para1));
+			$word_count2 = str_word_count(strip_tags($para2));
+			$total_words = $word_count1 + $word_count2;
+
+			// Retourne toujours le contenu, sans alerte
+			return $para1 . "\n\n" . $para2;
+		}
+
+		// Fallback si le texte généré n'a pas deux paragraphes distincts
+		return $raw_output;
 	}
 
 

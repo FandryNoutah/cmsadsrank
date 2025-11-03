@@ -12,7 +12,7 @@
 				<div class="modal-body">
 					<div class="form-group">
 						<label for="brief">Brief</label>
-						<textarea name="information_client" id="brief" rows="10" class="form-control"><?php if (!empty($d['information_client'])) echo $d['information_client']; ?></textarea>
+						<textarea name="information_client" id="brief" rows="25" class="form-control"><?php if (!empty($d['information_client'])) echo $d['information_client']; ?></textarea>
 					</div>
 				</div>
 				<div class="modal-footer">

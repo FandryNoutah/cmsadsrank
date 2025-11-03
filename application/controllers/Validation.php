@@ -1,37 +1,58 @@
 <?php
+defined('BASEPATH') OR exit('No direct script access allowed');
+
+$vendorAutoload = FCPATH . 'vendor' . DIRECTORY_SEPARATOR . 'autoload.php';
+if (!file_exists($vendorAutoload)) {
+    // Message lisible et log si le fichier n'existe pas
+    log_message('error', 'vendor/autoload.php introuvable : ' . $vendorAutoload);
+    show_error("Dépendances Composer manquantes. Exécuter `composer require dompdf/dompdf` dans le dossier racine du projet.", 500, 'Dépendances manquantes');
+    exit;
+}
+require_once $vendorAutoload;
+
+use Dompdf\Dompdf;
+use Dompdf\Options;
+
 
 class Validation extends CI_Controller
 {
-	function __construct() {
-		parent::__construct();
+    public function __construct()
+    {
+        parent::__construct();
 
-		//require_once FCPATH . 'vendor/autoload.php';
+        // Helpers et librairies communes (éviter les doublons)
+        $this->load->helper(['url', 'language', 'form']);
+        $this->load->library(['form_validation', 'upload', 'curl']);
 
-		// Suppression de la bibliothèque ion_auth et de tout code lié à l'authentification
-		$this->load->library(array('form_validation')); // Conserver les bibliothèques nécessaires pour la validation des formulaires
-		$this->load->helper(array('url', 'language'));
-		$this->load->model("panneau_model");
-		$this->load->model("Image_model");
-		$this->load->model('MaBase');
-		$this->load->model('Data_modele');
-		$this->load->model('Visuels_model');
-		$this->load->model('Donne_modele');
-		$this->load->library('upload');
-		$this->load->model('visuels_model'); // Ajout du modèle visuels_model si nécessaire
-		$this->load->helper(array('form', 'url'));
-		$this->load->library('curl');
-		$this->load->model("Image_model");
-		$this->path = "assets/images/formats/";
-		$this->file_upload_field = "visuel_path";
-		// require_once(APPPATH.'third_party/tcpdf/src/tcpdf.php');
-		$this->load->library('upload');
-		$this->load->library('form_validation');
-		// Si vous avez des règles   de validation de formulaire spécifiques, vous pouvez les conserver
-		$this->form_validation->set_error_delimiters($this->config->item('error_start_delimiter', 'ion_auth'), $this->config->item('error_end_delimiter', 'ion_auth'));
+        // Models
+        $this->load->model([
+            'panneau_model',
+            'Image_model',
+            'MaBase',
+            'Data_modele',
+            'Visuels_model',
+            'Donne_modele',
+            'visuels_model'
+        ]);
 
-		// Chargement des traductions nécessaires (si des textes sont à afficher en plusieurs langues)
-		$this->lang->load('auth');
-	}
+        // Chemins et champs par défaut pour les uploads
+        $this->path = "assets/images/formats/";
+        $this->file_upload_field = "visuel_path";
+
+        // Sécuriser set_error_delimiters : n'appeler que si les clés existent
+        $start = $this->config->item('error_start_delimiter', 'ion_auth');
+        $end   = $this->config->item('error_end_delimiter', 'ion_auth');
+        if ($start !== null && $end !== null) {
+            $this->form_validation->set_error_delimiters($start, $end);
+        }
+
+        // Charger les traductions si nécessaire
+        $this->lang->load('auth');
+
+        // NOTE:
+        // - Dompdf est déjà inclus en haut du fichier via require_once.
+        // - N'inclure pas require_once ni use ici à l'intérieur du constructeur.
+    }
 
 	public function index() {
 		$this->load->view("templates/v3/Datastudio", $this->data);
@@ -250,135 +271,387 @@ endif;
 		echo json_encode(['status' => 'success']);
 	}
 
-	public function validation_structure(int $id) {
-		
-		$donnees_valider = $this->Donne_modele->getclientvalidation($id);
-		$this->data["clients"] = $this->visuels_model->getClientById($id);
-		$idclients = $id;
-		// Récupérer les groupes d'annonces
-		$groupes_valider = $this->Donne_modele->getcampagnegroupevalidationbyidclient($id);
-		if (!is_array($groupes_valider) || !count($groupes_valider)) {
-			redirect('Googleads');
-		}
+	/**
+ * Affiche la page de validation et gère l'export via ?action=export
+ */
+public function validation_structure(int $id)
+    {
+        // 1) Logo statique (base64)
+        $this->data['logo_base64'] = $this->encode_local_image_to_data_uri(
+            FCPATH.(defined('IMAGES_PATH') ? IMAGES_PATH : 'assets/images').'/logo/logo3.png'
+        );
 
-		// Regrouper les groupes d'annonces par campagne
-		foreach ($donnees_valider as &$campagne) {
-			// Initialiser un tableau pour les groupes d'annonces de cette campagne
-			$campagne['groupes_annonces'] = [];
+        // 2) Charger les campagnes du client, puis hydrater groupes + images
+        $campagnes = $this->Visuels_model->get_campagnes_by_client($id);
+        if (is_array($campagnes)) {
+            foreach ($campagnes as &$campagne) {
+                // Groupes d’annonces
+                $campagne['groupes_annonces'] = $this->Visuels_model->get_groupes_by_campagne($campagne['idcampagne']) ?: [];
 
-			// Ajouter les groupes d'annonces qui appartiennent à cette campagne
-			foreach ($groupes_valider as $groupe) {
-				if ($groupe['idcampagne'] == $campagne['idcampagne']) {
-					$campagne['groupes_annonces'][] = $groupe;
-				}
+                // Images de campagne
+                $campagne['images'] = $this->Image_model->get_images_by_campagne($campagne['idcampagne']) ?: [];
 
-				if ($groupe['type_campagnes'] == 5) {
-					$logo_client = $groupe['logo_client'];
-					if (file_exists($logo_client)) {
-						$logo_type = mime_content_type($logo_client);
-						$logo_data = base64_encode(file_get_contents($logo_client));
-						$groupe['logo_client'] = "data:{$logo_type};base64,{$logo_data}";
-					} else {
-						$groupe['logo_client'] = ''; // Fallback if logo not found
-					}
-				}
-			}
-		}
-
-		$idclients = intval($groupes_valider[0]['idclients']);
-		$this->data["exlusions"] = $this->Visuels_model->get_exclusions($idclients);
-		$this->data["donne_valider"] = $donnees_valider;
-		$this->data["extensions"] = $this->visuels_model->getallextensionsByIdc($id);
-		$this->data["groupe_valider"] = $groupes_valider;
-
-		// Encode static logo image to Base64
-		$logo_path = FCPATH . IMAGES_PATH . '/logo/logo3.png';
-		if (file_exists($logo_path)) {
-			$logo_type = mime_content_type($logo_path);
-			$logo_data = base64_encode(file_get_contents($logo_path));
-			$this->data['logo_base64'] = "data:{$logo_type};base64,{$logo_data}";
-		} else {
-			$this->data['logo_base64'] = ''; // Fallback if logo not found
-		}
-
-		$a = $this->Donne_modele->getpmaxvalider($id);
-		if ($a != NULL) {
-
-			$idgroupe_annonce = intval($a[0]['idgroupe_annonce']);
-			$images = $this->Image_model->get_images_by_clients($id, $idgroupe_annonce);
-			foreach ($images as &$image) {
-
-				$image_path = (strpos($image->image_url, 'http') === 0) ? $image->image_url : FCPATH . $image->image_url;
-
-				if (file_exists($image_path)) {
-					$image_type = mime_content_type($image_path);
-					$image_data = base64_encode(file_get_contents($image_path));
-					$image->image_base64 = "data:{$image_type};base64,{$image_data}";
-				} else {
-					$image->image_base64 = ''; // Fallback if image not found
-				}
-			}
-
-			$this->data["images"] = $images;
-		}
-		$a = $this->Donne_modele->getlocalxvalider($id);
-
-		if ($a != NULL) {
-
-			$idgroupe_annonce = intval($a[0]['idgroupe_annonce']);
-		
-			$images = $this->Image_model->get_images_by_clients($id, $idgroupe_annonce);
-			foreach ($images as &$image) {
-
-				$image_path = (strpos($image->image_url, 'http') === 0) ? $image->image_url : FCPATH . $image->image_url;
-
-				if (file_exists($image_path)) {
-					$image_type = mime_content_type($image_path);
-					$image_data = base64_encode(file_get_contents($image_path));
-					$image->image_base64 = "data:{$image_type};base64,{$image_data}";
-				} else {
-					$image->image_base64 = ''; // Fallback if image not found
-				}
-			}
-		
-			$this->data["images_local"] = $images;
-		}
-		// Pass the $id to the view
+                // Normaliser les images (base64 si fichier local)
+                foreach ($campagne['images'] as &$img) {
+                    // $img est stdClass (d’après ton var_dump)
+                    $pathOrUrl = isset($img->image_url) ? $img->image_url : '';
+                    $img->image_base64 = $this->maybe_data_uri($pathOrUrl);
+                }
+                unset($img);
+            }
+            unset($campagne);
+        }
+        $this->data['campagnes'] = $campagnes ?: [];
         $this->data['id'] = $id;
 
-		$action = $this->input->get('action');
-		$this->data['action'] = $action;
-		if ($action === "export") {
+        // 3) Action (export PDF ?)
+        $action = $this->input->get('action', true);
+        $this->data['action'] = $action;
+        $is_export = ($action === 'export');
 
-			// Chargez la vue HTML à partir de CodeIgniter
-			$html = $this->load->view("templates/v3/Validation_structure_pdf", $this->data, TRUE);
-			
-			// Enregistrez le fichier HTML pour le débogage (optionnel)
-			file_put_contents(FCPATH . 'debug.html', $html);
-		
-			// Initialisez Dompdf
-			$dompdf = new \Dompdf\Dompdf();
-		
-			// Chargez le contenu HTML
-			$dompdf->loadHtml($html);
-		
-			// Configurez les options de Dompdf (si nécessaire)
-			$dompdf->setPaper('A4', 'landscape'); // Format A4 en paysage
-		
-			// Rendu du PDF
-			$dompdf->render();
-		
-			// Nom du fichier à générer (avec timestamp pour éviter les conflits)
-			$filename = "Validation_structure_pdf" . date('Ymd_His') . ".pdf";
-		
-			// Envoyer le fichier PDF directement au navigateur (en mode téléchargement ou prévisualisation)
-			$dompdf->stream($filename, array("Attachment" => 0)); // Remplacez "0" par "1" si vous souhaitez forcer le téléchargement
-		}
-		else {
-			$this->load->view("templates/v3/Validation_structure", $this->data);
-		}
-		
-	}
+        if ($is_export) {
+            $this->data['is_pdf'] = true;
+            $html = $this->load->view('templates/v3/Validation_structure', $this->data, true);
+
+            // Optionnel: dump debug HTML
+            // file_put_contents(FCPATH.'debug_validation_structure.html', $html);
+
+            // Dompdf
+            $options = new \Dompdf\Options();
+            $options->set('isRemoteEnabled', true);
+            $options->set('defaultFont', 'DejaVu Sans');
+
+            $dompdf = new \Dompdf\Dompdf($options);
+            $dompdf->setPaper('A4', 'landscape');
+            $dompdf->loadHtml($html, 'UTF-8');
+            $dompdf->render();
+
+            $filename = 'validation_structure_'.$id.'_'.date('Ymd_His').'.pdf';
+            $dompdf->stream($filename, ['Attachment' => 0]);
+            return; // fin
+        }
+
+        // 4) Affichage normal
+        $this->data['is_pdf'] = false;
+        $this->load->view('templates/v3/Validation_structure', $this->data);
+    }
+
+    /**
+     * POST depuis le modal "Modifier la campagne"
+     * Form action: Validation/updateCampagne
+     * Champs: idcampagne, zones, date_campagne, appareil, repartition_budget, nom_campagne, mot_cle (optionnel: appliquer aux groupes)
+     */
+    public function updateCampagne()
+    {
+        // Sécurité basique
+        if (strtoupper($this->input->method()) !== 'POST') { show_error('Méthode non autorisée', 405); }
+
+        $idcampagne = (int) $this->input->post('idcampagne', true);
+        if (!$idcampagne) { $this->session->set_flashdata('error','ID campagne manquant'); return $this->_redirect_back(); }
+
+        // Whitelist des champs éditables
+        $fields = [
+            'zones'              => $this->input->post('zones', true),
+            'date_campagne'      => $this->input->post('date_campagne', true),
+            'appareil'           => $this->input->post('appareil', true),
+            'repartition_budget' => $this->input->post('repartition_budget', true),
+            'nom_campagne'       => $this->input->post('nom_campagne', true),
+        ];
+
+        // Nettoyage minimal (tu peux durcir selon ton besoin)
+        $update = [];
+        foreach ($fields as $k => $v) {
+            if ($v !== null) { $update[$k] = trim($v); }
+        }
+
+        // Mise à jour campagne
+        $ok = !empty($update)
+            ? $this->db->where('idcampagne', $idcampagne)->update('campagne', $update)
+            : true;
+
+        if (!$ok) {
+            $this->session->set_flashdata('error','Échec de la mise à jour de la campagne.');
+            return $this->_redirect_back();
+        }
+
+        // Option : si "mot_cle" est envoyé, l'appliquer à TOUS les groupes de la campagne
+        $mot_cle_global = $this->input->post('mot_cle');
+        if ($mot_cle_global !== null) {
+            $mot_cle_global = trim($mot_cle_global);
+            // ici, tu peux:
+            // - soit répartir par ligne vers chaque groupe
+            // - soit dupliquer le même champ pour tous les groupes
+            // On choisit de DUpliquer sur tous les groupes :
+            $this->db->where('idcampagne', $idcampagne)->update('groupe_annonce', ['mot_cle' => $mot_cle_global]);
+        }
+
+        $this->session->set_flashdata('success','Campagne mise à jour.');
+        return $this->_redirect_back();
+    }
+
+    /**
+     * POST depuis le modal "Modifier le groupe d’annonce"
+     * Form action: Validation/updateDonneeClient
+     * Champs:
+     *   idgroupe_annonce (req), idcampagne, idclients,
+     *   nom_groupe, mot_cle, url_groupe_annonce,
+     *   titres (textarea lignes → titre1..12)
+     *   descriptions (textarea lignes → descriptions1..4)
+     */
+    public function updateDonneeClient()
+    {
+        if (strtoupper($this->input->method()) !== 'POST') { show_error('Méthode non autorisée', 405); }
+
+        $idg = (int) $this->input->post('idgroupe_annonce', true);
+        if (!$idg) { $this->session->set_flashdata('error','ID groupe manquant'); return $this->_redirect_back(); }
+
+        $payload = [
+            'nom_groupe'         => $this->input->post('nom_groupe', true),
+            'mot_cle'            => $this->input->post('mot_cle', true),
+            'url_groupe_annonce' => $this->input->post('url_groupe_annonce', true),
+        ];
+
+        // Mapper "titres" (textarea) → titre1..12
+        $titres_lines = preg_split('/\r\n|\r|\n/', (string)$this->input->post('titres'));
+       // Mapper "titres" (textarea) → titre1..12
+$titres_lines = preg_split('/\r\n|\r|\n/', (string)$this->input->post('titres'));
+$titres_lines = array_values(array_filter(array_map('trim', $titres_lines), function($x) {
+    return $x !== '';
+}));
+for ($i=1; $i<=12; $i++) {
+    $payload['titre'.$i] = isset($titres_lines[$i-1]) ? $titres_lines[$i-1] : null;
+}
+
+// Mapper "descriptions" (textarea) → descriptions1..4
+$desc_lines = preg_split('/\r\n|\r|\n/', (string)$this->input->post('descriptions'));
+$desc_lines = array_values(array_filter(array_map('trim', $desc_lines), function($x) {
+    return $x !== '';
+}));
+for ($i=1; $i<=4; $i++) {
+    $payload['descriptions'.$i] = isset($desc_lines[$i-1]) ? $desc_lines[$i-1] : null;
+}
+
+        for ($i=1; $i<=12; $i++) {
+            $payload['titre'.$i] = isset($titres_lines[$i-1]) ? $titres_lines[$i-1] : null;
+        }
+
+        // Mapper "descriptions" (textarea) → descriptions1..4
+        $desc_lines = preg_split('/\r\n|\r|\n/', (string)$this->input->post('descriptions'));
+       $desc_lines = array_values(array_filter(array_map('trim', $desc_lines), function($x) {
+    return $x !== '';
+}));
+
+        for ($i=1; $i<=4; $i++) {
+            $payload['descriptions'.$i] = isset($desc_lines[$i-1]) ? $desc_lines[$i-1] : null;
+        }
+
+        // Nettoyage: convertir '' → NULL pour ne pas forcer vide (facultatif)
+        foreach ($payload as $k => $v) {
+            if ($v === '') { $payload[$k] = null; }
+        }
+
+        $ok = $this->db->where('idgroupe_annonce', $idg)->update('groupe_annonce', $payload);
+
+        if (!$ok) {
+            $this->session->set_flashdata('error','Échec de la mise à jour du groupe.');
+        } else {
+            $this->session->set_flashdata('success','Groupe mis à jour.');
+        }
+
+        return $this->_redirect_back();
+    }
+
+    /* ============================================================
+     *                         HELPERS
+     * ============================================================ */
+
+    /**
+     * Retourne une data-uri si $pathOrUrl est un fichier local lisible.
+     * Sinon, retourne l’URL telle quelle (ou chaîne vide).
+     */
+    private function maybe_data_uri(?string $pathOrUrl): string
+    {
+        $pathOrUrl = (string)$pathOrUrl;
+        if ($pathOrUrl === '') return '';
+
+        // URL absolue ?
+        if (preg_match('#^https?://#i', $pathOrUrl)) {
+            return $pathOrUrl; // laisser tel quel
+        }
+
+        // Chemin relatif → construire chemin absolu local
+        $local = FCPATH.ltrim($pathOrUrl, '/\\');
+        return $this->encode_local_image_to_data_uri($local);
+    }
+
+    /**
+     * Convertit un fichier image local en data-uri base64 (si lisible), sinon ''.
+     */
+    private function encode_local_image_to_data_uri(string $absolutePath): string
+    {
+        if (is_file($absolutePath) && is_readable($absolutePath)) {
+            $mime = @mime_content_type($absolutePath) ?: 'image/png';
+            $data = @file_get_contents($absolutePath);
+            if ($data !== false) {
+                return 'data:'.$mime.';base64,'.base64_encode($data);
+            }
+        }
+        return '';
+    }
+
+    /**
+     * Redirige vers la page précédente ou, à défaut, vers Googleads.
+     */
+    private function _redirect_back()
+    {
+        $ref = $this->input->server('HTTP_REFERER');
+        if ($ref) {
+            redirect($ref);
+        } else {
+            redirect('Googleads');
+        }
+    }
+public function export_rendu($idclient = null)
+{
+    $id = $idclient;
+
+    // Récupérer campagnes + groupes + images
+    $campagnes = $this->visuels_model->get_campagnes_by_client($idclient);
+    if (!is_array($campagnes)) $campagnes = [];
+
+    foreach ($campagnes as &$C) {
+        // Récupérer les groupes
+        $C['groupes_annonces'] = $this->visuels_model->get_groupes_by_campagne($C['idcampagne']);
+
+        // Récupérer images liées à la campagne et convertir en data-uri
+        $imgs = $this->Image_model->get_images_by_campagne($C['idcampagne']);
+        $C['images'] = [];
+        if (is_array($imgs)) {
+            foreach ($imgs as $img) {
+                $url = is_object($img) ? ($img->image_url ?? '') : (is_array($img) ? ($img['image_url'] ?? '') : $img);
+                $dataUri = $this->_image_to_datauri($url);
+                $C['images'][] = [
+                    'image_url' => $url,
+                    'image_base64' => $dataUri
+                ];
+            }
+        }
+    }
+    unset($C);
+
+    // Préparer données pour la vue PDF
+    $this->data['campagnes'] = $campagnes;
+    $this->data['id'] = $id;
+    $this->data['is_pdf'] = true;
+
+    // Logo en base64 si tu t'en sers
+    $logo_path = FCPATH . IMAGES_PATH . '/logo/logo3.png';
+    if (file_exists($logo_path)) {
+        $logo_type = mime_content_type($logo_path) ?: 'image/png';
+        $logo_data = base64_encode(file_get_contents($logo_path));
+        $this->data['logo_base64'] = "data:{$logo_type};base64,{$logo_data}";
+    } else {
+        $this->data['logo_base64'] = '';
+    }
+
+    // Charger la vue PDF dédiée
+    $html = $this->load->view('templates/v3/Validation_structure_pdf', $this->data, TRUE);
+
+    // Sauvegarde de debug (optionnel)
+    file_put_contents(FCPATH . 'debug_validation_structure_pdf.html', $html);
+
+    // Dompdf
+    $options = new \Dompdf\Options();
+    $options->set('isRemoteEnabled', true);
+    $options->set('defaultFont', 'DejaVu Sans');
+
+    $dompdf = new \Dompdf\Dompdf($options);
+    $dompdf->setPaper('A4', 'portrait'); // portrait = campagne page + groupes page par page vertical
+    $dompdf->loadHtml($html, 'UTF-8');
+    $dompdf->render();
+
+    $filename = 'validation_campagne_' . ($id ?? date('Ymd_His')) . '.pdf';
+    $dompdf->stream($filename, ['Attachment' => 0]);
+    exit;
+}
+public function update_campagne_field()
+{
+    $this->output->set_content_type('application/json');
+
+    $id   = (int) $this->input->post('id');
+    $fld  = trim($this->input->post('field', true));
+    $val  = $this->input->post('value', true);
+
+    if (!$id || !$fld) return $this->output->set_output(json_encode(['ok'=>false,'msg'=>'Paramètres manquants.']));
+
+    // Whitelist stricte des colonnes éditables
+    $allowed = [
+        'nom_campagne','zones','date_campagne','appareil','repartition_budget',
+        'url_site','age','cible','Mots_cle_exclus'
+    ];
+    if (!in_array($fld, $allowed, true)) {
+        return $this->output->set_output(json_encode(['ok'=>false,'msg'=>'Champ non autorisé.']));
+    }
+
+    $ok = $this->db->where('idcampagne',$id)->update('campagne', [$fld => $val]);
+    return $this->output->set_output(json_encode(['ok'=>$ok ? true:false]));
+}
+
+public function update_groupe_field()
+{
+    $this->output->set_content_type('application/json');
+
+    $id   = (int) $this->input->post('id');
+    $fld  = trim($this->input->post('field', true));
+    $val  = $this->input->post('value', true);
+
+    if (!$id || !$fld) return $this->output->set_output(json_encode(['ok'=>false,'msg'=>'Paramètres manquants.']));
+
+    // Whitelist des champs éditables dans groupe_annonce
+    $allowed = [
+        'nom_groupe','mot_cle','url_groupe_annonce','repartition_budget',
+        'titre1','titre2','titre3','titre4','titre5','titre6','titre7','titre8','titre9','titre10','titre11','titre12',
+        'descriptions1','descriptions2','descriptions3','descriptions4'
+    ];
+    if (!in_array($fld, $allowed, true)) {
+        return $this->output->set_output(json_encode(['ok'=>false,'msg'=>'Champ non autorisé.']));
+    }
+
+    $ok = $this->db->where('idgroupe_annonce',$id)->update('groupe_annonce', [$fld => $val]);
+    return $this->output->set_output(json_encode(['ok'=>$ok ? true:false]));
+}
+
+/** Helper pour convertir une image (URL ou chemin local) en data URI */
+private function _image_to_datauri($url)
+{
+    if (empty($url)) return '';
+
+    if (strpos($url, 'data:') === 0) return $url;
+
+    // remote URL
+    if (strpos($url, 'http') === 0) {
+        $content = @file_get_contents($url);
+        if ($content !== false) {
+            $finfo = finfo_open(FILEINFO_MIME_TYPE);
+            $mime = finfo_buffer($finfo, $content);
+            finfo_close($finfo);
+            return 'data:' . $mime . ';base64,' . base64_encode($content);
+        }
+        return $url;
+    }
+
+    // local file - construire chemin absolu
+    $path = (is_file($url)) ? $url : FCPATH . ltrim($url, '/\\');
+    if (is_file($path)) {
+        $content = file_get_contents($path);
+        $mime = mime_content_type($path) ?: 'image/jpeg';
+        return 'data:' . $mime . ';base64,' . base64_encode($content);
+    }
+
+    return $url;
+}
+
+
 	public function resize_and_compress_image($image_path, $max_width = 400, $max_height = 300, $quality = 30) {
 		if (!file_exists($image_path)) {
 			return '';
@@ -429,206 +702,45 @@ endif;
 	}
 	
 
-    public function export_rendu($id) {
-        // Assurez-vous que $html est bien défini avant de l'utiliser
-        $donnees_valider = $this->Donne_modele->getclientvalidation($id);
-        $groupes_valider = $this->Donne_modele->getgroupevalidation($id);
+  
 
-        /* if (!is_array($groupes_valider) || !count($groupes_valider)) {
-            redirect('Googleads');
-        } */
 
-        // Regrouper les groupes d'annonces par campagne
-        foreach ($donnees_valider as &$campagne) {
-            $campagne['groupes_annonces'] = [];
-            foreach ($groupes_valider as $groupe) {
-                if ($groupe['idcampagne'] == $campagne['idcampagne']) {
-                    $campagne['groupes_annonces'][] = $groupe;
-                }
-				$c = $this->visuels_model->getClientById($id);
-				$c = $c[0]['logo_client'];
-				
-			
-				$logo_client = $c;
 
-                if ($groupe['type_campagnes'] == 3) {
-                    if (file_exists($c)) {
-                        $logo_type = mime_content_type($c);
-                        $logo_data = base64_encode(file_get_contents($c));
-						$logoclient = $groupe['logo_client'] = "data:{$logo_type};base64,{$logo_data}";
-                    } else {
-                       $groupe['logo_client'] = ''; 
-                    }
-				
-                }
+    /**
+     * Convertit une URL (ou chemin local) d'image en data URI base64.
+     * Retourne l'URL d'origine si l'encodage échoue.
+     */
+    private function _remote_to_base64($url)
+    {
+        if (empty($url)) return $url;
+        // si c'est déjà un data-uri, on retourne tel quel
+        if (strpos($url, 'data:') === 0) return $url;
+
+        // essayer récupérer le contenu (attention allow_url_fopen ou curl)
+        $imageContent = @file_get_contents($url);
+        if ($imageContent === false) {
+            // fallback : essayer curl
+            if (function_exists('curl_init')) {
+                $ch = curl_init($url);
+                curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+                curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
+                curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+                $imageContent = curl_exec($ch);
+                curl_close($ch);
             }
         }
-		$this->data["logoclient"] = $logoclient;
 
-        // Récupérer les exclusions et autres données
-        $idclients = intval($groupes_valider[0]['idclients']);
-        $id = $idclients;
-        $CL = $this->data["clients"] = $this->visuels_model->getClientById($id);
-        $this->data["exlusions"] = $this->Visuels_model->get_exclusions($idclients);
-        $this->data["donne_valider"] = $donnees_valider;
-        $this->data["extensions"] = $this->visuels_model->getallextensionsByIdc($id);
-        $this->data["groupe_valider"] = $groupes_valider;
-
-        // Logo client
-        $logo_path = FCPATH . IMAGES_PATH . '/logo/logo3.png';
-        if (file_exists($logo_path)) {
-            $logo_type = mime_content_type($logo_path);
-            $logo_data = base64_encode(file_get_contents($logo_path));
-            $this->data['logo_base64'] = "data:{$logo_type};base64,{$logo_data}";
-        } else {
-            $this->data['logo_base64'] = ''; 
-        }
-        $youtube = FCPATH . IMAGES_PATH. '/youtube.jpg';
-        if (file_exists($youtube)) {
-            $youtube_type = mime_content_type($youtube);
-            $youtube_data = base64_encode(file_get_contents($youtube));
-            $this->data['youtube_base64'] = "data:{$youtube_type};base64,{$youtube_data}";
-        } else {
-            $this->data['youtube_base64'] = ''; 
-        }
-		$youtube2 = FCPATH . IMAGES_PATH. '/footeryoutube.jpg';
-        if (file_exists($youtube2)) {
-            $youtube2_type = mime_content_type($youtube2);
-            $youtube2_data = base64_encode(file_get_contents($youtube2));
-            $this->data['youtube2_base64'] = "data:{$youtube2_type};base64,{$youtube2_data}";
-        } else {
-            $this->data['youtube2_base64'] = ''; 
-        }
-		$entetegmail = FCPATH . IMAGES_PATH. '/entetegmail.jpg';
-        if (file_exists($entetegmail)) {
-            $entetegmail_type = mime_content_type($entetegmail);
-            $entetegmail_data = base64_encode(file_get_contents($entetegmail));
-            $this->data['entetegmail_base64'] = "data:{$entetegmail_type};base64,{$entetegmail_data}";
-        } else {
-            $this->data['entetegmail_base64'] = ''; 
-        }
-		$recherchegmail = FCPATH . IMAGES_PATH. '/recherchegmail.jpg';
-        if (file_exists($recherchegmail)) {
-            $recherchegmail_type = mime_content_type($recherchegmail);
-            $recherchegmail_data = base64_encode(file_get_contents($recherchegmail));
-            $this->data['recherchegmail_base64'] = "data:{$recherchegmail_type};base64,{$recherchegmail_data}";
-        } else {
-            $this->data['recherchegmail_base64'] = ''; 
-        }
-		$troiepoint = FCPATH . IMAGES_PATH. '/troiepoint.jpg';
-        if (file_exists($troiepoint)) {
-            $troiepoint_type = mime_content_type($troiepoint);
-            $troiepoint_data = base64_encode(file_get_contents($troiepoint));
-            $point = $this->data['troiepoint_base64'] = "data:{$troiepoint_type};base64,{$troiepoint_data}";
-        } else {
-            $this->data['troiepoint_base64'] = ''; 
+        if ($imageContent === false || $imageContent === null) {
+            // on renvoie l'URL d'origine si impossible
+            return $url;
         }
 
-        // Images liées aux groupes d'annonces
-        $a = $this->Donne_modele->getpmaxvalider($id);
-        if ($a != NULL) {
-            $idgroupe_annonce = intval($a[0]['idgroupe_annonce']);
-            $images = $this->Image_model->get_images_by_clients($id, $idgroupe_annonce);
+        $finfo = finfo_open(FILEINFO_MIME_TYPE);
+        $mime = finfo_buffer($finfo, $imageContent);
+        finfo_close($finfo);
 
-            foreach ($images as &$image) {
-                // Détermine si l'URL est complète ou un chemin local
-                $image_path = (strpos($image->image_url, 'http') === 0) ? $image->image_url : FCPATH . $image->image_url;
-            
-                // Si l'image est locale
-                if (strpos($image->image_url, 'http') !== 0) {
-                    // Redimensionner et compresser l'image avant de la convertir en base64
-                    $image->image_base64 = $this->resize_and_compress_image($image_path, 800, 600, 75); // Limite la taille à 800x600 et qualité à 75
-                } else {
-                    // Si c'est une image distante
-                    $image_data = @file_get_contents($image->image_url);
-            
-                    // Vérifie si le contenu a bien été récupéré
-                    if ($image_data !== false) {
-                        // Utiliser getimagesizefromstring pour obtenir le type MIME de l'image
-                        $image_info = getimagesizefromstring($image_data);
-            
-                        // Si les informations de l'image ont été récupérées
-                        if ($image_info !== false) {
-                            $image_type = $image_info['mime']; // Le type MIME est dans l'index 'mime'
-                            $image->image_base64 = "data:{$image_type};base64," . base64_encode($image_data); // Convertir l'image en base64
-                        } else {
-                            $image->image_base64 = ''; // Si l'image est invalide
-                        }
-                    } else {
-                        $image->image_base64 = ''; // Si file_get_contents échoue
-                        log_message('error', "Erreur lors de la récupération de l'image distante: " . $image->image_url);
-                    }
-                }
-            }
-            // Assigner les images traitées à la vue
-            $this->data["images"] = $images;
-        }
-		if ($a == NULL) {
-			$this->data["images"] = NULL;
-		}
-
-        // Localisation et images locales
-        $b = $this->Donne_modele->getlocalxvalider($id);
-        if ($b != NULL) {
-            $idgroupe_annonce = intval($a[0]['idgroupe_annonce']);
-            $images = $this->Image_model->get_images_by_clients($id, $idgroupe_annonce);
-
-            foreach ($images as &$image) {
-                // Détermine si l'URL est complète ou un chemin local
-                $image_path = (strpos($image->image_url, 'http') === 0) ? $image->image_url : FCPATH . $image->image_url;
-            
-                // Si l'image est locale
-                if (strpos($image->image_url, 'http') !== 0) {
-                    // Redimensionner et compresser l'image avant de la convertir en base64
-                    $image->image_base64 = $this->resize_and_compress_image($image_path, 800, 600, 75); // Limite la taille à 800x600 et qualité à 75
-                } else {
-                    // Si c'est une image distante
-                    $image_data = @file_get_contents($image->image_url);
-            
-                    // Vérifie si le contenu a bien été récupéré
-                    if ($image_data !== false) {
-                        // Utiliser getimagesizefromstring pour obtenir le type MIME de l'image
-                        $image_info = getimagesizefromstring($image_data);
-            
-                        // Si les informations de l'image ont été récupérées
-                        if ($image_info !== false) {
-                            $image_type = $image_info['mime']; // Le type MIME est dans l'index 'mime'
-                            $image->image_base64 = "data:{$image_type};base64," . base64_encode($image_data); // Convertir l'image en base64
-                        } else {
-                            $image->image_base64 = ''; // Si l'image est invalide
-                        }
-                    } else {
-                        $image->image_base64 = ''; // Si file_get_contents échoue
-                        log_message('error', "Erreur lors de la récupération de l'image distante: " . $image->image_url);
-                    }
-                }
-            }
-            // Assigner les images traitées à la vue
-            $this->data["images_local"] = $images;
-        }
-		if ($b == NULL) {
-			$this->data["images_local"] = NULL;
-		}
-
-        $action = $this->input->get('action');
-        $this->data['action'] = $action;
-
-        // Assurez-vous que les données sont bien passées
-        $this->data['id'] = $id;
-        $html = $this->load->view('templates/v3/Validation_structure_pdf', $this->data, true); // Charger le HTML via une vue
-
-        // Initialisez Dompdf
-        $dompdf = new \Dompdf\Dompdf();
-
-        // Chargez le contenu HTML
-        $dompdf->loadHtml($html);
-
-        // Configurez les options de Dompdf (si nécessaire)
-        $dompdf->setPaper('A4', 'landscape'); // Format A4 en paysage
-
-        $CL = $CL[0]['nom_client'];
-        $dompdf->render();
-        $dompdf->stream("Validation-structure-" .  $CL . " .pdf", array("Attachment" => 0));
+        $base64 = 'data:' . $mime . ';base64,' . base64_encode($imageContent);
+        return $base64;
     }
 	public function editcampagne($id) {
 		// Récupérer les données de la campagne
@@ -877,60 +989,9 @@ endif;
 		redirect('Validation/validation_structure/' . $idclients);
 	}
 
-	public function updateDonneeClient() {
-		// Récupérer les données postées
-		$idcampagne = $this->input->post('idcampagne');
-		$idgroupe_annonce = $this->input->post('idgroupe_annonce');
-		$id = $this->input->post('idclients');
-		$zones = $this->input->post('zones');
-		$date_campagne = $this->input->post('date_campagne');
-		$nom_groupe = $this->input->post('nom_groupe');
-		$appareil = $this->input->post('appareil');
-		$budget = $this->input->post('budget');
-		$nom_campagne = $this->input->post('nom_campagne');
-		$mot_cle = $this->input->post('mot_cle');
+	
 
-		$this->visuels_model->updatescampagnes($zones, $date_campagne, $appareil, $budget, $idcampagne);
-		$this->visuels_model->updatesgroupe($nom_groupe, $mot_cle, $idgroupe_annonce);
-
-		// Rediriger vers la méthode validation_structure avec l'id du client
-		redirect('Validation/validation_structure/' . $id);
-	}
-
-	public function updateDonneeClients() {
-		$idgroupe_annonce = $this->input->post('idgroupe_annonce');
-		$idcampagne = $this->input->post('idcampagne');
-		$idclients = $this->input->post('idclients');
-		$type_campagne = $this->input->post('type_campagne');
-		$nom_groupe = $this->input->post('nom_groupe');
-		$titre1 = $this->input->post('titre1');
-		$titre2 = $this->input->post('titre2');
-		$titre3 = $this->input->post('titre3');
-		$titre4 = $this->input->post('titre4');
-		$titre5 = $this->input->post('titre5');
-		$titre6 = $this->input->post('titre6');
-		$titre7 = $this->input->post('titre7');
-		$titre8 = $this->input->post('titre8');
-		$titre9 = $this->input->post('titre9');
-		$titre10 = $this->input->post('titre10');
-		$titre11 = $this->input->post('titre11');
-		$titre12 = $this->input->post('titre12');
-		$description1 = $this->input->post('description1');
-		$description2 = $this->input->post('description2');
-		$description3 = $this->input->post('description3');
-		$description4 = $this->input->post('description4');
-		$description_breve = $this->input->post('description_breve');
-		$chemin1 = $this->input->post('chemin1');
-		$chemin2 = $this->input->post('chemin2');
-		$url = $this->input->post('url');
-
-		// Mettre à jour les données de la campagne et des groupes d'annonces
-		$this->visuels_model->updatescampagne($zones, $date_campagne, $appareil, $budget, $idcampagne);
-		$this->visuels_model->updatesgroupe($nom_groupe, $mot_cle, $idgroupe_annonce);
-
-		// Rediriger vers la méthode validation_structure avec l'id du client
-		redirect('Validation/validation_structure/' . $id);
-	}
+	
 
 	private function set_upload_options($prefix, $filename) {
 		$file = pathinfo($filename);
@@ -943,4 +1004,154 @@ endif;
 		$config['overwrite']        = FALSE;
 		return $config;
 	}
+	// --- Récupérer les images d'une URL (scraping simple) ---
+public function fetch_images_campagnes()
+{
+    $this->output->set_content_type('application/json');
+
+    $url = trim((string)$this->input->post('url', true));
+    if ($url === '' || !preg_match('#^https?://#i', $url)) {
+        return $this->output->set_output(json_encode(['success'=>false,'msg'=>'URL invalide']));
+    }
+
+    // Récupération HTML (cURL > file_get_contents)
+    $html = $this->_curl_get($url);
+    if ($html === false) {
+        return $this->output->set_output(json_encode(['success'=>false,'msg'=>'Impossible de charger la page']));
+    }
+
+    // Parse <img src>
+    $images = $this->_extract_images_from_html($html, $url);
+    // Filtrer doublons + formats douteux
+    $images = array_values(array_unique(array_filter($images, function($u){
+        if (!$u) return false;
+        // ignorer data uri très longues
+        if (strpos($u, 'data:image') === 0) return strlen($u) < 2*1024*1024; // <2MB pour l’UI
+        // extensions usuelles
+        return preg_match('#\.(png|jpg|jpeg|gif|webp)(\?.*)?$#i', parse_url($u, PHP_URL_PATH) ?? '') === 1;
+    })));
+
+    return $this->output->set_output(json_encode([
+        'success' => true,
+        'images'  => $images
+    ]));
+}
+
+// --- Sauvegarder les images sélectionnées pour un groupe/campagne ---
+public function save_images_for_group()
+{
+    $this->output->set_content_type('application/json');
+
+    $idclients        = (int)$this->input->post('idclients');
+    $idcampagne       = (int)$this->input->post('idcampagne');
+    $idgroupe_annonce = (int)$this->input->post('idgroupe_annonce');
+    $imagesCsv        = (string)$this->input->post('images'); // CSV d’URLs ou data-uri
+
+    if (!$idclients || !$idcampagne || !$idgroupe_annonce) {
+        return $this->output->set_output(json_encode(['success'=>false,'msg'=>'IDs manquants']));
+    }
+
+    $images = array_values(array_filter(array_map('trim', explode(',', $imagesCsv))));
+    if (empty($images)) {
+        return $this->output->set_output(json_encode(['success'=>false,'msg'=>'Aucune image']));
+    }
+
+    // Option: effacer l’existant pour ce groupe (sinon on append)
+    $this->db->where([
+        'idclients'        => $idclients,
+        'idcampagne'       => $idcampagne,
+        'idgroupe_annonce' => $idgroupe_annonce
+    ])->delete('images');
+
+    // Insert (rank ordonné)
+    $rank = 1;
+    foreach ($images as $src) {
+        $this->db->insert('images', [
+            'idclients'        => $idclients,
+            'idcampagne'       => $idcampagne,
+            'idgroupe_annonce' => $idgroupe_annonce,
+            'image_url'        => $src,
+            'rank'             => $rank++
+        ]);
+    }
+
+    return $this->output->set_output(json_encode(['success'=>true]));
+}
+
+/* ========== helpers scraping ========== */
+
+private function _curl_get(string $url)
+{
+    if (!function_exists('curl_init')) {
+        // fallback
+        $ctx = stream_context_create(['http'=>['timeout'=>10,'header'=>"User-Agent: Mozilla/5.0\r\n"]]);
+        return @file_get_contents($url, false, $ctx);
+    }
+
+    $ch = curl_init($url);
+    curl_setopt_array($ch, [
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_FOLLOWLOCATION => true,
+        CURLOPT_CONNECTTIMEOUT => 8,
+        CURLOPT_TIMEOUT        => 12,
+        CURLOPT_SSL_VERIFYPEER => false,
+        CURLOPT_SSL_VERIFYHOST => 0,
+        CURLOPT_USERAGENT      => 'Mozilla/5.0',
+    ]);
+    $out = curl_exec($ch);
+    curl_close($ch);
+    return $out;
+}
+
+private function _extract_images_from_html(string $html, string $baseUrl): array
+{
+    $images = [];
+    libxml_use_internal_errors(true);
+    $dom = new DOMDocument();
+    // Charger en UTF-8
+    @$dom->loadHTML('<?xml encoding="utf-8" ?>'.$html);
+    libxml_clear_errors();
+
+    $tags = $dom->getElementsByTagName('img');
+    foreach ($tags as $tag) {
+        $src = $tag->getAttribute('src');
+        if (!$src) continue;
+        $images[] = $this->_absolutize_url($src, $baseUrl);
+    }
+    return $images;
+}
+
+private function _absolutize_url(string $maybeRelative, string $base): string
+{
+    if (preg_match('#^https?://#i', $maybeRelative) || strpos($maybeRelative, 'data:image') === 0) {
+        return $maybeRelative;
+    }
+    // composer une URL absolue
+    $baseParts = parse_url($base);
+    if (!$baseParts || empty($baseParts['scheme']) || empty($baseParts['host'])) return $maybeRelative;
+
+    $scheme = $baseParts['scheme'];
+    $host   = $baseParts['host'];
+    $port   = isset($baseParts['port']) ? ':'.$baseParts['port'] : '';
+    $path   = isset($baseParts['path']) ? $baseParts['path'] : '/';
+
+    if (substr($maybeRelative, 0, 1) === '/') {
+        $absPath = $maybeRelative;
+    } else {
+        $dir = rtrim(dirname($path), '/\\');
+        $absPath = $dir.'/'.$maybeRelative;
+    }
+
+    // normaliser ../ ./ dans le path
+    $segments = [];
+    foreach (explode('/', $absPath) as $part) {
+        if ($part === '' || $part === '.') continue;
+        if ($part === '..') { array_pop($segments); continue; }
+        $segments[] = $part;
+    }
+    $absPath = '/'.implode('/', $segments);
+
+    return $scheme.'://'.$host.$port.$absPath;
+}
+
 }

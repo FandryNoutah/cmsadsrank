@@ -116,7 +116,7 @@ $images_site = isset($images_site) && is_array($images_site) ? $images_site : []
 
 						<div class="form-group">
 							<label for="url_campagne">URL de la campagne</label>
-							<input type="url" class="form-control" name="url_campagne" id="url_campagne">
+							<input type="url" class="form-control" name="url_campagne" id="url_campagne" value="<?= $d['site_client'] ?>">
 						</div>
 
 						<div class="form-group">
@@ -146,7 +146,7 @@ $images_site = isset($images_site) && is_array($images_site) ? $images_site : []
 									<div class="group-annonce-content">
 										<div class="form-group">
 											<label>Groupe d'annonce</label>
-											<input type="text" class="form-control" name="groupe_annonce" value="">
+											<input type="text" class="form-control" name="groupe_annonce" value="<?= $d['nom_client'] ?> - Groupe d'annonce - Local">
 										</div>
 										<div class="form-group">
 											<label>Contexte du groupe d'annonce</label>
@@ -485,268 +485,154 @@ $images_site = isset($images_site) && is_array($images_site) ? $images_site : []
 <?php end_section() ?>
 <?php start_section('script'); ?>
 <script>
-	$(document).ready(function() {
-		$('#generate-info-campagne').on('click', function() {
-			const idClient = $(this).data('idclient');
-			const urlCampagne = $('#url_campagne').val();
+$(document).ready(function() {
 
-			if (!urlCampagne) {
-				alert("Veuillez entrer une URL de campagne.");
-				return;
-			}
+    const fetchImagesUrl = '<?= site_url("Client/fetch_images_campagnes") ?>';
+    const propositionCard = $('#propositionImagesCard');
+    const propositionContainer = $('#propositionImagesContainer');
+    const selectedImagesInput = $('#selectedImagesInput');
+    const imagePreviewContainer = $('#imagePreviewContainer');
 
-			$.ajax({
-				url: '<?= base_url("Client/information_campagne") ?>/' + idClient,
-				method: 'POST',
-				data: {
-					url: urlCampagne
-				},
-				dataType: 'json',
-				success: function(response) {
-					if (response.status === 'success') {
-						$('#information_campagne_search').val(response.data);
-					} else {
-						alert("Une erreur est survenue.");
-					}
-				},
-				error: function() {
-					alert("Erreur lors de la communication avec le serveur.");
-				}
-			});
-		});
-	});
-</script>
+    <?php if (isset($this->security) && method_exists($this->security, 'get_csrf_hash')): ?>
+        const csrfName = '<?= $this->security->get_csrf_token_name() ?>';
+        const csrfHash = '<?= $this->security->get_csrf_hash() ?>';
+    <?php else: ?>
+        const csrfName = '';
+        const csrfHash = '';
+    <?php endif; ?>
 
-<script>
-	$(document).ready(function() {
-		const $checkbox = $('#multiple_groupe_annonce');
-		const $container = $('#groupe_annonce_container');
-		const $addButton = $('#add_groupe_annonce');
+    // Utility : debounce pour limiter le nombre d'appels AJAX
+    function debounce(fn, delay) {
+        let timer = null;
+        return function() {
+            const context = this, args = arguments;
+            clearTimeout(timer);
+            timer = setTimeout(() => fn.apply(context, args), delay);
+        };
+    }
 
-		// Activation/désactivation du bloc quand on coche la switch
-		$checkbox.on('change', function() {
-			if (this.checked) {
-				$addButton.parent().removeClass('d-none');
-			} else {
-				$addButton.parent().addClass('d-none');
-				// facultatif : vider les groupes sauf l'original
-				$container.find('.group-annonce-content:not(.original)').remove();
-			}
-		});
+    function updateSelectedFromPropositions() {
+        const selected = [];
+        $('.img-proposition.selected').each(function() {
+            selected.push($(this).data('url'));
+        });
+        selectedImagesInput.val(selected.join(','));
+    }
 
-		// Ajout d'un nouveau groupe
-		$addButton.on('click', function() {
-			const count = $container.find('.group-annonce-content').length + 1;
-			const $clone = $container.find('.group-annonce-content.original').first().clone();
-			$clone.removeClass('original');
-			$clone.find('input, textarea').val('');
-			$clone.find('label:first').text('Groupe d\'annonce ' + count);
-			$clone.append('<button type="button" class="btn btn-sm btn-danger remove_groupe_annonce mt-2">Supprimer</button><hr>');
-			$container.append($clone);
-		});
+    function createImageItem(src) {
+        return `
+            <div class="position-relative m-2 image-item">
+                <img src="${src}" width="120" height="120" class="rounded border" style="object-fit:cover;">
+                <button type="button" class="btn btn-sm btn-danger position-absolute remove-image-btn" style="top:2px; right:2px;">&times;</button>
+            </div>`;
+    }
 
-		// Suppression d'un groupe
-		$container.on('click', '.remove_groupe_annonce', function() {
-			$(this).closest('.group-annonce-content').remove();
-		});
-	});
-	$(document).ready(function() {
-		$('.generate-keywords-btn').on('click', function() {
-			const idClient = $(this).data('idclient');
-			const infoCampagne = $('#information_campagne_search').val();
+    function updatePropositionImages(images) {
+        propositionContainer.empty();
+        if (!Array.isArray(images) || images.length === 0) {
+            propositionCard.hide();
+            selectedImagesInput.val('');
+            return;
+        }
+        propositionCard.show();
+        let html = '';
+        images.forEach(src => {
+            html += `
+                <div class="col-auto px-2 mb-3">
+                    <img src="${src}" alt="Image site client"
+                        width="120" class="img-proposition selected"
+                        data-url="${src}"
+                        style="object-fit: cover; border-radius: 4px;">
+                </div>`;
+        });
+        propositionContainer.html(html);
+        updateSelectedFromPropositions();
+    }
 
-			if (!infoCampagne) {
-				alert("Veuillez remplir les informations de la campagne avant de générer les mots-clés à exclure.");
-				return;
-			}
+    function fetchImagesForUrl(url) {
+        if (!url) {
+            propositionContainer.empty();
+            propositionCard.hide();
+            selectedImagesInput.val('');
+            return;
+        }
 
-			$.ajax({
-				url: '<?= base_url("Client/get_mot_cle_a_exclure") ?>/' + idClient,
-				method: 'POST',
-				data: {
-					information_campagne_search: infoCampagne
-				},
-				dataType: 'json',
-				success: function(response) {
-					if (response.status === 'success') {
-						$('textarea[name="Mots_cle_exclus"]').val(response.data);
-					} else {
-						alert(response.message || "Erreur lors de la génération des mots-clés.");
-					}
-				},
-				error: function() {
-					alert("Erreur serveur lors de la génération.");
-				}
-			});
-		});
-	});
-</script>
+        let data = { url: url };
+        if (csrfName && csrfHash) data[csrfName] = csrfHash;
 
-<script>
-	const fetchImagesUrl = '<?= site_url("Client/fetch_images_campagne") ?>';
-	<?php if (function_exists('csrf_token') || (isset($this->security) && method_exists($this->security, 'get_csrf_hash'))): ?>
-		const csrfName = '<?= isset($this->security) ? $this->security->get_csrf_token_name() : '' ?>';
-		const csrfHash = '<?= isset($this->security) ? $this->security->get_csrf_hash() : '' ?>';
-	<?php else: ?>
-		const csrfName = '';
-		const csrfHash = '';
-	<?php endif; ?>
+        propositionContainer.html('<div class="col-12 text-center"><div class="loading-spinner"></div><p class="mt-2">Chargement des images...</p></div>');
+        propositionCard.show();
 
-	$(document).ready(function() {
-		function debounce(fn, delay) {
-			let timer = null;
-			return function() {
-				const context = this,
-					args = arguments;
-				clearTimeout(timer);
-				timer = setTimeout(function() {
-					fn.apply(context, args);
-				}, delay);
-			};
-		}
+        $.post(fetchImagesUrl, data, function(resp) {
+            if (resp && resp.success && Array.isArray(resp.images) && resp.images.length > 0) {
+                updatePropositionImages(resp.images);
+                imagePreviewContainer.empty();
+                resp.images.forEach(src => imagePreviewContainer.append(createImageItem(src)));
+            } else {
+                propositionContainer.html('<div class="col-12 text-center text-muted">Aucune image trouvée</div>');
+                selectedImagesInput.val('');
+            }
+        }, 'json').fail(function() {
+            propositionContainer.html('<div class="col-12 text-center text-danger">Erreur lors du chargement</div>');
+        });
+    }
 
-		const propositionCard = $('#propositionImagesCard');
-		const propositionContainer = $('#propositionImagesContainer');
-		const selectedImagesInput = $('#selectedImagesInput');
-		const imagePreviewContainer = $('#imagePreviewContainer');
+    // Sélection/désélection d'image
+    $(document).on('click', '.img-proposition', function() {
+        $(this).toggleClass('selected');
+        updateSelectedFromPropositions();
+    });
 
-		function updateSelectedFromPropositions() {
-			let selected = [];
-			$('.img-proposition.selected').each(function() {
-				selected.push($(this).data('url'));
-			});
-			selectedImagesInput.val(selected.join(','));
-		}
+    // Chargement automatique au démarrage si URL présente
+    const initialUrl = $('#url_campagne').val().trim();
+    if (initialUrl) fetchImagesForUrl(initialUrl);
 
-		$(document).on('click', '.img-proposition', function() {
-			$(this).toggleClass('selected');
-			updateSelectedFromPropositions();
-		});
+    // Déclenchement à chaque modification de l'URL avec debounce
+    $('#url_campagne').on('input paste', debounce(function() {
+        const url = $(this).val().trim();
+        if (url.length < 10) {
+            propositionContainer.empty();
+            propositionCard.hide();
+            selectedImagesInput.val('');
+            return;
+        }
+        fetchImagesForUrl(url);
+    }, 800));
 
-		const fetchImagesForUrl = debounce(function(url) {
-			if (!url) {
-				propositionContainer.empty();
-				propositionCard.hide();
-				selectedImagesInput.val('');
-				return;
-			}
-			let data = {
-				url: url
-			};
-			if (csrfName && csrfHash) data[csrfName] = csrfHash;
+    // Gestion du modal images
+    imagePreviewContainer.on('click', '.remove-image-btn', function() {
+        $(this).closest('.image-item').remove();
+    });
 
-			const loader = '<div class="col-12 text-center"><div class="loading-spinner"></div><p class="mt-2">Chargement des images...</p></div>';;
-			propositionContainer.html(loader);
-			propositionCard.show();
+    $('#addImageUrlBtn').on('click', function() {
+        const url = $('#imageUrlInput').val().trim();
+        if (!url) return;
+        imagePreviewContainer.append(createImageItem(url));
+        $('#imageUrlInput').val('');
+    });
 
-			$.ajax({
-				url: fetchImagesUrl,
-				type: 'POST',
-				data: data,
-				dataType: 'json',
-				success: function(resp) {
-					if (resp && resp.success && Array.isArray(resp.images) && resp.images.length > 0) {
-						let html = '';
-						resp.images.forEach(function(img) {
-							html += `
-							<div class="col-auto px-2 mb-3">
-								<img src="${img}" alt="Image site client"
-									width="120"
-									class="img-proposition selected"
-									data-url="${img}"
-									style="object-fit: cover; border-radius: 4px;">
-							</div>`;
-						});
-						propositionContainer.html(html);
-						selectedImagesInput.val(resp.images.join(','));
-						imagePreviewContainer.empty();
-						resp.images.forEach(function(src) {
-							imagePreviewContainer.append(createImageItem(src));
-						});
-					} else {
-						propositionContainer.html('<div class="col-12 text-center text-muted">Aucune image trouvée</div>');
-						selectedImagesInput.val('');
-					}
-				},
-				error: function() {
-					propositionContainer.html('<div class="col-12 text-center text-danger">Erreur lors du chargement</div>');
-				}
-			});
-		}, 550);
+    $('#imageUpload').on('change', function(event) {
+        const files = event.target.files;
+        for (let file of files) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                imagePreviewContainer.append(createImageItem(e.target.result));
+            };
+            reader.readAsDataURL(file);
+        }
+        $(this).val('');
+    });
 
-		$('#url_campagne').on('input paste change', function() {
-			const url = $(this).val().trim();
-			if (url.length === 0) {
-				propositionContainer.empty();
-				propositionCard.hide();
-				selectedImagesInput.val('');
-				return;
-			}
-			fetchImagesForUrl(url);
-		});
+    $('#saveImagesBtn').on('click', function() {
+        const images = [];
+        imagePreviewContainer.find('img').each(function() {
+            images.push($(this).attr('src'));
+        });
+        selectedImagesInput.val(images.join(','));
+        updatePropositionImages(images);
+        $('#modalGestionImages').modal('hide');
+    });
 
-		imagePreviewContainer.on('click', '.remove-image-btn', function() {
-			$(this).closest('.image-item').remove();
-		});
-
-		$('#addImageUrlBtn').on('click', function() {
-			const url = $('#imageUrlInput').val().trim();
-			if (!url) return;
-			imagePreviewContainer.append(createImageItem(url));
-			$('#imageUrlInput').val('');
-		});
-
-		$('#imageUpload').on('change', function(event) {
-			const files = event.target.files;
-			for (let file of files) {
-				const reader = new FileReader();
-				reader.onload = function(e) {
-					imagePreviewContainer.append(createImageItem(e.target.result));
-				};
-				reader.readAsDataURL(file);
-			}
-			$(this).val('');
-		});
-
-		$('#saveImagesBtn').on('click', function() {
-			const images = [];
-			imagePreviewContainer.find('img').each(function() {
-				images.push($(this).attr('src'));
-			});
-			selectedImagesInput.val(images.join(','));
-			updatePropositionImages(images);
-			$('#modalGestionImages').modal('hide');
-		});
-
-		function createImageItem(src) {
-			return `
-			<div class="position-relative m-2 image-item">
-				<img src="${src}" width="120" height="120" class="rounded border" style="object-fit:cover;">
-				<button type="button" class="btn btn-sm btn-danger position-absolute remove-image-btn" style="top: 2px; right: 2px;">&times;</button>
-			</div>`;
-		}
-
-		function updatePropositionImages(images) {
-			propositionContainer.empty();
-			if (!Array.isArray(images) || images.length === 0) {
-				propositionCard.hide();
-				selectedImagesInput.val('');
-				return;
-			}
-			propositionCard.show();
-			let html = '';
-			images.forEach(function(src) {
-				html += `
-				<div class="col-auto px-2 mb-3">
-					<img src="${src}" alt="Image site client"
-						width="120"
-						class="img-proposition selected"
-						data-url="${src}"
-						style="object-fit: cover; border-radius: 4px;">
-				</div>`;
-			});
-			propositionContainer.html(html);
-		}
-	});
+});
 </script>
 <?php end_section() ?>

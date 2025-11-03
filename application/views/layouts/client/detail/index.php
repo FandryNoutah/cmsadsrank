@@ -232,13 +232,20 @@
 								<br><br>
 								<div class="d-flex justify-content-start mb-3" style="font-size: 15px;">
 									<i class="fa fa-check-square mr-2" style="color: black; font-size: 18px;"></i>
-									<span class="mr-2">Date d'anniversaire : <?= $d['mis_en_place_paiement'] ?></span>
+									<span class="mr-2">
+										Date d'anniversaire :
+										<?= (!empty($d['mis_en_place_paiement']) && $d['mis_en_place_paiement'] != '0000-00-00') ? date('d-m-Y', strtotime($d['mis_en_place_paiement'])) : '-' ?>
+									</span>
 								</div>
+
 								<div class="d-flex justify-content-start mb-3" style="font-size: 15px;">
 									<i class="fa fa-check-square mr-2" style="color: black; font-size: 18px;"></i>
-									<span class="mr-2">Date de mise en ligne : <?= $d['annonce'] ?></span>
-
+									<span class="mr-2">
+										Date de mise en ligne :
+										<?= (!empty($d['annonce']) && $d['annonce'] != '0000-00-00') ? date('d-m-Y', strtotime($d['annonce'])) : '-' ?>
+									</span>
 								</div>
+
 								<div class="d-flex justify-content-start mb-3" style="font-size: 15px;">
 									<i class="fa fa-check-square mr-2" style="color: black; font-size: 18px;"></i>
 									<span class="mr-2">Commerciale</span>
@@ -315,7 +322,7 @@
 											<a class="nav-link py-2 active" type="button">
 												Secteur Activité
 											</a>
-											<span class="badge alert-dark py-2 px-4" style="margin-top: 20px;">Artisan Plombier</span>
+											<span class="badge alert-dark py-2 px-4" style="margin-top: 20px;"><?= nl2br($d['secteur_activite']) ?></span>
 										</li>
 									</ul>
 								</div>
@@ -446,8 +453,9 @@
 														</span>
 													<?php endif; ?>
 												</td>
-												<td><?= $u->date_demande ?></td>
-												<td><?= $u->date_upsell ?></td>
+												<td><?= (!empty($u->date_demande) && $u->date_demande != '0000-00-00') ? date('d-m-Y', strtotime($u->date_demande)) : '-' ?></td>
+												<td><?= (!empty($u->date_upsell) && $u->date_upsell != '0000-00-00') ? date('d-m-Y', strtotime($u->date_upsell)) : '-' ?></td>
+
 												<td>
 													<?php if ($u->type_upsell == 4): ?>
 														Pause
@@ -523,12 +531,9 @@
 									<i class="fa fa-chevron-right ml-auto" style="font-size: 12px;"></i>
 								</div>
 								<h3 class="m-0" style="font-size: 21px;">
-									<?php if($d['meetingDate'] != NULL): ?>
-										<?= $d['meetingDate'] ?> 
-									<?php else: ?>
-										Ajouter une date
-									<?php endif; ?>
+									<?= (!empty($d['meetingDate']) && $d['meetingDate'] != '0000-00-00') ? date('d-m-Y', strtotime($d['meetingDate'])) : 'Ajouter une date' ?>
 								</h3>
+
 							</div>
 						</div>
 					</div>
@@ -825,12 +830,13 @@
 										<td class="align-middle" style="font-weight: 500;"><?= $t->title; ?></td>
 										<td class="align-middle text-muted">
 											<img src="<?= base_url('assets/images/icons/figma/calendar.svg') ?>" alt="">
-											<?= $t->date_demande; ?>
+											<?= (!empty($t->date_demande) && $t->date_demande != '0000-00-00') ? date('d-m-Y', strtotime($t->date_demande)) : '-' ?>
 										</td>
 										<td class="align-middle text-muted">
 											<img src="<?= base_url('assets/images/icons/figma/calendar.svg') ?>" alt="">
-											<?= $t->date_due; ?>
+											<?= (!empty($t->date_due) && $t->date_due != '0000-00-00') ? date('d-m-Y', strtotime($t->date_due)) : '-' ?>
 										</td>
+
 										<td class="align-middle text-muted">
 											<?= $t->description; ?>
 										</td>
@@ -935,7 +941,10 @@
 										<?php endforeach; ?>
 									</div> -->
 
-									<span class="text-muted text-right text-nowrap ml-auto"><?= $note->date_due; ?></span>
+									<span class="text-muted text-right text-nowrap ml-auto">
+										<?= (!empty($note->date_due) && $note->date_due != '0000-00-00') ? date('d-m-Y', strtotime($note->date_due)) : '-' ?>
+									</span>
+
 								</div>
 							</div>
 						</div>

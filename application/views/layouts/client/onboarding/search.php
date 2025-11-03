@@ -55,13 +55,13 @@ $images_site = isset($images_site) && is_array($images_site) ? $images_site : []
 					<li class="nav-item rounded">
 						<a class="nav-link text-secondary" href="#">
 							<img class="mr-2" src="<?= base_url('assets/images/icons/figma/icon-chartpie.svg') ?>" />
-							<span>Menu 1</span>
+							<span>Paramètre</span>
 						</a>
 					</li>
 					<li class="nav-item rounded">
 						<a class="nav-link text-secondary" href="#">
 							<img class="mr-2" src="<?= base_url('assets/images/icons/figma/icon-bell.svg') ?>" />
-							<span>Menu 2</span>
+							<span>Groupe d'annonce</span>
 						</a>
 					</li>
 				</ul>
@@ -69,7 +69,7 @@ $images_site = isset($images_site) && is_array($images_site) ? $images_site : []
 					<li class="nav-item rounded">
 						<a class="nav-link text-secondary" href="#">
 							<img class="mr-2" src="<?= base_url('assets/images/icons/figma/chartlineup.svg') ?>" />
-							<span>Exemple Menu</span>
+							<span>Asset média</span>
 						</a>
 					</li>
 				</ul>
@@ -111,12 +111,12 @@ $images_site = isset($images_site) && is_array($images_site) ? $images_site : []
 
 						<div class="form-group">
 							<label for="nom_campagne_search">Nom de la campagne</label>
-							<input type="text" class="form-control" name="nom_campagne_search" id="nom_campagne_search" value="<?= isset($campagne) ? htmlentities($campagne->nom_campagne) : '' ?>">
+							<input type="text" class="form-control" name="nom_campagne_search" id="nom_campagne_search" value="<?= $d['nom_client'] ?> - Search">
 						</div>
 
 						<div class="form-group">
 							<label for="url_campagne">URL de la campagne</label>
-							<input type="url" class="form-control" name="url_campagne" id="url_campagne">
+							<input type="url" class="form-control" name="url_campagne" id="url_campagne" value="<?= $donnees[0]['site_client'] ?>">
 						</div>
 
 						<div class="form-group">
@@ -142,10 +142,7 @@ $images_site = isset($images_site) && is_array($images_site) ? $images_site : []
 							<input type="number" class="form-control" name="repartition_budget_search" id="repartition_budget_search" value="<?= isset($campagne) ? htmlentities($campagne->repartition_budget) : '' ?>">
 						</div>
 
-						<div class="custom-control custom-switch mb-3">
-							<input type="checkbox" class="custom-control-input" id="multiple_groupe_annonce" <?php if (isset($campagne) && !empty($groupes_annonces) && count($groupes_annonces) > 0): ?> checked <?php endif; ?>>
-							<label class="custom-control-label" for="multiple_groupe_annonce">Souhaitez-vous créer plusieurs groupes d'annonces dans la campagne?</label>
-						</div>
+						
 
 						<div id="groupe_annonce_container" class="mb-4 pt-4">
 							<?php if (isset($groupes_annonces) && count($groupes_annonces) > 0): ?>
@@ -190,6 +187,11 @@ $images_site = isset($images_site) && is_array($images_site) ? $images_site : []
 									<i class="fa fa-plus"></i> Nouveau groupe d'annonce
 								</button>
 							</div>
+							
+						</div>
+						<div class="custom-control custom-switch mb-3">
+							<input type="checkbox" class="custom-control-input" id="multiple_groupe_annonce" <?php if (isset($campagne) && !empty($groupes_annonces) && count($groupes_annonces) > 0): ?> checked <?php endif; ?>>
+							<label class="custom-control-label" for="multiple_groupe_annonce">Souhaitez-vous créer plusieurs groupes d'annonces dans la campagne?</label>
 						</div>
 
 						<h5>Paramètres de la campagne</h5>
@@ -455,39 +457,6 @@ $images_site = isset($images_site) && is_array($images_site) ? $images_site : []
 <?php start_section('script'); ?>
 <script>
 	$(document).ready(function() {
-		$('#generate-info-campagne').on('click', function() {
-			const idClient = $(this).data('idclient');
-			const urlCampagne = $('#url_campagne').val();
-
-			if (!urlCampagne) {
-				alert("Veuillez entrer une URL de campagne.");
-				return;
-			}
-
-			$.ajax({
-				url: '<?= base_url("Client/information_campagne") ?>/' + idClient,
-				method: 'POST',
-				data: {
-					url: urlCampagne
-				},
-				dataType: 'json',
-				success: function(response) {
-					if (response.status === 'success') {
-						$('#information_campagne_search').val(response.data);
-					} else {
-						alert("Une erreur est survenue.");
-					}
-				},
-				error: function() {
-					alert("Erreur lors de la communication avec le serveur.");
-				}
-			});
-		});
-	});
-</script>
-
-<script>
-	$(document).ready(function() {
 		const $checkbox = $('#multiple_groupe_annonce');
 		const $container = $('#groupe_annonce_container');
 		const $addButton = $('#add_groupe_annonce');
@@ -519,203 +488,155 @@ $images_site = isset($images_site) && is_array($images_site) ? $images_site : []
 			$(this).closest('.group-annonce-content').remove();
 		});
 	});
-	$(document).ready(function() {
-		$('.generate-keywords-btn').on('click', function() {
-			const idClient = $(this).data('idclient');
-			const infoCampagne = $('#information_campagne_search').val();
+$(document).ready(function() {
 
-			if (!infoCampagne) {
-				alert("Veuillez remplir les informations de la campagne avant de générer les mots-clés à exclure.");
-				return;
-			}
+    const fetchImagesUrl = '<?= site_url("Client/fetch_images_campagnes") ?>';
+    const propositionCard = $('#propositionImagesCard');
+    const propositionContainer = $('#propositionImagesContainer');
+    const selectedImagesInput = $('#selectedImagesInput');
+    const imagePreviewContainer = $('#imagePreviewContainer');
 
-			$.ajax({
-				url: '<?= base_url("Client/get_mot_cle_a_exclure") ?>/' + idClient,
-				method: 'POST',
-				data: {
-					information_campagne_search: infoCampagne
-				},
-				dataType: 'json',
-				success: function(response) {
-					if (response.status === 'success') {
-						$('textarea[name="Mots_cle_exclus"]').val(response.data);
-					} else {
-						alert(response.message || "Erreur lors de la génération des mots-clés.");
-					}
-				},
-				error: function() {
-					alert("Erreur serveur lors de la génération.");
-				}
-			});
-		});
-	});
+    <?php if (isset($this->security) && method_exists($this->security, 'get_csrf_hash')): ?>
+        const csrfName = '<?= $this->security->get_csrf_token_name() ?>';
+        const csrfHash = '<?= $this->security->get_csrf_hash() ?>';
+    <?php else: ?>
+        const csrfName = '';
+        const csrfHash = '';
+    <?php endif; ?>
+
+    // Utility : debounce pour limiter le nombre d'appels AJAX
+    function debounce(fn, delay) {
+        let timer = null;
+        return function() {
+            const context = this, args = arguments;
+            clearTimeout(timer);
+            timer = setTimeout(() => fn.apply(context, args), delay);
+        };
+    }
+
+    function updateSelectedFromPropositions() {
+        const selected = [];
+        $('.img-proposition.selected').each(function() {
+            selected.push($(this).data('url'));
+        });
+        selectedImagesInput.val(selected.join(','));
+    }
+
+    function createImageItem(src) {
+        return `
+            <div class="position-relative m-2 image-item">
+                <img src="${src}" width="120" height="120" class="rounded border" style="object-fit:cover;">
+                <button type="button" class="btn btn-sm btn-danger position-absolute remove-image-btn" style="top:2px; right:2px;">&times;</button>
+            </div>`;
+    }
+
+    function updatePropositionImages(images) {
+        propositionContainer.empty();
+        if (!Array.isArray(images) || images.length === 0) {
+            propositionCard.hide();
+            selectedImagesInput.val('');
+            return;
+        }
+        propositionCard.show();
+        let html = '';
+        images.forEach(src => {
+            html += `
+                <div class="col-auto px-2 mb-3">
+                    <img src="${src}" alt="Image site client"
+                        width="120" class="img-proposition selected"
+                        data-url="${src}"
+                        style="object-fit: cover; border-radius: 4px;">
+                </div>`;
+        });
+        propositionContainer.html(html);
+        updateSelectedFromPropositions();
+    }
+
+    function fetchImagesForUrl(url) {
+        if (!url) {
+            propositionContainer.empty();
+            propositionCard.hide();
+            selectedImagesInput.val('');
+            return;
+        }
+
+        let data = { url: url };
+        if (csrfName && csrfHash) data[csrfName] = csrfHash;
+
+        propositionContainer.html('<div class="col-12 text-center"><div class="loading-spinner"></div><p class="mt-2">Chargement des images...</p></div>');
+        propositionCard.show();
+
+        $.post(fetchImagesUrl, data, function(resp) {
+            if (resp && resp.success && Array.isArray(resp.images) && resp.images.length > 0) {
+                updatePropositionImages(resp.images);
+                imagePreviewContainer.empty();
+                resp.images.forEach(src => imagePreviewContainer.append(createImageItem(src)));
+            } else {
+                propositionContainer.html('<div class="col-12 text-center text-muted">Aucune image trouvée</div>');
+                selectedImagesInput.val('');
+            }
+        }, 'json').fail(function() {
+            propositionContainer.html('<div class="col-12 text-center text-danger">Erreur lors du chargement</div>');
+        });
+    }
+
+    // Sélection/désélection d'image
+    $(document).on('click', '.img-proposition', function() {
+        $(this).toggleClass('selected');
+        updateSelectedFromPropositions();
+    });
+
+    // Chargement automatique au démarrage si URL présente
+    const initialUrl = $('#url_campagne').val().trim();
+    if (initialUrl) fetchImagesForUrl(initialUrl);
+
+    // Déclenchement à chaque modification de l'URL avec debounce
+    $('#url_campagne').on('input paste', debounce(function() {
+        const url = $(this).val().trim();
+        if (url.length < 10) {
+            propositionContainer.empty();
+            propositionCard.hide();
+            selectedImagesInput.val('');
+            return;
+        }
+        fetchImagesForUrl(url);
+    }, 800));
+
+    // Gestion du modal images
+    imagePreviewContainer.on('click', '.remove-image-btn', function() {
+        $(this).closest('.image-item').remove();
+    });
+
+    $('#addImageUrlBtn').on('click', function() {
+        const url = $('#imageUrlInput').val().trim();
+        if (!url) return;
+        imagePreviewContainer.append(createImageItem(url));
+        $('#imageUrlInput').val('');
+    });
+
+    $('#imageUpload').on('change', function(event) {
+        const files = event.target.files;
+        for (let file of files) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                imagePreviewContainer.append(createImageItem(e.target.result));
+            };
+            reader.readAsDataURL(file);
+        }
+        $(this).val('');
+    });
+
+    $('#saveImagesBtn').on('click', function() {
+        const images = [];
+        imagePreviewContainer.find('img').each(function() {
+            images.push($(this).attr('src'));
+        });
+        selectedImagesInput.val(images.join(','));
+        updatePropositionImages(images);
+        $('#modalGestionImages').modal('hide');
+    });
+
+});
 </script>
 
-<script>
-	const fetchImagesUrl = '<?= site_url("Client/fetch_images_campagne") ?>';
-	<?php if (function_exists('csrf_token') || (isset($this->security) && method_exists($this->security, 'get_csrf_hash'))): ?>
-		const csrfName = '<?= isset($this->security) ? $this->security->get_csrf_token_name() : '' ?>';
-		const csrfHash = '<?= isset($this->security) ? $this->security->get_csrf_hash() : '' ?>';
-	<?php else: ?>
-		const csrfName = '';
-		const csrfHash = '';
-	<?php endif; ?>
-
-	$(document).ready(function() {
-		function debounce(fn, delay) {
-			let timer = null;
-			return function() {
-				const context = this,
-					args = arguments;
-				clearTimeout(timer);
-				timer = setTimeout(function() {
-					fn.apply(context, args);
-				}, delay);
-			};
-		}
-
-		const propositionCard = $('#propositionImagesCard');
-		const propositionContainer = $('#propositionImagesContainer');
-		const selectedImagesInput = $('#selectedImagesInput');
-		const imagePreviewContainer = $('#imagePreviewContainer');
-
-		function updateSelectedFromPropositions() {
-			let selected = [];
-			$('.img-proposition.selected').each(function() {
-				selected.push($(this).data('url'));
-			});
-			selectedImagesInput.val(selected.join(','));
-		}
-
-		$(document).on('click', '.img-proposition', function() {
-			$(this).toggleClass('selected');
-			updateSelectedFromPropositions();
-		});
-
-		const fetchImagesForUrl = debounce(function(url) {
-			if (!url) {
-				propositionContainer.empty();
-				propositionCard.hide();
-				selectedImagesInput.val('');
-				return;
-			}
-			let data = {
-				url: url
-			};
-			if (csrfName && csrfHash) data[csrfName] = csrfHash;
-
-			const loader = '<div class="col-12 text-center"><div class="loading-spinner"></div><p class="mt-2">Chargement des images...</p></div>';;
-			propositionContainer.html(loader);
-			propositionCard.show();
-
-			$.ajax({
-				url: fetchImagesUrl,
-				type: 'POST',
-				data: data,
-				dataType: 'json',
-				success: function(resp) {
-					if (resp && resp.success && Array.isArray(resp.images) && resp.images.length > 0) {
-						let html = '';
-						resp.images.forEach(function(img) {
-							html += `
-							<div class="col-auto px-2 mb-3">
-								<img src="${img}" alt="Image site client"
-									width="120"
-									class="img-proposition selected"
-									data-url="${img}"
-									style="object-fit: cover; border-radius: 4px;">
-							</div>`;
-						});
-						propositionContainer.html(html);
-						selectedImagesInput.val(resp.images.join(','));
-						imagePreviewContainer.empty();
-						resp.images.forEach(function(src) {
-							imagePreviewContainer.append(createImageItem(src));
-						});
-					} else {
-						propositionContainer.html('<div class="col-12 text-center text-muted">Aucune image trouvée</div>');
-						selectedImagesInput.val('');
-					}
-				},
-				error: function() {
-					propositionContainer.html('<div class="col-12 text-center text-danger">Erreur lors du chargement</div>');
-				}
-			});
-		}, 550);
-
-		$('#url_campagne').on('input paste change', function() {
-			const url = $(this).val().trim();
-			if (url.length === 0) {
-				propositionContainer.empty();
-				propositionCard.hide();
-				selectedImagesInput.val('');
-				return;
-			}
-			fetchImagesForUrl(url);
-		});
-
-		imagePreviewContainer.on('click', '.remove-image-btn', function() {
-			$(this).closest('.image-item').remove();
-		});
-
-		$('#addImageUrlBtn').on('click', function() {
-			const url = $('#imageUrlInput').val().trim();
-			if (!url) return;
-			imagePreviewContainer.append(createImageItem(url));
-			$('#imageUrlInput').val('');
-		});
-
-		$('#imageUpload').on('change', function(event) {
-			const files = event.target.files;
-			for (let file of files) {
-				const reader = new FileReader();
-				reader.onload = function(e) {
-					imagePreviewContainer.append(createImageItem(e.target.result));
-				};
-				reader.readAsDataURL(file);
-			}
-			$(this).val('');
-		});
-
-		$('#saveImagesBtn').on('click', function() {
-			const images = [];
-			imagePreviewContainer.find('img').each(function() {
-				images.push($(this).attr('src'));
-			});
-			selectedImagesInput.val(images.join(','));
-			updatePropositionImages(images);
-			$('#modalGestionImages').modal('hide');
-		});
-
-		function createImageItem(src) {
-			return `
-			<div class="position-relative m-2 image-item">
-				<img src="${src}" width="120" height="120" class="rounded border" style="object-fit:cover;">
-				<button type="button" class="btn btn-sm btn-danger position-absolute remove-image-btn" style="top: 2px; right: 2px;">&times;</button>
-			</div>`;
-		}
-
-		function updatePropositionImages(images) {
-			propositionContainer.empty();
-			if (!Array.isArray(images) || images.length === 0) {
-				propositionCard.hide();
-				selectedImagesInput.val('');
-				return;
-			}
-			propositionCard.show();
-			let html = '';
-			images.forEach(function(src) {
-				html += `
-				<div class="col-auto px-2 mb-3">
-					<img src="${src}" alt="Image site client"
-						width="120"
-						class="img-proposition selected"
-						data-url="${src}"
-						style="object-fit: cover; border-radius: 4px;">
-				</div>`;
-			});
-			propositionContainer.html(html);
-		}
-	});
-</script>
 <?php end_section() ?>
