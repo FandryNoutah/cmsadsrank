@@ -332,7 +332,7 @@ $images_site = isset($images_site) && is_array($images_site) ? $images_site : []
 
 						<div class="form-group">
 							<label>Propositions de mots-clés à exclure</label>
-							<textarea class="form-control" rows="15" name="Mots_cle_exclus"><?= isset($mots_exclus) ? htmlentities($mots_exclus) : '' ?></textarea>
+							<textarea class="form-control" rows="15" name="Mots_cle_exclus"><?= isset($mots_exclus[0]['exclusion']) ? htmlentities($mots_exclus[0]['exclusion']) : '' ?></textarea>
 						</div>
 
 						<div class="form-group">

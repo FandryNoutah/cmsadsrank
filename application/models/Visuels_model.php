@@ -1194,18 +1194,24 @@ public function insertclient($client, $site_client, $email_client, $numero_clien
 	}
 	
    public function insertfiche($idclient, $budget, $secteur_activite, $product_choice, $initiative, $am, $date_mis_en_place, $date_brief, $date_annonce, $dejaclient, $gtm_code) {
+    $secteur_activite = $this->db->escape($secteur_activite);
+    $gtm_code = $this->db->escape($gtm_code);
+
+    $date_mis_en_place = $this->db->escape($date_mis_en_place);
+    $date_brief = $this->db->escape($date_brief);
+    $date_annonce = $this->db->escape($date_annonce);
+
     $query = "INSERT INTO donnee 
         (idclients, idproduit, budget, secteur_activite, initiative, account_manager, mis_en_place_paiement, Brief, annonce, modifier_par, dejaclient, tracking_gtm) 
         VALUES 
-        ('$idclient', '$product_choice', '$budget', '$secteur_activite', '$initiative', '$am', '$date_mis_en_place', '$date_brief', '$date_annonce', '$am', '$dejaclient', '$gtm_code')";
+        ($idclient, $product_choice, $budget, $secteur_activite, $initiative, $am, $date_mis_en_place, $date_brief, $date_annonce, $am, $dejaclient, $gtm_code)";
     
     $this->db->query($query);
 
     // Récupère l'ID de la dernière insertion
-    $idonnee = $this->db->insert_id();
-
-    return $idonnee;
+    return $this->db->insert_id();
 }
+
 
 
 

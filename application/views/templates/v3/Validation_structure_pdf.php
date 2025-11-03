@@ -1,322 +1,258 @@
-<?php
-/**
- * Validation_structure_pdf.php
- * Vue réécrite pour affichage et export PDF (Dompdf).
- */
-?><!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="fr">
 <head>
-<meta charset="utf-8">
-<title>Validation client – Campagne Google Ads</title>
-
-<?php if (empty($is_pdf)): ?>
+    <meta charset="utf-8">
+    <title>Validation client</title>
+    <!-- Font Awesome for icons (local) -->
     <link href="<?php echo base_url('assets/css/font-awesome.all.min.css'); ?>" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" rel="stylesheet">
-<?php endif; ?>
+    <link href="<?php echo base_url('assets/css/inventaire_pmax_pdf.css'); ?>" rel="stylesheet">
+    <style>
+        /* Only page-break CSS */
+        .section { page-break-before: always; }
+        .section:first-child { page-break-before: auto; }
+        td {
+        font-size: 13px! important;
+        }
 
-<style>
-/* === CSS compatible Dompdf (remplacer l'ancien <style>) === */
-
-@page {
-  margin: 20mm 15mm; /* marges page */
-}
-
-:root{
-  --primary:#4EA5FE;
-  --bg-card:#ffffff;
-  --text-dark:#333;
-  --border:#e0e0e0;
-}
-
-body{
-  font-family: "DejaVu Sans", Arial, sans-serif;
-  color:var(--text-dark);
-  background:#fff; /* Dompdf ignore souvent body background but keep */
-  margin:0; padding:0;
-}
-
-.container{
-  width:95%;
-  max-width:1200px;
-  margin:0 auto;
-  padding:10px 0 30px;
-}
-
-/* Header (campagne) : garder sur UNE page, puis sauter */
-.header-section{
-  page-break-inside: avoid;
-  page-break-after: always; /* FORCE nouvelle page après la campagne */
-  padding-bottom:8px;
-}
-
-/* Remplacer .header-row flex par un simple tableau (éviter flex) */
-.header-row{
-  display:table;
-  width:100%;
-  table-layout:fixed;
-}
-.header-row .col-left,
-.header-row .col-center,
-.header-row .col-right{
-  display:table-cell;
-  vertical-align:middle;
-}
-.header-row .col-left, .header-row .col-right{
-  width:140px;
-}
-.header-row img{ max-width:140px; height:auto; display:block; }
-
-/* Sections générales */
-.section{
-  background:var(--bg-card);
-  border-radius:6px;
-  padding:10px;
-  margin:10px 0;
-  page-break-inside: avoid;
-}
-
-/* Table global simple */
-table{ width:100%; border-collapse:collapse; font-size:12px; }
-thead{ background:var(--primary); color:#fff; }
-th, td{ padding:8px 10px; border:1px solid var(--border); vertical-align:top; text-align:left; }
-
-/* Groupe card : UNE page par groupe */
-.groupe-card{
-  background:#fff;
-  border:1px solid var(--border);
-  border-radius:6px;
-  padding:10px;
-  margin:0 0 8px 0;
-  box-shadow:none; /* éviter */
-  page-break-inside: avoid;
-  page-break-after: always; /* force chaque groupe sur page séparée */
-}
-
-/* Table interne du groupe */
-.groupe-card table{ width:100%; border-collapse:collapse; font-size:13px; }
-.groupe-card th{ background:var(--primary); color:#fff; padding:8px; width:200px; text-align:left; vertical-align:middle; }
-.groupe-card td{ padding:8px; border:1px solid var(--border); vertical-align:middle; text-align:left; }
-
-/* Images : pas de flex, utiliser inline-block */
-.images-row{ display:block; text-align:left; margin-top:6px; }
-.images-row .img-wrap{ display:inline-block; margin:4px; vertical-align:top; }
-.images-row img{
-  display:block;
-  max-width:120px;
-  max-height:90px;
-  width:auto;
-  height:auto;
-  border-radius:4px;
-}
-
-/* Cacher éléments interactifs dans le PDF */
-.edit-btn, .action-btns, .btn{ display:none !important; }
-
-/* Titres */
-h1,h2{ color:var(--primary); text-align:center; margin:6px 0 12px 0; font-weight:600; }
-
-/* petites précautions */
-* { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-
-</style>
+    </style>
 </head>
-<body>
-<div class="container">
+<body style="font-family: Arial, sans-serif; margin: 0; padding: 0; background-color: white;">
+    <div style="width: 90%; max-width: 1650px; margin: 0 auto; padding: 15px; margin-top: -50px;">
+        <div class="section">
+            <h1 style="text-align: center; margin-bottom: 15px; font-size: 2em;">Campagne Google ADS</h1>
 
-    <div class="section header-section" style="page-break-inside:avoid;">
-        <div class="header-row">
-            <?php if (!empty($logo_base64)): ?>
-                <img src="<?= htmlspecialchars($logo_base64); ?>" alt="Logo">
-            <?php else: ?>
-                <div style="width:140px;height:40px;"></div>
-            <?php endif; ?>
-            <h1>Campagne Google Ads</h1>
-            <div style="width:140px;"></div>
-        </div>
-    </div>
+            <div>
+                <img src="<?php echo $logo_base64; ?>" alt="Logo" style="max-width: 150px; width: 100%; height: auto;">
+                <h2 style="text-align: right; margin-top: -30px;">Campagne</h2>
+            </div>
 
-    <!-- Tableau global des campagnes (inchangé) -->
-    <div class="section">
-        <table class="table table-sm table-bordered">
-            <thead>
-                <tr>
-                    <th>Zone</th>
-                    <th>Calendrier</th>
-                    <th>Appareils</th>
-                    <th>Budget</th>
-                    <th>Campagne</th>
-                    <th>Groupe</th>
-                    <th>Mots-Clés</th>
-                    <?php if (empty($is_pdf)): ?><th>Actions</th><?php endif; ?>
-                </tr>
-            </thead>
-            <tbody>
-            <?php if (!empty($campagnes) && is_array($campagnes)): ?>
-                <?php foreach($campagnes as $C): 
-                    $zones = htmlspecialchars($C['zones'] ?? '—');
-                    $date_campagne = htmlspecialchars($C['date_campagne'] ?? '—');
-                    $appareil = htmlspecialchars($C['appareil'] ?? '—');
-                    $budget = htmlspecialchars($C['repartition_budget'] ?? '—');
-                    $nom_campagne = htmlspecialchars($C['nom_campagne'] ?? '—');
-                    $groupes = $C['groupes_annonces'] ?? [];
-                ?>
+
+            <table style="width: 100%; border-collapse: collapse; border: 1px solid #dee2e6; background-color: #fff;">
+                <thead style="background-color: #007bff; color: #fff;">
+                    <tr>
+                        <th style="padding: 12px; border: 1px solid #dee2e6;">Zone</th>
+                        <th style="padding: 12px; border: 1px solid #dee2e6;">Calendrier</th>
+                        <th style="padding: 12px; border: 1px solid #dee2e6; width: 70px;">Appareils</th>
+                        <th style="padding: 12px; border: 1px solid #dee2e6;">Budget</th>
+                        <th style="padding: 12px; border: 1px solid #dee2e6; width: 120px;">Campagne</th>
+                        <th style="padding: 12px; border: 1px solid #dee2e6; width: 120px;">Groupe d'annonces</th>
+                        <th style="padding: 12px; border: 1px solid #dee2e6;width: 250px;">Mots-clés</th>
+                    </tr>
+                </thead>
+                <tbody>
+                <?php if (!empty($campagnes) && is_array($campagnes)): ?>
+                    <?php foreach($campagnes as $C): ?>
+                    <?php $groupes = $C['groupes_annonces'] ?? []; ?>
                     <?php if (!empty($groupes)): ?>
-                        <?php foreach ($groupes as $G): 
-                            $nom_groupe = htmlspecialchars($G['nom_groupe'] ?? '—');
-                            $mot_cle = nl2br(htmlspecialchars($G['mot_cle'] ?? '—'));
-                        ?>
+                        <?php foreach($groupes as $G): ?>
                         <tr>
-                            <td><?= $zones; ?></td>
-                            <td><?= $date_campagne; ?></td>
-                            <td><?= $appareil; ?></td>
-                            <td><?= $budget !== '—' ? $budget . ' €' : '—'; ?></td>
-                            <td><b><?= $nom_campagne; ?></b></td>
-                            <td><?= $nom_groupe; ?></td>
-                            <td><?= $mot_cle; ?></td>
-                            <?php if (empty($is_pdf)): ?>
+                            <td><?= htmlspecialchars($C['zones'] ?? '—'); ?></td>
+                            <td><?= htmlspecialchars($C['date_campagne'] ?? '—'); ?></td>
+                            <td><?= htmlspecialchars($C['appareil'] ?? '—'); ?></td>
                             <td>
-                                <button class="btn btn-sm btn-primary" onclick="openEditCampaign('<?= htmlspecialchars($C['idcampagne']); ?>')">
-                                    <i class="fa fa-edit"></i> Modifier
-                                </button>
+                            <?php $b = trim((string)($C['repartition_budget'] ?? '')); ?>
+                            <?= $b !== '' ? htmlspecialchars($b).' €' : '—'; ?>
                             </td>
-                            <?php endif; ?>
+                            <td><b><?= htmlspecialchars($C['nom_campagne'] ?? ''); ?></b></td>
+                            <td><?= htmlspecialchars($G['nom_groupe'] ?? ''); ?></td>
+                            <td><?= nl2br(htmlspecialchars($G['mot_cle'] ?? '—')); ?></td>
                         </tr>
                         <?php endforeach; ?>
                     <?php else: ?>
                         <tr>
-                            <td><?= $zones; ?></td>
-                            <td><?= $date_campagne; ?></td>
-                            <td><?= $appareil; ?></td>
-                            <td><?= $budget !== '—' ? $budget . ' €' : '—'; ?></td>
-                            <td><b><?= $nom_campagne; ?></b></td>
-                            <td colspan="<?= empty($is_pdf) ? 3 : 2; ?>">Aucun groupe d'annonce</td>
+                        <td><?= htmlspecialchars($C['zones'] ?? '—'); ?></td>
+                        <td><?= htmlspecialchars($C['date_campagne'] ?? '—'); ?></td>
+                        <td><?= htmlspecialchars($C['appareil'] ?? '—'); ?></td>
+                        <td>
+                            <?php $b = trim((string)($C['repartition_budget'] ?? '')); ?>
+                            <?= $b !== '' ? htmlspecialchars($b).' €' : '—'; ?>
+                        </td>
+                        <td><b><?= htmlspecialchars($C['nom_campagne'] ?? ''); ?></b></td>
+                        <td colspan="3">Aucun groupe d’annonce</td>
                         </tr>
                     <?php endif; ?>
-                <?php endforeach; ?>
-            <?php else: ?>
-                <tr><td colspan="<?= empty($is_pdf) ? 8 : 7; ?>">Aucune campagne disponible.</td></tr>
-            <?php endif; ?>
-            </tbody>
-        </table>
-    </div>
+                    <?php endforeach; ?>
+                <?php else: ?>
+                    <tr><td colspan="8">Aucune campagne disponible.</td></tr>
+                <?php endif; ?>
+                </tbody>
+            </table>
+        </div>
+        
+            <?php if (!empty($campagnes) && is_array($campagnes)): ?>
+                <?php foreach ($campagnes as $C): ?>
+                    <?php $groupes = $C['groupes_annonces'] ?? []; $campImages = $C['images'] ?? []; ?>
+                    <?php foreach ($groupes as $G): ?>            
+        <div class="section">
+            <div>
+                <img src="<?php echo $logo_base64; ?>" alt="Logo" style="max-width: 150px; width: 100%; height: auto;">
+                <h2 style="text-align: right; margin-top: -30px;">Annonce</h2>
+            </div>
+          			
+                  <table style="width: 100%; border-collapse: collapse; border: 1px solid #dee2e6; background-color: #fff; margin-bottom: 30px;">
+                        <tbody>
+                            <tr>
+                                <th style="padding: 12px; border: 1px solid #dee2e6; background-color: #007bff; color: #fff; width: 20%;">Campagne</th>
+                                <td style="padding: 12px; border: 1px solid #dee2e6; text-align: center;">
+                                    <b><?= htmlspecialchars($C['nom_campagne'] ?? ''); ?></b>
 
-    <!-- Aperçu des groupes d'annonces (modifié) -->
-    <div class="section">
-        <h2 style="margin-bottom:12px;">Aperçu des Groupes d'Annonces</h2>
-
-        <?php if (!empty($campagnes) && is_array($campagnes)): ?>
-            <?php foreach ($campagnes as $C): 
-                $groupes = $C['groupes_annonces'] ?? [];
-                $camp_images = $C['images'] ?? [];
-            ?>
-                <?php foreach ($groupes as $G): ?>
-                <div class="groupe-card">
-                    <table>
-                        <tr>
-                            <th>Campagne</th>
-                            <td><b><?= ucfirst(htmlspecialchars($C['nom_campagne'] ?? '—')); ?></b></td>
-                        </tr>
-                        <tr>
-                            <th>Groupe</th>
-                            <td><b><?= ucfirst(htmlspecialchars($G['nom_groupe'] ?? '—')); ?></b></td>
-                        </tr>
-                        <tr>
-                            <th>Titres</th>
-                            <td>
-                                <?php
-                                    $titres_html = 'Aucun titre';
-                                    $titres = [];
-                                    for ($i = 1; $i <= 12; $i++) {
-                                        if (!empty($G['titre'.$i])) $titres[] = ucfirst(htmlspecialchars($G['titre'.$i]));
-                                    }
-                                    if (!empty($titres)) $titres_html = implode('<br>', $titres);
-                                    echo $titres_html;
-                                ?>
-                            </td>
-                        </tr>
-                        <tr>
-                            <th>Descriptions</th>
-                            <td>
-                                <?php
-                                    $desc_html = 'Aucune description';
-                                    $descs = [];
-                                    for ($i = 1; $i <= 4; $i++) {
-                                        if (!empty($G['descriptions'.$i])) $descs[] = ucfirst(htmlspecialchars($G['descriptions'.$i]));
-                                    }
-                                    if (!empty($descs)) $desc_html = implode('<br>', $descs);
-                                    echo $desc_html;
-                                ?>
-                            </td>
-                        </tr>
-                        <tr>
-                            <th>Images</th>
-                            <td>
-                                <div class="images-row">
-                                    <?php
-                                    if (!empty($camp_images) && is_array($camp_images)) {
-                                        foreach ($camp_images as $img) {
-                                            $image_base64 = is_object($img) ? ($img->image_base64 ?? '') : ($img['image_base64'] ?? '');
-                                            $image_url = is_object($img) ? ($img->image_url ?? '') : ($img['image_url'] ?? '');
-                                            $src = $image_base64 ?: $image_url;
-                                            if ($src) {
-                                                echo '<span class="img-wrap"><img src="'.htmlspecialchars($src).'" alt="Image annonce"></span>';
-                                            }
-                                        }
-                                    } else {
-                                        echo '<span>—</span>';
-                                    }
-                                    ?>
-                                    </div>
-
-                            </td>
-                        </tr>
-                        <tr>
-                            <th>URL</th>
-                            <td>
-                                <?php $url = htmlspecialchars($G['url_groupe_annonce'] ?? ''); ?>
-                                <?php if ($url): ?>
-                                    <?php if (empty($is_pdf)): ?>
-                                        <a href="<?= $url; ?>" target="_blank"><?= $url; ?></a>
-                                    <?php else: ?>
-                                        <?= $url; ?>
-                                    <?php endif; ?>
+									
+                                </td>
+                            </tr>
+                            <tr>
+                                <th style="padding: 12px; border: 1px solid #dee2e6; background-color: #007bff; color: #fff; width: 20%;">Groupe d'annonces</th>
+                                <td style="padding: 12px; border: 1px solid #dee2e6; text-align: center;"><b><?= htmlspecialchars($G['nom_groupe'] ?? ''); ?></b></td>
+                            </tr>
+                            <tr>
+                                <th style="padding: 12px; border: 1px solid #dee2e6; background-color: #007bff; color: #fff; width: 20%;">Titres</th>
+                                <td style="padding: 12px; border: 1px solid #dee2e6; text-align: center;   text-transform: capitalize;"> <?php
+                                $titres = [];
+                                for ($i=1;$i<=12;$i++) if (!empty($G['titre'.$i])) $titres[] = htmlspecialchars($G['titre'.$i]);
+                                echo !empty($titres) ? implode('<br>', $titres) : 'Aucun titre';
+                                ?></td>
+                            </tr>
+                            <tr>
+                                <th style="padding: 12px; border: 1px solid #dee2e6; background-color: #007bff; color: #fff; width: 20%;   text-transform: capitalize;">Descriptions</th>
+                                <td style="padding: 12px; border: 1px solid #dee2e6; text-align: center;   text-transform: capitalize;"><?php
+                            $desc = [];
+                            for ($i=1;$i<=4;$i++) if (!empty($G['descriptions'.$i])) $desc[] = htmlspecialchars($G['descriptions'.$i]);
+                            echo !empty($desc) ? implode('<br>', $desc) : 'Aucune description';
+                            ?></td>
+                            </tr>
+                             <tr>
+                                <th style="padding: 12px; border: 1px solid #dee2e6; background-color: #007bff; color: #fff; width: 20%;">Images</th>
+                                <td style="padding: 12px; border: 1px solid #dee2e6; text-align: center;">
+                                    
+                                <div class="images-row" >   
+                                <?php if (!empty($campImages) && is_array($campImages)): ?>
+                                <?php foreach($campImages as $img):
+                                    $b64 = is_object($img) ? ($img->image_base64 ?? '') : ($img['image_base64'] ?? '');
+                                    $url = is_object($img) ? ($img->image_url ?? '')    : ($img['image_url'] ?? '');
+                                    $src = $b64 ?: $url;
+                                    if ($src): ?>
+                                    <img src="<?= htmlspecialchars($src); ?>" alt="Image annonce" style="width:160px;height:120px;border-radius:10px; margin-top: 20px;">
+                                    <?php endif; endforeach; ?>
                                 <?php else: ?>
-                                    &mdash;
+                                — 
                                 <?php endif; ?>
-                            </td>
-                        </tr>
+                                </div>
+                            </tr>                        
+                             <?php if ($G['type_campagnes'] == 1): ?>
+                                <tr>
+                                    <th style="padding: 12px; border: 1px solid #dee2e6; background-color: #007bff; color: #fff; width: 20%;">Chemin 1</th>
+                                    <td style="padding: 12px; border: 1px solid #dee2e6; text-align: center;"><?php echo $G['chemin1']; ?></td>
+                                </tr>
+                                <tr>
+                                    <th style="padding: 12px; border: 1px solid #dee2e6; background-color: #007bff; color: #fff; width: 20%;">Chemin 2</th>
+                                    <td style="padding: 12px; border: 1px solid #dee2e6; text-align: center;"><?php echo $G['chemin2']; ?></td>
+                                </tr>
+                            <?php endif; ?>
+                            <tr>
+                                    <th style="padding: 12px; border: 1px solid #dee2e6; background-color: #007bff; color: #fff; width: 20%;">URL</th>
+                                    <td style="padding: 12px; border: 1px solid #dee2e6; text-align: center;">
+                                        <?php $url = trim((string)($G['url_groupe_annonce'] ?? '')); ?>
+                                <?php if ($url): ?>
+                                    <a href="<?= htmlspecialchars($url); ?>" target="_blank" rel="noopener"><?= htmlspecialchars($url); ?></a>
+                                <?php else: ?>—<?php endif; ?></td>
+                                </tr>
+                        
+                            
+                            
+                        </tbody>
                     </table>
-
-                    <?php if (empty($is_pdf)): ?>
-                    <button class="edit-btn" onclick="openEditGroupe('<?= htmlspecialchars($G['idgroupe_annonce'] ?? ''); ?>')">
-                        <i class="fa fa-edit"></i> Modifier ce groupe
-                    </button>
-                    <?php endif; ?>
-                </div>
-                <?php endforeach; ?>
+           
+             </div>  
+             <?php endforeach; ?>
             <?php endforeach; ?>
-        <?php else: ?>
+            <?php else: ?>
             <p>Aucun groupe d'annonces à afficher.</p>
+            <?php endif; ?>
+
+
+            <?php if (!empty($extensions) && is_array($extensions)): ?>
+            <div class="section">
+     
+                <div>
+                    <img src="<?php echo $logo_base64; ?>" alt="Logo" style="max-width: 150px; width: 100%; height: auto;">
+                    <h2 style="text-align: right; margin-top: -30px; color: black">Extensions</h2>
+                </div>
+
+                <table style="width: 100%; border-collapse: collapse; border: 1px solid #dee2e6; background-color: #fff;">
+                    <thead style="background-color: #4EA5FE; color: #fff;">
+                        <tr>
+                            <th style="padding: 12px; border: 1px solid #dee2e6;">Liens annexes</th>
+                            <th style="padding: 12px; border: 1px solid #dee2e6;">Accroche</th>
+                            <th style="padding: 12px; border: 1px solid #dee2e6;">Extraits de site</th>
+                            <th style="padding: 12px; border: 1px solid #dee2e6;">Lieu</th>
+                            <th style="padding: 12px; border: 1px solid #dee2e6;">Appel</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php $i = 0; ?>
+                        <?php foreach ($extensions as $E): ?>
+                            <tr style="background-color: <?php echo ($i % 2 == 0) ? '#fff' : '#fff'; ?>;">
+                                <td style="padding: 12px; border: 1px solid #dee2e6;">
+                                    <strong><?php echo $E['titre_extensions']; ?></strong><br>
+                                    <?php echo $E['description_extensions']; ?><br>
+                                    <a href="<?php echo $E['url_extensions']; ?>" style="color: #007bff; text-decoration: none;"><?php echo $E['url_extensions']; ?></a>
+                                </td>
+                                <?php if ($i === 0): ?>
+                                    <td rowspan="<?php echo count($extensions); ?>" style="padding: 12px; border: 1px solid #dee2e6;text-align: center;"><?php echo $E['extensions_accroche']; ?></td>
+                                    <td rowspan="<?php echo count($extensions); ?>" style="padding: 12px; border: 1px solid #dee2e6;text-align: center;"><?php echo $E['extensions_extrait_site']; ?></td>
+                                    <td rowspan="<?php echo count($extensions); ?>" style="padding: 12px; border: 1px solid #dee2e6;text-align: center;"><?php echo $E['extensions_lieu']; ?></td>
+                                    <td rowspan="<?php echo count($extensions); ?>" style="padding: 12px; border: 1px solid #dee2e6;text-align: center;"><?php echo $E['extensions_appel']; ?></td>
+                                <?php endif; ?>
+                            </tr>
+                            <?php $i++; ?>
+                        <?php endforeach; ?>
+                    </tbody>
+                </table>
+            </div>
+            
         <?php endif; ?>
-    </div>
 
-    <?php if (empty($is_pdf)): ?>
-    <div class="action-btns">
-        <a href="<?= base_url('Googleads/save_campagne_clients/'.($campagnes[0]['idcampagne'] ?? '')); ?>" class="btn btn-validate"><i class="fa fa-check"></i> Valider la campagne</a>
-        <a href="<?= base_url('Validation/export_rendu/'.$campagnes[0]['idclients'].'?action=export'); ?>" class="btn btn-export" target="_blank"><i class="fa fa-file-pdf"></i> Exporter en PDF</a>
-    </div>
-    <?php endif; ?>
+        <div class="section">
+             
+                <img src="<?php echo $logo_base64; ?>" alt="Logo" style="max-width: 150px; width: 100%; height: auto;">
+                <h2 style="text-align: right; margin-top: -30px; color: black">Mots Clés à exclure</h2>
+            </div>
 
-</div>
-
-<?php if (empty($is_pdf)): ?>
-<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
-<script>
-function openEditCampaign(id){ console.log('openEditCampaign', id); }
-function openEditGroupe(id){ console.log('openEditGroupe', id); }
-</script>
-<?php endif; ?>
-
-</body>
-</html>
+            <table style="width: 100%; border-collapse: collapse; border: 1px solid #dee2e6; background-color: #fff;">
+                <thead style="background-color: #4EA5FE; color: #fff;">
+                    <tr>
+                        <th colspan="2" style="padding: 12px; border: 1px solid #dee2e6; text-align: center;">Liste</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php $hasContent = false; ?>
+                    <?php foreach ($exlusions as $D): ?>
+                        <?php if ($D['exclusion'] != NULL): ?>
+                            <?php $hasContent = true; ?>
+                            <?php
+                            $exclusion = htmlspecialchars($D['exclusion']);
+                            $lines = explode("\n", $exclusion);
+                            $lineCount = count($lines);
+                            if ($lineCount > 21) {
+                                $firstPart = implode("\n", array_slice($lines, 0, 21));
+                                $secondPart = implode("\n", array_slice($lines, 21));
+                            } else {
+                                $firstPart = $exclusion;
+                                $secondPart = '';
+                            }
+                            ?>
+                            <tr style="background-color: <?php echo ($i % 2 == 0) ? '#fff' : '#fff'; ?>;">
+                                <td style="padding: 12px; border: 1px solid #dee2e6; text-align: center;"><?php echo nl2br($firstPart); ?></td>
+                                <?php if (!empty($secondPart)): ?>
+                                    <td style="padding: 12px; border: 1px solid #dee2e6; text-align: center;"><?php echo nl2br($secondPart); ?></td>
+                                <?php endif; ?>
+                            </tr>
+                        <?php endif; ?>
+                    <?php endforeach; ?>
+                    <?php if (!$hasContent): ?>
+                        <tr><td colspan="2" style="padding: 12px; border: 1px solid #dee2e6; text-align: center;">Aucune exclusion</td></tr>
+                    <?php endif; ?>
+                </tbody>
+            </table>
+        </div>
+        </div>
+   

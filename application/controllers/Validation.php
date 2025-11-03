@@ -64,24 +64,7 @@ class Validation extends CI_Controller
 		$this->data["extensions"] = $this->visuels_model->getextensionsByIdc($id);
 		$this->load->view("templates/v3/edit_extensions_validation", $this->data);
 	}
-	public function updateextensions()
-	{
-		$idclients = $this->input->post('idclients');
-		$idextensions = $this->input->post('idextensions');
-		$data = array(
-			'idextensions' => $this->input->post('idextensions'),
-			'titre_extensions' => $this->input->post('titre_extensions'),
-			'description_extensions' => $this->input->post('description_extensions'),
-			'url_extensions' => $this->input->post('url_extensions'),
-			'extensions_accroche' => $this->input->post('extensions_accroche'),
-			'extensions_extrait_site' => $this->input->post('extensions_extrait_site'),
-			'extensions_lieu' => $this->input->post('extensions_lieu'),
-			'extensions_appel' => $this->input->post('extensions_appel')
-		);
-		$this->Donne_modele->updateextensions($idextensions, $data);
-		$this->session->set_flashdata('message-success', 'Extenions mis à jours.');
-		redirect('Validation/validation_structure/' . $idclients);
-	}
+
 	public function exclusion()
 	{
 		$exclusion = $this->input->post('exclusion');
@@ -270,30 +253,59 @@ endif;
 
 		echo json_encode(['status' => 'success']);
 	}
+   public function updateExtensions() {
+        $post = $this->input->post();
+        $idclients = $post['idclients'] ?? null;
 
+        if (!$idclients) {
+            show_error('ID client manquant.');
+        }
+
+        $extensions = [
+            'extensions_accroche' => $post['extensions_accroche'],
+            'extensions_extrait_site' => $post['extensions_extrait_site'],
+            'extensions_lieu' => $post['extensions_lieu'],
+            'extensions_appel' => $post['extensions_appel'],
+        ];
+
+        $this->Extension_model->updateExtensions($idclients, $extensions);
+
+        redirect('Validation/validation_structure/' . $idclients);
+    }
+
+    // Mettre à jour les exclusions
+    public function updateExclusions() {
+        $post = $this->input->post();
+        $idclients = $post['idclients'] ?? null;
+
+        if (!$idclients) {
+            show_error('ID client manquant.');
+        }
+
+        $exclusion = explode("\n", trim($post['exclusions'] ?? ''));
+        $this->visuels_model->exclusion($id, $exclusion);
+		
+
+        redirect('Validation/validation_structure/' . $idclients);
+    }
 	/**
  * Affiche la page de validation et gère l'export via ?action=export
  */
 public function validation_structure(int $id)
     {
-        // 1) Logo statique (base64)
+        // 1️⃣ Logo statique
         $this->data['logo_base64'] = $this->encode_local_image_to_data_uri(
             FCPATH.(defined('IMAGES_PATH') ? IMAGES_PATH : 'assets/images').'/logo/logo3.png'
         );
 
-        // 2) Charger les campagnes du client, puis hydrater groupes + images
+        // 2️⃣ Charger les campagnes + groupes + images
         $campagnes = $this->Visuels_model->get_campagnes_by_client($id);
         if (is_array($campagnes)) {
             foreach ($campagnes as &$campagne) {
-                // Groupes d’annonces
                 $campagne['groupes_annonces'] = $this->Visuels_model->get_groupes_by_campagne($campagne['idcampagne']) ?: [];
-
-                // Images de campagne
                 $campagne['images'] = $this->Image_model->get_images_by_campagne($campagne['idcampagne']) ?: [];
 
-                // Normaliser les images (base64 si fichier local)
                 foreach ($campagne['images'] as &$img) {
-                    // $img est stdClass (d’après ton var_dump)
                     $pathOrUrl = isset($img->image_url) ? $img->image_url : '';
                     $img->image_base64 = $this->maybe_data_uri($pathOrUrl);
                 }
@@ -301,40 +313,91 @@ public function validation_structure(int $id)
             }
             unset($campagne);
         }
+        $idclients = $id;
         $this->data['campagnes'] = $campagnes ?: [];
         $this->data['id'] = $id;
-
-        // 3) Action (export PDF ?)
-        $action = $this->input->get('action', true);
-        $this->data['action'] = $action;
-        $is_export = ($action === 'export');
-
-        if ($is_export) {
-            $this->data['is_pdf'] = true;
-            $html = $this->load->view('templates/v3/Validation_structure', $this->data, true);
-
-            // Optionnel: dump debug HTML
-            // file_put_contents(FCPATH.'debug_validation_structure.html', $html);
-
-            // Dompdf
-            $options = new \Dompdf\Options();
-            $options->set('isRemoteEnabled', true);
-            $options->set('defaultFont', 'DejaVu Sans');
-
-            $dompdf = new \Dompdf\Dompdf($options);
-            $dompdf->setPaper('A4', 'landscape');
-            $dompdf->loadHtml($html, 'UTF-8');
-            $dompdf->render();
-
-            $filename = 'validation_structure_'.$id.'_'.date('Ymd_His').'.pdf';
-            $dompdf->stream($filename, ['Attachment' => 0]);
-            return; // fin
-        }
-
-        // 4) Affichage normal
         $this->data['is_pdf'] = false;
+        $this->data['extensions'] = $this->Donne_modele->get_extensions_by_clients($idclients);
+        $this->data["exlusions"] = $this->Visuels_model->get_exclusions($idclients);
+        // 3️⃣ Afficher la page normale
         $this->load->view('templates/v3/Validation_structure', $this->data);
     }
+
+    public function exporter(int $id)
+{
+    // 1️⃣ Récupération des données
+    $this->data['logo_base64'] = $this->encode_local_image_to_data_uri(
+        FCPATH.(defined('IMAGES_PATH') ? IMAGES_PATH : 'assets/images').'/logo/logo3.png'
+    );
+
+    $campagnes = $this->Visuels_model->get_campagnes_by_client($id);
+    if (is_array($campagnes)) {
+        foreach ($campagnes as &$campagne) {
+            $campagne['groupes_annonces'] = $this->Visuels_model->get_groupes_by_campagne($campagne['idcampagne']) ?: [];
+            $campagne['images'] = $this->Image_model->get_images_by_campagne($campagne['idcampagne']) ?: [];
+
+            foreach ($campagne['images'] as &$img) {
+                $pathOrUrl = isset($img->image_url) ? $img->image_url : '';
+                // Assure-toi que maybe_data_uri() existe dans la classe
+                $img->image_base64 = $this->maybe_data_uri($pathOrUrl);
+            }
+            unset($img);
+        }
+        unset($campagne);
+    }
+
+    $this->data['campagnes'] = $campagnes ?: [];
+    $this->data['id'] = $id;
+    $this->data['is_pdf'] = true;
+    $idclients = $id;
+        $this->data['extensions'] = $this->Donne_modele->get_extensions_by_clients($idclients);
+        $this->data["exlusions"] = $this->Visuels_model->get_exclusions($idclients);
+    $groupe_valider = $this->Donne_modele->getcampagnegroupevalidationbyidclients($idclients);
+		$groupes_par_campagne = [];
+
+		foreach ($groupe_valider as $groupe) {
+			$idcampagne = $groupe['idcampagne'];
+			if (!isset($groupes_par_campagne[$idcampagne])) {
+				$groupes_par_campagne[$idcampagne] = [];
+			}
+			$groupes_par_campagne[$idcampagne][] = $groupe;
+		}
+        $this->data['groupe_valider'] = $groupe_valider;
+
+    // 2️⃣ Générer le HTML
+    $html = $this->load->view('templates/v3/Validation_structure_pdf', $this->data, true);
+
+    // 3️⃣ Options Dompdf
+    $options = new Options();
+    $options->set('isRemoteEnabled', true);
+    $options->set('defaultFont', 'DejaVu Sans');
+    $options->set('isHtml5ParserEnabled', true);
+    $options->set('enable_css_float', true);
+    // optionnel :
+    $options->set('debugPng', false);
+
+    // 4️⃣ Render + stream dans try/catch et nettoyer le buffer
+    try {
+        $dompdf = new Dompdf($options);
+        $dompdf->setPaper('A3', 'landscape');
+        $dompdf->loadHtml($html, 'UTF-8');
+        $dompdf->render();
+
+        // Nettoyage d'éventuels buffers pour éviter PDF corrompu
+        if (ob_get_length()) {
+            @ob_end_clean();
+        }
+
+        $filename = 'validation_structure_'.$id.'_'.date('Ymd_His').'.pdf';
+        // Affiche dans le navigateur (Attachment => 0). Pour forcer le téléchargement => 1
+        $dompdf->stream($filename, ['Attachment' => 0]);
+        exit; // termine proprement après l'envoi
+    } catch (\Exception $e) {
+        // Log et message d'erreur lisible (à adapter à ton logger)
+        log_message('error', 'Dompdf error: '.$e->getMessage());
+        show_error('Erreur lors de la génération du PDF. Voir les logs serveur.');
+    }
+}
 
     /**
      * POST depuis le modal "Modifier la campagne"
@@ -388,6 +451,57 @@ public function validation_structure(int $id)
         $this->session->set_flashdata('success','Campagne mise à jour.');
         return $this->_redirect_back();
     }
+    /**
+ * Convertit un chemin local ou une URL en data:image/...;base64,... 
+ * Retourne la data-uri ou '' en cas d'échec.
+ */
+protected function maybe_data_uri(string $pathOrUrl = ''): string
+{
+    $pathOrUrl = trim($pathOrUrl);
+    if ($pathOrUrl === '') return '';
+
+    // si déjà data-uri
+    if (strpos($pathOrUrl, 'data:') === 0) return $pathOrUrl;
+
+    // déterminer si URL distante
+    $isRemote = preg_match('#^https?://#i', $pathOrUrl);
+
+    // Tentative de lecture
+    $contents = false;
+    if ($isRemote) {
+        // Préférer curl pour robustesse
+        if (function_exists('curl_init')) {
+            $ch = curl_init($pathOrUrl);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
+            curl_setopt($ch, CURLOPT_TIMEOUT, 8);
+            $contents = @curl_exec($ch);
+            $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+            curl_close($ch);
+            if ($contents === false || $httpCode >= 400) $contents = false;
+        } elseif (ini_get('allow_url_fopen')) {
+            $contents = @file_get_contents($pathOrUrl);
+        }
+    } else {
+        // chemin local relatif/absolu
+        if (file_exists($pathOrUrl)) {
+            $contents = @file_get_contents($pathOrUrl);
+        } else {
+            // tenter en l'appendant à FCPATH si c'est un chemin relatif
+            $possible = FCPATH . ltrim($pathOrUrl, '/\\');
+            if (file_exists($possible)) $contents = @file_get_contents($possible);
+        }
+    }
+
+    if ($contents === false) return '';
+
+    // déterminer le mime type
+    $finfo = new finfo(FILEINFO_MIME_TYPE);
+    $mime = $finfo->buffer($contents) ?: 'image/png';
+    $base64 = base64_encode($contents);
+    return "data:{$mime};base64,{$base64}";
+}
+
 
     /**
      * POST depuis le modal "Modifier le groupe d’annonce"
@@ -469,20 +583,7 @@ for ($i=1; $i<=4; $i++) {
      * Retourne une data-uri si $pathOrUrl est un fichier local lisible.
      * Sinon, retourne l’URL telle quelle (ou chaîne vide).
      */
-    private function maybe_data_uri(?string $pathOrUrl): string
-    {
-        $pathOrUrl = (string)$pathOrUrl;
-        if ($pathOrUrl === '') return '';
 
-        // URL absolue ?
-        if (preg_match('#^https?://#i', $pathOrUrl)) {
-            return $pathOrUrl; // laisser tel quel
-        }
-
-        // Chemin relatif → construire chemin absolu local
-        $local = FCPATH.ltrim($pathOrUrl, '/\\');
-        return $this->encode_local_image_to_data_uri($local);
-    }
 
     /**
      * Convertit un fichier image local en data-uri base64 (si lisible), sinon ''.
@@ -555,7 +656,7 @@ public function export_rendu($idclient = null)
     }
 
     // Charger la vue PDF dédiée
-    $html = $this->load->view('templates/v3/Validation_structure_pdf', $this->data, TRUE);
+    $html = $this->load->view('templates/v3/Validation_structure', $this->data, TRUE);
 
     // Sauvegarde de debug (optionnel)
     file_put_contents(FCPATH . 'debug_validation_structure_pdf.html', $html);

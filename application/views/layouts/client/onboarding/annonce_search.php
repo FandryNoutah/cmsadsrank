@@ -107,16 +107,45 @@
 					<!-- Liens annexes -->
 					<div class="form-section-title">Liens annexes</div>
 					<div id="liens-annexes-container">
-						<div class="form-group-wrapper mb-3 p-2 border rounded">
-							<span class="remove-btn">&times;</span>
-							<input type="text" class="form-control mb-2" placeholder="Texte lien annexe" name="texte_annexe[]">
-							<input type="text" class="form-control mb-2" placeholder="Description 1" name="desc1_annexe[]">
-							<input type="text" class="form-control mb-2" placeholder="Description 2" name="desc2_annexe[]">
-							<input type="url" class="form-control mb-2" placeholder="URL" name="url_annexe[]">
-						</div>
+						<?php if (!empty($extensions)): ?>
+							<?php foreach ($extensions as $ext): ?>
+								<div class="form-group-wrapper mb-3 p-2 border rounded">
+									<span class="remove-btn">&times;</span>
+                                    <p>Titre extensions</p>
+									<input type="text" class="form-control mb-2" placeholder="Titre extensions" name="titre_annexe[]" value="<?= htmlspecialchars($ext['titre_extensions']) ?>">
+									<p>Description extensions</p>
+                                    <input type="text" class="form-control mb-2" placeholder="Description extensions" name="extensions_annexe[]" value="<?= htmlspecialchars($ext['description_extensions']) ?>">
+									<p>Extensions Accroche</p>
+                                    <input type="text" class="form-control mb-2" placeholder="Extensions Accroche" name="accroche_annexe[]" value="<?= htmlspecialchars($ext['extensions_accroche']) ?>">
+									<p>Extraits de site</p>
+                                    <input type="text" class="form-control mb-2" placeholder="Extraits de site" name="site_annexe[]" value="<?= htmlspecialchars($ext['extensions_extrait_site']) ?>">
+									<p>Extensions de Lieu</p>
+                                    <input type="text" class="form-control mb-2" placeholder="Extensions de Lieu" name="lieu_annexe[]" value="<?= htmlspecialchars($ext['extensions_lieu']) ?>">
+									<p>Extensions d'appel</p>
+                                    <input type="text" class="form-control mb-2" placeholder="Appel" name="appel_annexe[]" value="<?= htmlspecialchars($ext['extensions_appel']) ?>">
+									<input type="url" class="form-control mb-2" placeholder="URL" name="url_annexe[]" value="<?= htmlspecialchars($ext['url_extensions']) ?>">
+								</div>
+							<?php endforeach; ?>
+						<?php else: ?>
+							<!-- Si aucune extension existante -->
+							<div class="form-group-wrapper mb-3 p-2 border rounded">
+								<span class="remove-btn">&times;</span>
+								<input type="text" class="form-control mb-2" placeholder="Titre extensions" name="titre_annexe[]">
+								<input type="text" class="form-control mb-2" placeholder="Description extensions" name="extensions_annexe[]">
+								<input type="text" class="form-control mb-2" placeholder="Extensions Accroche" name="accroche_annexe[]">
+								<input type="text" class="form-control mb-2" placeholder="Extraits de site" name="site_annexe[]">
+								<input type="text" class="form-control mb-2" placeholder="Extensions de Lieu" name="lieu_annexe[]">
+								<input type="text" class="form-control mb-2" placeholder="Appel" name="appel_annexe[]">
+								<input type="url" class="form-control mb-2" placeholder="URL" name="url_annexe[]">
+							</div>
+						<?php endif; ?>
 					</div>
-					<button type="button" class="btn btn-outline-dark btn-sm mb-5" id="add_lien_annexe">+ Ajouter un lien annexe</button>
 
+					<button type="button" class="btn btn-outline-dark btn-sm mb-5" id="add_lien_annexe">+ Ajouter un lien annexe</button>
+					<div class="form-group">
+							<label>Mots-clés à exclure</label>
+							<textarea class="form-control" rows="15" name="Mots_cle_exclus"><?= isset($mots_exclus[0]['exclusion']) ? htmlentities($mots_exclus[0]['exclusion']) : '' ?></textarea>
+					</div>		
 					<!-- Preview -->
 					<button type="button" class="btn btn-dark btn-sm btn-block mb-3" id="btn-next">Suivant</button>
 					<div id="preview-section" class="preview-card mt-4 d-none">
@@ -139,6 +168,7 @@
 					</div>
 				</div>
 			</form>
+			
 		</div>
 
 		<!-- Colonne droite -->
@@ -214,13 +244,13 @@ $(document).ready(function() {
 		return `<div class="form-group-wrapper mb-2"><input type="text" class="form-control" name="${name}"><span class="remove-btn">&times;</span></div>`;
 	}
 	function newAnnexe() {
-		return `<div class="form-group-wrapper mb-3 p-2 border rounded">
-					<span class="remove-btn">&times;</span>
-					<input type="text" class="form-control mb-2" placeholder="Texte lien annexe" name="texte_annexe[]">
-					<input type="text" class="form-control mb-2" placeholder="Description 1" name="desc1_annexe[]">
-					<input type="text" class="form-control mb-2" placeholder="Description 2" name="desc2_annexe[]">
-					<input type="url" class="form-control mb-2" placeholder="URL" name="url_annexe[]">
-				</div>`;
+		return `	<input type="text" class="form-control mb-2" placeholder="Titre extensions" name="titre_annexe[]">
+							<input type="text" class="form-control mb-2" placeholder="Description extensions" name="extensions_annexe[]">
+							<input type="text" class="form-control mb-2" placeholder="Extensions Accroche" name="accroche_annexe[]">
+							<input type="text" class="form-control mb-2" placeholder="Extraits de site" name="site_annexe[]">
+							<input type="text" class="form-control mb-2" placeholder="Extensions de Lieu" name="lieu_annexe[]">
+							<input type="text" class="form-control mb-2" placeholder="Appel" name="appel_annexe[]">
+							<input type="url" class="form-control mb-2" placeholder="URL" name="url_annexe[]">`;
 	}
 
 	/* === Preview === */

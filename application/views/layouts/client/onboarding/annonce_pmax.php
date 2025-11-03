@@ -164,13 +164,39 @@
                     <!-- Liens annexes -->
                     <div class="form-section-title">Liens annexes</div>
                     <div id="liens-annexes-container">
-                        <div class="form-group">
-                            <input type="text" class="form-control mb-2" placeholder="Texte lien annexe" name="texte_annexe[]">
-                            <input type="text" class="form-control mb-2" placeholder="Description 1" name="desc1_annexe[]">
-                            <input type="text" class="form-control mb-2" placeholder="Description 2" name="desc2_annexe[]">
-                            <input type="url" class="form-control mb-2" placeholder="URL" name="url_annexe[]">
-                        </div>
-                    </div>
+						<?php if (!empty($extensions)): ?>
+							<?php foreach ($extensions as $ext): ?>
+								<div class="form-group-wrapper mb-3 p-2 border rounded">
+									<span class="remove-btn">&times;</span>
+                                    <p>Titre extensions</p>
+									<input type="text" class="form-control mb-2" placeholder="Titre extensions" name="titre_annexe[]" value="<?= htmlspecialchars($ext['titre_extensions']) ?>">
+									<p>Description extensions</p>
+                                    <input type="text" class="form-control mb-2" placeholder="Description extensions" name="extensions_annexe[]" value="<?= htmlspecialchars($ext['description_extensions']) ?>">
+									<p>Extensions Accroche</p>
+                                    <input type="text" class="form-control mb-2" placeholder="Extensions Accroche" name="accroche_annexe[]" value="<?= htmlspecialchars($ext['extensions_accroche']) ?>">
+									<p>Extraits de site</p>
+                                    <input type="text" class="form-control mb-2" placeholder="Extraits de site" name="site_annexe[]" value="<?= htmlspecialchars($ext['extensions_extrait_site']) ?>">
+									<p>Extensions de Lieu</p>
+                                    <input type="text" class="form-control mb-2" placeholder="Extensions de Lieu" name="lieu_annexe[]" value="<?= htmlspecialchars($ext['extensions_lieu']) ?>">
+									<p>Extensions d'appel</p>
+                                    <input type="text" class="form-control mb-2" placeholder="Appel" name="appel_annexe[]" value="<?= htmlspecialchars($ext['extensions_appel']) ?>">
+									<input type="url" class="form-control mb-2" placeholder="URL" name="url_annexe[]" value="<?= htmlspecialchars($ext['url_extensions']) ?>">
+								</div>
+							<?php endforeach; ?>
+						<?php else: ?>
+							<!-- Si aucune extension existante -->
+							<div class="form-group-wrapper mb-3 p-2 border rounded">
+								<span class="remove-btn">&times;</span>
+								<input type="text" class="form-control mb-2" placeholder="Titre extensions" name="titre_annexe[]">
+								<input type="text" class="form-control mb-2" placeholder="Description extensions" name="extensions_annexe[]">
+								<input type="text" class="form-control mb-2" placeholder="Extensions Accroche" name="accroche_annexe[]">
+								<input type="text" class="form-control mb-2" placeholder="Extraits de site" name="site_annexe[]">
+								<input type="text" class="form-control mb-2" placeholder="Extensions de Lieu" name="lieu_annexe[]">
+								<input type="text" class="form-control mb-2" placeholder="Appel" name="appel_annexe[]">
+								<input type="url" class="form-control mb-2" placeholder="URL" name="url_annexe[]">
+							</div>
+						<?php endif; ?>
+					</div>
                     <button type="button" class="btn btn-outline-dark btn-sm mb-5" id="add_lien_annexe">+ Ajouter un lien annexe</button>
 
                     <!-- Preview -->
@@ -245,15 +271,45 @@
 <?php start_section('script'); ?>
 <script>
 $(document).ready(function() {
-    // Gestion ajout/suppression champs dynamiques
+
+    // ==========================================================
+    // 🔧 Suppression dynamique et générateurs de champs
+    // ==========================================================
     $(document).on('click', '.remove-btn', function() {
         $(this).closest('.form-group-wrapper').remove();
     });
-    $('#add_titre').click(() => $('#titres-container').append('<div class="form-group-wrapper mb-2"><input type="text" class="form-control" name="titres[]"><span class="remove-btn">&times;</span></div>'));
-    $('#add_titre_long').click(() => $('#titres-longs-container').append('<div class="form-group-wrapper mb-2"><input type="text" class="form-control" name="titres_longs[]"><span class="remove-btn">&times;</span></div>'));
-    $('#add_description').click(() => $('#descriptions-container').append('<div class="form-group-wrapper mb-2"><input type="text" class="form-control" name="descriptions[]"><span class="remove-btn">&times;</span></div>'));
-    $('#add_lien_annexe').click(() => $('#liens-annexes-container').append('<div class="form-group-wrapper mb-3 p-2 border rounded"><span class="remove-btn">&times;</span><input type="text" class="form-control mb-2" placeholder="Texte lien annexe" name="texte_annexe[]"><input type="text" class="form-control mb-2" placeholder="Description 1" name="desc1_annexe[]"><input type="text" class="form-control mb-2" placeholder="Description 2" name="desc2_annexe[]"><input type="url" class="form-control mb-2" placeholder="URL" name="url_annexe[]"></div>'));
 
+    function newInput(name) {
+        return `<div class="form-group-wrapper mb-2">
+                    <input type="text" class="form-control" name="${name}">
+                    <span class="remove-btn">&times;</span>
+                </div>`;
+    }
+
+    function newAnnexe() {
+        return `<div class="form-group-wrapper mb-3 p-2 border rounded">
+                    <span class="remove-btn">&times;</span>
+                    <input type="text" class="form-control mb-2" placeholder="Titre extensions" name="titre_annexe[]">
+                    <input type="text" class="form-control mb-2" placeholder="Description extensions" name="extensions_annexe[]">
+                    <input type="text" class="form-control mb-2" placeholder="Extensions Accroche" name="accroche_annexe[]">
+                    <input type="text" class="form-control mb-2" placeholder="Extraits de site" name="site_annexe[]">
+                    <input type="text" class="form-control mb-2" placeholder="Extensions de Lieu" name="lieu_annexe[]">
+                    <input type="text" class="form-control mb-2" placeholder="Appel" name="appel_annexe[]">
+                    <input type="url" class="form-control mb-2" placeholder="URL" name="url_annexe[]">
+                </div>`;
+    }
+
+    // ==========================================================
+    // ➕ Ajout dynamique
+    // ==========================================================
+    $('#add_titre').click(() => $('#titres-container').append(newInput('titres[]')));
+    $('#add_titre_long').click(() => $('#titres-longs-container').append(newInput('titres_longs[]')));
+    $('#add_description').click(() => $('#descriptions-container').append(newInput('descriptions[]')));
+    $('#add_lien_annexe').click(() => $('#liens-annexes-container').append(newAnnexe()));
+
+    // ==========================================================
+    // 🖼️ Gestion des images
+    // ==========================================================
     const propositionCard = $('#propositionImagesCard');
     const propositionContainer = $('#propositionImagesContainer');
     const imagePreviewContainer = $('#imagePreviewContainer');
@@ -325,31 +381,37 @@ $(document).ready(function() {
         }, 'json');
     });
 
-function updatePreview() {
-    const collectInput = name => $('input[name="'+name+'[]"]').map(function(){return $(this).val().trim();}).get().filter(v=>v!=='');
-    $('#preview-titres').html(collectInput('titres').join('<br>') || 'Aucun titre');
-    $('#preview-titres-longs').html(collectInput('titres_longs').join('<br>') || 'Aucun titre long');
-    $('#preview-descriptions').html(collectInput('descriptions').join('<br>') || 'Aucune description');
-    $('#preview-url').text($('#url_campagne').val().trim() || 'Aucune URL');
-    $('#Description-brève').text($('input[name="Description_brève"]').val().trim() || 'Aucune description brève');
+    // ==========================================================
+    // 👁️ Aperçu de la campagne
+    // ==========================================================
+    function updatePreview() {
+        const collectInput = name => $('input[name="'+name+'[]"]').map(function(){return $(this).val().trim();}).get().filter(v=>v!=='');
+        $('#preview-titres').html(collectInput('titres').join('<br>') || 'Aucun titre');
+        $('#preview-titres-longs').html(collectInput('titres_longs').join('<br>') || 'Aucun titre long');
+        $('#preview-descriptions').html(collectInput('descriptions').join('<br>') || 'Aucune description');
+        $('#preview-url').text($('#url_campagne').val().trim() || 'Aucune URL');
+        $('#Description-brève').text($('input[name="Description_brève"]').val().trim() || 'Aucune description brève');
 
-    // Toutes les images sélectionnées
-    const imgs = propositionContainer.find('img').map(function(){ return $(this).attr('src'); }).get();
-    if (imgs.length) {
-        let html = imgs.map(src => `<img src="${src}" width="120" style="object-fit:cover; border-radius:4px; margin:2px;">`).join('');
-        $('#image').html(html);
-    } else {
-        $('#image').text('Aucune image');
+        const imgs = propositionContainer.find('img').map(function(){ return $(this).attr('src'); }).get();
+        if (imgs.length) {
+            let html = imgs.map(src => `<img src="${src}" width="120" style="object-fit:cover; border-radius:4px; margin:2px;">`).join('');
+            $('#image').html(html);
+        } else {
+            $('#image').text('Aucune image');
+        }
     }
-}
 
-
-	
-
-    $('#btn-next').click(function() { updatePreview(); $('#preview-section').removeClass('d-none'); $('html, body').animate({scrollTop: $("#preview-section").offset().top}, 600); });
+    $('#btn-next').click(function() {
+        updatePreview();
+        $('#preview-section').removeClass('d-none');
+        $('html, body').animate({scrollTop: $("#preview-section").offset().top}, 600);
+    });
+    
     $('#refresh-preview').click(updatePreview);
 
+    // Charger les images au démarrage
     loadImages();
 });
 </script>
+
 <?php end_section(); ?>

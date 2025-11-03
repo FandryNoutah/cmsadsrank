@@ -200,14 +200,110 @@ a{color:var(--primary);text-decoration:none;}
     <?php endif; ?>
   </div>
 
+      
+  <?php if (!empty($extensions) && is_array($extensions)): ?>
+            <div class="section">
+     
+            <div>
+                <img src="<?php echo $logo_base64; ?>" alt="Logo" style="max-width: 150px; width: 100%; height: auto;">
+                <h2 style="text-align: right; margin-top: -30px; color: black">Extensions</h2>
+            </div>
+
+                <table style="width: 100%; border-collapse: collapse; border: 1px solid #dee2e6; background-color: #fff;">
+                    <thead style="background-color: #4EA5FE; color: #fff;">
+                        <tr>
+                            <th style="padding: 12px; border: 1px solid #dee2e6;">Liens annexes</th>
+                            <th style="padding: 12px; border: 1px solid #dee2e6;">Accroche</th>
+                            <th style="padding: 12px; border: 1px solid #dee2e6;">Extraits de site</th>
+                            <th style="padding: 12px; border: 1px solid #dee2e6;">Lieu</th>
+                            <th style="padding: 12px; border: 1px solid #dee2e6;">Appel</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php $i = 0; ?>
+                        <?php foreach ($extensions as $E): ?>
+                            <tr style="background-color: <?php echo ($i % 2 == 0) ? '#f8f9fa' : '#fff'; ?>;">
+                                <td style="padding: 12px; border: 1px solid #dee2e6;">
+                                    <strong><?php echo $E['titre_extensions']; ?></strong><br>
+                                    <?php echo $E['description_extensions']; ?><br>
+                                    <a href="<?php echo $E['url_extensions']; ?>" style="color: #007bff; text-decoration: none;"><?php echo $E['url_extensions']; ?></a>
+                                </td>
+                                <?php if ($i === 0): ?>
+                                    <td rowspan="<?php echo count($extensions); ?>" style="padding: 12px; border: 1px solid #dee2e6;text-align: center;"><?php echo $E['extensions_accroche']; ?></td>
+                                    <td rowspan="<?php echo count($extensions); ?>" style="padding: 12px; border: 1px solid #dee2e6;text-align: center;"><?php echo $E['extensions_extrait_site']; ?></td>
+                                    <td rowspan="<?php echo count($extensions); ?>" style="padding: 12px; border: 1px solid #dee2e6;text-align: center;"><?php echo $E['extensions_lieu']; ?></td>
+                                    <td rowspan="<?php echo count($extensions); ?>" style="padding: 12px; border: 1px solid #dee2e6;text-align: center;"><?php echo $E['extensions_appel']; ?></td>
+                                <?php endif; ?>
+                                 <button class="btn btn-primary btn-sm float-right" onclick="openEditExtensions()">Modifier</button>
+                            </tr>
+                            <?php $i++; ?>
+                        <?php endforeach; ?>
+                    </tbody>
+                 
+
+                </table>
+            </div>
+            
+        <?php endif; ?>
+
+        <div class="section">
+             
+                <img src="<?php echo $logo_base64; ?>" alt="Logo" style="max-width: 150px; width: 100%; height: auto;">
+                <h2 style="text-align: right; margin-top: -30px; color: black">Mots Clés à exclure</h2>
+            </div>
+
+            <table style="width: 100%; border-collapse: collapse; border: 1px solid #dee2e6; background-color: #fff;">
+                <thead style="background-color: #4EA5FE; color: #fff;">
+                    <tr>
+                        <th colspan="2" style="padding: 12px; border: 1px solid #dee2e6; text-align: center;">Liste</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php $hasContent = false; ?>
+                    <?php foreach ($exlusions as $D): ?>
+                        <?php if ($D['exclusion'] != NULL): ?>
+                            <?php $hasContent = true; ?>
+                            <?php
+                            $exclusion = htmlspecialchars($D['exclusion']);
+                            $lines = explode("\n", $exclusion);
+                            $lineCount = count($lines);
+                            if ($lineCount > 21) {
+                                $firstPart = implode("\n", array_slice($lines, 0, 21));
+                                $secondPart = implode("\n", array_slice($lines, 21));
+                            } else {
+                                $firstPart = $exclusion;
+                                $secondPart = '';
+                            }
+                            ?>
+                            <tr style="background-color: <?php echo ($i % 2 == 0) ? '#f8f9fa' : '#fff'; ?>;">
+                                <td style="padding: 12px; border: 1px solid #dee2e6; text-align: center;"><?php echo nl2br($firstPart); ?></td>
+                                <?php if (!empty($secondPart)): ?>
+                                    <td style="padding: 12px; border: 1px solid #dee2e6; text-align: center;"><?php echo nl2br($secondPart); ?></td>
+                                <?php endif; ?>
+                            </tr>
+                        <?php endif; ?>
+                    <?php endforeach; ?>
+                    <?php if (!$hasContent): ?>
+                        <tr><td colspan="2" style="padding: 12px; border: 1px solid #dee2e6; text-align: center;">Aucune exclusion</td></tr>
+                    <?php endif; ?>
+                </tbody>
+                <button class="btn btn-primary btn-sm float-right" onclick="openEditExclusions()">Modifier</button>
+
+
+            </table>
+        </div>
+        </div>
+
   <div class="action-btns">
     <a href="<?= base_url('Googleads/save_campagne_clients/'.($campagnes[0]['idcampagne'] ?? '')); ?>" class="btn btn-validate">
       <i class="fa fa-check"></i> Valider la campagne
     </a>
     <!-- lien export aligné avec le contrôleur -->
-    <a href="<?= base_url('Validation/validation_structure/'.($id ?? ($campagnes[0]['idclients'] ?? '')).'?action=export'); ?>" class="btn btn-export" target="_blank">
+    <a href="<?= base_url('Validation/exporter/'.($campagnes[0]['idclients'] ?? '')); ?>" 
+      class="btn btn-export" target="_blank">
       <i class="fa fa-file-pdf"></i> Exporter en PDF
     </a>
+
   </div>
 
   <!-- Modal GROUPE -->
@@ -263,6 +359,72 @@ a{color:var(--primary);text-decoration:none;}
       </div>
     </div>
   </div>
+  <!-- Modal EXTENSIONS -->
+<div class="modal fade" id="modalEditExtensions" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <form id="formEditExtensions" method="POST" action="<?= site_url('Validation/updateExtensions'); ?>">
+       <input type="hidden" name="idclients" value="<?= $campagnes[0]['idclients'] ?? ''; ?>">
+      <div class="modal-content">
+        <div class="modal-header bg-primary text-white">
+          <h5 class="modal-title">Modifier les Extensions</h5>
+          <button type="button" class="close text-white" data-dismiss="modal">&times;</button>
+        </div>
+        <div class="modal-body">
+          <div class="form-group">
+            <label>Liens annexes</label>
+            <textarea name="liens_annexes" id="edit_liens_annexes" class="form-control" rows="3"></textarea>
+          </div>
+          <div class="form-group">
+            <label>Accroche</label>
+            <textarea name="extensions_accroche" id="edit_extensions_accroche" class="form-control" rows="2"></textarea>
+          </div>
+          <div class="form-group">
+            <label>Extraits de site</label>
+            <textarea name="extensions_extrait_site" id="edit_extensions_extrait_site" class="form-control" rows="2"></textarea>
+          </div>
+          <div class="form-group">
+            <label>Lieu</label>
+            <input type="text" name="extensions_lieu" id="edit_extensions_lieu" class="form-control">
+          </div>
+          <div class="form-group">
+            <label>Appel</label>
+            <input type="text" name="extensions_appel" id="edit_extensions_appel" class="form-control">
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Annuler</button>
+          <button type="submit" class="btn btn-success">Enregistrer</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Modal EXCLUSIONS -->
+<div class="modal fade" id="modalEditExclusions" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <form id="formEditExclusions" method="POST" action="<?= site_url('Validation/updateExclusions'); ?>">
+       <input type="hidden" name="idclients" value="<?= $campagnes[0]['idclients'] ?? ''; ?>">
+      <div class="modal-content">
+        <div class="modal-header bg-primary text-white">
+          <h5 class="modal-title">Modifier les Mots-Clés à Exclure</h5>
+          <button type="button" class="close text-white" data-dismiss="modal">&times;</button>
+        </div>
+        <div class="modal-body">
+          <div class="form-group">
+            <label>Liste des mots-clés exclus (un par ligne)</label>
+            <textarea name="exclusion" id="edit_exclusion" class="form-control" rows="8"></textarea>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Annuler</button>
+          <button type="submit" class="btn btn-success">Enregistrer</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+
 
 </div><!-- /.container -->
 
@@ -270,6 +432,30 @@ a{color:var(--primary);text-decoration:none;}
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
 
 <script>
+
+  const extensionsJS = <?= json_encode($extensions ?? []); ?>;
+const exclusionsJS = <?= json_encode($exlusions ?? []); ?>;
+
+function openEditExtensions() {
+  if (extensionsJS.length > 0) {
+    const ext = extensionsJS[0];
+    $('#edit_liens_annexes').val(ext.titre_extensions + "\n" + ext.description_extensions + "\n" + ext.url_extensions);
+    $('#edit_extensions_accroche').val(ext.extensions_accroche);
+    $('#edit_extensions_extrait_site').val(ext.extensions_extrait_site);
+    $('#edit_extensions_lieu').val(ext.extensions_lieu);
+    $('#edit_extensions_appel').val(ext.extensions_appel);
+  }
+  $('#modalEditExtensions').modal('show');
+}
+
+function openEditExclusions() {
+  if (exclusionsJS.length > 0) {
+    let excl = exclusionsJS.map(e => e.exclusion).filter(Boolean).join("\n");
+    $('#edit_exclusion').val(excl);
+  }
+  $('#modalEditExclusions').modal('show');
+}
+
 // Dataset JS
 const campagnesJS = <?= json_encode($campagnes ?? []); ?>;
 const groupesData = [
@@ -320,5 +506,6 @@ function openEditGroupe(id){
   $('#modalEditGroupe').modal('show');
 }
 </script>
+
 </body>
 </html>

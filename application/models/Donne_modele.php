@@ -13,6 +13,25 @@ class Donne_modele extends CI_Model
 	{
 		parent::__construct();
 	}
+	public function insert_extension($data)
+	{
+		return $this->db->insert('extensions', $data);
+	}
+
+	public function get_extensions_by_campagne($idcampagne)
+	{
+		return $this->db->get_where('extensions', ['idcampagne' => $idcampagne])->result_array();
+	}
+	public function get_extensions_by_clients($idclients)
+	{
+		return $this->db->get_where('extensions', ['idclients' => $idclients])->result_array();
+	}
+
+	public function delete_extensions_by_campagne($idcampagne)
+	{
+		return $this->db->delete('extensions', ['idcampagne' => $idcampagne]);
+	}
+
 	public function update_send_annonce($idonnee, $statut) {
 			$this->db->select('idclients');
 			$this->db->from('donnee');
@@ -862,6 +881,7 @@ class Donne_modele extends CI_Model
 	public function update_groupe_search($idgroupe_annonce, $data)
 	{
 		// Mise à jour des données dans la table des groupes d'annonces en fonction de l'ID
+		$this->load->database();
 		$this->db->where('idgroupe_annonce', $idgroupe_annonce);
 		return $this->db->update('groupe_annonce', $data);
 	}

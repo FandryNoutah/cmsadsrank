@@ -168,8 +168,23 @@ class Client extends MY_Controller
 		$email_campagne = $this->input->post('email_campagne');
 		$adresse_campagne = $this->input->post('adresse_campagne');
 
+		// Données des extensions
+		$titre_annexe = $this->input->post('titre_annexe');
+		$extensions_annexe = $this->input->post('extensions_annexe');
+		$accroche_annexe = $this->input->post('accroche_annexe');
+		$site_annexe = $this->input->post('site_annexe');
+		$lieu_annexe = $this->input->post('lieu_annexe');
+		$appel_annexe = $this->input->post('appel_annexe');
+		$url_annexe = $this->input->post('url_annexe');
+
+		$exclusion = $this->input->post('Mots_cle_exclus');
+		$id = $idclients;
+
+		$this->visuels_model->exclusion($id, $exclusion);
+
 		$statut = 1;
 
+		// Préparer les données du groupe
 		$data = array(
 			'idgroupe_annonce' => $idgroupe_annonce,
 			'idcampagne'       => $idcampagne,
@@ -182,28 +197,56 @@ class Client extends MY_Controller
 			'adresse_campagne' => $adresse_campagne
 		);
 
+		// Titres
 		for ($i = 0; $i < 12; $i++) {
 			$data['titre' . ($i + 1)] = $titres[$i] ?? null;
 		}
 
+		// Titres longs
 		for ($i = 0; $i < 5; $i++) {
 			$data['longtitre' . ($i + 1)] = $titres_longs[$i] ?? null;
 		}
 
+		// Descriptions
 		for ($i = 0; $i < 4; $i++) {
 			$data['descriptions' . ($i + 1)] = $descriptions[$i] ?? null;
 		}
 
+		// 🔹 Mise à jour du groupe d’annonce
 		$this->Donne_modele->update_groupe_search($idgroupe_annonce, $data);
+		// 🔹 Enregistrer les extensions
+		if (!empty($titre_annexe)) {
+			// Supprimer les anciennes extensions avant d’insérer les nouvelles
+			$this->Donne_modele->delete_extensions_by_campagne($idcampagne);
+
+			for ($i = 0; $i < count($titre_annexe); $i++) {
+				// Vérifier qu'au moins un champ n’est pas vide
+				if (!empty($titre_annexe[$i]) || !empty($extensions_annexe[$i]) || !empty($url_annexe[$i])) {
+					$extension = array(
+						'idclients'              => $idclients,
+						'idcampagne'             => $idcampagne,
+						'titre_extensions'       => $titre_annexe[$i] ?? '',
+						'description_extensions' => $extensions_annexe[$i] ?? '',
+						'url_extensions'         => $url_annexe[$i] ?? '',
+						'extensions_accroche'    => $accroche_annexe[$i] ?? '',
+						'extensions_extrait_site'=> $site_annexe[$i] ?? '',
+						'extensions_lieu'        => $lieu_annexe[$i] ?? '',
+						'extensions_appel'       => $appel_annexe[$i] ?? ''
+					);
+					$this->Donne_modele->insert_extension($extension);
+				}
+			}
+		}
 
 		redirect('Client/onboarding/' . $idclients, 'refresh');
 	}
 
 
+
 	public function insertgroupeannonce($id)
 	{
 		$k = $this->data["groupe"] = $this->visuels_model->getgpid($id);
-		$id = $k[0]['idclients'];
+		$id = $idclients = $k[0]['idclients'];
 		$id = intval($id);
 		$d = $this->data['donnees'] = $this->visuels_model->getDonneeById($id);
 		$information_base = $d[0]['info_base_client'];
@@ -216,6 +259,8 @@ class Client extends MY_Controller
 		$this->data['ads_titres_longs'] = $adsContent['titres_longs'];
 		$this->data['ads_descriptions'] = $adsContent['descriptions'];
 		$this->data['images_site'] = $this->Image_model->get_images_by_campagne($idcampagne);
+		$this->data['extensions'] = $this->Donne_modele->get_extensions_by_clients($idclients);
+		$this->data["mots_exclus"] = $this->visuels_model->get_exclusions($idclients);
 		if ($type_campagne == 1) {
 			$this->content = "layouts/client/onboarding/annonce_search";
 		}
@@ -1040,6 +1085,8 @@ private function _scrape_images_from_site($url)
 		$this->data['donne_valider'] = $donne_valider;
 		$this->data['groupe_valider'] = $groupe_valider;
 		$this->data['procedure_gtm'] = $this->Task_model->get_procedure_gtm($idclients);
+		$this->data['extensions'] = $this->Donne_modele->get_extensions_by_campagne($idcampagne);
+
 
 		$this->content = "layouts/client/onboarding/index.php";
 		$this->layout();
@@ -1096,7 +1143,7 @@ private function _scrape_images_from_site($url)
 		//$campagne = $this->visuels_model->get_mot_clé($idclients);
 		//$mots_exclus = $campagne[]
 		//$this->data["mots_exclus"]
-
+		$this->data["mots_exclus"] = $this->visuels_model->get_exclusions($idclients);
 		$this->content = "layouts/client/onboarding/" . $type_page[$camp_type] . ".php";
 		$this->layout();
 	}
@@ -1419,8 +1466,10 @@ private function _scrape_images_from_site($url)
 		$idcampagne = $id_campagne;
 		$idgroupe_annonce = 0;
 		$this->Image_model->insert_images($imagesArray, $idclients, $idcampagne, $idgroupe_annonce);
-
-
+		$exclusion = $this->input->post('Mots_cle_exclus');
+		$id = $idclients;
+		$this->visuels_model->exclusion($id, $exclusion);
+		
 		$this->session->set_flashdata('success', 'Campagne ajouter avec succès.');
 		redirect('Client/onboarding/' . $idclients, 'refresh');
 
