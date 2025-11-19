@@ -156,7 +156,7 @@
 								$d->budget != 0 &&
 								!in_array($d->type_upsell, [10, 5])
 							):
-							if ($d->type_upsell != 1):
+							if ($d->type_upsell == 0 || $d->type_upsell == 2):
 						?>
 
 								<?php
@@ -223,7 +223,7 @@
 													data-email-onboarding="<?= $d->email_onboarding; ?>"
 													data-facturation="<?= $d->facturation; ?>"
 													data-datastudio="<?= $d->datastudio; ?>"
-													data-validation_structure="<?= $d->date_validation_structure; ?>"
+													data-date-validation-structure="<?= $d->date_validation_structure; ?>"
 													data-statut_upsell="<?= $d->statut_upsell; ?>">Modifier</a>
 											</div>
 										</div>
@@ -233,11 +233,19 @@
 									<td>
 										<?php //var_dump($d->type_upsell); 
 										?>
-										<a href="<?= base_url('Client/detail_client/' . $d->idclients) ?>" class="d-flex align-items-center text-decoration-none text-dark">
-											<img src="<?= $d->favicon ?>" class="img-thumbnail" width="28" height="28" alt="Favicon" style="margin-right:8px;">
-											<?= htmlspecialchars(mb_strimwidth($d->nom_client, 0, 10, '...')) ?>
+										<a href="<?= base_url('Client/detail_client/' . $d->idclients) ?>"
+											class="d-flex align-items-center text-decoration-none text-dark"
+											title="<?= htmlspecialchars($d->nom_client) ?>">
+												
+												<?php if($d->favicon != "https://www.memoriafuneraire.com/favicon.ico"): ?>    
+													<img src="<?= $d->favicon ?>" class="img-thumbnail" width="28" height="28" alt="Favicon" style="margin-right:8px;">
+												<?php else: ?>
+													<img src="<?= base_url('assets/images/ico/default_favicon.png') ?>" class="img-thumbnail" width="28" height="28" alt="Favicon" style="margin-right:8px;">
+												<?php endif; ?>    
 
-										</a>
+												<?= htmlspecialchars(mb_strimwidth($d->nom_client, 0, 10, '...')) ?>
+											</a>
+
 									</td>
 
 									<?php //if($current_users != 1): 
@@ -291,7 +299,7 @@
 									</td>
 									<td><?= $d->paiement_recu ? 'Oui' : 'Non' ?></td>	
 									<?php if ($current_users != 2): ?>			
-									<td>
+									<td><a href="<?= base_url('Client/onboarding/' . $d->idclients . '#campagne') ?>">
 										<?php if ($d->statut_brief == 1):  ?>
 											<span class="badge alert-success rounded-pill px-2 py-1" style="font-size: 12px; font-weight: 500;">
 												<i class="fa fa-circle mr-1" style="font-size: 10px;"></i>
@@ -304,6 +312,8 @@
 												<?= (!empty($d->Brief) && $d->Brief != '0000-00-00') ? date('d-m-Y', strtotime($d->Brief)) : '-' ?>
 											</span>
 										<?php endif; ?>	
+										</a>
+										
 									</td>
 
 									<td>
@@ -488,7 +498,7 @@
 						<label>Statut</label>
 						<select id="edit_statut_upsell" name="statut_upsell" class="form-control">
 							<option value="0">En attente</option>
-							<option value="2">En cours</option>
+							<option value="2">En ligne</option>
 						</select>
 					</div>
 				</div>
@@ -569,7 +579,8 @@
 		modal.find('#edit_email_onboarding').val(button.data('email-onboarding'));
 		modal.find('#edit_facturation').val(button.data('facturation'));
 		modal.find('#edit_datastudio').val(button.data('datastudio'));
-		modal.find('#edit_validation_structure').val(button.data('Validation_structure'));
+		modal.find('#edit_validation_structure').val(button.data('dateValidationStructure'));
+
 		modal.find('#edit_statut_upsell').val(button.data('statut_upsell'));
 	});
 </script>

@@ -83,8 +83,12 @@
 								<button class="btn btn-light btn-block">Annuler</button>
 							</div>
 							<div class="col">
-								<button class="btn btn-dark btn-block">Confirmer</button>
+							<button type="submit" class="btn btn-dark btn-block" id="submitBtn">
+								<span id="btnText">Confirmer</span>
+								<span id="btnLoader" class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>
+							</button>
 							</div>
+
 						</div>
 					</div>
 				</form>
@@ -92,3 +96,19 @@
 		</div>
 	</div>
 </div>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const form = document.querySelector("#clientModal form");
+    const submitBtn = document.getElementById("submitBtn");
+    const btnText = document.getElementById("btnText");
+    const btnLoader = document.getElementById("btnLoader");
+
+    form.addEventListener("submit", function (e) {
+        // Désactiver le bouton pour éviter plusieurs clics
+        submitBtn.disabled = true;
+        // Changer le texte du bouton et afficher le spinner
+        btnText.textContent = "Envoi...";
+        btnLoader.classList.remove("d-none");
+    });
+});
+</script>

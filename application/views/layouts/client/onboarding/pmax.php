@@ -120,7 +120,7 @@ $images_site = isset($images_site) && is_array($images_site) ? $images_site : []
 						</div>
 
 						<div class="form-group">
-							<label for="information_campagne_search">Information de la campagne</label>
+							<label for="information_campagne_pmax">Information de la campagne</label>
 
 							<button
 								type="button"
@@ -130,7 +130,7 @@ $images_site = isset($images_site) && is_array($images_site) ? $images_site : []
 								<i class="fa fa-images"></i> Générer avec ChatGPT
 							</button>
 
-							<textarea class="form-control" name="information_campagne_pmax" id="information_campagne_pmax"><?= isset($campagne) ? htmlentities($campagne->information_campagne) : '' ?></textarea>
+							<textarea rows="12" class="form-control" name="information_campagne_pmax" id="information_campagne_pmax"><?= isset($campagne) ? htmlentities($campagne->information_campagne) : '' ?></textarea>
 						</div>
 
 
@@ -153,8 +153,17 @@ $images_site = isset($images_site) && is_array($images_site) ? $images_site : []
 											<textarea name="contexte_groupe_annonce" class="form-control"></textarea>
 										</div>
 										<div class="form-group">
-											<label>Saisir mots-clés</label>
-											<textarea name="Mot_cle" class="form-control"></textarea>
+											<div class="d-flex justify-content-between align-items-center">
+												<label class="mb-0">Saisir mots-clés</label>
+												<button
+													type="button"
+													class="btn btn-outline-dark btn-sm"
+													id="generate-keywords-from-url"
+													data-idclient="<?= $idclients ?>">
+													<i class="fa fa-magic"></i> Générer mots clé
+												</button>
+											</div>
+											<textarea name="Mot_cle" class="form-control" rows="6"></textarea>
 										</div>
 										<hr>
 									</div>
@@ -468,6 +477,149 @@ $images_site = isset($images_site) && is_array($images_site) ? $images_site : []
 <?php end_section() ?>
 <?php start_section('script'); ?>
 <script>
+	
+	// --- Génération des mots-clés depuis l'URL via ChatGPT ---
+$('#generate-keywords-from-url').on('click', function () {
+    const idClient = $(this).data('idclient');
+    const $btn = $(this);
+    const $dest = $('textarea[name="Mot_cle"]');
+    const url = ($('#url_campagne').val() || '').trim();
+    const langue = ($('select[name="langue"]').val() || 'fr').trim();
+    const zone = ($('#zone_search').val() || '').trim();
+    const services = ($('textarea[name="services"]').val() || '').trim();
+
+    if (!url) {
+        alert("Renseigne d'abord l’URL de la campagne.");
+        return;
+    }
+
+    const endpoint = '<?= site_url("Client/get_mots_cle_depuis_url") ?>/' + encodeURIComponent(idClient);
+
+    const payload = { url, langue, zone, services };
+    if (typeof csrfName !== 'undefined' && csrfName && typeof csrfHash !== 'undefined' && csrfHash) {
+        payload[csrfName] = csrfHash;
+    }
+
+    const originalHtml = $btn.html();
+    $btn.prop('disabled', true).html('<span class="spinner-border spinner-border-sm"></span> Génération...');
+
+    $.post(endpoint, payload, function (resp) {
+        if (resp && resp.csrfName && resp.csrfHash) {
+            window.csrfName = resp.csrfName;
+            window.csrfHash = resp.csrfHash;
+        }
+        if (resp && resp.status === 'success') {
+            $dest.val(resp.data || '');
+        } else {
+            console.error(resp);
+            alert(resp && resp.message ? resp.message : "Échec de la génération des mots-clés.");
+        }
+    }, 'json')
+    .fail(function (xhr) {
+        console.error(xhr);
+        alert("Erreur réseau / serveur pendant la génération.");
+    })
+    .always(function () {
+        $btn.prop('disabled', false).html(originalHtml);
+    });
+});
+
+	// --- Génération "Information de la campagne" via ChatGPT ---
+$('#generate-info-campagne').on('click', function () {
+    const idClient = $(this).data('idclient');
+    const url = $('#url_campagne').val().trim();
+    const $btn = $(this);
+    const $textarea = $('#information_campagne_pmax');
+
+    if (!url) {
+        alert("Veuillez saisir l'URL de la campagne avant de générer.");
+        return;
+    }
+
+    // Construire l'URL vers le contrôleur (CI3)
+    const endpoint = '<?= site_url("Client/information_campagne") ?>/' + encodeURIComponent(idClient);
+
+    // Données POST (avec CSRF si présent)
+    const payload = { url: url };
+    if (typeof csrfName !== 'undefined' && csrfName && typeof csrfHash !== 'undefined' && csrfHash) {
+        payload[csrfName] = csrfHash;
+    }
+
+    // UI loading
+    const originalHtml = $btn.html();
+    $btn.prop('disabled', true).html('<span class="spinner-border spinner-border-sm"></span> Génération...');
+
+    $.post(endpoint, payload, function (resp) {
+        // Mise à jour automatique du hash CSRF si ton backend le renvoie (optionnel)
+        if (resp && resp.csrfName && resp.csrfHash) {
+            window.csrfName = resp.csrfName;
+            window.csrfHash = resp.csrfHash;
+        }
+
+        if (resp && resp.status === 'success') {
+            $textarea.val(resp.data || '');
+        } else {
+            console.error(resp);
+            alert(resp && resp.message ? resp.message : "Une erreur est survenue lors de la génération.");
+        }
+    }, 'json')
+    .fail(function (xhr) {
+        console.error(xhr);
+        alert("Erreur réseau / serveur pendant la génération.");
+    })
+    .always(function () {
+        $btn.prop('disabled', false).html(originalHtml);
+    });
+});
+// --- Génération des mots-clés à exclure via ChatGPT ---
+$(document).on('click', '.generate-keywords-btn', function () {
+    const idClient = $(this).data('idclient');
+    const $btn = $(this);
+    const $srcTextarea = $('#information_campagne_pmax');           // source : infos campagne
+    const $destTextarea = $('textarea[name="Mots_cle_exclus"]');      // destination : exclure
+    const campagneInfo = ($srcTextarea.val() || '').trim();
+
+    if (!campagneInfo) {
+        alert("Renseigne d'abord 'Information de la campagne' (ou génère-la).");
+        return;
+    }
+
+    // Endpoint CI3
+    const endpoint = '<?= site_url("Client/get_mot_cle_a_exclure") ?>/' + encodeURIComponent(idClient);
+
+    // Payload (avec CSRF si présent)
+    const payload = { information_campagne_pmax: campagneInfo };
+    if (typeof csrfName !== 'undefined' && csrfName && typeof csrfHash !== 'undefined' && csrfHash) {
+        payload[csrfName] = csrfHash;
+    }
+
+    // UI loading
+    const originalHtml = $btn.html();
+    $btn.prop('disabled', true).html('<span class="spinner-border spinner-border-sm"></span> Génération...');
+    
+    $.post(endpoint, payload, function (resp) {
+        // Mise à jour CSRF (si tu renvoies les nouveaux jetons côté serveur)
+        if (resp && resp.csrfName && resp.csrfHash) {
+            window.csrfName = resp.csrfName;
+            window.csrfHash = resp.csrfHash;
+        }
+
+        if (resp && resp.status === 'success') {
+            $destTextarea.val(resp.data || '');
+        } else {
+            console.error(resp);
+            alert(resp && resp.message ? resp.message : "Échec de la génération des mots-clés exclus.");
+        }
+    }, 'json')
+    .fail(function (xhr) {
+        console.error(xhr);
+        alert("Erreur réseau / serveur pendant la génération.");
+    })
+    .always(function () {
+        $btn.prop('disabled', false).html(originalHtml);
+    });
+});
+
 $(document).ready(function() {
 
     const fetchImagesUrl = '<?= site_url("Client/fetch_images_campagnes") ?>';

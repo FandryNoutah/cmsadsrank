@@ -328,6 +328,98 @@
 
 <?php start_section('content'); ?>
 <?php foreach ($donnees as $d): ?>
+	<?php if ($current_user->tech == 3): ?>
+	<?php if ($d['statut_demande_en_cours'] == 3): ?>
+
+		<div class="modal fade" id="choixCampagneModal" tabindex="-1" aria-labelledby="choixCampagneLabel" aria-hidden="true">
+			<div class="modal-dialog modal-xl modal-dialog-centered">
+				<div class="modal-content rounded-3 shadow-lg">
+					<div class="modal-header">
+						<h2 class="modal-title" id="choixCampagneLabel">Upsell client</h2>
+					</div>
+					<div class="modal-body">
+						<form method="post" action="<?= site_url('Client/uspell_campagne'); ?>">
+
+							<input type="hidden" name="idclients" value="<?= $d['idclients']; ?>">
+							<div class="row row-cols-2 mt-4 mb-2">
+								<div class="col">
+									<div class="card camp-container h-100">
+										<div class="card-body">
+											<div class="d-block mb-2">
+												<i class="fa fa-cloud" style="font-size: 22px;"></i>
+											</div>
+											<h3>Campagne précédente</h3>
+											<p class="text-muted">Continuer avec la campagne existante.</p>
+											<a href="javascript:void(0);" class="stretched-link text-dark font-weight-bold select-camp" data-target="#camp_resa">
+												<i class="fa fa-arrow-right"></i>
+											</a>
+											<input type="radio" name="camp_param" id="camp_resa" value="1" class="d-none">
+										</div>
+									</div>
+								</div>
+								<div class="col">
+									<div class="card camp-container h-100">
+										<div class="card-body">
+											<div class="d-block mb-2">
+												<i class="fa fa-database" style="font-size: 22px;"></i>
+											</div>
+											<h3>Nouvelle campagne</h3>
+											<p class="text-muted">Démarrer une nouvelle campagne à partir de zéro.</p>
+											<a href="javascript:void(0);" class="stretched-link text-dark font-weight-bold select-camp" data-target="#camp_sale">
+												<i class="fa fa-arrow-right"></i>
+											</a>
+											<input type="radio" name="camp_param" id="camp_sale" value="2" class="d-none">
+										</div>
+									</div>
+								</div>
+
+
+							</div>
+							<div class="text-end mt-4">
+								<button type="submit" class="btn btn-primary">Valider</button>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<script>
+			document.addEventListener("DOMContentLoaded", function() {
+			var modalEl = document.getElementById('choixCampagneModal');
+			
+			var modal = new bootstrap.Modal(modalEl, {
+				backdrop: 'static', 
+				keyboard: false  
+			});
+			modal.show();
+			document.querySelectorAll('.select-camp').forEach(function(el) {
+				el.addEventListener('click', function() {
+					var target = document.querySelector(this.dataset.target);
+					if (target) {
+						target.checked = true;
+						document.querySelectorAll('.camp-container')
+							.forEach(c => c.classList.remove('border-primary'));
+						this.closest('.camp-container').classList.add('border', 'border-primary');
+					}
+				});
+			});
+
+			document.querySelector('.btn-primary').addEventListener('click', function(e) {
+				let selected = document.querySelector('input[name="camp_param"]:checked');
+				if (!selected) {
+					e.preventDefault();
+					e.stopPropagation();
+					alert("Veuillez sélectionner une campagne avant de valider.");
+				}
+			});
+		});
+
+
+		</script>
+
+	<?php endif; ?>
+		<?php endif; ?>
 	<div class="row no-gutters h-100">
 		<?php $this->load->view('layouts/client/onboarding/sidebar'); ?>
 
@@ -509,6 +601,10 @@
 								<button type="button" class="btn btn-outline-dark btn-block" data-toggle="modal" data-target="#inventaireModal">
 									Inventaire
 								</button>
+								<button type="button" class="btn btn-outline-dark btn-block" data-toggle="modal" data-target="#modifier_Brief">
+									Brief campagne
+								</button>
+								
 								<?php //echo anchor('Validation/validation_structure/' . $C->idclients, $C->validation_technique, ['style' => 'color: white', 'data-edit' => $C->idclients, 'target' => '_blank']); 
 								?>
 							</div>
@@ -516,39 +612,144 @@
 					</div>
 				</div>
 
-				<h1 class="display-1 text-center mt-4" style="font-size: 42px;" id="brief">
-					Brief
-				</h1>
-				<div class="d-flex justify-content-between">
-					<ul class="nav nav-tabs mb-3" style="margin-top: -15px;">
-						<li class="nav-item">
-							<a class="nav-link py-3 active" type="button">
-								Brief client
-							</a>
-						</li>
-					</ul>
-					<div class="d-inline">
-						<?php if (!empty($d['information_client'])): ?>
-							<button class="btn btn-dark" data-toggle="modal" data-target="#briefModal">
-								<img src="<?= base_url('assets/images/icons/figma/icon-plus.svg') ?>" alt="">
-								Modifier Brief
-							</button>
-						<?php else: ?>
-							<button class="btn btn-dark" data-toggle="modal" data-target="#briefModal">
-								<img src="<?= base_url('assets/images/icons/figma/icon-plus.svg') ?>" alt="">
-								Ajouter Brief
-							</button>
-						<?php endif; ?>
-					</div>
-				</div>
-				<?php if (!empty($d['information_client'])): ?>
-					<div class="card">
-						<div class="card-body" style="height: 300px; overflow-y: auto;">
-							<?= nl2br($d['information_client']); ?>
-						</div>
+				<h1 style="font-size: 48px;">Budget annuel</h1>
+				</br>
 
+				<div class="tab-content" id="taskTabContent">
+					<div class="tab-pane fade mb-5 show active" id="budget" role="tabpanel" aria-labelledby="budget_tab">
+						<div class="card">
+							<div class="card-body">
+								<h5>Hausse et baisse de budget</h5>
+								<div class="d-flex align-items-center">
+									<h2 class="mr-2"><?= $d['budget'] ?> Є</h2>
+									<div class="mr-auto">
+										<span class="badge alert-success rounded-pill py-2 px-3 font-weight-normal" style="font-size: 14px;">
+											<i class="fa fa-chart-line mr-1"></i>
+											12%
+										</span>
+									</div>
+									<select class="form-control w-auto mr-5 border-dark text-dark" id="filter_budget_year" style="font-size: 14px; font-weight: 500;">
+										<option value="2023">2023</option>
+										<option value="2024">2024</option>
+										<option value="2025">2025</option>
+									</select>
+								</div>
+								<span class="text-muted" style="font-size: 14px;">Budget actuellement en cours</span>
+								<table class="table table-wrapper" style="text-align: center;">
+									<thead>
+										<tr>
+											<th>
+												Gestion de budget
+											</th>
+											<th>
+												Date de la demande
+											</th>
+											<th>
+												Date Effective
+											</th>
+											<th>
+												Montant
+											</th>
+											<th>
+												Nouveau montant
+											</th>
+											<th>
+												Statut
+											</th>
+											<th>
+											</th>
+										</tr>
+									</thead>
+									<tbody>
+										<?php foreach ($upsell as $u): ?>
+											<tr class="budget-year-row" data-year="<?= explode('-', $u->date_demande)[0]; ?>">
+												<td>
+													<?php if ($u->type_upsell == 2): ?>
+														<span class="badge alert-success rounded-pill px-4 py-3" style="font-size: 14px; font-weight: 500;">
+															<i class="fa fa-circle mr-1" style="font-size: 10px;"></i>
+															Hausse de budget
+														</span>
+													<?php endif; ?>
+													<?php if ($u->type_upsell == 1): ?>
+														<span class="badge alert-danger rounded-pill px-4 py-3" style="font-size: 14px; font-weight: 500;">
+															<i class="fa fa-circle mr-1" style="font-size: 10px;"></i>
+															Baisse de budget
+														</span>
+													<?php endif; ?>
+													<?php if ($u->type_upsell == 3): ?>
+														<span class="badge alert-primary rounded-pill px-4 py-3" style="font-size: 14px; font-weight: 500;">
+															<i class="fa fa-circle mr-1" style="font-size: 10px;"></i>
+															Booster
+														</span>
+													<?php endif; ?>
+													<?php if ($u->type_upsell == 5): ?>
+														<span class="badge alert-danger rounded-pill px-4 py-3" style="font-size: 14px; font-weight: 500;">
+															<i class="fa fa-circle mr-1" style="font-size: 10px;"></i>
+															Résiliation complète </span>
+													<?php endif; ?>
+													<?php if ($u->type_upsell == 4): ?>
+														<span class="badge alert-warning rounded-pill px-4 py-3" style="font-size: 14px; font-weight: 500;">
+															<i class="fa fa-circle mr-1" style="font-size: 10px;"></i>
+															Mise en pause
+														</span>
+													<?php endif; ?>
+												</td>
+												<td><?= (!empty($u->date_demande) && $u->date_demande != '0000-00-00') ? date('d-m-Y', strtotime($u->date_demande)) : '-' ?></td>
+												<td><?= (!empty($u->date_upsell) && $u->date_upsell != '0000-00-00') ? date('d-m-Y', strtotime($u->date_upsell)) : '-' ?></td>
+
+												<td>
+													<?php if ($u->type_upsell == 4): ?>
+														Pause
+													<?php endif; ?>
+													<?php if ($u->type_upsell == 5): ?>
+														Résilié
+													<?php endif; ?>
+													<?php if ($u->type_upsell == 1 || $u->type_upsell == 2 || $u->type_upsell == 3): ?>
+														<?= $u->budget_initiale ?> €
+													<?php endif; ?>
+												</td>
+												<td>
+													<?php if ($u->type_upsell == 4): ?>
+														Pause
+													<?php endif; ?>
+													<?php if ($u->type_upsell == 5): ?>
+														Résilié
+													<?php endif; ?>
+													<?php if ($u->type_upsell == 1 || $u->type_upsell == 2 || $u->type_upsell == 3): ?>
+														<?= $u->budgets ?> €
+													<?php endif; ?>
+												</td>
+												<td>
+													<?php if($u->statut_actif == 2): ?>
+														<span class="badge alert-primary px-2 py-1">En cours</span>
+													<?php endif; ?> 
+													<?php if($u->statut_actif == 0): ?>
+														<span class="badge alert-warning px-2 py-1">En attente</span>
+													<?php endif; ?> 
+													<?php if($u->statut_actif == 1): ?>
+														<span class="badge alert-success px-2 py-1">En ligne</span>
+													<?php endif; ?>  		
+												</td>
+												<td>
+													<div class="dropdown no-arrow">
+														<a href="javascript:void(0);" class="text-decoration-none text-muted task-menu dropdown-toggle" role="button" data-toggle="dropdown" aria-expanded="false">
+															<i class="fa fa-ellipsis-v"></i>
+														</a>
+														<div class="dropdown-menu dropdown-menu-right">
+															<button type="button" class="dropdown-item" data-toggle="modal" data-target="#changestatutbudget" data-id="<?= $u->idupsell; ?>">
+																<i class="fa fa-eye mr-2"></i>
+																Statut
+															</button>
+														</div>
+													</div>
+												</td>
+											</tr>
+										<?php endforeach; ?>
+									</tbody>
+								</table>
+							</div>
+						</div>
 					</div>
-				<?php endif; ?>
 				<!-- GTM -->
 				<h1 class="display-1 text-center my-5" style="font-size: 42px;">
 					Mise en place Google Tag manager
@@ -679,6 +880,12 @@
 				<h1 class="display-1 text-center mt-4" style="font-size: 42px;" id="campagne">
 					Campagne
 				</h1>
+			<button class="btn btn-dark py-3 px-5"
+					data-toggle="modal"
+					data-target="#budgetModal-<?= $d['idclients'] ?>">
+				Répartition budget
+			</button>
+
 				<div class="table-responsive">
 					<table class="table table-wrapper">
 						<thead class="bg-light text-muted">
@@ -703,7 +910,7 @@
 													<i class="fa fa-ellipsis-v"></i>
 												</a>
 												<div class="dropdown-menu">
-													<a class="dropdown-item" href="<?= site_url("Client/campagne/" . $idclients . "?id_camp=" . $campagne['idcampagne']) ?>">Modifier</a>
+													<a class="dropdown-item" href="<?= site_url("Client/campagne_edit/" . $idclients . "?id_camp=" . $campagne['idcampagne']) ?>">Modifier</a>
 													<a class="dropdown-item text-danger" href="<?= site_url("Client/supprimer_campagne/" . $campagne['idcampagne']) ?>" onclick="return confirm('Supprimer cette campagne ?');">Supprimer</a>
 													<!-- <php if ($campagne['type_campagne'] == 1): ?>
 															<a class="dropdown-item" href="<?= site_url("Googleads/ajout_groupeannonce/" . $campagne['idcampagne']) ?>">Ajouter Groupe</a>
@@ -789,9 +996,16 @@
 																	<?php endif; ?>
 																</td>
 																<td>
-																	<a href="<?= base_url('Client/insertgroupeannonce/' . $groupe['idgroupe_annonce']) ?>" class="btn btn-sm google_btn">
-																		Créer annonce
+																	
+																	<?php if ($groupe['statut'] == 1): ?>
+																	<a href="<?= base_url('Client/modifier_annonce/' . $groupe['idgroupe_annonce']) ?>" class="btn btn-sm google_btn">
+																		Modifier annonce
 																	</a>
+																	<?php else: ?>
+																	<a href="<?= base_url('Client/insertgroupeannonce/' . $groupe['idgroupe_annonce']) ?>" class="btn btn-sm google_btn">
+																		Creer annonce
+																	</a>	
+																	<?php endif; ?>
 																</td>
 															</tr>
 														<?php endforeach; ?>
@@ -817,6 +1031,7 @@
 					<img src="<?= base_url('assets/images/icons/figma/icon-plus.svg') ?>" alt="">
 					Création Nouvelle Campagne
 				</button>
+
 
 				<div id="camp_creation_step" class="d-none">
 					<p style="display: none;"><?= nl2br(htmlspecialchars($d['information_client'])); ?> </p>
@@ -884,6 +1099,20 @@
 	<?php $this->load->view('layouts/client/onboarding/modal/brief', ['d' => $d]) ?>
 	<?php $this->load->view('layouts/client/onboarding/modal/client') ?>
 	<?php $this->load->view('layouts/client/onboarding/modal/inventaire_pmax', ['groupe_valider' => $groupe_valider]) ?>
+	<?php $this->load->view('layouts/client/onboarding/modal/modifier_Brief', ['campagne' => $donne_valider]) ?>
+	<?php $this->load->view('layouts/client/onboarding/modal/change_statut') ?>
+	<?php
+		if (!empty($upsell) && is_array($upsell)) {
+			$last_upsell = end($upsell);
+			$d['last_type_upsell'] = isset($last_upsell->type_upsell) ? $last_upsell->type_upsell : null;
+			reset($upsell);
+		} else {
+			$d['last_type_upsell'] = null;
+		}
+		$this->load->view('layouts/client/onboarding/modal/budget', $d);
+		?>
+
+
 
 
 <?php endforeach; ?>
@@ -892,6 +1121,17 @@
 
 <?php start_section('script') ?>
 <script>
+	$('#changestatutbudget').on('show.bs.modal', function (event) {
+  var button = $(event.relatedTarget); 
+  var id = button.data('id'); 
+  $('#idupsell').val(id); 
+});
+	$('#repartitionbudget').on('show.bs.modal', function (event) {
+  var button = $(event.relatedTarget); 
+  var id = button.data('id'); 
+  $('#idupsell').val(id); 
+});
+
 	$(document).ready(function() {
 		// Clic sur "Envoyer l’annonce"
 		$(document).on('click', '.sendAnnonce', function(e) {
@@ -1012,13 +1252,21 @@
 			});
 		});
 
-		// --- Bouton "Créer nouvelle campagne" ---
-		$('#create_camp_button').click(function() {
-			$('#camp_creation_step').removeClass('d-none');
-			$('.scroll-container').animate({
-				scrollTop: $('.scroll-container')[0].scrollHeight
-			}, 800);
-		});
+// --- Bouton "Créer nouvelle campagne" ---
+$('#create_camp_button').on('click', function () {
+  // Affiche la section si elle était cachée
+  $('#camp_creation_step').removeClass('d-none');
+
+  // Laisse le DOM peindre, puis scroll jusqu'à la section dans son conteneur scrollable
+  requestAnimationFrame(() => {
+    const el = document.getElementById('campagne_step');
+    if (el) {
+      el.scrollIntoView({ behavior: 'smooth', block: 'start', inline: 'nearest' });
+    }
+  });
+});
+
+
 
 		// --- Sélection du type de campagne (un seul choix) ---
 		$('.select-conversion-type').click(function() {

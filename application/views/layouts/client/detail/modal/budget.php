@@ -19,7 +19,7 @@
 								<option value="">Séléctionner type</option>
 								<option value="2">Upsell - création de nouvelle campagne</option>
 								<option value="1">Baisse de budget</option>
-								<option value="3">Booster (NE FONCTIONNE PAS ENCORE)</option>
+								<option value="3">Booster</option>
 							</select>
 
 						</div>
@@ -30,7 +30,7 @@
 						</div>
 
 						<div class="form-group">
-							<label for="budget_initial">Budget Initiale</label>
+							<label for="budget_initial">Budget Initiale HT</label>
 							<?php if(empty($budget_initial[0]->budgets)): 
 								$budget_initial = $d['budget']; 
 							endif;  ?>
@@ -41,9 +41,17 @@
 						</div>
 
 						<div class="form-group">
-							<label for="budget">Budget</label>
+							<label for="budget">Budget HT</label>
 							<input type="number" name="budget_upsell" id="budget" class="form-control">
 						</div>
+						
+
+
+						<div class="form-group">
+							<label for="budget_information">Information</label>
+							<textarea name="information_upsell" id="budget_information" rows="2" class="form-control"></textarea>
+						</div>
+
 
 						<div class="form-group" style="display: none">
 							<label for="am_select">AM</label>
@@ -79,19 +87,18 @@
 								document.getElementById("budget_date_demand").value = today;
 							});
 						</script>
-						<div class="form-group">
-							<label for="budget_date_demand">Date Brief</label>
-							<input type="date" name="date_brief" id="budget_date_demand" class="form-control">
-						</div>			
+						<div class="form-group" id="brief_group">
+							<label for="date_brief">Date Brief</label>
+							<input type="date" name="date_brief" id="date_brief" class="form-control">
+						</div>
+
+		
 						<div class="form-group">
 							<label for="budget_date_upsell">Date annonce en ligne</label>
 							<input type="date" name="date_upsell" id="budget_date_upsell" class="form-control">
 						</div>
 
-						<div class="form-group">
-							<label for="budget_information">Information</label>
-							<textarea name="information_upsell" id="budget_information" rows="2" class="form-control"></textarea>
-						</div>
+						
 
 						<div class="form-group">
 							<label for="budget_status">Statut</label>
@@ -108,3 +115,25 @@
 		</div>
 	</form>
 <?php endforeach; ?>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const typeUpsell = document.getElementById("budget_type");
+    const briefGroup = document.getElementById("brief_group");
+
+    function toggleBrief() {
+        // Masquer si type == 1 (Baisse) OU type == 3 (Booster)
+        if (typeUpsell.value === "1" || typeUpsell.value === "3") {
+            briefGroup.style.display = "none";
+        } else {
+            briefGroup.style.display = "block";
+        }
+    }
+
+    typeUpsell.addEventListener("change", toggleBrief);
+    toggleBrief(); // au chargement
+});
+</script>
+
+
+
+

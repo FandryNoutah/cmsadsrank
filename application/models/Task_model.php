@@ -253,7 +253,62 @@ public function get_all_tâche($status = null)
 		// Retourner les résultats
 		return $query->result();
 	}
+public function get_task_booster_by_id_and_validation($idclients)
+{
+    $this->db->select('tasks.*, 
+        u1.first_name as assigned_to_name, 
+        u1.photo_users as assigned_to_photo, 
+        u2.first_name as AM_name, 
+        u2.photo_users as AM_photo, 
+        clients.*');
+    $this->db->from('tasks');
+    $this->db->join('users u1', 'u1.id = tasks.assigned_to', 'left');
+    $this->db->join('clients', 'clients.idclients = tasks.idclients', 'left');
+    $this->db->join('users u2', 'u2.id = tasks.AM', 'left');
 
+    $this->db->where('tasks.idclients', $idclients);
+
+    // titre qui COMMENCE par "Booster"
+    $this->db->like('tasks.title', 'Booster', 'after'); // équivalent à "tasks.title LIKE 'Booster%'"
+
+    // Choisir la colonne de tri si elle existe (préférence pour une colonne date)
+    if ($this->db->field_exists('date_created', 'tasks')) {
+        $this->db->order_by('tasks.date_created', 'DESC');
+    } elseif ($this->db->field_exists('created_at', 'tasks')) {
+        $this->db->order_by('tasks.created_at', 'DESC');
+    } elseif ($this->db->field_exists('date', 'tasks')) {
+        $this->db->order_by('tasks.date', 'DESC');
+    } else {
+        // fallback : on prend l'id le plus grand (suppose auto-increment)
+        $this->db->order_by('tasks.id', 'DESC');
+    }
+
+    $this->db->limit(1);
+
+    $query = $this->db->get();
+
+    return $query->row();
+}
+
+	public function get_task_by_id_and_validation($idclients)
+	{
+		$this->db->select('tasks.*, 
+        u1.first_name as assigned_to_name, 
+        u1.photo_users as assigned_to_photo, 
+        u2.first_name as AM_name, 
+        u2.photo_users as AM_photo, 
+        clients.*');
+		$this->db->from('tasks');
+		$this->db->join('users u1', 'u1.id = tasks.assigned_to', 'left');
+		$this->db->join('clients', 'clients.idclients = tasks.idclients', 'left');
+		$this->db->join('users u2', 'u2.id = tasks.AM', 'left');
+		$this->db->where('tasks.idclients', $idclients);
+		$this->db->where('tasks.title', "Validation client");
+
+		$query = $this->db->get();
+
+		return $query->row();
+	}
 	public function get_task_by_id($idtask)
 	{
 		$this->db->select('tasks.*, 
@@ -308,7 +363,7 @@ public function get_all_tâche($status = null)
             LEFT JOIN clients AS am_clients ON am_clients.idclients = tasks.AM 
             LEFT JOIN clients AS assigned_clients ON assigned_clients.idclients = tasks.assigned_to 
             WHERE tasks.idclients = ?";
-
+		$this->load->database();	
 		// Exécuter la requête avec le paramètre $idclients
 		$query = $this->db->query($sql, array($idclients));
 
@@ -388,7 +443,6 @@ public function get_all_tâche($status = null)
 	}
 	public function update_task_statuts($taskId, $data)
 	{
-		
 		$this->load->database();
 		$this->db->where('idtask', $taskId);
 		$this->db->update('tasks', $data);

@@ -13,7 +13,51 @@ class Visuels_model extends CI_Model {
 	protected $visuels_formats_images = "hm_visuels_formats_images";
     protected $_database;
     public $table_fields = array();
+
+	public function get_last_onboarding_by_id($idclient)
+	{
+		$this->db->where('idclients', $idclient);
+		$this->db->order_by('idonboarding', 'DESC'); 
+		$this->db->limit(1);
+		return $this->db->get('onboarding')->row_array(); 
+	}
+
+    public function update_rapports($id, $data)
+    {
+        $this->db->where("idonnee", $id);
+        return $this->db->update("donnee", $data);
+    }
+
+
 // Récupérer toutes les campagnes d’un client
+public function update_exclusion_by_client($idclients, $exclusion)
+{
+    // Si la table donnee a plusieurs lignes pour un client,
+    // on les met toutes à jour, sinon une seule
+    return $this->db
+        ->where('idclients', $idclients)
+        ->update('donnee', ['exclusion' => $exclusion]);
+}
+public function delete_all_images($idclients)
+{
+    return $this->db->where('idclients', $idclients)->delete('images');
+}
+public function delete_all_campagne($idclients)
+{
+    return $this->db->where('idclients', $idclients)->delete('campagne');
+}
+public function delete_extensions_by_client($idclients)
+{
+    return $this->db->where('idclients', $idclients)->delete('extensions');
+}
+
+public function insert_extension($data)
+{
+    return $this->db->insert('extensions', $data);
+}
+
+
+
 public function get_campagnes_by_client($idclient)
 {
     $this->db->where('idclients', $idclient);
@@ -196,8 +240,18 @@ public function get_gtm($idclients) {
 			$result = $this->db->get();
 			return $result->result_array();
 			}
+		public function update_status_booster($statut_upsell, $idupsell){
+		$sql = "update upsell set statut_actif='".$statut_upsell."' where idupsell='".$idupsell."'";
+		$this->db->query($sql);
+		$this->db->close();
+	}
 	public function update_status_upsell($statut_upsell, $idupsell){
 		$sql = "update onboarding set statut_upsell='".$statut_upsell."' where idupsell='".$idupsell."'";
+		$this->db->query($sql);
+		$this->db->close();
+	}
+	public function update_statut_demande_en_cours($statut_demande_en_cours,$idonnee){
+		$sql = "update donnee set statut_demande_en_cours='".$statut_demande_en_cours."' where idonnee='".$idonnee."'";
 		$this->db->query($sql);
 		$this->db->close();
 	}
@@ -904,12 +958,12 @@ public function get_gtm($idclients) {
 		return $retour;	
 	}
 	
-	public function getCampagneById($id) {
+	public function getCampagneById($id_campagne) {
 		// Ajout du JOIN pour récupérer le label du type de campagne
 		$sql = "SELECT c.*, t.label_type_campagne 
 				FROM campagne c
 				INNER JOIN type_campagne t ON c.type_campagne = t.idtype_campagne
-				WHERE c.idcampagne = '" . $id . "'";
+				WHERE c.idcampagne = '" . $id_campagne . "'";
 		
 		// Exécution de la requête
 		$query = $this->db->query($sql);
@@ -1017,11 +1071,19 @@ public function get_gtm($idclients) {
         $this->db->where('id_Car', $id_Car);
         return $this->db->delete('liste_car');
 	}
-	public function exclusion($id,$exclusion){
-		$sql = "update donnee set exclusion='".$exclusion."' where idclients='".$id."'";
-		$this->db->query($sql);
-		$this->db->close();
-	}
+	public function exclusion($id, $exclusion)
+{
+    $data = array(
+        'exclusion' => $exclusion
+    );
+
+    $this->db->where('idclients', $id);
+    $this->db->update('donnee', $data);
+
+    $this->db->close();
+}
+
+
 	public function update_client($idclient,$client,$email_client,$numero_client,$site_client){
 		$sql = "update clients set nom_client='".$client."',email_client='".$email_client."',numero_client='".$numero_client."',site_client='".$site_client."' where idclients='".$idclient."'";
 		$this->db->query($sql);
@@ -1236,29 +1298,28 @@ public function insertclient($client, $site_client, $email_client, $numero_clien
         return $query->result();  
     }
 	public function getClientDataByDonnee() {
-		// Sélectionner toutes les colonnes nécessaires, y compris les photos des utilisateurs
-		$this->db->select('donnee.*, clients.*, produit.*, 
-						   am_user.photo_users AS am_photo_user, 
-						   tech_user.photo_users AS tech_photo_user');  // Retirer les commentaires
-		
-		// Table de base : donnee
-		$this->db->from('donnee');
-		
-		// Jointure entre donnee et clients sur idclients
-		$this->db->join('clients', 'donnee.idclients = clients.idclients');
-		
-		// Jointure entre donnee et produit sur idproduit
-		$this->db->join('produit', 'donnee.idproduit = produit.idproduit');
-		
-		// Jointure entre donnee et users pour l'account_manager (utilisateur qui gère le client)
-		$this->db->join('users AS am_user', 'donnee.account_manager = am_user.id', 'left');
-		
-		// Jointure entre donnee et users pour l'initiative (utilisateur responsable de l'initiative)
-		$this->db->join('users AS tech_user', 'donnee.initiative = tech_user.id', 'left');
-		
-		// Récupérer les résultats
-		return $this->db->get()->result();
-	}	
+
+    $this->db->select("
+        donnee.*,
+        clients.*,
+        produit.*,
+        am_user.photo_users AS am_photo_user,
+        tech_user.photo_users AS tech_photo_user,
+        GROUP_CONCAT(campagne.type_campagne SEPARATOR ', ') AS campagnes
+    ");
+
+    $this->db->from('donnee');
+    $this->db->join('clients', 'donnee.idclients = clients.idclients');
+    $this->db->join('produit', 'donnee.idproduit = produit.idproduit');
+    $this->db->join('campagne', 'donnee.idclients = campagne.idclients', 'left');
+    $this->db->join('users AS am_user', 'donnee.account_manager = am_user.id', 'left');
+    $this->db->join('users AS tech_user', 'donnee.initiative = tech_user.id', 'left');
+
+    $this->db->group_by('donnee.idonnee');  // essentiel
+
+    return $this->db->get()->result();
+}
+
 	public function getClientDataonboarding() {
 	$this->db->select('onboarding.*, clients.*, produit.*, 
 					   am_user.photo_users AS am_photo_user, 

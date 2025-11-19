@@ -13,6 +13,83 @@ class Donne_modele extends CI_Model
 	{
 		parent::__construct();
 	}
+	public function update_budget($idcampagne, $budget)
+{
+    $this->db->where('idcampagne', $idcampagne);
+    $this->db->update('campagne', ['repartition_budget' => $budget]);
+}
+
+	public function update_campagne($idclients)
+{
+    $id_campagne = intval($this->input->post('id_campagne'));
+
+    if (!$id_campagne) {
+        show_error("Identifiant de campagne manquant", 400);
+        return;
+    }
+
+    // Récupération des champs principaux
+    $data = [
+        'nom_campagne'          => $this->input->post('nom_campagne_search'),
+        'url'                   => $this->input->post('url_campagne'),
+        'information_campagne'  => $this->input->post('information_campagne_search'),
+        'repartition_budget'    => $this->input->post('repartition_budget_search'),
+        'zones'                 => $this->input->post('zone_search'),
+        'langue'                => $this->input->post('langue'),
+        'cible'                 => $this->input->post('cible'),
+        'age'                   => $this->input->post('age'),
+        'sexe'                  => $this->input->post('sexe'),
+        'date_campagne'         => $this->input->post('date_campagne'),
+        'audience'              => $this->input->post('audience'),
+        'appareil'              => $this->input->post('appareil'),
+        'youtube'               => $this->input->post('Youtube'),
+        'updated_at'            => date('Y-m-d H:i:s')
+    ];
+
+    // Mise à jour de la campagne principale
+    $this->visuels_model->update_campagne($id_campagne, $data);
+
+    // Gestion des groupes d’annonces
+    $groupes = $this->input->post('groupe_annonce');
+    $contextes = $this->input->post('contexte_groupe_annonce');
+    $keywords = $this->input->post('Mot_cle');
+
+    if (!empty($groupes)) {
+        $this->Donne_modele->delete_gp_by_idcampagne($id_campagne);
+        foreach ($groupes as $i => $nom) {
+            if (trim($nom) === '') continue;
+            $this->Donne_modele->insert_gp([
+                'id_campagne' => $id_campagne,
+                'nom_groupe' => $nom,
+                'contexte_groupes_annonces' => $contextes[$i] ?? '',
+                'mot_cle' => $keywords[$i] ?? '',
+            ]);
+        }
+    }
+
+    // Mots-clés à exclure
+    $mots_exclus = $this->input->post('Mots_cle_exclus');
+    if ($mots_exclus !== null) {
+        $this->visuels_model->update_exclusions($idclients, $mots_exclus);
+    }
+
+    // Redirection
+    $this->session->set_flashdata('success', 'Campagne mise à jour avec succès.');
+    redirect('Client/campagne/' . $idclients . '?id_camp=' . $id_campagne);
+}
+
+
+	public function update_num_adresse($numero, $adresse, $idcampagne)
+	{
+		$data = [
+			'numero' => $numero,
+			'adresse' => $adresse
+		];
+
+		$this->db->where('idcampagne', $idcampagne);
+		$this->db->update('campagne', $data);
+	}
+
 	public function insert_extension($data)
 	{
 		return $this->db->insert('extensions', $data);
@@ -53,6 +130,7 @@ class Donne_modele extends CI_Model
 			return $idclients;
 		}
 		public function update_status_brief($idonnee, $date_envoye, $statut) {
+			$this->load->database();
 			$this->db->select('idclients');
 			$this->db->from('donnee');
 			$this->db->where('idonnee', $idonnee);
@@ -73,6 +151,66 @@ class Donne_modele extends CI_Model
 
 			return $idclients;
 		}
+		public function update_last_onboarding_status_briefs($idonnee, $statut) {
+			$this->load->database();
+			$this->db->where('idonnee', $idonnee);
+			$this->db->order_by('idonboarding', 'DESC');
+			$this->db->limit(1);
+			$query = $this->db->get('onboarding');
+			$row = $query->row_array();
+
+			if (!$row) {
+				return false; 
+			}
+
+			$idclients = $row['idclients'];
+			$this->db->where('idonboarding', $row['idonboarding']); 
+			$this->db->update('onboarding', ['statut_brief' => $statut]);
+
+			return $idclients;
+		}
+		public function update_status_statut_envoye($idonnee, $statut) {
+			$this->load->database();
+			$this->db->select('idclients');
+			$this->db->from('donnee');
+			$this->db->where('idonnee', $idonnee);
+			$query = $this->db->get();
+			$row = $query->row_array();
+
+			if (!$row) {
+				return false; 
+			}
+
+			$idclients = $row['idclients'];
+			$data = [
+				'statut_envoye'     => $statut
+			];
+			$this->db->where('idonnee', $idonnee);
+			$this->db->update('donnee', $data);
+
+			return $idclients;
+		}
+		public function update_status_briefs($idonnee, $statut) {
+			$this->load->database();
+			$this->db->select('idclients');
+			$this->db->from('donnee');
+			$this->db->where('idonnee', $idonnee);
+			$query = $this->db->get();
+			$row = $query->row_array();
+
+			if (!$row) {
+				return false; 
+			}
+
+			$idclients = $row['idclients'];
+			$data = [
+				'statut_brief'     => $statut
+			];
+			$this->db->where('idonnee', $idonnee);
+			$this->db->update('donnee', $data);
+
+			return $idclients;
+		}
 	public function update_send_annonce_onboarding($idonnee, $statut) {
     $data = [
         'statut_envoye'   => $statut
@@ -82,6 +220,7 @@ class Donne_modele extends CI_Model
     $this->db->update('onboarding', $data);
 }	
 	public function update_status_brief_onboarding($idonnee, $date_envoye, $statut) {
+		$this->load->database();
     $data = [
         'statut_brief'   => $statut,
         'Envoie_structure' => $date_envoye
@@ -109,12 +248,7 @@ class Donne_modele extends CI_Model
 		$this->db->query($sql);
 		$this->db->close();
 	}
-	public function update_budger_onboarding($idclient, $budget)
-	{
-		$sql = "UPDATE onboarding SET budget = $budget WHERE idclients = $idclient";
-		$this->db->query($sql);
-		$this->db->close();
-	}
+
 	public function update_information_resiliation(
 		$idonnee,
 		$information_resiliation,
@@ -564,7 +698,7 @@ class Donne_modele extends CI_Model
             FROM groupe_annonce ga 
             JOIN campagne c ON ga.idcampagne = c.idcampagne 
             WHERE ga.idclients = '" . $id . "' 
-            AND ga.validation_technique = '1' AND type_campagne = '3'";
+            AND type_campagne = '3'";
 
 		// Exécution de la requête
 		$result = $this->db->query($sql);
@@ -605,9 +739,10 @@ class Donne_modele extends CI_Model
 		$idclients = (int)$idclients;
 
 		// 1️⃣ Get all groupe_annonce + campagne
-		$sql = "SELECT ga.*, c.*
+		$sql = "SELECT ga.*, c.*,cl.*
             FROM groupe_annonce ga 
             JOIN campagne c ON ga.idcampagne = c.idcampagne
+			JOIN clients cl ON c.idclients = cl.idclients
             WHERE ga.idclients = ?";
 		$query = $this->db->query($sql, [$idclients]);
 		$groupes = $query->result_array();
@@ -617,13 +752,13 @@ class Donne_modele extends CI_Model
 		}
 
 		// 2️⃣ Get all images for those groupes, ordered by rank
-		$ids = array_column($groupes, 'idgroupe_annonce');
+		$ids = array_column($groupes, 'idcampagne');
 		$placeholders = implode(',', array_fill(0, count($ids), '?'));
 
 		$imgQuery = $this->db->query(
-			"SELECT idgroupe_annonce, image_url
+			"SELECT idcampagne, image_url
          FROM images
-         WHERE idgroupe_annonce IN ($placeholders)
+         WHERE idcampagne IN ($placeholders)
          ORDER BY rank ASC",
 			$ids
 		);
@@ -633,12 +768,12 @@ class Donne_modele extends CI_Model
 		// 3️⃣ Group only image_url values by idgroupe_annonce
 		$imagesByGroupe = [];
 		foreach ($images as $img) {
-			$imagesByGroupe[$img['idgroupe_annonce']][] = $img['image_url'];
+			$imagesByGroupe[$img['idcampagne']][] = $img['image_url'];
 		}
 
 		// 4️⃣ Attach array of URLs to each groupe
 		foreach ($groupes as &$groupe) {
-			$gid = $groupe['idgroupe_annonce'];
+			$gid = $groupe['idcampagne'];
 			$groupe['images'] = $imagesByGroupe[$gid] ?? [];
 		}
 		unset($groupe);
@@ -736,94 +871,45 @@ class Donne_modele extends CI_Model
 	}
 
 	public function insert_campagne_am(
-		$idclients,
-		$camp_type,
-		$nom_campagne,
-		$information_campagne,
-		$cible,
-		$ages,
-		$zones,
-		$repartition_budget,
-		$date_campagne,
-		$appareil,
-		$objectif,
-		$url_site,
-		$mots_cle,
-		$Mots_cle_exclus,
-		$sexe,
-		$promotions,
-		$prix,
-		$téléphone
-	) {
-		// Échappement des variables
-		$idclients = $this->db->escape($idclients);
-		$camp_type = $this->db->escape($camp_type);
-		$nom_campagne = $this->db->escape($nom_campagne);
-		$information_campagne = $this->db->escape($information_campagne);
-		$ages = $this->db->escape($ages);
-		$cible = $this->db->escape($cible);
-		$zones = $this->db->escape($zones);
-		$repartition_budget = $this->db->escape($repartition_budget);
-		$date_campagne = $this->db->escape($date_campagne);
-		$appareil = $this->db->escape($appareil);
-		$objectif = $this->db->escape($objectif);
-		$url_site = $this->db->escape($url_site);
-		$Mots_cle_exclus = $this->db->escape($Mots_cle_exclus);
-		$sexe = $this->db->escape($sexe);
-		$promotions = $this->db->escape($promotions);
-		$prix = $this->db->escape($prix);
-		$téléphone = $this->db->escape($téléphone);
+    $idclients,
+    $camp_type,
+    $nom_campagne,
+    $information_campagne,
+    $cible,
+    $ages,
+    $zones,
+    $repartition_budget,
+    $date_campagne,
+    $appareil,
+    $objectif,
+    $url_site,
+    $sexe,
+    $promotions,
+    $prix
+) {
+    $data = [
+        'idclients'           => $idclients,
+        'type_campagne'       => $camp_type,
+        'nom_campagne'        => $nom_campagne,
+        'information_campagne'=> $information_campagne,
+        'age'                 => $ages,
+        'cible'               => $cible,
+        'zones'               => $zones,
+        'repartition_budget'  => $repartition_budget,
+        'date_campagne'       => $date_campagne,
+        'appareil'            => $appareil,
+        'objectif'            => $objectif,
+        'url_site'            => $url_site,
+        'sexe'                => $sexe,
+        'promotions'          => $promotions,
+        'prix'                => $prix,
+    ];
 
-		// Construction de la requête SQL
-		$sql = "
-        INSERT INTO campagne (
-            idclients,
-            type_campagne,
-            nom_campagne,
-            information_campagne,
-            age,
-            cible,
-            zones,
-            repartition_budget,
-            date_campagne,
-            appareil,
-            objectif,
-            url_site,
-            Mots_cle_exclus,
-			sexe,
-			promotions,
-			prix,
-			téléphone
-        ) VALUES (
-            $idclients,
-            $camp_type,
-            $nom_campagne,
-            $information_campagne,
-            $ages,
-            $cible,
-            $zones,
-            $repartition_budget,
-            $date_campagne,
-            $appareil,
-            $objectif,
-            $url_site,
-            $Mots_cle_exclus,
-			$sexe,
-			$promotions,
-			$prix,
-			$téléphone
-        )
-    ";
-
-
-		$this->db->query($sql);
-
-		$idcampagne = $this->db->insert_id();
-
-		$this->db->close();
-
-		return $idcampagne;
-	}
+    $this->db->insert('campagne', $data);
+    $idcampagne = $this->db->insert_id();
+    $this->db->close();
+    return $idcampagne;
+}
 
 
 	public function update_campagne_am(

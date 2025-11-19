@@ -55,8 +55,150 @@ class Validation extends CI_Controller
     }
 
 	public function index() {
-		$this->load->view("templates/v3/Datastudio", $this->data);
+        $url = base_url('Client');
+        $response = file_get_contents($url);
+        echo $response;
+		//$this->load->view("templates/v3/Datastudio", $this->data);
 	}
+    	public function inventaire_pmax($idclients)
+	{
+        $donne_valider = $this->Donne_modele->getcclientvalidationbyidclients($idclients);
+		$groupe_valider = $this->Donne_modele->getcampagnegroupevalidationbyidclients($idclients);
+		$groupes_par_campagne = [];
+
+		foreach ($groupe_valider as $groupe) {
+			$idcampagne = $groupe['idcampagne'];
+			if (!isset($groupes_par_campagne[$idcampagne])) {
+				$groupes_par_campagne[$idcampagne] = [];
+			}
+			$groupes_par_campagne[$idcampagne][] = $groupe;
+		}
+
+		foreach ($donne_valider as &$campagne) {
+			$idcampagne = $campagne['idcampagne'];
+			$campagne['groupes_annonces'] = isset($groupes_par_campagne[$idcampagne]) ? $groupes_par_campagne[$idcampagne] : [];
+		}
+		unset($campagne);
+		$this->data['groupe_valider'] = $groupe_valider;
+		$this->load->view('layouts/client/onboarding/inventaire', $this->data);
+	}
+  public function updateImages()
+{
+    $idcampagne = trim($this->input->post('idcampagne'));
+    $idclients  = trim($this->input->post('idclients'));
+    $imagesJson = $this->input->post('images');
+    $images     = json_decode($imagesJson, true);
+
+    if (!$idcampagne || !$idclients) {
+        echo json_encode(['status' => 'error', 'message' => 'Identifiants manquants.']);
+        return;
+    }
+
+    $this->db->trans_start();
+
+    // DELETE robuste : campagne uniquement (0) + compat NULL
+    $this->db->where('idcampagne', $idcampagne)
+             ->where('idclients',  $idclients)
+             ->group_start()
+                 ->where('idgroupe_annonce', 0)
+                 ->or_where('idgroupe_annonce IS NULL', null, false)
+             ->group_end()
+             ->delete('images');
+
+    $deleted = $this->db->affected_rows();
+
+    // Réinsertion propre
+    if (!empty($images) && is_array($images)) {
+        foreach ($images as $rank => $img) {
+            $url = isset($img['image_url']) ? trim($img['image_url']) : '';
+            if ($url === '') continue;
+
+            $this->db->insert('images', [
+                'idclients'        => (int)$idclients,
+                'idcampagne'       => (int)$idcampagne,
+                'idgroupe_annonce' => 0,   // campagne only
+                'image_url'        => $url,
+                'rank'             => (int)$rank,
+            ]);
+        }
+    }
+
+    $this->db->trans_complete();
+
+    if (!$this->db->trans_status()) {
+        echo json_encode(['status' => 'error', 'message' => 'Échec transaction.']);
+        return;
+    }
+
+    echo json_encode([
+        'status'  => 'success',
+        'deleted' => $deleted,
+        'kept'    => !empty($images) ? count($images) : 0
+    ]);
+}
+
+
+
+
+    public function updateExclusions()
+{
+
+    $idclients = $this->input->post('idclients');
+    $exclusion = trim($this->input->post('exclusion'));
+
+    if (empty($idclients)) {
+        $this->session->set_flashdata('error', 'Client non défini.');
+        redirect($_SERVER['HTTP_REFERER'] ?? 'Validation');
+        return;
+    }
+
+    // Met à jour la colonne exclusion dans la table donnee
+    $this->visuels_model->update_exclusion_by_client($idclients, $exclusion);
+
+    $this->session->set_flashdata('success', 'Mots-clés exclus mis à jour avec succès.');
+    redirect($_SERVER['HTTP_REFERER'] ?? 'Validation');
+}
+
+    public function updateExtensions()
+{
+
+    $idclients = $this->input->post('idclients');
+
+    // Champs simples
+    $dataGlobal = [
+        'extensions_accroche'      => $this->input->post('extensions_accroche'),
+        'extensions_extrait_site'  => $this->input->post('extensions_extrait_site'),
+        'extensions_lieu'          => $this->input->post('extensions_lieu'),
+        'extensions_appel'         => $this->input->post('extensions_appel')
+    ];
+
+    $titres = $this->input->post('titre_extensions');
+    $descs  = $this->input->post('description_extensions');
+    $urls   = $this->input->post('url_extensions');
+
+    // ⚠️ Supprimer les anciennes extensions liées au client
+    $this->visuels_model->delete_extensions_by_client($idclients);
+
+    // Réinsérer les nouvelles lignes
+    if (is_array($titres)) {
+        foreach ($titres as $i => $titre) {
+            $data = array_merge($dataGlobal, [
+                'idclients' => $idclients,
+                'idcampagne' => 0, // ou laisse vide si tu veux
+                'titre_extensions' => trim($titre),
+                'description_extensions' => trim($descs[$i] ?? ''),
+                'url_extensions' => trim($urls[$i] ?? '')
+            ]);
+            $this->visuels_model->insert_extension($data);
+        }
+    }
+
+    $this->session->set_flashdata('success', 'Extensions du client mises à jour avec succès.');
+    redirect($_SERVER['HTTP_REFERER'] ?? 'Validation');
+}
+
+
+
 	public function editextensions($id)
 	{
 		// Récupérer les données de la campagne
@@ -253,41 +395,10 @@ endif;
 
 		echo json_encode(['status' => 'success']);
 	}
-   public function updateExtensions() {
-        $post = $this->input->post();
-        $idclients = $post['idclients'] ?? null;
 
-        if (!$idclients) {
-            show_error('ID client manquant.');
-        }
-
-        $extensions = [
-            'extensions_accroche' => $post['extensions_accroche'],
-            'extensions_extrait_site' => $post['extensions_extrait_site'],
-            'extensions_lieu' => $post['extensions_lieu'],
-            'extensions_appel' => $post['extensions_appel'],
-        ];
-
-        $this->Extension_model->updateExtensions($idclients, $extensions);
-
-        redirect('Validation/validation_structure/' . $idclients);
-    }
 
     // Mettre à jour les exclusions
-    public function updateExclusions() {
-        $post = $this->input->post();
-        $idclients = $post['idclients'] ?? null;
 
-        if (!$idclients) {
-            show_error('ID client manquant.');
-        }
-
-        $exclusion = explode("\n", trim($post['exclusions'] ?? ''));
-        $this->visuels_model->exclusion($id, $exclusion);
-		
-
-        redirect('Validation/validation_structure/' . $idclients);
-    }
 	/**
  * Affiche la page de validation et gère l'export via ?action=export
  */
@@ -297,6 +408,7 @@ public function validation_structure(int $id)
         $this->data['logo_base64'] = $this->encode_local_image_to_data_uri(
             FCPATH.(defined('IMAGES_PATH') ? IMAGES_PATH : 'assets/images').'/logo/logo3.png'
         );
+        
 
         // 2️⃣ Charger les campagnes + groupes + images
         $campagnes = $this->Visuels_model->get_campagnes_by_client($id);
@@ -306,9 +418,17 @@ public function validation_structure(int $id)
                 $campagne['images'] = $this->Image_model->get_images_by_campagne($campagne['idcampagne']) ?: [];
 
                 foreach ($campagne['images'] as &$img) {
-                    $pathOrUrl = isset($img->image_url) ? $img->image_url : '';
-                    $img->image_base64 = $this->maybe_data_uri($pathOrUrl);
+                    if (!empty($img->image_url)) {
+                        if (file_exists(FCPATH . $img->image_url)) {
+                            $img->final_url = base_url($img->image_url);
+                        } else {
+                            $img->final_url = $img->image_url;
+                        }
+                    } else {
+                        $img->final_url = base_url('assets/images/placeholder.jpg'); 
+                    }
                 }
+
                 unset($img);
             }
             unset($campagne);
@@ -319,13 +439,30 @@ public function validation_structure(int $id)
         $this->data['is_pdf'] = false;
         $this->data['extensions'] = $this->Donne_modele->get_extensions_by_clients($idclients);
         $this->data["exlusions"] = $this->Visuels_model->get_exclusions($idclients);
-        // 3️⃣ Afficher la page normale
+        $donne_valider = $this->Donne_modele->getcclientvalidationbyidclients($idclients);
+        $groupe_valider = $this->Donne_modele->getcampagnegroupevalidationbyidclients($idclients);
+		$groupes_par_campagne = [];
+
+		foreach ($groupe_valider as $groupe) {
+			$idcampagne = $groupe['idcampagne'];
+			if (!isset($groupes_par_campagne[$idcampagne])) {
+				$groupes_par_campagne[$idcampagne] = [];
+			}
+			$groupes_par_campagne[$idcampagne][] = $groupe;
+		}
+
+		foreach ($donne_valider as &$campagne) {
+			$idcampagne = $campagne['idcampagne'];
+			$campagne['groupes_annonces'] = isset($groupes_par_campagne[$idcampagne]) ? $groupes_par_campagne[$idcampagne] : [];
+		}
+		unset($campagne);
+		$this->data['donne_valider'] = $donne_valider;
+		$this->data['groupe_valider'] = $groupe_valider;
         $this->load->view('templates/v3/Validation_structure', $this->data);
     }
 
     public function exporter(int $id)
-{
-    // 1️⃣ Récupération des données
+    {
     $this->data['logo_base64'] = $this->encode_local_image_to_data_uri(
         FCPATH.(defined('IMAGES_PATH') ? IMAGES_PATH : 'assets/images').'/logo/logo3.png'
     );
@@ -338,7 +475,6 @@ public function validation_structure(int $id)
 
             foreach ($campagne['images'] as &$img) {
                 $pathOrUrl = isset($img->image_url) ? $img->image_url : '';
-                // Assure-toi que maybe_data_uri() existe dans la classe
                 $img->image_base64 = $this->maybe_data_uri($pathOrUrl);
             }
             unset($img);
@@ -363,6 +499,25 @@ public function validation_structure(int $id)
 			$groupes_par_campagne[$idcampagne][] = $groupe;
 		}
         $this->data['groupe_valider'] = $groupe_valider;
+         $donne_valider = $this->Donne_modele->getcclientvalidationbyidclients($idclients);
+        $groupe_valider = $this->Donne_modele->getcampagnegroupevalidationbyidclients($idclients);
+		$groupes_par_campagne = [];
+
+		foreach ($groupe_valider as $groupe) {
+			$idcampagne = $groupe['idcampagne'];
+			if (!isset($groupes_par_campagne[$idcampagne])) {
+				$groupes_par_campagne[$idcampagne] = [];
+			}
+			$groupes_par_campagne[$idcampagne][] = $groupe;
+		}
+
+		foreach ($donne_valider as &$campagne) {
+			$idcampagne = $campagne['idcampagne'];
+			$campagne['groupes_annonces'] = isset($groupes_par_campagne[$idcampagne]) ? $groupes_par_campagne[$idcampagne] : [];
+		}
+		unset($campagne);
+		$this->data['donne_valider'] = $donne_valider;
+		$this->data['groupe_valider'] = $groupe_valider;
 
     // 2️⃣ Générer le HTML
     $html = $this->load->view('templates/v3/Validation_structure_pdf', $this->data, true);
@@ -404,53 +559,66 @@ public function validation_structure(int $id)
      * Form action: Validation/updateCampagne
      * Champs: idcampagne, zones, date_campagne, appareil, repartition_budget, nom_campagne, mot_cle (optionnel: appliquer aux groupes)
      */
-    public function updateCampagne()
-    {
-        // Sécurité basique
-        if (strtoupper($this->input->method()) !== 'POST') { show_error('Méthode non autorisée', 405); }
+   public function updateCampagne()
+{
+    if (strtoupper($this->input->method()) !== 'POST') { show_error('Méthode non autorisée', 405); }
 
-        $idcampagne = (int) $this->input->post('idcampagne', true);
-        if (!$idcampagne) { $this->session->set_flashdata('error','ID campagne manquant'); return $this->_redirect_back(); }
+    $idcampagne = (int) $this->input->post('idcampagne', true);
+    if (!$idcampagne) { $this->session->set_flashdata('error','ID campagne manquant'); return $this->_redirect_back(); }
 
-        // Whitelist des champs éditables
-        $fields = [
-            'zones'              => $this->input->post('zones', true),
-            'date_campagne'      => $this->input->post('date_campagne', true),
-            'appareil'           => $this->input->post('appareil', true),
-            'repartition_budget' => $this->input->post('repartition_budget', true),
-            'nom_campagne'       => $this->input->post('nom_campagne', true),
-        ];
+    $fields = [
+        'zones'              => $this->input->post('zones', true),
+        'date_campagne'      => $this->input->post('date_campagne', true),
+        'appareil'           => $this->input->post('appareil', true),
+        'repartition_budget' => $this->input->post('repartition_budget', true),
+        'nom_campagne'       => $this->input->post('nom_campagne', true),
+    ];
+    $update = [];
+    foreach ($fields as $k => $v) { if ($v !== null) { $update[$k] = trim($v); } }
 
-        // Nettoyage minimal (tu peux durcir selon ton besoin)
-        $update = [];
-        foreach ($fields as $k => $v) {
-            if ($v !== null) { $update[$k] = trim($v); }
-        }
+    $ok = !empty($update)
+        ? $this->db->where('idcampagne', $idcampagne)->update('campagne', $update)
+        : true;
 
-        // Mise à jour campagne
-        $ok = !empty($update)
-            ? $this->db->where('idcampagne', $idcampagne)->update('campagne', $update)
-            : true;
-
-        if (!$ok) {
-            $this->session->set_flashdata('error','Échec de la mise à jour de la campagne.');
-            return $this->_redirect_back();
-        }
-
-        // Option : si "mot_cle" est envoyé, l'appliquer à TOUS les groupes de la campagne
-        $mot_cle_global = $this->input->post('mot_cle');
-        if ($mot_cle_global !== null) {
-            $mot_cle_global = trim($mot_cle_global);
-            // ici, tu peux:
-            // - soit répartir par ligne vers chaque groupe
-            // - soit dupliquer le même champ pour tous les groupes
-            // On choisit de DUpliquer sur tous les groupes :
-            $this->db->where('idcampagne', $idcampagne)->update('groupe_annonce', ['mot_cle' => $mot_cle_global]);
-        }
-
+    if (!$ok) {
+        $this->session->set_flashdata('error','Échec de la mise à jour de la campagne.');
+    } else {
         $this->session->set_flashdata('success','Campagne mise à jour.');
-        return $this->_redirect_back();
     }
+    return $this->_redirect_back();
+}
+public function updateMotCleGroupe()
+{
+    if (strtoupper($this->input->method()) !== 'POST') {
+        return $this->_json(['status'=>'error','message'=>'Méthode non autorisée'], 405);
+    }
+
+    $idg = (int) $this->input->post('idgroupe_annonce', true);
+    if (!$idg) {
+        return $this->_json(['status'=>'error','message'=>'ID groupe manquant'], 400);
+    }
+
+    // Récupère tel quel, tu peux ajouter validations (taille max, blacklist, etc.)
+    $mot_cle = trim((string) $this->input->post('mot_cle'));
+
+    $ok = $this->db->where('idgroupe_annonce', $idg)
+                   ->update('groupe_annonce', ['mot_cle' => $mot_cle !== '' ? $mot_cle : null]);
+
+    if (!$ok) {
+        return $this->_json(['status'=>'error','message'=>'Échec de la mise à jour'], 500);
+    }
+    return $this->_json(['status'=>'success']);
+}
+
+// petit helper JSON (si tu ne l’as pas déjà)
+private function _json($payload, $code = 200)
+{
+    $this->output
+         ->set_content_type('application/json')
+         ->set_status_header($code)
+         ->set_output(json_encode($payload));
+}
+
     /**
  * Convertit un chemin local ou une URL en data:image/...;base64,... 
  * Retourne la data-uri ou '' en cas d'échec.
@@ -512,68 +680,68 @@ protected function maybe_data_uri(string $pathOrUrl = ''): string
      *   titres (textarea lignes → titre1..12)
      *   descriptions (textarea lignes → descriptions1..4)
      */
-    public function updateDonneeClient()
-    {
-        if (strtoupper($this->input->method()) !== 'POST') { show_error('Méthode non autorisée', 405); }
+   public function updateDonneeClient()
+{
+    if (strtoupper($this->input->method()) !== 'POST') { show_error('Méthode non autorisée', 405); }
 
-        $idg = (int) $this->input->post('idgroupe_annonce', true);
-        if (!$idg) { $this->session->set_flashdata('error','ID groupe manquant'); return $this->_redirect_back(); }
+    $idg = (int) $this->input->post('idgroupe_annonce', true);
+    if (!$idg) { $this->session->set_flashdata('error','ID groupe manquant'); return $this->_redirect_back(); }
 
-        $payload = [
-            'nom_groupe'         => $this->input->post('nom_groupe', true),
-            'mot_cle'            => $this->input->post('mot_cle', true),
-            'url_groupe_annonce' => $this->input->post('url_groupe_annonce', true),
-        ];
+    // Champs de base
+    $payload = [
+        'nom_groupe'         => $this->input->post('nom_groupe', true),
+        'mot_cle'            => $this->input->post('mot_cle', true),
+        'url_groupe_annonce' => $this->input->post('url_groupe_annonce', true),
+    ];
 
-        // Mapper "titres" (textarea) → titre1..12
-        $titres_lines = preg_split('/\r\n|\r|\n/', (string)$this->input->post('titres'));
-       // Mapper "titres" (textarea) → titre1..12
-$titres_lines = preg_split('/\r\n|\r|\n/', (string)$this->input->post('titres'));
-$titres_lines = array_values(array_filter(array_map('trim', $titres_lines), function($x) {
-    return $x !== '';
-}));
-for ($i=1; $i<=12; $i++) {
-    $payload['titre'.$i] = isset($titres_lines[$i-1]) ? $titres_lines[$i-1] : null;
-}
-
-// Mapper "descriptions" (textarea) → descriptions1..4
-$desc_lines = preg_split('/\r\n|\r|\n/', (string)$this->input->post('descriptions'));
-$desc_lines = array_values(array_filter(array_map('trim', $desc_lines), function($x) {
-    return $x !== '';
-}));
-for ($i=1; $i<=4; $i++) {
-    $payload['descriptions'.$i] = isset($desc_lines[$i-1]) ? $desc_lines[$i-1] : null;
-}
-
-        for ($i=1; $i<=12; $i++) {
-            $payload['titre'.$i] = isset($titres_lines[$i-1]) ? $titres_lines[$i-1] : null;
-        }
-
-        // Mapper "descriptions" (textarea) → descriptions1..4
-        $desc_lines = preg_split('/\r\n|\r|\n/', (string)$this->input->post('descriptions'));
-       $desc_lines = array_values(array_filter(array_map('trim', $desc_lines), function($x) {
-    return $x !== '';
-}));
-
-        for ($i=1; $i<=4; $i++) {
-            $payload['descriptions'.$i] = isset($desc_lines[$i-1]) ? $desc_lines[$i-1] : null;
-        }
-
-        // Nettoyage: convertir '' → NULL pour ne pas forcer vide (facultatif)
-        foreach ($payload as $k => $v) {
-            if ($v === '') { $payload[$k] = null; }
-        }
-
-        $ok = $this->db->where('idgroupe_annonce', $idg)->update('groupe_annonce', $payload);
-
-        if (!$ok) {
-            $this->session->set_flashdata('error','Échec de la mise à jour du groupe.');
-        } else {
-            $this->session->set_flashdata('success','Groupe mis à jour.');
-        }
-
-        return $this->_redirect_back();
+    // Type & champs conditionnels
+    $type = $this->input->post('type_campagnes');
+    $type = is_numeric($type) ? (int)$type : null;
+    if ($type !== null) {
+        $payload['type_campagnes'] = $type;
     }
+
+    // Si type 1: chemins, sinon NULL
+    $payload['chemin1'] = ($type === 1) ? $this->input->post('chemin1', true) : null;
+    $payload['chemin2'] = ($type === 1) ? $this->input->post('chemin2', true) : null;
+
+    // Si type 2/3: description_breve, sinon NULL
+    $payload['description_breve'] = ($type === 2 || $type === 3) ? $this->input->post('description_breve', true) : null;
+
+    // Titre1..12
+    // Titres
+        $titres_lines = preg_split('/\r\n|\r|\n/', (string)$this->input->post('titres'));
+        $titres_lines = array_values(array_filter(
+            array_map('trim', $titres_lines),
+            function ($x) { return $x !== ''; }
+        ));
+        for ($i = 1; $i <= 12; $i++) {
+            $payload['titre' . $i] = isset($titres_lines[$i-1]) ? $titres_lines[$i-1] : null;
+        }
+
+        // Descriptions
+        $desc_lines = preg_split('/\r\n|\r|\n/', (string)$this->input->post('descriptions'));
+        $desc_lines = array_values(array_filter(
+            array_map('trim', $desc_lines),
+            function ($x) { return $x !== ''; }
+        ));
+        for ($i = 1; $i <= 4; $i++) {
+            $payload['descriptions' . $i] = isset($desc_lines[$i-1]) ? $desc_lines[$i-1] : null;
+        }
+
+
+    // '' -> NULL
+    foreach ($payload as $k => $v) {
+        if ($v === '') { $payload[$k] = null; }
+    }
+
+    $ok = $this->db->where('idgroupe_annonce', $idg)->update('groupe_annonce', $payload);
+
+    $this->session->set_flashdata($ok ? 'success' : 'error', $ok ? 'Groupe mis à jour.' : 'Échec de la mise à jour du groupe.');
+
+    return $this->_redirect_back();
+}
+
 
     /* ============================================================
      *                         HELPERS

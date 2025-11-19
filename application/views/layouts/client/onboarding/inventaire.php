@@ -1,7 +1,3 @@
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-<script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
-
-
 <div class="modal fade" id="inventaireModal" tabindex="-1" role="dialog" aria-labelledby="inventaireModalLabel" aria-hidden="true">
 	<div class="modal-dialog modal-dialog-scrollable" role="document" style="max-width: 1400px;">
 		<div class="modal-content">
@@ -24,11 +20,9 @@
 						</a>
 					</li>
 				</ul>
-				<button id="exportPdfBtn" class="btn btn-primary no-export">Lien datastudio</button>
-				<button id="exportPdfBtn" class="btn btn-primary no-export">Exporter en PDF</button>
-			<!-- <button class="btn btn-secondary no-export" data-dismiss="modal">Fermer</button> -->
-
-
+				<button type="button" class="close" data-dismiss="modal" aria-label="Fermer">
+					<span aria-hidden="true">&times;</span>
+				</button>
 			</div>
 			<div class="modal-body">
 
@@ -86,15 +80,15 @@
 													<img src=<?= $groupe['images'][0] ?? "https://placehold.co/120x120?text=Youtube+Ads" ?> alt="placeholder">
 												</div>
 												<div class="alert alert-primary border-0 py-0 px-2 d-flex justify-content-between align-items-center">
-													<span class="small font-weight-bold">Réservation</span>
+													<span class="small font-weight-bold">Book now</span>
 													<i class="fa fa-external-link-alt"></i>
 												</div>
 												<div class="row no-gutters justify-content-between">
 													<div class="col-auto">
-														<img src="<?= $groupe['favicon'] ?>" alt="" class="rounded-circle" width="38">
+														<img src="https://placehold.co/38x38?text=Favicon" alt="" class="rounded-circle" width="38">
 													</div>
 													<div class="col px-2">
-														<p class="font-weight-bold m-0"><?= $groupe['titre1'] ?></p>
+														<p class="font-weight-bold m-0"><?= $groupe['nom_groupe'] ?></p>
 														<p class="small text-muted m-0"><?= $groupe['descriptions1'] ?></p>
 													</div>
 													<div class="col-auto">
@@ -117,10 +111,10 @@
 												</div>
 												<div class="row no-gutters justify-content-start mb-3">
 													<div class="col-auto">
-														<img src="<?= $groupe['favicon'] ?>" alt="" class="rounded-circle" width="38">
+														<img src="https://placehold.co/38x38?text=Favicon" alt="" class="rounded-circle" width="38">
 													</div>
 													<div class="pl-2 col">
-														<p class="small m-0"><?= $groupe['nom_client'] ?></p>
+														<p class="small m-0">Résidence-Luxe</p>
 														<p class="small m-0 text-muted">à Moi</p>
 													</div>
 												</div>
@@ -128,10 +122,10 @@
 													<img src=<?= $groupe['images'][1] ?? $groupe['images'][0] ?? "https://placehold.co/120x120?text=Gmail+Attachment" ?> alt="placeholder">
 												</div>
 
-												<p class="font-weight-bold mb-2"><?= $groupe['titre1'] ?></p>
+												<p class="font-weight-bold mb-2"><?= $groupe['nom_groupe'] ?></p>
 												<p class="small text-muted"><?= $groupe['descriptions1'] ?></p>
 
-												<span class="badge badge-primary py-2 w-100 rounded-pill">Réservation</span>
+												<span class="badge badge-primary py-2 w-100 rounded-pill">Book now</span>
 											</div>
 										</div>
 									</div>
@@ -146,29 +140,29 @@
 												</div>
 												<div class="d-flex justify-content-between align-items-center border rounded-pill w-100 px-2 py-1">
 													<i class="fa fa-search"></i>
-													<span class="mr-auto ml-3"><?= htmlspecialchars(strtok($groupe['mot_cle'] ?? '', "\n"), ENT_QUOTES, 'UTF-8') ?></span>
+													<span class="mr-auto ml-3">Mots clés</span>
 													<img height="20" src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIj8+PHN2ZyBpZD0iQ2FwYV8xIiBzdHlsZT0iZW5hYmxlLWJhY2tncm91bmQ6bmV3IDAgMCAxNTAgMTUwOyIgdmVyc2lvbj0iMS4xIiB2aWV3Qm94PSIwIDAgMTUwIDE1MCIgeG1sOnNwYWNlPSJwcmVzZXJ2ZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB4bWxuczp4bGluaz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94bGluayI+PHN0eWxlIHR5cGU9InRleHQvY3NzIj4KCS5zdDB7ZmlsbDojMUE3M0U4O30KCS5zdDF7ZmlsbDojRUE0MzM1O30KCS5zdDJ7ZmlsbDojNDI4NUY0O30KCS5zdDN7ZmlsbDojRkJCQzA0O30KCS5zdDR7ZmlsbDojMzRBODUzO30KCS5zdDV7ZmlsbDojNENBRjUwO30KCS5zdDZ7ZmlsbDojMUU4OEU1O30KCS5zdDd7ZmlsbDojRTUzOTM1O30KCS5zdDh7ZmlsbDojQzYyODI4O30KCS5zdDl7ZmlsbDojRkJDMDJEO30KCS5zdDEwe2ZpbGw6IzE1NjVDMDt9Cgkuc3QxMXtmaWxsOiMyRTdEMzI7fQoJLnN0MTJ7ZmlsbDojRjZCNzA0O30KCS5zdDEze2ZpbGw6I0U1NDMzNTt9Cgkuc3QxNHtmaWxsOiM0MjgwRUY7fQoJLnN0MTV7ZmlsbDojMzRBMzUzO30KCS5zdDE2e2NsaXAtcGF0aDp1cmwoI1NWR0lEXzJfKTt9Cgkuc3QxN3tmaWxsOiMxODgwMzg7fQoJLnN0MTh7b3BhY2l0eTowLjI7ZmlsbDojRkZGRkZGO2VuYWJsZS1iYWNrZ3JvdW5kOm5ldyAgICA7fQoJLnN0MTl7b3BhY2l0eTowLjM7ZmlsbDojMEQ2NTJEO2VuYWJsZS1iYWNrZ3JvdW5kOm5ldyAgICA7fQoJLnN0MjB7Y2xpcC1wYXRoOnVybCgjU1ZHSURfNF8pO30KCS5zdDIxe29wYWNpdHk6MC4zO2ZpbGw6dXJsKCNfNDVfc2hhZG93XzFfKTtlbmFibGUtYmFja2dyb3VuZDpuZXcgICAgO30KCS5zdDIye2NsaXAtcGF0aDp1cmwoI1NWR0lEXzZfKTt9Cgkuc3QyM3tmaWxsOiNGQTdCMTc7fQoJLnN0MjR7b3BhY2l0eTowLjM7ZmlsbDojMTc0RUE2O2VuYWJsZS1iYWNrZ3JvdW5kOm5ldyAgICA7fQoJLnN0MjV7b3BhY2l0eTowLjM7ZmlsbDojQTUwRTBFO2VuYWJsZS1iYWNrZ3JvdW5kOm5ldyAgICA7fQoJLnN0MjZ7b3BhY2l0eTowLjM7ZmlsbDojRTM3NDAwO2VuYWJsZS1iYWNrZ3JvdW5kOm5ldyAgICA7fQoJLnN0Mjd7ZmlsbDp1cmwoI0ZpbmlzaF9tYXNrXzFfKTt9Cgkuc3QyOHtmaWxsOiNGRkZGRkY7fQoJLnN0Mjl7ZmlsbDojMEM5RDU4O30KCS5zdDMwe29wYWNpdHk6MC4yO2ZpbGw6IzAwNEQ0MDtlbmFibGUtYmFja2dyb3VuZDpuZXcgICAgO30KCS5zdDMxe29wYWNpdHk6MC4yO2ZpbGw6IzNFMjcyMztlbmFibGUtYmFja2dyb3VuZDpuZXcgICAgO30KCS5zdDMye2ZpbGw6I0ZGQzEwNzt9Cgkuc3QzM3tvcGFjaXR5OjAuMjtmaWxsOiMxQTIzN0U7ZW5hYmxlLWJhY2tncm91bmQ6bmV3ICAgIDt9Cgkuc3QzNHtvcGFjaXR5OjAuMjt9Cgkuc3QzNXtmaWxsOiMxQTIzN0U7fQoJLnN0MzZ7ZmlsbDp1cmwoI1NWR0lEXzdfKTt9Cgkuc3QzN3tmaWxsOiNGQkJDMDU7fQoJLnN0Mzh7Y2xpcC1wYXRoOnVybCgjU1ZHSURfOV8pO2ZpbGw6I0U1MzkzNTt9Cgkuc3QzOXtjbGlwLXBhdGg6dXJsKCNTVkdJRF8xMV8pO2ZpbGw6I0ZCQzAyRDt9Cgkuc3Q0MHtjbGlwLXBhdGg6dXJsKCNTVkdJRF8xM18pO2ZpbGw6I0U1MzkzNTt9Cgkuc3Q0MXtjbGlwLXBhdGg6dXJsKCNTVkdJRF8xNV8pO2ZpbGw6I0ZCQzAyRDt9Cjwvc3R5bGU+PGc+PGcgaWQ9ImcxNzQ4MCIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoNjQ2LjMwMzQsMjM2LjM3ODkpIj48cGF0aCBjbGFzcz0ic3Q2IiBkPSJNLTU3MS4zLTE0Ny4zYzcuOSwwLDE0LjItNi40LDE0LjItMTQuMmwwLTMzLjJjMC03LjktNi40LTE0LjItMTQuMi0xNC4yICAgIGMtNy45LDAtMTQuMiw2LjQtMTQuMiwxNC4ydjMzLjJDLTU4NS41LTE1My43LTU3OS4xLTE0Ny4zLTU3MS4zLTE0Ny4zIiBpZD0icGF0aDE3NDgyIi8+PC9nPjxnIGlkPSJnMTc0ODQiIHRyYW5zZm9ybT0idHJhbnNsYXRlKDY0NS40ODAzLDIzMy4xNDkyKSI+PHBhdGggY2xhc3M9InN0NSIgZD0iTS01NzUuMi0xMjUuNUwtNTc1LjItMTI1LjV2MTQuOWg5LjV2LTE0LjhjLTEuNSwwLjItMy4xLDAuMi00LjcsMC4yICAgIEMtNTcyLjEtMTI1LjEtNTczLjYtMTI1LjItNTc1LjItMTI1LjUiIGlkPSJwYXRoMTc0ODYiLz48L2c+PGcgaWQ9ImcxNzQ4OCIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoNjQzLjM4MDksMjM1LjkxMTUpIj48cGF0aCBjbGFzcz0ic3Q5IiBkPSJNLTU4NS4yLTE0NC4xYy00LjItNC4zLTYuOS05LjUtNi45LTE2LjZoLTkuNWMwLDkuNSwzLjcsMTcuMyw5LjcsMjMuM2wwLjEtMC4xICAgIGMwLDAsMCwwLTAuMS0wLjFMLTU4NS4yLTE0NC4xeiIgaWQ9InBhdGgxNzQ5MCIvPjwvZz48ZyBpZD0iZzE3NDkyIiB0cmFuc2Zvcm09InRyYW5zbGF0ZSg2NTAuNDA4MSwyMzguNzkpIj48cGF0aCBjbGFzcz0ic3Q3IiBkPSJNLTU1MS43LTE2My42YzAsMTEuOS0xMC41LDIzLjYtMjMuNywyMy42Yy02LjYsMC0xMi41LTIuNy0xNi44LTdsLTAuMSwwLjFsLTYuNiw2LjYgICAgYzAsMCwwLDAsMC4xLDAuMWM0LjksNC45LDExLjQsOC4yLDE4LjcsOS4zYzEuNiwwLjIsMy4yLDAuNCw0LjgsMC40YzEuNiwwLDMuMiwwLDQuNy0wLjJjMTYuMS0yLjMsMjguNC0xNi4xLDI4LjQtMzIuN0gtNTUxLjd6IiBpZD0icGF0aDE3NDk0Ii8+PC9nPjwvZz48L3N2Zz4=" alt="google-microphone">
 												</div>
 												<hr>
 												<p class="small font-weight-bold mb-2">Sponsorisé</p>
 												<div class="row no-gutters justify-content-start mb-2">
 													<div class="col-auto">
-														<img src="<?= $groupe['favicon'] ?>" alt="" class="rounded-circle" width="38">
+														<img src="https://placehold.co/38x38?text=Favicon" alt="" class="rounded-circle" width="38">
 													</div>
 													<div class="pl-2 col">
-														<p class="m-0"><?= $groupe['nom_client'] ?></p>
+														<p class="m-0">Résidence-Luxe</p>
 														<p class="small m-0 text-muted"><?= $groupe['url_site'] ?></p>
 													</div>
 												</div>
 
-												<p class="text-primary mb-2"><?= $groupe['titre1'] ?></p>
+												<p class="text-primary mb-2"><?= $groupe['nom_groupe'] ?></p>
 												<p class="small text-muted mb-2"><?= $groupe['descriptions1'] ?></p>
 
-												<span class="border rounded-pill text-primary py-1 px-2 small"><?= htmlspecialchars(strtok($groupe['mot_cle'] ?? '', "\n"), ENT_QUOTES, 'UTF-8') ?></span>
+												<span class="border rounded-pill text-primary py-1 px-2 small">Chalets de Luxe</span>
 												<span class="border rounded-pill text-primary py-1 px-2 small">Promotions</span>
 												<hr>
 												<i class="fa fa-phone"></i>
-												Appeler le <?= $groupe['numero_client'] ?>
+												Appeler le <?= $groupe['téléphone'] ?>
 											</div>
 										</div>
 									</div>
@@ -182,14 +176,14 @@
 												</div>
 												<div class="row no-gutters justify-content-start mb-2">
 													<div class="col-auto">
-														<img src="<?= $groupe['favicon'] ?>" alt="" class="rounded-circle" width="38">
+														<img src="https://placehold.co/38x38?text=Favicon" alt="" class="rounded-circle" width="38">
 													</div>
 													<div class="pl-2 col">
-														<p class="m-0"><?= $groupe['nom_client'] ?></p>
+														<p class="m-0">Résidence-Luxe</p>
 													</div>
 												</div>
 												<div class="d-flex justify-content-between">
-													<span class="small text-muted"><?= $groupe['titre1'] ?></span>
+													<span class="small text-muted">Résidence-Luxe</span>
 													<span class="small">
 														En savoir plus
 														<i class="fa fa-chevron-right"></i>
@@ -206,10 +200,10 @@
 											<div class="screen">
 												<div class="row no-gutters justify-content-start mb-3">
 													<div class="col-auto">
-														<img src="<?= $groupe['favicon'] ?>" alt="" class="rounded-circle" width="38">
+														<img src="https://placehold.co/38x38?text=Favicon" alt="" class="rounded-circle" width="38">
 													</div>
 													<div class="pl-2 col">
-														<p class="m-0"><?= $groupe['nom_client'] ?></p>
+														<p class="m-0"><?= $groupe['nom_groupe'] ?></p>
 														<p class="small m-0 text-muted">Sponsored</p>
 													</div>
 												</div>
@@ -235,8 +229,6 @@
 					</div>
 
 					<!-- SEARCH -->
-					 <?php foreach ($groupe_valider as $groupe): ?>
-							<?php if ($groupe['type_campagne'] == 1): ?>
 					<div class="tab-pane fade" id="search" role="tabpanel" aria-labelledby="search_tab">
 
 						<div class="row row-cols-3 justify-content-around  mb-4 small">
@@ -259,29 +251,29 @@
 										</div>
 										<div class="d-flex justify-content-between align-items-center border rounded-pill w-100 px-2 py-1">
 											<i class="fa fa-search"></i>
-											<span class="mr-auto ml-3"><?= htmlspecialchars(strtok($groupe['mot_cle'] ?? '', "\n"), ENT_QUOTES, 'UTF-8') ?></span>
+											<span class="mr-auto ml-3">Mots clés</span>
 											<img height="20" src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIj8+PHN2ZyBpZD0iQ2FwYV8xIiBzdHlsZT0iZW5hYmxlLWJhY2tncm91bmQ6bmV3IDAgMCAxNTAgMTUwOyIgdmVyc2lvbj0iMS4xIiB2aWV3Qm94PSIwIDAgMTUwIDE1MCIgeG1sOnNwYWNlPSJwcmVzZXJ2ZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB4bWxuczp4bGluaz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94bGluayI+PHN0eWxlIHR5cGU9InRleHQvY3NzIj4KCS5zdDB7ZmlsbDojMUE3M0U4O30KCS5zdDF7ZmlsbDojRUE0MzM1O30KCS5zdDJ7ZmlsbDojNDI4NUY0O30KCS5zdDN7ZmlsbDojRkJCQzA0O30KCS5zdDR7ZmlsbDojMzRBODUzO30KCS5zdDV7ZmlsbDojNENBRjUwO30KCS5zdDZ7ZmlsbDojMUU4OEU1O30KCS5zdDd7ZmlsbDojRTUzOTM1O30KCS5zdDh7ZmlsbDojQzYyODI4O30KCS5zdDl7ZmlsbDojRkJDMDJEO30KCS5zdDEwe2ZpbGw6IzE1NjVDMDt9Cgkuc3QxMXtmaWxsOiMyRTdEMzI7fQoJLnN0MTJ7ZmlsbDojRjZCNzA0O30KCS5zdDEze2ZpbGw6I0U1NDMzNTt9Cgkuc3QxNHtmaWxsOiM0MjgwRUY7fQoJLnN0MTV7ZmlsbDojMzRBMzUzO30KCS5zdDE2e2NsaXAtcGF0aDp1cmwoI1NWR0lEXzJfKTt9Cgkuc3QxN3tmaWxsOiMxODgwMzg7fQoJLnN0MTh7b3BhY2l0eTowLjI7ZmlsbDojRkZGRkZGO2VuYWJsZS1iYWNrZ3JvdW5kOm5ldyAgICA7fQoJLnN0MTl7b3BhY2l0eTowLjM7ZmlsbDojMEQ2NTJEO2VuYWJsZS1iYWNrZ3JvdW5kOm5ldyAgICA7fQoJLnN0MjB7Y2xpcC1wYXRoOnVybCgjU1ZHSURfNF8pO30KCS5zdDIxe29wYWNpdHk6MC4zO2ZpbGw6dXJsKCNfNDVfc2hhZG93XzFfKTtlbmFibGUtYmFja2dyb3VuZDpuZXcgICAgO30KCS5zdDIye2NsaXAtcGF0aDp1cmwoI1NWR0lEXzZfKTt9Cgkuc3QyM3tmaWxsOiNGQTdCMTc7fQoJLnN0MjR7b3BhY2l0eTowLjM7ZmlsbDojMTc0RUE2O2VuYWJsZS1iYWNrZ3JvdW5kOm5ldyAgICA7fQoJLnN0MjV7b3BhY2l0eTowLjM7ZmlsbDojQTUwRTBFO2VuYWJsZS1iYWNrZ3JvdW5kOm5ldyAgICA7fQoJLnN0MjZ7b3BhY2l0eTowLjM7ZmlsbDojRTM3NDAwO2VuYWJsZS1iYWNrZ3JvdW5kOm5ldyAgICA7fQoJLnN0Mjd7ZmlsbDp1cmwoI0ZpbmlzaF9tYXNrXzFfKTt9Cgkuc3QyOHtmaWxsOiNGRkZGRkY7fQoJLnN0Mjl7ZmlsbDojMEM5RDU4O30KCS5zdDMwe29wYWNpdHk6MC4yO2ZpbGw6IzAwNEQ0MDtlbmFibGUtYmFja2dyb3VuZDpuZXcgICAgO30KCS5zdDMxe29wYWNpdHk6MC4yO2ZpbGw6IzNFMjcyMztlbmFibGUtYmFja2dyb3VuZDpuZXcgICAgO30KCS5zdDMye2ZpbGw6I0ZGQzEwNzt9Cgkuc3QzM3tvcGFjaXR5OjAuMjtmaWxsOiMxQTIzN0U7ZW5hYmxlLWJhY2tncm91bmQ6bmV3ICAgIDt9Cgkuc3QzNHtvcGFjaXR5OjAuMjt9Cgkuc3QzNXtmaWxsOiMxQTIzN0U7fQoJLnN0MzZ7ZmlsbDp1cmwoI1NWR0lEXzdfKTt9Cgkuc3QzN3tmaWxsOiNGQkJDMDU7fQoJLnN0Mzh7Y2xpcC1wYXRoOnVybCgjU1ZHSURfOV8pO2ZpbGw6I0U1MzkzNTt9Cgkuc3QzOXtjbGlwLXBhdGg6dXJsKCNTVkdJRF8xMV8pO2ZpbGw6I0ZCQzAyRDt9Cgkuc3Q0MHtjbGlwLXBhdGg6dXJsKCNTVkdJRF8xM18pO2ZpbGw6I0U1MzkzNTt9Cgkuc3Q0MXtjbGlwLXBhdGg6dXJsKCNTVkdJRF8xNV8pO2ZpbGw6I0ZCQzAyRDt9Cjwvc3R5bGU+PGc+PGcgaWQ9ImcxNzQ4MCIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoNjQ2LjMwMzQsMjM2LjM3ODkpIj48cGF0aCBjbGFzcz0ic3Q2IiBkPSJNLTU3MS4zLTE0Ny4zYzcuOSwwLDE0LjItNi40LDE0LjItMTQuMmwwLTMzLjJjMC03LjktNi40LTE0LjItMTQuMi0xNC4yICAgIGMtNy45LDAtMTQuMiw2LjQtMTQuMiwxNC4ydjMzLjJDLTU4NS41LTE1My43LTU3OS4xLTE0Ny4zLTU3MS4zLTE0Ny4zIiBpZD0icGF0aDE3NDgyIi8+PC9nPjxnIGlkPSJnMTc0ODQiIHRyYW5zZm9ybT0idHJhbnNsYXRlKDY0NS40ODAzLDIzMy4xNDkyKSI+PHBhdGggY2xhc3M9InN0NSIgZD0iTS01NzUuMi0xMjUuNUwtNTc1LjItMTI1LjV2MTQuOWg5LjV2LTE0LjhjLTEuNSwwLjItMy4xLDAuMi00LjcsMC4yICAgIEMtNTcyLjEtMTI1LjEtNTczLjYtMTI1LjItNTc1LjItMTI1LjUiIGlkPSJwYXRoMTc0ODYiLz48L2c+PGcgaWQ9ImcxNzQ4OCIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoNjQzLjM4MDksMjM1LjkxMTUpIj48cGF0aCBjbGFzcz0ic3Q5IiBkPSJNLTU4NS4yLTE0NC4xYy00LjItNC4zLTYuOS05LjUtNi45LTE2LjZoLTkuNWMwLDkuNSwzLjcsMTcuMyw5LjcsMjMuM2wwLjEtMC4xICAgIGMwLDAsMCwwLTAuMS0wLjFMLTU4NS4yLTE0NC4xeiIgaWQ9InBhdGgxNzQ5MCIvPjwvZz48ZyBpZD0iZzE3NDkyIiB0cmFuc2Zvcm09InRyYW5zbGF0ZSg2NTAuNDA4MSwyMzguNzkpIj48cGF0aCBjbGFzcz0ic3Q3IiBkPSJNLTU1MS43LTE2My42YzAsMTEuOS0xMC41LDIzLjYtMjMuNywyMy42Yy02LjYsMC0xMi41LTIuNy0xNi44LTdsLTAuMSwwLjFsLTYuNiw2LjYgICAgYzAsMCwwLDAsMC4xLDAuMWM0LjksNC45LDExLjQsOC4yLDE4LjcsOS4zYzEuNiwwLjIsMy4yLDAuNCw0LjgsMC40YzEuNiwwLDMuMiwwLDQuNy0wLjJjMTYuMS0yLjMsMjguNC0xNi4xLDI4LjQtMzIuN0gtNTUxLjd6IiBpZD0icGF0aDE3NDk0Ii8+PC9nPjwvZz48L3N2Zz4=" alt="google-microphone">
 										</div>
 										<hr>
 										<p class="small font-weight-bold mb-2">Sponsorisé</p>
 										<div class="row no-gutters justify-content-start mb-2">
 											<div class="col-auto">
-												<img src="<?= $groupe['favicon'] ?>" alt="" class="rounded-circle" width="38">
+												<img src="https://placehold.co/38x38?text=Favicon" alt="" class="rounded-circle" width="38">
 											</div>
 											<div class="pl-2 col">
-												<p class="m-0"><?= $groupe['nom_client'] ?></p>
+												<p class="m-0">Résidence-Luxe</p>
 												<p class="small m-0 text-muted"><?= $groupe['url_site'] ?></p>
 											</div>
 										</div>
 
-										<p class="text-primary mb-2"><?= $groupe['titre1'] ?></p>
+										<p class="text-primary mb-2"><?= $groupe['nom_groupe'] ?></p>
 										<p class="small text-muted mb-2"><?= $groupe['descriptions1'] ?></p>
 
-										<span class="border rounded-pill text-primary py-1 px-2 small"><?= htmlspecialchars(strtok($groupe['mot_cle'] ?? '', "\n"), ENT_QUOTES, 'UTF-8') ?></span>
+										<span class="border rounded-pill text-primary py-1 px-2 small">Chalets de Luxe</span>
 										<span class="border rounded-pill text-primary py-1 px-2 small">Promotions</span>
 										<hr>
 										<i class="fa fa-phone"></i>
-										Appeler le <?= $groupe['numero_client'] ?>
+										Appeler le <?= $groupe['téléphone'] ?>
 									</div>
 								</div>
 							</div>
@@ -304,29 +296,29 @@
 										</div>
 										<div class="d-flex justify-content-between align-items-center border rounded-pill w-100 px-2 py-1">
 											<i class="fa fa-search"></i>
-											<span class="mr-auto ml-3"><?= htmlspecialchars(strtok($groupe['mot_cle'] ?? '', "\n"), ENT_QUOTES, 'UTF-8') ?></span>
+											<span class="mr-auto ml-3">Mots clés</span>
 											<img height="20" src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIj8+PHN2ZyBpZD0iQ2FwYV8xIiBzdHlsZT0iZW5hYmxlLWJhY2tncm91bmQ6bmV3IDAgMCAxNTAgMTUwOyIgdmVyc2lvbj0iMS4xIiB2aWV3Qm94PSIwIDAgMTUwIDE1MCIgeG1sOnNwYWNlPSJwcmVzZXJ2ZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB4bWxuczp4bGluaz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94bGluayI+PHN0eWxlIHR5cGU9InRleHQvY3NzIj4KCS5zdDB7ZmlsbDojMUE3M0U4O30KCS5zdDF7ZmlsbDojRUE0MzM1O30KCS5zdDJ7ZmlsbDojNDI4NUY0O30KCS5zdDN7ZmlsbDojRkJCQzA0O30KCS5zdDR7ZmlsbDojMzRBODUzO30KCS5zdDV7ZmlsbDojNENBRjUwO30KCS5zdDZ7ZmlsbDojMUU4OEU1O30KCS5zdDd7ZmlsbDojRTUzOTM1O30KCS5zdDh7ZmlsbDojQzYyODI4O30KCS5zdDl7ZmlsbDojRkJDMDJEO30KCS5zdDEwe2ZpbGw6IzE1NjVDMDt9Cgkuc3QxMXtmaWxsOiMyRTdEMzI7fQoJLnN0MTJ7ZmlsbDojRjZCNzA0O30KCS5zdDEze2ZpbGw6I0U1NDMzNTt9Cgkuc3QxNHtmaWxsOiM0MjgwRUY7fQoJLnN0MTV7ZmlsbDojMzRBMzUzO30KCS5zdDE2e2NsaXAtcGF0aDp1cmwoI1NWR0lEXzJfKTt9Cgkuc3QxN3tmaWxsOiMxODgwMzg7fQoJLnN0MTh7b3BhY2l0eTowLjI7ZmlsbDojRkZGRkZGO2VuYWJsZS1iYWNrZ3JvdW5kOm5ldyAgICA7fQoJLnN0MTl7b3BhY2l0eTowLjM7ZmlsbDojMEQ2NTJEO2VuYWJsZS1iYWNrZ3JvdW5kOm5ldyAgICA7fQoJLnN0MjB7Y2xpcC1wYXRoOnVybCgjU1ZHSURfNF8pO30KCS5zdDIxe29wYWNpdHk6MC4zO2ZpbGw6dXJsKCNfNDVfc2hhZG93XzFfKTtlbmFibGUtYmFja2dyb3VuZDpuZXcgICAgO30KCS5zdDIye2NsaXAtcGF0aDp1cmwoI1NWR0lEXzZfKTt9Cgkuc3QyM3tmaWxsOiNGQTdCMTc7fQoJLnN0MjR7b3BhY2l0eTowLjM7ZmlsbDojMTc0RUE2O2VuYWJsZS1iYWNrZ3JvdW5kOm5ldyAgICA7fQoJLnN0MjV7b3BhY2l0eTowLjM7ZmlsbDojQTUwRTBFO2VuYWJsZS1iYWNrZ3JvdW5kOm5ldyAgICA7fQoJLnN0MjZ7b3BhY2l0eTowLjM7ZmlsbDojRTM3NDAwO2VuYWJsZS1iYWNrZ3JvdW5kOm5ldyAgICA7fQoJLnN0Mjd7ZmlsbDp1cmwoI0ZpbmlzaF9tYXNrXzFfKTt9Cgkuc3QyOHtmaWxsOiNGRkZGRkY7fQoJLnN0Mjl7ZmlsbDojMEM5RDU4O30KCS5zdDMwe29wYWNpdHk6MC4yO2ZpbGw6IzAwNEQ0MDtlbmFibGUtYmFja2dyb3VuZDpuZXcgICAgO30KCS5zdDMxe29wYWNpdHk6MC4yO2ZpbGw6IzNFMjcyMztlbmFibGUtYmFja2dyb3VuZDpuZXcgICAgO30KCS5zdDMye2ZpbGw6I0ZGQzEwNzt9Cgkuc3QzM3tvcGFjaXR5OjAuMjtmaWxsOiMxQTIzN0U7ZW5hYmxlLWJhY2tncm91bmQ6bmV3ICAgIDt9Cgkuc3QzNHtvcGFjaXR5OjAuMjt9Cgkuc3QzNXtmaWxsOiMxQTIzN0U7fQoJLnN0MzZ7ZmlsbDp1cmwoI1NWR0lEXzdfKTt9Cgkuc3QzN3tmaWxsOiNGQkJDMDU7fQoJLnN0Mzh7Y2xpcC1wYXRoOnVybCgjU1ZHSURfOV8pO2ZpbGw6I0U1MzkzNTt9Cgkuc3QzOXtjbGlwLXBhdGg6dXJsKCNTVkdJRF8xMV8pO2ZpbGw6I0ZCQzAyRDt9Cgkuc3Q0MHtjbGlwLXBhdGg6dXJsKCNTVkdJRF8xM18pO2ZpbGw6I0U1MzkzNTt9Cgkuc3Q0MXtjbGlwLXBhdGg6dXJsKCNTVkdJRF8xNV8pO2ZpbGw6I0ZCQzAyRDt9Cjwvc3R5bGU+PGc+PGcgaWQ9ImcxNzQ4MCIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoNjQ2LjMwMzQsMjM2LjM3ODkpIj48cGF0aCBjbGFzcz0ic3Q2IiBkPSJNLTU3MS4zLTE0Ny4zYzcuOSwwLDE0LjItNi40LDE0LjItMTQuMmwwLTMzLjJjMC03LjktNi40LTE0LjItMTQuMi0xNC4yICAgIGMtNy45LDAtMTQuMiw2LjQtMTQuMiwxNC4ydjMzLjJDLTU4NS41LTE1My43LTU3OS4xLTE0Ny4zLTU3MS4zLTE0Ny4zIiBpZD0icGF0aDE3NDgyIi8+PC9nPjxnIGlkPSJnMTc0ODQiIHRyYW5zZm9ybT0idHJhbnNsYXRlKDY0NS40ODAzLDIzMy4xNDkyKSI+PHBhdGggY2xhc3M9InN0NSIgZD0iTS01NzUuMi0xMjUuNUwtNTc1LjItMTI1LjV2MTQuOWg5LjV2LTE0LjhjLTEuNSwwLjItMy4xLDAuMi00LjcsMC4yICAgIEMtNTcyLjEtMTI1LjEtNTczLjYtMTI1LjItNTc1LjItMTI1LjUiIGlkPSJwYXRoMTc0ODYiLz48L2c+PGcgaWQ9ImcxNzQ4OCIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoNjQzLjM4MDksMjM1LjkxMTUpIj48cGF0aCBjbGFzcz0ic3Q5IiBkPSJNLTU4NS4yLTE0NC4xYy00LjItNC4zLTYuOS05LjUtNi45LTE2LjZoLTkuNWMwLDkuNSwzLjcsMTcuMyw5LjcsMjMuM2wwLjEtMC4xICAgIGMwLDAsMCwwLTAuMS0wLjFMLTU4NS4yLTE0NC4xeiIgaWQ9InBhdGgxNzQ5MCIvPjwvZz48ZyBpZD0iZzE3NDkyIiB0cmFuc2Zvcm09InRyYW5zbGF0ZSg2NTAuNDA4MSwyMzguNzkpIj48cGF0aCBjbGFzcz0ic3Q3IiBkPSJNLTU1MS43LTE2My42YzAsMTEuOS0xMC41LDIzLjYtMjMuNywyMy42Yy02LjYsMC0xMi41LTIuNy0xNi44LTdsLTAuMSwwLjFsLTYuNiw2LjYgICAgYzAsMCwwLDAsMC4xLDAuMWM0LjksNC45LDExLjQsOC4yLDE4LjcsOS4zYzEuNiwwLjIsMy4yLDAuNCw0LjgsMC40YzEuNiwwLDMuMiwwLDQuNy0wLjJjMTYuMS0yLjMsMjguNC0xNi4xLDI4LjQtMzIuN0gtNTUxLjd6IiBpZD0icGF0aDE3NDk0Ii8+PC9nPjwvZz48L3N2Zz4=" alt="google-microphone">
 										</div>
 										<hr>
 										<p class="small font-weight-bold mb-2">Sponsorisé</p>
 										<div class="row no-gutters justify-content-start mb-2">
 											<div class="col-auto">
-												<img src="<?= $groupe['favicon'] ?>" alt="" class="rounded-circle" width="38">
+												<img src="https://placehold.co/38x38?text=Favicon" alt="" class="rounded-circle" width="38">
 											</div>
 											<div class="pl-2 col">
-												<p class="m-0"><?= $groupe['nom_client'] ?></p>
+												<p class="m-0">Résidence-Luxe</p>
 												<p class="small m-0 text-muted"><?= $groupe['url_site'] ?></p>
 											</div>
 										</div>
 
-										<p class="text-primary mb-2"><?= $groupe['titre1'] ?></p>
+										<p class="text-primary mb-2"><?= $groupe['nom_groupe'] ?></p>
 										<p class="small text-muted mb-2"><?= $groupe['descriptions1'] ?></p>
 
-										<span class="border rounded-pill text-primary py-1 px-2 small"><?= htmlspecialchars(strtok($groupe['mot_cle'] ?? '', "\n"), ENT_QUOTES, 'UTF-8') ?></span>
+										<span class="border rounded-pill text-primary py-1 px-2 small">Chalets de Luxe</span>
 										<span class="border rounded-pill text-primary py-1 px-2 small">Promotions</span>
 										<hr>
 										<i class="fa fa-phone"></i>
-										Appeler le <?= $groupe['numero_client'] ?>
+										Appeler le <?= $groupe['téléphone'] ?>
 									</div>
 								</div>
 							</div>
@@ -340,70 +332,41 @@
 									<p class="mockup-label">Bureau</p>
 								</div>
 
-								<div class=" device-frame tablet-frame" style="width: 500px;">
+								<div class=" device-frame desktop-frame">
 									<div class="screen">
 										<div class="d-flex align-items-center mb-1">
 
 											<img alt="google" height="24" src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIj8+PHN2ZyBoZWlnaHQ9IjkyIiB2aWV3Qm94PSIwIDAgMjcyIDkyIiB3aWR0aD0iMjcyIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxwYXRoIGQ9Ik0xMTUuNzUgNDcuMThjMCAxMi43Ny05Ljk5IDIyLjE4LTIyLjI1IDIyLjE4cy0yMi4yNS05LjQxLTIyLjI1LTIyLjE4QzcxLjI1IDM0LjMyIDgxLjI0IDI1IDkzLjUgMjVzMjIuMjUgOS4zMiAyMi4yNSAyMi4xOHptLTkuNzQgMGMwLTcuOTgtNS43OS0xMy40NC0xMi41MS0xMy40NFM4MC45OSAzOS4yIDgwLjk5IDQ3LjE4YzAgNy45IDUuNzkgMTMuNDQgMTIuNTEgMTMuNDRzMTIuNTEtNS41NSAxMi41MS0xMy40NHoiIGZpbGw9IiNFQTQzMzUiLz48cGF0aCBkPSJNMTYzLjc1IDQ3LjE4YzAgMTIuNzctOS45OSAyMi4xOC0yMi4yNSAyMi4xOHMtMjIuMjUtOS40MS0yMi4yNS0yMi4xOGMwLTEyLjg1IDkuOTktMjIuMTggMjIuMjUtMjIuMThzMjIuMjUgOS4zMiAyMi4yNSAyMi4xOHptLTkuNzQgMGMwLTcuOTgtNS43OS0xMy40NC0xMi41MS0xMy40NHMtMTIuNTEgNS40Ni0xMi41MSAxMy40NGMwIDcuOSA1Ljc5IDEzLjQ0IDEyLjUxIDEzLjQ0czEyLjUxLTUuNTUgMTIuNTEtMTMuNDR6IiBmaWxsPSIjRkJCQzA1Ii8+PHBhdGggZD0iTTIwOS43NSAyNi4zNHYzOS44MmMwIDE2LjM4LTkuNjYgMjMuMDctMjEuMDggMjMuMDctMTAuNzUgMC0xNy4yMi03LjE5LTE5LjY2LTEzLjA3bDguNDgtMy41M2MxLjUxIDMuNjEgNS4yMSA3Ljg3IDExLjE3IDcuODcgNy4zMSAwIDExLjg0LTQuNTEgMTEuODQtMTN2LTMuMTloLS4zNGMtMi4xOCAyLjY5LTYuMzggNS4wNC0xMS42OCA1LjA0LTExLjA5IDAtMjEuMjUtOS42Ni0yMS4yNS0yMi4wOSAwLTEyLjUyIDEwLjE2LTIyLjI2IDIxLjI1LTIyLjI2IDUuMjkgMCA5LjQ5IDIuMzUgMTEuNjggNC45NmguMzR2LTMuNjFoOS4yNXptLTguNTYgMjAuOTJjMC03LjgxLTUuMjEtMTMuNTItMTEuODQtMTMuNTItNi43MiAwLTEyLjM1IDUuNzEtMTIuMzUgMTMuNTIgMCA3LjczIDUuNjMgMTMuMzYgMTIuMzUgMTMuMzYgNi42MyAwIDExLjg0LTUuNjMgMTEuODQtMTMuMzZ6IiBmaWxsPSIjNDI4NUY0Ii8+PHBhdGggZD0iTTIyNSAzdjY1aC05LjVWM2g5LjV6IiBmaWxsPSIjMzRBODUzIi8+PHBhdGggZD0iTTI2Mi4wMiA1NC40OGw3LjU2IDUuMDRjLTIuNDQgMy42MS04LjMyIDkuODMtMTguNDggOS44My0xMi42IDAtMjIuMDEtOS43NC0yMi4wMS0yMi4xOCAwLTEzLjE5IDkuNDktMjIuMTggMjAuOTItMjIuMTggMTEuNTEgMCAxNy4xNCA5LjE2IDE4Ljk4IDE0LjExbDEuMDEgMi41Mi0yOS42NSAxMi4yOGMyLjI3IDQuNDUgNS44IDYuNzIgMTAuNzUgNi43MiA0Ljk2IDAgOC40LTIuNDQgMTAuOTItNi4xNHptLTIzLjI3LTcuOThsMTkuODItOC4yM2MtMS4wOS0yLjc3LTQuMzctNC43LTguMjMtNC43LTQuOTUgMC0xMS44NCA0LjM3LTExLjU5IDEyLjkzeiIgZmlsbD0iI0VBNDMzNSIvPjxwYXRoIGQ9Ik0zNS4yOSA0MS40MVYzMkg2N2MuMzEgMS42NC40NyAzLjU4LjQ3IDUuNjggMCA3LjA2LTEuOTMgMTUuNzktOC4xNSAyMi4wMS02LjA1IDYuMy0xMy43OCA5LjY2LTI0LjAyIDkuNjZDMTYuMzIgNjkuMzUuMzYgNTMuODkuMzYgMzQuOTEuMzYgMTUuOTMgMTYuMzIuNDcgMzUuMy40N2MxMC41IDAgMTcuOTggNC4xMiAyMy42IDkuNDlsLTYuNjQgNi42NGMtNC4wMy0zLjc4LTkuNDktNi43Mi0xNi45Ny02LjcyLTEzLjg2IDAtMjQuNyAxMS4xNy0yNC43IDI1LjAzIDAgMTMuODYgMTAuODQgMjUuMDMgMjQuNyAyNS4wMyA4Ljk5IDAgMTQuMTEtMy42MSAxNy4zOS02Ljg5IDIuNjYtMi42NiA0LjQxLTYuNDYgNS4xLTExLjY1bC0yMi40OS4wMXoiIGZpbGw9IiM0Mjg1RjQiLz48L3N2Zz4=">
 											<div class="d-flex justify-content-between align-items-center border rounded-pill px-2 py-1 mx-2" style="width: 65%;">
-												<span class="mr-auto"><?= htmlspecialchars(strtok($groupe['mot_cle'] ?? '', "\n"), ENT_QUOTES, 'UTF-8') ?></span>
+												<span class="mr-auto">Mots clés</span>
 												<img class="mx-1" height="20" src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIj8+PHN2ZyBpZD0iQ2FwYV8xIiBzdHlsZT0iZW5hYmxlLWJhY2tncm91bmQ6bmV3IDAgMCAxNTAgMTUwOyIgdmVyc2lvbj0iMS4xIiB2aWV3Qm94PSIwIDAgMTUwIDE1MCIgeG1sOnNwYWNlPSJwcmVzZXJ2ZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB4bWxuczp4bGluaz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94bGluayI+PHN0eWxlIHR5cGU9InRleHQvY3NzIj4KCS5zdDB7ZmlsbDojMUE3M0U4O30KCS5zdDF7ZmlsbDojRUE0MzM1O30KCS5zdDJ7ZmlsbDojNDI4NUY0O30KCS5zdDN7ZmlsbDojRkJCQzA0O30KCS5zdDR7ZmlsbDojMzRBODUzO30KCS5zdDV7ZmlsbDojNENBRjUwO30KCS5zdDZ7ZmlsbDojMUU4OEU1O30KCS5zdDd7ZmlsbDojRTUzOTM1O30KCS5zdDh7ZmlsbDojQzYyODI4O30KCS5zdDl7ZmlsbDojRkJDMDJEO30KCS5zdDEwe2ZpbGw6IzE1NjVDMDt9Cgkuc3QxMXtmaWxsOiMyRTdEMzI7fQoJLnN0MTJ7ZmlsbDojRjZCNzA0O30KCS5zdDEze2ZpbGw6I0U1NDMzNTt9Cgkuc3QxNHtmaWxsOiM0MjgwRUY7fQoJLnN0MTV7ZmlsbDojMzRBMzUzO30KCS5zdDE2e2NsaXAtcGF0aDp1cmwoI1NWR0lEXzJfKTt9Cgkuc3QxN3tmaWxsOiMxODgwMzg7fQoJLnN0MTh7b3BhY2l0eTowLjI7ZmlsbDojRkZGRkZGO2VuYWJsZS1iYWNrZ3JvdW5kOm5ldyAgICA7fQoJLnN0MTl7b3BhY2l0eTowLjM7ZmlsbDojMEQ2NTJEO2VuYWJsZS1iYWNrZ3JvdW5kOm5ldyAgICA7fQoJLnN0MjB7Y2xpcC1wYXRoOnVybCgjU1ZHSURfNF8pO30KCS5zdDIxe29wYWNpdHk6MC4zO2ZpbGw6dXJsKCNfNDVfc2hhZG93XzFfKTtlbmFibGUtYmFja2dyb3VuZDpuZXcgICAgO30KCS5zdDIye2NsaXAtcGF0aDp1cmwoI1NWR0lEXzZfKTt9Cgkuc3QyM3tmaWxsOiNGQTdCMTc7fQoJLnN0MjR7b3BhY2l0eTowLjM7ZmlsbDojMTc0RUE2O2VuYWJsZS1iYWNrZ3JvdW5kOm5ldyAgICA7fQoJLnN0MjV7b3BhY2l0eTowLjM7ZmlsbDojQTUwRTBFO2VuYWJsZS1iYWNrZ3JvdW5kOm5ldyAgICA7fQoJLnN0MjZ7b3BhY2l0eTowLjM7ZmlsbDojRTM3NDAwO2VuYWJsZS1iYWNrZ3JvdW5kOm5ldyAgICA7fQoJLnN0Mjd7ZmlsbDp1cmwoI0ZpbmlzaF9tYXNrXzFfKTt9Cgkuc3QyOHtmaWxsOiNGRkZGRkY7fQoJLnN0Mjl7ZmlsbDojMEM5RDU4O30KCS5zdDMwe29wYWNpdHk6MC4yO2ZpbGw6IzAwNEQ0MDtlbmFibGUtYmFja2dyb3VuZDpuZXcgICAgO30KCS5zdDMxe29wYWNpdHk6MC4yO2ZpbGw6IzNFMjcyMztlbmFibGUtYmFja2dyb3VuZDpuZXcgICAgO30KCS5zdDMye2ZpbGw6I0ZGQzEwNzt9Cgkuc3QzM3tvcGFjaXR5OjAuMjtmaWxsOiMxQTIzN0U7ZW5hYmxlLWJhY2tncm91bmQ6bmV3ICAgIDt9Cgkuc3QzNHtvcGFjaXR5OjAuMjt9Cgkuc3QzNXtmaWxsOiMxQTIzN0U7fQoJLnN0MzZ7ZmlsbDp1cmwoI1NWR0lEXzdfKTt9Cgkuc3QzN3tmaWxsOiNGQkJDMDU7fQoJLnN0Mzh7Y2xpcC1wYXRoOnVybCgjU1ZHSURfOV8pO2ZpbGw6I0U1MzkzNTt9Cgkuc3QzOXtjbGlwLXBhdGg6dXJsKCNTVkdJRF8xMV8pO2ZpbGw6I0ZCQzAyRDt9Cgkuc3Q0MHtjbGlwLXBhdGg6dXJsKCNTVkdJRF8xM18pO2ZpbGw6I0U1MzkzNTt9Cgkuc3Q0MXtjbGlwLXBhdGg6dXJsKCNTVkdJRF8xNV8pO2ZpbGw6I0ZCQzAyRDt9Cjwvc3R5bGU+PGc+PGcgaWQ9ImcxNzQ4MCIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoNjQ2LjMwMzQsMjM2LjM3ODkpIj48cGF0aCBjbGFzcz0ic3Q2IiBkPSJNLTU3MS4zLTE0Ny4zYzcuOSwwLDE0LjItNi40LDE0LjItMTQuMmwwLTMzLjJjMC03LjktNi40LTE0LjItMTQuMi0xNC4yICAgIGMtNy45LDAtMTQuMiw2LjQtMTQuMiwxNC4ydjMzLjJDLTU4NS41LTE1My43LTU3OS4xLTE0Ny4zLTU3MS4zLTE0Ny4zIiBpZD0icGF0aDE3NDgyIi8+PC9nPjxnIGlkPSJnMTc0ODQiIHRyYW5zZm9ybT0idHJhbnNsYXRlKDY0NS40ODAzLDIzMy4xNDkyKSI+PHBhdGggY2xhc3M9InN0NSIgZD0iTS01NzUuMi0xMjUuNUwtNTc1LjItMTI1LjV2MTQuOWg5LjV2LTE0LjhjLTEuNSwwLjItMy4xLDAuMi00LjcsMC4yICAgIEMtNTcyLjEtMTI1LjEtNTczLjYtMTI1LjItNTc1LjItMTI1LjUiIGlkPSJwYXRoMTc0ODYiLz48L2c+PGcgaWQ9ImcxNzQ4OCIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoNjQzLjM4MDksMjM1LjkxMTUpIj48cGF0aCBjbGFzcz0ic3Q5IiBkPSJNLTU4NS4yLTE0NC4xYy00LjItNC4zLTYuOS05LjUtNi45LTE2LjZoLTkuNWMwLDkuNSwzLjcsMTcuMyw5LjcsMjMuM2wwLjEtMC4xICAgIGMwLDAsMCwwLTAuMS0wLjFMLTU4NS4yLTE0NC4xeiIgaWQ9InBhdGgxNzQ5MCIvPjwvZz48ZyBpZD0iZzE3NDkyIiB0cmFuc2Zvcm09InRyYW5zbGF0ZSg2NTAuNDA4MSwyMzguNzkpIj48cGF0aCBjbGFzcz0ic3Q3IiBkPSJNLTU1MS43LTE2My42YzAsMTEuOS0xMC41LDIzLjYtMjMuNywyMy42Yy02LjYsMC0xMi41LTIuNy0xNi44LTdsLTAuMSwwLjFsLTYuNiw2LjYgICAgYzAsMCwwLDAsMC4xLDAuMWM0LjksNC45LDExLjQsOC4yLDE4LjcsOS4zYzEuNiwwLjIsMy4yLDAuNCw0LjgsMC40YzEuNiwwLDMuMiwwLDQuNy0wLjJjMTYuMS0yLjMsMjguNC0xNi4xLDI4LjQtMzIuN0gtNTUxLjd6IiBpZD0icGF0aDE3NDk0Ii8+PC9nPjwvZz48L3N2Zz4=" alt="google-microphone">
 												<i class="fa fa-search mx-1"></i>
 											</div>
-											
+											<i class="fa fa-bars text-muted ml-auto"></i>
 										</div>
 
 										<hr>
 										<div class="container pl-5">
 
 											<p class="small font-weight-bold mb-2">Sponsorisé</p>
-											<div class="row mb-4">
-												<?php if (!empty($groupe['images'][0])): ?>
-													<div class="col-md-8">
-														<div class="row no-gutters justify-content-start mb-2">
-															<div class="col-auto">
-																<img src="<?= $groupe['favicon'] ?>" alt="" class="rounded-circle" width="38">
-															</div>
-															<div class="pl-2 col">
-																<p class="m-0"><?= $groupe['nom_client'] ?></p>
-																<p class="small m-0 text-muted"><?= $groupe['url_site'] ?></p>
-															</div>
-														</div>
-
-														<p class="text-primary mb-2"><?= $groupe['titre1'] ?></p>
-														<p class="small text-muted mb-2"><?= $groupe['descriptions1'] ?></p>
-													</div>
-													<div class="col-md-4">
-														<div class="thumb-box" style="height: 140px;">
-															<img src="<?= $groupe['images'][0] ?>" 
-																alt="placeholder" class="img-fluid h-100 w-100" style="object-fit: cover;">
-														</div>
-													</div>
-												<?php else: ?>
-													<div class="col-12">
-														<div class="row no-gutters justify-content-start mb-2">
-															<div class="col-auto">
-																<img src="<?= $groupe['favicon'] ?>" alt="" class="rounded-circle" width="38">
-															</div>
-															<div class="pl-2 col">
-																<p class="m-0"><?= $groupe['nom_client'] ?></p>
-																<p class="small m-0 text-muted"><?= $groupe['url_site'] ?></p>
-															</div>
-														</div>
-
-														<p class="text-primary mb-2"><?= $groupe['titre1'] ?></p>
-														<p class="small text-muted mb-2"><?= $groupe['descriptions1'] ?></p>
-													</div>
-												<?php endif; ?>
+											<div class="row no-gutters justify-content-start mb-2">
+												<div class="col-auto">
+													<img src="https://placehold.co/38x38?text=Favicon" alt="" class="rounded-circle" width="38">
+												</div>
+												<div class="pl-2 col">
+													<p class="m-0">Résidence-Luxe</p>
+													<p class="small m-0 text-muted"><?= $groupe['url_site'] ?></p>
+												</div>
 											</div>
-
-
 	
-											<span class="border rounded-pill text-primary py-1 px-2 small"><?= htmlspecialchars(strtok($groupe['mot_cle'] ?? '', "\n"), ENT_QUOTES, 'UTF-8') ?></span>
+											<p class="text-primary mb-2"><?= $groupe['nom_groupe'] ?></p>
+											<p class="small text-muted mb-2"><?= $groupe['descriptions1'] ?></p>
+	
+											<span class="border rounded-pill text-primary py-1 px-2 small">Chalets de Luxe</span>
 											<span class="border rounded-pill text-primary py-1 px-2 small">Promotions</span>
 											<hr>
 											<i class="fa fa-phone"></i>
-											Appeler le <?= $groupe['numero_client'] ?>
+											Appeler le <?= $groupe['téléphone'] ?>
 										</div>
 									</div>
 								</div>
@@ -411,12 +374,8 @@
 
 						</div>
 					</div>
-					<?php endif; ?>
-						<?php endforeach; ?>
 
 					<!-- LOCAL -->
-					 <?php foreach ($groupe_valider as $groupe): ?>
-							<?php if ($groupe['type_campagne'] == 2): ?>
 					<div class="tab-pane fade" id="local" role="tabpanel" aria-labelledby="local_tab">
 
 						<ul class="nav nav-tabs mb-4 d-flex justify-content-center" role="tablist">
@@ -466,29 +425,29 @@
 										</div>
 										<div class="d-flex justify-content-between align-items-center border rounded-pill w-100 px-2 py-1">
 											<i class="fa fa-search"></i>
-											<span class="mr-auto ml-3"><?= htmlspecialchars(strtok($groupe['mot_cle'] ?? '', "\n"), ENT_QUOTES, 'UTF-8') ?></span>
+											<span class="mr-auto ml-3">Mots clés</span>
 											<img height="20" src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIj8+PHN2ZyBpZD0iQ2FwYV8xIiBzdHlsZT0iZW5hYmxlLWJhY2tncm91bmQ6bmV3IDAgMCAxNTAgMTUwOyIgdmVyc2lvbj0iMS4xIiB2aWV3Qm94PSIwIDAgMTUwIDE1MCIgeG1sOnNwYWNlPSJwcmVzZXJ2ZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB4bWxuczp4bGluaz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94bGluayI+PHN0eWxlIHR5cGU9InRleHQvY3NzIj4KCS5zdDB7ZmlsbDojMUE3M0U4O30KCS5zdDF7ZmlsbDojRUE0MzM1O30KCS5zdDJ7ZmlsbDojNDI4NUY0O30KCS5zdDN7ZmlsbDojRkJCQzA0O30KCS5zdDR7ZmlsbDojMzRBODUzO30KCS5zdDV7ZmlsbDojNENBRjUwO30KCS5zdDZ7ZmlsbDojMUU4OEU1O30KCS5zdDd7ZmlsbDojRTUzOTM1O30KCS5zdDh7ZmlsbDojQzYyODI4O30KCS5zdDl7ZmlsbDojRkJDMDJEO30KCS5zdDEwe2ZpbGw6IzE1NjVDMDt9Cgkuc3QxMXtmaWxsOiMyRTdEMzI7fQoJLnN0MTJ7ZmlsbDojRjZCNzA0O30KCS5zdDEze2ZpbGw6I0U1NDMzNTt9Cgkuc3QxNHtmaWxsOiM0MjgwRUY7fQoJLnN0MTV7ZmlsbDojMzRBMzUzO30KCS5zdDE2e2NsaXAtcGF0aDp1cmwoI1NWR0lEXzJfKTt9Cgkuc3QxN3tmaWxsOiMxODgwMzg7fQoJLnN0MTh7b3BhY2l0eTowLjI7ZmlsbDojRkZGRkZGO2VuYWJsZS1iYWNrZ3JvdW5kOm5ldyAgICA7fQoJLnN0MTl7b3BhY2l0eTowLjM7ZmlsbDojMEQ2NTJEO2VuYWJsZS1iYWNrZ3JvdW5kOm5ldyAgICA7fQoJLnN0MjB7Y2xpcC1wYXRoOnVybCgjU1ZHSURfNF8pO30KCS5zdDIxe29wYWNpdHk6MC4zO2ZpbGw6dXJsKCNfNDVfc2hhZG93XzFfKTtlbmFibGUtYmFja2dyb3VuZDpuZXcgICAgO30KCS5zdDIye2NsaXAtcGF0aDp1cmwoI1NWR0lEXzZfKTt9Cgkuc3QyM3tmaWxsOiNGQTdCMTc7fQoJLnN0MjR7b3BhY2l0eTowLjM7ZmlsbDojMTc0RUE2O2VuYWJsZS1iYWNrZ3JvdW5kOm5ldyAgICA7fQoJLnN0MjV7b3BhY2l0eTowLjM7ZmlsbDojQTUwRTBFO2VuYWJsZS1iYWNrZ3JvdW5kOm5ldyAgICA7fQoJLnN0MjZ7b3BhY2l0eTowLjM7ZmlsbDojRTM3NDAwO2VuYWJsZS1iYWNrZ3JvdW5kOm5ldyAgICA7fQoJLnN0Mjd7ZmlsbDp1cmwoI0ZpbmlzaF9tYXNrXzFfKTt9Cgkuc3QyOHtmaWxsOiNGRkZGRkY7fQoJLnN0Mjl7ZmlsbDojMEM5RDU4O30KCS5zdDMwe29wYWNpdHk6MC4yO2ZpbGw6IzAwNEQ0MDtlbmFibGUtYmFja2dyb3VuZDpuZXcgICAgO30KCS5zdDMxe29wYWNpdHk6MC4yO2ZpbGw6IzNFMjcyMztlbmFibGUtYmFja2dyb3VuZDpuZXcgICAgO30KCS5zdDMye2ZpbGw6I0ZGQzEwNzt9Cgkuc3QzM3tvcGFjaXR5OjAuMjtmaWxsOiMxQTIzN0U7ZW5hYmxlLWJhY2tncm91bmQ6bmV3ICAgIDt9Cgkuc3QzNHtvcGFjaXR5OjAuMjt9Cgkuc3QzNXtmaWxsOiMxQTIzN0U7fQoJLnN0MzZ7ZmlsbDp1cmwoI1NWR0lEXzdfKTt9Cgkuc3QzN3tmaWxsOiNGQkJDMDU7fQoJLnN0Mzh7Y2xpcC1wYXRoOnVybCgjU1ZHSURfOV8pO2ZpbGw6I0U1MzkzNTt9Cgkuc3QzOXtjbGlwLXBhdGg6dXJsKCNTVkdJRF8xMV8pO2ZpbGw6I0ZCQzAyRDt9Cgkuc3Q0MHtjbGlwLXBhdGg6dXJsKCNTVkdJRF8xM18pO2ZpbGw6I0U1MzkzNTt9Cgkuc3Q0MXtjbGlwLXBhdGg6dXJsKCNTVkdJRF8xNV8pO2ZpbGw6I0ZCQzAyRDt9Cjwvc3R5bGU+PGc+PGcgaWQ9ImcxNzQ4MCIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoNjQ2LjMwMzQsMjM2LjM3ODkpIj48cGF0aCBjbGFzcz0ic3Q2IiBkPSJNLTU3MS4zLTE0Ny4zYzcuOSwwLDE0LjItNi40LDE0LjItMTQuMmwwLTMzLjJjMC03LjktNi40LTE0LjItMTQuMi0xNC4yICAgIGMtNy45LDAtMTQuMiw2LjQtMTQuMiwxNC4ydjMzLjJDLTU4NS41LTE1My43LTU3OS4xLTE0Ny4zLTU3MS4zLTE0Ny4zIiBpZD0icGF0aDE3NDgyIi8+PC9nPjxnIGlkPSJnMTc0ODQiIHRyYW5zZm9ybT0idHJhbnNsYXRlKDY0NS40ODAzLDIzMy4xNDkyKSI+PHBhdGggY2xhc3M9InN0NSIgZD0iTS01NzUuMi0xMjUuNUwtNTc1LjItMTI1LjV2MTQuOWg5LjV2LTE0LjhjLTEuNSwwLjItMy4xLDAuMi00LjcsMC4yICAgIEMtNTcyLjEtMTI1LjEtNTczLjYtMTI1LjItNTc1LjItMTI1LjUiIGlkPSJwYXRoMTc0ODYiLz48L2c+PGcgaWQ9ImcxNzQ4OCIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoNjQzLjM4MDksMjM1LjkxMTUpIj48cGF0aCBjbGFzcz0ic3Q5IiBkPSJNLTU4NS4yLTE0NC4xYy00LjItNC4zLTYuOS05LjUtNi45LTE2LjZoLTkuNWMwLDkuNSwzLjcsMTcuMyw5LjcsMjMuM2wwLjEtMC4xICAgIGMwLDAsMCwwLTAuMS0wLjFMLTU4NS4yLTE0NC4xeiIgaWQ9InBhdGgxNzQ5MCIvPjwvZz48ZyBpZD0iZzE3NDkyIiB0cmFuc2Zvcm09InRyYW5zbGF0ZSg2NTAuNDA4MSwyMzguNzkpIj48cGF0aCBjbGFzcz0ic3Q3IiBkPSJNLTU1MS43LTE2My42YzAsMTEuOS0xMC41LDIzLjYtMjMuNywyMy42Yy02LjYsMC0xMi41LTIuNy0xNi44LTdsLTAuMSwwLjFsLTYuNiw2LjYgICAgYzAsMCwwLDAsMC4xLDAuMWM0LjksNC45LDExLjQsOC4yLDE4LjcsOS4zYzEuNiwwLjIsMy4yLDAuNCw0LjgsMC40YzEuNiwwLDMuMiwwLDQuNy0wLjJjMTYuMS0yLjMsMjguNC0xNi4xLDI4LjQtMzIuN0gtNTUxLjd6IiBpZD0icGF0aDE3NDk0Ii8+PC9nPjwvZz48L3N2Zz4=" alt="google-microphone">
 										</div>
 										<hr>
 										<p class="small font-weight-bold mb-2">Sponsorisé</p>
 										<div class="row no-gutters justify-content-start mb-2">
 											<div class="col-auto">
-												<img src="<?= $groupe['favicon'] ?>" alt="" class="rounded-circle" width="38">
+												<img src="https://placehold.co/38x38?text=Favicon" alt="" class="rounded-circle" width="38">
 											</div>
 											<div class="pl-2 col">
-												<p class="m-0"><?= $groupe['nom_client'] ?></p>
+												<p class="m-0">Résidence-Luxe</p>
 												<p class="small m-0 text-muted"><?= $groupe['url_site'] ?></p>
 											</div>
 										</div>
 
-										<p class="text-primary mb-2"><?= $groupe['titre1'] ?></p>
+										<p class="text-primary mb-2"><?= $groupe['nom_groupe'] ?></p>
 										<p class="small text-muted mb-2"><?= $groupe['descriptions1'] ?></p>
 
-										<span class="border rounded-pill text-primary py-1 px-2 small"><?= htmlspecialchars(strtok($groupe['mot_cle'] ?? '', "\n"), ENT_QUOTES, 'UTF-8') ?></span>
+										<span class="border rounded-pill text-primary py-1 px-2 small">Chalets de Luxe</span>
 										<span class="border rounded-pill text-primary py-1 px-2 small">Promotions</span>
 										<hr>
 										<i class="fa fa-phone"></i>
-										Appeler le <?= $groupe['numero_client'] ?>
+										Appeler le <?= $groupe['téléphone'] ?>
 									</div>
 								</div>
 							</div>
@@ -498,18 +457,18 @@
 								<div class=" device-frame phone-frame">
 									<div class="screen">
 										<div class="thumb-box mb-3" style="height: 140px;">
-											<img src="data:image/jpeg;base64,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" alt="placeholder">
+											<img src=<?= $groupe['images'][2] ?? $groupe['images'][1] ?? $groupe['images'][0] ?? "https://placehold.co/120x120?text=Display" ?> alt="placeholder">
 										</div>
 										<div class="row no-gutters justify-content-start mb-2">
 											<div class="col-auto">
-												<img src="<?= $groupe['favicon'] ?>" alt="" class="rounded-circle" width="38">
+												<img src="https://placehold.co/38x38?text=Favicon" alt="" class="rounded-circle" width="38">
 											</div>
 											<div class="pl-2 col">
-												<p class="m-0"><?= $groupe['nom_client'] ?></p>
+												<p class="m-0">Résidence-Luxe</p>
 											</div>
 										</div>
 										<div class="d-flex justify-content-between">
-											<span class="small text-muted"><?= $groupe['titre1'] ?></span>
+											<span class="small text-muted">Résidence-Luxe</span>
 											<span class="small">
 												En savoir plus
 												<i class="fa fa-chevron-right"></i>
@@ -532,34 +491,29 @@
 										</div>
 										<div class="row no-gutters justify-content-start mb-3">
 											<div class="col-auto">
-												<img src="<?= $groupe['favicon'] ?>" alt="" class="rounded-circle" width="38">
+												<img src="https://placehold.co/38x38?text=Favicon" alt="" class="rounded-circle" width="38">
 											</div>
 											<div class="pl-2 col">
-												<p class="small m-0"><?= $groupe['nom_client'] ?></p>
+												<p class="small m-0">Résidence-Luxe</p>
 												<p class="small m-0 text-muted">à Moi</p>
 											</div>
 										</div>
 										<div class="thumb-box mb-3" style="height: 140px;">
-											<img src="<?= $groupe['images'][0] ?>" alt="placeholder">
+											<img src=<?= $groupe['images'][1] ?? $groupe['images'][0] ?? "https://placehold.co/120x120?text=Gmail+Attachment" ?> alt="placeholder">
 										</div>
 
-										<p class="font-weight-bold mb-2"><?= $groupe['titre1'] ?></p>
+										<p class="font-weight-bold mb-2"><?= $groupe['nom_groupe'] ?></p>
 										<p class="small text-muted"><?= $groupe['descriptions1'] ?></p>
 
-										<span class="badge badge-primary py-2 w-100 rounded-pill">Réservation</span>
+										<span class="badge badge-primary py-2 w-100 rounded-pill">Book now</span>
 									</div>
 								</div>
 							</div>
 						</div>
 					</div>
-					<?php endif; ?>
-						<?php endforeach; ?>
 
 				</div>
 			</div>
 		</div>
 	</div>
 </div>
-
-
-

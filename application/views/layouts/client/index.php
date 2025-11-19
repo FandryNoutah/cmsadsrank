@@ -147,7 +147,12 @@
 								<tr class="client-filter" data-status="<?= $d->resiliation; ?>">
 									<td>
 										<a href="<?= base_url('Client/detail_client/' . $d->idclients) ?>" style="display: flex; align-items: center; text-decoration: none; color: inherit;">
-											<img src="<?= $d->favicon ?>" class="img-thumbnail" width="28" height="28" alt="Client Image" style="margin-right: 8px;">
+										<?php if($d->favicon != "https://www.memoriafuneraire.com/favicon.ico"): ?>	
+										<img src="<?= $d->favicon ?>" class="img-thumbnail" width="28" height="28" alt="Client Image" style="margin-right: 8px;">
+										<?php else: ?>
+										<img src="<?= base_url('assets/images/ico/default_favicon.png') ?>" class="img-thumbnail" width="28" height="28" alt="Client Image" style="margin-right: 8px;">
+										<?php endif; ?>
+										
 											<?= htmlspecialchars($d->nom_client) ?>
 										</a>
 									</td>
@@ -206,7 +211,11 @@
 									<div class="card mt-3">
 										<div class="card-body">
 											<a href="<?= base_url('Client/detail_client/' . $d->idclients) ?>" class="stretched-link"></a>
+											<?php if($d->favicon != "https://www.memoriafuneraire.com/favicon.ico"): ?>	
 											<div class="mb-3"><img src="<?= $d->favicon ?>" width="48"></div>
+											<?php else: ?>
+											<div class="mb-3"><img src="<?= base_url('assets/images/ico/default_favicon.png') ?>" width="48"></div>
+											<?php endif; ?>
 											<p class="mb-3"><?= htmlspecialchars($d->nom_client) ?></p>
 											<div class="d-flex justify-content-between">
 												<span class="text-muted">
@@ -240,7 +249,11 @@
 									<div class="card mt-3">
 										<div class="card-body">
 											<a href="<?= base_url('Client/detail_client/' . $d->idclients) ?>" class="stretched-link"></a>
+											<?php if($d->favicon != "https://www.memoriafuneraire.com/favicon.ico"): ?>	
 											<div class="mb-3"><img src="<?= $d->favicon ?>" width="48"></div>
+											<?php else: ?>
+											<div class="mb-3"><img src="<?= base_url('assets/images/ico/default_favicon.png') ?>" width="48"></div>
+											<?php endif; ?>
 											<p class="mb-3"><?= htmlspecialchars($d->nom_client) ?></p>
 											<div class="d-flex justify-content-between">
 												<span class="text-muted">
@@ -274,7 +287,11 @@
 									<div class="card mt-3">
 										<div class="card-body">
 											<a href="<?= base_url('Client/detail_client/' . $d->idclients) ?>" class="stretched-link"></a>
+											<?php if($d->favicon != "https://www.memoriafuneraire.com/favicon.ico"): ?>	
 											<div class="mb-3"><img src="<?= $d->favicon ?>" width="48"></div>
+											<?php else: ?>
+											<div class="mb-3"><img src="<?= base_url('assets/images/ico/default_favicon.png') ?>" width="48"></div>
+											<?php endif; ?>
 											<p class="mb-3"><?= htmlspecialchars($d->nom_client) ?></p>
 											<div class="d-flex justify-content-between">
 												<span class="text-muted">

@@ -19,6 +19,7 @@ class Notes extends MY_Controller
 	{
 
 		$notes = $this->Note_model->get_for_user($this->current_user->id);
+
 		$this->data['donnee'] = $this->visuels_model->getClientDataByDonnee();
 		$users = $this->Note_model->get_all_users();
 

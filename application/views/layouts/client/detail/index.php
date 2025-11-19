@@ -56,80 +56,7 @@
 <?php start_section('content'); ?>
 
 <?php foreach ($donnees as $d): ?>
-	<?php if ($d['statut_demande_en_cours'] == 3): ?>
-
-		<div class="modal fade" id="choixCampagneModal" tabindex="-1" aria-labelledby="choixCampagneLabel" aria-hidden="true">
-			<div class="modal-dialog modal-xl modal-dialog-centered">
-				<div class="modal-content rounded-3 shadow-lg">
-					<div class="modal-header">
-						<h2 class="modal-title" id="choixCampagneLabel">Relance client</h2>
-					</div>
-					<div class="modal-body">
-						<form method="post" action="<?= site_url('Client/relance'); ?>">
-
-							<input type="hidden" name="idclients" value="<?= $d['idclients']; ?>">
-							<div class="row row-cols-2 mt-4 mb-2">
-								<div class="col">
-									<div class="card camp-container h-100">
-										<div class="card-body">
-											<div class="d-block mb-2">
-												<i class="fa fa-cloud" style="font-size: 22px;"></i>
-											</div>
-											<h3>Campagne précédente</h3>
-											<p class="text-muted">Continuer avec la campagne existante.</p>
-											<a href="javascript:void(0);" class="stretched-link text-dark font-weight-bold select-camp" data-target="#camp_resa">
-												<i class="fa fa-arrow-right"></i>
-											</a>
-											<input type="radio" name="camp_param" id="camp_resa" value="1" class="d-none">
-										</div>
-									</div>
-								</div>
-								<div class="col">
-									<div class="card camp-container h-100">
-										<div class="card-body">
-											<div class="d-block mb-2">
-												<i class="fa fa-database" style="font-size: 22px;"></i>
-											</div>
-											<h3>Nouvelle campagne</h3>
-											<p class="text-muted">Démarrer une nouvelle campagne à partir de zéro.</p>
-											<a href="javascript:void(0);" class="stretched-link text-dark font-weight-bold select-camp" data-target="#camp_sale">
-												<i class="fa fa-arrow-right"></i>
-											</a>
-											<input type="radio" name="camp_param" id="camp_sale" value="2" class="d-none">
-										</div>
-									</div>
-								</div>
-
-
-							</div>
-							<div class="text-end mt-4">
-								<button type="submit" class="btn btn-primary">Valider</button>
-							</div>
-						</form>
-					</div>
-				</div>
-			</div>
-		</div>
-
-		<script>
-			document.addEventListener("DOMContentLoaded", function() {
-				var modal = new bootstrap.Modal(document.getElementById('choixCampagneModal'));
-				modal.show();
-
-				document.querySelectorAll('.select-camp').forEach(function(el) {
-					el.addEventListener('click', function() {
-						var target = document.querySelector(this.dataset.target);
-						if (target) {
-							target.checked = true;
-							document.querySelectorAll('.camp-container').forEach(c => c.classList.remove('border-primary'));
-							this.closest('.camp-container').classList.add('border', 'border-primary');
-						}
-					});
-				});
-			});
-		</script>
-
-	<?php endif; ?>
+	
 
 	<div class="row no-gutters h-100">
 
@@ -371,7 +298,12 @@
 											</a>
 										</li>
 									</ul>
-									<img src="<?= $d['favicon']; ?>" width="28" class="mr-2">
+											<?php if($d['favicon'] != "https://www.memoriafuneraire.com/favicon.ico"): ?>	
+											<img src="<?= $d['favicon']; ?>" width="28" class="mr-2">
+											<?php else: ?>
+											<img src="<?= base_url('assets/images/ico/default_favicon.png') ?>" width="28" class="mr-2">
+											<?php endif; ?>
+									
 								</div>
 							</div>
 						</div>
@@ -441,6 +373,12 @@
 															Baisse de budget
 														</span>
 													<?php endif; ?>
+													<?php if ($u->type_upsell == 3): ?>
+														<span class="badge alert-primary rounded-pill px-4 py-3" style="font-size: 14px; font-weight: 500;">
+															<i class="fa fa-circle mr-1" style="font-size: 10px;"></i>
+															Booster
+														</span>
+													<?php endif; ?>
 													<?php if ($u->type_upsell == 5): ?>
 														<span class="badge alert-danger rounded-pill px-4 py-3" style="font-size: 14px; font-weight: 500;">
 															<i class="fa fa-circle mr-1" style="font-size: 10px;"></i>
@@ -463,7 +401,7 @@
 													<?php if ($u->type_upsell == 5): ?>
 														Résilié
 													<?php endif; ?>
-													<?php if ($u->type_upsell == 1 || $u->type_upsell == 2): ?>
+													<?php if ($u->type_upsell == 1 || $u->type_upsell == 2 || $u->type_upsell == 3): ?>
 														<?= $u->budget_initiale ?> €
 													<?php endif; ?>
 												</td>
@@ -474,11 +412,14 @@
 													<?php if ($u->type_upsell == 5): ?>
 														Résilié
 													<?php endif; ?>
-													<?php if ($u->type_upsell == 1 || $u->type_upsell == 2): ?>
+													<?php if ($u->type_upsell == 1 || $u->type_upsell == 2 || $u->type_upsell == 3): ?>
 														<?= $u->budgets ?> €
 													<?php endif; ?>
 												</td>
 												<td>
+														<?php if($u->statut_actif == 2): ?>
+														<span class="badge alert-primary px-2 py-1">Programmer</span>
+													<?php endif; ?> 
 													<?php if($u->statut_actif == 0): ?>
 														<span class="badge alert-warning px-2 py-1">En attente</span>
 													<?php endif; ?> 
@@ -826,6 +767,7 @@
 						<tbody>
 							<?php if ($task != NULL): ?>
 								<?php foreach ($task as $t): ?>
+									<?php if($t->status != "effectuée"): ?>
 									<tr>
 										<td class="align-middle" style="font-weight: 500;"><?= $t->title; ?></td>
 										<td class="align-middle text-muted">
@@ -879,12 +821,90 @@
 											</div>
 										</td>
 									</tr>
+									<?php endif; ?>
 								<?php endforeach; ?>
 							<?php endif; ?>
 
 						</tbody>
 					</table>
 				</div><br><br></br></br>
+
+				<h1 style="font-size: 48px;">Note</h1>
+				</br>
+				<div class="row row-cols-3">
+					<?php foreach ($notes as $note): ?>
+
+						<div class="col mb-3">
+							<div class="card h-100">
+								<div class="card-body">
+									<div class="row">
+										<span class="col-auto mx-1 badge alert-warning">
+											<?= htmlspecialchars($note->type); ?>
+										</span>
+										<span class="col-auto mx-1 badge alert-primary">
+											<?= htmlspecialchars($note->status); ?>
+										</span>
+										<div class="col-auto dropdown no-arrow ml-auto">
+											<a href="javascript:void(0);" class="d-none text-decoration-none text-muted note-menu dropdown-toggle" role="button" data-toggle="dropdown" aria-expanded="false">
+												<i class="fa fa-ellipsis-h"></i>
+											</a>
+											<div class="dropdown-menu">
+												<button type="button" class="dropdown-item" data-toggle="modal" data-target="#detailModal" data-id="<?= $note->id; ?>">
+													<i class="fa fa-eye mr-2"></i>
+													Détails
+												</button>
+												<button type="button" class="dropdown-item" data-toggle="modal" data-target="#formModal" data-id="<?= $note->id; ?>">
+													<i class="fa fa-edit mr-2"></i>
+													Modifier
+												</button>
+												<div class="dropdown-divider"></div>
+												<a href="<?= base_url('Notes/delete/' . $note->id); ?>" class="dropdown-item text-danger" data-id="<?= $note->id; ?>">
+													<i class="fa fa-trash mr-2"></i>
+													Supprimer
+												</a>
+											</div>
+										</div>
+									</div>
+									<h6 class="my-3" style="font-size: 16px; font-weight: 500;">
+										<?= htmlspecialchars($note->title); ?>
+									</h6>
+									<p class="text-muted">
+										<?= nl2br(htmlspecialchars($note->content)); ?>
+									</p>
+								</div>
+								<div class="card-footer d-flex bg-transparent">
+
+									<div class="d-flex align-items-center avatar-group">
+										<img src="<?= base_url(IMAGES_PATH . $this->ion_auth->user()->row()->photo_users); ?>" class="avatar rounded-circle" width="28" height="28" alt="Client Image">
+									</div>
+
+									<!-- <div class="d-flex align-items-center avatar-group">
+										<?php foreach ($note->assigned_users as $assigned_user): ?>
+											<img src="<?= base_url(IMAGES_PATH . $assigned_user->photo_users); ?>" class="avatar rounded-circle" width="28" height="28" alt="Client Image">
+										<?php endforeach; ?>
+									</div> -->
+
+									<span class="text-muted text-right text-nowrap ml-auto">
+										<?= (!empty($note->date_due) && $note->date_due != '0000-00-00') ? date('d-m-Y', strtotime($note->date_due)) : '-' ?>
+									</span>
+
+								</div>
+							</div>
+						</div>
+						
+					<?php endforeach; ?>
+
+					<div class="col mb-3">
+						<div class="card h-100">
+							<div class="card-body d-flex align-items-center">
+								<button class="btn btn-light btn-block btn-sm" type="button" data-toggle="modal" data-target="#noteModal">
+									<i class="fa fa-plus"></i>
+									Nouvelle note
+								</button>
+							</div>
+						</div>
+					</div>
+				</div>
 
 				<h1 style="font-size: 48px;">Bilan</h1>
 				</br>
@@ -962,6 +982,7 @@
 						</div>
 					</div>
 				</div>
+			</div>
 			</div>
 		</div>
 	</div>

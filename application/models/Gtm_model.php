@@ -6,6 +6,72 @@ class Gtm_model extends CI_Model
 	{
 		parent::__construct();
 	}
+	public function change_statut_optimisation($id, $Débogage, $date_due)
+{
+	$this->load->database();
+    $data = array(
+        'Débogage' => $Débogage
+    );
+
+    $this->db->where('idclients', $id);
+    $this->db->where('mois', $date_due);
+    $this->db->update('optimisation_gtm', $data);
+
+    $this->db->close();
+}
+
+		public function update_budger_onboarding($idclient, $budget)
+	{
+		$sql = "UPDATE onboarding SET budget = $budget WHERE idclients = $idclient";
+		$this->db->query($sql);
+		$this->db->close();
+	}
+	public function get_optimisation(){
+        $this->db->select('o.*, c.nom_client, c.favicon');
+        $this->db->from('optimisation_gtm o');
+        $this->db->join('clients c','c.idclients=o.idclients','left');
+        $this->db->order_by('mois','DESC');
+        return $this->db->get()->result_array();
+    }
+
+    public function get_optimisation_by_id($id){
+        return $this->db->get_where('optimisation_gtm',['id_optimisation_gtm'=>$id])->row_array();
+    }
+
+    public function exists_optimisation($idclients,$mois){
+        $this->db->where('idclients',$idclients);
+        $this->db->where('DATE_FORMAT(mois,"%Y-%m")',$mois);
+        $count = $this->db->count_all_results('optimisation_gtm');
+        return $count>0;
+    }
+
+    public function add_optimisation($idclients,$mois,$debug){
+        $this->db->insert('optimisation_gtm',[
+            'idclients'=>$idclients,
+            'mois'=>$mois.'-01',
+            'Débogage'=>$debug,
+            'statut'=>'En_attente',
+            'date_demande'=>date('Y-m-d')
+        ]);
+    }
+
+    public function update_optimisation($id,$debug){
+        $this->db->where('id_optimisation_gtm',$id);
+        $this->db->update('optimisation_gtm',[
+
+            'Débogage'=>$debug
+        ]);
+    }
+
+    // Optionnel : ajout automatique début de mois
+    public function add_optimisation_automatic($clients){
+        $currentMonth = date('Y-m-01');
+        foreach($clients as $c){
+            if(!$this->exists_optimisation($c['idclients'],date('Y-m',$currentMonth))){
+                $this->add_optimisation($c['idclients'],$currentMonth,'à vérifier');
+            }
+        }
+    }
 	public function get_all_gtm() {
 			$this->db->select('gtm.*, clients.*,users.*,donnee.tracking_gtm');
 			$this->db->from('gtm');

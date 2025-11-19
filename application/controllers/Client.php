@@ -1,5 +1,16 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
+$vendorAutoload = FCPATH . 'vendor' . DIRECTORY_SEPARATOR . 'autoload.php';
+if (!file_exists($vendorAutoload)) {
+    // Message lisible et log si le fichier n'existe pas
+    log_message('error', 'vendor/autoload.php introuvable : ' . $vendorAutoload);
+    show_error("Dépendances Composer manquantes. Exécuter `composer require dompdf/dompdf` dans le dossier racine du projet.", 500, 'Dépendances manquantes');
+    exit;
+}
+require_once $vendorAutoload;
+
+use Dompdf\Dompdf;
+use Dompdf\Options;
 
 class Client extends MY_Controller
 {
@@ -20,6 +31,7 @@ class Client extends MY_Controller
 		$this->load->model("Note_model");
 		$this->load->model("Discussion_model");
 		$this->load->model("Gtm_model");
+		$this->load->model("Application_model");
 		$this->data['visuels'] = $this->visuels_model->get_all();
 		// $this->load->library('PHPExcel');
 		// $this->load->library('excel');
@@ -27,7 +39,7 @@ class Client extends MY_Controller
 		$this->load->library('curl');
 		$this->path = "assets/images/formats/";
 		$this->file_upload_field = "visuel_path";
-
+		$this->load->database(); 
 		$this->load->library('upload');
 		$this->load->library('form_validation');
 		$this->form_validation->set_error_delimiters('<span class="error">', '</span>');
@@ -46,6 +58,287 @@ class Client extends MY_Controller
 		$this->content = "layouts/client/index.php";
 		$this->layout();
 	}
+	public function valider_campagne($idclients)
+	{
+				$statut_demande = 3;
+				$task = $this->Task_model->get_task_by_id_and_validation($idclients);
+				$onboarding = $this->visuels_model->get_last_onboarding_by_id($idclients);
+				$date_fin = $onboarding['annonce'];
+				$id = intval($task->idtask);
+				$idtask = intval($task->idtask);
+				$am = intval($task->assigned_to);
+				$this->visuels_model->change_statut_en_demande($id, $statut_demande);
+				$data = [
+					'status'	=>	"effectuée",
+				];
+				$this->Task_model->update_task_statuts($idtask, $data);
+					$id = intval($task->idclients);
+					$type_tache = 15;
+					$title = "Mise en ligne";
+					$description = "Veuiller mettre la campagne en ligne le $date_fin";
+					$Statuts_technique = 1;
+					$procedure_gtm = 4;
+					$tm = 23;
+					$date_debut = date('Y-m-d');
+					$data = array(
+						'type_tache' => $type_tache,
+						'date_demande' => $date_debut,
+						'date_due' => $date_fin,
+						'idclients' => $id,
+						'AM' => $am,
+						'assigned_to' => 23,
+						'title' => $title,
+						'Statuts_technique' => $Statuts_technique,
+						'procedure_gtm' => $procedure_gtm,
+						'description' => $description
+					);
+
+		$this->Task_model->add_task($data);
+		redirect('Onboarding');
+	}
+	public function uspell_campagne()
+	{
+		$idclients = intval($this->input->post('idclients'));
+		$camp_param = intval($this->input->post('camp_param'));
+		$onboarding = $this->visuels_model->get_last_onboarding_by_id($idclients);
+		$idonnee = $onboarding['idonnee'];
+		$idupsell = $onboarding['idupsell'];
+		$statut = 2;
+		if($camp_param == 1){
+
+		}
+		if($camp_param == 2){
+			$this->visuels_model->delete_all_campagne($idclients);
+			$this->visuels_model->delete_all_images($idclients);
+		}
+		$statut_demande_en_cours = 0;
+		$this->load->database();
+		$update = $this->db
+			->where('idupsell', $idupsell)
+			->update('upsell', ['statut_actif' => $statut]);
+
+		$this->visuels_model->update_statut_demande_en_cours($statut_demande_en_cours,$idonnee);
+		$this->visuels_model->update_statut_demande_en_cours($statut_demande_en_cours,$idonnee);
+		redirect('Client/onboarding/'. $idclients );
+
+	}
+	public function mis_a_jour_cmp($id)
+	{
+
+		// récupérer l’URL du client
+		$client = $this->Application_model->get_client($id);
+		$url = $client['site_client'];
+
+		// détecter CMP
+		$cmp = $this->Application_model->detect_cmp($url);
+
+		// mettre à jour en base
+		$this->Application_model->update_cmp($id, $cmp);
+
+		// message puis redirection
+		$this->session->set_flashdata('success', 'CMP mis à jour automatiquement : ' . $cmp);
+		redirect('Client/application/'.$id.'?maj=ok&type=cmp');
+
+	}
+
+
+	public function mis_a_jour_datalayer($id)
+	{
+
+		// récupérer l’URL du client
+		$client = $this->Application_model->get_client($id);
+		$url = $client['site_client'];
+
+		// détecter datalayer
+		$datalayer = $this->Application_model->detect_datalayer($url);
+
+		// mise à jour
+		$this->Application_model->update_datalayer($id, $datalayer);
+
+		$this->session->set_flashdata('success', 'DataLayer mis à jour : ' . $datalayer);
+		redirect('Client/application/'.$id.'?maj=ok&type=datalayer');
+
+	}
+
+	public function repatition_budget()
+{
+    $this->load->model('Donne_modele'); // assure-toi que le model est chargé
+    $this->load->model('Task_model');
+    $this->load->model('visuels_model');
+
+    $idclients       = $this->input->post('client');
+    $campagnesData   = $this->input->post('campagne');      // nouveaux montants
+    $campagnesOld    = $this->input->post('campagne_old');  // anciens montants (hidden)
+    $campagnesName   = $this->input->post('campagne_name'); // noms (hidden)
+    $type_upsell     = intval($this->input->post('type_upsell'));
+
+    if (!$idclients || !$campagnesData || !is_array($campagnesData)) {
+        $this->session->set_flashdata('error', 'Aucune donnée reçue.');
+        redirect($_SERVER['HTTP_REFERER']);
+        return;
+    }
+
+    // transaction optionnelle
+    $this->db->trans_begin();
+
+    $changes = [];
+    foreach ($campagnesData as $idcampagne => $newBudgetRaw) {
+        $idcamp = intval($idcampagne);
+        $newBudget = floatval($newBudgetRaw);
+
+        // récupérer old et nom depuis le POST (fallback si manquant)
+        $oldBudget = isset($campagnesOld[$idcamp]) ? floatval($campagnesOld[$idcamp]) : 0;
+        $nomCampagne = isset($campagnesName[$idcamp]) ? $campagnesName[$idcamp] : 'Campagne #' . $idcamp;
+
+        // Mettre à jour via ton model si existant
+        if (method_exists($this->Donne_modele, 'update_budget')) {
+            $this->Donne_modele->update_budget($idcamp, $newBudget);
+        } else {
+            // fallback : update direct si model indisponible
+            $this->db->where('idcampagne', $idcamp)->update('campagnes', ['repartition_budget' => $newBudget]);
+        }
+
+        $changes[] = [
+            'idcampagne' => $idcamp,
+            'nom' => $nomCampagne,
+            'old' => $oldBudget,
+            'new' => $newBudget,
+        ];
+    }
+
+    if ($this->db->trans_status() === FALSE) {
+        $this->db->trans_rollback();
+        $this->session->set_flashdata('error', 'Erreur lors de la mise à jour des budgets.');
+        redirect($_SERVER['HTTP_REFERER']);
+        return;
+    } else {
+        $this->db->trans_commit();
+    }
+
+    // Si Booster : on ajoute le détail directement dans la description de la tache
+    if ($type_upsell === 3) {
+        // recuperer la tache booster la plus récente
+        $task = $this->Task_model->get_task_booster_by_id_and_validation($idclients);
+
+        // Préparer la description textuelle (Ancien -> Nouveau)
+        $lines = [];
+        $lines[] = "Répartition BOOSTER";
+        $lines[] = "";
+        $lines[] = "Détails des modifications :";
+		foreach ($changes as $c) {
+			$lines[] =  $c['nom'] . " : Ancien montant : " 
+						. number_format($c['old'], 2, ',', ' ') . " € -> Nouveau montant : " 
+						. number_format($c['new'], 2, ',', ' ') . " €";
+		}
+
+        $description = implode("\n", $lines);
+
+        // si tache existante -> marquer effectuée
+        if ($task && isset($task->idtask)) {
+            $idtask = intval($task->idtask);
+            // si tu as des fonctions pour changer statuts, les appeler
+            $this->visuels_model->change_statut_en_demande($idtask, 3); // adapte si besoin
+            $this->Task_model->update_task_statuts($idtask, ['status' => 'effectuée']);
+        }
+
+        // créer une nouvelle tache "Mise en ligne" avec la description (ou l'ajouter à la tache existante)
+        $onboarding = $this->visuels_model->get_last_onboarding_by_id($idclients);
+        $date_mise_en_ligne = isset($onboarding['annonce']) ? $onboarding['annonce'] : date('Y-m-d');
+
+        $am = ($task && isset($task->assigned_to)) ? intval($task->assigned_to) : null;
+        $assigned_to = 23; // fallback
+		$idupsell = intval($task->idupsell);
+        $newTask = [
+            'type_tache'        => 15,
+            'date_demande'      => date('Y-m-d'),
+            'date_due'          => $date_mise_en_ligne,
+            'idclients'         => intval($idclients),
+            'AM'                => $am,
+            'assigned_to'       => $assigned_to,
+            'title'             => 'Mise en ligne - Booster',
+            'Statuts_technique' => 1,
+            'procedure_gtm'     => 4,
+            'description'       => $description,
+			'idupsell'       => $idupsell
+        ];
+
+        $this->Task_model->add_task($newTask);
+    }
+
+    // flash summary
+    $summaryLines = [];
+    foreach ($changes as $c) {
+        $summaryLines[] = $c['nom'] . ': ' . number_format($c['old'], 0, ',', ' ') . '€ → ' . number_format($c['new'], 0, ',', ' ') . '€';
+    }
+    $this->session->set_flashdata('success', 'Répartition du budget mise à jour !<br>' . implode('<br>', $summaryLines));
+
+    redirect($_SERVER['HTTP_REFERER']);
+}
+
+	public function change_statut_budget()
+	{
+		$idupsell = (int) $this->input->post('idupsell');
+		$statut = (int) $this->input->post('statut_actif');
+
+		$upsell = $this->visuels_model->get_upsell_by_id($idupsell);
+		$budget_finale = $upsell[0]['budgets'];
+		$idclients     = $upsell[0]['idclients'];
+		if ($statut == 2) {
+			$this->visuels_model->update_budget($budget_finale, $idclients);
+		}
+		$this->load->database();
+		$update = $this->db
+			->where('idupsell', $idupsell)
+			->update('upsell', ['statut_actif' => $statut]);
+
+		if ($update) {
+			$this->session->set_flashdata('success', 'Statut modifié avec succès !');
+		} else {
+			$this->session->set_flashdata('error', 'Erreur lors de la mise à jour du statut.');
+		}
+		
+
+		// Redirection vers la page précédente
+		return redirect($_SERVER['HTTP_REFERER']);
+	}
+
+
+
+
+
+	public function export_inventaire_pdf($client_id = null)
+    {
+        // TODO: récupère tes données comme d’habitude
+        // Ex: $groupe_valider = $this->Client_model->getGroupesValider($client_id);
+        $groupe_valider = isset($this->groupe_valider) ? $this->groupe_valider : []; // adapte à ton code
+
+        // Flag pour adapter l’affichage "spécial PDF"
+        $data = [
+            'groupe_valider' => $groupe_valider,
+            'for_pdf'        => true,
+            'client_id'      => $client_id,
+        ];
+
+        // 1) Rendre une vue spéciale PDF
+        $html = $this->load->view('client/inventaire_pdf', $data, true);
+
+        // 2) Dompdf (options safe)
+        require_once APPPATH . 'third_party/dompdf/autoload.inc.php'; // adapte si besoin
+
+        $options = new Options();
+        $options->set('isRemoteEnabled', true);       // pour images https externes
+        $options->set('isHtml5ParserEnabled', true);  // meilleur rendu HTML5/CSS3
+        $options->setChroot(FCPATH);                  // sécurité fichiers locaux
+
+        $dompdf = new Dompdf($options);
+        $dompdf->setPaper('A4', 'portrait');
+        $dompdf->loadHtml($html, 'UTF-8');
+        $dompdf->render();
+
+        // 3) Stream (Attachment=false = ouvre dans le navigateur)
+        $filename = 'inventaire-' . ($client_id ?? 'client') . '.pdf';
+        $dompdf->stream($filename, ['Attachment' => false]);
+    }
 	public function send_annonce($idonnee = null)
 		{
 
@@ -151,101 +444,449 @@ class Client extends MY_Controller
 		$this->content = "layouts/client/onboarding/annonces_liste";
 		$this->layout();
 	}
+	public function modifier_annonce($idgroupe_annonce)
+{
+	
+    // --- Groupe
+    $groupe = $this->db->get_where('groupe_annonce', [
+        'idgroupe_annonce' => (int)$idgroupe_annonce
+    ])->row_array();
+    if (!$groupe) { show_404(); }
+
+    // --- Campagne
+    $campagne = $this->db->get_where('campagne', [
+        'idcampagne' => (int)$groupe['idcampagne']
+    ])->row_array();
+    if (!$campagne) { show_404(); }
+
+    $idcampagne = (int)$groupe['idcampagne'];
+    $idclients  = (int)$groupe['idclients'];
+	
+
+    // --- Mapping type_campagne : 1=search, 2=local, 3=pmax
+    $mapNumToSlug = [
+        1 => 'search',
+        2 => 'local',
+        3 => 'pmax',
+    ];
+    $mapSlugToSlug = [
+        '1' => 'search', 'search' => 'search',
+        '2' => 'local',  'local'  => 'local',
+        '3' => 'pmax',   'pmax'   => 'pmax',
+    ];
+
+    // 1) si ?type= fourni (nombre ou slug), il a la priorité
+    $typeReq = strtolower((string)$this->input->get('type', true));
+    $type = $mapSlugToSlug[$typeReq] ?? null;
+
+    // 2) sinon, on lit la DB : int dans type_campagne ou un éventuel texte dans type
+    if (!$type) {
+        if (isset($campagne['type_campagne']) && $campagne['type_campagne'] !== '') {
+            $typeNum = (int)$campagne['type_campagne'];
+            $type = $mapNumToSlug[$typeNum] ?? null;
+        }
+    }
+    if (!$type) {
+        // fallback : texte éventuel en base (search/local/pmax) ou défaut search
+        $raw = strtolower((string)($campagne['type'] ?? ''));
+        $type = $mapSlugToSlug[$raw] ?? 'search';
+    }
+
+    // --- Titres / longues / descriptions
+    $ads_titres = [];
+    for ($i=1; $i<=15; $i++) { $ads_titres[] = (string)($groupe['titre'.$i] ?? ''); }
+
+    $ads_titres_longs = [];
+    for ($i=1; $i<=5; $i++) { $ads_titres_longs[] = (string)($groupe['longtitre'.$i] ?? ''); }
+
+    $ads_descriptions = [];
+    for ($i=1; $i<=4; $i++) { $ads_descriptions[] = (string)($groupe['descriptions'.$i] ?? ''); }
+
+    // --- Extensions
+    $extensions = $this->db->order_by('idlien_annexe','asc')
+        ->get_where('lien_annexe', ['idcampagne' => $idcampagne])->result_array();
+
+    $accroches = $this->db->order_by('idextension_accroche','asc')
+        ->get_where('extension_accroche', ['idcampagne' => $idcampagne])->result_array();
+
+    $extraits = $this->db->order_by('idextrait_de_site','asc')
+        ->get_where('extrait_de_site', ['idcampagne' => $idcampagne])->result_array();
+
+    // --- Images
+    $images = $this->db->order_by('rank','asc')->get_where('images', [
+        'idcampagne' => $idcampagne,
+        'idclients'  => $idclients
+    ])->result_array();
+	$this->data["donnees"] = $this->visuels_model->getDonneeById($idclients);
+
+    // Normalisation pour vues "Local" qui attendent $images_site (objets { image_url })
+    $images_site = array_map(function($row){
+        return (object)['image_url' => $row['image_url'] ?? ($row['url'] ?? '')];
+    }, $images);
+
+    // --- Infos client
+    $donnees = $this->visuels_model->getDonneeById($idclients);
+
+    // --- Sauvegarde Numéro/Adresse en POST uniquement
+    if (strtolower($this->input->method()) === 'post') {
+        $numero  = $this->input->post('numero', true);
+        $adresse = $this->input->post('adresse', true);
+        if ($numero !== null || $adresse !== null) {
+            if (method_exists($this->Donne_modele, 'update_num_adresse')) {
+                $this->Donne_modele->update_num_adresse($numero, $adresse, $idcampagne);
+            }
+        }
+    }
+
+    // --- Data partagée
+    $this->data = array_merge($this->data ?? [], [
+        'mode'               => 'edit',
+        'type'               => $type,
+        'groupe'             => [$groupe],
+        'campagne'           => $campagne,
+        'donnees'            => [$donnees[0] ?? []],
+        'ads_titres'         => $ads_titres,
+        'ads_titres_longs'   => $ads_titres_longs,
+        'ads_descriptions'   => $ads_descriptions,
+        'extensions'         => $extensions,
+        'accroches'          => $accroches,
+        'extraits'           => $extraits,
+        'images'             => $images,
+        'images_site'        => $images_site,
+    ]);
+
+    // --- Sélection de la vue par type
+    $views = [
+        'search' => 'layouts/client/onboarding/modifier_annonce_search',
+        'local'  => 'layouts/client/onboarding/modifier_annonce_local',
+        'pmax'   => 'layouts/client/onboarding/modifier_annonce_pmax',
+    ];
+
+    $this->content = $views[$type] ?? $views['search'];
+    $this->layout();
+}
+
+
+public function update_annonce()
+{
+    // --- Inputs de base
+    $idgroupe_annonce = (int)$this->input->post('idgroupe_annonce');
+    $idcampagne       = (int)$this->input->post('idcampagne');
+    $idclients        = (int)$this->input->post('idclients');
+
+    // Récupérer le type de campagne pour appliquer la logique
+    $groupe = $this->db->get_where('groupe_annonce', ['idgroupe_annonce' => $idgroupe_annonce])->row_array();
+    if (!$groupe) { show_404(); return; }
+    $type = (int)$groupe['type_campagnes']; // 1=Search, 2=Local, 3=PMax
+
+    // Champs communs
+    $mot_cle          = trim((string)$this->input->post('mot_cle'));
+    $url_campagne     = trim((string)$this->input->post('url_campagne'));
+
+    // Champs spécifiques
+	$chemin1           = trim((string)$this->input->post('chemin1'));
+	$chemin2           = trim((string)$this->input->post('chemin2'));
+
+	// -> clé ASCII "description_breve" prioritaire, puis fallback sur "Description_brève"
+	$description_breve = trim((string)(
+		$this->input->post('description_breve') !== null
+			? $this->input->post('description_breve')
+			: $this->input->post('Description_brève')
+	));
+
+
+    // Groupes d’assets
+    $titres           = is_array($this->input->post('titres'))         ? $this->input->post('titres')         : [];
+    $titres_longs     = is_array($this->input->post('titres_longs'))   ? $this->input->post('titres_longs')   : [];
+    $descriptions     = is_array($this->input->post('descriptions'))   ? $this->input->post('descriptions')   : [];
+
+    // “Nouvelle” UX
+    $titre_annexe     = is_array($this->input->post('titre_annexe'))   ? $this->input->post('titre_annexe')   : [];
+    $desc1_annexe     = is_array($this->input->post('desc1_annexe'))   ? $this->input->post('desc1_annexe')   : [];
+    $desc2_annexe     = is_array($this->input->post('desc2_annexe'))   ? $this->input->post('desc2_annexe')   : [];
+    $url_annexe       = is_array($this->input->post('url_annexe'))     ? $this->input->post('url_annexe')     : [];
+    $accroche_annexe  = is_array($this->input->post('accroche_annexe'))? $this->input->post('accroche_annexe'): [];
+    $site_annexe      = is_array($this->input->post('site_annexe'))    ? $this->input->post('site_annexe')    : [];
+
+    // Autres champs (déjà présents dans ton code)
+    $fiche_etablissement = $this->input->post('fiche_etablissement');
+    $email_campagne      = $this->input->post('email_campagne');
+    $adresse_campagne    = $this->input->post('adresse_campagne');
+
+    // Téléphone / Adresse (sauvegarde via modèle dédié)
+    $numero  = $this->input->post('numero');
+    $adresse = $this->input->post('adresse');
+
+    // ---------- Construction de $data commun ----------
+    $data = [
+        'fiche_etablissement' => $fiche_etablissement,
+        'email_campagne'      => $email_campagne,
+        'adresse_campagne'    => $adresse_campagne,
+        'mot_cle'             => mb_substr($mot_cle, 0, 255),
+        'url_groupe_annonce'  => mb_substr($url_campagne, 0, 200),
+    ];
+
+    // Titres / Longtitres / Descriptions (respect des limites de colonnes)
+    for ($i = 0; $i < 12; $i++) {
+        $val = isset($titres[$i]) ? trim((string)$titres[$i]) : null;
+        $data['titre'.($i+1)] = $val !== '' ? mb_substr($val, 0, 200) : null;
+    }
+    for ($i = 0; $i < 5; $i++) {
+        $val = isset($titres_longs[$i]) ? trim((string)$titres_longs[$i]) : null;
+        $data['longtitre'.($i+1)] = $val !== '' ? mb_substr($val, 0, 200) : '';
+    }
+    for ($i = 0; $i < 4; $i++) {
+        $val = isset($descriptions[$i]) ? trim((string)$descriptions[$i]) : null;
+        $data['descriptions'.($i+1)] = $val !== '' ? mb_substr($val, 0, 200) : null;
+    }
+
+    // ---------- Logique conditionnelle par type ----------
+    if ($type === 1) {
+    // SEARCH
+    $data['chemin1'] = $chemin1 !== '' ? mb_substr($chemin1, 0, 200) : null;
+    $data['chemin2'] = $chemin2 !== '' ? mb_substr($chemin2, 0, 200) : null;
+    $data['description_breve'] = null;  // plutôt null qu'une chaîne vide
+	} else {
+		// LOCAL & PMAX
+		$data['description_breve'] = $description_breve !== '' ? mb_substr($description_breve, 0, 250) : null;
+		$data['chemin1'] = null;
+		$data['chemin2'] = null;
+	}
+
+
+    // ---------- Transaction ----------
+    $this->db->trans_start();
+
+    // (1) MAJ groupe
+    $this->db->where('idgroupe_annonce', $idgroupe_annonce)->update('groupe_annonce', $data);
+
+    // (2) SITELINKS
+    $this->db->where('idcampagne', $idcampagne)->delete('lien_annexe');
+    $max = max(count($titre_annexe), count($desc1_annexe), count($desc2_annexe), count($url_annexe));
+    for ($i=0; $i<$max; $i++) {
+        $t  = isset($titre_annexe[$i]) ? trim((string)$titre_annexe[$i]) : '';
+        $d1 = isset($desc1_annexe[$i]) ? trim((string)$desc1_annexe[$i]) : '';
+        $d2 = isset($desc2_annexe[$i]) ? trim((string)$desc2_annexe[$i]) : '';
+        $u  = isset($url_annexe[$i])   ? trim((string)$url_annexe[$i])   : '';
+        if ($t==='' && $d1==='' && $d2==='' && $u==='') continue;
+
+        $this->db->insert('lien_annexe', [
+            'idclients'                => $idclients,
+            'idcampagne'               => $idcampagne,
+            'titre_lien_annexe'        => mb_substr($t,  0, 25),
+            'description1_lien_annexe' => mb_substr($d1, 0, 90),
+            'description2_lien_annexe' => mb_substr($d2, 0, 90),
+            'url_lien_annexe'          => mb_substr($u,  0, 200),
+        ]);
+    }
+
+    // (3) ACCROCHES
+    $this->db->where('idcampagne', $idcampagne)->delete('extension_accroche');
+    foreach ($accroche_annexe as $acc) {
+        $acc = trim((string)$acc);
+        if ($acc==='') continue;
+        $this->db->insert('extension_accroche', [
+            'idclients'                => $idclients,
+            'idcampagne'               => $idcampagne,
+            'texte_extension_accroche' => mb_substr($acc, 0, 25),
+        ]);
+    }
+
+    // (4) EXTRAITS
+    $this->db->where('idcampagne', $idcampagne)->delete('extrait_de_site');
+    foreach ($site_annexe as $snip) {
+        $snip = trim((string)$snip);
+        if ($snip==='') continue;
+        $this->db->insert('extrait_de_site', [
+            'idclients'             => $idclients,
+            'idcampagne'            => $idcampagne,
+            'texte_extrait_de_site' => mb_substr($snip, 0, 25),
+        ]);
+    }
+
+    // (5) Téléphone / Adresse (table dédiée)
+    $this->Donne_modele->update_num_adresse($numero, $adresse, $idcampagne);
+
+    $this->db->trans_complete();
+
+    if (!$this->db->trans_status()) {
+        show_error('Erreur lors de la modification du groupe/annonce.');
+        return;
+    }
+
+    redirect('Client/onboarding/'.$idclients, 'refresh');
+}
+
+
 
 
 
 	public function Ajoutgroupes()
-	{
-		$idgroupe_annonce = $this->input->post('idgroupe_annonce');
-		$idcampagne = $this->input->post('idcampagne');
-		$idclients = $this->input->post('idclients');
-		$chemin1 = $this->input->post('chemin1');
-		$chemin2 = $this->input->post('chemin2');
-		$titres = is_array($this->input->post('titres')) ? $this->input->post('titres') : [];
-		$titres_longs = is_array($this->input->post('titres_longs')) ? $this->input->post('titres_longs') : [];
-		$descriptions = is_array($this->input->post('descriptions')) ? $this->input->post('descriptions') : [];
-		$fiche_etablissement = $this->input->post('fiche_etablissement');
-		$email_campagne = $this->input->post('email_campagne');
-		$adresse_campagne = $this->input->post('adresse_campagne');
+{
+    // --- Inputs de base
+	$this->load->database(); 
+    $idgroupe_annonce = $this->input->post('idgroupe_annonce');
+    $idcampagne       = $this->input->post('idcampagne');
+    $idclients        = $this->input->post('idclients');
 
-		// Données des extensions
-		$titre_annexe = $this->input->post('titre_annexe');
-		$extensions_annexe = $this->input->post('extensions_annexe');
-		$accroche_annexe = $this->input->post('accroche_annexe');
-		$site_annexe = $this->input->post('site_annexe');
-		$lieu_annexe = $this->input->post('lieu_annexe');
-		$appel_annexe = $this->input->post('appel_annexe');
-		$url_annexe = $this->input->post('url_annexe');
+    $chemin1          = trim((string)$this->input->post('chemin1'));
+    $chemin2          = trim((string)$this->input->post('chemin2'));
 
-		$exclusion = $this->input->post('Mots_cle_exclus');
-		$id = $idclients;
+    $titres           = is_array($this->input->post('titres'))         ? $this->input->post('titres')         : [];
+    $titres_longs     = is_array($this->input->post('titres_longs'))   ? $this->input->post('titres_longs')   : [];
+    $descriptions     = is_array($this->input->post('descriptions'))   ? $this->input->post('descriptions')   : [];
 
-		$this->visuels_model->exclusion($id, $exclusion);
+    $fiche_etablissement = $this->input->post('fiche_etablissement');
+    $email_campagne      = $this->input->post('email_campagne');
+    $adresse_campagne    = $this->input->post('adresse_campagne');
 
-		$statut = 1;
+    // --- NOUVEAUX CHAMPS — Sitelinks + Accroches + Extraits
+    $titre_annexe = is_array($this->input->post('titre_annexe'))  ? $this->input->post('titre_annexe')  : [];
+    $desc1_annexe = is_array($this->input->post('desc1_annexe'))  ? $this->input->post('desc1_annexe')  : [];
+    $desc2_annexe = is_array($this->input->post('desc2_annexe'))  ? $this->input->post('desc2_annexe')  : [];
+    $url_annexe   = is_array($this->input->post('url_annexe'))    ? $this->input->post('url_annexe')    : [];
 
-		// Préparer les données du groupe
-		$data = array(
-			'idgroupe_annonce' => $idgroupe_annonce,
-			'idcampagne'       => $idcampagne,
-			'idclients'        => $idclients,
-			'chemin1'          => $chemin1,
-			'chemin2'          => $chemin2,
-			'statut'           => $statut,
-			'fiche_etablissement' => $fiche_etablissement,
-			'email_campagne'   => $email_campagne,
-			'adresse_campagne' => $adresse_campagne
-		);
+    $accroche_annexe = is_array($this->input->post('accroche_annexe')) ? $this->input->post('accroche_annexe') : [];
+    $site_annexe     = is_array($this->input->post('site_annexe'))     ? $this->input->post('site_annexe')     : [];
 
-		// Titres
-		for ($i = 0; $i < 12; $i++) {
-			$data['titre' . ($i + 1)] = $titres[$i] ?? null;
-		}
+	$numero = $this->input->post('numero');
+    $adresse     = $this->input->post('adresse');
 
-		// Titres longs
-		for ($i = 0; $i < 5; $i++) {
-			$data['longtitre' . ($i + 1)] = $titres_longs[$i] ?? null;
-		}
+	$this->Donne_modele->update_num_adresse($numero, $adresse, $idcampagne);
+	$id = $idclients;
+    $exclusion = $this->input->post('Mots_cle_exclus');
+	$this->visuels_model->exclusion($id, $exclusion);
+    $statut = 1;
 
-		// Descriptions
-		for ($i = 0; $i < 4; $i++) {
-			$data['descriptions' . ($i + 1)] = $descriptions[$i] ?? null;
-		}
+    // --- Prépare les données du groupe
+    $data = [
+        'idgroupe_annonce'    => $idgroupe_annonce,
+        'idcampagne'          => $idcampagne,
+        'idclients'           => $idclients,
+        'chemin1'             => $chemin1,
+        'chemin2'             => $chemin2,
+        'statut'              => $statut,
+        'fiche_etablissement' => $fiche_etablissement,
+        'email_campagne'      => $email_campagne,
+        'adresse_campagne'    => $adresse_campagne
+    ];
 
-		// 🔹 Mise à jour du groupe d’annonce
-		$this->Donne_modele->update_groupe_search($idgroupe_annonce, $data);
-		// 🔹 Enregistrer les extensions
-		if (!empty($titre_annexe)) {
-			// Supprimer les anciennes extensions avant d’insérer les nouvelles
-			$this->Donne_modele->delete_extensions_by_campagne($idcampagne);
+    // Titres (jusqu’à 12)
+    for ($i = 0; $i < 12; $i++) {
+        $data['titre' . ($i + 1)] = isset($titres[$i]) ? trim($titres[$i]) : null;
+    }
+    // Titres longs (jusqu’à 5)
+    for ($i = 0; $i < 5; $i++) {
+        $data['longtitre' . ($i + 1)] = isset($titres_longs[$i]) ? trim($titres_longs[$i]) : null;
+    }
+    // Descriptions (jusqu’à 4)
+    for ($i = 0; $i < 4; $i++) {
+        $data['descriptions' . ($i + 1)] = isset($descriptions[$i]) ? trim($descriptions[$i]) : null;
+    }
 
-			for ($i = 0; $i < count($titre_annexe); $i++) {
-				// Vérifier qu'au moins un champ n’est pas vide
-				if (!empty($titre_annexe[$i]) || !empty($extensions_annexe[$i]) || !empty($url_annexe[$i])) {
-					$extension = array(
-						'idclients'              => $idclients,
-						'idcampagne'             => $idcampagne,
-						'titre_extensions'       => $titre_annexe[$i] ?? '',
-						'description_extensions' => $extensions_annexe[$i] ?? '',
-						'url_extensions'         => $url_annexe[$i] ?? '',
-						'extensions_accroche'    => $accroche_annexe[$i] ?? '',
-						'extensions_extrait_site'=> $site_annexe[$i] ?? '',
-						'extensions_lieu'        => $lieu_annexe[$i] ?? '',
-						'extensions_appel'       => $appel_annexe[$i] ?? ''
-					);
-					$this->Donne_modele->insert_extension($extension);
-				}
-			}
-		}
+    // --- Transaction globale
+    //$this->db->trans_start();
 
-		redirect('Client/onboarding/' . $idclients, 'refresh');
-	}
+    // 1) MAJ du groupe
+    $this->Donne_modele->update_groupe_search($idgroupe_annonce, $data);
+
+    // 2) SITELINKS (lien_annexe)
+    // Nettoyage ancien
+    $this->db->where('idcampagne', $idcampagne)->delete('lien_annexe');
+
+    // Insert (max 4 affichés côté front)
+    $max = max(count($titre_annexe), count($desc1_annexe), count($desc2_annexe), count($url_annexe));
+    for ($i = 0; $i < $max; $i++) {
+        $t  = isset($titre_annexe[$i]) ? trim($titre_annexe[$i]) : '';
+        $d1 = isset($desc1_annexe[$i]) ? trim($desc1_annexe[$i]) : '';
+        $d2 = isset($desc2_annexe[$i]) ? trim($desc2_annexe[$i]) : '';
+        $u  = isset($url_annexe[$i])   ? trim($url_annexe[$i])   : '';
+
+        // si tout est vide, on saute
+        if ($t === '' && $d1 === '' && $d2 === '' && $u === '') continue;
+
+        // bornes de sécurité (Google: 25/90/90)
+        $row = [
+            'idclients'                => $idclients,
+            'idcampagne'               => $idcampagne,
+            'titre_lien_annexe'        => mb_substr($t,  0, 25),
+            'description1_lien_annexe' => mb_substr($d1, 0, 90),
+            'description2_lien_annexe' => mb_substr($d2, 0, 90),
+            'url_lien_annexe'          => mb_substr($u,  0, 200),
+        ];
+        $this->db->insert('lien_annexe', $row);
+    }
+
+    // 3) EXTENSIONS D’ACCROCHE (extension_accroche)
+    $this->db->where('idcampagne', $idcampagne)->delete('extension_accroche');
+    foreach ($accroche_annexe as $acc) {
+        $acc = trim((string)$acc);
+        if ($acc === '') continue;
+        $this->db->insert('extension_accroche', [
+            'idclients'                => $idclients,
+            'idcampagne'               => $idcampagne,
+            'texte_extension_accroche' => mb_substr($acc, 0, 25),
+        ]);
+    }
+
+    // 4) EXTRAITS DE SITE (extrait_de_site)
+    $this->db->where('idcampagne', $idcampagne)->delete('extrait_de_site');
+    foreach ($site_annexe as $snip) {
+        $snip = trim((string)$snip);
+        if ($snip === '') continue;
+        $this->db->insert('extrait_de_site', [
+            'idclients'            => $idclients,
+            'idcampagne'           => $idcampagne,
+            'texte_extrait_de_site'=> mb_substr($snip, 0, 25),
+        ]);
+    }
+
+    // 5) éventuelle logique “fiche établissement” (inchangée)
+    $donnees  = $this->visuels_model->getDonneeById($idclients);
+    $assigned_to = $donnees[0]['account_manager'];
+
+    if ($fiche_etablissement === "Non") {
+        $date_demande = date('Y-m-d');
+        $date_due     = date('Y-m-d', strtotime('+3 days'));
+        $title        = "Demande fiche d'etablissement";
+        $tache        = "Nous avons besoin du fiche d'etablissement du client";
+        $current_user = $this->ion_auth->user()->row();
+        $am           = intval($current_user->id);
+
+        $datas = [
+            'date_demande' => $date_demande,
+            'date_due'     => $date_due,
+            'idclients'    => $idclients,
+            'AM'           => $am,
+            'assigned_to'  => $assigned_to,
+            'title'        => $title,
+            'type_tache'   => 11,
+            'description'  => $tache
+        ];
+        $this->Task_model->add_tasks($datas);
+    }
+
+    $this->db->trans_complete();
+
+    if (!$this->db->trans_status()) {
+        // tu peux logger et afficher un flash error si nécessaire
+        show_error('Erreur lors de la sauvegarde du groupe et des extensions.');
+        return;
+    }
+
+    redirect('Client/onboarding/' . $idclients, 'refresh');
+}
+
 
 
 
 	public function insertgroupeannonce($id)
 	{
 		$k = $this->data["groupe"] = $this->visuels_model->getgpid($id);
+		$mot_cle = $k[0]['mot_cle'];
+		$contexte_groupes_annonces = $k[0]['contexte_groupes_annonces'];
+		$information_campagne = $k[0]['information_campagne'];
+		$url_site = $k[0]['url_site'];
 		$id = $idclients = $k[0]['idclients'];
 		$id = intval($id);
 		$d = $this->data['donnees'] = $this->visuels_model->getDonneeById($id);
@@ -254,7 +895,18 @@ class Client extends MY_Controller
 		$site_client = $d[0]['site_client'];
 		$type_campagne = $k[0]['type_campagne'];
 		$idcampagne = $k[0]['idcampagne'];
-		$adsContent = $this->generateGoogleAdsCopy($information_base, $information_client, $site_client);
+
+		$adsContent = $this->generateGoogleAdsCopy($mot_cle, $contexte_groupes_annonces, $information_campagne, $url_site);
+		$sitelinks = $this->generateSitelinks(
+			$mot_cle,
+			$information_campagne,
+			$contexte_groupes_annonces,
+			$url_site
+		);
+
+		$this->data['sitelinks'] = $sitelinks;
+
+
 		$this->data['ads_titres'] = $adsContent['titres'];
 		$this->data['ads_titres_longs'] = $adsContent['titres_longs'];
 		$this->data['ads_descriptions'] = $adsContent['descriptions'];
@@ -273,6 +925,115 @@ class Client extends MY_Controller
 		}
 		$this->layout();
 	}
+	private function generateSitelinks($mot_cle, $information_campagne, $contexte_groupes_annonces, $url_site)
+{
+    // Prompt strict: demande 2 liens, longueurs Google Ads
+    $prompt = "Tu es un expert Google Ads.
+En t'appuyant sur:
+- Informations de campagne: $information_campagne
+- Contexte/brief: $contexte_groupes_annonces
+- Mot clé principal: $mot_cle
+- URL de campagne (par défaut pour les liens): $url_site
+
+Objectif: Génère exactement 2 liens annexes (sitelinks) pertinents.
+Contraintes:
+- title: max 25 caractères (ton clair, actionnable)
+- desc1: max 90 caractères
+- desc2: max 90 caractères
+- url: par défaut l'URL de campagne fournie ($url_site). Si tu proposes un chemin, concatène proprement (ex: $url_site/page) sans paramètres.
+
+Retourne UNIQUEMENT ce JSON:
+{
+  \"sitelinks\": [
+    {\"title\":\"...\",\"desc1\":\"...\",\"desc2\":\"...\",\"url\":\"...\"},
+    {\"title\":\"...\",\"desc1\":\"...\",\"desc2\":\"...\",\"url\":\"...\"}
+  ]
+}";
+
+    $curl = curl_init();
+    curl_setopt_array($curl, [
+        CURLOPT_URL => 'https://api.openai.com/v1/chat/completions',
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_HTTPHEADER => [
+            'Content-Type: application/json',
+            'Authorization: Bearer ' . getenv('CHAT_GPT_API_KEY')
+        ],
+        CURLOPT_POST => true,
+        CURLOPT_POSTFIELDS => json_encode([
+            'model' => 'gpt-4-turbo',
+            'messages' => [
+                ['role' => 'system', 'content' => 'Tu es un expert en publicité Google Ads.'],
+                ['role' => 'user', 'content' => $prompt],
+            ],
+            'temperature' => 0.7
+        ])
+    ]);
+
+    $response = curl_exec($curl);
+    curl_close($curl);
+
+    $decoded = json_decode($response, true);
+    $content = $decoded['choices'][0]['message']['content'] ?? '';
+    $json = json_decode($content, true);
+
+    // Sécurisation/fallback
+    $sitelinks = [];
+    if (isset($json['sitelinks']) && is_array($json['sitelinks'])) {
+        foreach ($json['sitelinks'] as $sl) {
+            $title = isset($sl['title']) ? $this->trimUtf8($sl['title'], 25) : '';
+            $desc1 = isset($sl['desc1']) ? $this->trimUtf8($sl['desc1'], 90) : '';
+            $desc2 = isset($sl['desc2']) ? $this->trimUtf8($sl['desc2'], 90) : '';
+            $url   = !empty($sl['url']) ? $sl['url'] : $url_site;
+
+            // URL par défaut = URL campagne si vide, normalisation simple
+            if (empty($url)) $url = $url_site;
+
+            // Garde seulement si on a au moins un titre
+            if ($title !== '') {
+                $sitelinks[] = [
+                    'title' => $title,
+                    'desc1' => $desc1,
+                    'desc2' => $desc2,
+                    'url'   => $url,
+                ];
+            }
+            if (count($sitelinks) === 2) break;
+        }
+    }
+
+    // Fallback si le modèle ne renvoie pas correctement
+    if (count($sitelinks) < 2) {
+        // Deux suggestions génériques mais propres
+        $sitelinks = [
+            [
+                'title' => $this->trimUtf8('Nos services', 25),
+                'desc1' => $this->trimUtf8("Découvrez nos prestations phares adaptées à vos besoins.", 90),
+                'desc2' => $this->trimUtf8("Tarifs, délais et garanties clairs pour décider rapidement.", 90),
+                'url'   => $url_site
+            ],
+            [
+                'title' => $this->trimUtf8('Contact & devis', 25),
+                'desc1' => $this->trimUtf8("Obtenez un devis gratuit et personnalisé en quelques minutes.", 90),
+                'desc2' => $this->trimUtf8("Nos experts vous répondent rapidement, sans engagement.", 90),
+                'url'   => $url_site
+            ]
+        ];
+    }
+
+    // Toujours 2 éléments
+    return array_slice($sitelinks, 0, 2);
+}
+
+/**
+ * Coupe proprement en UTF-8 sans casser les caractères multioctets.
+ */
+private function trimUtf8($text, $limit)
+{
+    $text = trim((string)$text);
+    if (mb_strlen($text, 'UTF-8') <= $limit) return $text;
+    return mb_substr($text, 0, $limit, 'UTF-8');
+}
+
 	public function fetch_images_campagnes()
 {
     $idcampagne = $this->input->post('idcampagne');
@@ -356,18 +1117,19 @@ private function _scrape_images_from_site($url)
 	}
 
 
-	private function generateGoogleAdsCopy($info_base, $info_client, $site)
+	private function generateGoogleAdsCopy($mot_cle, $contexte_groupes_annonces, $information_campagne, $url_site)
 	{
 		$prompt = "Tu es un expert en Google Ads. 
 		À partir de ces informations :
-		- Informations de base : $info_base
-		- Brief client : $info_client
-		- Site web : $site
+		- Informations de campagne : $information_campagne
+		- Brief client : $contexte_groupes_annonces
+		- Site web : $url_site
+		- Mot clé : $mot_cle
 
 		Génère :
 		- 12 titres courts accrocheurs (max 30 caractères chacun),
 		- 4 titres longs (max 90 caractères chacun),
-		- 4 descriptions (max 90 caractères chacune).
+		- 4 descriptions entre 70 et 90 caractère (max 90 caractères chacune).
 
 		Retourne uniquement une réponse JSON structurée comme ceci :
 		{
@@ -386,7 +1148,7 @@ private function _scrape_images_from_site($url)
 			],
 			CURLOPT_POST => true,
 			CURLOPT_POSTFIELDS => json_encode([
-				'model' => 'gpt-4',
+				'model' => 'gpt-4-turbo',
 				'messages' => [
 					['role' => 'system', 'content' => 'Tu es un expert en publicité Google Ads.'],
 					['role' => 'user', 'content' => $prompt]
@@ -510,7 +1272,8 @@ private function _scrape_images_from_site($url)
 		if ($gtm_code != Null):
 			$this->visuels_model->mis_a_jour_gtm($idclients, $gtm_code);
 		endif;
-		redirect('Client/application/' . $idclients);
+		redirect('Client/application/'.$id.'?maj=ok&type=gtm');
+
 	}
 	public function mis_a_jour_cms($idclients)
 	{
@@ -531,7 +1294,8 @@ private function _scrape_images_from_site($url)
 			$this->visuels_model->mis_a_jour_cms($idclients, $cms);
 		}
 
-		redirect('Client/application/' . $idclients);
+		redirect('Client/application/'.$id.'?maj=ok&type=cms');
+
 	}
 	public function ajout_brief()
 	{
@@ -1009,6 +1773,7 @@ private function _scrape_images_from_site($url)
 		$this->data['upsell'] = $this->visuels_model->getupsellbyidclient($idclients);
 		$this->data['budget_initial'] = $this->visuels_model->getdernierbyidclient($idclients);
 		$this->data['discussion'] = $this->Discussion_model->getdiscussionbyidclient($idclients);
+		$this->data["campagnes"] = $this->visuels_model->getCampagneByIdclient($idclients);
 		$t = $this->data['task'] = $this->Task_model->get_task_by_id_client($idclients);
 		$t = count($t);
 		$this->data['nbr_task'] = $t;
@@ -1044,6 +1809,79 @@ private function _scrape_images_from_site($url)
 		$this->content = "layouts/client/detail/index.php";
 		$this->layout();
 	}
+	public function update_campagne($idclients)
+{
+    $id_campagne = intval($this->input->post('id_campagne'));
+
+    if (!$id_campagne) {
+        show_error("Identifiant de campagne manquant", 400);
+        return;
+    }
+
+    // Récupération des champs principaux
+    $data = [
+        'nom_campagne'          => $this->input->post('nom_campagne_search'),
+        'url'                   => $this->input->post('url_campagne'),
+        'information_campagne'  => $this->input->post('information_campagne_search'),
+        'repartition_budget'    => $this->input->post('repartition_budget_search'),
+        'zones'                 => $this->input->post('zone_search'),
+        'langue'                => $this->input->post('langue'),
+        'cible'                 => $this->input->post('cible'),
+        'age'                   => $this->input->post('age'),
+        'sexe'                  => $this->input->post('sexe'),
+        'date_campagne'         => $this->input->post('date_campagne'),
+        'audience'              => $this->input->post('audience'),
+        'appareil'              => $this->input->post('appareil'),
+        'youtube'               => $this->input->post('Youtube'),
+        'updated_at'            => date('Y-m-d H:i:s')
+    ];
+
+    // Mise à jour de la campagne principale
+    $this->visuels_model->update_campagne($id_campagne, $data);
+
+    // Gestion des groupes d’annonces
+    $groupes = $this->input->post('groupe_annonce');
+    $contextes = $this->input->post('contexte_groupe_annonce');
+    $keywords = $this->input->post('Mot_cle');
+
+    if (!empty($groupes)) {
+        $this->Donne_modele->delete_gp_by_idcampagne($id_campagne);
+        foreach ($groupes as $i => $nom) {
+            if (trim($nom) === '') continue;
+            $this->Donne_modele->insert_gp([
+                'id_campagne' => $id_campagne,
+                'nom_groupe' => $nom,
+                'contexte_groupes_annonces' => $contextes[$i] ?? '',
+                'mot_cle' => $keywords[$i] ?? '',
+            ]);
+        }
+    }
+
+    // Mots-clés à exclure
+    $mots_exclus = $this->input->post('Mots_cle_exclus');
+    if ($mots_exclus !== null) {
+        $this->visuels_model->update_exclusions($idclients, $mots_exclus);
+    }
+
+    // Redirection
+    $this->session->set_flashdata('success', 'Campagne mise à jour avec succès.');
+    redirect('Client/onboarding/' . $idclients);
+}
+public function update_brief()
+{
+    $idcampagne = $this->input->post('idcampagne');
+    $information = $this->input->post('information_campagne');
+
+    if (!$idcampagne || !$information) {
+        show_error('Données invalides', 400);
+    }
+
+    $this->db->where('idcampagne', $idcampagne);
+    $this->db->update('campagne', ['information_campagne' => $information]);
+
+    echo json_encode(['success' => true]);
+}
+
 
 	public function onboarding($idclients)
 	{
@@ -1055,6 +1893,7 @@ private function _scrape_images_from_site($url)
 		];
 		$this->data['idclients'] = $idclients;
 		$this->data["donnees"] = $this->visuels_model->getDonneeById($idclients);
+		$this->data['upsell'] = $this->visuels_model->getupsellbyidclient($idclients);
 		$campagnes = $this->data["campagnes"] = $this->visuels_model->getCampagneByIdclient($idclients);
 		$campagnes = $this->visuels_model->getCampagneByIdclient($idclients);
 
@@ -1080,17 +1919,61 @@ private function _scrape_images_from_site($url)
 			$campagne['groupes_annonces'] = isset($groupes_par_campagne[$idcampagne]) ? $groupes_par_campagne[$idcampagne] : [];
 		}
 		unset($campagne);
-
-		// dd($groupe_valider);
 		$this->data['donne_valider'] = $donne_valider;
 		$this->data['groupe_valider'] = $groupe_valider;
+		
 		$this->data['procedure_gtm'] = $this->Task_model->get_procedure_gtm($idclients);
-		$this->data['extensions'] = $this->Donne_modele->get_extensions_by_campagne($idcampagne);
-
+		if(!empty($idcampagne)){
+			$this->data['extensions'] = $this->Donne_modele->get_extensions_by_campagne($idcampagne);
+		}	
 
 		$this->content = "layouts/client/onboarding/index.php";
 		$this->layout();
 	}
+	public function campagne_edit($idclients)
+{
+    $id_campagne = intval($this->input->get('id_camp'));
+
+    if (!$id_campagne) {
+        show_error("Aucune campagne spécifiée.", 404);
+        return;
+    }
+
+    // Récupère les infos du client
+    $d = $this->visuels_model->getDonneeById($idclients);
+    $this->data['donnees'] = $d;
+
+    // Récupère la campagne existante
+    $campagne = $this->visuels_model->getCampagneById($id_campagne);
+    if (!$campagne) {
+        show_error("Campagne introuvable.", 404);
+        return;
+    }
+
+    // Récupère les groupes d'annonces associés
+    $groupes_annonces = $this->Donne_modele->get_gp_by_idcampagne($id_campagne);
+
+    // Récupère les exclusions associées
+    $mots_exclus = $this->visuels_model->get_exclusions($idclients);
+
+    // Récupère éventuellement les images
+    $site_client = $d[0]['site_client'] ?? '';
+    $images_site = []; // tu peux appeler ici fetch_all_images_from_site($site_client, 8) si tu veux.
+
+    // Remplissage des données pour la vue
+    $this->data['idclients'] = $idclients;
+    $this->data['id_camp'] = $id_campagne;
+    $this->data['campagne'] = $campagne;
+    $this->data['groupes_annonces'] = $groupes_annonces;
+    $this->data['mots_exclus'] = $mots_exclus;
+    $this->data['images_site'] = $images_site;
+    $this->data['site_client'] = $site_client;
+
+    // Vue correspondante
+    $this->content = "layouts/client/onboarding/search_edit.php";
+    $this->layout();
+}
+
 
 	public function campagne($idclients)
 	{
@@ -1102,11 +1985,10 @@ private function _scrape_images_from_site($url)
 
 		$this->data['idclients'] = $idclients;
 		$d = $this->visuels_model->getDonneeById($idclients);
-		$id_campagne = $this->input->get('id_camp');
+		$id_campagne = intval($this->input->get('id_camp'));
 		$information_client = $d->information ?? '';
 		$site_client = $d[0]['site_client'];
 		//$images_site = $this->fetch_all_images_from_site($site_client, 8);
-
 		if ($id_campagne) {
 			$campagne = $this->data['campagne'] = $this->visuels_model->getCampagneById($id_campagne);
 			$camp_type = $campagne->type_campagne;
@@ -1184,39 +2066,158 @@ private function _scrape_images_from_site($url)
 
 
 	public function get_mot_cle_a_exclure($idclients)
-	{
-		$campagne_info = $this->input->post('information_campagne_search');
+{
+	$campagne_info = '';
 
-		if (!$campagne_info) {
-			return $this->output
-				->set_content_type('application/json')
-				->set_output(json_encode(['status' => 'error', 'message' => 'Aucune information de campagne reçue.']));
-		}
+$info_post = $this->input->post('information_campagne_search', true);
+$pmax_post = $this->input->post('information_campagne_pmax', true);
 
-		$prompt = "Tu es un expert Google Ads.
-		Génère une liste de 60 mots-clés à exclure pour une campagne Google Ads sur le réseau de recherche.
-		Voici les informations de la campagne :
+if (!empty($info_post)) {
+    $campagne_info = trim((string) $info_post);
+} elseif (!empty($pmax_post)) {
+    $campagne_info = trim((string) $pmax_post);
+}
 
-		$campagne_info
-		Même si les informations sont partielles, propose une liste pertinente et standard de mots-clés à exclure en français pour éviter les recherches non qualifiées.
-		Donne UNIQUEMENT les mots, séparés par des virgules, sans introduction ni phrase explicative.";
 
-		$raw_keywords = $this->call_openai($prompt);
-		$raw_keywords = trim($raw_keywords);
+	
 
-		if (preg_match('/([a-zA-ZÀ-ÿ0-9,\s]+)/', $raw_keywords, $matches)) {
-			$raw_keywords = $matches[1];
-		}
+    if ($campagne_info === '') {
+        return $this->output
+            ->set_content_type('application/json; charset=utf-8')
+            ->set_output(json_encode(['status' => 'error', 'message' => 'Aucune information de campagne reçue.']));
+    }
 
-		$clean_keywords = preg_replace('/,\s*/', "\n", $raw_keywords);
+    $prompt = "Tu es un expert Google Ads.
+	Génère une liste de 60 mots-clés à exclure pour la Google Ads concernant ce Brief.
+	Voici le Brief de la campagne :
 
-		return $this->output
-			->set_content_type('application/json')
-			->set_output(json_encode([
-				'status' => 'success',
-				'data' => $clean_keywords
-			]));
-	}
+	$campagne_info
+	NB: Exclus moi les mots à exlure qui n'ont rien à voir avec le brief
+
+	Même si les informations sont partielles, propose une liste pertinente et standard de mots-clés à exclure en français pour éviter les recherches non qualifiées.
+	Donne UNIQUEMENT les mots, séparés par des virgules, sans introduction ni phrase explicative.";
+
+    $raw_keywords = (string) $this->call_openai($prompt);
+    $raw_keywords = trim($raw_keywords);
+
+    // Récupère seulement lettres/chiffres/accents/virgules/espaces/+/-
+    if (preg_match('/([0-9A-Za-zÀ-ÖØ-öø-ÿÉÈÊËéèêëÀÂÄàâäÎÏîïÔÖôöÛÜûüÇç\'"’„”«»+\\-_,.\\s]+)/u', $raw_keywords, $m)) {
+        $raw_keywords = $m[1];
+    }
+
+    // Remplace retours à la ligne / point-virgule par des virgules
+    $raw_keywords = preg_replace('/[;\r\n]+/u', ',', $raw_keywords);
+
+    // Split, trim, déduplique (case-insensitive) et filtre les vides
+    $items = array_filter(array_map('trim', explode(',', $raw_keywords)), function ($v) {
+        return $v !== '';
+    });
+
+    // Déduplication insensible à la casse/accents
+    $seen = [];
+    $dedup = [];
+    foreach ($items as $kw) {
+        $key = mb_strtolower(iconv('UTF-8', 'ASCII//TRANSLIT//IGNORE', $kw));
+        if (!isset($seen[$key])) {
+            $seen[$key] = true;
+            $dedup[] = $kw;
+        }
+    }
+
+    // Limite à 60 lignes max
+    $dedup = array_slice($dedup, 0, 60);
+
+    // Sortie : une par ligne
+    $clean_keywords = implode("\n", $dedup);
+
+    $payload = [
+        'status' => 'success',
+        'data'   => $clean_keywords,
+        // Décommente si tu régénères CSRF à chaque requête AJAX
+        // 'csrfName' => $this->security->get_csrf_token_name(),
+        // 'csrfHash' => $this->security->get_csrf_hash(),
+    ];
+
+    return $this->output
+        ->set_content_type('application/json; charset=utf-8')
+        ->set_output(json_encode($payload));
+}
+public function get_mots_cle_depuis_url($idclients)
+{
+    $url      = trim((string) $this->input->post('url'));
+    $langue   = trim((string) $this->input->post('langue'));   // 'fr' ou 'en'
+    $zone     = trim((string) $this->input->post('zone'));
+    $services = trim((string) $this->input->post('services'));
+
+    if ($url === '') {
+        return $this->output
+            ->set_content_type('application/json; charset=utf-8')
+            ->set_output(json_encode(['status' => 'error', 'message' => 'URL manquante.']));
+    }
+
+    // Prompt : on demande des mots-clés pertinents pour Search (exact/expressions implicites),
+    // une ligne par mot-clé, en langue choisie, contextualisés par zone/services si fournis.
+    $lang_label = ($langue === 'en') ? 'anglais' : 'français';
+    $prompt = "Tu es un expert Google Ads (réseau de recherche).
+Je te donne l'URL du site d'un client : $url
+Contexte additionnel (facultatif) :
+- Zone géographique : " . ($zone ?: 'non spécifiée') . "
+- Produits/Services : " . ($services ?: 'non spécifiés') . "
+
+Objectif : Propose entre 5 mots-clés pertinents pour une campagne Google Ads Search.
+Contraintes :
+- Donne UNIQUEMENT la liste, un mot-clé par ligne (pas de numéros, pas d'introduction).
+- Mots-clés en $lang_label.
+- Mélange d'intentions haut/milieu de funnel, incluant quelques requêtes de marque si pertinentes.
+- Évite les requêtes trop génériques et les requêtes non qualifiées (pas d'emplois, gratuit, tuto, formation, pdf, etc.).
+- N'ajoute pas de variantes exactes/broad modifiées explicitement (pas de guillemets, pas de +), juste le texte du mot-clé.";
+
+    // Option simple : laisser le modèle inférer à partir de l'URL (il peut parcourir si tools browsing côté backend).
+    // Si tu as déjà un helper qui résume la page : $info = $this->get_information_campagne_from_chatgpt($url); et tu peux l'ajouter au prompt.
+
+    $raw = (string) $this->call_openai($prompt);
+    $raw = trim($raw);
+
+    // Normalisation douce : accepte lettres/chiffres/accents/espaces/+-'"/,.
+    if (preg_match('/([0-9A-Za-zÀ-ÖØ-öø-ÿÉÈÊËéèêëÀÂÄàâäÎÏîïÔÖôöÛÜûüÇç\'"’„”«»+\\-_,.\\s]+)/u', $raw, $m)) {
+        $raw = $m[1];
+    }
+
+    // Uniformise séparateurs : transforme virgules/semicolon en retours à la ligne
+    $raw = preg_replace('/[;,]+/u', "\n", $raw);
+
+    // Split lignes, trim, filtre vides
+    $lines = array_filter(array_map('trim', preg_split('/\r\n|\r|\n/', $raw)), function ($v) {
+        return $v !== '';
+    });
+
+    // Dédup insensible à la casse/accents
+    $seen = [];
+    $dedup = [];
+    foreach ($lines as $kw) {
+        $key = mb_strtolower(iconv('UTF-8', 'ASCII//TRANSLIT//IGNORE', $kw));
+        if (!isset($seen[$key])) {
+            $seen[$key] = true;
+            $dedup[] = $kw;
+        }
+    }
+
+    // Clamp 120 max
+    $dedup = array_slice($dedup, 0, 120);
+
+    $payload = [
+        'status' => 'success',
+        'data'   => implode("\n", $dedup),
+        // Si tu régénères le CSRF à chaque requête AJAX, renvoie-les :
+        // 'csrfName' => $this->security->get_csrf_token_name(),
+        // 'csrfHash' => $this->security->get_csrf_hash(),
+    ];
+
+    return $this->output
+        ->set_content_type('application/json; charset=utf-8')
+        ->set_output(json_encode($payload));
+}
+
 
 	public function ajout_campagne($idclients)
 	{
@@ -1245,7 +2246,6 @@ private function _scrape_images_from_site($url)
 				$groupes_annonces      	= $this->input->post('groupe_annonce'); // OK
 				$contexte_groupes      	= $this->input->post('contexte_groupe_annonce'); // not in view
 				$mots_cle              	= $this->input->post('Mot_cle'); // OK
-				$Mots_cle_exclus       	= $this->input->post('Mots_cle_exclus');
 				$selected_images		= $this->input->post('selected_images');
 				$sexe			      	= $this->input->post('sexe');
 				$promotions            	= $this->input->post('promotions');
@@ -1272,8 +2272,6 @@ private function _scrape_images_from_site($url)
 							$appareil,
 							$objectif,
 							$url_site,
-							$mots_cle,
-							$Mots_cle_exclus,
 							$sexe,
 							$promotions,
 							$prix,
@@ -1301,8 +2299,6 @@ private function _scrape_images_from_site($url)
 							$appareil,
 							$objectif,
 							$url_site,
-							$mots_cle,
-							$Mots_cle_exclus,
 							$sexe,
 							$promotions,
 							$prix,
@@ -1338,14 +2334,14 @@ private function _scrape_images_from_site($url)
 			case 2: //local
 				// Inputs spécifiques
 				$nom_campagne          = $this->input->post('nom_campagne_pmax');
-				$information_campagne  = $this->input->post('information_campagne_pmax');
+				$information_campagne  = $this->input->post('information_campagne_search');
 				$ages				   = $this->input->post('age');
 				$cible				   = $this->input->post('cible');
 				$url_site              = $this->input->post('url_campagne');
 				$repartition_budget    = $this->input->post('repartition_budget_pmax');
-				$zones                 = $this->input->post('zone_pmax');
+				$zones                 = $this->input->post('zone_search');
 				$nom_groupe_pmax       = $this->input->post('nom_groupe_pmax');
-				$date_campagne         = $this->input->post('date_campagne_pmax');
+				$date_campagne         = $this->input->post('date_campagne');
 				$appareil              = $this->input->post('appareil');
 				$objectif              = $this->input->post('objectif_pmax');
 				$Mots_cle_potentiels   = $this->input->post('Mot_cle_pmax');
@@ -1355,7 +2351,6 @@ private function _scrape_images_from_site($url)
 				$groupes_annonces      = $this->input->post('groupe_annonce'); // OK
 				$contexte_groupes      = $this->input->post('contexte_groupe_annonce'); // not in view
 				$mots_cle              = $this->input->post('Mot_cle'); // OK
-				$Mots_cle_exclus       = $this->input->post('Mots_cle_exclus');
 				$sexe			      	= $this->input->post('sexe');
 				$promotions            	= $this->input->post('promotions');
 				$prix			       	= $this->input->post('prix');
@@ -1377,8 +2372,6 @@ private function _scrape_images_from_site($url)
 					$appareil,
 					$objectif,
 					$url_site,
-					$mots_cle,
-					$Mots_cle_exclus,
 					$sexe,
 					$promotions,
 					$prix,
@@ -1408,9 +2401,9 @@ private function _scrape_images_from_site($url)
 				$cible				   = $this->input->post('cible');
 				$url_site              = $this->input->post('url_campagne');
 				$repartition_budget    = $this->input->post('repartition_budget_pmax');
-				$zones                 = $this->input->post('zone_pmax');
+				$zones                 = $this->input->post('zone_search');
 				$nom_groupe_pmax       = $this->input->post('nom_groupe_pmax');
-				$date_campagne         = $this->input->post('date_campagne_pmax');
+				$date_campagne         = $this->input->post('date_campagne');
 				$appareil              = $this->input->post('appareil');
 				$objectif              = $this->input->post('objectif_pmax');
 				$Mots_cle_potentiels   = $this->input->post('Mot_cle_pmax');
@@ -1420,7 +2413,6 @@ private function _scrape_images_from_site($url)
 				$groupes_annonces      = $this->input->post('groupe_annonce'); // OK
 				$contexte_groupes      = $this->input->post('contexte_groupe_annonce'); // not in view
 				$mots_cle              = $this->input->post('Mot_cle'); // OK
-				$Mots_cle_exclus       = $this->input->post('Mots_cle_exclus');
 				$sexe			      	= $this->input->post('sexe');
 				$promotions            	= $this->input->post('promotions');
 				$prix			       	= $this->input->post('prix');
@@ -1438,8 +2430,6 @@ private function _scrape_images_from_site($url)
 					$appareil,
 					$objectif,
 					$url_site,
-					$mots_cle,
-					$Mots_cle_exclus,
 					$sexe,
 					$promotions,
 					$prix,
@@ -1459,6 +2449,8 @@ private function _scrape_images_from_site($url)
 					'type_campagnes'          	=>	$camp_type
 				];
 				$this->Donne_modele->insert_gp_pmax($data_groups);
+				//$exclusion = $this->input->post('Mots_cle_exclus');
+
 				break;
 		}
 		$selectedImages = $this->input->post('selectedImages');
@@ -1467,6 +2459,7 @@ private function _scrape_images_from_site($url)
 		$idgroupe_annonce = 0;
 		$this->Image_model->insert_images($imagesArray, $idclients, $idcampagne, $idgroupe_annonce);
 		$exclusion = $this->input->post('Mots_cle_exclus');
+		
 		$id = $idclients;
 		$this->visuels_model->exclusion($id, $exclusion);
 		
@@ -1475,21 +2468,85 @@ private function _scrape_images_from_site($url)
 
 		// $this->layout();
 	}
+	public function generate_group_keywords_url_context($idclients)
+{
+    $url       = trim((string) $this->input->post('url_campagne'));
+    $contexte  = trim((string) $this->input->post('contexte'));
+    $nomGroupe = trim((string) $this->input->post('nom_groupe'));
+
+    if ($url === '') {
+        return $this->output->set_content_type('application/json; charset=utf-8')
+            ->set_output(json_encode(['status' => 'error', 'message' => 'URL manquante.']));
+    }
+
+    // Langue : si tu as un <select name="langue"> côté vue, tu peux aussi la poster. Ici on force FR.
+    $prompt = "Tu es un expert Google Ads (réseau Search).
+Objectif : Générer une liste de mots-clés pertinents pour un groupe d'annonce, en français.
+
+Données :
+- URL du site : $url
+- Nom du groupe : " . ($nomGroupe ?: 'non spécifié') . "
+- Contexte du groupe : " . ($contexte ?: 'non spécifié') . "
+
+Attendus :
+- Donne UNIQUEMENT la liste, un mot-clé par ligne (pas de numéros, pas d'introduction).
+- Entre 5 et 10 mots-clés.
+- Mélange d'intentions hautes et milieu de tunnel, focalisés sur le contexte du groupe.
+- Évite les requêtes non qualifiées (emploi, gratuit, tutoriel, pdf, occasion, réparation si HS, etc.).
+- Pas de guillemets, pas de +, pas de [].";
+
+    // (Optionnel) enrichir avec ton résumé du site :
+    // $site_info = $this->get_information_campagne_from_chatgpt($url);
+    // $prompt .= \"\\n\\nRésumé du site :\\n$site_info\";
+
+    $raw = (string) $this->call_openai($prompt);
+    $raw = trim($raw);
+
+    // Filtrage caractères plausibles puis normalisation en lignes
+    if (preg_match('/([0-9A-Za-zÀ-ÖØ-öø-ÿÉÈÊËéèêëÀÂÄàâäÎÏîïÔÖôöÛÜûüÇç\'\"’„”«»+\\-_,.\\s]+)/u', $raw, $m)) {
+        $raw = $m[1];
+    }
+    $raw = preg_replace('/[;,]+/u', "\n", $raw);
+    $lines = array_filter(array_map('trim', preg_split('/\r\n|\r|\n/', $raw)), function ($v) { return $v !== ''; });
+
+    // Dédup insensible casse/accents
+    $seen = [];
+    $dedup = [];
+    foreach ($lines as $kw) {
+        $key = mb_strtolower(iconv('UTF-8', 'ASCII//TRANSLIT//IGNORE', $kw));
+        if (!isset($seen[$key])) { $seen[$key] = true; $dedup[] = $kw; }
+    }
+
+    // Limite 80
+    $dedup = array_slice($dedup, 0, 80);
+
+    $payload = [
+        'status' => 'success',
+        'data'   => implode("\n", $dedup),
+        // 'csrfName' => $this->security->get_csrf_token_name(),
+        // 'csrfHash' => $this->security->get_csrf_hash(),
+    ];
+
+    return $this->output
+        ->set_content_type('application/json; charset=utf-8')
+        ->set_output(json_encode($payload));
+}
+
 
 	public function supprimer_campagne($id_campagne)
 	{
 
 		$campagne = $this->data['campagne'] = $this->visuels_model->getCampagneById($id_campagne);
 		$groupes_annonces = $this->Donne_modele->get_gp_by_idcampagne($id_campagne);
+		$idclients = $groupes_annonces[0]['idclients'];
 
 		foreach ($groupes_annonces as $groupe_annonce) {
 			$this->Donne_modele->deletegroupe($groupe_annonce['idgroupe_annonce']);
 		}
 
 		$this->Donne_modele->deletecampagne($id_campagne);
-
 		$this->session->set_flashdata('success', 'Campagne ajouter avec succès.');
-		redirect('Client/onboarding/' . $campagne->idclients, 'refresh');
+		redirect('Client/onboarding/' . $idclients, 'refresh');
 	}
 
 	public function groupe_annonce($id_campagne, $id_groupe) {}
@@ -1823,143 +2880,136 @@ private function _scrape_images_from_site($url)
 
 	public function creer_upsell()
 	{
-		$type_upsell = $this->input->post('type_upsell');
-		$demmande_upsell = $this->input->post('demmande_upsell');
-		$budget_upsell = $this->input->post('budget_upsell');
-		$idclients = $this->input->post('client');
-		$tm = $this->input->post('tm');
-		$date_upsell = $this->input->post('date_upsell');
-		$date_demande_upsell = $this->input->post('date_demande_upsell');
-		$inforamtion_upsell = $this->input->post('information_upsell');
-		$date_brief = $this->input->post('date_brief');
+		// Récupération des données
+		$type_upsell          = $this->input->post('type_upsell');
+		$demmande_upsell      = $this->input->post('demmande_upsell');
+		$budget_upsell        = intval($this->input->post('budget_upsell'));
+		$idclients            = $this->input->post('client');
+		$tm                   = $this->input->post('tm');
+		$date_upsell          = $this->input->post('date_upsell');
+		$date_demande_upsell  = $this->input->post('date_demande_upsell');
+		$information_upsell   = $this->input->post('information_upsell');
+		$date_brief           = $this->input->post('date_brief');
+		$statut_upsell        = $this->input->post('statut_upsell');
+		$am                   = $this->input->post('am');
 
-		$statut_upsell = $this->input->post('statut_upsell');
-		$id = $idclients;
-		$donnee = $this->data["clients"] = $this->visuels_model->getDonneeById($id);
-		$initiative = $donnee[0]['initiative'];
-		$idonnee = $donnee[0]['idonnee'];
-		$buget_initiale = $donnee[0]['budget'];
-		if ($type_upsell == 2):
-			$am = $this->input->post('am');
-			$budget_initiale = $this->input->post('budget_initiale');
-			$budget_initiale = intval($budget_initiale);
-			$budget_upsell = intval($budget_upsell);
-			$budget_finale = $budget_upsell + $budget_initiale;
-			$actif = 1;
-			$idupsell = $this->visuels_model->create_upsell($type_upsell, $budget_finale, $budget_initiale, $demmande_upsell, $am, $tm, $date_upsell, $date_demande_upsell, $inforamtion_upsell, $statut_upsell, $idclients, $actif);
-			$type_tache = 5;
-			$title = "Upsell";
-			if ($inforamtion_upsell == Null) {
-				$tache = "Le client fait une upsell de "  . number_format($budget_upsell, 0, ',', ' ') . " €";
-			}
-			if ($inforamtion_upsell != Null) {
-				$tache = "Le client fait une upsell de " . number_format($budget_upsell, 0, ',', ' ') . " €" . " avec les informations suivantes :\n" . $inforamtion_upsell;
-			}
-			$Statuts_technique = 1;
+		// Donnée client
+		$donnee      = $this->visuels_model->getDonneeById($idclients);
+		$initiative  = $donnee[0]['initiative'];
+		$idonnee     = $donnee[0]['idonnee'];
+		$budget_init = intval($donnee[0]['budget']);
 
-			$data = array(
-				'type_tache' => $type_tache,
-				'date_demande' => $date_demande_upsell,
-				'date_due' => $date_demande_upsell,
-				'idclients' => $idclients,
-				'AM' => $tm,
-				'assigned_to' => $am,
-				'title' => $title,
-				'Statuts_technique' => $Statuts_technique,
-				'description' => $tache,
-				'idupsell' => $idupsell
-			);
+		// Contrôle du type upsell
+		if (!$type_upsell) {
+			$this->session->set_flashdata('message-erreur', "Type upsell manquant.");
+			redirect('Client/detail_client/' . $idclients);
+			return;
+		}
 
-			$this->Task_model->add_task($data);
-			$client = $idclients;
-			$dejaclient = 1;
-			$budget = $budget_upsell;
-			$am = $am;
-			$type_upsell = $type_upsell;
-			$data_upsell = array(
-				'idupsell' => $idupsell,
-				'idclients' => $idclients,
-				'dejaclient' => $dejaclient,
-				'budget' => $budget_finale,
-				'account_manager' => $am,
-				'initiative' => $initiative,
-				'type_upsell' => $type_upsell,
-				'mis_en_place_paiement' => $date_demande_upsell,
-				'Brief' => $date_brief,
-				'annonce' => $date_upsell,
-				'budget_upsell' => $budget_upsell
+		// Construction du budget final
+		if ($type_upsell == 1) { 
+			// BAISSE
+			$budget_final = $budget_init - $budget_upsell;
+			$title        = "Baisse";
+			$type_tache   = 6;
+			$tache        = "Le client fait une baisse de " . number_format($budget_upsell, 0, ',', ' ') . " €";
 
-			);
-			
-			$this->visuels_model->add_upsell_onboarding($data_upsell);
-		endif;
-		if ($type_upsell == 1):
-			$am = $this->input->post('am');
-			$budget_initiale = $this->input->post('budget_initiale');
-			$budget_initiale = intval($budget_initiale);
-			$budget_upsell = intval($budget_upsell);
-			$budget_finale = $budget_initiale - $budget_upsell;
-			$actif = 1;
-			$idupsell = $this->visuels_model->create_upsell($type_upsell, $budget_finale, $budget_initiale, $demmande_upsell, $am, $tm, $date_upsell, $date_demande_upsell, $inforamtion_upsell, $statut_upsell, $idclients, $actif);
-			$type_tache = 6;
-			$title = "Baisse";
-			if ($inforamtion_upsell == Null) {
-				$tache = "Le client fait une baisse de "  . number_format($budget_upsell, 0, ',', ' ') . " €";
-			}
-			if ($inforamtion_upsell != Null) {
-				$tache = "Le client fait une baisse de " . number_format($budget_upsell, 0, ',', ' ') . " €" . " avec les informations suivantes :\n" . $inforamtion_upsell;
-			}
-			$Statuts_technique = 1;
-			$actif = 1;
-			$data = array(
-				'type_tache' => $type_tache,
-				'date_demande' => $date_demande_upsell,
-				'date_due' => $date_demande_upsell,
-				'idclients' => $idclients,
-				'AM' => $am,
-				'assigned_to' => $tm,
-				'title' => $title,
-				'Statuts_technique' => $Statuts_technique,
-				'description' => $tache,
-				'idupsell' => $idupsell
-			);
+		} elseif ($type_upsell == 2) {  
+			// UPSELL NOUVELLE CAMPAGNE
+			$budget_final = $budget_init + $budget_upsell;
+			$title        = "Upsell";
+			$type_tache   = 5;
+			$tache        = "Le client fait une upsell de " . number_format($budget_upsell, 0, ',', ' ') . " €";
 
-			$this->Task_model->add_task($data);
-			$client = $idclients;
-			$idupsell = $idupsell;
-			$dejaclient = 1;
-			$budget = $budget_upsell;
-			$initiative = $tm;
-			$am = $am;
-			$type_upsell = $type_upsell;
+		} elseif ($type_upsell == 3) {  
+			// BOOSTER
+			$budget_final = $budget_init + $budget_upsell;
+			$title        = "Booster";
+			$type_tache   = 5;
+			$tache        = "Le client fait un Booster de " . number_format($budget_upsell, 0, ',', ' ') . " €";
 
-			$data_upsell = array(
-				'idupsell' => $idupsell,
-				'idclients' => $idclients,
-				'dejaclient' => $dejaclient,
-				'budget' => $budget_finale,
-				'account_manager' => $am,
-				'initiative' => $tm,
-				'type_upsell' => $type_upsell,
-				'budget_upsell' => $budget_upsell
+		} else {
+			$this->session->set_flashdata('message-erreur', "Type upsell invalide.");
+			redirect('Client/detail_client/' . $idclients);
+			return;
+		}
 
-			);
-			$this->visuels_model->add_upsell_onboarding($data_upsell);
+		// Ajouter les informations supplémentaires si présentes
+		if (!empty($information_upsell)) {
+			$tache .= " avec les informations suivantes :\n" . $information_upsell;
+		}
 
-		endif;
-		//if ($type_upsell == 3):
-		//$am = $this->input->post('am');
-		//$am = $demmande_upsell;
-		//$budget_initiale = $this->input->post('budget_initiale');
-		//$idclient = $this->visuels_model->create_upsell($type_upsell, $budget_upsell, $budget_initiale, $demmande_upsell, $am, $tm, $date_upsell, $date_demande_upsell, $inforamtion_upsell, $statut_upsell, $idclients);
+		// Création UPSell (table upsell principale)
+		$idupsell = $this->visuels_model->create_upsell(
+			$type_upsell,
+			$budget_final,
+			$budget_init,
+			$demmande_upsell,
+			$am,
+			$tm,
+			$date_upsell,
+			$date_demande_upsell,
+			$information_upsell,
+			$statut_upsell,
+			$idclients,
+			1 // actif
+		);
 
-		//endif;
-		$this->session->set_flashdata('message-succes', "Donnée ajouté avec succès");
-		redirect('Client/detail_client/' . $idclients, 'refresh');
+		// Création tâche liée
+		$task = array(
+			'type_tache'        => $type_tache,
+			'date_demande'      => $date_demande_upsell,
+			'date_due'          => $date_upsell,
+			'idclients'         => $idclients,
+			'AM'                => $tm,
+			'assigned_to'       => $am,
+			'title'             => $title,
+			'Statuts_technique' => 1,
+			'description'       => $tache,
+			'idupsell'          => $idupsell
+		);
+		$this->Task_model->add_task($task);
 
+		// Données onboarding (une seule insertion)
+		$data_upsell = array(
+			'idupsell'              => $idupsell,
+			'idonnee'               => $idonnee,
+			'idclients'             => $idclients,
+			'dejaclient'            => 1,
+			'budget'                => $budget_final,
+			'account_manager'       => $am,
+			'initiative'            => $initiative,
+			'type_upsell'           => $type_upsell,
+			'mis_en_place_paiement' => $date_demande_upsell,
+			'Brief'                 => $date_brief,
+			'annonce'               => $date_upsell,
+			'budget_upsell'         => $budget_upsell
+		);
 
-		$this->layout();
+		$this->visuels_model->add_upsell_onboarding($data_upsell);
+		if ($type_upsell == 2) { 
+			$statut_demande_en_cours = 3;
+			$budget_finale = $budget_final; 
+			$statut = 0;
+			$this->Donne_modele->update_last_onboarding_status_briefs($idonnee, $statut);
+			$this->Donne_modele->update_status_statut_envoye($idonnee, $statut);
+			$this->Donne_modele->update_status_briefs($idonnee, $statut);
+			//$this->visuels_model->update_statut_demande_en_cours($statut_demande_en_cours,$idonnee);
+			$this->visuels_model->update_budget($budget_finale, $idclients);
+			$date_envoye = date('Y-m-d');
+			//$this->Donne_modele->update_status_brief_onboarding($idonnee,$date_envoye, 0);
+		} 
+		else{
+			$budget_finale = $budget_final; 
+			$this->visuels_model->update_budget($budget_finale, $idclients);
+			$date_envoye = date('Y-m-d');
+		}
+
+		// Message + redirection
+		$this->session->set_flashdata('message-succes', "Donnée ajoutée avec succès");
+		redirect('Client/detail_client/' . $idclients);
 	}
+
 
 	private function get_all_calls()
 	{

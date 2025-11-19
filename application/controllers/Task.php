@@ -112,10 +112,18 @@ class Task extends MY_Controller
 				$statut_demande = 0;
 				$id = intval($task->idclients);
 				$idupsell = $task->idupsell;
-				$this->visuels_model->change_statut_en_demande($id, $statut_demande);
 				$statut_upsell = 1;
 				$this->visuels_model->update_status_upsell($statut_upsell, $idupsell);
 			}
+			if (strpos($task->title, "Erreur d'optimisation") === 0) {
+				$statut_demande = 3;
+				$id = intval($task->idclients);
+				$idupsell = $task->idupsell;
+				$date_due = $task->date_due;
+				$Débogage = "Implémenté";
+				$this->Gtm_model->change_statut_optimisation($id, $Débogage, $date_due);
+			}
+
 			if ($task->title == "Relance client") {
 				$statut_demande = 3;
 				$id = intval($task->idclients);
@@ -124,39 +132,93 @@ class Task extends MY_Controller
 				$statut_upsell = 1;
 				$this->visuels_model->update_status_upsell($statut_upsell, $idupsell);
 			}
+			if ($task->title == "Mise en ligne") {
+				$statut_demande = 3;
+				$id = intval($task->idclients);
+				$idupsell = $task->idupsell;
+				$statut_upsell = 2;
+				$this->visuels_model->update_status_upsell($statut_upsell, $idupsell);
+			}
+			if ($task->title == "Mise en ligne - Booster") {
+				$statut_demande = 3;
+				$id = intval($task->idclients);
+				$idupsell = $task->idupsell;
+				$statut_upsell = 1;
+				$this->visuels_model->update_status_booster($statut_upsell, $idupsell);
+			}
+			if ($task->title == "Validation client") {
+				$statut_demande = 3;
+				$id = intval($task->idclients);
+				$am = intval($task->assigned_to);
+					$type_tache = 15;
+					$title = "Mise en ligne";
+					$description = "Veuiller mettre la campagne";
+					$Statuts_technique = 1;
+					$procedure_gtm = 4;
+					$tm = 23;
+					$date_debut = date('Y-m-d');
+					$date_fin = date('Y-m-d', strtotime($date_debut . ' +2 days'));
+
+					$data = array(
+						'type_tache' => $type_tache,
+						'date_demande' => $date_debut,
+						'date_due' => $date_fin,
+						'idclients' => $id,
+						'AM' => $am,
+						'assigned_to' => 23,
+						'title' => $title,
+						'Statuts_technique' => $Statuts_technique,
+						'procedure_gtm' => $procedure_gtm,
+						'description' => $description
+					);
+
+			$this->Task_model->add_task($data);
+				
+				
+			}
+			
 			if ($task->title == "Demande invitation GTM") {
 				$statut_demande = 3;
 				$id = intval($task->idclients);
 				$am = intval($task->AM);
-				$this->visuels_model->change_statut_en_demande($id, $statut_demande);
-				$type_tache = 3;
-				$title = "Implémentation Plan de taggage";
-				$description = "Veuiller mettre en place et implémenté le Plan de taggage du client";
-				$Statuts_technique = 1;
-				$procedure_gtm = 4;
-				$tm = 23;
-				$date_debut = date('Y-m-d');
-				$date_fin = date('Y-m-d', strtotime($date_debut . ' +2 days'));
+					$type_tache = 3;
+					$title = "Reception invitation";
+					$description = "Veuiller mettre en tâche effectuer des que l'invitation du client est reçu";
+					$Statuts_technique = 1;
+					$procedure_gtm = 4;
+					$tm = 23;
+					$date_debut = date('Y-m-d');
+					$date_fin = date('Y-m-d', strtotime($date_debut . ' +2 days'));
 
-				$data = array(
-					'type_tache' => $type_tache,
-					'date_demande' => $date_debut,
-					'date_due' => $date_fin,
-					'idclients' => $id,
-					'AM' => $am,
-					'assigned_to' => $tm,
-					'title' => $title,
-					'Statuts_technique' => $Statuts_technique,
-					'procedure_gtm' => $procedure_gtm,
-					'description' => $description
-				);
+					$data = array(
+						'type_tache' => $type_tache,
+						'date_demande' => $date_debut,
+						'date_due' => $date_fin,
+						'idclients' => $id,
+						'AM' => $am,
+						'assigned_to' => 24,
+						'title' => $title,
+						'Statuts_technique' => $Statuts_technique,
+						'procedure_gtm' => $procedure_gtm,
+						'description' => $description
+					);
 
-				$this->Task_model->add_task($data);
-				$date_invitation = $date_debut;
-				$gtm = "Installé";
+			$this->Task_model->add_task($data);
+				
+				
+			}
+			if ($task->title == "Reception invitation") {
+				$statut_demande = 3;
+				$id = intval($task->idclients);
+				$am = intval($task->AM);
+				$statut = "Implémenté";
 				$data = [
-					'gtm'    		    => $gtm,
-					'invitation_reçu'   =>$date_invitation,
+					'statut'   =>$statut,
+				];
+				$this->Gtm_model->update_implementation($id,$data);
+				$date_invitation = date('Y-m-d');
+				$data = [
+					'invitation_reçu'   => $date_invitation,
 				];
 				$this->Gtm_model->update_invitation($id,$data);
 			}
@@ -164,7 +226,6 @@ class Task extends MY_Controller
 				$statut_demande = 3;
 				$id = intval($task->idclients);
 				$am = intval($task->AM);
-				$this->visuels_model->change_statut_en_demande($id, $statut_demande);
 				$statut = "Implémenté";
 				$data = [
 					'statut'   =>$statut,
@@ -209,6 +270,34 @@ class Task extends MY_Controller
 		$this->Task_model->update_task_statuts($taskId, $data);
 		redirect('Task');
 	}
+
+		public function creer_task_implementation($id_task)
+		{
+
+					$type_tache = 3;
+					$title = "Implémentation Plan de taggage";
+					$description = "Veuiller mettre en place et implémenté le Plan de taggage du client";
+					$Statuts_technique = 1;
+					$procedure_gtm = 4;
+					$tm = 23;
+					$date_debut = date('Y-m-d');
+					$date_fin = date('Y-m-d', strtotime($date_debut . ' +2 days'));
+
+					$data = array(
+						'type_tache' => $type_tache,
+						'date_demande' => $date_debut,
+						'date_due' => $date_fin,
+						'idclients' => $id,
+						'AM' => $am,
+						'assigned_to' => $tm,
+						'title' => $title,
+						'Statuts_technique' => $Statuts_technique,
+						'procedure_gtm' => $procedure_gtm,
+						'description' => $description
+					);
+
+			$this->Task_model->add_task($data);
+		}
 
 	public function fetch_discussion($id_task)
 	{

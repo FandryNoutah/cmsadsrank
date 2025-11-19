@@ -18,9 +18,8 @@
 						<div class="col form-group">
 							<label for="task_type">Type</label>
 							<select name="type_tache" id="task_type" class="form-control">
-								<option value="1">Team task</option>
-								<option value="2">Temporaire</option>
-								<option value="3">GTM</option>
+								<option value="20">Team task</option>
+								<option value="21">Temporaire</option>
 							</select>
 						</div>
 						<div class="col form-group d-flex align-items-center">

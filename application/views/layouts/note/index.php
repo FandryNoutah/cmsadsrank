@@ -95,6 +95,11 @@
 								</div>
 							</div>
 						</div>
+						<?php if($note->idclients != NULL): ?>
+							<h6 class="my-3" style="font-size: 16px; font-weight: 500;">
+							Client : <?= htmlspecialchars($note->client_name); ?>
+						</h6>
+						<?php endif; ?>
 						<h6 class="my-3" style="font-size: 16px; font-weight: 500;">
 							<?= htmlspecialchars($note->title); ?>
 						</h6>

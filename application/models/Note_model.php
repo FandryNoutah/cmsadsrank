@@ -10,18 +10,20 @@ class Note_model extends CI_Model {
     }
     public function get_for_user($user_id = null) {
 
-        $this->db->select('n.*, u.username AS author');
-        $this->db->from('notes n');
-        $this->db->join('users u', 'u.id = n.created_by', 'left');
-        $this->db->join('note_users nu', 'nu.note_id = n.id', 'inner');
-		if ($user_id !== null) {
-			$this->db->where('nu.user_id', $user_id);
-		}
-        $this->db->order_by('n.created_at', 'DESC');
-		$this->db->group_by('nu.note_id');
-		
-        return $this->db->get()->result();
+    $this->db->select('n.*, u.username AS author, c.nom_client AS client_name'); 
+    $this->db->from('notes n');
+    $this->db->join('users u', 'u.id = n.created_by', 'left');
+    $this->db->join('note_users nu', 'nu.note_id = n.id', 'inner');
+    $this->db->join('clients c', 'c.idclients = n.idclients', 'left'); 
+    if ($user_id !== null) {
+        $this->db->where('nu.user_id', $user_id);
     }
+    $this->db->order_by('n.created_at', 'DESC');
+    $this->db->group_by('nu.note_id');
+
+    return $this->db->get()->result();
+}
+
 	
 	public function get_all_by_idclients($idclients) {
 		

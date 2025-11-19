@@ -130,7 +130,7 @@ $images_site = isset($images_site) && is_array($images_site) ? $images_site : []
 								<i class="fa fa-images"></i> Générer avec ChatGPT
 							</button>
 
-							<textarea class="form-control" name="information_campagne_search" id="information_campagne_search"><?= isset($campagne) ? htmlentities($campagne->information_campagne) : '' ?></textarea>
+							<textarea rows="12"  class="form-control" name="information_campagne_search" id="information_campagne_search"><?= isset($campagne) ? htmlentities($campagne->information_campagne) : '' ?></textarea>
 						</div>
 
 
@@ -145,50 +145,80 @@ $images_site = isset($images_site) && is_array($images_site) ? $images_site : []
 						
 
 						<div id="groupe_annonce_container" class="mb-4 pt-4">
-							<?php if (isset($groupes_annonces) && count($groupes_annonces) > 0): ?>
+							<?php if (!empty($groupes_annonces) && is_array($groupes_annonces)) : ?>
+								<?php foreach ($groupes_annonces as $idx => $g) : 
+									$nom_groupe  = isset($g['nom_groupe']) ? htmlentities($g['nom_groupe']) : '';
+									$contexte    = isset($g['contexte_groupes_annonces']) ? htmlentities($g['contexte_groupes_annonces']) : '';
+									$mot_cle     = isset($g['mot_cle']) ? htmlentities($g['mot_cle']) : '';
+								?>
+								<div class="group-annonce-content">
+									<div class="form-group d-flex justify-content-between align-items-center">
+										<label class="mb-0">Groupe d'annonce <?= (int)($idx + 1) ?></label>
+										<button type="button"
+												class="btn btn-outline-dark btn-sm generate-group-keywords-url-context"
+												data-idclient="<?= htmlentities($idclients) ?>">
+											<i class="fa fa-magic"></i> Générer 
+										</button>
+									</div>
 
-								<?php foreach ($groupes_annonces as $groupe_annonce): ?>
-									<div class="group-annonce-content">
-										<div class="form-group">
-											<label>Groupe d'annonce 1</label>
-											<input type="text" class="form-control" name="groupe_annonce[]" value="<?= $groupe_annonce['nom_groupe'] ?>">
-										</div>
-										<div class="form-group">
-											<label>Contexte du groupe d'annonce</label>
-											<textarea name="contexte_groupe_annonce[]" class="form-control"><?= $groupe_annonce['contexte_groupes_annonces'] ?></textarea>
-										</div>
-										<div class="form-group">
-											<label>Saisir des mots-clés du groupe d'annonce</label>
-											<textarea name="Mot_cle[]" class="form-control"><?= $groupe_annonce['mot_cle'] ?></textarea>
-										</div>
-										<button type="button" class="btn btn-sm btn-danger remove_groupe_annonce mt-2">Supprimer</button>
-										<hr>
-									</div>
-								<?php endforeach; ?>
-							<?php else: ?>
-								<div class="group-annonce-content original">
 									<div class="form-group">
-										<label>Groupe d'annonce 1</label>
-										<input type="text" class="form-control" name="groupe_annonce[]">
+										<label>Nom du groupe</label>
+										<input type="text" class="form-control" name="groupe_annonce[]" value="<?= $nom_groupe ?>">
 									</div>
+
 									<div class="form-group">
 										<label>Contexte du groupe d'annonce</label>
-										<textarea name="contexte_groupe_annonce[]" class="form-control"></textarea>
+										<textarea name="contexte_groupe_annonce[]" class="form-control" rows="4"><?= $contexte ?></textarea>
 									</div>
+
 									<div class="form-group">
-										<label>Saisir des mots-clés du groupe d'annonce</label>
-										<textarea name="Mot_cle[]" class="form-control"></textarea>
+										<label>Mots-clés du groupe</label>
+										<textarea name="Mot_cle[]" class="form-control" rows="6"><?= $mot_cle ?></textarea>
+									</div>
+
+									<button type="button" class="btn btn-sm btn-danger remove_groupe_annonce mt-2">Supprimer</button>
+									<hr>
+								</div>
+								<?php endforeach; ?>
+
+							<?php else : ?>
+								<div class="group-annonce-content original">
+									
+										<label class="mb-0">Groupe d'annonce 1</label>
+								
+
+									<div class="form-group">
+										<label>Nom du groupe</label>
+										<input type="text" class="form-control" name="groupe_annonce[]">
+									</div>
+
+									<div class="form-group">
+										<label>Contexte du groupe d'annonce</label>
+										<textarea name="contexte_groupe_annonce[]" class="form-control" rows="4"></textarea>
+									</div>
+
+									<div class="form-group">
+										<div class="form-group d-flex justify-content-between align-items-center">
+										<label>Mots-clés du groupe</label>
+										<button type="button"
+												class="btn btn-outline-dark btn-sm generate-group-keywords-url-context"
+												data-idclient="<?= htmlentities($idclients) ?>">
+											<i class="fa fa-magic"></i> Générer 
+										</button>
+												
+									</div>
+										<textarea name="Mot_cle[]" class="form-control" rows="6"></textarea>
 									</div>
 								</div>
 							<?php endif; ?>
 
-							<div class="text-center d-none mb-4">
+							<div class="text-center mb-4">
 								<button type="button" class="btn btn-outline-dark btn-sm" id="add_groupe_annonce">
 									<i class="fa fa-plus"></i> Nouveau groupe d'annonce
 								</button>
 							</div>
-							
 						</div>
+
 						<div class="custom-control custom-switch mb-3">
 							<input type="checkbox" class="custom-control-input" id="multiple_groupe_annonce" <?php if (isset($campagne) && !empty($groupes_annonces) && count($groupes_annonces) > 0): ?> checked <?php endif; ?>>
 							<label class="custom-control-label" for="multiple_groupe_annonce">Souhaitez-vous créer plusieurs groupes d'annonces dans la campagne?</label>
@@ -234,7 +264,7 @@ $images_site = isset($images_site) && is_array($images_site) ? $images_site : []
 					<div class="form-group">
 						<label for="age-range">Sexe</label>
 						<select name="sexe" id="age-range" class="form-control">
-							<option value="">-- Sélectionnez sexe --</option>
+							<option value="Tous sexe">Tous sexe</option>
 							<option value="Homme">Homme</option>
 							<option value="Femme">Femme</option>
 							<option value="Inconnu">Inconnu</option>
@@ -456,6 +486,200 @@ $images_site = isset($images_site) && is_array($images_site) ? $images_site : []
 <?php end_section() ?>
 <?php start_section('script'); ?>
 <script>
+// Génère des mots-clés pour UN groupe -> à partir de l'URL globale + contexte du groupe
+$(document).on('click', '.generate-group-keywords-url-context', function () {
+  const idClient = $(this).data('idclient');
+  const $btn = $(this);
+  const $block = $btn.closest('.group-annonce-content');
+
+  const url = ($('#url_campagne').val() || '').trim(); // URL globale saisie
+  const contexte = ($block.find('textarea[name="contexte_groupe_annonce[]"]').val() || '').trim();
+  const nomGroupe = ($block.find('input[name="groupe_annonce[]"]').val() || '').trim();
+  const $dest = $block.find('textarea[name="Mot_cle[]"]');
+
+  if (!url) { alert("Renseigne d'abord l’URL de la campagne."); return; }
+  if (!contexte && !nomGroupe) { alert("Ajoute au moins un contexte ou un nom de groupe."); return; }
+
+  const endpoint = '<?= site_url("Client/generate_group_keywords_url_context") ?>/' + encodeURIComponent(idClient);
+
+  const payload = {
+    url_campagne: url,
+    contexte: contexte,
+    nom_groupe: nomGroupe
+  };
+  if (typeof csrfName !== 'undefined' && csrfName && typeof csrfHash !== 'undefined' && csrfHash) {
+    payload[csrfName] = csrfHash;
+  }
+
+  const oldHtml = $btn.html();
+  const oldVal = $dest.val();
+  $btn.prop('disabled', true).html('<span class="spinner-border spinner-border-sm"></span> Génération...');
+  $dest.val("⏳ Génération des mots-clés...");
+
+  $.post(endpoint, payload, function (resp) {
+    if (resp && resp.csrfName && resp.csrfHash) {
+      window.csrfName = resp.csrfName; window.csrfHash = resp.csrfHash;
+    }
+    if (resp && resp.status === 'success') {
+      $dest.val(resp.data || '');
+    } else {
+      console.error(resp);
+      alert(resp && resp.message ? resp.message : "Échec de la génération.");
+      $dest.val(oldVal);
+    }
+  }, 'json')
+  .fail(function (xhr) {
+    console.error(xhr);
+    alert("Erreur réseau / serveur.");
+    $dest.val(oldVal);
+  })
+  .always(function () {
+    $btn.prop('disabled', false).html(oldHtml);
+  });
+});
+
+	// --- Génération des mots-clés depuis l'URL via ChatGPT ---
+$('#generate-keywords-from-url').on('click', function () {
+    const idClient = $(this).data('idclient');
+    const $btn = $(this);
+    const $dest = $('textarea[name="Mot_cle"]');
+    const url = ($('#url_campagne').val() || '').trim();
+    const langue = ($('select[name="langue"]').val() || 'fr').trim();
+    const zone = ($('#zone_search').val() || '').trim();
+    const services = ($('textarea[name="services"]').val() || '').trim();
+
+    if (!url) {
+        alert("Renseigne d'abord l’URL de la campagne.");
+        return;
+    }
+
+    const endpoint = '<?= site_url("Client/get_mots_cle_depuis_url") ?>/' + encodeURIComponent(idClient);
+
+    const payload = { url, langue, zone, services };
+    if (typeof csrfName !== 'undefined' && csrfName && typeof csrfHash !== 'undefined' && csrfHash) {
+        payload[csrfName] = csrfHash;
+    }
+
+    const originalHtml = $btn.html();
+    $btn.prop('disabled', true).html('<span class="spinner-border spinner-border-sm"></span> Génération...');
+
+    $.post(endpoint, payload, function (resp) {
+        if (resp && resp.csrfName && resp.csrfHash) {
+            window.csrfName = resp.csrfName;
+            window.csrfHash = resp.csrfHash;
+        }
+        if (resp && resp.status === 'success') {
+            $dest.val(resp.data || '');
+        } else {
+            console.error(resp);
+            alert(resp && resp.message ? resp.message : "Échec de la génération des mots-clés.");
+        }
+    }, 'json')
+    .fail(function (xhr) {
+        console.error(xhr);
+        alert("Erreur réseau / serveur pendant la génération.");
+    })
+    .always(function () {
+        $btn.prop('disabled', false).html(originalHtml);
+    });
+});
+
+	// --- Génération "Information de la campagne" via ChatGPT ---
+$('#generate-info-campagne').on('click', function () {
+    const idClient = $(this).data('idclient');
+    const url = $('#url_campagne').val().trim();
+    const $btn = $(this);
+    const $textarea = $('#information_campagne_search');
+
+    if (!url) {
+        alert("Veuillez saisir l'URL de la campagne avant de générer.");
+        return;
+    }
+
+    // Construire l'URL vers le contrôleur (CI3)
+    const endpoint = '<?= site_url("Client/information_campagne") ?>/' + encodeURIComponent(idClient);
+
+    // Données POST (avec CSRF si présent)
+    const payload = { url: url };
+    if (typeof csrfName !== 'undefined' && csrfName && typeof csrfHash !== 'undefined' && csrfHash) {
+        payload[csrfName] = csrfHash;
+    }
+
+    // UI loading
+    const originalHtml = $btn.html();
+    $btn.prop('disabled', true).html('<span class="spinner-border spinner-border-sm"></span> Génération...');
+
+    $.post(endpoint, payload, function (resp) {
+        // Mise à jour automatique du hash CSRF si ton backend le renvoie (optionnel)
+        if (resp && resp.csrfName && resp.csrfHash) {
+            window.csrfName = resp.csrfName;
+            window.csrfHash = resp.csrfHash;
+        }
+
+        if (resp && resp.status === 'success') {
+            $textarea.val(resp.data || '');
+        } else {
+            console.error(resp);
+            alert(resp && resp.message ? resp.message : "Une erreur est survenue lors de la génération.");
+        }
+    }, 'json')
+    .fail(function (xhr) {
+        console.error(xhr);
+        alert("Erreur réseau / serveur pendant la génération.");
+    })
+    .always(function () {
+        $btn.prop('disabled', false).html(originalHtml);
+    });
+});
+// --- Génération des mots-clés à exclure via ChatGPT ---
+$(document).on('click', '.generate-keywords-btn', function () {
+    const idClient = $(this).data('idclient');
+    const $btn = $(this);
+    const $srcTextarea = $('#information_campagne_search');           // source : infos campagne
+    const $destTextarea = $('textarea[name="Mots_cle_exclus"]');      // destination : exclure
+    const campagneInfo = ($srcTextarea.val() || '').trim();
+
+    if (!campagneInfo) {
+        alert("Renseigne d'abord 'Information de la campagne' (ou génère-la).");
+        return;
+    }
+
+    // Endpoint CI3
+    const endpoint = '<?= site_url("Client/get_mot_cle_a_exclure") ?>/' + encodeURIComponent(idClient);
+
+    // Payload (avec CSRF si présent)
+    const payload = { information_campagne_search: campagneInfo };
+    if (typeof csrfName !== 'undefined' && csrfName && typeof csrfHash !== 'undefined' && csrfHash) {
+        payload[csrfName] = csrfHash;
+    }
+
+    // UI loading
+    const originalHtml = $btn.html();
+    $btn.prop('disabled', true).html('<span class="spinner-border spinner-border-sm"></span> Génération...');
+    
+    $.post(endpoint, payload, function (resp) {
+        // Mise à jour CSRF (si tu renvoies les nouveaux jetons côté serveur)
+        if (resp && resp.csrfName && resp.csrfHash) {
+            window.csrfName = resp.csrfName;
+            window.csrfHash = resp.csrfHash;
+        }
+
+        if (resp && resp.status === 'success') {
+            $destTextarea.val(resp.data || '');
+        } else {
+            console.error(resp);
+            alert(resp && resp.message ? resp.message : "Échec de la génération des mots-clés exclus.");
+        }
+    }, 'json')
+    .fail(function (xhr) {
+        console.error(xhr);
+        alert("Erreur réseau / serveur pendant la génération.");
+    })
+    .always(function () {
+        $btn.prop('disabled', false).html(originalHtml);
+    });
+});
+
 	$(document).ready(function() {
 		const $checkbox = $('#multiple_groupe_annonce');
 		const $container = $('#groupe_annonce_container');
