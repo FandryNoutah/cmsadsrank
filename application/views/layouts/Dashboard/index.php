@@ -106,9 +106,48 @@
 
 <?php start_section('content'); ?>
 
-<div class="container-fluid pt-4">
+<div class="container-fluid pt-4" 
+		<?php if (in_array($current_user->tech, [1, 2, 3])): ?>
+			style="background-image: url('<?= site_url('assets/images/figma/') . "user_tech_" . $current_user->tech . ".svg" ?>'); background-repeat: no-repeat; background-position: top right 100px; background-size: 534px;"
+		<?php endif; ?> >
+	<div class="row row-cols-2 mb-5 position-relative">
+		<div class="col-auto">
+			<h1 class="display-4 mb-4">Bonjour <?= $current_user->first_name; ?></h1>
+			<p class="mb-2">
+				<u>
+					<a href="https://citation-celebre.leparisien.fr/citations/262772" class="text-dark">
+						Le lâche ne commence jamais, le faible ne termine jamais, <br> et le gagnant n'abandonne jamais.
+					</a>
+				</u>
+			</p>
+			<p class="mb-5">
+				<u>
+					<a href="https://citation-celebre.leparisien.fr/auteur/philip-knight-nike" class="text-muted">
+						Philip Knight (Nike)
+					</a>
+				</u>
+			</p>
 
-	<h1 class="display-3 mb-4">Bonjour <?= $current_user->first_name; ?></h1>
+			<div class="card" style="width: 344px; height: 129px;">
+				<div class="card-body d-flex justify-content-between px-4">
+					<img src="<?= site_url('assets/images/figma/trophee.png') ?>?>" alt="trophee" width="64" class="align-self-center">
+					<div>
+						<div class="span badge alert-warning p-2 mb-2">PRESENCES NOVEMBRE</div>
+						<div class="d-flex justify-content-between">
+							<div class="text-left">
+								<h6 class="text-muted mb-2" style="font-size: 14px; font-weight: 500;">PRESENTS</h6>
+								<h4 class="text-dark">51%</h4>
+							</div>
+							<div class="text-right">
+								<h6 class="text-muted mb-2" style="font-size: 14px; font-weight: 500;">CONGES</h6>
+								<h4 class="text-dark">4</h4>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
 
 	<p class="text-muted mb-5">
 		Nous avons actuellement

@@ -15,7 +15,7 @@ class Dashboard extends MY_Controller
 	{
 
 		$current_user = $this->data['current_user'];
-		
+		// dd($current_user);
 		$idusers = intval($current_user->id);
 		$task = $this->Dashboard_model->get_task_by_id_users($idusers);
 
