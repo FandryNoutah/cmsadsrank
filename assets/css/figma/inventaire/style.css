@@ -1,0 +1,1727 @@
+.figma-inventaire .dashboard {
+  background-color: var(--color-tokens-color-tokens-background-primary);
+  width: 100%;
+  max-width: min-content;
+  min-height: 2785px;
+  position: relative;
+}
+
+.figma-inventaire .dashboard .frame {
+  position: absolute;
+  top: 1179px;
+  left: 2364px;
+  width: 33px;
+  height: 34px;
+  overflow: hidden;
+}
+
+.figma-inventaire .dashboard .image {
+  position: absolute;
+  width: 487.88%;
+  top: -16507px;
+  left: -64933.33%;
+  height: 59px;
+  aspect-ratio: 2.73;
+  object-fit: cover;
+}
+
+.figma-inventaire .dashboard .rectangle {
+  position: absolute;
+  width: 306.06%;
+  height: 105.88%;
+  top: -311.76%;
+  left: 669.70%;
+  background-color: #ffffff;
+  border: 1px solid;
+  border-color: #58a942;
+}
+
+.figma-inventaire .dashboard .text-wrapper {
+  width: 715.15%;
+  height: 138.24%;
+  top: -291.18%;
+  left: 706.06%;
+  position: absolute;
+  font-family: "Open Sans", Helvetica;
+  font-weight: 600;
+  color: #58a942;
+  font-size: 16px;
+  letter-spacing: 0;
+  line-height: normal;
+}
+
+.figma-inventaire .dashboard .div {
+  width: 533.33%;
+  height: 64.71%;
+  top: -185.29%;
+  left: 684.85%;
+  position: absolute;
+  font-family: "Open Sans", Helvetica;
+  font-weight: 600;
+  color: #000000;
+  font-size: 16px;
+  letter-spacing: 0;
+  line-height: normal;
+}
+
+.figma-inventaire .dashboard .img {
+  position: absolute;
+  width: 160.61%;
+  top: -16326px;
+  left: -64918.18%;
+  height: 53px;
+  aspect-ratio: 1;
+  object-fit: cover;
+}
+
+.figma-inventaire .dashboard .r-sidence-luxe-https {
+  position: absolute;
+  width: 896.97%;
+  height: 194.12%;
+  top: -100%;
+  left: 924.24%;
+  font-family: "Open Sans", Helvetica;
+  font-weight: 400;
+  color: #000000;
+  font-size: 16px;
+  letter-spacing: 0;
+  line-height: normal;
+}
+
+.figma-inventaire .dashboard .span {
+  font-weight: 600;
+}
+
+.figma-inventaire .dashboard .text-wrapper-2 {
+  font-family: "Open Sans", Helvetica;
+  font-weight: 400;
+  color: #000000;
+  font-size: 16px;
+  letter-spacing: 0;
+}
+
+.figma-inventaire .dashboard .img-2 {
+  position: absolute;
+  top: 1077px;
+  left: 526px;
+  width: 430px;
+  height: 932px;
+}
+
+.figma-inventaire .dashboard .img-3 {
+  position: absolute;
+  top: calc(50.00% - 328px);
+  left: calc(50.00% + 968px);
+  width: 432px;
+  height: 934px;
+}
+
+.figma-inventaire .dashboard .div-2 {
+  position: absolute;
+  top: 1066px;
+  left: 998px;
+  width: 430px;
+  height: 932px;
+  background-color: #ffffff;
+  border-radius: 50px;
+  overflow: hidden;
+  border: 1px solid;
+  border-color: #000000;
+}
+
+.figma-inventaire .dashboard .text-wrapper-3 {
+  position: absolute;
+  top: calc(50.00% + 372px);
+  left: calc(50.00% - 69px);
+  font-family: "Roboto", Helvetica;
+  font-weight: 500;
+  color: #ffffff;
+  font-size: 20px;
+  text-align: center;
+  letter-spacing: 0;
+  line-height: normal;
+  white-space: nowrap;
+}
+
+.figma-inventaire .dashboard .overlap-group {
+  position: absolute;
+  width: 23px;
+  height: 23px;
+  top: 837px;
+  left: 258px;
+}
+
+.figma-inventaire .dashboard .send-icon {
+  position: absolute;
+  width: 23px;
+  height: 23px;
+  top: 0;
+  left: 0;
+  display: flex;
+}
+
+.figma-inventaire .dashboard .group {
+  width: 23px;
+  background-image: url(./img/vector-42.svg);
+  background-size: 100% 100%;
+  flex: 1;
+  position: relative;
+}
+
+.figma-inventaire .dashboard .vector {
+  position: absolute;
+  width: 26.35%;
+  height: 26.40%;
+  top: 36.09%;
+  left: 36.24%;
+}
+
+.figma-inventaire .dashboard .mask-group {
+  position: absolute;
+  top: 254px;
+  left: 313px;
+  width: 78px;
+  height: 74px;
+}
+
+.figma-inventaire .dashboard .fi-rr-marker {
+  position: absolute;
+  top: 558px;
+  left: 37px;
+  width: 22px;
+  height: 22px;
+}
+
+.figma-inventaire .dashboard .p {
+  top: 254px;
+  left: 97px;
+  width: 227px;
+  position: absolute;
+  font-family: "Open Sans", Helvetica;
+  font-weight: 400;
+  color: #000000;
+  font-size: 16px;
+  letter-spacing: 0;
+  line-height: normal;
+}
+
+.figma-inventaire .dashboard .s-lection-des-plus {
+  position: absolute;
+  top: 421px;
+  left: 37px;
+  width: 357px;
+  font-family: "Open Sans", Helvetica;
+  font-weight: 400;
+  color: #000000;
+  font-size: 16px;
+  letter-spacing: 0;
+  line-height: normal;
+}
+
+.figma-inventaire .dashboard .text-wrapper-4 {
+  position: absolute;
+  top: 558px;
+  left: 72px;
+  width: 373px;
+  font-family: "Open Sans", Helvetica;
+  font-weight: 400;
+  color: #000000;
+  font-size: 16px;
+  letter-spacing: 0;
+  line-height: normal;
+}
+
+.figma-inventaire .dashboard .text-wrapper-5 {
+  position: absolute;
+  top: 801px;
+  left: 85px;
+  width: 239px;
+  font-family: "Open Sans", Helvetica;
+  font-weight: 400;
+  color: #000000;
+  font-size: 16px;
+  letter-spacing: 0;
+  line-height: normal;
+}
+
+.figma-inventaire .dashboard .location-de-chalets {
+  position: absolute;
+  top: 339px;
+  left: 37px;
+  width: 366px;
+  font-family: "Open Sans", Helvetica;
+  font-weight: 400;
+  color: #0242a2;
+  font-size: 24px;
+  letter-spacing: 0;
+  line-height: normal;
+}
+
+.figma-inventaire .dashboard .location-de-chalets-2 {
+  top: 599px;
+  left: 33px;
+  width: 330px;
+  font-family: "Open Sans", Helvetica;
+  color: #0242a2;
+  position: absolute;
+  font-weight: 400;
+  font-size: 24px;
+  letter-spacing: 0;
+  line-height: normal;
+}
+
+.figma-inventaire .dashboard .location-de-chalets-3 {
+  top: 698px;
+  left: 34px;
+  width: 319px;
+  font-family: "Open Sans", Helvetica;
+  color: #0242a2;
+  position: absolute;
+  font-weight: 400;
+  font-size: 24px;
+  letter-spacing: 0;
+  line-height: normal;
+}
+
+.figma-inventaire .dashboard .line {
+  top: 784px;
+  left: 32px;
+  position: absolute;
+  width: 340px;
+  height: 2px;
+  object-fit: cover;
+}
+
+.figma-inventaire .dashboard .image-2 {
+  position: absolute;
+  top: 254px;
+  left: 34px;
+  width: 47px;
+  height: 47px;
+  aspect-ratio: 1;
+  object-fit: cover;
+}
+
+.figma-inventaire .dashboard .image-3 {
+  position: absolute;
+  top: 48px;
+  left: 129px;
+  width: 172px;
+  height: 58px;
+  aspect-ratio: 2.96;
+  object-fit: cover;
+}
+
+.figma-inventaire .dashboard .rectangle-2 {
+  position: absolute;
+  top: 119px;
+  left: 31px;
+  width: 375px;
+  height: 68px;
+  border-radius: 30px;
+  border: 1px solid;
+  border-color: #d8d8d8;
+  box-shadow: 0px 13px 26px -2px #0000001f;
+  backdrop-filter: blur(5px) brightness(100%);
+  -webkit-backdrop-filter: blur(5px) brightness(100%);
+}
+
+.figma-inventaire .dashboard .icon-phone {
+  position: absolute;
+  top: 570px;
+  left: 37px;
+  width: 24px;
+  height: 24px;
+}
+
+.figma-inventaire .dashboard .line-2 {
+  top: 692px;
+  left: 34px;
+  position: absolute;
+  width: 340px;
+  height: 2px;
+  object-fit: cover;
+}
+
+.figma-inventaire .dashboard .icon-arrow-left {
+  position: absolute;
+  width: 0;
+  height: 0;
+  top: 69.33%;
+  left: 89.38%;
+  transform: rotate(-176.78deg);
+}
+
+.figma-inventaire .dashboard .vector-2 {
+  position: absolute;
+  width: 100%;
+  height: 100.00%;
+  top: -7.07%;
+  left: -18.42%;
+  transform: rotate(176.78deg);
+}
+
+.figma-inventaire .dashboard .vector-wrapper {
+  top: 79.31%;
+  left: 90.08%;
+  position: absolute;
+  width: 0;
+  height: 0;
+  transform: rotate(-176.78deg);
+}
+
+.figma-inventaire .dashboard .icon-home {
+  position: absolute;
+  width: 5.35%;
+  height: 2.47%;
+  top: 94.53%;
+  left: 4.88%;
+  background-image: url(./img/vector-63.svg);
+  background-size: 100% 100%;
+}
+
+.figma-inventaire .dashboard .overlap {
+  position: absolute;
+  width: 22px;
+  height: 22px;
+  top: 881px;
+  left: 137px;
+}
+
+.figma-inventaire .dashboard .icon-clock {
+  position: absolute;
+  width: 22px;
+  height: 22px;
+  top: 0;
+  left: 0;
+  display: flex;
+}
+
+.figma-inventaire .dashboard .group-2 {
+  width: 22px;
+  flex: 1;
+  position: relative;
+}
+
+.figma-inventaire .dashboard .vector-3 {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: -4.55%;
+  left: -4.55%;
+}
+
+.figma-inventaire .dashboard .vector-4 {
+  position: absolute;
+  width: 20.40%;
+  height: 38.35%;
+  top: 23.00%;
+  left: 43.61%;
+}
+
+.figma-inventaire .dashboard .icon-heart {
+  position: absolute;
+  width: 5.58%;
+  height: 2.31%;
+  top: 94.53%;
+  left: 58.84%;
+  background-image: url(./img/vector-66.svg);
+  background-size: 100% 100%;
+}
+
+.figma-inventaire .dashboard .vector-5 {
+  position: absolute;
+  width: 16.78%;
+  height: 2.85%;
+  top: 20.89%;
+  left: 68.75%;
+}
+
+.figma-inventaire .dashboard .overlap-2 {
+  position: absolute;
+  width: 18px;
+  height: 24px;
+  top: 881px;
+  left: 369px;
+}
+
+.figma-inventaire .dashboard .icon-user {
+  position: absolute;
+  width: 18px;
+  height: 24px;
+  top: 0;
+  left: 0;
+  display: flex;
+}
+
+.figma-inventaire .dashboard .group-3 {
+  width: 18.17px;
+  flex: 1;
+  position: relative;
+}
+
+.figma-inventaire .dashboard .vector-6 {
+  position: absolute;
+  width: 61.56%;
+  height: 46.61%;
+  top: 0;
+  left: 19.22%;
+}
+
+.figma-inventaire .dashboard .vector-7 {
+  position: absolute;
+  width: 100%;
+  height: 34.45%;
+  top: 52.69%;
+  left: 0;
+}
+
+.figma-inventaire .dashboard .vector-8 {
+  position: absolute;
+  width: 100%;
+  height: 19.78%;
+  top: 80.22%;
+  left: 0;
+}
+
+.figma-inventaire .dashboard .text-wrapper-6 {
+  top: 226px;
+  left: 34px;
+  width: 135px;
+  position: absolute;
+  font-family: "Open Sans", Helvetica;
+  font-weight: 600;
+  color: #000000;
+  font-size: 16px;
+  letter-spacing: 0;
+  line-height: normal;
+}
+
+.figma-inventaire .dashboard .icon-phone-2 {
+  position: absolute;
+  top: 800px;
+  left: 49px;
+  width: 24px;
+  height: 24px;
+}
+
+.figma-inventaire .dashboard .img-wrapper {
+  position: absolute;
+  top: 141px;
+  left: 352px;
+  width: 24px;
+  height: 24px;
+}
+
+.figma-inventaire .dashboard .vector-9 {
+  position: absolute;
+  width: 75.00%;
+  height: 75.00%;
+  top: 12.50%;
+  left: 12.50%;
+}
+
+.figma-inventaire .dashboard .text-wrapper-7 {
+  position: absolute;
+  top: 141px;
+  left: 56px;
+  width: 276px;
+  font-family: "Open Sans", Helvetica;
+  font-weight: 400;
+  color: #000000;
+  font-size: 20px;
+  letter-spacing: 0;
+  line-height: normal;
+}
+
+.figma-inventaire .dashboard .vector-10 {
+  position: absolute;
+  width: 4.42%;
+  height: 2.15%;
+  top: 85.86%;
+  left: 10.76%;
+}
+
+.figma-inventaire .dashboard .img-4 {
+  position: absolute;
+  top: 1066px;
+  left: 1470px;
+  width: 430px;
+  height: 932px;
+}
+
+.figma-inventaire .dashboard .div-3 {
+  position: absolute;
+  top: 1066px;
+  left: 1942px;
+  width: 430px;
+  height: 932px;
+  background-color: #ffffff;
+  border-radius: 50px;
+  overflow: hidden;
+  border: 1px solid;
+  border-color: #000000;
+}
+
+.figma-inventaire .dashboard .rectangle-3 {
+  position: absolute;
+  top: 816px;
+  left: 28px;
+  width: 373px;
+  height: 66px;
+  border-radius: 20px;
+  box-shadow: 0px 13px 26px -2px #0000001f;
+  backdrop-filter: blur(5px) brightness(100%);
+  -webkit-backdrop-filter: blur(5px) brightness(100%);
+  background: linear-gradient(
+      0deg,
+      rgba(26, 115, 232, 1) 0%,
+      rgba(26, 115, 232, 1) 100%
+    ),
+    linear-gradient(
+      0deg,
+      rgba(255, 255, 255, 0.4) 0%,
+      rgba(255, 255, 255, 0.4) 100%
+    );
+}
+
+.figma-inventaire .dashboard .group-wrapper {
+  top: 837px;
+  left: 258px;
+  position: absolute;
+  width: 23px;
+  height: 23px;
+  display: flex;
+}
+
+.figma-inventaire .dashboard .mask-group-2 {
+  position: absolute;
+  top: 204px;
+  left: 28px;
+  width: 373px;
+  height: 486px;
+}
+
+.figma-inventaire .dashboard .fi-rr-marker-2 {
+  position: absolute;
+  top: 425px;
+  left: 63px;
+  width: 22px;
+  height: 22px;
+}
+
+.figma-inventaire .dashboard .ellipse {
+  position: absolute;
+  top: 608px;
+  left: 328px;
+  width: 44px;
+  height: 44px;
+}
+
+.figma-inventaire .dashboard .icon-arrow-left-2 {
+  top: 66.97%;
+  left: 80.31%;
+  position: absolute;
+  width: 0;
+  height: 0;
+  transform: rotate(-176.78deg);
+}
+
+.figma-inventaire .dashboard .notre-service-de {
+  position: absolute;
+  top: 709px;
+  left: 41px;
+  width: 347px;
+  font-family: "Roboto", Helvetica;
+  font-weight: 400;
+  color: #000000;
+  font-size: 24px;
+  letter-spacing: 0;
+  line-height: normal;
+}
+
+.figma-inventaire .dashboard .r-sidence-luxe-https-2 {
+  top: 138px;
+  left: 95px;
+  width: 335px;
+  position: absolute;
+  font-family: "Open Sans", Helvetica;
+  font-weight: 400;
+  color: #000000;
+  font-size: 16px;
+  letter-spacing: 0;
+  line-height: normal;
+}
+
+.figma-inventaire .dashboard .image-4 {
+  position: absolute;
+  top: 131px;
+  left: 42px;
+  width: 47px;
+  height: 47px;
+  aspect-ratio: 1;
+  object-fit: cover;
+}
+
+.figma-inventaire .dashboard .image-5 {
+  position: absolute;
+  top: 1109px;
+  left: 2071px;
+  width: 172px;
+  height: 58px;
+  aspect-ratio: 2.96;
+  object-fit: cover;
+}
+
+.figma-inventaire .dashboard .img-5 {
+  position: absolute;
+  top: calc(50.00% - 316px);
+  left: calc(50.00% - 1392px);
+  width: 432px;
+  height: 934px;
+}
+
+.figma-inventaire .dashboard .image-6 {
+  position: absolute;
+  top: 1110px;
+  left: 46px;
+  width: 107px;
+  height: 107px;
+  aspect-ratio: 1;
+  object-fit: cover;
+}
+
+.figma-inventaire .dashboard .fi-rr-marker-3 {
+  position: absolute;
+  top: 812px;
+  left: 2362px;
+  width: 23px;
+  height: 26px;
+}
+
+.figma-inventaire .dashboard .vector-11 {
+  position: absolute;
+  width: 33.33%;
+  height: 33.33%;
+  top: 25.00%;
+  left: 33.33%;
+}
+
+.figma-inventaire .dashboard .vector-12 {
+  position: absolute;
+  width: 83.79%;
+  height: 100.01%;
+  top: 0;
+  left: 8.10%;
+}
+
+.figma-inventaire .dashboard .div-4 {
+  position: absolute;
+  top: 69px;
+  left: 1002px;
+  width: 430px;
+  height: 932px;
+  background-color: #ffffff;
+  border-radius: 50px;
+  overflow: hidden;
+  border: 1px solid;
+  border-color: #000000;
+}
+
+.figma-inventaire .dashboard .rectangle-4 {
+  position: absolute;
+  top: 127px;
+  left: 37px;
+  width: 376px;
+  height: 60px;
+  border-radius: 30px;
+  border: 2px solid;
+  border-color: #d2d2d2;
+}
+
+.figma-inventaire .dashboard .heart-icon {
+  position: absolute;
+  width: 5.12%;
+  height: 2.12%;
+  top: 24.86%;
+  left: 58.14%;
+  background-image: url(./img/vector-62.svg);
+  background-size: 100% 100%;
+}
+
+.figma-inventaire .dashboard .image-7 {
+  position: absolute;
+  top: 337px;
+  left: 134px;
+  width: 36px;
+  height: 35px;
+  aspect-ratio: 1.03;
+  object-fit: cover;
+}
+
+.figma-inventaire .dashboard .text-wrapper-8 {
+  position: absolute;
+  top: 548px;
+  left: 134px;
+  width: 209px;
+  font-family: "Roboto", Helvetica;
+  font-weight: 500;
+  color: #ffffff;
+  font-size: 16px;
+  text-align: center;
+  letter-spacing: 0;
+  line-height: normal;
+}
+
+.figma-inventaire .dashboard .icon-home-2 {
+  width: 5.35%;
+  height: 2.47%;
+  top: 92.70%;
+  left: 6.05%;
+  background-image: url(./img/vector-63.svg);
+  position: absolute;
+  background-size: 100% 100%;
+}
+
+.figma-inventaire .dashboard .div-wrapper {
+  position: absolute;
+  width: 22px;
+  height: 22px;
+  top: 864px;
+  left: 142px;
+  display: flex;
+}
+
+.figma-inventaire .dashboard .vector-13 {
+  position: absolute;
+  width: 20.40%;
+  height: 38.35%;
+  top: 23.01%;
+  left: 43.61%;
+}
+
+.figma-inventaire .dashboard .icon-heart-2 {
+  width: 5.58%;
+  top: 92.70%;
+  left: 60.00%;
+  background-image: url(./img/vector-66.svg);
+  position: absolute;
+  height: 2.31%;
+  background-size: 100% 100%;
+}
+
+.figma-inventaire .dashboard .icon-user-2 {
+  position: absolute;
+  width: 18px;
+  height: 24px;
+  top: 864px;
+  left: 374px;
+  display: flex;
+}
+
+.figma-inventaire .dashboard .ellipse-2 {
+  position: absolute;
+  top: 864px;
+  left: 18px;
+  width: 8px;
+  height: 8px;
+  background-color: #ff4a4a;
+  border-radius: 4px;
+}
+
+.figma-inventaire .dashboard .mask-group-3 {
+  position: absolute;
+  top: 223px;
+  left: 28px;
+  width: 374px;
+  height: 229px;
+}
+
+.figma-inventaire .dashboard .r-sidence-luxe-https-3 {
+  top: 542px;
+  left: 81px;
+  width: 335px;
+  position: absolute;
+  font-family: "Open Sans", Helvetica;
+  font-weight: 400;
+  color: #000000;
+  font-size: 16px;
+  letter-spacing: 0;
+  line-height: normal;
+}
+
+.figma-inventaire .dashboard .s-lection-des-plus-2 {
+  position: absolute;
+  top: 682px;
+  left: 25px;
+  width: 373px;
+  font-family: "Open Sans", Helvetica;
+  font-weight: 400;
+  color: #000000;
+  font-size: 16px;
+  letter-spacing: 0;
+  line-height: normal;
+}
+
+.figma-inventaire .dashboard .location-de-chalets-4 {
+  top: 600px;
+  left: 28px;
+  width: 374px;
+  font-family: "Open Sans", Helvetica;
+  color: #0242a2;
+  position: absolute;
+  font-weight: 400;
+  font-size: 24px;
+  letter-spacing: 0;
+  line-height: normal;
+}
+
+.figma-inventaire .dashboard .image-8 {
+  position: absolute;
+  top: 535px;
+  left: 28px;
+  width: 47px;
+  height: 47px;
+  aspect-ratio: 1;
+  object-fit: cover;
+}
+
+.figma-inventaire .dashboard .text-wrapper-9 {
+  top: 495px;
+  left: 28px;
+  width: 135px;
+  position: absolute;
+  font-family: "Open Sans", Helvetica;
+  font-weight: 600;
+  color: #000000;
+  font-size: 16px;
+  letter-spacing: 0;
+  line-height: normal;
+}
+
+.figma-inventaire .dashboard .frame-2 {
+  position: absolute;
+  top: 145px;
+  left: 342px;
+  width: 24px;
+  height: 24px;
+}
+
+.figma-inventaire .dashboard .text-wrapper-10 {
+  top: 145px;
+  left: 66px;
+  width: 276px;
+  font-family: "Open Sans", Helvetica;
+  font-weight: 400;
+  color: #000000;
+  font-size: 20px;
+  position: absolute;
+  letter-spacing: 0;
+  line-height: normal;
+}
+
+.figma-inventaire .dashboard .text-wrapper-11 {
+  position: absolute;
+  top: 787px;
+  left: 75px;
+  width: 239px;
+  font-family: "Open Sans", Helvetica;
+  font-weight: 400;
+  color: #000000;
+  font-size: 16px;
+  letter-spacing: 0;
+  line-height: normal;
+}
+
+.figma-inventaire .dashboard .vector-14 {
+  position: absolute;
+  width: 4.00%;
+  height: 0;
+  top: 84.47%;
+  left: 6.57%;
+}
+
+.figma-inventaire .dashboard .div-5 {
+  position: absolute;
+  top: calc(50.00% - 1324px);
+  left: calc(50.00% + 24px);
+  width: 432px;
+  height: 934px;
+  background-color: #ffffff;
+  border-radius: 50px;
+  overflow: hidden;
+  border: 1px solid;
+  border-color: #000000;
+}
+
+.figma-inventaire .dashboard .chalet-de-luxe {
+  top: 232px;
+  left: 18px;
+  font-family: "Roboto", Helvetica;
+  font-weight: 500;
+  color: transparent;
+  font-size: 16px;
+  white-space: nowrap;
+  position: absolute;
+  letter-spacing: 0;
+  line-height: normal;
+}
+
+.figma-inventaire .dashboard .text-wrapper-12 {
+  color: #0172b2;
+}
+
+.figma-inventaire .dashboard .text-wrapper-13 {
+  color: #000000;
+}
+
+.figma-inventaire .dashboard .heart-icon-2 {
+  width: 5.09%;
+  height: 2.11%;
+  top: 24.80%;
+  left: 57.87%;
+  background-image: url(./img/vector-62.svg);
+  position: absolute;
+  background-size: 100% 100%;
+}
+
+.figma-inventaire .dashboard .ellipse-3 {
+  position: absolute;
+  top: 49px;
+  left: 334px;
+  width: 8px;
+  height: 8px;
+  background-color: #ff4a4a;
+  border-radius: 4px;
+}
+
+.figma-inventaire .dashboard .image-9 {
+  position: absolute;
+  top: 662px;
+  left: 37px;
+  width: 47px;
+  height: 47px;
+  aspect-ratio: 1;
+  object-fit: cover;
+}
+
+.figma-inventaire .dashboard .mask-group-4 {
+  position: absolute;
+  top: 201px;
+  left: 22px;
+  width: 374px;
+  height: 382px;
+}
+
+.figma-inventaire .dashboard .ellipse-4 {
+  position: absolute;
+  top: 681px;
+  left: 345px;
+  width: 44px;
+  height: 44px;
+}
+
+.figma-inventaire .dashboard .icon-arrow-left-3 {
+  top: 74.64%;
+  left: 83.87%;
+  position: absolute;
+  width: 0;
+  height: 0;
+  transform: rotate(-176.78deg);
+}
+
+.figma-inventaire .dashboard .vector-15 {
+  position: absolute;
+  width: 100%;
+  height: 100.00%;
+  top: -7.08%;
+  left: -18.42%;
+  transform: rotate(176.78deg);
+}
+
+.figma-inventaire .dashboard .image-10 {
+  position: absolute;
+  top: 26px;
+  left: 28px;
+  width: 157px;
+  height: 97px;
+  aspect-ratio: 1.62;
+  object-fit: cover;
+}
+
+.figma-inventaire .dashboard .text-wrapper-14 {
+  top: 629px;
+  left: 37px;
+  width: 135px;
+  position: absolute;
+  font-family: "Open Sans", Helvetica;
+  font-weight: 600;
+  color: #000000;
+  font-size: 16px;
+  letter-spacing: 0;
+  line-height: normal;
+}
+
+.figma-inventaire .dashboard .rectangle-5 {
+  position: absolute;
+  top: 771px;
+  left: 28px;
+  width: 373px;
+  height: 66px;
+  border-radius: 20px;
+  box-shadow: 0px 13px 26px -2px #0000001f;
+  backdrop-filter: blur(5px) brightness(100%);
+  -webkit-backdrop-filter: blur(5px) brightness(100%);
+  background: linear-gradient(
+      0deg,
+      rgba(26, 115, 232, 1) 0%,
+      rgba(26, 115, 232, 1) 100%
+    ),
+    linear-gradient(
+      0deg,
+      rgba(255, 255, 255, 0.4) 0%,
+      rgba(255, 255, 255, 0.4) 100%
+    );
+}
+
+.figma-inventaire .dashboard .text-wrapper-15 {
+  position: absolute;
+  top: calc(50.00% + 326px);
+  left: calc(50.00% - 53px);
+  font-family: "Roboto", Helvetica;
+  font-weight: 500;
+  color: #ffffff;
+  font-size: 20px;
+  text-align: center;
+  letter-spacing: 0;
+  line-height: normal;
+  white-space: nowrap;
+}
+
+.figma-inventaire .dashboard .send-icon-2 {
+  top: 796px;
+  left: 277px;
+  position: absolute;
+  width: 23px;
+  height: 23px;
+  display: flex;
+}
+
+.figma-inventaire .dashboard .frame-3 {
+  position: absolute;
+  top: 866px;
+  left: 198px;
+  width: 31px;
+  height: 30px;
+}
+
+.figma-inventaire .dashboard .vector-16 {
+  position: absolute;
+  width: 83.33%;
+  height: 83.33%;
+  top: 8.33%;
+  left: 8.34%;
+}
+
+.figma-inventaire .dashboard .frame-4 {
+  position: absolute;
+  top: 59px;
+  left: 363px;
+  width: 33px;
+  height: 33px;
+}
+
+.figma-inventaire .dashboard .frame-5 {
+  position: absolute;
+  top: 59px;
+  left: 309px;
+  width: 35px;
+  height: 35px;
+}
+
+.figma-inventaire .dashboard .vector-17 {
+  position: absolute;
+  width: 66.67%;
+  height: 83.33%;
+  top: 8.33%;
+  left: 16.67%;
+}
+
+.figma-inventaire .dashboard .frame-6 {
+  position: absolute;
+  top: 57px;
+  left: 255px;
+  width: 32px;
+  height: 36px;
+}
+
+.figma-inventaire .dashboard .vector-18 {
+  position: absolute;
+  width: 83.33%;
+  height: 66.67%;
+  top: 16.67%;
+  left: 8.33%;
+}
+
+.figma-inventaire .dashboard .div-6 {
+  position: absolute;
+  top: 69px;
+  left: 2418px;
+  width: 430px;
+  height: 932px;
+  background-color: #ffffff;
+  border-radius: 50px;
+  overflow: hidden;
+  border: 1px solid;
+  border-color: #000000;
+}
+
+.figma-inventaire .dashboard .mask-group-5 {
+  position: absolute;
+  top: 293px;
+  left: 29px;
+  width: 363px;
+  height: 233px;
+}
+
+.figma-inventaire .dashboard .r-sidence-luxe-https-4 {
+  top: 213px;
+  left: 117px;
+  width: 296px;
+  position: absolute;
+  font-family: "Open Sans", Helvetica;
+  font-weight: 400;
+  color: #000000;
+  font-size: 16px;
+  letter-spacing: 0;
+  line-height: normal;
+}
+
+.figma-inventaire .dashboard .image-11 {
+  position: absolute;
+  top: 212px;
+  left: 38px;
+  width: 53px;
+  height: 53px;
+  aspect-ratio: 1;
+  object-fit: cover;
+}
+
+.figma-inventaire .dashboard .image-12 {
+  position: absolute;
+  top: 48px;
+  left: 33px;
+  width: 161px;
+  height: 59px;
+  aspect-ratio: 2.73;
+  object-fit: cover;
+}
+
+.figma-inventaire .dashboard .rectangle-6 {
+  position: absolute;
+  top: 573px;
+  left: 29px;
+  width: 366px;
+  height: 48px;
+  background-color: #f9f9f9;
+}
+
+.figma-inventaire .dashboard .rectangle-7 {
+  position: absolute;
+  top: 627px;
+  left: 29px;
+  width: 366px;
+  height: 48px;
+  background-color: #f9f9f9;
+}
+
+.figma-inventaire .dashboard .rectangle-8 {
+  position: absolute;
+  top: 682px;
+  left: 29px;
+  width: 366px;
+  height: 48px;
+  background-color: #f9f9f9;
+}
+
+.figma-inventaire .dashboard .rectangle-9 {
+  position: absolute;
+  top: 737px;
+  left: 29px;
+  width: 366px;
+  height: 48px;
+  background-color: #f9f9f9;
+}
+
+.figma-inventaire .dashboard .rectangle-10 {
+  position: absolute;
+  top: 158px;
+  left: 33px;
+  width: 101px;
+  height: 36px;
+  background-color: #ffffff;
+  border: 1px solid;
+  border-color: #58a942;
+}
+
+.figma-inventaire .dashboard .text-wrapper-16 {
+  top: 165px;
+  left: 45px;
+  width: 236px;
+  position: absolute;
+  font-family: "Open Sans", Helvetica;
+  font-weight: 600;
+  color: #58a942;
+  font-size: 16px;
+  letter-spacing: 0;
+  line-height: normal;
+}
+
+.figma-inventaire .dashboard .div-7 {
+  position: absolute;
+  top: calc(50.00% - 1314px);
+  left: calc(50.00% - 1392px);
+  width: 432px;
+  height: 934px;
+  background-color: #ffffff;
+  border-radius: 50px;
+  overflow: hidden;
+  border: 1px solid;
+  border-color: #000000;
+}
+
+.figma-inventaire .dashboard .mask-group-6 {
+  position: absolute;
+  top: 584px;
+  left: 33px;
+  width: 112px;
+  height: 107px;
+}
+
+.figma-inventaire .dashboard .mask-group-7 {
+  position: absolute;
+  top: 584px;
+  left: 153px;
+  width: 120px;
+  height: 112px;
+}
+
+.figma-inventaire .dashboard .mask-group-8 {
+  position: absolute;
+  top: 584px;
+  left: 285px;
+  width: 122px;
+  height: 112px;
+}
+
+.figma-inventaire .dashboard .text-wrapper-17 {
+  position: absolute;
+  top: 551px;
+  left: 75px;
+  width: 31px;
+  font-family: "Open Sans", Helvetica;
+  font-weight: 400;
+  color: #000000;
+  font-size: 16px;
+  letter-spacing: 0;
+  line-height: normal;
+  white-space: nowrap;
+}
+
+.figma-inventaire .dashboard .text-wrapper-18 {
+  position: absolute;
+  top: 551px;
+  left: 181px;
+  width: 129px;
+  font-family: "Open Sans", Helvetica;
+  font-weight: 400;
+  color: #000000;
+  font-size: 16px;
+  letter-spacing: 0;
+  line-height: normal;
+  white-space: nowrap;
+}
+
+.figma-inventaire .dashboard .text-wrapper-19 {
+  position: absolute;
+  top: 550px;
+  left: 119px;
+  width: 62px;
+  font-family: "Open Sans", Helvetica;
+  font-weight: 400;
+  color: #34a853;
+  font-size: 16px;
+  letter-spacing: 0;
+  line-height: normal;
+  white-space: nowrap;
+}
+
+.figma-inventaire .dashboard .text-wrapper-20 {
+  position: absolute;
+  top: 551px;
+  left: 33px;
+  width: 18px;
+  font-family: "Open Sans", Helvetica;
+  font-weight: 400;
+  color: #000000;
+  font-size: 16px;
+  letter-spacing: 0;
+  line-height: normal;
+  white-space: nowrap;
+}
+
+.figma-inventaire .dashboard .image-13 {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 430px;
+  height: 398px;
+  aspect-ratio: 2.72;
+}
+
+.figma-inventaire .dashboard .rectangle-11 {
+  position: absolute;
+  top: 74px;
+  left: 37px;
+  width: 375px;
+  height: 68px;
+  border-radius: 30px;
+  border: 1px solid;
+  border-color: #ffffff;
+  box-shadow: 0px 13px 26px -2px #0000001f;
+  backdrop-filter: blur(5px) brightness(100%);
+  -webkit-backdrop-filter: blur(5px) brightness(100%);
+  background: linear-gradient(
+    0deg,
+    rgba(255, 255, 255, 1) 0%,
+    rgba(255, 255, 255, 1) 100%
+  );
+}
+
+.figma-inventaire .dashboard .vector-19 {
+  position: absolute;
+  width: 5.73%;
+  height: 2.73%;
+  top: 10.06%;
+  left: 82.18%;
+}
+
+.figma-inventaire .dashboard .text-wrapper-21 {
+  top: 94px;
+  left: 61px;
+  width: 276px;
+  font-family: "Open Sans", Helvetica;
+  font-weight: 400;
+  color: #000000;
+  font-size: 20px;
+  position: absolute;
+  letter-spacing: 0;
+  line-height: normal;
+}
+
+.figma-inventaire .dashboard .text-wrapper-22 {
+  top: 431px;
+  left: 28px;
+  width: 135px;
+  position: absolute;
+  font-family: "Open Sans", Helvetica;
+  font-weight: 600;
+  color: #000000;
+  font-size: 16px;
+  letter-spacing: 0;
+  line-height: normal;
+}
+
+.figma-inventaire .dashboard .text-wrapper-23 {
+  top: 455px;
+  left: 30px;
+  width: 347px;
+  font-family: "Roboto", Helvetica;
+  color: #000000;
+  position: absolute;
+  font-weight: 400;
+  font-size: 24px;
+  letter-spacing: 0;
+  line-height: normal;
+}
+
+.figma-inventaire .dashboard .text-wrapper-24 {
+  position: absolute;
+  top: 809px;
+  left: 55px;
+  width: 83px;
+  font-family: "Roboto", Helvetica;
+  font-weight: 400;
+  color: #1a73e9;
+  font-size: 15px;
+  letter-spacing: 0;
+  line-height: normal;
+}
+
+.figma-inventaire .dashboard .text-wrapper-25 {
+  position: absolute;
+  top: 811px;
+  left: 184px;
+  width: 83px;
+  font-family: "Roboto", Helvetica;
+  font-weight: 400;
+  color: #1a73e9;
+  font-size: 15px;
+  letter-spacing: 0;
+  line-height: normal;
+}
+
+.figma-inventaire .dashboard .text-wrapper-26 {
+  position: absolute;
+  top: 811px;
+  left: 308px;
+  width: 83px;
+  font-family: "Roboto", Helvetica;
+  font-weight: 400;
+  color: #1a73e9;
+  font-size: 15px;
+  letter-spacing: 0;
+  line-height: normal;
+}
+
+.figma-inventaire .dashboard .icon-star {
+  position: absolute;
+  top: 548px;
+  left: 49px;
+  width: 24px;
+  height: 24px;
+}
+
+.figma-inventaire .dashboard .ellipse-5 {
+  position: absolute;
+  top: 716px;
+  left: 57px;
+  width: 87px;
+  height: 87px;
+}
+
+.figma-inventaire .dashboard .ellipse-6 {
+  position: absolute;
+  top: 719px;
+  left: 171px;
+  width: 87px;
+  height: 87px;
+}
+
+.figma-inventaire .dashboard .ellipse-7 {
+  position: absolute;
+  top: 719px;
+  left: 285px;
+  width: 87px;
+  height: 87px;
+}
+
+.figma-inventaire .dashboard .frame-7 {
+  position: absolute;
+  top: 741px;
+  left: 80px;
+  width: 40px;
+  height: 39px;
+}
+
+.figma-inventaire .dashboard .vector-20 {
+  position: absolute;
+  width: 83.33%;
+  height: 83.33%;
+  top: 8.33%;
+  left: 8.33%;
+}
+
+.figma-inventaire .dashboard .frame-8 {
+  position: absolute;
+  top: 744px;
+  left: 195px;
+  width: 38px;
+  height: 38px;
+}
+
+.figma-inventaire .dashboard .vector-21 {
+  position: absolute;
+  width: 91.67%;
+  height: 91.67%;
+  top: 4.17%;
+  left: 4.17%;
+}
+
+.figma-inventaire .dashboard .frame-9 {
+  position: absolute;
+  top: 743px;
+  left: 309px;
+  width: 40px;
+  height: 33px;
+}
+
+.figma-inventaire .dashboard .vector-22 {
+  position: absolute;
+  width: 75.00%;
+  height: 75.00%;
+  top: 24.24%;
+  left: 12.50%;
+}
+
+.figma-inventaire .dashboard .div-8 {
+  position: absolute;
+  top: calc(50.00% - 1314px);
+  left: calc(50.00% - 916px);
+  width: 432px;
+  height: 934px;
+  background-color: #ffffff;
+  border-radius: 50px;
+  overflow: hidden;
+  border: 1px solid;
+  border-color: #000000;
+}
+
+.figma-inventaire .dashboard .icon-home-3 {
+  width: 5.32%;
+  height: 2.46%;
+  top: 92.51%;
+  left: 6.02%;
+  background-image: url(./img/vector-63.svg);
+  position: absolute;
+  background-size: 100% 100%;
+}
+
+.figma-inventaire .dashboard .icon-heart-3 {
+  width: 5.56%;
+  top: 92.51%;
+  left: 59.72%;
+  background-image: url(./img/vector-66.svg);
+  position: absolute;
+  height: 2.31%;
+  background-size: 100% 100%;
+}
+
+.figma-inventaire .dashboard .image-14 {
+  position: absolute;
+  top: 603px;
+  left: 37px;
+  width: 47px;
+  height: 47px;
+  aspect-ratio: 1;
+  object-fit: cover;
+}
+
+.figma-inventaire .dashboard .mask-group-9 {
+  position: absolute;
+  top: 35px;
+  left: 28px;
+  width: 374px;
+  height: 537px;
+}
+
+.figma-inventaire .dashboard .ellipse-8 {
+  position: absolute;
+  top: 622px;
+  left: 348px;
+  width: 44px;
+  height: 44px;
+}
+
+.figma-inventaire .dashboard .icon-arrow-left-4 {
+  top: 68.32%;
+  left: 84.80%;
+  position: absolute;
+  width: 0;
+  height: 0;
+  transform: rotate(-176.78deg);
+}
+
+.figma-inventaire .dashboard .rectangle-12 {
+  position: absolute;
+  top: 109px;
+  left: 2627px;
+  width: 200px;
+  height: 68px;
+  border-radius: 30px;
+  backdrop-filter: blur(5px) brightness(100%);
+  -webkit-backdrop-filter: blur(5px) brightness(100%);
+  background: linear-gradient(
+    0deg,
+    rgba(218, 229, 252, 0.59) 0%,
+    rgba(218, 229, 252, 0.59) 100%
+  );
+}
+
+.figma-inventaire .dashboard .image-15 {
+  position: absolute;
+  top: 128px;
+  left: 1124px;
+  width: 172px;
+  height: 58px;
+  aspect-ratio: 2.96;
+  object-fit: cover;
+}
+
+.figma-inventaire .dashboard .frame-10 {
+  position: absolute;
+  top: 131px;
+  left: 2777px;
+  width: 33px;
+  height: 34px;
+  overflow: hidden;
+}
+
+.figma-inventaire .dashboard .image-16 {
+  position: absolute;
+  width: 487.88%;
+  top: -15459px;
+  left: -66184.85%;
+  height: 59px;
+  aspect-ratio: 2.73;
+  object-fit: cover;
+}
+
+.figma-inventaire .dashboard .image-17 {
+  position: absolute;
+  width: 160.61%;
+  top: -15278px;
+  left: -66169.70%;
+  height: 53px;
+  aspect-ratio: 1;
+  object-fit: cover;
+}
+
+.figma-inventaire .dashboard .text-wrapper-27 {
+  top: 677px;
+  left: 643px;
+  width: 236px;
+  font-family: "Open Sans", Helvetica;
+  font-weight: 400;
+  color: #000000;
+  font-size: 28px;
+  position: absolute;
+  letter-spacing: 0;
+  line-height: normal;
+}
+
+.figma-inventaire .dashboard .text-wrapper-28 {
+  top: 726px;
+  left: 1588px;
+  width: 236px;
+  font-family: "Open Sans", Helvetica;
+  font-weight: 400;
+  color: #000000;
+  font-size: 28px;
+  position: absolute;
+  letter-spacing: 0;
+  line-height: normal;
+}
+
+.figma-inventaire .dashboard .text-wrapper-29 {
+  top: 794px;
+  left: 571px;
+  width: 347px;
+  font-family: "Roboto", Helvetica;
+  color: #000000;
+  position: absolute;
+  font-weight: 400;
+  font-size: 24px;
+  letter-spacing: 0;
+  line-height: normal;
+}

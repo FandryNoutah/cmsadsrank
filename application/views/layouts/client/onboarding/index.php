@@ -1,4 +1,6 @@
 <?php start_section('stylesheet') ?>
+<link rel="stylesheet" href="<?= base_url('assets/css/figma/inventaire/style.css') ?>">
+
 <style>
 	/* Bigger switch size */
 	.custom-switch.custom-switch-xl .custom-control-label::before {
@@ -329,97 +331,95 @@
 <?php start_section('content'); ?>
 <?php foreach ($donnees as $d): ?>
 	<?php if ($current_user->tech == 3): ?>
-	<?php if ($d['statut_demande_en_cours'] == 3): ?>
+		<?php if ($d['statut_demande_en_cours'] == 3): ?>
 
-		<div class="modal fade" id="choixCampagneModal" tabindex="-1" aria-labelledby="choixCampagneLabel" aria-hidden="true">
-			<div class="modal-dialog modal-xl modal-dialog-centered">
-				<div class="modal-content rounded-3 shadow-lg">
-					<div class="modal-header">
-						<h2 class="modal-title" id="choixCampagneLabel">Upsell client</h2>
-					</div>
-					<div class="modal-body">
-						<form method="post" action="<?= site_url('Client/uspell_campagne'); ?>">
+			<div class="modal fade" id="choixCampagneModal" tabindex="-1" aria-labelledby="choixCampagneLabel" aria-hidden="true">
+				<div class="modal-dialog modal-xl modal-dialog-centered">
+					<div class="modal-content rounded-3 shadow-lg">
+						<div class="modal-header">
+							<h2 class="modal-title" id="choixCampagneLabel">Upsell client</h2>
+						</div>
+						<div class="modal-body">
+							<form method="post" action="<?= site_url('Client/uspell_campagne'); ?>">
 
-							<input type="hidden" name="idclients" value="<?= $d['idclients']; ?>">
-							<div class="row row-cols-2 mt-4 mb-2">
-								<div class="col">
-									<div class="card camp-container h-100">
-										<div class="card-body">
-											<div class="d-block mb-2">
-												<i class="fa fa-cloud" style="font-size: 22px;"></i>
+								<input type="hidden" name="idclients" value="<?= $d['idclients']; ?>">
+								<div class="row row-cols-2 mt-4 mb-2">
+									<div class="col">
+										<div class="card camp-container h-100">
+											<div class="card-body">
+												<div class="d-block mb-2">
+													<i class="fa fa-cloud" style="font-size: 22px;"></i>
+												</div>
+												<h3>Campagne précédente</h3>
+												<p class="text-muted">Continuer avec la campagne existante.</p>
+												<a href="javascript:void(0);" class="stretched-link text-dark font-weight-bold select-camp" data-target="#camp_resa">
+													<i class="fa fa-arrow-right"></i>
+												</a>
+												<input type="radio" name="camp_param" id="camp_resa" value="1" class="d-none">
 											</div>
-											<h3>Campagne précédente</h3>
-											<p class="text-muted">Continuer avec la campagne existante.</p>
-											<a href="javascript:void(0);" class="stretched-link text-dark font-weight-bold select-camp" data-target="#camp_resa">
-												<i class="fa fa-arrow-right"></i>
-											</a>
-											<input type="radio" name="camp_param" id="camp_resa" value="1" class="d-none">
 										</div>
 									</div>
-								</div>
-								<div class="col">
-									<div class="card camp-container h-100">
-										<div class="card-body">
-											<div class="d-block mb-2">
-												<i class="fa fa-database" style="font-size: 22px;"></i>
+									<div class="col">
+										<div class="card camp-container h-100">
+											<div class="card-body">
+												<div class="d-block mb-2">
+													<i class="fa fa-database" style="font-size: 22px;"></i>
+												</div>
+												<h3>Nouvelle campagne</h3>
+												<p class="text-muted">Démarrer une nouvelle campagne à partir de zéro.</p>
+												<a href="javascript:void(0);" class="stretched-link text-dark font-weight-bold select-camp" data-target="#camp_sale">
+													<i class="fa fa-arrow-right"></i>
+												</a>
+												<input type="radio" name="camp_param" id="camp_sale" value="2" class="d-none">
 											</div>
-											<h3>Nouvelle campagne</h3>
-											<p class="text-muted">Démarrer une nouvelle campagne à partir de zéro.</p>
-											<a href="javascript:void(0);" class="stretched-link text-dark font-weight-bold select-camp" data-target="#camp_sale">
-												<i class="fa fa-arrow-right"></i>
-											</a>
-											<input type="radio" name="camp_param" id="camp_sale" value="2" class="d-none">
 										</div>
 									</div>
+
+
 								</div>
-
-
-							</div>
-							<div class="text-end mt-4">
-								<button type="submit" class="btn btn-primary">Valider</button>
-							</div>
-						</form>
+								<div class="text-end mt-4">
+									<button type="submit" class="btn btn-primary">Valider</button>
+								</div>
+							</form>
+						</div>
 					</div>
 				</div>
 			</div>
-		</div>
 
-		<script>
-			document.addEventListener("DOMContentLoaded", function() {
-			var modalEl = document.getElementById('choixCampagneModal');
-			
-			var modal = new bootstrap.Modal(modalEl, {
-				backdrop: 'static', 
-				keyboard: false  
-			});
-			modal.show();
-			document.querySelectorAll('.select-camp').forEach(function(el) {
-				el.addEventListener('click', function() {
-					var target = document.querySelector(this.dataset.target);
-					if (target) {
-						target.checked = true;
-						document.querySelectorAll('.camp-container')
-							.forEach(c => c.classList.remove('border-primary'));
-						this.closest('.camp-container').classList.add('border', 'border-primary');
-					}
+			<script>
+				document.addEventListener("DOMContentLoaded", function() {
+					var modalEl = document.getElementById('choixCampagneModal');
+
+					var modal = new bootstrap.Modal(modalEl, {
+						backdrop: 'static',
+						keyboard: false
+					});
+					modal.show();
+					document.querySelectorAll('.select-camp').forEach(function(el) {
+						el.addEventListener('click', function() {
+							var target = document.querySelector(this.dataset.target);
+							if (target) {
+								target.checked = true;
+								document.querySelectorAll('.camp-container')
+									.forEach(c => c.classList.remove('border-primary'));
+								this.closest('.camp-container').classList.add('border', 'border-primary');
+							}
+						});
+					});
+
+					document.querySelector('.btn-primary').addEventListener('click', function(e) {
+						let selected = document.querySelector('input[name="camp_param"]:checked');
+						if (!selected) {
+							e.preventDefault();
+							e.stopPropagation();
+							alert("Veuillez sélectionner une campagne avant de valider.");
+						}
+					});
 				});
-			});
+			</script>
 
-			document.querySelector('.btn-primary').addEventListener('click', function(e) {
-				let selected = document.querySelector('input[name="camp_param"]:checked');
-				if (!selected) {
-					e.preventDefault();
-					e.stopPropagation();
-					alert("Veuillez sélectionner une campagne avant de valider.");
-				}
-			});
-		});
-
-
-		</script>
-
-	<?php endif; ?>
 		<?php endif; ?>
+	<?php endif; ?>
 	<div class="row no-gutters h-100">
 		<?php $this->load->view('layouts/client/onboarding/sidebar'); ?>
 
@@ -604,7 +604,7 @@
 								<button type="button" class="btn btn-outline-dark btn-block" data-toggle="modal" data-target="#modifier_Brief">
 									Brief campagne
 								</button>
-								
+
 								<?php //echo anchor('Validation/validation_structure/' . $C->idclients, $C->validation_technique, ['style' => 'color: white', 'data-edit' => $C->idclients, 'target' => '_blank']); 
 								?>
 							</div>
@@ -720,15 +720,15 @@
 													<?php endif; ?>
 												</td>
 												<td>
-													<?php if($u->statut_actif == 2): ?>
+													<?php if ($u->statut_actif == 2): ?>
 														<span class="badge alert-primary px-2 py-1">En cours</span>
-													<?php endif; ?> 
-													<?php if($u->statut_actif == 0): ?>
+													<?php endif; ?>
+													<?php if ($u->statut_actif == 0): ?>
 														<span class="badge alert-warning px-2 py-1">En attente</span>
-													<?php endif; ?> 
-													<?php if($u->statut_actif == 1): ?>
+													<?php endif; ?>
+													<?php if ($u->statut_actif == 1): ?>
 														<span class="badge alert-success px-2 py-1">En ligne</span>
-													<?php endif; ?>  		
+													<?php endif; ?>
 												</td>
 												<td>
 													<div class="dropdown no-arrow">
@@ -750,169 +750,169 @@
 							</div>
 						</div>
 					</div>
-				<!-- GTM -->
-				<h1 class="display-1 text-center my-5" style="font-size: 42px;">
-					Mise en place Google Tag manager
-				</h1>
+					<!-- GTM -->
+					<h1 class="display-1 text-center my-5" style="font-size: 42px;">
+						Mise en place Google Tag manager
+					</h1>
 
-				<div class="card mb-3">
-					<div class="card-body py-5 px-4">
-						<div class="row align-items-center">
+					<div class="card mb-3">
+						<div class="card-body py-5 px-4">
+							<div class="row align-items-center">
 
-							<div class="col-6 text-center">
-								<h3 class="mb-3" style="font-size: 32px; font-weight: 500;" id="gtm">Google Tag Manager</h3>
+								<div class="col-6 text-center">
+									<h3 class="mb-3" style="font-size: 32px; font-weight: 500;" id="gtm">Google Tag Manager</h3>
 
-								<?php if (!empty($d['tracking_gtm'])): ?>
-									<p class="text-muted" style="font-size: 18px; line-height: 150%;">
-										Action : Demander l’accès administrateur au conteneur GTM (gtm@adsrank.fr) et vérifier la configuration.
-									</p>
-								<?php endif; ?>
+									<?php if (!empty($d['tracking_gtm'])): ?>
+										<p class="text-muted" style="font-size: 18px; line-height: 150%;">
+											Action : Demander l’accès administrateur au conteneur GTM (gtm@adsrank.fr) et vérifier la configuration.
+										</p>
+									<?php endif; ?>
 
-								<?php if (empty($d['tracking_gtm'])): ?>
-									<p class="text-muted" style="font-size: 18px; line-height: 150%;">
-										Action : Vous pouvez activer la procédure GTM.
-									</p>
-								<?php endif; ?>
-							</div>
+									<?php if (empty($d['tracking_gtm'])): ?>
+										<p class="text-muted" style="font-size: 18px; line-height: 150%;">
+											Action : Vous pouvez activer la procédure GTM.
+										</p>
+									<?php endif; ?>
+								</div>
 
-							<div class="col-3">
-								<?php if (!empty($d['tracking_gtm'])): ?>
-									<span class="badge alert-success rounded-pill px-4 py-3" style="font-size: 14px; font-weight: 500;">
-										<i class="fa fa-circle mr-1" style="font-size: 10px;"></i>
-										<?php echo $d['tracking_gtm']; ?>
-									</span>
-								<?php endif; ?>
-
-								<?php if (empty($d['tracking_gtm'])): ?>
-									<span class="badge alert-danger rounded-pill px-4 py-3" style="font-size: 14px; font-weight: 500;">
-										<i class="fa fa-circle mr-1" style="font-size: 10px;"></i>
-										GTM non installé
-									</span>
-								<?php endif; ?>
-							</div>
-							<div class="col-3 text-center">
-								<?php if (empty($procedure_gtm)): ?>
-									<label class="toggle" aria-label="Activer procédure">
-										<input type="checkbox" class="activer-procedure"
-											data-idclient="<?php echo $d['idclients']; ?>"
-											data-am="<?php echo $d['initiative']; ?>"
-											data-assigned="<?php echo $d['account_manager']; ?>" />
-										<span class="switch">
-											<span class="knob"></span>
+								<div class="col-3">
+									<?php if (!empty($d['tracking_gtm'])): ?>
+										<span class="badge alert-success rounded-pill px-4 py-3" style="font-size: 14px; font-weight: 500;">
+											<i class="fa fa-circle mr-1" style="font-size: 10px;"></i>
+											<?php echo $d['tracking_gtm']; ?>
 										</span>
-									</label>
-								<?php else: ?>
-									<h2> Déja en place </h2>
-									<label class="toggle" aria-label="Activer procédure">
-										<input type="checkbox" class="activer-procedure"
-											data-idclient="<?php echo $d['idclients']; ?>"
-											data-am="<?php echo $d['initiative']; ?>"
-											data-assigned="<?php echo $d['account_manager']; ?>"
-											checked disabled />
-										<span class="switch">
-											<span class="knob"></span>
+									<?php endif; ?>
+
+									<?php if (empty($d['tracking_gtm'])): ?>
+										<span class="badge alert-danger rounded-pill px-4 py-3" style="font-size: 14px; font-weight: 500;">
+											<i class="fa fa-circle mr-1" style="font-size: 10px;"></i>
+											GTM non installé
 										</span>
-									</label>
-								<?php endif; ?>
+									<?php endif; ?>
+								</div>
+								<div class="col-3 text-center">
+									<?php if (empty($procedure_gtm)): ?>
+										<label class="toggle" aria-label="Activer procédure">
+											<input type="checkbox" class="activer-procedure"
+												data-idclient="<?php echo $d['idclients']; ?>"
+												data-am="<?php echo $d['initiative']; ?>"
+												data-assigned="<?php echo $d['account_manager']; ?>" />
+											<span class="switch">
+												<span class="knob"></span>
+											</span>
+										</label>
+									<?php else: ?>
+										<h2> Déja en place </h2>
+										<label class="toggle" aria-label="Activer procédure">
+											<input type="checkbox" class="activer-procedure"
+												data-idclient="<?php echo $d['idclients']; ?>"
+												data-am="<?php echo $d['initiative']; ?>"
+												data-assigned="<?php echo $d['account_manager']; ?>"
+												checked disabled />
+											<span class="switch">
+												<span class="knob"></span>
+											</span>
+										</label>
+									<?php endif; ?>
+								</div>
 							</div>
 						</div>
 					</div>
-				</div>
 
-				<!-- === MODAL POUR PARAMÈTRES DE CAMPAGNE === -->
-				<div class="modal fade" id="parametresCampagneModal" tabindex="-1" aria-labelledby="parametresCampagneLabel" aria-hidden="true">
-					<div class="modal-dialog modal-xl modal-dialog-centered">
-						<div class="modal-content">
-							<div class="modal-header">
-								<h1 class="modal-title fs-4" id="parametresCampagneLabel">Paramètres de la campagne</h1>
-								<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fermer"></button>
-							</div>
-							<div class="modal-body">
-								<p class="text-center text-muted" style="font-size: 18px;">
-									Pour atteindre les bonnes personnes, commencez par définir les paramètres clés de votre campagne
-								</p>
+					<!-- === MODAL POUR PARAMÈTRES DE CAMPAGNE === -->
+					<div class="modal fade" id="parametresCampagneModal" tabindex="-1" aria-labelledby="parametresCampagneLabel" aria-hidden="true">
+						<div class="modal-dialog modal-xl modal-dialog-centered">
+							<div class="modal-content">
+								<div class="modal-header">
+									<h1 class="modal-title fs-4" id="parametresCampagneLabel">Paramètres de la campagne</h1>
+									<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fermer"></button>
+								</div>
+								<div class="modal-body">
+									<p class="text-center text-muted" style="font-size: 18px;">
+										Pour atteindre les bonnes personnes, commencez par définir les paramètres clés de votre campagne
+									</p>
 
-								<div class="row row-cols-3 mt-4 mb-3">
-									<div class="col">
-										<div class="card conversion-container" data-value="ecommerce">
-											<div class="card-body text-center">
-												<div class="d-block mb-3">
-													<i class="fa fa-database" style="font-size: 22px;"></i>
+									<div class="row row-cols-3 mt-4 mb-3">
+										<div class="col">
+											<div class="card conversion-container" data-value="ecommerce">
+												<div class="card-body text-center">
+													<div class="d-block mb-3">
+														<i class="fa fa-database" style="font-size: 22px;"></i>
+													</div>
+													<h3>Site de vente</h3>
+													<p class="text-muted">A centralized repository storing all contact.</p>
 												</div>
-												<h3>Site de vente</h3>
-												<p class="text-muted">A centralized repository storing all contact.</p>
 											</div>
 										</div>
-									</div>
-									<div class="col">
-										<div class="card conversion-container" data-value="lead">
-											<div class="card-body text-center">
-												<div class="d-block mb-3">
-													<i class="fa fa-link" style="font-size: 22px;"></i>
+										<div class="col">
+											<div class="card conversion-container" data-value="lead">
+												<div class="card-body text-center">
+													<div class="d-block mb-3">
+														<i class="fa fa-link" style="font-size: 22px;"></i>
+													</div>
+													<h3>Site formulaire</h3>
+													<p class="text-muted">Setting tasks, follow-ups, or reminders.</p>
 												</div>
-												<h3>Site formulaire</h3>
-												<p class="text-muted">Setting tasks, follow-ups, or reminders.</p>
 											</div>
 										</div>
-									</div>
-									<div class="col">
-										<div class="card conversion-container" data-value="reservation">
-											<div class="card-body text-center">
-												<div class="d-block mb-3">
-													<i class="fa fa-cloud" style="font-size: 22px;"></i>
+										<div class="col">
+											<div class="card conversion-container" data-value="reservation">
+												<div class="card-body text-center">
+													<div class="d-block mb-3">
+														<i class="fa fa-cloud" style="font-size: 22px;"></i>
+													</div>
+													<h3>Site Réservation</h3>
+													<p class="text-muted">Automatically updating and enriching contact.</p>
 												</div>
-												<h3>Site Réservation</h3>
-												<p class="text-muted">Automatically updating and enriching contact.</p>
 											</div>
 										</div>
 									</div>
 								</div>
-							</div>
-							<div class="modal-footer d-flex justify-content-between">
-								<button type="button" class="btn btn-primary" id="btnActiverCampagne" disabled>Activer</button>
+								<div class="modal-footer d-flex justify-content-between">
+									<button type="button" class="btn btn-primary" id="btnActiverCampagne" disabled>Activer</button>
+								</div>
 							</div>
 						</div>
 					</div>
-				</div>
 
 
-				<!-- BRIEF -->
-				<h1 class="display-1 text-center mt-4" style="font-size: 42px;" id="campagne">
-					Campagne
-				</h1>
-			<button class="btn btn-dark py-3 px-5"
-					data-toggle="modal"
-					data-target="#budgetModal-<?= $d['idclients'] ?>">
-				Répartition budget
-			</button>
+					<!-- BRIEF -->
+					<h1 class="display-1 text-center mt-4" style="font-size: 42px;" id="campagne">
+						Campagne
+					</h1>
+					<button class="btn btn-dark py-3 px-5"
+						data-toggle="modal"
+						data-target="#budgetModal-<?= $d['idclients'] ?>">
+						Répartition budget
+					</button>
 
-				<div class="table-responsive">
-					<table class="table table-wrapper">
-						<thead class="bg-light text-muted">
-							<tr>
-								<th>ACTION</th>
-								<th>TYPE</th>
-								<th>CAMPAGNE</th>
-								<th>BUDGET</th>
-								<th>DEMANDE</th>
-								<th>STATUT</th>
-								<th></th> <!-- expand icon -->
-							</tr>
-						</thead>
-						<tbody>
-							<?php if (!empty($donne_valider)): ?>
-								<?php foreach ($donne_valider as $campagne): ?>
-									<!-- parent row -->
-									<tr>
-										<td>
-											<div class="dropdown no-arrow">
-												<a class="dropdown-toggle text-decoration-none" href="#" data-toggle="dropdown">
-													<i class="fa fa-ellipsis-v"></i>
-												</a>
-												<div class="dropdown-menu">
-													<a class="dropdown-item" href="<?= site_url("Client/campagne_edit/" . $idclients . "?id_camp=" . $campagne['idcampagne']) ?>">Modifier</a>
-													<a class="dropdown-item text-danger" href="<?= site_url("Client/supprimer_campagne/" . $campagne['idcampagne']) ?>" onclick="return confirm('Supprimer cette campagne ?');">Supprimer</a>
-													<!-- <php if ($campagne['type_campagne'] == 1): ?>
+					<div class="table-responsive">
+						<table class="table table-wrapper">
+							<thead class="bg-light text-muted">
+								<tr>
+									<th>ACTION</th>
+									<th>TYPE</th>
+									<th>CAMPAGNE</th>
+									<th>BUDGET</th>
+									<th>DEMANDE</th>
+									<th>STATUT</th>
+									<th></th> <!-- expand icon -->
+								</tr>
+							</thead>
+							<tbody>
+								<?php if (!empty($donne_valider)): ?>
+									<?php foreach ($donne_valider as $campagne): ?>
+										<!-- parent row -->
+										<tr>
+											<td>
+												<div class="dropdown no-arrow">
+													<a class="dropdown-toggle text-decoration-none" href="#" data-toggle="dropdown">
+														<i class="fa fa-ellipsis-v"></i>
+													</a>
+													<div class="dropdown-menu">
+														<a class="dropdown-item" href="<?= site_url("Client/campagne_edit/" . $idclients . "?id_camp=" . $campagne['idcampagne']) ?>">Modifier</a>
+														<a class="dropdown-item text-danger" href="<?= site_url("Client/supprimer_campagne/" . $campagne['idcampagne']) ?>" onclick="return confirm('Supprimer cette campagne ?');">Supprimer</a>
+														<!-- <php if ($campagne['type_campagne'] == 1): ?>
 															<a class="dropdown-item" href="<?= site_url("Googleads/ajout_groupeannonce/" . $campagne['idcampagne']) ?>">Ajouter Groupe</a>
 														<php elseif ($campagne['type_campagne'] == 2): ?>
 															<a class="dropdown-item" href="<?= site_url("Googleads/ajout_groupeannonce_local/" . $campagne['idcampagne']) ?>">Ajouter Groupe Local</a>
@@ -920,188 +920,188 @@
 															<a class="dropdown-item" href="<?= site_url("Googleads/ajout_groupeannonce_pmax/" . $campagne['idcampagne']) ?>">Ajouter Groupe PMax</a>
 														<php endif; ?>
 														-->
+													</div>
 												</div>
-											</div>
-										</td>
-										<td>
-											<?php
-											switch ($campagne['type_campagne']) {
-												case 1:
-													echo "Search";
-													break;
-												case 2:
-													echo "Local";
-													break;
-												case 3:
-													echo "PMax";
-													break;
-												default:
-													echo "Inconnu";
-													break;
-											}
-											?>
-										</td>
-										<td><?= htmlspecialchars($campagne['nom_campagne']) ?></td>
-										<td><?= isset($campagne['repartition_budget']) ? (float)$campagne['repartition_budget'] : 0 ?> €</td>
-										<td><span class="badge alert-primary">GTM</span></td>
-										<td>
-											<?php if (!empty($campagne['actif'])): ?>
-												<span class="badge alert-primary"><i class="fa fa-circle"></i> En cours</span>
-											<?php else: ?>
-												<span class="badge alert-success"><i class="fa fa-circle"></i> Terminée</span>
-											<?php endif; ?>
-										</td>
-										<td class="text-center">
-											<a data-toggle="collapse" href="#child<?= $campagne['idcampagne'] ?>" role="button" aria-expanded="false" aria-controls="child<?= $campagne['idcampagne'] ?>">
-												<i class="fa fa-chevron-down text-muted"></i>
+											</td>
+											<td>
+												<?php
+												switch ($campagne['type_campagne']) {
+													case 1:
+														echo "Search";
+														break;
+													case 2:
+														echo "Local";
+														break;
+													case 3:
+														echo "PMax";
+														break;
+													default:
+														echo "Inconnu";
+														break;
+												}
+												?>
+											</td>
+											<td><?= htmlspecialchars($campagne['nom_campagne']) ?></td>
+											<td><?= isset($campagne['repartition_budget']) ? (float)$campagne['repartition_budget'] : 0 ?> €</td>
+											<td><span class="badge alert-primary">GTM</span></td>
+											<td>
+												<?php if (!empty($campagne['actif'])): ?>
+													<span class="badge alert-primary"><i class="fa fa-circle"></i> En cours</span>
+												<?php else: ?>
+													<span class="badge alert-success"><i class="fa fa-circle"></i> Terminée</span>
+												<?php endif; ?>
+											</td>
+											<td class="text-center">
+												<a data-toggle="collapse" href="#child<?= $campagne['idcampagne'] ?>" role="button" aria-expanded="false" aria-controls="child<?= $campagne['idcampagne'] ?>">
+													<i class="fa fa-chevron-down text-muted"></i>
+												</a>
+											</td>
+										</tr>
+
+										<!-- child row -->
+										<tr id="child<?= $campagne['idcampagne'] ?>" class="collapse border-0">
+											<td colspan="7" class="border-0 p-0 pl-5">
+												<?php if (!empty($campagne['groupes_annonces'])): ?>
+													<table class="table table-wrapper mb-0">
+														<tbody>
+															<?php foreach ($campagne['groupes_annonces'] as $groupe): ?>
+																<tr>
+																	<td style="width: 200px;">
+																		<strong><?= htmlspecialchars($groupe['nom_groupe']) ?></strong>
+																	</td>
+																	<td style="width:500px;">
+																		<?= htmlspecialchars($groupe['contexte_groupes_annonces']) ?>
+																	</td>
+																	<td>
+																		<?php
+																		$mots = array_filter(array_map('trim', explode("\n", $groupe['mot_cle'])));
+																		$totalMots = count($mots);
+																		$motsAffiches = array_slice($mots, 0, 3);
+
+																		foreach ($motsAffiches as $mot) {
+																			echo '<span class="badge badge-secondary mr-1">' . htmlspecialchars($mot) . '</span>';
+																		}
+
+																		if ($totalMots > 3) {
+																			echo '<span class="badge badge-secondary mr-1">...</span>';
+																		}
+																		?>
+																	</td>
+
+																	<td>
+																		<?php if ($groupe['statut'] == 1): ?>
+																			<img src="<?= base_url('assets/images/icons/figma/CheckCircle.png') ?>" alt="Actif">
+																		<?php else: ?>
+																			<span class="text-muted">En cours</span>
+																		<?php endif; ?>
+																	</td>
+																	<td>
+
+																		<?php if ($groupe['statut'] == 1): ?>
+																			<a href="<?= base_url('Client/modifier_annonce/' . $groupe['idgroupe_annonce']) ?>" class="btn btn-sm google_btn">
+																				Modifier annonce
+																			</a>
+																		<?php else: ?>
+																			<a href="<?= base_url('Client/insertgroupeannonce/' . $groupe['idgroupe_annonce']) ?>" class="btn btn-sm google_btn">
+																				Creer annonce
+																			</a>
+																		<?php endif; ?>
+																	</td>
+																</tr>
+															<?php endforeach; ?>
+														</tbody>
+													</table>
+												<?php else: ?>
+													<em>Aucun groupe</em>
+												<?php endif; ?>
+											</td>
+										</tr>
+									<?php endforeach; ?>
+								<?php else: ?>
+									<tr>
+										<td colspan="7" class="text-center text-muted">Aucune campagne trouvée.</td>
+									</tr>
+								<?php endif; ?>
+							</tbody>
+						</table>
+
+					</div>
+
+					<button class="btn btn-dark" id="create_camp_button">
+						<img src="<?= base_url('assets/images/icons/figma/icon-plus.svg') ?>" alt="">
+						Création Nouvelle Campagne
+					</button>
+
+
+					<div id="camp_creation_step" class="d-none">
+						<p style="display: none;"><?= nl2br(htmlspecialchars($d['information_client'])); ?> </p>
+						<!-- CAMPAGNE -->
+						<div id="campagne_step" class="step active mb-4">
+							<h1 class="display-1 text-center mt-5" style="font-size: 42px;">
+								Choisissez votre objectif
+							</h1>
+							<p class="text-center text-muted" style="font-size: 18px;">
+								Sélectionner un objectif pour adapter votre expérience aux objectifs et aux paramètres qui fonctionneront le mieux pour votre campagne
+							</p>
+							<div class="row row-cols-3 mt-4 mb-3">
+								<div class="col">
+									<div class="card h-100 camp-type-container">
+										<div class="card-body">
+											<img src="<?= base_url('assets/images/icons/figma/content_icon.png') ?>" alt="" class="mb-3" width="110">
+											<h3>Search</h3>
+											<p class="text-muted">Create, customize, and manage email marketing campaigns.</p>
+											<a href="javascript:void(0);" class="stretched-link text-dark font-weight-bold select-conversion-type" data-target="#camp_1">
+												Discover More
+												<i class="fa fa-arrow-right"></i>
 											</a>
-										</td>
-									</tr>
-
-									<!-- child row -->
-									<tr id="child<?= $campagne['idcampagne'] ?>" class="collapse border-0">
-										<td colspan="7" class="border-0 p-0 pl-5">
-											<?php if (!empty($campagne['groupes_annonces'])): ?>
-												<table class="table table-wrapper mb-0">
-													<tbody>
-														<?php foreach ($campagne['groupes_annonces'] as $groupe): ?>
-															<tr>
-																<td style="width: 200px;">
-																	<strong><?= htmlspecialchars($groupe['nom_groupe']) ?></strong>
-																</td>
-																<td style="width:500px;">
-																	<?= htmlspecialchars($groupe['contexte_groupes_annonces']) ?>
-																</td>
-																<td>
-																	<?php
-																	$mots = array_filter(array_map('trim', explode("\n", $groupe['mot_cle'])));
-																	$totalMots = count($mots);
-																	$motsAffiches = array_slice($mots, 0, 3);
-
-																	foreach ($motsAffiches as $mot) {
-																		echo '<span class="badge badge-secondary mr-1">' . htmlspecialchars($mot) . '</span>';
-																	}
-
-																	if ($totalMots > 3) {
-																		echo '<span class="badge badge-secondary mr-1">...</span>';
-																	}
-																	?>
-																</td>
-
-																<td>
-																	<?php if ($groupe['statut'] == 1): ?>
-																		<img src="<?= base_url('assets/images/icons/figma/CheckCircle.png') ?>" alt="Actif">
-																	<?php else: ?>
-																		<span class="text-muted">En cours</span>
-																	<?php endif; ?>
-																</td>
-																<td>
-																	
-																	<?php if ($groupe['statut'] == 1): ?>
-																	<a href="<?= base_url('Client/modifier_annonce/' . $groupe['idgroupe_annonce']) ?>" class="btn btn-sm google_btn">
-																		Modifier annonce
-																	</a>
-																	<?php else: ?>
-																	<a href="<?= base_url('Client/insertgroupeannonce/' . $groupe['idgroupe_annonce']) ?>" class="btn btn-sm google_btn">
-																		Creer annonce
-																	</a>	
-																	<?php endif; ?>
-																</td>
-															</tr>
-														<?php endforeach; ?>
-													</tbody>
-												</table>
-											<?php else: ?>
-												<em>Aucun groupe</em>
-											<?php endif; ?>
-										</td>
-									</tr>
-								<?php endforeach; ?>
-							<?php else: ?>
-								<tr>
-									<td colspan="7" class="text-center text-muted">Aucune campagne trouvée.</td>
-								</tr>
-							<?php endif; ?>
-						</tbody>
-					</table>
-
-				</div>
-
-				<button class="btn btn-dark" id="create_camp_button">
-					<img src="<?= base_url('assets/images/icons/figma/icon-plus.svg') ?>" alt="">
-					Création Nouvelle Campagne
-				</button>
-
-
-				<div id="camp_creation_step" class="d-none">
-					<p style="display: none;"><?= nl2br(htmlspecialchars($d['information_client'])); ?> </p>
-					<!-- CAMPAGNE -->
-					<div id="campagne_step" class="step active mb-4">
-						<h1 class="display-1 text-center mt-5" style="font-size: 42px;">
-							Choisissez votre objectif
-						</h1>
-						<p class="text-center text-muted" style="font-size: 18px;">
-							Sélectionner un objectif pour adapter votre expérience aux objectifs et aux paramètres qui fonctionneront le mieux pour votre campagne
-						</p>
-						<div class="row row-cols-3 mt-4 mb-3">
-							<div class="col">
-								<div class="card h-100 camp-type-container">
-									<div class="card-body">
-										<img src="<?= base_url('assets/images/icons/figma/content_icon.png') ?>" alt="" class="mb-3" width="110">
-										<h3>Search</h3>
-										<p class="text-muted">Create, customize, and manage email marketing campaigns.</p>
-										<a href="javascript:void(0);" class="stretched-link text-dark font-weight-bold select-conversion-type" data-target="#camp_1">
-											Discover More
-											<i class="fa fa-arrow-right"></i>
-										</a>
-										<input type="radio" name="camp_type" id="camp_1" value="1" class="d-none">
+											<input type="radio" name="camp_type" id="camp_1" value="1" class="d-none">
+										</div>
+									</div>
+								</div>
+								<div class="col">
+									<div class="card h-100 camp-type-container">
+										<div class="card-body">
+											<img src="<?= base_url('assets/images/icons/figma/content_icon.png') ?>" alt="" class="mb-3" width="110">
+											<h3>Performance Max</h3>
+											<p class="text-muted">Tailor emails by segmenting contacts based on demographics, behavior.</p>
+											<a href="javascript:void(0);" class="stretched-link text-dark font-weight-bold select-conversion-type" data-target="#camp_3">
+												Discover More
+												<i class="fa fa-arrow-right"></i>
+											</a>
+											<input type="radio" name="camp_type" id="camp_3" value="3" class="d-none">
+										</div>
+									</div>
+								</div>
+								<div class="col">
+									<div class="card h-100 camp-type-container">
+										<div class="card-body">
+											<img src="<?= base_url('assets/images/icons/figma/relation_icon.png') ?>" alt="" class="mb-3" width="90">
+											<h3>Locale</h3>
+											<p class="text-muted">Create, customize, and manage email marketing campaigns.</p>
+											<a href="javascript:void(0);" class="stretched-link text-dark font-weight-bold select-conversion-type" data-target="#camp_2">
+												Discover More
+												<i class="fa fa-arrow-right"></i>
+											</a>
+											<input type="radio" name="camp_type" id="camp_2" value="2" class="d-none">
+										</div>
 									</div>
 								</div>
 							</div>
-							<div class="col">
-								<div class="card h-100 camp-type-container">
-									<div class="card-body">
-										<img src="<?= base_url('assets/images/icons/figma/content_icon.png') ?>" alt="" class="mb-3" width="110">
-										<h3>Performance Max</h3>
-										<p class="text-muted">Tailor emails by segmenting contacts based on demographics, behavior.</p>
-										<a href="javascript:void(0);" class="stretched-link text-dark font-weight-bold select-conversion-type" data-target="#camp_3">
-											Discover More
-											<i class="fa fa-arrow-right"></i>
-										</a>
-										<input type="radio" name="camp_type" id="camp_3" value="3" class="d-none">
-									</div>
-								</div>
+							<div class="d-flex justify-content-end align-items-center">
+								<button class="btn btn-dark px-4 float-right" id="final_button">Suivant</button>
 							</div>
-							<div class="col">
-								<div class="card h-100 camp-type-container">
-									<div class="card-body">
-										<img src="<?= base_url('assets/images/icons/figma/relation_icon.png') ?>" alt="" class="mb-3" width="90">
-										<h3>Locale</h3>
-										<p class="text-muted">Create, customize, and manage email marketing campaigns.</p>
-										<a href="javascript:void(0);" class="stretched-link text-dark font-weight-bold select-conversion-type" data-target="#camp_2">
-											Discover More
-											<i class="fa fa-arrow-right"></i>
-										</a>
-										<input type="radio" name="camp_type" id="camp_2" value="2" class="d-none">
-									</div>
-								</div>
-							</div>
-						</div>
-						<div class="d-flex justify-content-end align-items-center">
-							<button class="btn btn-dark px-4 float-right" id="final_button">Suivant</button>
 						</div>
 					</div>
 				</div>
 			</div>
 		</div>
-	</div>
 
-	<?php $this->load->view('layouts/client/onboarding/modal/brief', ['d' => $d]) ?>
-	<?php $this->load->view('layouts/client/onboarding/modal/client') ?>
-	<?php $this->load->view('layouts/client/onboarding/modal/inventaire_pmax', ['groupe_valider' => $groupe_valider]) ?>
-	<?php $this->load->view('layouts/client/onboarding/modal/modifier_Brief', ['campagne' => $donne_valider]) ?>
-	<?php $this->load->view('layouts/client/onboarding/modal/change_statut') ?>
-	<?php
+		<?php $this->load->view('layouts/client/onboarding/modal/brief', ['d' => $d]) ?>
+		<?php $this->load->view('layouts/client/onboarding/modal/client') ?>
+		<?php $this->load->view('layouts/client/onboarding/modal/inventaire_pmax', ['groupe_valider' => $groupe_valider]) ?>
+		<?php $this->load->view('layouts/client/onboarding/modal/modifier_Brief', ['campagne' => $donne_valider]) ?>
+		<?php $this->load->view('layouts/client/onboarding/modal/change_statut') ?>
+		<?php
 		if (!empty($upsell) && is_array($upsell)) {
 			$last_upsell = end($upsell);
 			$d['last_type_upsell'] = isset($last_upsell->type_upsell) ? $last_upsell->type_upsell : null;
@@ -1112,25 +1112,26 @@
 		$this->load->view('layouts/client/onboarding/modal/budget', $d);
 		?>
 
-
-
+	</div>
 
 <?php endforeach; ?>
 <?php end_section(); ?>
 
-
 <?php start_section('script') ?>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
 <script>
-	$('#changestatutbudget').on('show.bs.modal', function (event) {
-  var button = $(event.relatedTarget); 
-  var id = button.data('id'); 
-  $('#idupsell').val(id); 
-});
-	$('#repartitionbudget').on('show.bs.modal', function (event) {
-  var button = $(event.relatedTarget); 
-  var id = button.data('id'); 
-  $('#idupsell').val(id); 
-});
+	$('#changestatutbudget').on('show.bs.modal', function(event) {
+		var button = $(event.relatedTarget);
+		var id = button.data('id');
+		$('#idupsell').val(id);
+	});
+	$('#repartitionbudget').on('show.bs.modal', function(event) {
+		var button = $(event.relatedTarget);
+		var id = button.data('id');
+		$('#idupsell').val(id);
+	});
 
 	$(document).ready(function() {
 		// Clic sur "Envoyer l’annonce"
@@ -1252,19 +1253,23 @@
 			});
 		});
 
-// --- Bouton "Créer nouvelle campagne" ---
-$('#create_camp_button').on('click', function () {
-  // Affiche la section si elle était cachée
-  $('#camp_creation_step').removeClass('d-none');
+		// --- Bouton "Créer nouvelle campagne" ---
+		$('#create_camp_button').on('click', function() {
+			// Affiche la section si elle était cachée
+			$('#camp_creation_step').removeClass('d-none');
 
-  // Laisse le DOM peindre, puis scroll jusqu'à la section dans son conteneur scrollable
-  requestAnimationFrame(() => {
-    const el = document.getElementById('campagne_step');
-    if (el) {
-      el.scrollIntoView({ behavior: 'smooth', block: 'start', inline: 'nearest' });
-    }
-  });
-});
+			// Laisse le DOM peindre, puis scroll jusqu'à la section dans son conteneur scrollable
+			requestAnimationFrame(() => {
+				const el = document.getElementById('campagne_step');
+				if (el) {
+					el.scrollIntoView({
+						behavior: 'smooth',
+						block: 'start',
+						inline: 'nearest'
+					});
+				}
+			});
+		});
 
 
 
