@@ -1,5 +1,4 @@
 <?php start_section('stylesheet') ?>
-<link rel="stylesheet" href="<?= base_url('assets/css/figma/inventaire/style.css') ?>">
 
 <style>
 	/* Bigger switch size */

@@ -1,8 +1,6 @@
 .figma-inventaire .dashboard {
   background-color: var(--color-tokens-color-tokens-background-primary);
   width: 100%;
-  max-width: min-content;
-  min-height: 2785px;
   position: relative;
 }
 
