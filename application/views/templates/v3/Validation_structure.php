@@ -8,8 +8,7 @@
 
 	<!-- Styles & librairies -->
 	<link href="<?php echo base_url('assets/css/font-awesome.all.min.css'); ?>" rel="stylesheet" />
-	<link href="<?php echo base_url('assets/css/figma/inventaire/style.css'); ?>" rel="stylesheet" />
-	<link href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+	<link href="<?php echo base_url('assets/vendors/bootstrap/css/bootstrap.css'); ?>" rel="stylesheet" />
 
 	<style>
 		:root {
@@ -386,24 +385,106 @@
 			line-height: 1;
 		}
 
-		@media (max-width:1440px) {
-			.device-frame.phone-frame {
-				width: 210px;
-				padding: 8px;
-			}
+		/* Icons & Labels */
+		.mockup-icon img {
+			width: 36px;
+			height: auto;
+		}
 
-			.device-frame .screen {
-				min-height: 340px;
-			}
+		.mockup-label {
+			font-weight: 500;
+			margin-top: 6px;
+			margin-bottom: 10px;
+			color: #333;
+		}
 
-			.mockup-icon {
-				width: 58px;
-				height: 58px;
-			}
+		.device-frame {
+			background: #fff;
+			border: 2px solid #ddd;
+			border-radius: 30px;
+			box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+			position: relative;
+			overflow: hidden;
+			display: inline-block;
+		}
 
-			.mockup-icon img {
-				max-width: 36px;
-			}
+		/* Phone */
+		.phone-frame {
+			width: 245px;
+			height: 430px;
+			border-radius: 30px;
+		}
+
+		.phone-frame::before {
+			content: "";
+			position: absolute;
+			top: 8px;
+			left: 50%;
+			width: 40px;
+			height: 4px;
+			background: #ccc;
+			border-radius: 10px;
+			transform: translateX(-50%);
+		}
+
+		/* Tablet */
+		.tablet-frame {
+			width: 400px;
+			height: 430px;
+			border-radius: 24px;
+		}
+
+		.tablet-frame::before {
+			content: "";
+			position: absolute;
+			top: 10px;
+			left: 50%;
+			width: 60px;
+			height: 5px;
+			background: #ccc;
+			border-radius: 10px;
+			transform: translateX(-50%);
+		}
+
+		/* Desktop */
+		.desktop-frame {
+			width: 600px;
+			height: 430px;
+			border-radius: 10px;
+			border: 4px solid #ccc;
+		}
+
+		.desktop-frame::before {
+			content: "";
+			position: absolute;
+			top: -18px;
+			left: 50%;
+			width: 120px;
+			height: 12px;
+			background: #ccc;
+			border-radius: 6px;
+			transform: translateX(-50%);
+		}
+
+		.desktop-frame::after {
+			content: "";
+			position: absolute;
+			bottom: -30px;
+			left: 50%;
+			width: 80px;
+			height: 6px;
+			background: #ccc;
+			border-radius: 3px;
+			transform: translateX(-50%);
+		}
+
+		/* Screen area */
+		.screen {
+			width: 100%;
+			height: 100%;
+			background: #f8f9f9ff;
+			overflow: hidden;
+			padding: 25px 15px 15px 15px;
 		}
 	</style>
 </head>
@@ -746,7 +827,7 @@
 			<?php foreach ($groupe_valider as $groupe): ?>
 				<?php if ($groupe['type_campagne'] == 3): ?>
 
-					<div class="row row-cols-5 mb-4 small" style="margin-left: 20px;">
+					<div class="row row-cols-5 mb-4 small">
 						<!-- YouTube -->
 						<div class="col-auto">
 							<div class=" device-frame phone-frame">
@@ -889,7 +970,7 @@
 									<div class="thumb-box mb-3" style="height: 220px;">
 										<img src=<?= $groupe['images'][3] ?? $groupe['images'][2] ?? $groupe['images'][1] ?? $groupe['images'][0] ?? "https://placehold.co/120x120?text=Discovery" ?> alt="placeholder">
 										<span class="bg-white position-absolute text-primary" style="right: 2px; top: 2px; padding: 0px 2px;">
-
+											<i class="fa fa-info-circle"></i>
 										</span>
 									</div>
 									<p><?= $groupe['descriptions1'] ?></p>
