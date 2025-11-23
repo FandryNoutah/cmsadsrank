@@ -231,10 +231,10 @@
 					</div>
 
 					<!-- SEARCH -->
-					<?php foreach ($groupe_valider as $groupe): ?>
-						<?php if ($groupe['type_campagne'] == 1): ?>
-							<div class="tab-pane fade" id="search" role="tabpanel" aria-labelledby="search_tab">
+					<div class="tab-pane fade" id="search" role="tabpanel" aria-labelledby="search_tab">
 
+						<?php foreach ($groupe_valider as $groupe): ?>
+							<?php if ($groupe['type_campagne'] == 1): ?>
 								<div class="row row-cols-3 justify-content-around  mb-4 small">
 
 									<!-- Search -->
@@ -406,14 +406,14 @@
 									</div>
 
 								</div>
-							</div>
-						<?php endif; ?>
-					<?php endforeach; ?>
+							<?php endif; ?>
+						<?php endforeach; ?>
+					</div>
 
 					<!-- LOCAL -->
-					<?php foreach ($groupe_valider as $groupe): ?>
-						<?php if ($groupe['type_campagne'] == 2): ?>
-							<div class="tab-pane fade" id="local" role="tabpanel" aria-labelledby="local_tab">
+					<div class="tab-pane fade" id="local" role="tabpanel" aria-labelledby="local_tab">
+						<?php foreach ($groupe_valider as $groupe): ?>
+							<?php if ($groupe['type_campagne'] == 2): ?>
 
 								<ul class="nav nav-tabs mb-4 d-flex justify-content-center" role="tablist">
 									<li class="nav-item">
@@ -547,9 +547,9 @@
 										</div>
 									</div>
 								</div>
-							</div>
-						<?php endif; ?>
-					<?php endforeach; ?>
+							<?php endif; ?>
+						<?php endforeach; ?>
+					</div>
 
 				</div>
 			</div>
