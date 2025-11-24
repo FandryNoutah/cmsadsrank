@@ -566,6 +566,19 @@
 			vertical-align: middle !important;
 		}
 
+		.thumb-box {
+			overflow: hidden;
+			position: relative;
+		}
+
+		.thumb-box img {
+			width: 100%;
+			height: 100%;
+			object-fit: cover;
+			object-position: center;
+			display: block;
+		}
+
 		/* Icons & Labels */
 		.mockup-icon img {
 			width: 36px;
