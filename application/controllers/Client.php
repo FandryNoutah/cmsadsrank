@@ -61,13 +61,16 @@ class Client extends MY_Controller
 	public function valider_campagne($idclients)
 	{
 				$statut_demande = 3;
+				$statut_valide  = 1;
 				$task = $this->Task_model->get_task_by_id_and_validation($idclients);
 				$onboarding = $this->visuels_model->get_last_onboarding_by_id($idclients);
 				$date_fin = $onboarding['annonce'];
+				$idonboarding = $onboarding['idonboarding'];
 				$id = intval($task->idtask);
 				$idtask = intval($task->idtask);
 				$am = intval($task->assigned_to);
 				$this->visuels_model->change_statut_en_demande($id, $statut_demande);
+				$this->visuels_model->change_statut_valider_client($idonboarding, $statut_valide);
 				$data = [
 					'status'	=>	"effectuée",
 				];
@@ -1364,12 +1367,17 @@ private function _scrape_images_from_site($url)
 		$idclients = $this->input->post('idclients');
 
 		$logo = $this->file_upload_field = "logo";
-		$logo = "";
+		$logo_field = "logo";
 		$this->upload->initialize($this->set_upload_options("", $_FILES["logo"]["name"]));
-		if ($this->upload->do_upload('logo') != null) {
 
-			$logo = $this->path . $this->upload->file_name;
+		if ($this->upload->do_upload($logo_field)) {
+			$logo = $this->path . $this->upload->data('file_name');
+		} else {
+			echo json_encode(['error' => $this->upload->display_errors()]);
+			return;
 		}
+
+
 		$this->Donne_modele->updatelogo($idclients, $logo);
 
 		redirect('Client/detail_client/' . $idclients);
@@ -1821,7 +1829,7 @@ private function _scrape_images_from_site($url)
     // Récupération des champs principaux
     $data = [
         'nom_campagne'          => $this->input->post('nom_campagne_search'),
-        'url'                   => $this->input->post('url_campagne'),
+        'url_site'                   => $this->input->post('url_campagne'),
         'information_campagne'  => $this->input->post('information_campagne_search'),
         'repartition_budget'    => $this->input->post('repartition_budget_search'),
         'zones'                 => $this->input->post('zone_search'),
@@ -1832,8 +1840,7 @@ private function _scrape_images_from_site($url)
         'date_campagne'         => $this->input->post('date_campagne'),
         'audience'              => $this->input->post('audience'),
         'appareil'              => $this->input->post('appareil'),
-        'youtube'               => $this->input->post('Youtube'),
-        'updated_at'            => date('Y-m-d H:i:s')
+        'youtube'               => $this->input->post('Youtube')
     ];
 
     // Mise à jour de la campagne principale
@@ -1847,22 +1854,39 @@ private function _scrape_images_from_site($url)
     if (!empty($groupes)) {
         $this->Donne_modele->delete_gp_by_idcampagne($id_campagne);
         foreach ($groupes as $i => $nom) {
-            if (trim($nom) === '') continue;
-            $this->Donne_modele->insert_gp([
-                'id_campagne' => $id_campagne,
-                'nom_groupe' => $nom,
-                'contexte_groupes_annonces' => $contextes[$i] ?? '',
-                'mot_cle' => $keywords[$i] ?? '',
-            ]);
-        }
+    if (trim($nom) === '') continue;
+
+    $this->Donne_modele->insert_gp_update([
+        'idcampagne'  => $id_campagne,
+        'nom_groupe'  => $nom,
+        'contexte_groupes_annonces' => $contextes[$i] ?? '',
+        'mot_cle'     => $keywords[$i] ?? '',
+        'idclients'   => $idclients
+    ]);
+}
+
     }
 
     // Mots-clés à exclure
     $mots_exclus = $this->input->post('Mots_cle_exclus');
     if ($mots_exclus !== null) {
-        $this->visuels_model->update_exclusions($idclients, $mots_exclus);
+        $this->visuels_model->update_exclusion_by_client($idclients, $exclusion);
     }
+	$campagne['images'] = $this->Image_model->get_images_by_campagne($campagne['idcampagne']) ?: [];
 
+				foreach ($campagne['images'] as &$img) {
+					if (!empty($img->image_url)) {
+						if (file_exists(FCPATH . $img->image_url)) {
+							$img->final_url = base_url($img->image_url);
+						} else {
+							$img->final_url = $img->image_url;
+						}
+					} else {
+						$img->final_url = base_url('assets/images/placeholder.jpg');
+					}
+				}
+
+				unset($img);
     // Redirection
     $this->session->set_flashdata('success', 'Campagne mise à jour avec succès.');
     redirect('Client/onboarding/' . $idclients);

@@ -1,3 +1,9 @@
+<style>
+	.sidebar span{
+		color: #282a2c;
+	}
+
+</style>
 <nav class="col-auto p-0 d-md-block sidebar collapse border-right" style="width: 250px;">
 	<div class="sidebar-sticky">
 		<ul class="nav flex-column pt-4 pb-3 px-2 border-bottom">

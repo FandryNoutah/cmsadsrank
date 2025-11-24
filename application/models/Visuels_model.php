@@ -13,6 +13,12 @@ class Visuels_model extends CI_Model {
 	protected $visuels_formats_images = "hm_visuels_formats_images";
     protected $_database;
     public $table_fields = array();
+	public function update_campagne($id_campagne, $data)
+{
+    $this->db->where('idcampagne', $id_campagne);
+    return $this->db->update('campagne', $data);
+}
+
 
 	public function get_last_onboarding_by_id($idclient)
 	{
@@ -124,6 +130,11 @@ public function get_groupes_by_campagne($idcampagne)
 		}
 	public function change_statut_en_demande($id,$statut_demande){
             $sql = "update donnee set statut_demande_en_cours='".$statut_demande."' where idclients ='".$id."'";
+            $this->db->query($sql);
+            $this->db->close();
+    }
+	public function change_statut_valider_client($idonboarding, $statut_valide){
+            $sql = "update onboarding set 	client_valider='".$statut_valide."' where idonboarding ='".$idonboarding."'";
             $this->db->query($sql);
             $this->db->close();
     }	

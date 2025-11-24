@@ -207,29 +207,6 @@ $images_site = isset($images_site) && is_array($images_site) ? $images_site : []
 						<textarea class="form-control" rows="15" name="Mots_cle_exclus"><?= isset($mots_exclus[0]['exclusion']) ? htmlentities($mots_exclus[0]['exclusion']) : '' ?></textarea>
 					</div>
 
-					<div class="form-group">
-						<label>Média : Lien Youtube</label>
-						<input type="text" name="Youtube" class="form-control" placeholder="Entrer lien youtube" value="<?= htmlentities($campagne->youtube ?? '') ?>">
-					</div>
-
-					<ul class="nav nav-tabs mb-3">
-						<li class="nav-item"><a class="nav-link py-3 active">Proposition d'images</a></li>
-						<button type="button" class="btn btn-outline-dark mb-3" data-toggle="modal" data-target="#modalGestionImages">
-							<i class="fa fa-images"></i> Gérer les images
-						</button>
-					</ul>
-
-					<div class="card mb-4" id="propositionImagesCard" style="<?= empty($images_site) ? 'display:none;' : '' ?>">
-						<div class="card-body">
-							<div class="row no-gutters" id="propositionImagesContainer">
-								<?php foreach ($images_site as $img): ?>
-									<div class="col-auto px-2 mb-3">
-										<img src="<?= $img ?>" alt="Image site client" width="120" style="object-fit: cover; border-radius: 4px; cursor:pointer;" class="img-proposition selected" data-url="<?= $img ?>">
-									</div>
-								<?php endforeach; ?>
-							</div>
-						</div>
-					</div>
 
 					<div class="d-flex justify-content-between mb-5">
 						<a href="<?= site_url('Client/campagne/'.$idclients.'?id_camp='.urlencode($id_camp)) ?>" class="btn btn-outline-secondary">Annuler</a>

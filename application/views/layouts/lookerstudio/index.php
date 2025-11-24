@@ -186,12 +186,42 @@
 												</span>
 											</a>
 										<?php else: ?>
-											<a href="#" onclick="alert('Aucun rapport disponible'); return false;">
-												<span class="badge alert-primary rounded-pill px-2 py-2" style="font-size: 12px; font-weight: 500;">
-													<i class="fa fa-circle mr-1" style="font-size: 10px;"></i>
-													Upcoming
-												</span>
-											</a>
+											<?php
+												$types = [
+													1 => ['label' => 'Search', 'class' => 'badge searsh'],
+													3 => ['label' => 'PMax',   'class' => 'badge pmax']
+												];
+
+												$ids = array_unique(array_map('trim', explode(',', $d->campagnes)));
+												sort($ids, SORT_NUMERIC);
+
+												// On vérifie si Search (1) ou PMax (3) existent
+												$hasSearchOrPmax = false;
+
+												foreach ($ids as $id) {
+													if (isset($types[$id])) {
+														
+														$hasSearchOrPmax = true;
+													}
+												}
+
+												if ($hasSearchOrPmax) {
+													// Afficher Upcoming
+													?>
+													<a href="#" onclick="alert('Aucun rapport disponible'); return false;">
+														<span class="badge alert-primary rounded-pill px-2 py-2"
+															style="font-size:12px; font-weight:500;">
+															<i class="fa fa-circle mr-1" style="font-size:10px;"></i>
+															Upcoming
+														</span>
+													</a>
+													<?php
+												} else {
+													// Rien trouvé → afficher un tiret
+													echo '-';
+												}
+												?>
+
 										<?php endif; ?>
 									</td>
 
@@ -204,12 +234,40 @@
 												</span>
 											</a>
 										<?php else: ?>
-											<a href="#" onclick="alert('Aucun rapport disponible'); return false;">
-												<span class="badge alert-primary rounded-pill px-2 py-2" style="font-size: 12px; font-weight: 500;">
-													<i class="fa fa-circle mr-1" style="font-size: 10px;"></i>
-													Upcoming
-												</span>
-											</a>
+											<?php
+												$types = [
+													3 => ['label' => 'PMax',   'class' => 'badge pmax']
+												];
+
+												$ids = array_unique(array_map('trim', explode(',', $d->campagnes)));
+												sort($ids, SORT_NUMERIC);
+
+												// On vérifie si Search (1) ou PMax (3) existent
+												$hasSearchOrPmax = false;
+
+												foreach ($ids as $id) {
+													if (isset($types[$id])) {
+														
+														$hasSearchOrPmax = true;
+													}
+												}
+
+												if ($hasSearchOrPmax) {
+													// Afficher Upcoming
+													?>
+													<a href="#" onclick="alert('Aucun rapport disponible'); return false;">
+														<span class="badge alert-primary rounded-pill px-2 py-2"
+															style="font-size:12px; font-weight:500;">
+															<i class="fa fa-circle mr-1" style="font-size:10px;"></i>
+															Upcoming
+														</span>
+													</a>
+													<?php
+												} else {
+													// Rien trouvé → afficher un tiret
+													echo '-';
+												}
+												?>
 										<?php endif; ?>
 										</td>
 										<td>
@@ -221,12 +279,7 @@
 												</span>
 											</a>
 										<?php else: ?>
-											<a href="#" onclick="alert('Aucun rapport disponible'); return false;">
-												<span class="badge alert-primary rounded-pill px-2 py-2" style="font-size: 12px; font-weight: 500;">
-													<i class="fa fa-circle mr-1" style="font-size: 10px;"></i>
-													Upcoming
-												</span>
-											</a>
+											-
 										<?php endif; ?>	
 										</td>
 										<td>
@@ -238,12 +291,7 @@
 												</span>
 											</a>
 										<?php else: ?>
-											<a href="#" onclick="alert('Aucun rapport disponible'); return false;">
-												<span class="badge alert-primary rounded-pill px-2 py-2" style="font-size: 12px; font-weight: 500;">
-													<i class="fa fa-circle mr-1" style="font-size: 10px;"></i>
-													Upcoming
-												</span>
-											</a>
+										-
 										<?php endif; ?>	
 										</td>
 										<td>

@@ -141,7 +141,9 @@
 							<?php if ($current_users != 1 && $current_users != 3  && $current_users != 2): ?>
 							<th>DataStudio</th>					
 							<?php endif; ?>
+							<?php if ($current_users != 3): ?>
 							<th>Email</th>
+							<?php endif; ?>
 							<?php if ($current_users == 2): ?>
 							<th>Facturation</th>
 							<?php endif; ?>
@@ -334,11 +336,21 @@
 											<?php endif; ?>	
 										<?php endif; ?>					
               						  <td>
-										<?= (!empty($d->date_validation_structure) && $d->date_validation_structure != '0000-00-00') ? anchor('Validation/validation_structure/' . $d->idclients, date('d-m-Y', strtotime($d->date_validation_structure)), ['target' => '_blank']) : '-' ?>
-              						  </td>
+										<?php if ($d->client_valider == 1):  ?>
+											<span class="badge alert-success rounded-pill px-2 py-1" style="font-size: 12px; font-weight: 500;">
+												<i class="fa fa-circle mr-1" style="font-size: 10px;"></i>
+												<?= (!empty($d->date_validation_structure) && $d->date_validation_structure != '0000-00-00') ? anchor('Validation/validation_structure/' . $d->idclients, date('d-m-Y', strtotime($d->date_validation_structure)), ['target' => '_blank', 'style' => 'color:#589e67 !important;']) : '-' ?>
+											</span>
+										<?php endif; ?>
+										<?php if ($d->client_valider == 0):  ?>
+												<?= (!empty($d->date_validation_structure) && $d->date_validation_structure != '0000-00-00') ? anchor('Validation/validation_structure/' . $d->idclients, date('d-m-Y', strtotime($d->date_validation_structure)), ['target' => '_blank']) : '-' ?>
+              						  
+										<?php endif; ?>
+										</td>
 									<?php endif; ?>		
 									  <td>
 										<?= (!empty($d->annonce) && $d->annonce != '0000-00-00') ? date('d-m-Y', strtotime($d->annonce)) : '-' ?>
+										
 									  </td>
 										<?php if ($current_users != 2): ?>			
 										<?php if ($current_users == 1): ?>		
@@ -352,7 +364,9 @@
 										
 									
 									<?php endif; ?>	
+									<?php if ($current_users != 3): ?>
 									<td><?= $d->email_onboarding ? 'Oui' : 'Non' ?></td>
+									<?php endif; ?>	
 									<?php if ($current_users == 2): ?>
 										<td><?= $d->facturation ? 'Oui' : 'Non' ?></td>
 										<?php endif; ?>	

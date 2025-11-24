@@ -282,7 +282,7 @@
 											<input type="file" name="logo" id="logo" style="display: none;" onchange="this.form.submit();">
 											<input type="hidden" name="idclients" value="<?= $d['idclients']; ?>">
 											<button type="button" class="btn btn-light btn-sm" onclick="document.getElementById('logo').click();">
-												<img src="<?php echo base_url($d['logo_client']); ?>" width="150" />
+												<img src="<?php echo base_url($d['logo_client']); ?>" width="100" />
 											</button>
 										</div>
 										<?php echo form_close(); ?>
@@ -290,7 +290,7 @@
 								</div>
 							</div>
 							<div class="row">
-								<div class="col-auto">
+								<div class="col-auto" style="text-align: center">
 									<ul class="nav nav-tabs mb-3" style="margin-top: -15px;">
 										<li class="nav-item">
 											<a class="nav-link py-2 active" type="button">
@@ -299,7 +299,7 @@
 										</li>
 									</ul>
 											<?php if($d['favicon'] != "https://www.memoriafuneraire.com/favicon.ico"): ?>	
-											<img src="<?= $d['favicon']; ?>" width="28" class="mr-2">
+											<img src="<?= $d['favicon']; ?>" width="30" class="mr-2">
 											<?php else: ?>
 											<img src="<?= base_url('assets/images/ico/default_favicon.png') ?>" width="28" class="mr-2">
 											<?php endif; ?>

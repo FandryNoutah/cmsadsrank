@@ -366,17 +366,34 @@
 							<?php if (in_array($t->type_tache, [1,5,6,7,8,9,10,11,12,18,15]) && mb_strtolower(trim($t->status)) == 'planifié'): ?>
 								<tr class="task-filter" data-type="<?= htmlspecialchars($t->type_tache) ?>" data-am="<?= htmlspecialchars($t->AM) ?>" data-assigned="<?= htmlspecialchars($t->assigned_to) ?>" data-expired="<?= ($t->expired) ? '1' : '0'; ?>" data-urgent="<?= ($t->Statuts_technique == 3) ? '1' : '0'; ?>" <?php if ($t->expired): ?> style="background-color: rgba(255, 0, 0, 0.05);" <?php endif; ?> >
 									<td>
-										<h6 class="mb-0 ml-3"><?= htmlspecialchars($t->nom_client) ?></h6>
+										<?php if($t->title == "Création de Brief"): ?>
+										<a href="<?= base_url('Client/onboarding/' . $t->idclients . '#campagne') ?>" ><h6 class="mb-0 ml-3"><?= htmlspecialchars($t->nom_client) ?></h6></a>
+										<?php endif; ?>
+									</td>
+									<td>
+										<?php if($t->title == "Création de Brief"): ?>
+										<a href="<?= base_url('Client/onboarding/' . $t->idclients . '#campagne') ?>" ><h6 class="mb-0 ml-3"><?= htmlspecialchars($t->nom_client) ?></h6></a>
+										<?php endif; ?>
 									</td>
 									<td><span class="text-muted"><?= htmlspecialchars($t->title); ?></span></td>
 									<td><span class="text-muted"><img src="<?= base_url('assets/images/icons/figma/calendar.svg') ?>" alt=""> <?= htmlspecialchars($t->date_due); ?></span></td>
-									<td>
-										<div class="row">
-											<?php if ($t->type_tache == 3): ?><div class="mr-2"><span class="badge alert-success">GTM</span></div><?php endif; ?>
-											<?php if ($t->type_tache == 13): ?><div class="mr-2"><span class="badge alert-danger">Erreur optimisation GTM</span></div><?php endif; ?>
-											<?php if ($t->Statuts_technique == 3): ?><span class="col-auto mx-1 badge alert-danger">Urgent</span><?php endif; ?>
-										</div>
-									</td>
+										<td>
+											<div class="row">
+												<?php // type badges ?>
+												<?php if ($t->type_tache == 1): ?><div class="mr-2"><span class="badge alert-success">Team task</span></div><?php endif; ?>
+												<?php if ($t->type_tache == 2): ?><div class="mr-2"><span class="badge alert-success">Temporaire</span></div><?php endif; ?>
+												<?php if ($t->type_tache == 3): ?><div class="mr-2"><span class="badge alert-success">GTM</span></div><?php endif; ?>
+												<?php if ($t->type_tache == 4): ?><div class="mr-2"><span class="badge alert-success">Plan de taggage</span></div><?php endif; ?>
+												<?php if ($t->type_tache == 5): ?><div class="mr-2"><span class="badge alert-success">Upsell</span></div><?php endif; ?>
+												<?php if ($t->type_tache == 6): ?><div class="mr-2"><span class="badge alert-danger">Baisse</span></div><?php endif; ?>
+												<?php if ($t->type_tache == 7): ?><div class="mr-2"><span class="badge alert-danger">Résiliation</span></div><?php endif; ?>
+												<?php if ($t->type_tache == 8): ?><div class="mr-2"><span class="badge alert-warning">Mise en pause</span></div><?php endif; ?>
+												<?php if ($t->type_tache == 9): ?><div class="mr-2"><span class="badge alert-success">Relance</span></div><?php endif; ?>
+												<?php if ($t->type_tache == 10): ?><div class="mr-2"><span class="badge alert-success">Annonce</span></div><?php endif; ?>
+												<?php if ($t->type_tache == 15): ?><div class="mr-2"><span class="badge alert-success">Mise en ligne</span></div><?php endif; ?>
+												<?php if ($t->Statuts_technique == 3): ?><span class="col-auto mx-1 badge alert-danger">Urgent</span><?php endif; ?>
+											</div>
+										</td>
 									<td>
 										<div class="d-flex align-items-center avatar-group"><img src="<?= base_url(IMAGES_PATH . htmlspecialchars($t->AM_photo)); ?>" class="avatar rounded-circle bg-white" width="28" height="28" alt="AM"><img src="<?= base_url(IMAGES_PATH . htmlspecialchars($t->assigned_to_photo)); ?>" class="avatar rounded-circle bg-white" width="28" height="28" alt="Assigned"></div>
 									</td>

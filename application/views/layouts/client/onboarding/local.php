@@ -32,6 +32,12 @@
 		}
 	}
 </style>
+<style>
+	.sidebar span{
+		color: #282a2c;
+	}
+
+</style>
 <?php end_section(); ?>
 
 <?php start_section('content'); ?>

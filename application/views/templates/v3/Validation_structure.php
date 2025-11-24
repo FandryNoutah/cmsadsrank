@@ -354,7 +354,7 @@
 			left: 50%;
 			width: 40px;
 			height: 4px;
-			background: #ccc;
+			background: #fff;
 			border-radius: 10px;
 			transform: translateX(-50%);
 		}
@@ -373,7 +373,7 @@
 			left: 50%;
 			width: 60px;
 			height: 5px;
-			background: #ccc;
+			background: #fff;
 			border-radius: 10px;
 			transform: translateX(-50%);
 		}
@@ -383,7 +383,7 @@
 			width: 600px;
 			height: 430px;
 			border-radius: 10px;
-			border: 4px solid #ccc;
+			border: 4px solid #fff;
 		}
 
 		.desktop-frame::before {
@@ -393,7 +393,7 @@
 			left: 50%;
 			width: 120px;
 			height: 12px;
-			background: #ccc;
+			background: #fff;
 			border-radius: 6px;
 			transform: translateX(-50%);
 		}
@@ -405,7 +405,7 @@
 			left: 50%;
 			width: 80px;
 			height: 6px;
-			background: #ccc;
+			background: #fff;
 			border-radius: 3px;
 			transform: translateX(-50%);
 		}
@@ -414,7 +414,7 @@
 		.screen {
 			width: 100%;
 			height: 100%;
-			background: #f8f9f9ff;
+			background: #fff;
 			overflow: hidden;
 			padding: 25px 15px 15px 15px;
 		}

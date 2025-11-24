@@ -77,6 +77,11 @@ class Donne_modele extends CI_Model
     $this->session->set_flashdata('success', 'Campagne mise à jour avec succès.');
     redirect('Client/campagne/' . $idclients . '?id_camp=' . $id_campagne);
 }
+public function delete_gp_by_idcampagne($id_campagne)
+{
+    $this->db->where('idcampagne', $id_campagne);
+    return $this->db->delete('groupe_annonce');
+}
 
 
 	public function update_num_adresse($numero, $adresse, $idcampagne)
@@ -442,6 +447,24 @@ class Donne_modele extends CI_Model
 
 		return false;
 	}
+	public function insert_gp_update($groupe)
+{
+    $this->load->database();
+
+    // Nettoyage des mots-clés
+    $mots = is_array($groupe['mot_cle']) ? implode(', ', $groupe['mot_cle']) : $groupe['mot_cle'];
+
+    $data = [
+        'nom_groupe' => $groupe['nom_groupe'],
+        'contexte_groupes_annonces' => $groupe['contexte_groupes_annonces'],
+        'mot_cle' => $mots,
+        'idclients' => $groupe['idclients'],
+        'idcampagne' => $groupe['idcampagne']
+    ];
+
+    return $this->db->insert('groupe_annonce', $data);
+}
+
 
 	public function get_gp_by_idcampagne($idcampagne)
 	{
