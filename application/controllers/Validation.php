@@ -535,6 +535,8 @@ class Validation extends CI_Controller
 		$html = $this->load->view('templates/v3/Validation_structure_pdf', $this->data, true);
 		// $this->load->view('templates/v3/Validation_structure_pdf', $this->data);
 		
+		ob_clean();
+
 		$options = new Options();
 		$options->set('isRemoteEnabled', true);
 		$options->set('defaultFont', 'DejaVu Sans');
