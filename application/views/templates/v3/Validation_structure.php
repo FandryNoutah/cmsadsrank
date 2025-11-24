@@ -7,9 +7,8 @@
 	<title>Validation client — Campagne Google Ads</title>
 
 	<!-- Styles & librairies -->
-	<link href="<?php echo base_url('assets/css/font-awesome.all.min.css'); ?>" rel="stylesheet" />
-	<link href="<?php echo base_url('assets/vendors/bootstrap/css/bootstrap.css'); ?>" rel="stylesheet" />
-
+	<link href="<?= base_url('assets/vendors/bootstrap/css/bootstrap.css'); ?>" rel="stylesheet" />
+	<link href="<?= base_url('assets/css/font-awesome.all.min.css'); ?>" rel="stylesheet" />
 	<style>
 		.section {
 			background: var(--bg-card);
