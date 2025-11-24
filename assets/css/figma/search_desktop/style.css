@@ -1,0 +1,388 @@
+.figma-desktop-search .div-wrapper {
+  background-color: #ffffff;
+  border: 1px solid;
+  border-color: #000000;
+  width: 100%;
+  min-width: 970px;
+  height: 932px;
+  position: relative;
+}
+
+.figma-desktop-search .div-wrapper .text-wrapper {
+  position: absolute;
+  top: calc(50.00% + 366px);
+  left: calc(50.00% - 103px);
+  font-family: "Roboto", Helvetica;
+  font-weight: 500;
+  color: #ffffff;
+  font-size: 20px;
+  text-align: center;
+  letter-spacing: 0;
+  line-height: normal;
+  white-space: nowrap;
+}
+
+.figma-desktop-search .div-wrapper .overlap-group {
+  position: absolute;
+  width: 52px;
+  height: 23px;
+  top: 831px;
+  left: 582px;
+}
+
+.figma-desktop-search .div-wrapper .send-icon {
+  position: absolute;
+  width: 52px;
+  height: 23px;
+  top: 0;
+  left: 0;
+  display: flex;
+}
+
+.figma-desktop-search .div-wrapper .group {
+  background-image: url(./img/vector-2.svg);
+  margin-left: -0.0%;
+  width: 51.88px;
+  margin-right: 0.0%;
+  flex: 1;
+  position: relative;
+  background-size: 100% 100%;
+}
+
+.figma-desktop-search .div-wrapper .vector {
+  position: absolute;
+  width: 26.35%;
+  height: 26.40%;
+  top: 36.09%;
+  left: 36.25%;
+}
+
+.figma-desktop-search .div-wrapper .mask-group {
+  position: absolute;
+  top: 229px;
+  left: 756px;
+  width: 137px;
+  height: 124px;
+}
+
+.figma-desktop-search .div-wrapper .s-lection-des-plus {
+  position: absolute;
+  top: 410px;
+  left: 64px;
+  width: 654px;
+  font-family: "Open Sans", Helvetica;
+  font-weight: 400;
+  color: #000000;
+  font-size: 16px;
+  letter-spacing: 0;
+  line-height: normal;
+}
+
+.figma-desktop-search .div-wrapper .div {
+  position: absolute;
+  top: 491px;
+  left: 107px;
+  width: 373px;
+  font-family: "Open Sans", Helvetica;
+  font-weight: 400;
+  color: #000000;
+  font-size: 16px;
+  letter-spacing: 0;
+  line-height: normal;
+}
+
+.figma-desktop-search .div-wrapper .p {
+  position: absolute;
+  top: 865px;
+  left: 95px;
+  width: 239px;
+  font-family: "Open Sans", Helvetica;
+  font-weight: 400;
+  color: #000000;
+  font-size: 20px;
+  letter-spacing: 0;
+  line-height: normal;
+}
+
+.figma-desktop-search .div-wrapper .location-de-chalets {
+  position: absolute;
+  top: 360px;
+  left: 66px;
+  width: 738px;
+  font-family: "Open Sans", Helvetica;
+  font-weight: 400;
+  color: #0242a2;
+  font-size: 26px;
+  letter-spacing: 0;
+  line-height: normal;
+}
+
+.figma-desktop-search .div-wrapper .text-wrapper-2 {
+  top: 592px;
+  left: 57px;
+  position: absolute;
+  width: 643px;
+  font-family: "Open Sans", Helvetica;
+  font-weight: 400;
+  color: #000000;
+  font-size: 16px;
+  letter-spacing: 0;
+  line-height: normal;
+}
+
+.figma-desktop-search .div-wrapper .image {
+  top: 268px;
+  left: 71px;
+  width: 47px;
+  height: 47px;
+  aspect-ratio: 1;
+  position: absolute;
+  object-fit: cover;
+}
+
+.figma-desktop-search .div-wrapper .img {
+  top: 41px;
+  left: 393px;
+  width: 172px;
+  height: 58px;
+  aspect-ratio: 2.96;
+  position: absolute;
+  object-fit: cover;
+}
+
+.figma-desktop-search .div-wrapper .icon-phone {
+  position: absolute;
+  top: 508px;
+  left: 42px;
+  width: 24px;
+  height: 24px;
+}
+
+.figma-desktop-search .div-wrapper .fi-rr-marker {
+  position: absolute;
+  top: 490px;
+  left: 64px;
+  width: 22px;
+  height: 23px;
+}
+
+.figma-desktop-search .div-wrapper .vector-2 {
+  position: absolute;
+  width: 33.33%;
+  height: 33.33%;
+  top: 25.00%;
+  left: 33.33%;
+}
+
+.figma-desktop-search .div-wrapper .vector-3 {
+  position: absolute;
+  width: 83.79%;
+  height: 100.01%;
+  top: 0;
+  left: 8.11%;
+}
+
+.figma-desktop-search .div-wrapper .r-sidence-luxe-https {
+  position: absolute;
+  top: 255px;
+  left: 165px;
+  width: 549px;
+  font-family: "Open Sans", Helvetica;
+  font-weight: 400;
+  color: #000000;
+  font-size: 20px;
+  letter-spacing: 0;
+  line-height: normal;
+}
+
+.figma-desktop-search .div-wrapper .span {
+  font-weight: 600;
+}
+
+.figma-desktop-search .div-wrapper .text-wrapper-3 {
+  font-family: "Open Sans", Helvetica;
+  font-weight: 400;
+  color: #000000;
+  font-size: 20px;
+  letter-spacing: 0;
+}
+
+.figma-desktop-search .div-wrapper .location-de-chalets-2 {
+  top: 559px;
+  left: 57px;
+  width: 824px;
+  position: absolute;
+  font-family: "Open Sans", Helvetica;
+  font-weight: 400;
+  color: #0242a2;
+  font-size: 24px;
+  letter-spacing: 0;
+  line-height: normal;
+}
+
+.figma-desktop-search .div-wrapper .text-wrapper-4 {
+  top: 700px;
+  left: 54px;
+  position: absolute;
+  width: 643px;
+  font-family: "Open Sans", Helvetica;
+  font-weight: 400;
+  color: #000000;
+  font-size: 16px;
+  letter-spacing: 0;
+  line-height: normal;
+}
+
+.figma-desktop-search .div-wrapper .location-de-chalets-3 {
+  top: 667px;
+  left: 54px;
+  width: 675px;
+  position: absolute;
+  font-family: "Open Sans", Helvetica;
+  font-weight: 400;
+  color: #0242a2;
+  font-size: 24px;
+  letter-spacing: 0;
+  line-height: normal;
+}
+
+.figma-desktop-search .div-wrapper .line {
+  top: 743px;
+  left: 58px;
+  height: 5px;
+  position: absolute;
+  width: 637px;
+  object-fit: cover;
+}
+
+.figma-desktop-search .div-wrapper .rectangle {
+  position: absolute;
+  top: 113px;
+  left: 65px;
+  width: 855px;
+  height: 68px;
+  border-radius: 30px;
+  border: 1px solid;
+  border-color: #d8d8d8;
+  box-shadow: 0px 13px 26px -2px #0000001f;
+  backdrop-filter: blur(5px) brightness(100%);
+  -webkit-backdrop-filter: blur(5px) brightness(100%);
+}
+
+.figma-desktop-search .div-wrapper .line-2 {
+  top: 644px;
+  left: 57px;
+  height: 2px;
+  position: absolute;
+  width: 637px;
+  object-fit: cover;
+}
+
+.figma-desktop-search .div-wrapper .icon-arrow-left {
+  position: absolute;
+  width: 0;
+  height: 2.82%;
+  top: 62.58%;
+  left: 78.29%;
+  transform: rotate(177.98deg);
+}
+
+.figma-desktop-search .div-wrapper .vector-4 {
+  position: absolute;
+  width: 91.93%;
+  height: 95.57%;
+  top: -4.67%;
+  left: -2.97%;
+  transform: rotate(-177.98deg);
+}
+
+.figma-desktop-search .div-wrapper .vector-wrapper {
+  top: 74.70%;
+  left: 78.91%;
+  position: absolute;
+  width: 0;
+  height: 2.82%;
+  transform: rotate(177.98deg);
+}
+
+.figma-desktop-search .div-wrapper .text-wrapper-5 {
+  top: 802px;
+  left: 58px;
+  position: absolute;
+  width: 643px;
+  font-family: "Open Sans", Helvetica;
+  font-weight: 400;
+  color: #000000;
+  font-size: 16px;
+  letter-spacing: 0;
+  line-height: normal;
+}
+
+.figma-desktop-search .div-wrapper .location-de-chalets-4 {
+  top: 769px;
+  left: 58px;
+  width: 675px;
+  position: absolute;
+  font-family: "Open Sans", Helvetica;
+  font-weight: 400;
+  color: #0242a2;
+  font-size: 24px;
+  letter-spacing: 0;
+  line-height: normal;
+}
+
+.figma-desktop-search .div-wrapper .line-3 {
+  top: 845px;
+  left: 62px;
+  height: 5px;
+  position: absolute;
+  width: 637px;
+  object-fit: cover;
+}
+
+.figma-desktop-search .div-wrapper .img-wrapper {
+  top: 85.65%;
+  left: 79.33%;
+  position: absolute;
+  width: 0;
+  height: 2.82%;
+  transform: rotate(177.98deg);
+}
+
+.figma-desktop-search .div-wrapper .vector-5 {
+  position: absolute;
+  width: 91.93%;
+  height: 95.57%;
+  top: -4.67%;
+  left: -2.95%;
+  transform: rotate(-177.98deg);
+}
+
+.figma-desktop-search .div-wrapper .text-wrapper-6 {
+  position: absolute;
+  top: 233px;
+  left: 66px;
+  width: 135px;
+  font-family: "Open Sans", Helvetica;
+  font-weight: 600;
+  color: #000000;
+  font-size: 16px;
+  letter-spacing: 0;
+  line-height: normal;
+}
+
+.figma-desktop-search .div-wrapper .frame {
+  position: absolute;
+  top: 135px;
+  left: 872px;
+  width: 24px;
+  height: 24px;
+}
+
+.figma-desktop-search .div-wrapper .vector-6 {
+  position: absolute;
+  width: 75.00%;
+  height: 75.00%;
+  top: 12.50%;
+  left: 12.50%;
+}
