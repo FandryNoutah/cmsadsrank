@@ -137,7 +137,8 @@ class Task extends MY_Controller
 				$id = intval($task->idclients);
 				$idupsell = $task->idupsell;
 				$statut_upsell = 2;
-				$this->visuels_model->update_status_upsell($statut_upsell, $idupsell);
+
+				$this->visuels_model->update_status_upsell_en_ligne($statut_upsell, $idupsell, $id);
 			}
 			if ($task->title == "Mise en ligne - Booster") {
 				$statut_demande = 3;
@@ -153,6 +154,36 @@ class Task extends MY_Controller
 					$type_tache = 15;
 					$title = "Mise en ligne";
 					$description = "Veuiller mettre la campagne";
+					$Statuts_technique = 1;
+					$procedure_gtm = 4;
+					$tm = 23;
+					$date_debut = date('Y-m-d');
+					$date_fin = date('Y-m-d', strtotime($date_debut . ' +2 days'));
+
+					$data = array(
+						'type_tache' => $type_tache,
+						'date_demande' => $date_debut,
+						'date_due' => $date_fin,
+						'idclients' => $id,
+						'AM' => $am,
+						'assigned_to' => 23,
+						'title' => $title,
+						'Statuts_technique' => $Statuts_technique,
+						'procedure_gtm' => $procedure_gtm,
+						'description' => $description
+					);
+
+			$this->Task_model->add_task($data);
+				
+				
+			}
+			if ($task->title == "Reception invitation") {
+				$statut_demande = 3;
+				$id = intval($task->idclients);
+				$am = intval($task->AM);
+					$type_tache = 16;
+					$title = "Creation Plan de tagagge";
+					$description = "Veuiller completer le plan de taggage";
 					$Statuts_technique = 1;
 					$procedure_gtm = 4;
 					$tm = 23;

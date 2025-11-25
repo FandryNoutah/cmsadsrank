@@ -50,55 +50,55 @@
             
             <li class="nav-item rounded <?= ($this->uri->segment(1) == "Onboarding") ? 'active' : ''; ?>">
                 <a class="nav-link" href="<?= base_url('Onboarding') ?>">
-                    <img class="mr-2" src="<?= base_url('assets/images/icons/figma/AlignLeft.png') ?>" />
+                    <img class="mr-2" src="<?= base_url('assets/images/ico/icone/Stack.png') ?>" />
                     <span class="nav-label">Onboarding</span>
                 </a>
             </li>
 
             <li class="nav-item rounded <?= ($this->uri->segment(1) == "Client") ? 'active' : ''; ?>">
                 <a class="nav-link" href="<?= base_url('Client') ?>">
-                    <img class="mr-2" src="<?= base_url('assets/images/icons/figma/UserList.png') ?>" />
+                    <img class="mr-2" src="<?= base_url('assets/images/ico/icone/Users.png') ?>" />
                     <span class="nav-label">Vue Clients</span>
                 </a>
             </li>
 
             <li class="nav-item rounded <?= ($this->uri->segment(1) == "Task") ? 'active' : ''; ?>">
                 <a class="nav-link" href="<?= base_url('Task') ?>">
-                    <img class="mr-2" src="<?= base_url('assets/images/icons/figma/ClipboardText.png') ?>" />
+                    <img class="mr-2" src="<?= base_url('assets/images/ico/icone/CalendarPlus.png') ?>" />
                     <span class="nav-label">Tâches</span>
                 </a>
             </li>
 
             <li class="nav-item rounded <?= ($this->uri->segment(1) == "Notes") ? 'active' : ''; ?>">
                 <a class="nav-link" href="<?= base_url('Notes') ?>">
-                    <img class="mr-2" src="<?= base_url('assets/images/icons/figma/icon-noteblank.svg') ?>" />
+                    <img class="mr-2" src="<?= base_url('assets/images/ico/icone/PencilLine.png') ?>" />
                     <span class="nav-label">Notes</span>
                 </a>
             </li>
 
             <li class="nav-item rounded <?= ($this->uri->segment(1) == "Discussion") ? 'active' : ''; ?>">
                 <a class="nav-link" href="<?= base_url('Discussion'); ?>">
-                    <img class="mr-2" src="<?= base_url('assets/images/icons/figma/icon-envelope.svg') ?>" />
+                    <img class="mr-2" src="<?= base_url('assets/images/ico/icone/Stack.png') ?>" />
                     <span class="nav-label">Discussions</span>
                 </a>
             </li>
 
             <li class="nav-item rounded <?= ($this->uri->segment(1) == "Gtm") ? 'active' : ''; ?>">
                 <a class="nav-link" href="<?= base_url('Gtm') ?>">
-                    <img class="mr-2" src="<?= base_url('assets/images/icons/figma/GoogleLogo.png') ?>" />
+                    <img class="mr-2" src="<?= base_url('assets/images/ico/icone/ChatCircleText.png') ?>" />
                     <span class="nav-label">Suivi GTM</span>
                 </a>
             </li>
 
             <li class="nav-item rounded <?= ($this->uri->segment(1) == "Upsell") ? 'active' : ''; ?>">
                 <a class="nav-link" href="<?= base_url('Upsell') ?>">
-                    <img class="mr-2" src="<?= base_url('assets/images/icons/figma/TrendUp.png') ?>" />
+                    <img class="mr-2" src="<?= base_url('assets/images/ico/icone/CurrencyEur.png') ?>" />
                     <span class="nav-label">Suivi Budget</span>
                 </a>
             </li>
             <li class="nav-item rounded <?= ($this->uri->segment(1) == "Lookerstudio") ? 'active' : ''; ?>">
                 <a class="nav-link" href="<?= base_url('Lookerstudio') ?>">
-                    <img class="mr-2" src="<?= base_url('assets/images/icons/figma/TrendUp.png') ?>" />
+                    <img class="mr-2" src="<?= base_url('assets/images/ico/icone/ChartLineUp.png') ?>" />
                     <span class="nav-label">Looker Studio</span>
                 </a>
             </li>
@@ -108,7 +108,7 @@
             <h6 class="sidebar-heading nav-label text-muted font-weight-light ml-3">Planification</h6>
             <li class="nav-item rounded <?= ($this->uri->segment(1) == "Calendar") ? 'active' : ''; ?>">
                 <a class="nav-link" href="<?= base_url('Calendar'); ?>">
-                    <img class="mr-2" src="<?= base_url('assets/images/icons/figma/calendrier.png') ?>" />
+                    <img class="mr-2" src="<?= base_url('assets/images/ico/icone/CalendarPlus.png') ?>" />
                     <span class="nav-label">Calendrier</span>
                 </a>
             </li>
@@ -118,7 +118,7 @@
             <h6 class="sidebar-heading nav-label text-muted font-weight-light ml-3">Ressources humaines</h6>
             <li class="nav-item rounded <?= ($this->uri->segment(1) == "Conges") ? 'active' : ''; ?>">
                 <a class="nav-link" href="<?= base_url('Conges') ?>">
-                    <img class="mr-2" src="<?= base_url('assets/images/icons/figma/icon-briefcase.svg') ?>" />
+                    <img class="mr-2" src="<?= base_url('assets/images/ico/icone/SuitcaseSimple.png') ?>" />
                     <span class="nav-label">Congés <?php if($nbr_conge_en_cours != 0 && $current_user->tech == 3): ?> (<?php echo $nbr_conge_en_cours; ?>) <?php endif; ?></span>
                 </a>
             </li>
@@ -128,7 +128,7 @@
             <h6 class="sidebar-heading nav-label text-muted font-weight-light ml-3">Paramètres</h6>
             <li class="nav-item rounded <?= ($this->uri->segment(1) == "Utilisateur") ? 'active' : ''; ?>">
                 <a class="nav-link" href="<?= base_url('Utilisateur'); ?>">
-                    <img class="mr-2" src="<?= base_url('assets/images/icons/figma/icon-gear.svg') ?>" />
+                    <img class="mr-2" src="<?= base_url('assets/images/ico/icone/Gear.png') ?>" />
                     <span class="nav-label">Mon profil</span>
                 </a>
             </li>

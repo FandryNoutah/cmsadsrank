@@ -61,13 +61,13 @@ $images_site = isset($images_site) && is_array($images_site) ? $images_site : []
 					<li class="nav-item rounded">
 						<a class="nav-link text-secondary" href="#">
 							<img class="mr-2" src="<?= base_url('assets/images/icons/figma/icon-chartpie.svg') ?>" />
-							<span>Menu 1</span>
+							<span>Paramètre</span>
 						</a>
 					</li>
 					<li class="nav-item rounded">
 						<a class="nav-link text-secondary" href="#">
 							<img class="mr-2" src="<?= base_url('assets/images/icons/figma/icon-bell.svg') ?>" />
-							<span>Menu 2</span>
+							<span>Groupe d'annonce</span>
 						</a>
 					</li>
 				</ul>
@@ -75,9 +75,59 @@ $images_site = isset($images_site) && is_array($images_site) ? $images_site : []
 					<li class="nav-item rounded">
 						<a class="nav-link text-secondary" href="#">
 							<img class="mr-2" src="<?= base_url('assets/images/icons/figma/chartlineup.svg') ?>" />
-							<span>Exemple Menu</span>
+							<span>Asset média</span>
 						</a>
 					</li>
+				</ul>
+				<ul class="nav flex-column pt-4 pb-3 px-2 border-bottom">
+				<li class="nav-item rounded" style="margin-top: 10px;">
+					<a class="nav-link text-secondary">
+						<b>Budget total :</b> <?= (float)$donnees[0]['budget'] ?> €<br>
+						<hr>
+
+						<?php if (!empty($donne_valider)): ?>
+							<span><b>Répartition du budget par campagne</b></span><br>
+							<hr>
+
+							<?php 
+							// Calcul du total des budgets de campagnes validées
+							$totalCampagnes = 0;
+							foreach ($donne_valider as $campagnes) {
+								$totalCampagnes += isset($campagnes['repartition_budget']) ? (float)$campagnes['repartition_budget'] : 0;
+							}
+							?>
+
+							<?php foreach ($donne_valider as $campagnes): ?>
+								<p>
+									<b><?= htmlspecialchars($campagnes['nom_campagne']) ?> :</b> 
+									<?= isset($campagnes['repartition_budget']) ? (float)$campagnes['repartition_budget'] : 0 ?> € 
+								</p>
+							<?php endforeach; ?>
+
+							<hr>
+							<p><b>Total des budgets de campagnes :</b> <?= $totalCampagnes ?> €</p>
+
+							<?php if ($totalCampagnes > (float)$donnees[0]['budget']): ?>
+								<div class="alert alert-danger" role="alert">
+									⚠️ Attention : le total des budgets de campagnes (<?= $totalCampagnes ?> €)
+									dépasse le budget total autorisé (<?= (float)$donnees[0]['budget'] ?> €) !
+								</div>
+
+							<?php elseif ($totalCampagnes == (float)$donnees[0]['budget']): ?>
+								<div class="alert alert-success" role="alert">
+									✅ Parfait : le total des budgets de campagnes est exactement égal au budget total (<?= $totalCampagnes ?> €) !
+								</div>
+
+							<?php else: ?>
+								<div class="alert alert-warning" role="alert">
+									⚠️ Il reste encore du budget à utiliser : 
+									<?= (float)$donnees[0]['budget'] - $totalCampagnes ?> € sur <?= (float)$donnees[0]['budget'] ?> €.
+								</div>
+							<?php endif; ?>
+						<?php endif; ?>
+						
+					</a>
+				</li>
 				</ul>
 			</div>
 		</nav>

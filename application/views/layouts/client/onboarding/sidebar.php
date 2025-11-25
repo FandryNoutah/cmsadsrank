@@ -46,7 +46,7 @@
 										
 	
 	<li class="nav-item rounded" style="margin-top: 10px;">
-    <a class="nav-link text-secondary" href="#campagne">
+    <a class="nav-link text-secondary">
         <b>Budget total :</b> <?= (float)$donnees[0]['budget'] ?> €<br>
         <hr>
 

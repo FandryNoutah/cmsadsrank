@@ -256,6 +256,11 @@ public function get_gtm($idclients) {
 		$this->db->query($sql);
 		$this->db->close();
 	}
+	public function update_status_upsell_en_ligne($statut_upsell, $idupsell, $id){
+		$sql = "update onboarding set statut_upsell='".$statut_upsell."' where idupsell='".$idupsell."' AND idclients='".$id."'";
+		$this->db->query($sql);
+		$this->db->close();
+	}
 	public function update_status_upsell($statut_upsell, $idupsell){
 		$sql = "update onboarding set statut_upsell='".$statut_upsell."' where idupsell='".$idupsell."'";
 		$this->db->query($sql);

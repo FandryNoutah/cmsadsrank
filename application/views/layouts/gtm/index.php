@@ -46,6 +46,15 @@
 .table-wrapper td:nth-child(7) { width: 120px; } /* Status */
 .table-wrapper th:nth-child(8),
 .table-wrapper td:nth-child(8) { width: 50px; }  /* Actions */
+/* Désactiver l'overflow HIDDEN uniquement sur la colonne Actions */
+.table-wrapper td:last-child,
+.table-wrapper th:last-child {
+    overflow: visible !important;
+}
+.table-wrapper td:last-child {
+    position: relative !important;
+}
+
 </style>
 <?php end_section(); ?>
 
@@ -91,12 +100,12 @@
             <label class="btn btn-white rounded-pill mx-2 text-muted" style="font-size: 14px;">
                 <input type="radio" class="status-select" name="gtm_status_filter" value="2">
                 <i class="fa fa-circle mr-2" style="font-size: 10px; color: #B1AD1B;"></i>
-                Pause
+                En attente
             </label>
             <label class="btn btn-white rounded-pill mx-2 text-muted" style="font-size: 14px;">
                 <input type="radio" class="status-select" name="gtm_status_filter" value="3">
                 <i class="fa fa-circle mr-2" style="font-size: 10px; color: #AF4B4B;"></i>
-                Résilier
+                Non reçu
             </label>
         </div>
 
@@ -233,17 +242,17 @@
                 <label class="btn btn-white rounded-pill mx-2 text-muted" style="font-size: 14px;">
                     <input type="radio" class="status-select" name="optim_status_filter" value="1">
                     <i class="fa fa-circle mr-2" style="font-size: 10px; color: #589E67;"></i>
-                    Active
+                    Implémenté
                 </label>
                 <label class="btn btn-white rounded-pill mx-2 text-muted" style="font-size: 14px;">
                     <input type="radio" class="status-select" name="optim_status_filter" value="2">
                     <i class="fa fa-circle mr-2" style="font-size: 10px; color: #B1AD1B;"></i>
-                    Pause
+                    à verifier
                 </label>
                 <label class="btn btn-white rounded-pill mx-2 text-muted" style="font-size: 14px;">
                     <input type="radio" class="status-select" name="optim_status_filter" value="3">
                     <i class="fa fa-circle mr-2" style="font-size: 10px; color: #AF4B4B;"></i>
-                    Résilier
+                    Erreur
                 </label>
             </div>
 

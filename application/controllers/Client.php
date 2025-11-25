@@ -2050,6 +2050,27 @@ public function update_brief()
 		//$mots_exclus = $campagne[]
 		//$this->data["mots_exclus"]
 		$this->data["mots_exclus"] = $this->visuels_model->get_exclusions($idclients);
+		
+		$donne_valider = $this->Donne_modele->getcclientvalidationbyidclients($idclients);
+			$groupe_valider = $this->Donne_modele->getcampagnegroupevalidationbyidclients($idclients);
+			$groupes_par_campagne = [];
+
+			foreach ($groupe_valider as $groupe) {
+				$idcampagne = $groupe['idcampagne'];
+				if (!isset($groupes_par_campagne[$idcampagne])) {
+					$groupes_par_campagne[$idcampagne] = [];
+				}
+				$groupes_par_campagne[$idcampagne][] = $groupe;
+			}
+
+			foreach ($donne_valider as &$campagne) {
+				$idcampagne = $campagne['idcampagne'];
+				$campagne['groupes_annoncess'] = isset($groupes_par_campagne[$idcampagne]) ? $groupes_par_campagne[$idcampagne] : [];
+			}
+			unset($campagne);
+			$this->data['donne_valider'] = $donne_valider;
+			$this->data['groupe_valider'] = $groupe_valider;
+
 		$this->content = "layouts/client/onboarding/" . $type_page[$camp_type] . ".php";
 		$this->layout();
 	}
