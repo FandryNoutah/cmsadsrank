@@ -470,7 +470,7 @@ class Validation extends CI_Controller
 		unset($campagne);
 		$this->data['donne_valider'] = $donne_valider;
 		$this->data['groupe_valider'] = $groupe_valider;
-		$this->load->view('templates/v3/Search', $this->data);
+		$this->load->view('templates/v3/Test_inventaire', $this->data);
 	}
 
 	public function exporter(int $id)
