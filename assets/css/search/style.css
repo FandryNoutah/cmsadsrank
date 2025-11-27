@@ -1,0 +1,1079 @@
+.box {
+  width: 100%;            /* éviter valeurs fixes énormes */
+  max-width: 1400px;      /* limite raisonnable pour desktop */
+  min-height: 600px;
+  
+}
+
+.box .group {
+  position: relative;     /* ne plus fixer hors écran */
+  top: 0;
+  left: 0;
+  height: auto;
+  display: flex;
+  flex-wrap: wrap;        /* pour rendre responsive */
+  padding: 40px;          /* réduire padding pour test */
+  align-items: flex-start;
+  min-width: 0;           /* important pour éviter débordement */
+  background-color: transparent;
+}
+.box .group-wrapper {
+  display: flex;
+  align-items: flex-start;
+  min-width: 1951px;
+}
+
+.box .div-wrapper {
+  width: 1951px;
+  display: flex;
+}
+
+.box .div {
+  width: 1953px;
+  height: 1138px;
+  position: relative;
+}
+
+.box .frame {
+  position: absolute;
+  top: 206px;
+  left: 0;
+  width: 1033px;
+  height: 932px;
+}
+
+.box .div-2 {
+  top: 0;
+  left: 0;
+  width: 970px;
+  position: absolute;
+  height: 932px;
+  background-color: #ffffff;
+  border-radius: 50px;
+  overflow: hidden;
+  border: 1px solid;
+  border-color: #000000;
+}
+
+.box .text-wrapper {
+  position: absolute;
+  top: calc(50.00% + 366px);
+  left: calc(50.00% - 103px);
+  font-family: "Roboto", Helvetica;
+  font-weight: 500;
+  color: #ffffff;
+  font-size: 20px;
+  text-align: center;
+  letter-spacing: 0;
+  line-height: normal;
+  white-space: nowrap;
+}
+
+.box .overlap-group {
+  position: absolute;
+  width: 52px;
+  height: 23px;
+  top: 831px;
+  left: 582px;
+}
+
+.box .send-icon {
+  position: absolute;
+  width: 52px;
+  height: 23px;
+  top: 0;
+  left: 0;
+  display: flex;
+}
+
+.box .vector-wrapper {
+  margin-left: -0.0%;
+  width: 51.88px;
+  margin-right: 0.0%;
+  flex: 1;
+  position: relative;
+  background-image: url(./img/vector-2.svg);
+  background-size: 100% 100%;
+}
+
+.box .vector {
+  position: absolute;
+  width: 26.35%;
+  height: 26.40%;
+  top: 36.09%;
+  left: 36.25%;
+}
+
+.box .mask-group {
+  position: absolute;
+  top: 229px;
+  left: 756px;
+  width: 137px;
+  height: 124px;
+}
+
+.box .s-lection-des-plus {
+  top: 410px;
+  left: 64px;
+  width: 654px;
+  position: absolute;
+  font-family: "Open Sans", Helvetica;
+  font-weight: 400;
+  color: #000000;
+  font-size: 16px;
+  letter-spacing: 0;
+  line-height: normal;
+}
+
+.box .p {
+  top: 491px;
+  left: 107px;
+  position: absolute;
+  width: 373px;
+  font-family: "Open Sans", Helvetica;
+  font-weight: 400;
+  color: #000000;
+  font-size: 16px;
+  letter-spacing: 0;
+  line-height: normal;
+}
+
+.box .text-wrapper-2 {
+  position: absolute;
+  top: 865px;
+  left: 95px;
+  width: 239px;
+  font-family: "Open Sans", Helvetica;
+  font-weight: 400;
+  color: #000000;
+  font-size: 20px;
+  letter-spacing: 0;
+  line-height: normal;
+}
+
+.box .location-de-chalets {
+  top: 360px;
+  left: 66px;
+  width: 738px;
+  font-size: 26px;
+  position: absolute;
+  font-family: "Open Sans", Helvetica;
+  font-weight: 400;
+  color: #0242a2;
+  letter-spacing: 0;
+  line-height: normal;
+}
+
+.box .text-wrapper-3 {
+  top: 592px;
+  left: 57px;
+  width: 643px;
+  position: absolute;
+  font-family: "Open Sans", Helvetica;
+  font-weight: 400;
+  color: #000000;
+  font-size: 16px;
+  letter-spacing: 0;
+  line-height: normal;
+}
+
+.box .image {
+  top: 268px;
+  left: 71px;
+  width: 47px;
+  height: 47px;
+  aspect-ratio: 1;
+  position: absolute;
+  object-fit: cover;
+}
+
+.box .img {
+  top: 41px;
+  left: 393px;
+  width: 172px;
+  height: 58px;
+  aspect-ratio: 2.96;
+  position: absolute;
+  object-fit: cover;
+}
+
+.box .icon-phone {
+  position: absolute;
+  top: 508px;
+  left: 42px;
+  width: 24px;
+  height: 24px;
+}
+
+.box .fi-rr-marker {
+  position: absolute;
+  top: 490px;
+  left: 64px;
+  width: 22px;
+  height: 23px;
+}
+
+.box .vector-2 {
+  position: absolute;
+  width: 33.33%;
+  height: 33.33%;
+  top: 25.00%;
+  left: 33.34%;
+}
+
+.box .vector-3 {
+  position: absolute;
+  width: 83.79%;
+  height: 100.01%;
+  top: 0;
+  left: 8.11%;
+}
+
+.box .r-sidence-luxe-https {
+  top: 255px;
+  left: 165px;
+  width: 549px;
+  font-size: 20px;
+  position: absolute;
+  font-family: "Open Sans", Helvetica;
+  font-weight: 400;
+  color: #000000;
+  letter-spacing: 0;
+  line-height: normal;
+}
+
+.box .span {
+  font-weight: 600;
+}
+
+.box .text-wrapper-4 {
+  font-family: "Open Sans", Helvetica;
+  font-weight: 400;
+  color: #000000;
+  font-size: 20px;
+  letter-spacing: 0;
+}
+
+.box .location-de-chalets-2 {
+  top: 559px;
+  left: 57px;
+  width: 824px;
+  font-size: 24px;
+  position: absolute;
+  font-family: "Open Sans", Helvetica;
+  font-weight: 400;
+  color: #0242a2;
+  letter-spacing: 0;
+  line-height: normal;
+}
+
+.box .text-wrapper-5 {
+  top: 700px;
+  left: 54px;
+  width: 643px;
+  position: absolute;
+  font-family: "Open Sans", Helvetica;
+  font-weight: 400;
+  color: #000000;
+  font-size: 16px;
+  letter-spacing: 0;
+  line-height: normal;
+}
+
+.box .location-de-chalets-3 {
+  top: 667px;
+  left: 54px;
+  width: 675px;
+  font-size: 24px;
+  position: absolute;
+  font-family: "Open Sans", Helvetica;
+  font-weight: 400;
+  color: #0242a2;
+  letter-spacing: 0;
+  line-height: normal;
+}
+
+.box .line {
+  top: 743px;
+  left: 58px;
+  width: 637px;
+  height: 5px;
+  position: absolute;
+  object-fit: cover;
+}
+
+.box .rectangle {
+  left: 65px;
+  width: 855px;
+  position: absolute;
+  top: 113px;
+  height: 68px;
+  border-radius: 30px;
+  border: 1px solid;
+  border-color: #d8d8d8;
+  box-shadow: 0px 13px 26px -2px #0000001f;
+  backdrop-filter: blur(5px) brightness(100%);
+  -webkit-backdrop-filter: blur(5px) brightness(100%);
+}
+
+.box .line-2 {
+  top: 644px;
+  left: 57px;
+  width: 637px;
+  height: 2px;
+  position: absolute;
+  object-fit: cover;
+}
+
+.box .icon-arrow-left {
+  position: absolute;
+  width: 0;
+  height: 2.82%;
+  top: 62.58%;
+  left: 78.29%;
+  transform: rotate(177.98deg);
+}
+
+.box .vector-4 {
+  position: absolute;
+  width: 91.93%;
+  height: 95.57%;
+  top: -4.66%;
+  left: -2.97%;
+  transform: rotate(-177.98deg);
+}
+
+.box .img-wrapper {
+  height: 2.82%;
+  top: 74.70%;
+  left: 78.91%;
+  transform: rotate(177.98deg);
+  position: absolute;
+  width: 0;
+}
+
+.box .text-wrapper-6 {
+  top: 802px;
+  left: 58px;
+  width: 643px;
+  position: absolute;
+  font-family: "Open Sans", Helvetica;
+  font-weight: 400;
+  color: #000000;
+  font-size: 16px;
+  letter-spacing: 0;
+  line-height: normal;
+}
+
+.box .location-de-chalets-4 {
+  top: 769px;
+  left: 58px;
+  width: 675px;
+  font-size: 24px;
+  position: absolute;
+  font-family: "Open Sans", Helvetica;
+  font-weight: 400;
+  color: #0242a2;
+  letter-spacing: 0;
+  line-height: normal;
+}
+
+.box .line-3 {
+  top: 845px;
+  left: 62px;
+  width: 637px;
+  height: 5px;
+  position: absolute;
+  object-fit: cover;
+}
+
+.box .icon-arrow-left-2 {
+  height: 2.82%;
+  top: 85.65%;
+  left: 79.33%;
+  transform: rotate(177.98deg);
+  position: absolute;
+  width: 0;
+}
+
+.box .text-wrapper-7 {
+  top: 233px;
+  left: 66px;
+  position: absolute;
+  width: 135px;
+  font-family: "Open Sans", Helvetica;
+  font-weight: 600;
+  color: #000000;
+  font-size: 16px;
+  letter-spacing: 0;
+  line-height: normal;
+}
+
+.box .frame-2 {
+  position: absolute;
+  top: 135px;
+  left: 872px;
+  width: 24px;
+  height: 24px;
+}
+
+.box .vector-5 {
+  position: absolute;
+  width: 75.00%;
+  height: 75.00%;
+  top: 12.50%;
+  left: 12.50%;
+}
+
+.box .vector-6 {
+  position: absolute;
+  width: 0;
+  height: 2.15%;
+  top: 92.73%;
+  left: 5.93%;
+}
+
+.box .div-3 {
+  top: 206px;
+  left: 1033px;
+  width: 430px;
+  position: absolute;
+  height: 932px;
+  background-color: #ffffff;
+  border-radius: 50px;
+  overflow: hidden;
+  border: 1px solid;
+  border-color: #000000;
+}
+
+.box .heart-icon {
+  position: absolute;
+  width: 5.12%;
+  height: 2.12%;
+  top: 24.86%;
+  left: 58.14%;
+  background-image: url(./img/vector-11.svg);
+  background-size: 100% 100%;
+}
+
+.box .image-2 {
+  top: 337px;
+  left: 134px;
+  width: 36px;
+  height: 35px;
+  aspect-ratio: 1.03;
+  position: absolute;
+  object-fit: cover;
+}
+
+.box .text-wrapper-8 {
+  position: absolute;
+  top: 548px;
+  left: 134px;
+  width: 209px;
+  font-family: "Roboto", Helvetica;
+  font-weight: 500;
+  color: #ffffff;
+  font-size: 16px;
+  text-align: center;
+  letter-spacing: 0;
+  line-height: normal;
+}
+
+.box .icon-home {
+  position: absolute;
+  width: 5.35%;
+  height: 2.47%;
+  top: 92.70%;
+  left: 6.05%;
+  background-image: url(./img/vector-36.svg);
+  background-size: 100% 100%;
+}
+
+.box .icon-clock {
+  position: absolute;
+  width: 22px;
+  height: 22px;
+  top: 864px;
+  left: 142px;
+  display: flex;
+}
+
+.box .group-2 {
+  flex: 1;
+  width: 22px;
+  position: relative;
+}
+
+.box .vector-7 {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: -4.55%;
+  left: -4.55%;
+}
+
+.box .vector-8 {
+  position: absolute;
+  width: 20.40%;
+  height: 38.35%;
+  top: 23.01%;
+  left: 43.61%;
+}
+
+.box .icon-heart {
+  position: absolute;
+  width: 5.58%;
+  height: 2.31%;
+  top: 92.70%;
+  left: 60.00%;
+  background-image: url(./img/vector-39.svg);
+  background-size: 100% 100%;
+}
+
+.box .vector-9 {
+  position: absolute;
+  width: 16.78%;
+  height: 2.85%;
+  top: 20.89%;
+  left: 68.75%;
+}
+
+.box .icon-user {
+  position: absolute;
+  width: 18px;
+  height: 24px;
+  top: 864px;
+  left: 374px;
+  display: flex;
+}
+
+.box .group-3 {
+  flex: 1;
+  width: 18.17px;
+  position: relative;
+}
+
+.box .vector-10 {
+  position: absolute;
+  width: 61.56%;
+  height: 46.61%;
+  top: 0;
+  left: 19.22%;
+}
+
+.box .vector-11 {
+  position: absolute;
+  width: 100%;
+  height: 34.45%;
+  top: 52.69%;
+  left: 0;
+}
+
+.box .vector-12 {
+  position: absolute;
+  width: 100%;
+  height: 19.78%;
+  top: 80.22%;
+  left: 0;
+}
+
+.box .ellipse {
+  position: absolute;
+  top: 864px;
+  left: 18px;
+  width: 8px;
+  height: 8px;
+  background-color: #ff4a4a;
+  border-radius: 4px;
+}
+
+.box .mask-group-2 {
+  position: absolute;
+  top: 223px;
+  left: 28px;
+  width: 374px;
+  height: 229px;
+}
+
+.box .r-sidence-luxe-https-2 {
+  top: 542px;
+  left: 81px;
+  width: 335px;
+  font-size: 16px;
+  position: absolute;
+  font-family: "Open Sans", Helvetica;
+  font-weight: 400;
+  color: #000000;
+  letter-spacing: 0;
+  line-height: normal;
+}
+
+.box .s-lection-des-plus-2 {
+  top: 682px;
+  left: 25px;
+  width: 373px;
+  position: absolute;
+  font-family: "Open Sans", Helvetica;
+  font-weight: 400;
+  color: #000000;
+  font-size: 16px;
+  letter-spacing: 0;
+  line-height: normal;
+}
+
+.box .location-de-chalets-5 {
+  top: 600px;
+  left: 28px;
+  width: 374px;
+  font-size: 24px;
+  position: absolute;
+  font-family: "Open Sans", Helvetica;
+  font-weight: 400;
+  color: #0242a2;
+  letter-spacing: 0;
+  line-height: normal;
+}
+
+.box .image-3 {
+  top: 535px;
+  left: 28px;
+  width: 47px;
+  height: 47px;
+  aspect-ratio: 1;
+  position: absolute;
+  object-fit: cover;
+}
+
+.box .text-wrapper-9 {
+  top: 495px;
+  left: 28px;
+  position: absolute;
+  width: 135px;
+  font-family: "Open Sans", Helvetica;
+  font-weight: 600;
+  color: #000000;
+  font-size: 16px;
+  letter-spacing: 0;
+  line-height: normal;
+}
+
+.box .text-wrapper-10 {
+  top: 787px;
+  left: 75px;
+  position: absolute;
+  width: 239px;
+  font-family: "Open Sans", Helvetica;
+  font-weight: 400;
+  color: #000000;
+  font-size: 16px;
+  letter-spacing: 0;
+  line-height: normal;
+}
+
+.box .vector-13 {
+  position: absolute;
+  width: 4.00%;
+  height: 0;
+  top: 84.47%;
+  left: 6.57%;
+}
+
+.box .image-4 {
+  position: absolute;
+  top: 38px;
+  left: 126px;
+  width: 172px;
+  height: 58px;
+  aspect-ratio: 2.96;
+  object-fit: cover;
+}
+
+.box .rectangle-2 {
+  left: 31px;
+  width: 375px;
+  position: absolute;
+  top: 113px;
+  height: 68px;
+  border-radius: 30px;
+  border: 1px solid;
+  border-color: #d8d8d8;
+  box-shadow: 0px 13px 26px -2px #0000001f;
+  backdrop-filter: blur(5px) brightness(100%);
+  -webkit-backdrop-filter: blur(5px) brightness(100%);
+}
+
+.box .frame-3 {
+  position: absolute;
+  top: 135px;
+  left: 352px;
+  width: 24px;
+  height: 24px;
+}
+
+.box .text-wrapper-11 {
+  position: absolute;
+  top: 135px;
+  left: 56px;
+  width: 276px;
+  font-family: "Open Sans", Helvetica;
+  font-weight: 400;
+  color: #000000;
+  font-size: 20px;
+  letter-spacing: 0;
+  line-height: normal;
+}
+
+.box .div-4 {
+  top: 206px;
+  left: 1521px;
+  width: 430px;
+  position: absolute;
+  height: 932px;
+  background-color: #ffffff;
+  border-radius: 50px;
+  overflow: hidden;
+  border: 1px solid;
+  border-color: #000000;
+}
+
+.box .text-wrapper-12 {
+  position: absolute;
+  top: calc(50.00% + 366px);
+  left: calc(50.00% - 69px);
+  font-family: "Roboto", Helvetica;
+  font-weight: 500;
+  color: #ffffff;
+  font-size: 20px;
+  text-align: center;
+  letter-spacing: 0;
+  line-height: normal;
+  white-space: nowrap;
+}
+
+.box .overlap {
+  position: absolute;
+  width: 23px;
+  height: 23px;
+  top: 831px;
+  left: 258px;
+}
+
+.box .send-icon-2 {
+  position: absolute;
+  width: 23px;
+  height: 23px;
+  top: 0;
+  left: 0;
+  display: flex;
+}
+
+.box .group-4 {
+  flex: 1;
+  width: 23px;
+  position: relative;
+  background-image: url(./img/vector-34.svg);
+  background-size: 100% 100%;
+}
+
+.box .vector-14 {
+  position: absolute;
+  width: 26.35%;
+  height: 26.40%;
+  top: 36.09%;
+  left: 36.24%;
+}
+
+.box .mask-group-3 {
+  position: absolute;
+  top: 248px;
+  left: 313px;
+  width: 78px;
+  height: 74px;
+}
+
+.box .fi-rr-marker-2 {
+  position: absolute;
+  top: 552px;
+  left: 37px;
+  width: 22px;
+  height: 22px;
+}
+
+.box .r-sidence-luxe-https-3 {
+  position: absolute;
+  top: 248px;
+  left: 97px;
+  width: 227px;
+  font-family: "Open Sans", Helvetica;
+  font-weight: 400;
+  color: #000000;
+  font-size: 16px;
+  letter-spacing: 0;
+  line-height: normal;
+}
+
+.box .text-wrapper-13 {
+  font-family: "Open Sans", Helvetica;
+  font-weight: 400;
+  color: #000000;
+  font-size: 16px;
+  letter-spacing: 0;
+}
+
+.box .s-lection-des-plus-3 {
+  position: absolute;
+  top: 415px;
+  left: 37px;
+  width: 357px;
+  font-family: "Open Sans", Helvetica;
+  font-weight: 400;
+  color: #000000;
+  font-size: 16px;
+  letter-spacing: 0;
+  line-height: normal;
+}
+
+.box .text-wrapper-14 {
+  top: 552px;
+  left: 72px;
+  position: absolute;
+  width: 373px;
+  font-family: "Open Sans", Helvetica;
+  font-weight: 400;
+  color: #000000;
+  font-size: 16px;
+  letter-spacing: 0;
+  line-height: normal;
+}
+
+.box .text-wrapper-15 {
+  top: 795px;
+  left: 85px;
+  position: absolute;
+  width: 239px;
+  font-family: "Open Sans", Helvetica;
+  font-weight: 400;
+  color: #000000;
+  font-size: 16px;
+  letter-spacing: 0;
+  line-height: normal;
+}
+
+.box .location-de-chalets-6 {
+  position: absolute;
+  top: 333px;
+  left: 37px;
+  width: 366px;
+  font-family: "Open Sans", Helvetica;
+  font-weight: 400;
+  color: #0242a2;
+  font-size: 24px;
+  letter-spacing: 0;
+  line-height: normal;
+}
+
+.box .location-de-chalets-7 {
+  top: 601px;
+  left: 33px;
+  width: 330px;
+  font-size: 24px;
+  position: absolute;
+  font-family: "Open Sans", Helvetica;
+  font-weight: 400;
+  color: #0242a2;
+  letter-spacing: 0;
+  line-height: normal;
+}
+
+.box .location-de-chalets-8 {
+  top: 698px;
+  left: 34px;
+  width: 319px;
+  font-size: 24px;
+  position: absolute;
+  font-family: "Open Sans", Helvetica;
+  font-weight: 400;
+  color: #0242a2;
+  letter-spacing: 0;
+  line-height: normal;
+}
+
+.box .line-4 {
+  top: 778px;
+  left: 32px;
+  width: 340px;
+  height: 2px;
+  position: absolute;
+  object-fit: cover;
+}
+
+.box .image-5 {
+  top: 248px;
+  left: 34px;
+  width: 47px;
+  height: 47px;
+  aspect-ratio: 1;
+  position: absolute;
+  object-fit: cover;
+}
+
+.box .image-6 {
+  position: absolute;
+  top: 42px;
+  left: 129px;
+  width: 172px;
+  height: 58px;
+  aspect-ratio: 2.96;
+  object-fit: cover;
+}
+
+.box .icon-phone-2 {
+  top: 564px;
+  left: 37px;
+  position: absolute;
+  width: 24px;
+  height: 24px;
+}
+
+.box .line-5 {
+  top: 686px;
+  left: 34px;
+  width: 340px;
+  height: 2px;
+  position: absolute;
+  object-fit: cover;
+}
+
+.box .icon-arrow-left-3 {
+  height: 0;
+  top: 68.68%;
+  left: 89.38%;
+  transform: rotate(-176.78deg);
+  position: absolute;
+  width: 0;
+}
+
+.box .vector-15 {
+  position: absolute;
+  width: 100%;
+  height: 100.00%;
+  top: -7.08%;
+  left: -18.42%;
+  transform: rotate(176.78deg);
+}
+
+.box .icon-arrow-left-4 {
+  height: 0;
+  top: 78.66%;
+  left: 90.08%;
+  transform: rotate(-176.78deg);
+  position: absolute;
+  width: 0;
+}
+
+.box .icon-home-2 {
+  background-image: url(./img/vector-36.svg);
+  position: absolute;
+  width: 5.35%;
+  height: 2.47%;
+  top: 93.88%;
+  left: 4.88%;
+  background-size: 100% 100%;
+}
+
+.box .overlap-2 {
+  position: absolute;
+  width: 22px;
+  height: 22px;
+  top: 875px;
+  left: 137px;
+}
+
+.box .icon-clock-2 {
+  position: absolute;
+  width: 22px;
+  height: 22px;
+  top: 0;
+  left: 0;
+  display: flex;
+}
+
+.box .icon-heart-2 {
+  background-image: url(./img/vector-39.svg);
+  position: absolute;
+  width: 5.58%;
+  height: 2.31%;
+  top: 93.88%;
+  left: 58.84%;
+  background-size: 100% 100%;
+}
+
+.box .overlap-3 {
+  position: absolute;
+  width: 18px;
+  height: 24px;
+  top: 875px;
+  left: 369px;
+}
+
+.box .icon-user-2 {
+  position: absolute;
+  width: 18px;
+  height: 24px;
+  top: 0;
+  left: 0;
+  display: flex;
+}
+
+.box .text-wrapper-16 {
+  top: 220px;
+  left: 34px;
+  position: absolute;
+  width: 135px;
+  font-family: "Open Sans", Helvetica;
+  font-weight: 600;
+  color: #000000;
+  font-size: 16px;
+  letter-spacing: 0;
+  line-height: normal;
+}
+
+.box .icon-phone-3 {
+  top: 794px;
+  left: 49px;
+  position: absolute;
+  width: 24px;
+  height: 24px;
+}
+
+.box .vector-16 {
+  position: absolute;
+  width: 4.42%;
+  height: 2.15%;
+  top: 85.22%;
+  left: 10.76%;
+}
+
+.box .text-wrapper-17 {
+  position: absolute;
+  top: 98px;
+  left: 12px;
+  width: 129px;
+  font-family: "Open Sans", Helvetica;
+  font-weight: 700;
+  color: #000000;
+  font-size: 32px;
+  letter-spacing: 0;
+  line-height: normal;
+}
+
+.box .image-7 {
+  top: 0;
+  left: 23px;
+  width: 79px;
+  height: 79px;
+  aspect-ratio: 1;
+  position: absolute;
+  object-fit: cover;
+}
