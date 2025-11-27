@@ -1120,7 +1120,7 @@
 		<div class="section">
 			<div class="d-flex align-items-center justify-content-between" style="margin-bottom: 20px;">
 				<img src="<?php echo $logo_base64; ?>" alt="Logo" style="max-width:150px;height:auto" />
-				<h2 class="m-0" style="color:#000">Inventaire Search</h2>
+				<h2 class="m-0" style="color:#000">Inventaire Local</h2>
 			</div>
 
 			<?php foreach ($groupe_valider as $groupe): ?>
