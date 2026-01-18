@@ -42,12 +42,12 @@
                         Google Task Manager
                     </a>
                 </li>
-                <li class="nav-item">
+                <!-- <li class="nav-item">
                     <a class="nav-link py-3" type="button" id="optimisation_tab" data-toggle="tab" data-target="#optimisation" role="tab" aria-controls="kanban" aria-selected="false">
                         <img src="<?= base_url('assets/images/icons/figma/icon-kanban.svg') ?>" alt="">
                         Optimisation
                     </a>
-                </li>
+                </li> -->
             </ul>
             <div class="tab-content" id="clientTabContent">
                 <div class="tab-pane fade show active mb-5" id="gtm" role="tabpanel" aria-labelledby="gtm_tab">

@@ -46,13 +46,11 @@
 				</div>
 
 				<form action="<?= site_url('Task/send_message') ?>" method="POST" id="detail_discussion_form">
+				<input type="hidden" name="id_task">
+
+
 					<div class="form-group input-group">
 						<input type="text" class="form-control border-right-0" placeholder="Add Your Message" id="detail_message">
-						<div class="input-group-append">
-							<a href="#" class="btn btn-outline-secondary border-left-0 border-right-0 d-flex align-items-center">
-								<i class="fa fa-paperclip"></i>
-							</a>
-						</div>
 						<div class="input-group-append">
 							<button type="submit" class="btn btn-outline-secondary border-left-0 d-flex align-items-center">
 								<i class="fa fa-paper-plane"></i>

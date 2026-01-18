@@ -82,6 +82,7 @@
       <form action="<?= base_url('Client/Ajoutgroupes/' . $groupe[0]['idclients']) ?>" method="POST" enctype="multipart/form-data">
         <div class="container-fluid pt-4">
           <h5>Campagne Performance Max</h5>
+          
           <hr class="my-4">
 
           <input type="hidden" name="idgroupe_annonce" value="<?= $groupe[0]['idgroupe_annonce'] ?>">
@@ -207,11 +208,22 @@
                 <div class="g-title"><svg width="16" height="16" class="g-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg> Assets visuels</div>
                 <div class="g-sub">Ajoutez images/visuels pour PMax</div>
               </div>
+              
+
             </div>
             <div class="g-body" id="body-images">
               <button type="button" class="btn btn-outline-dark mb-3" data-toggle="modal" data-target="#modalGestionImages">
                 <i class="fa fa-images"></i> Gérer les images
               </button>
+              <?php if (!empty($groupe[0]['file'])): ?>
+                  <a href="<?= site_url('client/download_fichier/'.$groupe[0]['idcampagne']) ?>"
+                    class="btn btn-primary">
+                    Télécharger le fichier
+                  </a>
+              <?php else: ?>
+                  <p>Aucun fichier disponible</p>
+              <?php endif; ?>
+
               <div class="card mb-4 d-none" id="propositionImagesCard">
                 <div class="card-body">
                   <div class="row no-gutters" id="propositionImagesContainer"></div>

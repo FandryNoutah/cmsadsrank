@@ -125,11 +125,7 @@
 											</span>	
 											<?php endif; ?>	
 										</td>
-										<td>
-											<a href="javascript:void(0);" data-toggle="modal" data-target="#detailModal" data-id="<?= $t->idtask; ?>">
-												<i class="fa fa-ellipsis-v"></i>
-											</a>
-										</td>
+
 									</tr>
 								<?php endforeach; ?>
 							<?php endif; ?>

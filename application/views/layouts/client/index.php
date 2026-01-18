@@ -78,18 +78,7 @@
 </ul>
 
 <div class="row mx-lg-2 ml-auto">
-	<div class="col-auto px-1">
-		<button class="btn btn-outline-dark">
-			<img src="<?= base_url('assets/images/icons/figma/icon-funnelsimple.svg') ?>" alt="">
-			Sort By
-		</button>
-	</div>
-	<div class="col-auto px-1">
-		<button class="btn btn-outline-dark">
-			<img src="<?= base_url('assets/images/icons/figma/icon-funnel.svg') ?>" alt="">
-			Filter
-		</button>
-	</div>
+
 	<div class="col-auto px-1">
 		<button class="btn btn-dark" data-toggle="modal" data-target="#clientModal">
 			<img src="<?= base_url('assets/images/icons/figma/icon-plus.svg') ?>" alt="">
@@ -143,7 +132,7 @@
 					</thead>
 					<tbody>
 						<?php foreach ($donnee as $d): ?>
-							<?php if ($d->budget != 0): ?>
+							<?php //if ($d->budget != 0): ?>
 								<tr class="client-filter" data-status="<?= $d->resiliation; ?>">
 									<td>
 										<a href="<?= base_url('Client/detail_client/' . $d->idclients) ?>" style="display: flex; align-items: center; text-decoration: none; color: inherit;">
@@ -190,7 +179,7 @@
 										<?php endif; ?>
 									</td>
 								</tr>
-							<?php endif; ?>
+							<?php //endif; ?>
 						<?php endforeach; ?>
 					</tbody>
 				</table>

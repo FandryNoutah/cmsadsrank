@@ -13,6 +13,26 @@ class Donne_modele extends CI_Model
 	{
 		parent::__construct();
 	}
+	public function update_clients($id, $data)
+	{
+		$this->db->where('idclients', $id);
+		return $this->db->update('clients', $data);
+	}
+public function get_fichier_groupe($idcampagne)
+{
+    $query = $this->db
+        ->select('file')
+        ->where('idcampagne', (int)$idcampagne)
+        ->limit(1)
+        ->get('campagne');
+
+    if ($query->num_rows() === 1) {
+        return $query->row_array();
+    }
+
+    return false;
+}
+
 	public function update_budget($idcampagne, $budget)
 {
     $this->db->where('idcampagne', $idcampagne);
@@ -766,6 +786,7 @@ public function delete_gp_by_idcampagne($id_campagne)
             FROM groupe_annonce ga 
             JOIN campagne c ON ga.idcampagne = c.idcampagne
 			JOIN clients cl ON c.idclients = cl.idclients
+			
             WHERE ga.idclients = ?";
 		$query = $this->db->query($sql, [$idclients]);
 		$groupes = $query->result_array();
@@ -908,7 +929,9 @@ public function delete_gp_by_idcampagne($id_campagne)
     $url_site,
     $sexe,
     $promotions,
-    $prix
+    $prix,
+	$téléphone,
+	$fichier_nom 
 ) {
     $data = [
         'idclients'           => $idclients,
@@ -926,6 +949,7 @@ public function delete_gp_by_idcampagne($id_campagne)
         'sexe'                => $sexe,
         'promotions'          => $promotions,
         'prix'                => $prix,
+		 'file'                => $fichier_nom,
     ];
 
     $this->db->insert('campagne', $data);

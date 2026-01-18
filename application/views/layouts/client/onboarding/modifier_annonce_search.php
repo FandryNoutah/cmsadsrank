@@ -257,7 +257,14 @@
             <button type="button" class="btn btn-outline-dark mb-3" data-toggle="modal" data-target="#modalGestionImages">
               <i class="fa fa-images"></i> Gérer les images
             </button>
-
+             <?php if (!empty($groupe[0]['file'])): ?>
+                  <a href="<?= site_url('client/download_fichier/'.$groupe[0]['idcampagne']) ?>"
+                    class="btn btn-primary">
+                    Télécharger le fichier
+                  </a>
+              <?php else: ?>
+                  <p>Aucun fichier disponible</p>
+              <?php endif; ?>     
             <div class="card mb-4 <?= empty($images) ? 'd-none' : '' ?>" id="propositionImagesCard">
               <div class="card-body">
                 <div class="row no-gutters" id="propositionImagesContainer">

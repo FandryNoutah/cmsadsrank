@@ -241,6 +241,18 @@ public function change_rapport_base($id, $rapport_base)
 				'bilan' => $bilan_annuele
 			]);
 		}
+		public function update_google_ads($idclients, $value)
+{
+    $this->db->where('idclients', $idclients);
+    return $this->db->update('clients', ['googleads' => $value]);
+}
+
+public function update_google_analytics($idclients, $value)
+{
+    $this->db->where('idclients', $idclients);
+    return $this->db->update('clients', ['google_analytics' => $value]);
+}
+
 public function get_gtm($idclients) {
 			$this->db->select('gtm.*, clients.*,users.*,donnee.tracking_gtm');
 			$this->db->from('gtm');
@@ -1271,23 +1283,58 @@ public function insertclient($client, $site_client, $email_client, $numero_clien
 		return $affectedRows; // Retourne le nombre de lignes affectées
 	}
 	
-   public function insertfiche($idclient, $budget, $secteur_activite, $product_choice, $initiative, $am, $date_mis_en_place, $date_brief, $date_annonce, $dejaclient, $gtm_code) {
-    $secteur_activite = $this->db->escape($secteur_activite);
-    $gtm_code = $this->db->escape($gtm_code);
+   public function insertfiche($idclient, $budget, $secteur_activite, $product_choice = 1, $initiative = null, $am = null, $date_mis_en_place = null, $date_brief = null, $date_annonce = null, $dejaclient = 0, $gtm_code = null)
+{
+    // Normalisations simples
+    $idclient = (int)$idclient;
+    $product_choice = (int)$product_choice;
+    $dejaclient = (int)$dejaclient;
 
-    $date_mis_en_place = $this->db->escape($date_mis_en_place);
-    $date_brief = $this->db->escape($date_brief);
-    $date_annonce = $this->db->escape($date_annonce);
+    // budget -> garde 0 si vide
+    if ($budget === '' || $budget === null) {
+        $budget = 0;
+    }
 
-    $query = "INSERT INTO donnee 
-        (idclients, idproduit, budget, secteur_activite, initiative, account_manager, mis_en_place_paiement, Brief, annonce, modifier_par, dejaclient, tracking_gtm) 
-        VALUES 
-        ($idclient, $product_choice, $budget, $secteur_activite, $initiative, $am, $date_mis_en_place, $date_brief, $date_annonce, $am, $dejaclient, $gtm_code)";
-    
-    $this->db->query($query);
+    // Format des dates en Y-m-d ou null
+    $formatDate = function($d) {
+        if ($d === null || $d === '' ) return null;
+        // si c'est déjà au format YYYY-MM-DD, on retourne tel quel
+        $ts = @strtotime($d);
+        if ($ts === false) return null;
+        return date('Y-m-d', $ts);
+    };
 
-    // Récupère l'ID de la dernière insertion
-    return $this->db->insert_id();
+    $date_mis_en_place = $formatDate($date_mis_en_place);
+    $date_brief = $formatDate($date_brief);
+    $date_annonce = $formatDate($date_annonce);
+
+    // Prépare le tableau de données : valeurs null si non définies
+    $data = [
+        'idclients' => $idclient,
+        'idproduit' => $product_choice,
+        'budget' => $budget,
+        'secteur_activite' => $secteur_activite !== null ? $secteur_activite : '',
+        'initiative' => $initiative !== '' ? $initiative : null,
+        'account_manager' => $am !== '' ? $am : null,
+        'mis_en_place_paiement' => $date_mis_en_place,
+        'Brief' => $date_brief,
+        'annonce' => $date_annonce,
+        'modifier_par' => null,
+        'dejaclient' => $dejaclient,
+        'tracking_gtm' => $gtm_code !== '' ? $gtm_code : null
+    ];
+
+    // Insère via Query Builder (Active Record) — CI gère l'échappement et les NULL
+    $this->db->insert('donnee', $data);
+
+    if ($this->db->affected_rows() > 0) {
+        return (int)$this->db->insert_id();
+    }
+
+    // optionnel : log l'erreur pour debug
+    log_message('error', 'insertfiche failed: ' . $this->db->last_query());
+
+    return false;
 }
 
 

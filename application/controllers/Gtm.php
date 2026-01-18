@@ -74,48 +74,80 @@ class Gtm extends MY_Controller
 
         $this->Gtm_model->update_optimisation($id, $debug);
 
-        if($debug=='Erreur'){
-           $optim = $this->Gtm_model->get_optimisation_by_id($id);
-		    $error_description = $this->input->post('error_description');
-		   	$am = $optim['am'];
-			$months = [
-					1 => 'janvier', 2 => 'février', 3 => 'mars', 4 => 'avril',
-					5 => 'mai', 6 => 'juin', 7 => 'juillet', 8 => 'août',
-					9 => 'septembre', 10 => 'octobre', 11 => 'novembre', 12 => 'décembre'
-				];
+        if ($debug === 'Erreur') {
 
-				$mois = $optim['mois']; 
+    $optim = $this->Gtm_model->get_optimisation_by_id($id);
 
-				$numeroMois = (int) date('m', strtotime($mois)); 
-				$moisLettre = $months[$numeroMois];
-            $this->create_task_for_error_manual($optim['idclients'],$am,$moisLettre, $error_description);
-        }
+    $error_key = $this->input->post('error_title'); // gtm, tracking, etc.
+    $error_description = $this->input->post('error_description');
+
+    // Correspondance clé => libellé EXACT du select
+    $errorLabels = [
+        'gtm' => 'Bug Mise en place GTM',
+        'tracking' => 'Problème tracking balises',
+        'url' => 'Changement d’URL',
+        'href' => 'Problème lien href',
+        'cmp' => 'Problème CMP',
+        'thankyou' => 'URL page de remerciement incorrecte',
+        'contact' => 'Problème demande mise en relation'
+    ];
+
+    $error_title = $errorLabels[$error_key] ?? 'Erreur optimisation';
+
+    // Gestion Mois + Année
+    $months = [
+        1 => 'janvier', 2 => 'février', 3 => 'mars', 4 => 'avril',
+        5 => 'mai', 6 => 'juin', 7 => 'juillet', 8 => 'août',
+        9 => 'septembre', 10 => 'octobre', 11 => 'novembre', 12 => 'décembre'
+    ];
+
+    $mois = $optim['mois']; // ex: 2024-03-01
+    $numeroMois = (int) date('m', strtotime($mois));
+    $annee = date('Y', strtotime($mois));
+    $moisLettre = $months[$numeroMois];
+
+    $am = $optim['am'];
+
+    $this->create_task_for_error_manual(
+        $optim['idclients'],
+        $am,
+        ucfirst($moisLettre),
+        $annee,
+        $error_title,
+        $error_description
+    );
+}
+
+
 
         redirect('Gtm');
     }
 
-    private function create_task_for_error_manual($idclients,$am,$moisLettre, $error_description){
-        $type_tache = 13;
-        $title = "Erreur d'optimisation, Mois de: $moisLettre";
-        $description = "Erreur: $error_description";
-        $Statuts_technique = 1;
-        $procedure_gtm = 1;
+    private function create_task_for_error_manual(
+    $idclients,
+    $am,
+    $moisLettre,
+    $annee,
+    $error_title,
+    $error_description
+) {
+    $data = [
+        'type_tache' => 13,
+        'date_demande' => date('Y-m-d'),
+        'date_due' => date('Y-m-d'),
+        'idclients' => $idclients,
+        'AM' => $am,
+        'assigned_to' => 23,
+        'title' => $error_title . ' – ' . $moisLettre . ' ' . $annee,
+        'Statuts_technique' => 1,
+        'procedure_gtm' => 1,
+        'description' => $error_description
+    ];
 
-        $data = array(
-            'type_tache' => $type_tache,
-            'date_demande' => date('Y-m-d'),
-            'date_due' => date('Y-m-d'),
-            'idclients' => $idclients,
-            'AM' => $am,
-            'assigned_to' => 23,
-            'title' => $title,
-            'Statuts_technique' => $Statuts_technique,
-            'procedure_gtm' => $procedure_gtm,
-            'description' => $description
-        );
+    $this->Task_model->add_task($data);
+}
 
-        $this->Task_model->add_task($data);
-    }
+
 public function add_row()
 {
     $idclients = $this->input->post('idclients');
@@ -140,16 +172,16 @@ public function add_row()
 
 public function update_row()
 {
-    $idclients = $this->input->post('idclients'); // récupérer l’id client
-
+    $idclients = $this->input->post('idclients');
     $id = $this->input->post('idplan_de_taggage');
+    $etat = $this->input->post('etat');
 
     $data = [
         'conversion'        => $this->input->post('conversion'),
         'actions'           => $this->input->post('actions'),
         'types'             => $this->input->post('types'),
         'remarque'          => $this->input->post('remarque'),
-        'etat'              => $this->input->post('etat'),
+        'etat'              => $etat,
         'conditions'        => $this->input->post('conditions'),
         'conversion_id'     => $this->input->post('conversion_id'),
         'extensions_appel'  => $this->input->post('conversion_label'),
@@ -158,8 +190,45 @@ public function update_row()
     $this->db->where('idplan_de_taggage', $id);
     $this->db->update('plan_de_taggage', $data);
 
-    redirect('Gtm/Plan_de_taggage/'.$idclients);
+    // ✅ Création tâche si ERREUR
+    if ($etat == 2) {
+		$client = $this->visuels_model->getDonneeById($idclients);
+		$am = $client[0]['account_manager'];
+        $error_key = $this->input->post('error_title');
+        $error_description = $this->input->post('error_description');
+
+        $errorLabels = [
+            'gtm' => 'Bug Mise en place GTM',
+            'tracking' => 'Problème tracking balises',
+            'url' => 'Changement d’URL',
+            'href' => 'Problème lien href',
+            'cmp' => 'Problème CMP',
+            'thankyou' => 'URL page de remerciement incorrecte',
+            'contact' => 'Problème demande mise en relation'
+        ];
+
+        $error_title = $errorLabels[$error_key] ?? 'Erreur plan de taggage';
+
+        $mois = ucfirst(strftime('%B'));
+        $annee = date('Y');
+
+        $this->Task_model->add_task([
+            'type_tache' => 13,
+            'date_demande' => date('Y-m-d'),
+            'date_due' => date('Y-m-d'),
+			'AM' => $am,
+            'idclients' => $idclients,
+            'assigned_to' => 23,
+            'title' => $error_title,
+            'Statuts_technique' => 1,
+            'procedure_gtm' => 1,
+            'description' => $error_description
+        ]);
+    }
+
+    redirect('Gtm/Plan_de_taggage/' . $idclients);
 }
+
 
 
 public function delete_row($id = null, $idclients = null)
@@ -190,32 +259,89 @@ public function delete_row($id = null, $idclients = null)
 		echo json_encode($data);
 	}
 	public function update_gtm()
-	{
-		$id = intval($this->input->post('id_gtm'));
-		$idclients = intval($this->input->post('idclients'));
-		$test = $this->input->post('invitation_reçu');
-		$am = intval($this->input->post('am'));
-		$date_du_jour = date('Y-m-d');
-		$data = [
-			'date_demande'      => $this->input->post('date_demande'),
-			'invitation_reçu'   => $this->input->post('invitation_reçu'),
-			'gtm'               => $this->input->post('gtm'),
-			'statut'            => $this->input->post('statut'),
-		];
-		$this->Gtm_model->update($id, $data);
-		if($this->input->post('statut') == "Implémenté"){
-			$data_optimisation = [
-				'idclients'        => $this->input->post('idclients'),
-				'am'     => $am,
-				'tm'     => 23,
-				'date_demande'     => $date_du_jour,
-				'mois'  => $date_du_jour
-			];
-			$this->Gtm_model->insert_optimisation($data_optimisation);
-		}
+{
+    $id = (int) $this->input->post('id_gtm');
+    $idclients = (int) $this->input->post('idclients');
+    $am = (int) $this->input->post('am');
+    $statut = $this->input->post('statut');
+    $date_du_jour = date('Y-m-d');
 
-		redirect('Gtm'); 
-	}
+    $data = [
+        'date_demande'    => $this->input->post('date_demande'),
+        'invitation_reçu' => $this->input->post('invitation_reçu'),
+        'statut'          => $statut,
+    ];
+
+    $this->Gtm_model->update($id, $data);
+
+    // ✅ Si Implémenté → optimisation
+    if ($statut === "Implémenté") {
+        $this->Gtm_model->insert_optimisation([
+            'idclients'    => $idclients,
+            'am'           => $am,
+            'tm'           => 23,
+            'date_demande' => $date_du_jour,
+            'mois'         => $date_du_jour
+        ]);
+    }
+
+    // ✅ Si Erreur → création tâche
+    if ($statut === "Erreur") {
+
+        $error_key = $this->input->post('error_title');
+        $error_description = $this->input->post('error_description');
+
+        $errorLabels = [
+            'gtm' => 'Bug Mise en place GTM',
+            'tracking' => 'Problème tracking balises',
+            'url' => 'Changement d’URL',
+            'href' => 'Problème lien href',
+            'cmp' => 'Problème CMP',
+            'thankyou' => 'URL page de remerciement incorrecte',
+            'contact' => 'Problème demande mise en relation'
+        ];
+
+        $error_title = $errorLabels[$error_key] ?? 'Erreur GTM';
+
+        $moisLettre = ucfirst(strftime('%B'));
+        $annee = date('Y');
+
+        $this->create_task_gtm_error(
+            $idclients,
+            $am,
+            $error_title,
+            $moisLettre,
+            $annee,
+            $error_description
+        );
+    }
+
+    redirect('Gtm');
+}
+private function create_task_gtm_error(
+    $idclients,
+    $am,
+    $error_title,
+    $moisLettre,
+    $annee,
+    $error_description
+) {
+    $data = [
+        'type_tache' => 13,
+        'date_demande' => date('Y-m-d'),
+        'date_due' => date('Y-m-d'),
+        'idclients' => $idclients,
+        'AM' => $am,
+        'assigned_to' => 23,
+        'title' => $error_title,
+        'Statuts_technique' => 1,
+        'procedure_gtm' => 1,
+        'description' => $error_description
+    ];
+
+    $this->Task_model->add_task($data);
+}
+
 
 		public function update_table() {
 	$this->load->model('Gtm_model');

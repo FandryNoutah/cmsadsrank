@@ -16,47 +16,91 @@
 
 
 <?php start_section('content'); ?>
-
 <!-- ===================================================== -->
 <!--               MESSAGE MISE À JOUR                     -->
 <!-- ===================================================== -->
-<?php 
-if (!empty($_GET['maj']) && $_GET['maj'] == "ok"): 
+<?php
+// 1) Priorité aux flash messages (set in controller)
+$flash_type = null;
+$flash_msg  = null;
 
-$type = isset($_GET['type']) ? $_GET['type'] : '';
-
-switch ($type) {
-    case 'gtm':
-        $message = "Mise à jour Google Tag Manager effectuée";
-        break;
-
-    case 'cms':
-        $message = "Mise à jour CMS effectuée";
-        break;
-
-    case 'cmp':
-        $message = "Mise à jour CMP effectuée";
-        break;
-
-    case 'datalayer':
-        $message = "Mise à jour DataLayer effectuée";
-        break;
-
-    default:
-        $message = "Mise à jour effectuée";
-        break;
+if ($this->session->flashdata('success')) {
+    $flash_type = 'success';
+    $flash_msg  = $this->session->flashdata('success');
+} elseif ($this->session->flashdata('warning')) {
+    $flash_type = 'warning';
+    $flash_msg  = $this->session->flashdata('warning');
+} elseif ($this->session->flashdata('error')) {
+    $flash_type = 'danger';
+    $flash_msg  = $this->session->flashdata('error');
+} elseif ($this->session->flashdata('info')) {
+    $flash_type = 'info';
+    $flash_msg  = $this->session->flashdata('info');
 }
-?>
 
-<div class="alert alert-success text-center mt-3" id="majConfirm">
-    <?= $message ?>
+// 2) Fallback: ?maj=ok&type=... (ancienne méthode)
+if (empty($flash_msg) && !empty($_GET['maj']) && $_GET['maj'] == "ok") {
+    $type = isset($_GET['type']) ? $_GET['type'] : '';
+    switch ($type) {
+        case 'gtm':
+            $flash_type = 'success';
+            $flash_msg  = "Mise à jour Google Tag Manager effectuée";
+            break;
+        case 'cms':
+            $flash_type = 'success';
+            $flash_msg  = "Mise à jour CMS effectuée";
+            break;
+        case 'cmp':
+            $flash_type = 'success';
+            $flash_msg  = "Mise à jour CMP effectuée";
+            break;
+        case 'datalayer':
+            $flash_type = 'success';
+            $flash_msg  = "Mise à jour DataLayer effectuée";
+            break;
+        case 'googleads':
+            $flash_type = 'success';
+            $flash_msg  = "Mise à jour Google Ads effectuée";
+            break;
+        case 'google_analytics':
+            $flash_type = 'success';
+            $flash_msg  = "Mise à jour Google Analytics effectuée";
+            break;
+        default:
+            $flash_type = 'success';
+            $flash_msg  = "Mise à jour effectuée";
+            break;
+    }
+}
+
+if (!empty($flash_msg)):
+    // sanitize output
+    $safe_msg = htmlspecialchars($flash_msg, ENT_QUOTES, 'UTF-8');
+?>
+<div class="alert alert-<?= $flash_type ?> alert-dismissible fade show text-center mt-3" id="majConfirm" role="alert" aria-live="polite">
+    <?= $safe_msg ?>
+    <button type="button" class="close" data-dismiss="alert" aria-label="Fermer" style="position:absolute;right:10px;top:8px;">
+        <span aria-hidden="true">&times;</span>
+    </button>
 </div>
 
 <script>
-setTimeout(() => { $('#majConfirm').fadeOut(); }, 3000);
-</script>
+(function($){
+    $(function(){
+        // auto-hide après 3s
+        setTimeout(function(){
+            $('#majConfirm').fadeOut(400, function(){ $(this).remove(); });
+        }, 3000);
 
+        // si l'utilisateur clique sur la croix, on supprime tout de suite
+        $(document).on('click', '#majConfirm .close', function(){
+            $('#majConfirm').remove();
+        });
+    });
+})(jQuery);
+</script>
 <?php endif; ?>
+
 
 
 
@@ -209,6 +253,80 @@ $cms_name = (stripos($cms_full, 'Inconnu') !== false || stripos($cms_full, 'non 
                 <?php else: ?>
                   <span class="badge alert-danger rounded-pill px-4 py-3">
                     <i class="fa fa-circle mr-1"></i> DataLayer non disponible
+                  </span>
+                <?php endif; ?>
+
+              </div>
+
+            </div>
+          </div>
+
+    
+
+
+        <!-- ===================================================== -->
+          <!--                         Google Ads                     -->
+          <!-- ===================================================== -->
+          <div class="col" style="margin-top:20px;">
+            <div class="card h-100">
+
+              <div class="nav-link py-3 text-right" style="margin-right:20px;">
+                <a href="<?= base_url('Client/mis_a_jour_googleads/'.$d['idclients'].'?maj=ok&type=googleads') ?>">Mettre à jour</a>
+
+              </div>
+
+              <div class="card-body text-center">
+                <h3 class="mb-4">Google Ads </h3>
+
+                <p class="text-muted mx-5 mb-5" style="font-size:18px;">
+                  <?= (!empty($d['googleads']) && $d['googleads'] != "Aucun Google Ads détecté")
+                      ? "Google Ads installé."
+                      : "Aucun Google Ads — vous pouvez activer ou installer un Google Ads."; ?>
+                </p>
+
+                <?php if (!empty($d['googleads']) && $d['googleads'] != "Aucun Google Ads détecté"): ?>
+                  <span class="badge alert-success rounded-pill px-4 py-3">
+                    <i class="fa fa-circle mr-1"></i> <?= $d['googleads']; ?>
+                  </span>
+                <?php else: ?>
+                  <span class="badge alert-danger rounded-pill px-4 py-3">
+                    <i class="fa fa-circle mr-1"></i> Google Ads non installé
+                  </span>
+                <?php endif; ?>
+              </div>
+
+            </div>
+          </div>
+
+
+
+          <!-- ===================================================== -->
+          <!--                     Google Analytics                   -->
+          <!-- ===================================================== -->
+          <div class="col" style="margin-top:20px;">
+            <div class="card h-100">
+
+              <div class="nav-link py-3 text-right" style="margin-right:20px;">
+                <a href="<?= base_url('Client/mis_a_jour_google_analytics/'.$d['idclients'].'?maj=ok&type=google_analytics') ?>">Mettre à jour</a>
+
+              </div>
+
+              <div class="card-body text-center">
+                <h3 class="mb-4">Google Analytics</h3>
+
+                <p class="text-muted mx-5 mb-5" style="font-size:18px;">
+                  <?= (!empty($d['google_analytics']) && $d['google_analytics'] != "Non détecté")
+                      ? "Google Analytics détecté."
+                      : "Aucun Google Analytics — vous pouvez en implémenter un."; ?>
+                </p>
+
+                <?php if (!empty($d['google_analytics']) && $d['google_analytics'] != "Non détecté"): ?>
+                  <span class="badge alert-success rounded-pill px-4 py-3">
+                    <i class="fa fa-circle mr-1"></i> <?= $d['google_analytics']; ?>
+                  </span>
+                <?php else: ?>
+                  <span class="badge alert-danger rounded-pill px-4 py-3">
+                    <i class="fa fa-circle mr-1"></i> Google Analytics non disponible
                   </span>
                 <?php endif; ?>
 

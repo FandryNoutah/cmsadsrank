@@ -76,6 +76,8 @@
                     <td>
 						<?php if($p['etat'] == 1): ?>
 							<span class="badge alert-success px-2 py-1">Implémenté</span>
+                            <?php elseif($p['etat'] == 2): ?>
+							<span class="badge alert-danger px-2 py-1">Erreur</span>
 						<?php else: ?>
 							<span class="badge alert-warning px-2 py-1">À définir</span>
 						<?php endif; ?>
@@ -152,16 +154,43 @@
                         ] as $name => $label): ?>
                             <div class="col-6">
                                 <label><?= $label ?></label>
-                                <?php if($name === 'etat'): ?>
-                                    <select id="edit_<?= $name ?>" name="<?= $name ?>" class="form-control">
+                               <?php if($name === 'etat'): ?>
+                                   <select id="edit_etat" name="<?= $name ?>" class="form-control etat-select">
+
                                         <option value="0">À définir</option>
                                         <option value="1">Implémenté</option>
+                                        <option value="2">Erreur</option>
                                     </select>
+
+
                                 <?php else: ?>
-                                    <textarea id="edit_<?= $name ?>" name="<?= $name ?>" class="form-control"></textarea>
-                                <?php endif; ?>
+                                        <textarea id="edit_<?= $name ?>" name="<?= $name ?>" class="form-control"></textarea>
+                                    <?php endif; ?>
+
+
                             </div>
                         <?php endforeach; ?>
+                        <div class="row g-3 mt-2 d-none" id="error_type_group">
+                            <div class="col-6">
+                                <label>Type d'erreur</label>
+                                <select class="form-control" name="error_title" id="error_type">
+                                    <option value="">-- Sélectionner une erreur --</option>
+                                    <option value="gtm">Bug Mise en place GTM</option>
+                                    <option value="tracking">Problème tracking balises</option>
+                                    <option value="url">Changement d’URL</option>
+                                    <option value="href">Problème lien href</option>
+                                    <option value="cmp">Problème CMP</option>
+                                    <option value="thankyou">URL page de remerciement incorrecte</option>
+                                    <option value="contact">Problème demande mise en relation</option>
+                                </select>
+                            </div>
+
+                            <div class="col-6 d-none" id="error_description_group">
+                                <label>Description de l'erreur</label>
+                                <textarea class="form-control" name="error_description" id="error_description" rows="4"></textarea>
+                            </div>
+                        </div>
+
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -226,6 +255,51 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 
 <?php start_section('script'); ?>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+
+    const etatSelects = document.querySelectorAll('.etat-select');
+    const errorTypeGroup = document.getElementById('error_type_group');
+    const errorType = document.getElementById('error_type');
+    const errorDescriptionGroup = document.getElementById('error_description_group');
+    const errorDescription = document.getElementById('error_description');
+
+    const errorMessages = {
+        gtm: "Google Tag Manager non installé ou mal configuré.",
+        tracking: "Les balises de tracking (Google Ads / GA4 / conversions) ne déclenchent pas correctement.",
+        url: "Modification d’URL impactant le tracking ou les redirections (risque de perte de conversions).",
+        href: "Liens mal renseignés (href manquant, incorrect ou non cliquable).",
+        cmp: "Consent Management Platform défaillante (cookies non déclenchés selon le consentement).",
+        thankyou: "Impossible de configurer correctement le suivi de conversion sans cette URL.",
+        contact: "Dysfonctionnement technique empêchant le tracking – Demande de mise en relation."
+    };
+
+    etatSelects.forEach(select => {
+        select.addEventListener('change', function () {
+            if (this.value == 2) {
+                errorTypeGroup.classList.remove('d-none');
+            } else {
+                errorTypeGroup.classList.add('d-none');
+                errorDescriptionGroup.classList.add('d-none');
+                errorType.value = '';
+                errorDescription.value = '';
+            }
+        });
+    });
+
+    errorType.addEventListener('change', function () {
+        if (this.value && errorMessages[this.value]) {
+            errorDescription.value = errorMessages[this.value];
+            errorDescriptionGroup.classList.remove('d-none');
+        } else {
+            errorDescription.value = '';
+            errorDescriptionGroup.classList.add('d-none');
+        }
+    });
+
+});
+</script>
+
 <script>
 function openAddPopup() {
     new bootstrap.Modal(document.getElementById("addModal")).show();

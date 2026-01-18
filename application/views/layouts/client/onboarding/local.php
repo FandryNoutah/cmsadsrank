@@ -135,9 +135,9 @@ $images_site = isset($images_site) && is_array($images_site) ? $images_site : []
 		<div class="col">
 
 			<?php if (isset($campagne)): ?>
-				<form action="<?= site_url('Client/ajout_campagne/' . $idclients) . "?id_camp=" . urlencode($id_camp) ?>" method="POST">
+				<form action="<?= site_url('Client/ajout_campagne/' . $idclients) . "?id_camp=" . urlencode($id_camp) ?>" method="POST" enctype="multipart/form-data">
 				<?php else: ?>
-					<form action="<?= site_url('Client/ajout_campagne/' . $idclients) . "?conversion=" . urlencode($conversion) . "&camp_type=" . urlencode($camp_type) . "&gtm=" . urlencode($gtm) ?>" method="POST">
+					<form action="<?= site_url('Client/ajout_campagne/' . $idclients) . "?conversion=" . urlencode($conversion) . "&camp_type=" . urlencode($camp_type) . "&gtm=" . urlencode($gtm) ?>" method="POST" enctype="multipart/form-data">
 					<?php endif; ?>
 
 					<div class="container-fluid pt-4">
@@ -265,18 +265,45 @@ $images_site = isset($images_site) && is_array($images_site) ? $images_site : []
 						</div>
 
 						<div class="form-group">
-							<label for="age-range">Tranche d'âges</label>
-							<select name="age" id="age-range" class="form-control">
-								<option value="">-- Sélectionnez une tranche d'âge --</option>
-								<option value="Tous âges">Tout âges</option>
-								<option value="18-24">18 - 24 ans</option>
-								<option value="25-34">25 - 34 ans</option>
-								<option value="35-44">35 - 44 ans</option>
-								<option value="45-54">45 - 54 ans</option>
-								<option value="55-64">55 - 64 ans</option>
-								<option value="65+">65 ans et plus</option>
-							</select>
+												<label>Tranche d'âges</label>
+
+							<div class="form-check">
+								<input class="form-check-input" type="checkbox" name="age[]" value="Tous âges" id="age-all">
+								<label class="form-check-label" for="age-all">Tous âges</label>
+							</div>
+
+							<div class="form-check">
+								<input class="form-check-input" type="checkbox" name="age[]" value="18-24" id="age-18-24">
+								<label class="form-check-label" for="age-18-24">18 - 24 ans</label>
+							</div>
+
+							<div class="form-check">
+								<input class="form-check-input" type="checkbox" name="age[]" value="25-34" id="age-25-34">
+								<label class="form-check-label" for="age-25-34">25 - 34 ans</label>
+							</div>
+
+							<div class="form-check">
+								<input class="form-check-input" type="checkbox" name="age[]" value="35-44" id="age-35-44">
+								<label class="form-check-label" for="age-35-44">35 - 44 ans</label>
+							</div>
+
+							<div class="form-check">
+								<input class="form-check-input" type="checkbox" name="age[]" value="45-54" id="age-45-54">
+								<label class="form-check-label" for="age-45-54">45 - 54 ans</label>
+							</div>
+
+							<div class="form-check">
+								<input class="form-check-input" type="checkbox" name="age[]" value="55-64" id="age-55-64">
+								<label class="form-check-label" for="age-55-64">55 - 64 ans</label>
+							</div>
+
+							<div class="form-check">
+								<input class="form-check-input" type="checkbox" name="age[]" value="65+" id="age-65">
+								<label class="form-check-label" for="age-65">65 ans et plus</label>
+							</div>
 						</div>
+
+						
 
 					<div class="form-group">
 						<label for="age-range">Sexe</label>
@@ -293,70 +320,7 @@ $images_site = isset($images_site) && is_array($images_site) ? $images_site : []
                         <input type="text" name="date_campagne" class="form-control" value="7J/7, 24h/24">
                     </div>
 
-						<div class="form-group">
-							<label for="">Audiences</label>
-							<select name="audience" class="form-control">
-								<option value="">Audience 1</option>
-								<option value="">Audience 2</option>
-							</select>
-						</div>
-
-						<div class="container mb-3">
-							<div class="multi-col" style="height: 200px;">
-								<div class="custom-control custom-checkbox">
-									<input type="checkbox" name="" id="" class="custom-control-input">
-									<label for="" class="custom-control-label">Affinité</label>
-								</div>
-								<div class="custom-control custom-checkbox">
-									<input type="checkbox" name="" id="" class="custom-control-input">
-									<label for="" class="custom-control-label">Acheteurs</label>
-								</div>
-								<div class="custom-control custom-checkbox">
-									<input type="checkbox" name="" id="" class="custom-control-input">
-									<label for="" class="custom-control-label">Actualités et politique</label>
-								</div>
-								<div class="custom-control custom-checkbox">
-									<input type="checkbox" name="" id="" class="custom-control-input">
-									<label for="" class="custom-control-label">Alimentation et restauration</label>
-								</div>
-								<div class="custom-control custom-checkbox">
-									<input type="checkbox" name="" id="" class="custom-control-input">
-									<label for="" class="custom-control-label">Banque et finance</label>
-								</div>
-								<div class="custom-control custom-checkbox">
-									<input type="checkbox" name="" id="" class="custom-control-input">
-									<label for="" class="custom-control-label">Beauté et bien-être</label>
-								</div>
-								<div class="custom-control custom-checkbox">
-									<input type="checkbox" name="" id="" class="custom-control-input">
-									<label for="" class="custom-control-label">Maison et jardinage</label>
-								</div>
-								<div class="custom-control custom-checkbox">
-									<input type="checkbox" name="" id="" class="custom-control-input">
-									<label for="" class="custom-control-label">Modes de vie et loisirs</label>
-								</div>
-								<div class="custom-control custom-checkbox">
-									<input type="checkbox" name="" id="" class="custom-control-input">
-									<label for="" class="custom-control-label">Médias et divertissement</label>
-								</div>
-								<div class="custom-control custom-checkbox">
-									<input type="checkbox" name="" id="" class="custom-control-input">
-									<label for="" class="custom-control-label">Sport et remise en forme</label>
-								</div>
-								<div class="custom-control custom-checkbox">
-									<input type="checkbox" name="" id="" class="custom-control-input">
-									<label for="" class="custom-control-label">Technologie</label>
-								</div>
-								<div class="custom-control custom-checkbox">
-									<input type="checkbox" name="" id="" class="custom-control-input">
-									<label for="" class="custom-control-label">Voyages</label>
-								</div>
-								<div class="custom-control custom-checkbox">
-									<input type="checkbox" name="" id="" class="custom-control-input">
-									<label for="" class="custom-control-label">Véhicules et transports</label>
-								</div>
-							</div>
-						</div>
+						
 
 					<div class="form-group">
 						<label for="appareil_search">Appareil</label>
@@ -408,6 +372,13 @@ $images_site = isset($images_site) && is_array($images_site) ? $images_site : []
 							Lien Youtube
 							<input type="text" name="Youtube" class="form-control" placeholder="Entrer lien youtube">
                     	</div>
+						<ul class="nav nav-tabs mb-3">
+							<li class="nav-item">
+								<a class="nav-link py-3 active">Pièce jointe</a>
+							</li>
+							<input type="file" name="wetransfer" class="form-control">
+						</ul>
+
 
 						<ul class="nav nav-tabs mb-3">
 							<li class="nav-item">

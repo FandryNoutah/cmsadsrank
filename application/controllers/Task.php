@@ -31,51 +31,100 @@ class Task extends MY_Controller
         $this->load->library('form_validation'); */
 		//$this->form_validation->set_error_delimiters('<span class="error">', '</span>');
 
-	}
+	}public function index()
+{
+    // =========================
+    // Données globales
+    // =========================
+    $this->data['donnee'] = $this->visuels_model->getClientDataByDonnee();
+    $this->data['users']  = $this->visuels_model->getusersall();
 
-	public function index()
-	{
+    // =========================
+    // Récupération des tâches
+    // =========================
+    $tasks = $this->Task_model->get_all_tâche();
+    $this->data['tache'] = $tasks;
 
-		/* 
-		 $this->data['Campgagne_non_actif'] = $this->visuels_model->getDonneeByCampagneNonActif();
-		  $this->data['Campgagne_en_attente_envoye'] = $this->visuels_model->getDonneeByenattentedeenvoyestructure();
-		$ko = $this->data['upsell'] = $this->visuels_model->getupsell();
-		$this->data['produit'] = $this->Donne_modele->get_all_produit();
-		$this->data['am'] = $this->Donne_modele->get_all_am();
-		$this->data['initiative'] = $this->Donne_modele->get_all_initiative(); */
+    // =========================
+    // Compteurs globaux
+    // =========================
+    $this->data['count_planned']   = 0;
+    $this->data['count_upcoming']  = 0;
+    $this->data['count_completed'] = 0;
 
-		// $this->page = "templates/v3/Task.php";
+    // =========================
+    // Compteurs par onglet (PLANIFIÉ)
+    // =========================
+    $this->data['count_team_planned']       = 0;
+    $this->data['count_onboarding_planned'] = 0;
+    $this->data['count_gtm_planned']        = 0;
 
-		$this->data['donnee'] = $this->visuels_model->getClientDataByDonnee();
-		$this->data['users'] = $this->visuels_model->getusersall();
-		$tasks = $this->data['tache'] = $this->Task_model->get_all_tâche();
-		$this->data['count_planned'] = 0;
-		$this->data['count_upcoming'] = 0;
-		$this->data['count_completed'] = 0;
+    // =========================
+    // Traitement des tâches
+    // =========================
+    if (!empty($tasks)) {
+        foreach ($tasks as $task) {
 
-		foreach ($tasks as $task) {
-			
-			$task->expired = (new DateTime($task->date_due)) <= (new DateTime('now'));
-			
-			$task->count_messages = $this->Task_message_model->count_messages_by_task($task->idtask);
-			switch ($task->status) {
-				case "planifié":
-					$this->data['count_planned']++;
-					break;
+            // Expiration
+            $task->expired = !empty($task->date_due)
+                ? (new DateTime($task->date_due)) <= new DateTime()
+                : false;
 
-				case "en cours":
-					$this->data['count_upcoming']++;
-					break;
+            // Messages
+            $task->count_messages = $this->Task_message_model
+                ->count_messages_by_task($task->idtask);
 
-				case "effectuée":
-					$this->data['count_completed']++;
-					break;
-			}
-		}
+            // Normalisation du statut
+            $status = mb_strtolower(trim($task->status));
+            $type   = (int) $task->type_tache;
 
-		$this->content = "layouts/task/index.php";
-		$this->layout();
-	}
+            // =========================
+            // PLANIFIÉ
+            // =========================
+            if (in_array($status, ['planifié', 'planifie'])) {
+
+                $this->data['count_planned']++;
+
+                // 🔹 TEAM TASK (view: type 20,21)
+                if (in_array($type, [20, 21])) {
+                    $this->data['count_team_planned']++;
+                }
+
+                // 🔹 ONBOARDING (view: kanban)
+                elseif (in_array($type, [1,5,6,7,8,9,10,11,12,15,18])) {
+                    $this->data['count_onboarding_planned']++;
+                }
+
+                // 🔹 GTM
+                elseif (in_array($type, [3,13,16])) {
+                    $this->data['count_gtm_planned']++;
+                }
+            }
+
+            // =========================
+            // EN COURS
+            // =========================
+            elseif ($status === 'en cours') {
+                $this->data['count_upcoming']++;
+            }
+
+            // =========================
+            // EFFECTUÉE
+            // =========================
+            elseif ($status === 'effectuée') {
+                $this->data['count_completed']++;
+            }
+        }
+    }
+
+    // =========================
+    // Vue
+    // =========================
+    $this->content = 'layouts/task/index.php';
+    $this->layout();
+}
+
+
 
 	public function delete_task($task_id)
 	{

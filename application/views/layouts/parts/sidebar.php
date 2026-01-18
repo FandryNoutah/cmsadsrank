@@ -78,14 +78,14 @@
 
             <li class="nav-item rounded <?= ($this->uri->segment(1) == "Discussion") ? 'active' : ''; ?>">
                 <a class="nav-link" href="<?= base_url('Discussion'); ?>">
-                    <img class="mr-2" src="<?= base_url('assets/images/ico/icone/Stack.png') ?>" />
+                    <img class="mr-2" src="<?= base_url('assets/images/ico/icone/ChatCircleText.png') ?>" />
                     <span class="nav-label">Discussions</span>
                 </a>
             </li>
 
             <li class="nav-item rounded <?= ($this->uri->segment(1) == "Gtm") ? 'active' : ''; ?>">
                 <a class="nav-link" href="<?= base_url('Gtm') ?>">
-                    <img class="mr-2" src="<?= base_url('assets/images/ico/icone/ChatCircleText.png') ?>" />
+                    <img class="mr-2" src="<?= base_url('assets/images/ico/icone/gtm.png') ?>" width="25"/>
                     <span class="nav-label">Suivi GTM</span>
                 </a>
             </li>

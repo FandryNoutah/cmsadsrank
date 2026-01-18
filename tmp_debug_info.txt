@@ -1,0 +1,6 @@
+date: 2025-12-01T10:45:27+01:00
+idclients: 1
+donne_valider count: 3
+groupe_valider count: 3
+html_full length: 971
+html_body length: 385

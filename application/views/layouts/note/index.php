@@ -32,12 +32,7 @@
 
 <?php start_section('page_heading'); ?>
 <div class="row mx-lg-2 my-2">
-	<div class="col-auto px-1">
-		<button class="btn btn-outline-dark">
-			<img src="<?= base_url('assets/images/icons/figma/icon-funnelsimple.svg') ?>" alt="">
-			Sort By
-		</button>
-	</div>
+
 	<div class="col-auto px-1">
 		<select id="note_user_filter" class="custom-select border-dark">
 			<option disabled selected>Filter</option>

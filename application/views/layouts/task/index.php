@@ -84,22 +84,28 @@
 <?php start_section('page_heading'); ?>
 
 <ul class="nav nav-tabs mr-auto ml-5" role="tablist">
-	<li class="nav-item">
-		<a class="nav-link py-3 active" id="list_tab" data-toggle="tab" data-target="#list-list" role="tab" aria-controls="list-list" aria-selected="true">
-			<img src="<?= base_url('assets/images/icons/figma/icon-list.svg') ?>" alt=""> Team Task
-		</a>
-	</li>
-	<li class="nav-item">
-		<a class="nav-link py-3" id="kanban_tab" data-toggle="tab" data-target="#kanban-kanban" role="tab" aria-controls="kanban-kanban" aria-selected="false">
-			<img src="<?= base_url('assets/images/icons/figma/icon-kanban.svg') ?>" alt=""> Onboarding
-		</a>
-	</li>
-	<li class="nav-item">
-		<a class="nav-link py-3" id="gtm_tab" data-toggle="tab" data-target="#gtm-gtm" role="tab" aria-controls="gtm-gtm" aria-selected="false">
-			<img src="<?= base_url('assets/images/icons/figma/icon-kanban.svg') ?>" alt=""> GTM
-		</a>
-	</li>
+    <li class="nav-item">
+        <a class="nav-link py-3 active" id="list_tab" data-toggle="tab" data-target="#list-list" role="tab">
+            <img src="<?= base_url('assets/images/icons/figma/icon-list.svg') ?>" alt="">
+            Team Task <span class="badge badge-light">(<?= $count_team_planned ?>)</span>
+        </a>
+    </li>
+
+    <li class="nav-item">
+        <a class="nav-link py-3" id="kanban_tab" data-toggle="tab" data-target="#kanban-kanban" role="tab">
+            <img src="<?= base_url('assets/images/icons/figma/icon-kanban.svg') ?>" alt="">
+            Onboarding <span class="badge badge-light">(<?= $count_onboarding_planned ?>)</span>
+        </a>
+    </li>
+
+    <li class="nav-item">
+        <a class="nav-link py-3" id="gtm_tab" data-toggle="tab" data-target="#gtm-gtm" role="tab">
+            <img src="<?= base_url('assets/images/icons/figma/icon-kanban.svg') ?>" alt="">
+            GTM <span class="badge badge-light">(<?= $count_gtm_planned ?>)</span>
+        </a>
+    </li>
 </ul>
+
 
 <div class="row mx-lg-2">
 	<div class="col-auto px-1">
@@ -207,17 +213,8 @@
 										</td>
 										<td>
 											<div class="row">
-												<?php // type badges ?>
-												<?php if ($t->type_tache == 1): ?><div class="mr-2"><span class="badge alert-success">Team task</span></div><?php endif; ?>
-												<?php if ($t->type_tache == 2): ?><div class="mr-2"><span class="badge alert-success">Temporaire</span></div><?php endif; ?>
-												<?php if ($t->type_tache == 3): ?><div class="mr-2"><span class="badge alert-success">GTM</span></div><?php endif; ?>
-												<?php if ($t->type_tache == 4): ?><div class="mr-2"><span class="badge alert-success">Plan de taggage</span></div><?php endif; ?>
-												<?php if ($t->type_tache == 5): ?><div class="mr-2"><span class="badge alert-success">Upsell</span></div><?php endif; ?>
-												<?php if ($t->type_tache == 6): ?><div class="mr-2"><span class="badge alert-danger">Baisse</span></div><?php endif; ?>
-												<?php if ($t->type_tache == 7): ?><div class="mr-2"><span class="badge alert-danger">Résiliation</span></div><?php endif; ?>
-												<?php if ($t->type_tache == 8): ?><div class="mr-2"><span class="badge alert-warning">Mise en pause</span></div><?php endif; ?>
-												<?php if ($t->type_tache == 9): ?><div class="mr-2"><span class="badge alert-success">Relance</span></div><?php endif; ?>
-												<?php if ($t->type_tache == 10): ?><div class="mr-2"><span class="badge alert-success">Annonce</span></div><?php endif; ?>
+												<?php if ($t->type_tache == 20): ?><div class="mr-2"><span class="badge alert-success">Team task</span></div><?php endif; ?>
+												<?php if ($t->type_tache == 21): ?><div class="mr-2"><span class="badge alert-success">Temporaire</span></div><?php endif; ?>
 												<?php if ($t->Statuts_technique == 3): ?><span class="col-auto mx-1 badge alert-danger">Urgent</span><?php endif; ?>
 											</div>
 										</td>
@@ -373,6 +370,12 @@
 										<?php elseif($t->title == "Validation client"): ?>
 										<a href="<?= base_url('Validation/validation_structure/' . $t->idclients . '#campagne') ?>" ><h6 class="mb-0 ml-3" style="color: #282a2c"><?= htmlspecialchars($t->nom_client) ?></h6></a>
 										<?php elseif($t->title == "Création annonce"): ?>
+										<a href="<?= base_url('Client/onboarding/' . $t->idclients . '#campagne') ?>" ><h6 class="mb-0 ml-3" style="color: #282a2c"><?= htmlspecialchars($t->nom_client) ?></h6></a>
+										<?php elseif($t->title == "Upsell"): ?>
+										<a href="<?= base_url('Client/onboarding/' . $t->idclients . '#campagne') ?>" ><h6 class="mb-0 ml-3" style="color: #282a2c"><?= htmlspecialchars($t->nom_client) ?></h6></a>
+										<?php elseif($t->title == "Baisse"): ?>
+										<a href="<?= base_url('Client/onboarding/' . $t->idclients . '#campagne') ?>" ><h6 class="mb-0 ml-3" style="color: #282a2c"><?= htmlspecialchars($t->nom_client) ?></h6></a>
+										<?php elseif($t->title == "Booster"): ?>
 										<a href="<?= base_url('Client/onboarding/' . $t->idclients . '#campagne') ?>" ><h6 class="mb-0 ml-3" style="color: #282a2c"><?= htmlspecialchars($t->nom_client) ?></h6></a>
 										
 										<?php else: ?>
@@ -571,7 +574,6 @@ $(function() {
 		$('#detailModalLabel').text("");
 		$('#detail_date_due').removeAttr('value');
 		$('#detail_description').text("");
-		$('#detail_discussion_form').removeAttr('id').removeData('id');
 		$('#detail_type').html("");
 		$('#detail_status').html("");
 		$('#detail_avatar').html("");
@@ -642,7 +644,7 @@ $(function() {
 			success: function(response) {
 				if (!response || !response.task) { $('#detail_discussion').html('<div class="alert alert-warning">Tâche introuvable.</div>'); return; }
 				let task = response.task;
-				let messages = response.messages || [];
+
 				$('#detailModalLabel').text("Tâche: " + (task.title || ""));
 				$('#detail_date_due').val(task.date_due || "");
 				let safe = $('<div>').text(task.description || "").html();
@@ -652,8 +654,9 @@ $(function() {
 				$('#detail_avatar').append('<img src="<?= base_url(IMAGES_PATH); ?>/' + (task.assigned_to_photo || '') + '" class="avatar rounded-circle bg-white" width="36" height="36" alt="Assigned">');
 				var type = '';
 				switch (String(task.type_tache)) {
-					case '1': type = 'Team Task'; break;
-					case '2': type = 'Temporaire'; break;
+					case '20': type = 'Team Task'; break;
+					case '21': type = 'Temporaire'; break;
+					case '1': type = 'Onboarding'; break;
 					case '3': type = 'GTM'; break;
 					case '4': type = 'Plan de taggage'; break;
 					default: type = task.type_tache || ''; break;
@@ -668,16 +671,7 @@ $(function() {
 					default: status = task.Statuts_technique || ''; status_color = 'secondary';
 				}
 				$('#detail_status').html('<span class="badge alert-'+status_color+' p-2" style="font-size: 14px;">'+status+'</span>');
-				if (messages.length) {
-					$.each(messages, function(index, data) {
-						let html = '<div class="d-block activity-container mt-3">'+
-							'<div class="d-flex">'+
-								'<div class="mx-1"><img src="'+data.photo_users+'" alt="" width="32"></div>'+
-								'<div class="flex-fill mx-1"><div class="d-block mb-2"><span class="font-weight-bold">'+data.username+'</span> '+data.message+'</div><div class="d-block mb-2"><span class="text-muted small">'+data.created_at+'</span></div></div>'+
-							'</div></div>';
-						$('#detail_discussion').prepend(html);
-					});
-				}
+
 				if (task.fichier_nom) { $('#attachment_download').attr('href', "<?= base_url(); ?>/" + task.fichier_nom); $('#attachment_container').removeClass('d-none'); }
 				if (String(task.assigned_to) == "<?= $this->current_user->id ?>" || String(task.AM) == "<?= $this->current_user->id ?>") {
 					$('#change_status').val(task.status || "");
@@ -754,21 +748,63 @@ $(function() {
 		});
 	});
 
-	$('#detailModal').on('show.bs.modal', function(event) { let button = $(event.relatedTarget); let task_id = $(button).attr('data-id'); $('#detail_discussion_form').data('id', task_id); fetch_detail(task_id); });
-	$('#detailModal').on('hide.bs.modal', function() { resetDetail(); });
+	$('#detailModal').on('show.bs.modal', function (event) {
+    let button = $(event.relatedTarget);
+    let id_task = $(button).data('id');
 
-	$('#detail_discussion_form').submit(function(event) {
-		event.preventDefault();
-		let submitter = event.originalEvent && event.originalEvent.submitter ? event.originalEvent.submitter : $(this).find('button[type="submit"]')[0];
-		let buttonChild = $(submitter).html();
-		let task_id = $(this).data('id');
-		if (!task_id) return;
-		$.ajax({ type: $(this).attr('method'), url: $(this).attr('action'), data: { "id_task": task_id, "message": $('#detail_message').val() }, dataType: "json",
-			beforeSend: function() { $(submitter).attr('disabled', "disabled"); $(submitter).html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>'); },
-			success: function(response) { $(submitter).removeAttr("disabled"); $(submitter).html(buttonChild); $('#detail_message').val(""); fetch_detail(task_id); },
-			error: function() { $(submitter).removeAttr("disabled"); $(submitter).html(buttonChild); alert('Erreur lors de l\'envoi du message.'); }
-		});
-	});
+    fetch_detail(id_task);
+    loadDetailDiscussion(id_task);
+
+    $('#detail_discussion_form input[name="id_task"]').val(id_task);
+});
+$('#detailModal').on('hide.bs.modal', function() { resetDetail(); });
+$('#detail_discussion_form').on('submit', function (e) {
+    e.preventDefault();
+
+    let form = $(this);
+    let taskId = form.find('input[name="id_task"]').val();
+    let message = $('#detail_message').val();
+
+    if (!taskId || !message.trim()) return;
+
+$.post(form.attr('action'), {
+    id_task: taskId,
+    message: message
+}, function () {
+    $('#detail_message').val('');
+    loadDetailDiscussion(taskId);
+});
+
+});
+
+function loadDetailDiscussion(taskId) {
+    $.getJSON('<?= site_url("Task/fetch_discussion") ?>/' + taskId, function (response) {
+        let container = $('#detail_discussion');
+        container.html('');
+
+        if (!response.length) {
+            container.html('<div class="alert alert-light">Aucune discussion</div>');
+            return;
+        }
+
+        response.forEach(msg => {
+            container.append(`
+                <div class="d-flex ${msg.owner ? 'justify-content-end' : 'justify-content-start'} mt-2">
+                    <div class="p-2 rounded ${msg.owner ? 'bg-dark text-white' : 'bg-light border'}">
+                        <small class="text-muted d-block">${msg.username} – ${msg.created_at}</small>
+                        ${msg.message}
+                    </div>
+                </div>
+            `);
+        });
+    });
+}
+
+
+
+// envoi message dans le détail
+
+
 
 	$('#formModal').on('show.bs.modal', function(event) {
 		let button = $(event.relatedTarget);

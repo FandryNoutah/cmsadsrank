@@ -133,7 +133,7 @@
 							<th>Structure</th>
 							<th>Validation Client</th>
 							<?php endif; ?>
-							<th>Annonce</th>
+							<th>Mise en ligne</th>
 							<?php if ($current_users == 1): ?>
 							<th>Compte Ads</th>
 							<?php endif; ?>
@@ -254,7 +254,7 @@
 									?>
 									<td>
 										<?php if ($d->dejaclient == 0): ?>
-											<span class="badge alert-warning px-2 py-1" style="color: #727272; background-color: #eae7e79e">Nouveau client</span>
+											<span class="badge alert-warning px-2 py-1" style="color: #727272; background-color: #eae7e79e">Nouveau</span>
 										<?php else: ?>
 											<?php if ($d->type_upsell == 2): ?>
 												<span class="badge alert-success px-2 py-1">Upsell</span>

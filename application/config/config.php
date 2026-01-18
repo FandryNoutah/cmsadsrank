@@ -504,6 +504,7 @@ $config['time_reference'] = 'local';
 |
 */
 $config['rewrite_short_tags'] = FALSE;
+$config['composer_autoload'] = FCPATH . 'vendor/autoload.php';
 
 /*
 |--------------------------------------------------------------------------
@@ -523,3 +524,7 @@ $config['rewrite_short_tags'] = FALSE;
 */
 $config['proxy_ips'] = '';
 $config['max_size'] = 51200; 
+$config['enable_hooks'] = TRUE;
+$route['client/import'] = 'Client/import_excel_view';
+$route['client/import/process'] = 'Client/import_excel_process';
+

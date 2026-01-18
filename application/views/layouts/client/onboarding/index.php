@@ -839,7 +839,7 @@
 														<i class="fa fa-database" style="font-size: 22px;"></i>
 													</div>
 													<h3>Site de vente</h3>
-													<p class="text-muted">A centralized repository storing all contact.</p>
+													<p class="text-muted"></p>
 												</div>
 											</div>
 										</div>
@@ -850,7 +850,7 @@
 														<i class="fa fa-link" style="font-size: 22px;"></i>
 													</div>
 													<h3>Site formulaire</h3>
-													<p class="text-muted">Setting tasks, follow-ups, or reminders.</p>
+													<p class="text-muted"></p>
 												</div>
 											</div>
 										</div>
@@ -861,7 +861,7 @@
 														<i class="fa fa-cloud" style="font-size: 22px;"></i>
 													</div>
 													<h3>Site Réservation</h3>
-													<p class="text-muted">Automatically updating and enriching contact.</p>
+													<p class="text-muted"></p>
 												</div>
 											</div>
 										</div>
@@ -894,8 +894,10 @@
 									<th>TYPE</th>
 									<th>CAMPAGNE</th>
 									<th>BUDGET</th>
-									<th>DEMANDE</th>
+									<!-- <th>DEMANDE</th> -->
+									 <?php if($current_user->tech != 1): ?>
 									<th>STATUT</th>
+									<?php endif;  ?>
 									<th></th> <!-- expand icon -->
 								</tr>
 							</thead>
@@ -943,23 +945,28 @@
 											</td>
 											<td><?= htmlspecialchars($campagne['nom_campagne']) ?></td>
 											<td><?= isset($campagne['repartition_budget']) ? (float)$campagne['repartition_budget'] : 0 ?> €</td>
-											<td><span class="badge alert-primary">GTM</span></td>
+											<!-- <td><span class="badge alert-primary">GTM</span></td> -->
+											<?php if($current_user->tech != 1): ?>
 											<td>
+													 
 												<?php if (!empty($campagne['actif'])): ?>
 													<span class="badge alert-primary"><i class="fa fa-circle"></i> En cours</span>
 												<?php else: ?>
 													<span class="badge alert-success"><i class="fa fa-circle"></i> Terminée</span>
 												<?php endif; ?>
+														
 											</td>
+											<?php endif; ?>
 											<td class="text-center">
-												<a data-toggle="collapse" href="#child<?= $campagne['idcampagne'] ?>" role="button" aria-expanded="false" aria-controls="child<?= $campagne['idcampagne'] ?>">
+												<a data-toggle="collapse" href="#child<?= $campagne['idcampagne'] ?>" role="button" aria-expanded="true" aria-controls="child<?= $campagne['idcampagne'] ?>">
 													<i class="fa fa-chevron-down text-muted"></i>
 												</a>
 											</td>
 										</tr>
 
 										<!-- child row -->
-										<tr id="child<?= $campagne['idcampagne'] ?>" class="collapse border-0">
+										<tr id="child<?= $campagne['idcampagne'] ?>" class="collapse show border-0">
+
 											<td colspan="7" class="border-0 p-0 pl-5">
 												<?php if (!empty($campagne['groupes_annonces'])): ?>
 													<table class="table table-wrapper mb-0">
@@ -1048,8 +1055,8 @@
 									<div class="card h-100 camp-type-container">
 										<div class="card-body">
 											<img src="<?= base_url('assets/images/icons/figma/content_icon.png') ?>" alt="" class="mb-3" width="110">
-											<h3>Search</h3>
-											<p class="text-muted">Create, customize, and manage email marketing campaigns.</p>
+											<h3>Réseau de Recherche</h3>
+											<p class="text-muted">Suscitez l'engagement des utilisateurs sur le Réseau de recherche avec des annonces textuelles</p>
 											<a href="javascript:void(0);" class="stretched-link text-dark font-weight-bold select-conversion-type" data-target="#camp_1">
 												Discover More
 												<i class="fa fa-arrow-right"></i>
@@ -1063,7 +1070,7 @@
 										<div class="card-body">
 											<img src="<?= base_url('assets/images/icons/figma/content_icon.png') ?>" alt="" class="mb-3" width="110">
 											<h3>Performance Max</h3>
-											<p class="text-muted">Tailor emails by segmenting contacts based on demographics, behavior.</p>
+											<p class="text-muted">Touchez les bonnes personnes grâce à des annonces sur Search, YouTube, Display, Gmail et Discover</p>
 											<a href="javascript:void(0);" class="stretched-link text-dark font-weight-bold select-conversion-type" data-target="#camp_3">
 												Discover More
 												<i class="fa fa-arrow-right"></i>
@@ -1077,7 +1084,7 @@
 										<div class="card-body">
 											<img src="<?= base_url('assets/images/icons/figma/relation_icon.png') ?>" alt="" class="mb-3" width="90">
 											<h3>Locale</h3>
-											<p class="text-muted">Create, customize, and manage email marketing campaigns.</p>
+											<p class="text-muted">Attirer des visiteurs dans votre établissement (y compris un restaurant ou une concession automobile)</p>
 											<a href="javascript:void(0);" class="stretched-link text-dark font-weight-bold select-conversion-type" data-target="#camp_2">
 												Discover More
 												<i class="fa fa-arrow-right"></i>
@@ -1098,7 +1105,7 @@
 
 		<?php $this->load->view('layouts/client/onboarding/modal/brief', ['d' => $d]) ?>
 		<?php $this->load->view('layouts/client/onboarding/modal/client') ?>
-		<?php $this->load->view('layouts/client/onboarding/modal/inventaire_pmax', ['groupe_valider' => $groupe_valider]) ?>
+		<?php $this->load->view('layouts/client/onboarding/modal/inventaire', ['groupe_valider' => $groupe_valider]) ?>
 		<?php $this->load->view('layouts/client/onboarding/modal/modifier_Brief', ['campagne' => $donne_valider]) ?>
 		<?php $this->load->view('layouts/client/onboarding/modal/change_statut') ?>
 		<?php

@@ -1,5 +1,12 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
+$hook['post_controller'][] = array(
+    'class'    => 'TagInspectorHook',
+    'function' => 'run',
+    'filename' => 'TagInspectorHook.php',
+    'filepath' => 'hooks',
+    'params'   => array()
+);
 
 /*
 | -------------------------------------------------------------------------

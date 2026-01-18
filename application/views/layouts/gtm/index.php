@@ -167,6 +167,8 @@
                                     <span class="badge alert-warning rounded-pill px-2 py-1">En attente</span>
                                 <?php elseif ($d['statut'] == "Annulé"): ?>
                                     <span class="badge alert-danger rounded-pill px-2 py-1">Annulé</span>
+                                     <?php elseif ($d['statut'] == "Erreur"): ?>
+                                    <span class="badge alert-danger rounded-pill px-2 py-1">Erreur</span>
                                 <?php else: ?>
                                     <span class="badge alert-success rounded-pill px-2 py-1">Implémenté</span>
                                 <?php endif; ?>
@@ -210,14 +212,43 @@
                                     <label>Date de l'invitation reçue</label>
                                     <input type="date" class="form-control" name="invitation_reçu" id="invitation_recu_modal">
                                 </div>
+                                <!-- Statut -->
                                 <div class="form-group">
                                     <label>Statut</label>
                                     <select class="form-control" name="statut" id="statut_modal">
                                         <option value="En_attente">En attente</option>
                                         <option value="Annulé">Annulé</option>
                                         <option value="Implémenté">Implémenté</option>
+                                        <option value="Erreur">Erreur</option>
                                     </select>
                                 </div>
+
+                                <!-- Type d'erreur -->
+                                <div class="form-group" id="gtm_error_type_group" style="display:none;">
+                                    <label>Type d'erreur</label>
+                                    <select class="form-control" name="error_title" id="gtm_error_type">
+                                        <option value="">-- Sélectionner une erreur --</option>
+                                        <option value="gtm">Bug Mise en place GTM</option>
+                                        <option value="tracking">Problème tracking balises</option>
+                                        <option value="url">Changement d’URL</option>
+                                        <option value="href">Problème lien href</option>
+                                        <option value="cmp">Problème CMP</option>
+                                        <option value="thankyou">URL page de remerciement incorrecte</option>
+                                        <option value="contact">Problème demande mise en relation</option>
+                                    </select>
+                                </div>
+
+                                <!-- Description -->
+                                <div class="form-group" id="gtm_error_description_group" style="display:none;">
+                                    <label>Description de l'erreur</label>
+                                    <textarea
+                                        class="form-control"
+                                        name="error_description"
+                                        id="gtm_error_description"
+                                        rows="4">
+                                    </textarea>
+                                </div>
+
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Annuler</button>
@@ -320,13 +351,20 @@
 <div class="modal fade" id="optimisationModal" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
+
             <div class="modal-header">
                 <h5 class="modal-title">Modifier Optimisation GTM</h5>
-                <button type="button" class="close" data-dismiss="modal"><span>&times;</span></button>
+                <button type="button" class="close" data-dismiss="modal">
+                    <span>&times;</span>
+                </button>
             </div>
+
             <form id="optimisationEditForm" action="<?= base_url('Gtm/update_optimisation') ?>" method="POST">
                 <div class="modal-body">
+
                     <input type="hidden" name="id_optimisation_gtm" id="id_optimisation_modal">
+
+                    <!-- Débogage -->
                     <div class="form-group">
                         <label>Débogage</label>
                         <select class="form-control" name="debougage" id="debougage_modal">
@@ -334,18 +372,42 @@
                             <option value="Erreur">Erreur</option>
                             <option value="Implémenté">Implémenté</option>
                         </select>
-                        <div class="form-group" id="error_description_group" style="display:none;">
-                            <label>Description de l'erreur</label>
-                            <textarea class="form-control" name="error_description" id="error_description_modal"></textarea>
-                        </div>
-
                     </div>
+
+                    <!-- Type d'erreur -->
+                    <div class="form-group" id="error_type_group" style="display:none;">
+                        <label>Type d'erreur</label>
+                        <select class="form-control" name="error_title" id="error_type_modal">
+                            <option value="">-- Sélectionner une erreur --</option>
+                            <option value="gtm">Bug Mise en place GTM</option>
+                            <option value="tracking">Problème tracking balises</option>
+                            <option value="url">Changement d’URL</option>
+                            <option value="href">Problème lien href</option>
+                            <option value="cmp">Problème CMP</option>
+                            <option value="thankyou">URL page de remerciement incorrecte</option>
+                            <option value="contact">Problème demande mise en relation</option>
+                        </select>
+                    </div>
+
+
+                    <!-- Description -->
+                    <div class="form-group" id="error_description_group" style="display:none;">
+                        <label>Description de l'erreur</label>
+                        <textarea
+                            class="form-control"
+                            name="error_description"
+                            id="error_description_modal"
+                            rows="4">
+                        </textarea>
+                    </div>
+
                 </div>
-                
+
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Annuler</button>
                     <button type="submit" class="btn btn-primary">Enregistrer</button>
                 </div>
+
             </form>
         </div>
     </div>
@@ -354,16 +416,92 @@
 
 <?php start_section('script'); ?>
 <script>
-    document.getElementById("debougage_modal").addEventListener("change", function () {
-        let errorGroup = document.getElementById("error_description_group");
+document.addEventListener("DOMContentLoaded", function () {
 
+    const debougage = document.getElementById("debougage_modal");
+    const errorTypeGroup = document.getElementById("error_type_group");
+    const errorType = document.getElementById("error_type_modal");
+    const errorDescriptionGroup = document.getElementById("error_description_group");
+    const errorDescription = document.getElementById("error_description_modal");
+
+    const errorMessages = {
+        gtm: "Google Tag Manager non installé ou mal configuré.",
+        tracking: "Les balises de tracking (Google Ads / GA4 / conversions) ne déclenchent pas correctement.",
+        url: "Modification d’URL impactant le tracking ou les redirections (risque de perte de conversions).",
+        href: "Liens mal renseignés (href manquant, incorrect ou non cliquable).",
+        cmp: "Consent Management Platform défaillante (cookies non déclenchés selon le consentement).",
+        thankyou: "Impossible de configurer correctement le suivi de conversion sans cette URL.",
+        contact: "Dysfonctionnement technique empêchant le tracking – Demande de mise en relation."
+    };
+
+    debougage.addEventListener("change", function () {
         if (this.value === "Erreur") {
-            errorGroup.style.display = "block";
+            errorTypeGroup.style.display = "block";
         } else {
-            errorGroup.style.display = "none";
+            errorTypeGroup.style.display = "none";
+            errorDescriptionGroup.style.display = "none";
+            errorType.value = "";
+            errorDescription.value = "";
         }
     });
+
+    errorType.addEventListener("change", function () {
+        if (this.value && errorMessages[this.value]) {
+            errorDescription.value = errorMessages[this.value];
+            errorDescriptionGroup.style.display = "block";
+        } else {
+            errorDescription.value = "";
+            errorDescriptionGroup.style.display = "none";
+        }
+    });
+
+});
 </script>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+
+    const statut = document.getElementById("statut_modal");
+    const errorTypeGroup = document.getElementById("gtm_error_type_group");
+    const errorType = document.getElementById("gtm_error_type");
+    const errorDescriptionGroup = document.getElementById("gtm_error_description_group");
+    const errorDescription = document.getElementById("gtm_error_description");
+
+    const errorMessages = {
+        gtm: "Google Tag Manager non installé ou mal configuré.",
+        tracking: "Les balises de tracking (Google Ads / GA4 / conversions) ne déclenchent pas correctement.",
+        url: "Modification d’URL impactant le tracking ou les redirections (risque de perte de conversions).",
+        href: "Liens mal renseignés (href manquant, incorrect ou non cliquable).",
+        cmp: "Consent Management Platform défaillante (cookies non déclenchés selon le consentement).",
+        thankyou: "Impossible de configurer correctement le suivi de conversion sans cette URL.",
+        contact: "Dysfonctionnement technique empêchant le tracking – Demande de mise en relation."
+    };
+
+    statut.addEventListener("change", function () {
+        if (this.value === "Erreur") {
+            errorTypeGroup.style.display = "block";
+        } else {
+            errorTypeGroup.style.display = "none";
+            errorDescriptionGroup.style.display = "none";
+            errorType.value = "";
+            errorDescription.value = "";
+        }
+    });
+
+    errorType.addEventListener("change", function () {
+        if (this.value && errorMessages[this.value]) {
+            errorDescription.value = errorMessages[this.value];
+            errorDescriptionGroup.style.display = "block";
+        } else {
+            errorDescription.value = "";
+            errorDescriptionGroup.style.display = "none";
+        }
+    });
+
+});
+</script>
+
+
 
 <script>
 $(document).ready(function(){

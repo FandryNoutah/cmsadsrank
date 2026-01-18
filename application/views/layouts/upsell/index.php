@@ -28,7 +28,7 @@
 <?php end_section(); ?>
 
 <?php start_section('page_title'); ?>
-<h1 class="h4">Upsell / Baisse</h1>
+<h1 class="h4">Suivi Budget</h1>
 <?php end_section(); ?>
 
 <?php start_section('page_heading'); ?>
@@ -87,7 +87,7 @@
 						<th>Member</th>
 						<th>Date de la demande</th>
 						<th>Date Effective</th>
-						<th>Type</th>
+						<!-- <th>Type</th> -->
 						<th>Budget</th>
 						<th>Statut</th>
 					</tr>
@@ -111,7 +111,7 @@
 						</td>
 						<td><?= htmlspecialchars($C['date_demande']); ?></td>
 						<td><?= htmlspecialchars($C['date_upsell']); ?></td>
-						<td><?= ($C['type_upsell'] == 2) ? 'Upsell' : 'Baisse'; ?></td>
+						<!-- <td>?= ($C['type_upsell'] == 2) ? 'Upsell' : 'Baisse'; ?></td> -->
 						<td><?= htmlspecialchars($C['budgets']); ?> €</td>
 						<td>
 							<?php if($C['statut_actif'] == 0): ?>

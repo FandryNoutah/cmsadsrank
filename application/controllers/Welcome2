@@ -1,0 +1,22 @@
+class Welcome2 extends CI_Controller
+{
+    public function index()
+    {
+        // génère ta vue comme d'habitude
+        $this->load->view('welcome_message');
+
+        // si tu veux analyser la sortie actuelle :
+        $this->output->_display(); // si tu veux forcer l'affichage (optionnel)
+        $html = $this->output->get_output();
+
+        // charger la library
+        $this->load->library('TagInspector');
+
+        $result = $this->taginspector->inspect($html);
+
+        // afficher en debug (ou logger)
+        echo "<pre>";
+        print_r($result);
+        echo "</pre>";
+    }
+}

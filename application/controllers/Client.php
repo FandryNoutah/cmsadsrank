@@ -1,5 +1,8 @@
 <?php
+
 defined('BASEPATH') or exit('No direct script access allowed');
+use PhpOffice\PhpSpreadsheet\IOFactory;
+
 $vendorAutoload = FCPATH . 'vendor' . DIRECTORY_SEPARATOR . 'autoload.php';
 if (!file_exists($vendorAutoload)) {
     // Message lisible et log si le fichier n'existe pas
@@ -58,6 +61,316 @@ class Client extends MY_Controller
 		$this->content = "layouts/client/index.php";
 		$this->layout();
 	}
+	public function update_info_client()
+	{
+		$id = $this->input->post('id_client');
+
+		$data = [
+			'nom_client'        => $this->input->post('edit_name'),
+			'email_client'      => $this->input->post('edit_email'),
+			'numero_client'     => $this->input->post('edit_number'),
+			'site_client'       => $this->input->post('edit_site'),
+			'info_base_client'  => $this->input->post('info_base_client')
+		];
+
+		$this->Donne_modele->update_clients($id, $data);
+
+		redirect('client/detail_client/' . $id); 
+	}
+	
+public function download_fichier($idcampagne)
+{
+    $this->load->helper('download');
+
+    $this->load->model('Donne_modele');
+    $campagne = $this->Donne_modele->get_fichier_groupe($idcampagne);
+
+    if (!$campagne || empty($campagne['file'])) {
+        show_404();
+        return;
+    }
+
+    // Sécurisation du chemin
+    $filepath = FCPATH . $campagne['file'];
+
+    if (!file_exists($filepath)) {
+        show_404();
+        return;
+    }
+
+    force_download($filepath, NULL);
+}
+
+
+	public function import_excel_view()
+    {
+        // charge une view simple avec formulaire d'upload
+        $this->load->view('import_excel');
+    }
+
+    /**
+     * Traitement du fichier uploadé (import massifs)
+     */
+   public function import_excel_process()
+{
+    // contrôle basique
+    if (empty($_FILES['excel_file']) || $_FILES['excel_file']['error'] !== UPLOAD_ERR_OK) {
+        $this->session->set_flashdata('error', 'Fichier introuvable ou erreur d\'upload.');
+        redirect('Client');
+        return;
+    }
+
+    $tmp = $_FILES['excel_file']['tmp_name'];
+    $ext = pathinfo($_FILES['excel_file']['name'], PATHINFO_EXTENSION);
+    $allowed = ['xlsx','xls','csv'];
+    if (!in_array(strtolower($ext), $allowed)) {
+        $this->session->set_flashdata('error', 'Format de fichier non supporté. Utilisez xlsx/xls/csv.');
+        redirect('Client');
+        return;
+    }
+
+    // Lecture via PhpSpreadsheet
+    try {
+        $reader = IOFactory::createReaderForFile($tmp);
+        $spreadsheet = $reader->load($tmp);
+        $sheet = $spreadsheet->getActiveSheet();
+        $rows = $sheet->toArray(null, true, true, true);
+    } catch (Exception $e) {
+        $this->session->set_flashdata('error', 'Impossible de lire le fichier Excel: '.$e->getMessage());
+        redirect('Client');
+        return;
+    }
+
+    // Mapping par défaut (Société -> client/nom_client)
+    $header = array_shift($rows);
+    $map = [];
+
+    // helper pour normaliser l'entête (supprime BOM, accents en minuscule)
+    $normalizeHeader = function($s) {
+        $s = trim((string)$s);
+        // supprimer BOM si présent
+        $s = preg_replace('/^\x{FEFF}/u', '', $s);
+        $s = mb_strtolower($s, 'UTF-8');
+        // remplacer les accents par versions non accentuées pour robustesse
+        $s = strtr($s, 'éèêëàâäîïôöûüùç', 'eeeeaaaiioouuuc');
+        return $s;
+    };
+
+    foreach ($header as $col => $val) {
+        $v = $normalizeHeader($val);
+        if (in_array($v, ['société','societe','societe','societé','societe']) || strpos($v, 'soc') !== false) {
+            $map['client'] = $col; // map to client (nom_client)
+            continue;
+        }
+        if (strpos($v, 'site') !== false) $map['site_client'] = $col;
+        if (strpos($v, 'activité') !== false || strpos($v, 'activite') !== false || strpos($v, 'activ') !== false) $map['secteur_activite'] = $col;
+        if (strpos($v, 'tel') !== false || strpos($v, 'tél') !== false || strpos($v, 'phone') !== false) $map['numero_client'] = $col;
+        if (strpos($v, 'email') !== false) $map['email_client'] = $col;
+        if (strpos($v, 'date') !== false || strpos($v, 'création') !== false || strpos($v, 'creation') !== false) $map['date_creation'] = $col;
+        if (strpos($v, 'adresse') !== false || strpos($v, 'address') !== false) $map['adresse'] = $col;
+    }
+
+    // helper pour formater dates (retourne '0000-00-00' si tu veux garder ce fallback)
+    $formatDateOrDefault = function($d, $default = '0000-00-00') {
+        if (empty($d)) return $default;
+        $ts = @strtotime($d);
+        if ($ts === false) return $default;
+        return date('Y-m-d', $ts);
+    };
+
+    // itérations sur les lignes
+    $inserted = 0;
+    $errors = [];
+
+    foreach ($rows as $ridx => $row) {
+        // récupérer les champs via mapping (toujours trim)
+        $client = isset($map['client']) ? trim((string)($row[$map['client']] ?? '')) : null; // <-- Société -> client
+        $site_client_raw = isset($map['site_client']) ? trim((string)($row[$map['site_client']] ?? '')) : null;
+        $secteur_activite = isset($map['secteur_activite']) ? trim((string)($row[$map['secteur_activite']] ?? '')) : null;
+        $numero_client = isset($map['numero_client']) ? trim((string)($row[$map['numero_client']] ?? '')) : null;
+        $email_client = isset($map['email_client']) ? trim((string)($row[$map['email_client']] ?? '')) : null;
+        $date_creation = isset($map['date_creation']) ? trim((string)($row[$map['date_creation']] ?? '')) : null;
+        $adresse = isset($map['adresse']) ? trim((string)($row[$map['adresse']] ?? '')) : null;
+
+        // skip line si site vide et client vide
+        if (empty($site_client_raw) && empty($client)) {
+            continue;
+        }
+
+        // normaliser URL
+        $site_client = trim($site_client_raw);
+        if (!empty($site_client) && !preg_match('#^https?://#i', $site_client)) {
+            $site_client = 'https://' . $site_client;
+        }
+
+        // fetch html si possible
+        $html = null;
+        if (!empty($site_client)) {
+            $html = $this->fetch_url($site_client);
+        }
+
+        // initialisation des valeurs détectées
+        $summary = null;
+        $naf_info = ['libelle' => $secteur_activite];
+        $gtm_code = null;
+        $cms = null;
+        $cms_logo = null;
+        $favicon = null;
+        $google_ads_value = "Non détecté";
+        $google_analytics_value = "Non détecté";
+        $cmp = null;
+        $datalayer = null;
+
+        if ($html !== false && $html !== null) {
+            // extraction headings/paragraphs + résumé (ta logique)
+            libxml_use_internal_errors(true);
+            $dom = new DOMDocument();
+            @$dom->loadHTML($html);
+            libxml_clear_errors();
+            $xpath = new DOMXPath($dom);
+
+            $paragraphs = [];
+            $p_nodes = $xpath->query("//p");
+            foreach ($p_nodes as $p) {
+                $text = trim($p->textContent);
+                if (!empty($text)) $paragraphs[] = $text;
+            }
+
+            $headings = [];
+            for ($i=1;$i<=6;$i++) {
+                $h_nodes = $xpath->query("//h{$i}");
+                foreach ($h_nodes as $h) {
+                    $text = trim($h->textContent);
+                    if (!empty($text)) $headings[] = ['tag'=>"h{$i}", 'text'=>$text];
+                }
+            }
+
+            try { $summary = $this->get_summary_from_chatgpt($headings, $paragraphs); } catch (Exception $e) { $summary = null; }
+            try {
+                $naf_info = $this->get_naf_code_from_summary($summary);
+                if (isset($naf_info['libelle'])) $secteur_activite = $naf_info['libelle'];
+            } catch (Exception $e) {}
+
+            if (preg_match('/GTM-[A-Z0-9]+/i', $html, $m)) $gtm_code = strtoupper($m[0]);
+            try { $cms = $this->detect_cms($html, $site_client); $cms_logo = $this->get_cms_logo($cms); } catch (Exception $e) {}
+            try { $favicon = $this->get_favicon($html, $site_client); } catch (Exception $e) {}
+
+            if (preg_match('/G-[A-Z0-9]{6,15}/i', $html, $mga)) $google_analytics_value = strtoupper($mga[0]);
+            elseif (preg_match('/UA-\d{4,12}-\d{1,4}/i', $html, $mua)) $google_analytics_value = strtoupper($mua[0]);
+
+            if (method_exists($this, 'detect_google_ads_and_ga')) {
+                try {
+                    $aw_res = $this->detect_google_ads_and_ga($site_client);
+                    if (!empty($aw_res['aw'])) {
+                        $google_ads_value = is_array($aw_res['aw']) ? implode(',', $aw_res['aw']) : $aw_res['aw'];
+                    }
+                } catch (Exception $e) {}
+            } else {
+                if (preg_match_all('/(AW-\d{6,})/i', $html, $maw)) {
+                    $google_ads_value = implode(',', array_map('strtoupper', array_unique($maw[1])));
+                }
+            }
+
+            if (method_exists($this->Application_model, 'detect_cmp')) {
+                try { $cmp = $this->Application_model->detect_cmp($site_client); } catch (Exception $e) {}
+            }
+            if (method_exists($this->Application_model, 'detect_datalayer')) {
+                try { $datalayer = $this->Application_model->detect_datalayer($site_client); } catch (Exception $e) {}
+            }
+        } // end if html
+
+        // -------- Insert en base (visuels_model)
+        try {
+            // IMPORTANT: client correspond à la colonne 'nom_client' dans la table clients
+            $idclients = $this->visuels_model->insertclient(
+                $client,         // <-- Société (nom_client)
+                $site_client,
+                $email_client,
+                $numero_client,
+                $favicon ?? '',
+                $cms ?? '',
+                $cms_logo ?? '',
+                $summary ?? '',
+                $naf_info
+            );
+        } catch (Exception $e) {
+            $errors[] = "Ligne {$ridx} : erreur insertclient - " . $e->getMessage();
+            continue;
+        }
+
+        // insertfiche : valeurs par défaut sûres
+        try {
+            $budget = 0;
+            $product_choice = 1;
+            $initiative = 19;
+            $am = 18;
+            // date_mis_en_place prend la colonne "Date Création" si présente, formatée; sinon '0000-00-00' (ou null si DB accepte)
+            $date_mis_en_place = !empty($date_creation) ? date('Y-m-d', strtotime($date_creation)) : '0000-00-00';
+            $date_brief = '0000-00-00';
+            $date_annonce = '0000-00-00';
+            $dejaclient = 0;
+            $gtm_code = $gtm_code ?? null;
+
+            $idonnee = $this->visuels_model->insertfiche(
+                $idclients,
+                $budget,
+                $secteur_activite,
+                $product_choice,
+                $initiative,
+                $am,
+                $date_mis_en_place,
+                $date_brief,
+                $date_annonce,
+                $dejaclient,
+                $gtm_code
+            );
+        } catch (Exception $e) {
+            $errors[] = "Ligne {$ridx} : erreur insertfiche - " . $e->getMessage();
+        }
+
+        // Mises à jour sur clients (gtm/cms/googleads/ga/cmp/datalayer)
+        try {
+            if (!empty($gtm_code) && method_exists($this->visuels_model, 'mis_a_jour_gtm')) {
+                $this->visuels_model->mis_a_jour_gtm($idclients, $gtm_code);
+            } elseif (!empty($gtm_code) && method_exists($this->visuels_model, 'update_gtm')) {
+                $this->visuels_model->update_gtm($idclients, $gtm_code);
+            }
+            if (!empty($cms) && method_exists($this->visuels_model, 'mis_a_jour_cms')) {
+                $this->visuels_model->mis_a_jour_cms($idclients, $cms);
+            } elseif (!empty($cms) && method_exists($this->visuels_model, 'update_cms')) {
+                $this->visuels_model->update_cms($idclients, $cms);
+            }
+            if (!empty($google_ads_value) && method_exists($this->visuels_model, 'update_google_ads')) {
+                $this->visuels_model->update_google_ads($idclients, $google_ads_value);
+            }
+            if (!empty($google_analytics_value) && method_exists($this->visuels_model, 'update_google_analytics')) {
+                $this->visuels_model->update_google_analytics($idclients, $google_analytics_value);
+            }
+            if (!empty($cmp) && method_exists($this->visuels_model, 'update_cmp')) {
+                $this->visuels_model->update_cmp($idclients, $cmp);
+            }
+            if (!empty($datalayer) && method_exists($this->visuels_model, 'update_datalayer')) {
+                $this->visuels_model->update_datalayer($idclients, $datalayer);
+            }
+        } catch (Exception $e) {
+            // log et continue
+            log_message('error', "Import update warnings: " . $e->getMessage());
+        }
+
+        $inserted++;
+    } // end foreach rows
+
+    // fin import
+    $msg = "Import terminé. {$inserted} clients insérés.";
+    if (!empty($errors)) {
+        $msg .= " Erreurs: " . count($errors) . ". Voir log pour détails.";
+        log_message('error', "Import Excel erreurs:\n" . implode("\n", $errors));
+    }
+
+    $this->session->set_flashdata('success', $msg);
+    redirect('Client/import_excel_view');
+}
+
 	public function valider_campagne($idclients)
 	{
 				$statut_demande = 3;
@@ -125,43 +438,7 @@ class Client extends MY_Controller
 		redirect('Client/onboarding/'. $idclients );
 
 	}
-	public function mis_a_jour_cmp($id)
-	{
-
-		// récupérer l’URL du client
-		$client = $this->Application_model->get_client($id);
-		$url = $client['site_client'];
-
-		// détecter CMP
-		$cmp = $this->Application_model->detect_cmp($url);
-
-		// mettre à jour en base
-		$this->Application_model->update_cmp($id, $cmp);
-
-		// message puis redirection
-		$this->session->set_flashdata('success', 'CMP mis à jour automatiquement : ' . $cmp);
-		redirect('Client/application/'.$id.'?maj=ok&type=cmp');
-
-	}
-
-
-	public function mis_a_jour_datalayer($id)
-	{
-
-		// récupérer l’URL du client
-		$client = $this->Application_model->get_client($id);
-		$url = $client['site_client'];
-
-		// détecter datalayer
-		$datalayer = $this->Application_model->detect_datalayer($url);
-
-		// mise à jour
-		$this->Application_model->update_datalayer($id, $datalayer);
-
-		$this->session->set_flashdata('success', 'DataLayer mis à jour : ' . $datalayer);
-		redirect('Client/application/'.$id.'?maj=ok&type=datalayer');
-
-	}
+	
 
 	public function repatition_budget()
 {
@@ -1278,6 +1555,298 @@ private function _scrape_images_from_site($url)
 		redirect('Client/application/'.$id.'?maj=ok&type=gtm');
 
 	}
+	public function mis_a_jour_cmp($id)
+	{
+
+		// récupérer l’URL du client
+		$client = $this->Application_model->get_client($id);
+		$url = $client['site_client'];
+
+		// détecter CMP
+		$cmp = $this->Application_model->detect_cmp($url);
+
+		// mettre à jour en base
+		$this->Application_model->update_cmp($id, $cmp);
+
+		// message puis redirection
+		$this->session->set_flashdata('success', 'CMP mis à jour automatiquement : ' . $cmp);
+		redirect('Client/application/'.$id.'?maj=ok&type=cmp');
+
+	}
+
+
+	public function mis_a_jour_datalayer($id)
+	{
+
+		// récupérer l’URL du client
+		$client = $this->Application_model->get_client($id);
+		$url = $client['site_client'];
+
+		// détecter datalayer
+		$datalayer = $this->Application_model->detect_datalayer($url);
+
+		// mise à jour
+		$this->Application_model->update_datalayer($id, $datalayer);
+
+		$this->session->set_flashdata('success', 'DataLayer mis à jour : ' . $datalayer);
+		redirect('Client/application/'.$id.'?maj=ok&type=datalayer');
+
+	}
+	/**
+ * Détecte Google Ads (AW) et éventuellement GA/GTM pour une URL donnée.
+ * Retourne un tableau : ['aw' => 'AW-...'] ou ['aw' => ['AW-...','AW-...']] ou ['error' => 'message']
+ */
+private function detect_google_ads_and_ga($site)
+{
+    // sécurise l'URL
+    $site = trim($site);
+    if (!preg_match('#^https?://#i', $site)) $site = 'https://' . $site;
+    $site = rtrim($site, '/') . '/';
+
+    // récupérer la page
+    $html = $this->curl_get($site);
+    if ($html === false) {
+        return ['error' => "Impossible de récupérer le contenu de {$site}"];
+    }
+
+    // charger la lib si besoin
+    $this->load->library('TagInspector');
+
+    // inspecter le HTML
+    $result = $this->taginspector->inspect($html);
+
+    // collecter GTM ids
+    $gtm_ids = [];
+    if (!empty($result['gtm_container_inline']['entries'])) {
+        foreach ($result['gtm_container_inline']['entries'] as $e) {
+            if (!empty($e['id'])) $gtm_ids[] = $e['id'];
+        }
+    }
+    if (!empty($result['gtm_script']['entries'])) {
+        foreach ($result['gtm_script']['entries'] as $e) {
+            if (!empty($e['id'])) $gtm_ids[] = $e['id'];
+        }
+    }
+    $gtm_ids = array_values(array_unique($gtm_ids));
+
+    // résultat final
+    $found_aw = [];
+
+    // si aucun GTM, cherche directement AW dans le HTML (cas rare)
+    if (empty($gtm_ids)) {
+        if (preg_match_all('/(AW-\d{6,})/i', $html, $m)) {
+            foreach ($m[1] as $a) $found_aw[] = strtoupper($a);
+        }
+    } else {
+        // pour chaque GTM, récupérer gtm.js et analyser
+        foreach ($gtm_ids as $gid) {
+            $gtm_url = "https://www.googletagmanager.com/gtm.js?id=" . urlencode($gid);
+            $gtm_js = $this->curl_get($gtm_url);
+            if ($gtm_js === false) continue;
+
+            $ads_found = $this->detect_google_ads_in_text($gtm_js);
+
+            // récupérer aw_id ou AW_json ou fallback regex
+            if (!empty($ads_found['aw_id'])) {
+                foreach ($ads_found['aw_id'] as $a) {
+                    if (preg_match('/(AW-\d{6,})/i', $a, $mm)) $found_aw[] = strtoupper($mm[1]);
+                }
+            }
+            if (!empty($ads_found['AW_json'])) {
+                foreach ($ads_found['AW_json'] as $a) {
+                    if (preg_match('/(AW-\d{6,})/i', $a, $mm)) $found_aw[] = strtoupper($mm[1]);
+                }
+            }
+            // fallback : chercher dans le JS brut
+            if (preg_match_all('/(AW-\d{6,})/i', $gtm_js, $m2)) {
+                foreach ($m2[1] as $a) $found_aw[] = strtoupper($a);
+            }
+        }
+    }
+
+    $found_aw = array_values(array_unique($found_aw));
+
+    if (empty($found_aw)) {
+        return ['error' => 'Aucun Google Ads détecté'];
+    }
+
+    // si tu veux n'en garder qu'un seul, retourne la 1ère ; sinon retourne le tableau
+    if (count($found_aw) === 1) {
+        return ['aw' => $found_aw[0]];
+    } else {
+        return ['aw' => $found_aw];
+    }
+}
+
+/**
+ * Méthode d'update pour le controller — intègre la détection et met à jour en base.
+ */
+public function mis_a_jour_googleads($idclients)
+{
+    $id = (int)$idclients;
+    $client = $this->visuels_model->getDonneeById($id);
+    if (empty($client) || !isset($client[0]['site_client'])) {
+        show_error('Client introuvable', 404);
+        return;
+    }
+
+    // récupère l'URL à partir de la base (ou tu peux forcer un autre site)
+    $site_raw = trim($client[0]['site_client']);
+    if ($site_raw === '') {
+        $this->session->set_flashdata('error', 'URL du client vide.');
+        redirect("Client/application/{$id}?maj=ok&type=cmp");
+        return;
+    }
+
+    // assurer le schéma
+    if (!preg_match('#^https?://#i', $site_raw)) $site_raw = 'https://' . $site_raw;
+    $site = rtrim($site_raw, '/') . '/';
+
+    // appeler la détection
+    $res = $this->detect_google_ads_and_ga($site);
+
+    // déterminer la valeur à stocker
+    if (empty($res) || isset($res['error'])) {
+        $value = "Aucun Google Ads détecté";
+    } else {
+        if (is_array($res['aw'])) {
+            // choisis ici: garder la première ou stocker toutes séparées par virgule
+            $value = implode(',', $res['aw']); // toutes les IDs
+            // ou: $value = $res['aw'][0]; // première seulement
+        } else {
+            $value = $res['aw'];
+        }
+
+        $value = trim($value);
+        // validation simple
+        if (!preg_match('/(^AW-\d{6,}$)|(^AW-\d{6,}(,[A-Z0-9-]+)*$)/i', $value)) {
+            $value = "Aucun Google Ads détecté";
+        }
+    }
+
+    // mise à jour en base
+    $this->visuels_model->update_google_ads($id, $value);
+
+    // flash message et redirection
+    if ($value === "Aucun Google Ads détecté") {
+        $this->session->set_flashdata('warning', 'Aucun Google Ads détecté pour ce site.');
+    } else {
+        $this->session->set_flashdata('success', "Google Ads mis à jour : {$value}");
+    }
+
+    redirect("Client/application/{$id}?maj=ok&type=cmp");
+}
+
+/* ---------- Helpers (si tu ne les as pas déjà dans le controller) ---------- */
+
+private function curl_get($url, $timeout = 15)
+{
+    $ch = curl_init();
+    curl_setopt($ch, CURLOPT_URL, $url);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
+    curl_setopt($ch, CURLOPT_TIMEOUT, $timeout);
+    curl_setopt($ch, CURLOPT_USERAGENT, 'Mozilla/5.0 (compatible; TagInspector/1.0)');
+    $data = curl_exec($ch);
+    $err = curl_errno($ch);
+    curl_close($ch);
+    if ($err) return false;
+    return $data;
+}
+
+/**
+ * detect_google_ads_in_text: tu as déjà cette méthode dans ton find_ads()
+ */
+private function detect_google_ads_in_text($text)
+{
+    $found = [];
+
+    $patterns = [
+        'aw_id' => '/(AW-\d{6,})/i',
+        'gtag_aw_config' => "/gtag\\(\\s*['\"]config['\"]\\s*,\\s*['\"](AW-[A-Za-z0-9_-]+)['\"]/i",
+        'googlesyndication' => '/googlesyndication\.com/i',
+        'adsbygoogle' => '/adsbygoogle/i',
+        'conversion_id_field' => '/conversion_id\\W*[:=]\\W*(\\d{6,})/i',
+        'AW_json' => '/\"AW-\\d+\"/i',
+    ];
+
+    foreach ($patterns as $k => $pat) {
+        if (preg_match_all($pat, $text, $m)) {
+            $found[$k] = array_values(array_unique($m[0]));
+        }
+    }
+
+    return $found;
+}
+
+public function mis_a_jour_google_analytics($idclients)
+{
+    $id = (int)$idclients;
+    $client = $this->visuels_model->getDonneeById($id);
+
+    if (empty($client) || !isset($client[0]['site_client'])) {
+        show_error("Client introuvable", 404);
+        return;
+    }
+
+    $site_client = $client[0]['site_client'];
+    if (!preg_match('#^https?://#i', $site_client)) {
+        $site_client = 'https://' . $site_client;
+    }
+
+    $html = $this->fetch_url($site_client);
+    if ($html === false) {
+        show_error("Erreur : impossible d'accéder à l'URL $site_client", 500);
+        return;
+    }
+
+    $google_analytics = null;
+
+    // 1) GA4 : G-XXXXXXXX (6-15 chars alnum)
+    if (preg_match('/G-[A-Z0-9]{6,15}/i', $html, $m)) {
+        $google_analytics = strtoupper($m[0]);
+    }
+
+    // 2) gtag('config','G-XXXXX') fallback (déjà couvert mais safe)
+    if ($google_analytics === null && preg_match('/gtag\(\s*[\'"]config[\'"]\s*,\s*[\'"](G-[A-Z0-9]{6,15})[\'"]\s*\)/i', $html, $m2)) {
+        $google_analytics = strtoupper($m2[1]);
+    }
+
+    // 3) Universal Analytics UA-XXXXX-Y
+    if ($google_analytics === null && preg_match('/UA-\d{4,12}-\d{1,4}/i', $html, $m3)) {
+        $google_analytics = strtoupper($m3[0]);
+    }
+
+    $value = $google_analytics ?? "Non détecté";
+
+    // Mise à jour en base
+    $this->visuels_model->update_google_analytics($id, $value);
+
+    redirect('Client/application/'.$id.'?maj=ok&type=datalayer');
+}
+
+private function fetch_url($url)
+	{
+		$ch = curl_init();
+
+		curl_setopt($ch, CURLOPT_URL, $url);
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+		curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
+		curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false); // À activer en prod si possible
+		curl_setopt($ch, CURLOPT_USERAGENT, 'Mozilla/5.0 (compatible; MyBot/1.0)');
+
+		$response = curl_exec($ch);
+		$code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+
+		curl_close($ch);
+
+		if ($response === false || $code >= 400) {
+			return false;
+		}
+
+		return $response;
+	}
+
 	public function mis_a_jour_cms($idclients)
 	{
 		$id = $idclients;
@@ -1300,6 +1869,7 @@ private function _scrape_images_from_site($url)
 		redirect('Client/application/'.$id.'?maj=ok&type=cms');
 
 	}
+	
 	public function ajout_brief()
 	{
 		$id = $this->input->post('idclients');
@@ -2280,7 +2850,14 @@ Contraintes :
 				// Inputs spécifiques
 				$nom_campagne          	= $this->input->post('nom_campagne_search'); // not in view
 				$information_campagne  	= $this->input->post('information_campagne_search'); // not in view
-				$ages				   = $this->input->post('age');
+				$agesArray = $this->input->post('age', TRUE);
+
+				if (!empty($agesArray)) {
+					$ages = implode(',', $agesArray);
+				} else {
+					$ages = null;
+				}
+
 				$cible				   = $this->input->post('cible');
 				$zones                 	= $this->input->post('zone_search'); // OK
 				$repartition_budget    	= $this->input->post('repartition_budget_search'); // OK
@@ -2296,6 +2873,27 @@ Contraintes :
 				$promotions            	= $this->input->post('promotions');
 				$prix			       	= $this->input->post('prix');
 				$téléphone				= $this->input->post('téléphone');
+				$fichier_nom = null;
+				$this->load->library('upload');
+
+				if (isset($_FILES['wetransfer']) && $_FILES['wetransfer']['name'] != '') {
+
+					$config['upload_path']   = './uploads/';
+					$config['allowed_types'] = 'jpg|png|gif|pdf|doc|docx|xls|xlsx|csv|rar|zip';
+					$config['max_size']      = 8048;
+					$config['encrypt_name']  = FALSE;
+
+					$this->upload->initialize($config);
+
+					if ($this->upload->do_upload('wetransfer')) {
+						$uploadData = $this->upload->data();
+						$fichier_nom = 'uploads/' . $uploadData['file_name'];
+					} else {
+						echo $this->upload->display_errors();
+						return;
+					}
+				}
+
 
 
 				// Vérification cohérence
@@ -2347,7 +2945,8 @@ Contraintes :
 							$sexe,
 							$promotions,
 							$prix,
-							$téléphone
+							$téléphone,
+							$fichier_nom 
 						);
 					}
 
@@ -2380,7 +2979,14 @@ Contraintes :
 				// Inputs spécifiques
 				$nom_campagne          = $this->input->post('nom_campagne_pmax');
 				$information_campagne  = $this->input->post('information_campagne_search');
-				$ages				   = $this->input->post('age');
+				$agesArray = $this->input->post('age', TRUE);
+
+				if (!empty($agesArray)) {
+					$ages = implode(',', $agesArray);
+				} else {
+					$ages = null;
+				}
+
 				$cible				   = $this->input->post('cible');
 				$url_site              = $this->input->post('url_campagne');
 				$repartition_budget    = $this->input->post('repartition_budget_pmax');
@@ -2404,6 +3010,27 @@ Contraintes :
 				$services			       	= $this->input->post('services');
 				$produit				= $this->input->post('produit');
 				$youtube				= $this->input->post('Youtube');
+								$fichier_nom = null;
+				$this->load->library('upload');
+
+				if (isset($_FILES['wetransfer']) && $_FILES['wetransfer']['name'] != '') {
+
+					$config['upload_path']   = './uploads/';
+					$config['allowed_types'] = 'jpg|png|gif|pdf|doc|docx|xls|xlsx|csv|rar|zip';
+					$config['max_size']      = 8048;
+					$config['encrypt_name']  = FALSE;
+
+					$this->upload->initialize($config);
+
+					if ($this->upload->do_upload('wetransfer')) {
+						$uploadData = $this->upload->data();
+						$fichier_nom = 'uploads/' . $uploadData['file_name'];
+					} else {
+						echo $this->upload->display_errors();
+						return;
+					}
+				}
+
 				$id_campagne = $this->Donne_modele->insert_campagne_am(
 					$idclients,
 					$camp_type,
@@ -2420,7 +3047,8 @@ Contraintes :
 					$sexe,
 					$promotions,
 					$prix,
-					$téléphone
+					$téléphone,
+					$fichier_nom 
 				);
 
 				// Insert groupe pmax
@@ -2442,7 +3070,14 @@ Contraintes :
 				// Inputs spécifiques
 				$nom_campagne          = $this->input->post('nom_campagne_pmax');
 				$information_campagne  = $this->input->post('information_campagne_pmax');
-				$ages				   = $this->input->post('age');
+				$agesArray = $this->input->post('age', TRUE);
+
+				if (!empty($agesArray)) {
+					$ages = implode(',', $agesArray);
+				} else {
+					$ages = null;
+				}
+
 				$cible				   = $this->input->post('cible');
 				$url_site              = $this->input->post('url_campagne');
 				$repartition_budget    = $this->input->post('repartition_budget_pmax');
@@ -2462,6 +3097,27 @@ Contraintes :
 				$promotions            	= $this->input->post('promotions');
 				$prix			       	= $this->input->post('prix');
 				$téléphone				= $this->input->post('téléphone');
+				$fichier_nom = null;
+				$this->load->library('upload');
+
+				if (isset($_FILES['wetransfer']) && $_FILES['wetransfer']['name'] != '') {
+
+					$config['upload_path']   = './uploads/';
+					$config['allowed_types'] = 'jpg|png|gif|pdf|doc|docx|xls|xlsx|csv|rar|zip';
+					$config['max_size']      = 8048;
+					$config['encrypt_name']  = FALSE;
+
+					$this->upload->initialize($config);
+
+					if ($this->upload->do_upload('wetransfer')) {
+						$uploadData = $this->upload->data();
+						$fichier_nom = 'uploads/' . $uploadData['file_name'];
+					} else {
+						echo $this->upload->display_errors();
+						return;
+					}
+				}
+
 				$id_campagne = $this->Donne_modele->insert_campagne_am(
 					$idclients,
 					$camp_type,
@@ -2478,7 +3134,8 @@ Contraintes :
 					$sexe,
 					$promotions,
 					$prix,
-					$téléphone
+					$téléphone,
+					$fichier_nom 
 				);
 
 				// Insert groupe pmax
@@ -2583,8 +3240,8 @@ Attendus :
 
 		$campagne = $this->data['campagne'] = $this->visuels_model->getCampagneById($id_campagne);
 		$groupes_annonces = $this->Donne_modele->get_gp_by_idcampagne($id_campagne);
-		$idclients = $groupes_annonces[0]['idclients'];
-
+		$idclients = $campagne->idclients;
+		$idclients = intval($idclients);
 		foreach ($groupes_annonces as $groupe_annonce) {
 			$this->Donne_modele->deletegroupe($groupe_annonce['idgroupe_annonce']);
 		}
@@ -3391,27 +4048,7 @@ Attendus :
 
 
 	// Fonction cURL pour récupérer le contenu HTML
-	private function fetch_url($url)
-	{
-		$ch = curl_init();
-
-		curl_setopt($ch, CURLOPT_URL, $url);
-		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-		curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
-		curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false); // À activer en prod si possible
-		curl_setopt($ch, CURLOPT_USERAGENT, 'Mozilla/5.0 (compatible; MyBot/1.0)');
-
-		$response = curl_exec($ch);
-		$code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-
-		curl_close($ch);
-
-		if ($response === false || $code >= 400) {
-			return false;
-		}
-
-		return $response;
-	}
+	
 
 	// Reste de tes méthodes detect_cms(), get_cms_logo(), get_favicon() inchangées
 	private function detect_cms($html, $url)
